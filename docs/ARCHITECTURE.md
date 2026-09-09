@@ -43,14 +43,15 @@ graph TD
             J -->|Retards par Ligne & Sens| F
         end
 
-        subgraph Rendu Visuel Dual
-            K[deck.gl Overlay + MapLibre]
-            L[Three.js Studio 3D Paris]
-            E --> K
-            E -->|Code-Splitting On-Demand| L
+        subgraph Scène 3D Unifiée Contexte WebGL Unique
+            K1[MapLibre GL : Fond Vectoriel OpenFreeMap]
+            K2[MapLibre GL : Bâti 3D Fill-Extrusion z14+]
+            K3[deck.gl Overlay : Voies Métro & Rames 60 FPS]
+            K4[deck.gl Overlay : Monuments glTF ScenegraphLayer]
+            E --> K1 & K2 & K3 & K4
         end
 
-        F -->|Positions des 500 Rames 1 Hz| K & L
+        F -->|Positions des 500 Rames 1 Hz| K3
     end
 ```
 
@@ -68,7 +69,7 @@ graph TD
   - `tracks.json` : polylignes simplifiées à tolérance sub-métrique (108 Ko, réduction de 98.9 % par rapport au GeoJSON brut).
   - `schedule.json` : extraction des 11 252 courses actives de la journée parisienne.
   - `line_ladders.json` : arborescence ordonnée des stations pour chaque ligne et terminus.
-  - `paris_urban_mesh.json` : géométrie 3D de Paris (Seine, îles, ponts, immeubles haussmanniens).
+  - `/models/*.glb` : 8 modèles 3D glTF binaires optimisés Z-up pour les monuments parisiens (203 Ko cumulés).
 
 ### 2. Moteur de Simulation Cinématique (`web/src/sim/`)
 - **Rôle** : calculer à chaque seconde la position curviligne, la vitesse et le cap de chaque rame active.
@@ -78,26 +79,21 @@ graph TD
   - `shapes.ts` : décodeur haute performance du buffer binaire `shapes.bin` via `DataView`.
   - `prim_client.ts` : client HTTP interrogeant l'API PRIM avec lissage exponentiel des retards.
 
-### 3. Couche Cartographique 2.5D (`web/src/map/`)
-- **Rôle** : rendu cartographique interactif avec vue aérienne et perspective inclinée.
-- **Technologies** : MapLibre GL JS (fond de carte vectoriel Esri Dark Gray) + deck.gl (couches WebGL haute densité).
-- **Couches deck.gl** :
-  - `PathLayer` : extrusion 3D des voies avec décalage en Z pour les croisements sous-sol.
-  - `ScatterplotLayer` : stations et rames (corps blanc porcelaine + cœur coloré + bague dorée temps réel).
-  - `TextLayer` : étiquettes 3D des stations au survol et filtrage d'une ligne.
+### 3. Scène Cartographique & Bâti 3D Unifié (`web/src/map/`)
+- **Rôle** : rendu cartographique unifié haute performance sur un **seul contexte WebGL**.
+- **Technologies** : MapLibre GL JS (fond vectoriel OpenFreeMap + bâti 3D `fill-extrusion`) + deck.gl (infrastructure métropolitaine et monuments glTF).
+- **Couches & composants** :
+  - `vector_style.ts` : style sombre industriel conforme à `tokens.css`, couche `building-3d` avec extrusion conditionnelle et masquage des emprises de monuments.
+  - `deck_overlay.ts` : gestionnaire de couches deck.gl synchronisé sur la caméra MapLibre (`interleaved: false`).
+  - `trains_layer.ts` : rendu en capsule 5 couches métriques des rames à 60 FPS.
+  - `landmarks_layer.ts` : instanciation dynamique des 8 monuments glTF via `ScenegraphLayer` avec filtrage d'emprise géographique.
 
-### 4. Studio 3D Paris (« Ville Lumière ») (`web/src/three/`)
-- **Rôle** : maquette 3D architecturale nocturne de Paris.
-- **Technologies** : Three.js, OrbitControls, `THREE.InstancedMesh`.
-- **Composants** :
-  - `paris_scene.ts` : gestion de la scène, sol en ardoise blueprint semi-translucide, surface miroitante de la Seine, ponts 3D, skyline de La Défense, tubes néon du métro, rames 3D avec phares.
-  - `landmarks.ts` : modèles 3D paramétriques des monuments (Tour Eiffel avec son phare rotatif 360°, Sacré-Cœur, Arc de Triomphe, etc.).
-
-### 5. Interface Utilisateur & Navigation (`web/src/ui/` & `web/src/state/`)
+### 4. Interface Utilisateur & Navigation (`web/src/ui/` & `web/src/state/`)
 - **`dock.ts`** : « Le Quai », volet latéral escamotable (desktop) et bottom sheet tactile (smartphone).
 - **`station_ladder.ts`** : diagramme de marche vertical avec suivi des rames en approche et calcul de l'intervalle (*headway*).
 - **`search_bar.ts`** : champ de recherche de stations instantané avec autocomplétion floue (`⌘K`).
 - **`router.ts`** : gestion de l'historique de navigation HTML5 (`/ligne/:short_name?dir=:dir`) avec réécriture Netlify `_redirects`.
+- **Barre monuments (`#studio-nav-bar`)** : pilotage caméra cinématique fluide vers les monuments parisiens (`map.flyTo()`).
 
 ---
 
@@ -106,34 +102,14 @@ graph TD
 ### 1. Suppression du GeoJSON brut (Gain : -9.3 Mo)
 Le fichier initial `control_network.geojson` pesait **9.45 Mo**. Il a été remplacé par un fichier dédié `tracks.json` de **107.9 Ko** (-98.9 %) grâce à une simplification de géométrie Shapely (`tolerance = 0.00008`), permettant un chargement instantané de la carte sur mobile.
 
-### 2. Code-Splitting Dynamique de Three.js (Gain : -570 Ko)
-Three.js et la scène 3D de Paris représentent ~600 Ko de code JavaScript. Ils sont chargés **asynchronement à la demande** uniquement lorsque l'utilisateur clique sur le bouton `🗼` :
+### 2. Élimination de Three.js & Contexte WebGL Unique (Gain : -634 Ko JS, -275 Ko Data)
+L'ancien Studio Three.js créait un second contexte WebGL lourd et concurrent. Sa suppression a permis d'éliminer :
+- Le runtime Three.js et ses shaders (~634 Ko de JS minifié en moins).
+- L'ancien maillage statique JSON `paris_urban_mesh.json` (275 Ko éliminés).
+- Tout risque de conflit GPU ou de perte de contexte WebGL (*context loss*).
 
-```ts
-// main.ts
-let parisStudio: any = null;
-async function ensureParisStudio() {
-  if (!parisStudio) {
-    const { ParisThreeStudio } = await import('./three/paris_scene');
-    parisStudio = new ParisThreeStudio(threeContainerEl);
-    // ...
-  }
-  return parisStudio;
-}
-```
-
-### 3. Instanciation GPU pour le Bâti Parisien (60 FPS)
-Plutôt que de créer 4 000 objets `Mesh` individuels (ce qui saturerait le CPU en draw calls), les 3 923 immeubles parisiens et gratte-ciel sont rendus en un seul draw call via `THREE.InstancedMesh` :
-
-```ts
-const instHaussmann = new THREE.InstancedMesh(boxGeo, haussmannMat, count);
-for (let i = 0; i < count; i++) {
-  dummy.position.set(b.x, 0, b.z);
-  dummy.scale.set(b.w, b.h, b.d);
-  dummy.updateMatrix();
-  instHaussmann.setMatrixAt(i, dummy.matrix);
-}
-```
+### 3. Extrusion Vectorielle Native GPU & glTF à la Demande (60 FPS)
+Le bâti 3D parisien est désormais généré à la volée par le moteur de tuiles vectorielles de MapLibre en un seul passage GPU via la primitive `fill-extrusion`. Les 8 monuments emblématiques sont quant à eux distribués en modèles glTF binaires ultra-légers (5 à 62 Ko chacun) et instanciés uniquement lorsque la caméra s'en approche (`zoom >= 13`), garantissant 60 FPS constants sans saccade.
 
 ---
 

@@ -1,18 +1,23 @@
 # 🎨 Moteurs Graphiques & Rendu Visuel 3D
 
-Ce document détaille l'architecture graphique duale du projet : la vue cartographique haute densité (MapLibre + deck.gl) et la maquette 3D architecturale nocturne de Paris (Three.js).
+Ce document détaille l'architecture graphique unifiée du projet : une scène 3D haute performance fonctionnant sur un **unique contexte WebGL** combinant MapLibre GL JS (fond vectoriel et bâti 3D extrudé) et deck.gl (infrastructure ferroviaire, rames en circulation et monuments historiques glTF).
 
 ---
 
-## 1. Vue Cartographique 2.5D (MapLibre GL JS + deck.gl)
+## 1. Fond de Carte & Infrastructure Métropolitaine (MapLibre GL + deck.gl)
 
-### 1. Fond de Carte & Perspective
-- **Fond de carte** : tuiles vectorielles rasterisées **Esri Dark Gray Canvas**, offrant un contraste maximal sans watermark intrusif.
-- **Paramètres initiaux** :
+### 1. Fond de Carte Vectoriel Industriel Sombre
+- **Source vectorielle** : Tuiles vectorielles OpenMapTiles hébergées par **OpenFreeMap** (`https://tiles.openfreemap.org/planet`), éliminant tout fond rasterisé et offrant l'accès direct aux géométries de bâtiments.
+- **Palette chromatique industrielle** conforme à `tokens.css` :
+  - Fond / Ardoise : `--fonte` (`#0E1512`), `--fonte-surface` (`#141D19`).
+  - Voies d'eau (La Seine & canaux) : `--ardoise-eau` (`#0A2E2B`).
+  - Réseau viaire : `--zinc-route` (`#18231E`) et `--zinc-autoroute` (`#22322B`).
+  - Aucun libellé de rue avant le zoom 14 (`minzoom: 14`) pour préserver la lisibilité du réseau de transport.
+- **Paramètres de vue par défaut** :
   - Centre : Paris Châtelet (`lng: 2.3488`, `lat: 48.8534`).
-  - Zoom : `12.3`.
-  - Inclinaison (*Pitch*) : `52°` (vue 3D plongeante) ou `0°` (vue 2D zénithale en 1 clic).
-  - Orientation (*Bearing*) : `-15°` (aligné sur l'axe historique de la Seine et des grands boulevards).
+  - Zoom initial : `12.3`.
+  - Inclinaison (*Pitch*) : `52°` (vue 3D perspective) basculable en `0°` (vue 2D zénithale).
+  - Orientation (*Bearing*) : `-15°` (aligné sur l'axe historique de la Seine).
 
 ### 2. Extrusion Altitudinale des Voies (`elevation_offset`)
 À Paris, de nombreuses lignes se croisent en sous-sol (ex: Châtelet-Les Halles, République, Montparnasse). Sans gestion de l'altitude, les tracés se chevauchent de manière confuse.
@@ -66,50 +71,43 @@ Bien que le moteur de simulation GTFS/PRIM cadence son état logique à 1 Hz, l'
 
 ---
 
-## 2. Studio 3D Paris (« Ville Lumière ») — Three.js
+## 2. Bâti Urbain 3D & Monuments Historiques (Contexte Unifié)
 
-Accessible à tout moment en cliquant sur le bouton **`🗼`** dans les commandes de carte, ce mode bascule vers une maquette 3D nocturne architecturale.
+Le rendu 3D de Paris ne fait plus appel à un second moteur WebGL (l'ancien Studio Three.js a été éliminé). Il est entièrement intégré dans la même scène que les voies et les rames, garantissant 60 FPS constants sans surcharge GPU.
 
-### 1. La Seine, ses Îles et ses Ponts en 3D
-- **Surface miroitante de la Seine** :
-  - Ruban géométrique de 180 à 250 m de large suivant le méandre réel de Charenton à Boulogne.
-  - Matériau aquatique PBR profond (`color: 0x14b8a6`, `emissive: 0x0891b2`, `roughness: 0.08`, `metalness: 0.85`), réfléchissant la lune et les lumières des quais.
-- **Île de la Cité et Île Saint-Louis** :
-  - Plateaux rocheux insulaires émergeant à +2 m au-dessus de l'eau avec quais en pierre claire (`#C8BAA1`).
-- **15 Ponts Historiques en 3D** :
-  - Pont Neuf, Pont Alexandre III, Pont d'Iéna, Pont de la Concorde...
-  - **Pont de Bir-Hakeim** : modélisé avec son étage inférieur routier et son viaduc métallique supérieur franchi par les rames de la ligne 6.
+### 1. Bâti 3D en `fill-extrusion` (MapLibre GL)
+Les bâtiments parisiens sont générés en direct par le GPU à partir des géométries vectorielles d'OpenFreeMap :
+- **Couche** : `building-3d` de type `fill-extrusion`.
+- **Seuil d'apparition** : `minzoom: 14`, avec montée progressive de l'opacité entre zoom 14 (0.0) et zoom 15.5 (0.78) pour éviter tout effet de pop visuel.
+- **Calcul des hauteurs** :
+  ```json
+  ["coalesce", ["get", "render_height"], 18]
+  ```
+  Les bâtiments sans hauteur explicitée dans OpenStreetMap adoptent une hauteur médiane estimée à 18 mètres (gabarit haussmannien typique de 5 à 6 étages).
+- **Palette chromatique & occlusion** :
+  - Teinte ardoise/zinc sombre (`#18231F`) en harmonie avec l'univers nocturne.
+  - Masquage sélectif des polygones OSM bruts pour les monuments historiques (`['!=', 'hide_3d', true]`) afin d'éviter tout chevauchement avec les modèles glTF.
 
-### 2. Tissu Urbain Haussmannien & La Défense (Performance 60 FPS via `InstancedMesh`)
-Pour garantir 60 FPS constants sans faire souffrir la carte graphique :
-- **3 923 immeubles parisiens** sont instanciés via `THREE.InstancedMesh`.
-- **Haussmann classique** : façades en pierre de taille chaude (`#DFD5C2`), toits en zinc ardoise bleuté (`#4A6572`), et fenêtres éclairées la nuit en jaune chaud (`#FBBF24`).
-- **Quartier d'affaires de La Défense** : 15 gratte-ciel en verre et acier bleu miroitant (`#60A5FA` et `#1D4ED8`) montant jusqu'à 231 m (Tour First, Majunga, Total Coupole, Engie T1, Grande Arche).
+### 2. Monuments Historiques en glTF (`deck.gl ScenegraphLayer`)
+Les monuments emblématiques de Paris sont modélisés sous forme d'actifs glTF binaires (`.glb`) ultra-légers (< 300 Ko chacun, 203 Ko cumulés) et intégrés via `ScenegraphLayer` :
 
-### 3. Monuments Parisiens Emblématiques
-- **Tour Eiffel (324 m)** :
-  - Piliers quadruples arqués, 1ère et 2ème plateformes ajourées, flèche métallique dorée (`metalness: 0.85`, `roughness: 0.3`).
-  - Projecteurs dorés orientés vers le haut à la base.
-  - **Le Phare de la Tour Eiffel** : balise lumineuse à 324 m avec **deux faisceaux dorés rotatifs à 360° en temps réel** (`fog: false` pour préserver la clarté lumineuse sans noircissement).
-- **Sacré-Cœur & Butte Montmartre** :
-  - Butte en relief surélevée à +115 m.
-  - Basilique en travertin blanc étincelant avec grand dôme central, clochetons et campanile arrière de 83 m.
-- **Arc de Triomphe (Place de l'Étoile)** :
-  - Voûte monumentale et attique sculpté.
-  - 12 avenues rayonnantes bordées de lanternes dorées.
-- **Notre-Dame de Paris**, **Dôme doré des Invalides**, **Tour Montparnasse** (avec feux de sommet clignotants), **Pyramide du Louvre**, **Panthéon**.
+| Monument | Fichier | Taille | Emplacement WGS84 | Yaw (Cap) | Particularités |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Tour Eiffel** | `tour_eiffel.glb` | 60.6 Ko | `[2.2945, 48.8584]` | 26° | Alignée axe Champ-de-Mars, dentelle ajourée |
+| **Arc de Triomphe** | `arc_de_triomphe.glb` | 11.1 Ko | `[2.2950, 48.8738]` | 26° | Voûte axée sur les Champs-Élysées |
+| **Sacré-Cœur** | `sacre_coeur.glb` | 62.2 Ko | `[2.3431, 48.8867]` | 0° | Dômes et campanile de Montmartre |
+| **Notre-Dame** | `notre_dame.glb` | 7.7 Ko | `[2.3499, 48.8530]` | -20° | Île de la Cité, tours et nef axées |
+| **Hôtel des Invalides** | `invalides.glb` | 25.1 Ko | `[2.3124, 48.8550]` | 0° | Dôme doré et cour d'honneur |
+| **Tour Montparnasse** | `montparnasse.glb` | 5.2 Ko | `[2.3217, 48.8421]` | 35° | Silhouette monolithique 210 m |
+| **Musée du Louvre** | `louvre.glb` | 7.4 Ko | `[2.3364, 48.8606]` | 0° | Ailes et Cour Carrée |
+| **Le Panthéon** | `pantheon.glb` | 24.0 Ko | `[2.3460, 48.8462]` | 0° | Dôme néo-classique et colonnade |
 
-### 4. Réseau de Métro Luminescent & Rames 3D
-- **Tubes néon** : diamètre élargi à 16 m avec forte émissivité (`emissiveIntensity: 1.2`) aux couleurs de la ligne, formant un réseau de lumière visible sous la ville.
-- **Rames 3D** : véhicules en blanc lustré avec liseré de couleur de ligne et **phares doubles blancs** projetant de la lumière vers l'avant.
-- **Curseur Rayons X** : permet d'ajuster en continu la transparence de la dalle de sol (de 10 % pour un effet rayons X pur jusqu'à 100 % pour un sol plein).
+#### A. Conventions de Coordonnées & Export
+- **Système d'axes** : Les modèles sont exportés avec une rotation native $X = +\pi/2$ lors de la conversion glTF, ce qui garantit qu'ils sont en convention **Z-up** conforme à deck.gl WGS84.
+- **Orientation runtime** : `getOrientation: (d) => [0, -(d.yaw || 0), 0]` (Pitch = 0, Roll = 0, Yaw = cap géographique en degrés).
+- **Chargement à la demande** : Les modèles ne sont instanciés que pour un zoom $\ge 13$ et dans un rayon géodésique autour du centre de vue (`viewRadiusDeg`), garantissant zéro surcharge mémoire quand l'utilisateur observe d'autres zones.
 
-### 5. Barre de Navigation par Monument
-Une barre d'outils flottante au bas de l'écran permet de survoler instantanément les monuments clés :
-- `🗼 Tour Eiffel`
-- `🏛️ Cité (Notre-Dame)`
-- `🌟 Étoile (Champs-Élysées)`
-- `⛪ Montmartre (Sacré-Cœur)`
-- `🌐 Vue Globale`
-
-Chaque clic déclenche une trajectoire de caméra cinématographique interpolée avec amorti cubique doux (*Cubic Ease-Out*).
+### 3. Pipeline de Composition & Ordre de Rendu
+- L'overlay deck.gl est instancié avec `interleaved: false`.
+- Les voies de métro et les rames actives sont ainsi dessinées en surimpression sur le bâti extrudé MapLibre, évitant tout effet de masquage ou de clipping visuel des tunnels et voies en tranchée.
+- La barre de navigation en bas d'écran (`#studio-nav-bar`) pilote directement la caméra MapLibre (`map.flyTo()`) avec une inclinaison cinématique à 55° et une rotation orientée sur chaque monument.

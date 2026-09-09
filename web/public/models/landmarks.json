@@ -1,0 +1,90 @@
+[
+  {
+    "id": "tour_eiffel",
+    "name": "Tour Eiffel",
+    "coords": [
+      2.2945,
+      48.8584
+    ],
+    "file": "/models/tour_eiffel.glb",
+    "sizeBytes": 62080,
+    "sizeKb": 60.6
+  },
+  {
+    "id": "arc_de_triomphe",
+    "name": "Arc de Triomphe",
+    "coords": [
+      2.295,
+      48.8738
+    ],
+    "file": "/models/arc_de_triomphe.glb",
+    "sizeBytes": 11324,
+    "sizeKb": 11.1
+  },
+  {
+    "id": "sacre_coeur",
+    "name": "Sacré-Cœur (Montmartre)",
+    "coords": [
+      2.3431,
+      48.8867
+    ],
+    "file": "/models/sacre_coeur.glb",
+    "sizeBytes": 63668,
+    "sizeKb": 62.2
+  },
+  {
+    "id": "notre_dame",
+    "name": "Notre-Dame de Paris",
+    "coords": [
+      2.3499,
+      48.853
+    ],
+    "file": "/models/notre_dame.glb",
+    "sizeBytes": 7840,
+    "sizeKb": 7.7
+  },
+  {
+    "id": "invalides",
+    "name": "Hôtel des Invalides",
+    "coords": [
+      2.3124,
+      48.855
+    ],
+    "file": "/models/invalides.glb",
+    "sizeBytes": 25680,
+    "sizeKb": 25.1
+  },
+  {
+    "id": "montparnasse",
+    "name": "Tour Montparnasse",
+    "coords": [
+      2.3217,
+      48.8421
+    ],
+    "file": "/models/montparnasse.glb",
+    "sizeBytes": 5312,
+    "sizeKb": 5.2
+  },
+  {
+    "id": "louvre",
+    "name": "Musée du Louvre",
+    "coords": [
+      2.3364,
+      48.8606
+    ],
+    "file": "/models/louvre.glb",
+    "sizeBytes": 7576,
+    "sizeKb": 7.4
+  },
+  {
+    "id": "pantheon",
+    "name": "Le Panthéon",
+    "coords": [
+      2.346,
+      48.8462
+    ],
+    "file": "/models/pantheon.glb",
+    "sizeBytes": 24596,
+    "sizeKb": 24
+  }
+]

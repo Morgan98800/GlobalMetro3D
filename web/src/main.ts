@@ -53,6 +53,8 @@ async function bootstrap() {
 
   // 2. Initialize MapLibre
   const map = createMap('map');
+  (window as any).__map = map;
+  (window as any).map = map;
 
   // 3. Dynamic Three.js 3D Paris Studio Loader (Code-Splitting)
   let parisStudio: any = null;
@@ -258,7 +260,14 @@ async function bootstrap() {
     deckOverlay.setData({ lines, stations, tracks, shapes: shapesMap, rollingStockDb });
 
     const syncOverlayView = () => {
-      deckOverlay.setViewState(map.getZoom(), [map.getCenter().lng, map.getCenter().lat]);
+      const b = map.getBounds();
+      const boundsTuple: [[number, number], [number, number]] | null = b
+        ? [
+            [b.getWest(), b.getSouth()],
+            [b.getEast(), b.getNorth()]
+          ]
+        : null;
+      deckOverlay.setViewState(map.getZoom(), [map.getCenter().lng, map.getCenter().lat], boundsTuple);
     };
     map.on('move', syncOverlayView);
     syncOverlayView();

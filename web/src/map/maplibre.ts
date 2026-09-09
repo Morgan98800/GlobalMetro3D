@@ -1,43 +1,11 @@
 import maplibregl from 'maplibre-gl';
 import { PARIS_CENTER, DEFAULT_PITCH, DEFAULT_BEARING, DEFAULT_ZOOM } from '@paris-subway/shared';
+import { createVectorDarkStyle } from './vector_style';
 
 export function createMap(containerId: string): maplibregl.Map {
   const map = new maplibregl.Map({
     container: containerId,
-    style: {
-      version: 8,
-      sources: {
-        'esri-dark': {
-          type: 'raster',
-          tiles: [
-            'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'
-          ],
-          tileSize: 256,
-          attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors'
-        }
-      },
-      layers: [
-        {
-          id: 'background',
-          type: 'background',
-          paint: {
-            'background-color': '#0E1512'
-          }
-        },
-        {
-          id: 'esri-dark-layer',
-          type: 'raster',
-          source: 'esri-dark',
-          minzoom: 0,
-          maxzoom: 18,
-          paint: {
-            'raster-opacity': 0.85,
-            'raster-brightness-max': 0.75,
-            'raster-contrast': 0.1
-          }
-        }
-      ]
-    },
+    style: createVectorDarkStyle(),
     center: PARIS_CENTER,
     zoom: DEFAULT_ZOOM,
     pitch: DEFAULT_PITCH,
@@ -48,11 +16,11 @@ export function createMap(containerId: string): maplibregl.Map {
     attributionControl: false
   });
 
-  // Add custom attribution bottom-right
+  // Custom attribution bottom-right: OpenMapTiles, OpenStreetMap, IDFM
   map.addControl(
     new maplibregl.AttributionControl({
       compact: true,
-      customAttribution: 'Données © Île-de-France Mobilités · OSM'
+      customAttribution: '© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · IDFM ODbL'
     }),
     'bottom-right'
   );

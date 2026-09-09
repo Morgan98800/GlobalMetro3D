@@ -6,6 +6,7 @@ import type { LineMetadata, StationMetadata } from '@paris-subway/shared';
 import { createTrainsLayers, TrainMarker } from './trains_layer';
 import { createStationLabelsLayer } from './labels_layer';
 import { createCapsuleLayers } from './capsule_layer';
+import { createLandmarksLayers } from './landmarks_layer';
 import type { ShapeEntry } from '../sim/shapes';
 import type { RollingStockDatabase } from '../sim/rolling_stock';
 
@@ -45,6 +46,7 @@ export class SubwayDeckOverlay {
   private trains: TrainMarker[] = [];
   private zoom: number = 13;
   private mapCenter: [number, number] = [2.3488, 48.8534];
+  private bounds: [[number, number], [number, number]] | null = null;
   private onStationHover: (info: any) => void;
   private onStationClick: (station: StationMetadata) => void;
   private onTrainHover: (info: any) => void;
@@ -71,11 +73,18 @@ export class SubwayDeckOverlay {
     return this.overlay;
   }
 
-  public setViewState(zoom: number, mapCenter: [number, number]) {
+  public setViewState(
+    zoom: number,
+    mapCenter: [number, number],
+    bounds?: [[number, number], [number, number]] | null
+  ) {
     const zoomChangedLOD = Math.floor(this.zoom * 2) !== Math.floor(zoom * 2);
     this.zoom = zoom;
     this.mapCenter = mapCenter;
-    if (zoomChangedLOD) {
+    if (bounds) {
+      this.bounds = bounds;
+    }
+    if (zoomChangedLOD || bounds) {
       this.updateLayers();
     }
   }
@@ -192,9 +201,16 @@ export class SubwayDeckOverlay {
           })
         : createTrainsLayers(this.trains, this.selectedLineId, this.onTrainHover, this.onTrainClick);
 
+    const landmarkLayers = createLandmarksLayers({
+      zoom: this.zoom,
+      mapCenter: this.mapCenter,
+      bounds: this.bounds
+    });
+
     const layers: any[] = [
       pathLayer,
       stationsLayer,
+      ...landmarkLayers,
       ...trainLayers
     ];
     if (labelsLayer) {

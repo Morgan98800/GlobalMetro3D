@@ -1,6 +1,7 @@
 import type { LineMetadata, StationMetadata } from '@paris-subway/shared';
 import { StationLadder, LineLadderData } from './station_ladder';
 import type { TrainMarker } from '../map/trains_layer';
+import { lineBadgeGrid, LineLike } from './line_badge';
 
 export class SubwayDock {
   private dockEl: HTMLElement;
@@ -14,6 +15,7 @@ export class SubwayDock {
   private laddersData: Record<string, LineLadderData> = {};
   private selectedLineId: string | null = null;
   private selectedDir: string = '0';
+  private setGridSelected: ((lineId: string | null) => void) | null = null;
   private stationLadder: StationLadder;
   private onLineSelect: (lineId: string | null, dir?: string) => void;
   private onStationClick: (station: StationMetadata) => void;
@@ -81,7 +83,30 @@ export class SubwayDock {
     this.lines = lines;
     this.stations = stations;
     this.laddersData = ladders;
-    this.renderLinePills();
+
+    // Sort lines: 1..14, 3bis, 7bis
+    const sortedLines = [...this.lines].sort((a, b) => {
+      const numA = parseInt(a.short_name);
+      const numB = parseInt(b.short_name);
+      if (!isNaN(numA) && !isNaN(numB)) {
+        if (numA !== numB) return numA - numB;
+      }
+      return a.short_name.localeCompare(b.short_name);
+    });
+
+    const lineLikes: LineLike[] = sortedLines.map(l => ({
+      line_id: l.id,
+      short_name: l.short_name,
+      route_color: l.color,
+      route_text_color: l.text_color
+    }));
+
+    const { element, setSelected } = lineBadgeGrid(lineLikes, (lineId) => {
+      this.selectLine(lineId);
+    });
+
+    this.setGridSelected = setSelected;
+    this.linesGridEl.replaceChildren(element);
   }
 
   public setLaddersData(ladders: Record<string, LineLadderData>) {
@@ -98,7 +123,10 @@ export class SubwayDock {
   public selectLine(lineId: string | null, dir: string = '0', triggerCallback: boolean = true) {
     this.selectedLineId = lineId;
     this.selectedDir = dir;
-    this.updateActivePill();
+
+    if (this.setGridSelected) {
+      this.setGridSelected(lineId);
+    }
 
     if (lineId && this.laddersData[lineId]) {
       this.stationLadder.setLine(this.laddersData[lineId], dir);
@@ -112,51 +140,6 @@ export class SubwayDock {
     if (triggerCallback) {
       this.onLineSelect(lineId, dir);
     }
-  }
-
-  private renderLinePills() {
-    this.linesGridEl.innerHTML = '';
-
-    // Sort lines: 1..14, 3bis, 7bis
-    const sortedLines = [...this.lines].sort((a, b) => {
-      const numA = parseInt(a.short_name);
-      const numB = parseInt(b.short_name);
-      if (!isNaN(numA) && !isNaN(numB)) {
-        if (numA !== numB) return numA - numB;
-      }
-      return a.short_name.localeCompare(b.short_name);
-    });
-
-    for (const line of sortedLines) {
-      const btn = document.createElement('button');
-      btn.className = 'line-badge-btn';
-      btn.dataset.lineId = line.id;
-      btn.style.backgroundColor = line.color;
-      btn.style.color = line.text_color;
-      btn.textContent = line.short_name;
-      btn.title = `Ligne ${line.short_name} : ${line.long_name}`;
-
-      btn.addEventListener('click', () => {
-        if (this.selectedLineId === line.id) {
-          this.selectLine(null);
-        } else {
-          this.selectLine(line.id);
-        }
-      });
-
-      this.linesGridEl.appendChild(btn);
-    }
-  }
-
-  private updateActivePill() {
-    const buttons = this.linesGridEl.querySelectorAll('.line-badge-btn');
-    buttons.forEach((btn: any) => {
-      if (btn.dataset.lineId === this.selectedLineId) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
   }
 
   private renderContent() {

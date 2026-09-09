@@ -1,0 +1,324 @@
+/* ===========================================================================
+   chrome.css — bandeau supérieur, indices de lignes, statut temps réel
+   À importer après tokens.css. Ajoute --signal et --ceramique-faint aux tokens
+   existants s'ils n'y sont pas déjà.
+   =========================================================================== */
+
+:root {
+  --signal: #c8362b;
+  --ceramique-faint: #6e6a60;
+  --header-h: 52px;
+  --header-h-mobile: 48px;
+}
+
+/* --------------------------------------------------------------------------
+   Bandeau
+   -------------------------------------------------------------------------- */
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 16px 0;
+  background: var(--fonte);
+  border-bottom: 1px solid var(--fonte-border);
+  font-family: var(--font-ui, "Inter", system-ui, sans-serif);
+  /* pas de border-radius, pas d'ombre : le bandeau encadre la carte,
+     il ne flotte pas dessus */
+}
+
+.topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.topbar__mark {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.topbar__name {
+  color: var(--ceramique);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  /* bas de casse : la signalétique du métro n'est pas en capitales */
+  text-transform: none;
+}
+
+.topbar__meta {
+  color: var(--ceramique-dim);
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.topbar__spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Compteur de rames : nombre avant le mot, chiffres tabulaires,
+   largeur minimale fixe pour supprimer le décalage de mise en page. */
+.topbar__count {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.topbar__count-value {
+  color: var(--ceramique);
+  font-size: 15px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  min-width: 3.2ch;
+  text-align: right;
+}
+
+.topbar__count-value--pending {
+  color: var(--ceramique-dim);
+  font-weight: 400;
+}
+
+.topbar__count-label {
+  color: var(--ceramique-dim);
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   Statut temps réel — un état, pas un contrôle
+   -------------------------------------------------------------------------- */
+
+.rt-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.rt-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--ceramique-dim);
+}
+
+.rt-status__label {
+  color: var(--ceramique-dim);
+  font-size: 13px;
+}
+
+.rt-status[data-state="live"] .rt-status__dot {
+  background: var(--laiton);
+  animation: rt-pulse 2.4s ease-in-out infinite;
+}
+
+.rt-status[data-state="live"] .rt-status__label {
+  color: var(--laiton);
+}
+
+.rt-status[data-state="error"] .rt-status__dot {
+  background: var(--signal);
+}
+
+.rt-status[data-state="error"] .rt-status__label {
+  color: var(--signal);
+}
+
+@keyframes rt-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-status[data-state="live"] .rt-status__dot { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Recherche
+   -------------------------------------------------------------------------- */
+
+.topbar__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  width: 210px;
+  padding: 0 10px;
+  flex-shrink: 0;
+  background: var(--fonte-surface);
+  border: 1px solid var(--fonte-border);
+  border-radius: 6px;
+  color: var(--ceramique-dim);
+  font: inherit;
+  font-size: 13px;
+  cursor: text;
+  transition: border-color 120ms ease;
+}
+
+.topbar__search:hover {
+  border-color: var(--guimard);
+}
+
+.topbar__search:focus-visible {
+  outline: none;
+  border-color: var(--laiton);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--laiton) 22%, transparent);
+}
+
+.topbar__search-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--ceramique-dim);
+}
+
+.topbar__search-text {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar__search-kbd {
+  color: var(--ceramique-faint);
+  font-size: 11px;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+/* Bouton loupe seul, mobile */
+.topbar__search-icon-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  color: var(--ceramique-dim);
+  cursor: pointer;
+}
+
+.topbar__search-icon-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--laiton);
+}
+
+/* --------------------------------------------------------------------------
+   Indices de lignes
+   -------------------------------------------------------------------------- */
+
+.line-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.line-badge {
+  --badge-size: 30px;
+  width: var(--badge-size);
+  height: var(--badge-size);
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 100ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  /* la couleur de fond et de texte sont posées en inline par lineBadge(),
+     depuis route_color et route_text_color du GTFS */
+}
+
+/* 3bis / 7bis : deux caractères, texte réduit pour ne pas déformer le cercle */
+.line-badge[data-len="2"] { font-size: 12px; }
+.line-badge[data-len="3"] { font-size: 10.5px; letter-spacing: -0.02em; }
+
+.line-badge:hover { transform: scale(1.06); }
+.line-badge:active { transform: scale(0.97); }
+
+.line-badge:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fonte), 0 0 0 4px var(--laiton);
+}
+
+.line-badge[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--fonte), 0 0 0 3px var(--ceramique);
+}
+
+.line-badges[data-has-selection="true"] .line-badge[aria-pressed="false"] {
+  opacity: 0.42;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .topbar {
+    gap: 10px;
+    height: calc(var(--header-h-mobile) + env(safe-area-inset-top, 0px));
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+  }
+
+  /* les métadonnées réseau et le raccourci clavier n'ont pas de sens ici */
+  .topbar__meta,
+  .topbar__search { display: none; }
+
+  .topbar__search-icon-btn { display: inline-flex; }
+
+  .topbar__name { font-size: 14px; }
+
+  .topbar__count-label { display: none; }
+
+  /* le compteur et le statut fusionnent : point + nombre + « rames » */
+  .rt-status__label { display: none; }
+
+  .rt-status::after {
+    content: "rames";
+    color: var(--ceramique-dim);
+    font-size: 13px;
+  }
+
+  /* cible tactile minimale 44 px : le cercle reste à 40 px,
+     la zone cliquable est étendue par le padding du conteneur */
+  .line-badge { --badge-size: 40px; font-size: 16px; }
+  .line-badge[data-len="2"] { font-size: 14px; }
+  .line-badge[data-len="3"] { font-size: 12px; }
+  .line-badges { gap: 10px; }
+  .line-badge:hover { transform: none; }
+}
+
+@media (max-width: 359px) {
+  .topbar__name { display: none; }
+}

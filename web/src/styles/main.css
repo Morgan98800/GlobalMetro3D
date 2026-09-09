@@ -34,55 +34,19 @@ iframe[src*="netlify"] {
   left: -9999px !important;
 }
 
-/* Header Badge */
-.header-badge {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: rgba(14, 21, 18, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--fonte-border);
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+/* Search Modal Wrap */
+.search-modal-wrap {
+  position: fixed;
+  top: calc(var(--chrome-top, 52px) + 8px);
+  right: 16px;
+  z-index: 100;
 }
-
-.brand-left {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.brand-title {
-  font-family: var(--font-title);
-  font-size: 0.98rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  color: var(--ceramique);
-  text-transform: uppercase;
-}
-
-.brand-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--laiton);
-  box-shadow: 0 0 8px var(--laiton);
-  flex-shrink: 0;
-}
-
-.brand-stats {
-  font-size: 0.8rem;
-  color: var(--ceramique-dim);
-  border-left: 1px solid var(--fonte-border);
-  padding-left: 0.75rem;
-  font-feature-settings: "tnum" 1;
-  font-variant-numeric: tabular-nums;
+@media (max-width: 767px) {
+  .search-modal-wrap {
+    top: calc(var(--header-h-mobile, 48px) + env(safe-area-inset-top, 0px) + 8px);
+    left: 12px;
+    right: 12px;
+  }
 }
 
 /* Realtime Status Badge & Toggle Button */
@@ -181,7 +145,7 @@ iframe[src*="netlify"] {
 /* Le Quai - Lateral Dock */
 .dock {
   position: absolute;
-  top: 5rem;
+  top: calc(var(--chrome-top, 52px) + 12px);
   left: 1.5rem;
   bottom: 1.5rem;
   width: 330px;
@@ -264,12 +228,10 @@ iframe[src*="netlify"] {
   transition: transform 0.2s ease;
 }
 
-/* Line Selector Grid */
+/* Line Selector Grid Container */
 .lines-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  padding: 1rem;
+  display: block;
+  padding: 0.75rem 1rem 0.25rem;
   border-bottom: 1px solid var(--fonte-border);
 }
 
@@ -453,7 +415,7 @@ iframe[src*="netlify"] {
 /* Controls (3D tilt, reset camera) */
 .map-controls {
   position: absolute;
-  top: 1.5rem;
+  top: calc(var(--chrome-top, 52px) + 12px);
   right: 1.5rem;
   z-index: 10;
   display: flex;
@@ -467,8 +429,8 @@ iframe[src*="netlify"] {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--fonte-border);
   color: var(--ceramique);
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -488,57 +450,17 @@ iframe[src*="netlify"] {
    Mobile / Smartphone Responsive Optimization (< 768px)
    ========================================================================= */
 @media (max-width: 768px) {
-  /* Header Badge on Mobile */
-  .header-badge {
-    top: calc(0.6rem + env(safe-area-inset-top, 0px));
-    left: 0.6rem;
-    right: calc(3.8rem + env(safe-area-inset-right, 0px));
-    padding: 0.45rem 0.75rem;
-    gap: 0.45rem;
-    flex-wrap: wrap;
-    border-radius: 10px;
-  }
-
-  .brand-left {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .brand-title {
-    font-size: 0.85rem;
-  }
-
-  .brand-dot {
-    width: 6px;
-    height: 6px;
-  }
-
-  .brand-stats {
-    font-size: 0.72rem;
-    padding-left: 0.45rem;
-  }
-
-  #network-stats {
-    display: none; /* Hide static line count on mobile to keep space for live stats */
-  }
-
-  .rt-badge {
-    font-size: 0.68rem;
-    padding: 0.15rem 0.45rem;
-  }
-
   /* Map Controls on Mobile */
   .map-controls {
-    top: calc(0.6rem + env(safe-area-inset-top, 0px));
+    top: calc(var(--header-h-mobile, 48px) + env(safe-area-inset-top, 0px) + 8px);
     right: calc(0.6rem + env(safe-area-inset-right, 0px));
     gap: 0.4rem;
   }
 
   .map-control-btn {
-    width: 38px;
-    height: 38px;
-    font-size: 0.95rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
     border-radius: 8px;
   }
 
@@ -549,6 +471,7 @@ iframe[src*="netlify"] {
     right: calc(0.6rem + env(safe-area-inset-right, 0px));
     bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
     width: auto;
+    z-index: 150;
     border-radius: 16px;
     max-height: 48vh;
     box-shadow: 0 -6px 28px rgba(0, 0, 0, 0.65);
@@ -585,10 +508,9 @@ iframe[src*="netlify"] {
     font-size: 0.8rem;
   }
 
-  /* Compact grid for mobile thumb-tapping */
+  /* Compact grid container for mobile thumb-tapping */
   .lines-grid {
-    grid-template-columns: repeat(8, 1fr);
-    gap: 0.35rem;
+    display: block;
     padding: 0.65rem 0.8rem;
   }
 

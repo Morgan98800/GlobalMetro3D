@@ -10,6 +10,9 @@ import type { TrainMarker } from './map/trains_layer';
 import type { LineMetadata, StationMetadata } from '@paris-subway/shared';
 import { PARIS_CENTER, DEFAULT_PITCH, DEFAULT_BEARING, DEFAULT_ZOOM } from '@paris-subway/shared';
 import { PARIS_LANDMARKS_GLTF } from './map/landmarks_layer';
+import './ui/chrome.css';
+import { TopBar } from './ui/header';
+import { auditLineContrast, LineLike } from './ui/line_badge';
 
 // API Key for IDFM PRIM SIRI-Lite feed (injected via Vite env or empty)
 const PRIM_API_KEY = import.meta.env.VITE_PRIM_API_KEY || '';
@@ -39,18 +42,16 @@ async function bootstrap() {
   );
 
   // DOM Elements
-  const statsEl = document.getElementById('network-stats');
-  if (statsEl) {
-    statsEl.textContent = `${lines.length} lignes · ${stations.length} stations`;
-  }
-  const trainsStatsEl = document.getElementById('trains-stats');
-  const rtToggleBtn = (document.getElementById('rt-toggle-btn') || document.getElementById('rt-badge')) as HTMLButtonElement | HTMLElement | null;
-  const rtBadgeTextEl = document.getElementById('rt-badge-text');
   const mapEl = document.getElementById('map')!;
   const tooltipEl = document.getElementById('tooltip')!;
   const studioNavBar = document.getElementById('studio-nav-bar')!;
 
-  // 2. Initialize MapLibre
+  // 2. Initialize Simulation Engine
+  const engine = new BrowserSubwayEngine(PRIM_API_KEY);
+  await engine.initialize(lines);
+  let isRealtimeEnabled = false;
+
+  // 3. Initialize MapLibre
   const map = createMap('map');
   (window as any).__map = map;
   (window as any).map = map;
@@ -185,7 +186,7 @@ async function bootstrap() {
   dock.setData(lines, stations, laddersData);
 
   // 6. Initialize Search Bar Component (Instant Station Autocomplete)
-  new SubwaySearchBar({
+  const searchBar = new SubwaySearchBar({
     containerId: 'search-container',
     stations,
     lines,
@@ -201,6 +202,36 @@ async function bootstrap() {
       });
     }
   });
+
+  // TopBar Component (header redesign)
+  const topbar = new TopBar({
+    lineCount: lines.length,
+    stationCount: stations.length,
+    onSearch: () => {
+      searchBar.open();
+    },
+    onToggleRealtime: () => {
+      isRealtimeEnabled = !isRealtimeEnabled;
+      if (isRealtimeEnabled) {
+        engine.startRealtime();
+        topbar.setRealtimeState({ active: true, delays: {} });
+      } else {
+        engine.stopRealtime();
+        topbar.setRealtimeState('standby');
+      }
+    }
+  });
+  topbar.mount();
+
+  if (import.meta.env.DEV) {
+    const lineLikes: LineLike[] = lines.map(l => ({
+      line_id: l.id,
+      short_name: l.short_name,
+      route_color: l.color,
+      route_text_color: l.text_color
+    }));
+    auditLineContrast(lineLikes);
+  }
 
   // 7. Router initialization
   const router = new SubwayRouter(({ lineShortName, dir }) => {
@@ -302,71 +333,21 @@ async function bootstrap() {
     });
   }
 
-  // 10. Initialize Autonomous Subway Simulation Engine (Realtime is disabled by default to save quota)
-  const engine = new BrowserSubwayEngine(PRIM_API_KEY);
-  await engine.initialize(lines);
-
-  let isRealtimeEnabled = false;
-
-  const updateRealtimeUI = (status?: any) => {
-    if (!rtToggleBtn || !rtBadgeTextEl) return;
-
-    if (!isRealtimeEnabled) {
-      rtToggleBtn.className = 'rt-badge rt-btn standby';
-      rtToggleBtn.setAttribute('aria-pressed', 'false');
-      rtToggleBtn.title = "Cliquer pour activer le suivi en direct PRIM (économise le quota d'API)";
-      rtBadgeTextEl.textContent = '⚡ Métro Temps Réel : OFF';
-    } else {
-      rtToggleBtn.setAttribute('aria-pressed', 'true');
-      if (status && status.lastError) {
-        rtToggleBtn.className = 'rt-badge rt-btn offline';
-        rtToggleBtn.title = `${status.lastError} — Cliquer pour couper`;
-        rtBadgeTextEl.textContent = 'PRIM : Hors Ligne';
-      } else if (status && status.active) {
-        rtToggleBtn.className = 'rt-badge rt-btn';
-        const lineCount = Object.keys(status.delays || {}).length;
-        rtToggleBtn.title = `Suivi en direct actif (${status.requestCount || 0} requêtes) — Cliquer pour couper (économiser quota)`;
-        rtBadgeTextEl.textContent = lineCount > 0 ? `⚡ PRIM : ${lineCount} lignes sync` : '⚡ PRIM : Connexion...';
-      } else {
-        rtToggleBtn.className = 'rt-badge rt-btn syncing';
-        rtToggleBtn.title = 'Connexion au flux SIRI-Lite en cours...';
-        rtBadgeTextEl.textContent = '⚡ PRIM : Connexion...';
-      }
-    }
-  };
-
-  // Initial state: OFF
-  updateRealtimeUI();
-
-  if (rtToggleBtn) {
-    rtToggleBtn.addEventListener('click', () => {
-      isRealtimeEnabled = !isRealtimeEnabled;
-      if (isRealtimeEnabled) {
-        engine.startRealtime();
-        updateRealtimeUI();
-      } else {
-        engine.stopRealtime();
-        updateRealtimeUI();
-      }
-    });
-  }
-
+  // 10. Start Autonomous Subway Simulation Engine Loop
   let lastDomUpdateTime = 0;
   engine.start({
     onTick: (trains, activeCount) => {
       deckOverlay.setTrains(trains);
+      topbar.setTrainCount(activeCount);
       const now = performance.now();
       if (now - lastDomUpdateTime >= 1000) {
         lastDomUpdateTime = now;
         dock.updateTrains(trains);
-        if (trainsStatsEl) {
-          trainsStatsEl.textContent = `${activeCount} rames en circulation`;
-        }
       }
     },
     onPrimStatus: (status) => {
       if (isRealtimeEnabled) {
-        updateRealtimeUI(status);
+        topbar.setRealtimeState(status);
       }
     }
   });

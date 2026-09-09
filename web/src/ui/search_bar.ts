@@ -30,6 +30,19 @@ export class SubwaySearchBar {
     this.bindEvents();
   }
 
+  public open() {
+    if (this.containerEl.style.display === 'none') {
+      this.containerEl.style.display = 'block';
+    }
+    this.inputEl.focus();
+    this.inputEl.select();
+  }
+
+  public close() {
+    this.resultsEl.style.display = 'none';
+    this.inputEl.blur();
+  }
+
   public setData(stations: StationMetadata[], lines: LineMetadata[]) {
     this.stations = stations;
     this.linesMap.clear();

@@ -132,7 +132,13 @@ export class BrowserSubwayEngine {
     const parisString = now.toLocaleString('en-US', { timeZone: 'Europe/Paris' });
     const pDate = new Date(parisString);
     const sec = pDate.getHours() * 3600 + pDate.getMinutes() * 60 + pDate.getSeconds();
-    return (sec + this.virtualTimeOffsetS) % 86400;
+    const rawSec = sec + this.virtualTimeOffsetS;
+    const modSec = ((rawSec % 86400) + 86400) % 86400;
+    // In GTFS, trips between 00:00 and 04:59 belong to the active service day and have t0/t1 >= 86400
+    if (modSec < 18000) {
+      return modSec + 86400;
+    }
+    return modSec;
   }
 
   public start(events: EngineEvents) {
@@ -222,8 +228,8 @@ export class BrowserSubwayEngine {
 
       this.trackedTrains = nextTrackedTrains;
 
-      // If prefers-reduced-motion is active, extrapolation is disabled: positions apply only per tick
-      if (this.reduceMotion) {
+      // If prefers-reduced-motion is active or no trains are running, positions apply per tick
+      if (this.reduceMotion || this.trackedTrains.size === 0) {
         events.onTick(activeTrainsList, activeTrainsList.length);
       }
     };

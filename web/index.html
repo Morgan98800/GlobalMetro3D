@@ -31,20 +31,8 @@
     <div id="app">
       <div id="map"></div>
 
-      <!-- Header status badge -->
-      <header class="header-badge" id="header-badge">
-        <div class="brand-left">
-          <div class="brand-dot"></div>
-          <div class="brand-title">Métro Parisien 3D</div>
-        </div>
-        <div class="brand-stats" id="network-stats">16 lignes · 321 stations</div>
-        <div class="brand-stats trains-stats" id="trains-stats">Calcul des rames...</div>
-        <button type="button" class="rt-badge rt-btn standby" id="rt-toggle-btn" aria-pressed="false" title="Cliquer pour activer le suivi en direct PRIM (économise le quota d'API)">
-          <div class="rt-pulse-dot"></div>
-          <span id="rt-badge-text">Métro Temps Réel : OFF</span>
-        </button>
-        <div id="search-container"></div>
-      </header>
+      <!-- Modal / popup container for station search -->
+      <div id="search-container" class="search-modal-wrap" style="display: none;"></div>
 
       <!-- Navigation monuments 3D (pilotage caméra MapLibre) -->
       <nav class="studio-nav-bar" id="studio-nav-bar" aria-label="Navigation monuments 3D">

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Paris Subway 3D — Visualiseur Cartographique</title>
+    
+    <!-- Typography: Inter for UI & Archivo bold for Title -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+
+    <script>
+      // Cleanly suppress any injected Netlify HUD, drawer, or feedback widget
+      function suppressNetlifyElements() {
+        const sel = 'script[src*="netlify/scripts/hud"], [data-netlify-site-id], [data-nf-variant], netlify-drawer, #netlify-drawer, .netlify-drawer, div[id*="netlify"], div[class*="netlify"], iframe[src*="netlify"]';
+        document.querySelectorAll(sel).forEach(el => el.remove());
+      }
+      suppressNetlifyElements();
+      const obs = new MutationObserver(suppressNetlifyElements);
+      obs.observe(document.documentElement, { childList: true, subtree: true });
+      window.addEventListener('DOMContentLoaded', suppressNetlifyElements);
+      window.addEventListener('load', suppressNetlifyElements);
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="map"></div>
+      <div id="three-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: none;"></div>
+
+      <!-- Header status badge -->
+      <header class="header-badge" id="header-badge">
+        <div class="brand-left">
+          <div class="brand-dot"></div>
+          <div class="brand-title">Métro Parisien 3D</div>
+        </div>
+        <div class="brand-stats" id="network-stats">16 lignes · 321 stations</div>
+        <div class="brand-stats trains-stats" id="trains-stats">Calcul des rames...</div>
+        <button type="button" class="rt-badge rt-btn standby" id="rt-toggle-btn" aria-pressed="false" title="Cliquer pour activer le suivi en direct PRIM (économise le quota d'API)">
+          <div class="rt-pulse-dot"></div>
+          <span id="rt-badge-text">Métro Temps Réel : OFF</span>
+        </button>
+        <div id="search-container"></div>
+      </header>
+
+      <!-- 3D Studio Paris Landmark Navigation Bar -->
+      <nav class="studio-nav-bar" id="studio-nav-bar" aria-label="Navigation monuments 3D" style="display: none;">
+        <button class="landmark-btn active" data-landmark="Tour Eiffel">🗼 Tour Eiffel</button>
+        <button class="landmark-btn" data-landmark="Notre-Dame">🏛️ Cité</button>
+        <button class="landmark-btn" data-landmark="Arc de Triomphe">🌟 Étoile</button>
+        <button class="landmark-btn" data-landmark="Sacré-Cœur">⛪ Montmartre</button>
+        <button class="landmark-btn" data-landmark="Overview">🌐 Vue Globale</button>
+        <div class="studio-opacity-wrap" title="Transparence du sol (effet Rayons X)">
+          <span class="xray-label">Rayons X</span>
+          <input type="range" id="ground-opacity-slider" min="10" max="100" value="76" aria-label="Transparence du sol" />
+        </div>
+      </nav>
+
+      <!-- Camera & view controls -->
+      <aside class="map-controls">
+        <button class="map-control-btn" id="btn-studio-mode" title="Basculer en vue Studio 3D Paris (Three.js)">🗼</button>
+        <button class="map-control-btn" id="btn-pitch" title="Basculer 2D / 3D">3D</button>
+        <button class="map-control-btn" id="btn-recenter" title="Recentrer sur Paris">⊙</button>
+      </aside>
+
+      <!-- Lateral dock / Mobile Bottom Sheet ("Le Quai") -->
+      <nav class="dock" id="dock" aria-label="Sélection de ligne et stations">
+        <div class="dock-handle" id="dock-handle" title="Glisser pour afficher / masquer"></div>
+        <div class="dock-header">
+          <span class="dock-title">Lignes de Métro</span>
+          <div class="dock-header-actions">
+            <button class="dock-reset-btn" id="dock-reset" style="display: none;">Tout afficher</button>
+            <button class="dock-collapse-btn" id="dock-collapse" aria-label="Réduire ou ouvrir le panneau">▾</button>
+          </div>
+        </div>
+        <div class="lines-grid" id="lines-grid" role="group" aria-label="Liste des 16 lignes"></div>
+        <div class="dock-content" id="dock-content">
+          <div style="padding: 1rem 0; font-size: 0.8rem; color: var(--ceramique-dim); line-height: 1.5;">
+            Cliquez sur un indice de ligne pour filtrer son tracé et parcourir ses arrêts.
+          </div>
+        </div>
+      </nav>
+
+      <!-- Interactive Tooltip -->
+      <div class="map-tooltip" id="tooltip">
+        <div class="tooltip-name" id="tooltip-name"></div>
+        <div class="tooltip-lines" id="tooltip-lines"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

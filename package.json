@@ -1,0 +1,14 @@
+{
+  "name": "paris-subway-3d",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "web",
+    "engine"
+  ],
+  "scripts": {
+    "build:web": "npm --workspace=web run build",
+    "dev:web": "npm --workspace=web run dev"
+  }
+}

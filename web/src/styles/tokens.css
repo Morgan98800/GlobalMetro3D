@@ -1,0 +1,43 @@
+:root {
+  --fonte: #0E1512;
+  --fonte-surface: #151F1B;
+  --fonte-border: #23332D;
+  --guimard: #1F4A3B;
+  --guimard-light: #2A6350;
+  --ceramique: #EFE9DD;
+  --ceramique-dim: #A8A398;
+  --laiton: #B4894F;
+  --laiton-hover: #D1A465;
+  --signal: #C8362B;
+
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-title: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--fonte);
+  color: var(--ceramique);
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular figures for digits across the UI */
+.line-badge-btn,
+.pill-mini,
+.train-tooltip-line,
+.trains-stats,
+.brand-stats,
+.tnum {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}

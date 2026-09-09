@@ -1,0 +1,29 @@
+{
+  "name": "@paris-subway/web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "node --experimental-strip-types src/sim/shapes.test.ts",
+    "test:shapes": "node --experimental-strip-types src/sim/shapes.test.ts"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^9.1.4",
+    "@deck.gl/geo-layers": "^9.1.4",
+    "@deck.gl/extensions": "^9.1.4",
+    "@deck.gl/layers": "^9.1.4",
+    "@deck.gl/mapbox": "^9.1.4",
+    "@paris-subway/shared": "*",
+    "@types/three": "^0.185.4",
+    "maplibre-gl": "^4.7.1",
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0"
+  }
+}

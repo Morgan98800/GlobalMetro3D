@@ -1,0 +1,4259 @@
+[
+  {
+    "id": "IDFM:71432",
+    "name": "Abbesses",
+    "coordinates": [
+      2.338367,
+      48.884384
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72491",
+    "name": "Aimé Césaire",
+    "coordinates": [
+      2.378131,
+      48.908438
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71728",
+    "name": "Alexandre Dumas",
+    "coordinates": [
+      2.394825,
+      48.856002
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71290",
+    "name": "Alma - Marceau",
+    "coordinates": [
+      2.301131,
+      48.864728
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71030",
+    "name": "Alésia",
+    "coordinates": [
+      2.327093,
+      48.828201
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71519",
+    "name": "Anatole France",
+    "coordinates": [
+      2.284886,
+      48.892197
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71419",
+    "name": "Anvers",
+    "coordinates": [
+      2.344155,
+      48.882869
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71348",
+    "name": "Argentine",
+    "coordinates": [
+      2.290148,
+      48.875384
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71293",
+    "name": "Arts et Métiers",
+    "coordinates": [
+      2.356535,
+      48.865381
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01381"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72286",
+    "name": "Asnières - Gennevilliers - Les Courtilles",
+    "coordinates": [
+      2.28422,
+      48.930765
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73642",
+    "name": "Assemblée Nationale",
+    "coordinates": [
+      2.32069,
+      48.861122
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72460",
+    "name": "Aubervilliers - Pantin - Quatre Chemins",
+    "coordinates": [
+      2.392221,
+      48.903757
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71158",
+    "name": "Avenue Émile Zola",
+    "coordinates": [
+      2.294719,
+      48.846964
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71697",
+    "name": "Avron",
+    "coordinates": [
+      2.398022,
+      48.851819
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:63284",
+    "name": "Aéroport d'Orly",
+    "coordinates": [
+      2.362534,
+      48.728246
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:483315",
+    "name": "Bagneux - Lucie Aubrac",
+    "coordinates": [
+      2.317458,
+      48.803548
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71073",
+    "name": "Balard",
+    "coordinates": [
+      2.278402,
+      48.836533
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70441",
+    "name": "Barbara",
+    "coordinates": [
+      2.317417,
+      48.809799
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71426",
+    "name": "Barbès - Rochechouart",
+    "coordinates": [
+      2.350607,
+      48.883776
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01374"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72326",
+    "name": "Basilique de Saint-Denis",
+    "coordinates": [
+      2.359203,
+      48.936594
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:463564",
+    "name": "Bastille",
+    "coordinates": [
+      2.369652,
+      48.853485
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01375",
+      "IDFM:C01378"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73650",
+    "name": "Bel-Air",
+    "coordinates": [
+      2.400964,
+      48.841338
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71853",
+    "name": "Belleville",
+    "coordinates": [
+      2.376685,
+      48.87199
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01381"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71607",
+    "name": "Bercy",
+    "coordinates": [
+      2.380343,
+      48.839488
+    ],
+    "lines": [
+      "IDFM:C01376",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71572",
+    "name": "Bibliothèque François Mitterrand",
+    "coordinates": [
+      2.376285,
+      48.830204
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71034",
+    "name": "Billancourt",
+    "coordinates": [
+      2.237891,
+      48.83192
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:473829",
+    "name": "Bir-Hakeim",
+    "coordinates": [
+      2.289296,
+      48.853884
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71420",
+    "name": "Blanche",
+    "coordinates": [
+      2.332484,
+      48.883766
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72486",
+    "name": "Bobigny - Pablo Picasso",
+    "coordinates": [
+      2.44915,
+      48.906312
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72039",
+    "name": "Bobigny-Pantin - Raymond Queneau",
+    "coordinates": [
+      2.426278,
+      48.895638
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71301",
+    "name": "Boissière",
+    "coordinates": [
+      2.290033,
+      48.866848
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71920",
+    "name": "Bolivar",
+    "coordinates": [
+      2.374125,
+      48.88079
+    ],
+    "lines": [
+      "IDFM:C01387"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71320",
+    "name": "Bonne Nouvelle",
+    "coordinates": [
+      2.348494,
+      48.870643
+    ],
+    "lines": [
+      "IDFM:C01378",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71906",
+    "name": "Botzaris",
+    "coordinates": [
+      2.388703,
+      48.879462
+    ],
+    "lines": [
+      "IDFM:C01387"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:412992",
+    "name": "Boucicaut",
+    "coordinates": [
+      2.287794,
+      48.841122
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71147",
+    "name": "Boulogne Jean Jaurès",
+    "coordinates": [
+      2.239078,
+      48.841992
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70721",
+    "name": "Boulogne Pont de Saint-Cloud",
+    "coordinates": [
+      2.228611,
+      48.840737
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73635",
+    "name": "Bourse",
+    "coordinates": [
+      2.340652,
+      48.868739
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73661",
+    "name": "Brochant",
+    "coordinates": [
+      2.32019,
+      48.890622
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73621",
+    "name": "Bréguet-Sabin",
+    "coordinates": [
+      2.370168,
+      48.856163
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71900",
+    "name": "Buttes Chaumont",
+    "coordinates": [
+      2.381394,
+      48.878417
+    ],
+    "lines": [
+      "IDFM:C01387"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:479928",
+    "name": "Buzenval",
+    "coordinates": [
+      2.401171,
+      48.851762
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71650",
+    "name": "Bérault",
+    "coordinates": [
+      2.429026,
+      48.845549
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71351",
+    "name": "Cadet",
+    "coordinates": [
+      2.344664,
+      48.876009
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71167",
+    "name": "Cambronne",
+    "coordinates": [
+      2.302899,
+      48.847493
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71063",
+    "name": "Campo-Formio",
+    "coordinates": [
+      2.358469,
+      48.835595
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71153",
+    "name": "Cardinal Lemoine",
+    "coordinates": [
+      2.351328,
+      48.8467
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72217",
+    "name": "Carrefour Pleyel",
+    "coordinates": [
+      2.342526,
+      48.919021
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71100",
+    "name": "Censier - Daubenton",
+    "coordinates": [
+      2.351627,
+      48.840226
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71305",
+    "name": "Champs-Élysées - Clemenceau",
+    "coordinates": [
+      2.314342,
+      48.867674
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01383"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71141",
+    "name": "Chardon Lagache",
+    "coordinates": [
+      2.266905,
+      48.845088
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70648",
+    "name": "Charenton - Écoles",
+    "coordinates": [
+      2.413845,
+      48.821481
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71156",
+    "name": "Charles Michels",
+    "coordinates": [
+      2.285624,
+      48.846362
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71347",
+    "name": "Charles de Gaulle - Étoile",
+    "coordinates": [
+      2.295869,
+      48.874824
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01372",
+      "IDFM:C01376"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73647",
+    "name": "Charonne",
+    "coordinates": [
+      2.384915,
+      48.85499
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73689",
+    "name": "Chaussée d'Antin - La Fayette",
+    "coordinates": [
+      2.333782,
+      48.872919
+    ],
+    "lines": [
+      "IDFM:C01377",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73622",
+    "name": "Chemin Vert",
+    "coordinates": [
+      2.368222,
+      48.857106
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73651",
+    "name": "Chevaleret",
+    "coordinates": [
+      2.368136,
+      48.834936
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73753",
+    "name": "Chevilly-Larue (Marché International)",
+    "coordinates": [
+      2.36646,
+      48.758722
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:474149",
+    "name": "Château Landon",
+    "coordinates": [
+      2.362099,
+      48.878523
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71469",
+    "name": "Château Rouge",
+    "coordinates": [
+      2.349531,
+      48.886963
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71333",
+    "name": "Château d'Eau",
+    "coordinates": [
+      2.356131,
+      48.872654
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71634",
+    "name": "Château de Vincennes",
+    "coordinates": [
+      2.438792,
+      48.84466
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71264",
+    "name": "Châtelet",
+    "coordinates": [
+      2.348153,
+      48.857619
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01374",
+      "IDFM:C01377",
+      "IDFM:C01381",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:461505",
+    "name": "Châtillon - Montrouge",
+    "coordinates": [
+      2.301595,
+      48.810728
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71223",
+    "name": "Cité",
+    "coordinates": [
+      2.347232,
+      48.854934
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73619",
+    "name": "Cluny - La Sorbonne",
+    "coordinates": [
+      2.345022,
+      48.850794
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71893",
+    "name": "Colonel Fabien",
+    "coordinates": [
+      2.370468,
+      48.87765
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71132",
+    "name": "Commerce",
+    "coordinates": [
+      2.293595,
+      48.844412
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71298",
+    "name": "Concorde",
+    "coordinates": [
+      2.321915,
+      48.866561
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01378",
+      "IDFM:C01382"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71075",
+    "name": "Convention",
+    "coordinates": [
+      2.296364,
+      48.837126
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72031",
+    "name": "Corentin Cariou",
+    "coordinates": [
+      2.382292,
+      48.894673
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70990",
+    "name": "Corentin Celton",
+    "coordinates": [
+      2.278959,
+      48.826823
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71013",
+    "name": "Corvisart",
+    "coordinates": [
+      2.350463,
+      48.829769
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:490783",
+    "name": "Coteaux Beauclair",
+    "coordinates": [
+      2.467472,
+      48.882311
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71576",
+    "name": "Cour Saint-Emilion",
+    "coordinates": [
+      2.386602,
+      48.833252
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71376",
+    "name": "Courcelles",
+    "coordinates": [
+      2.303294,
+      48.879265
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71834",
+    "name": "Couronnes",
+    "coordinates": [
+      2.380289,
+      48.869193
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72013",
+    "name": "Crimée",
+    "coordinates": [
+      2.377045,
+      48.890832
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71756",
+    "name": "Croix de Chavaux",
+    "coordinates": [
+      2.435855,
+      48.857993
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70269",
+    "name": "Créteil - L'Échat",
+    "coordinates": [
+      2.449424,
+      48.796611
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70021",
+    "name": "Créteil - Préfecture",
+    "coordinates": [
+      2.459399,
+      48.779937
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70172",
+    "name": "Créteil - Université",
+    "coordinates": [
+      2.45057,
+      48.789943
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71930",
+    "name": "Danube",
+    "coordinates": [
+      2.393228,
+      48.881949
+    ],
+    "lines": [
+      "IDFM:C01387"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71614",
+    "name": "Daumesnil",
+    "coordinates": [
+      2.395574,
+      48.839674
+    ],
+    "lines": [
+      "IDFM:C01376",
+      "IDFM:C01378"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71056",
+    "name": "Denfert-Rochereau",
+    "coordinates": [
+      2.332087,
+      48.833922
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01376"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71606",
+    "name": "Dugommier",
+    "coordinates": [
+      2.389913,
+      48.839052
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71197",
+    "name": "Dupleix",
+    "coordinates": [
+      2.293582,
+      48.850393
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71159",
+    "name": "Duroc",
+    "coordinates": [
+      2.316284,
+      48.84668
+    ],
+    "lines": [
+      "IDFM:C01380",
+      "IDFM:C01383"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71108",
+    "name": "Edgar Quinet",
+    "coordinates": [
+      2.325539,
+      48.840909
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71485",
+    "name": "Esplanade de la Défense",
+    "coordinates": [
+      2.250112,
+      48.888072
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73617",
+    "name": "Europe",
+    "coordinates": [
+      2.322185,
+      48.878825
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71124",
+    "name": "Exelmans",
+    "coordinates": [
+      2.259612,
+      48.842453
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:74001",
+    "name": "Faidherbe - Chaligny",
+    "coordinates": [
+      2.384072,
+      48.850201
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73641",
+    "name": "Falguière",
+    "coordinates": [
+      2.317551,
+      48.844318
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71277",
+    "name": "Filles du Calvaire",
+    "coordinates": [
+      2.366827,
+      48.863088
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73695",
+    "name": "Fort d'Aubervilliers",
+    "coordinates": [
+      2.404188,
+      48.914708
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71318",
+    "name": "Franklin D. Roosevelt",
+    "coordinates": [
+      2.309488,
+      48.868725
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:74041",
+    "name": "Front Populaire",
+    "coordinates": [
+      2.365903,
+      48.906539
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71137",
+    "name": "Félix Faure",
+    "coordinates": [
+      2.291752,
+      48.842747
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72203",
+    "name": "Gabriel Péri",
+    "coordinates": [
+      2.29443,
+      48.916616
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71817",
+    "name": "Gallieni",
+    "coordinates": [
+      2.41593,
+      48.865128
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71808",
+    "name": "Gambetta",
+    "coordinates": [
+      2.397353,
+      48.864883
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01386"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71135",
+    "name": "Gare d'Austerlitz",
+    "coordinates": [
+      2.364395,
+      48.842282
+    ],
+    "lines": [
+      "IDFM:C01375",
+      "IDFM:C01380"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73626",
+    "name": "Gare de Lyon",
+    "coordinates": [
+      2.373658,
+      48.845893
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71359",
+    "name": "Gare de l'Est",
+    "coordinates": [
+      2.358121,
+      48.876271
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01375",
+      "IDFM:C01377"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71410",
+    "name": "Gare du Nord",
+    "coordinates": [
+      2.356769,
+      48.879511
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01375"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72128",
+    "name": "Garibaldi",
+    "coordinates": [
+      2.331486,
+      48.905246
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73675",
+    "name": "Gaîté",
+    "coordinates": [
+      2.322393,
+      48.838733
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71328",
+    "name": "George V",
+    "coordinates": [
+      2.300336,
+      48.872134
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71026",
+    "name": "Glacière",
+    "coordinates": [
+      2.343438,
+      48.831116
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71840",
+    "name": "Goncourt",
+    "coordinates": [
+      2.370644,
+      48.869836
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71326",
+    "name": "Grands Boulevards",
+    "coordinates": [
+      2.34322,
+      48.871559
+    ],
+    "lines": [
+      "IDFM:C01378",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71528",
+    "name": "Guy Môquet",
+    "coordinates": [
+      2.327483,
+      48.893001
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:482368",
+    "name": "Havre-Caumartin",
+    "coordinates": [
+      2.327677,
+      48.873757
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72004",
+    "name": "Hoche",
+    "coordinates": [
+      2.403114,
+      48.891496
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70445",
+    "name": "Hôpital Bicêtre",
+    "coordinates": [
+      2.349892,
+      48.809989
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:415852",
+    "name": "Hôtel de Ville",
+    "coordinates": [
+      2.351424,
+      48.857601
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01381"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71274",
+    "name": "Invalides",
+    "coordinates": [
+      2.314633,
+      48.861092
+    ],
+    "lines": [
+      "IDFM:C01378",
+      "IDFM:C01383"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71294",
+    "name": "Iéna",
+    "coordinates": [
+      2.293864,
+      48.86478
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71322",
+    "name": "Jacques Bonsergent",
+    "coordinates": [
+      2.361024,
+      48.870621
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73657",
+    "name": "Jasmin",
+    "coordinates": [
+      2.267933,
+      48.852433
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71940",
+    "name": "Jaurès",
+    "coordinates": [
+      2.370174,
+      48.881596
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01375",
+      "IDFM:C01387"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71150",
+    "name": "Javel - André Citroën",
+    "coordinates": [
+      2.277779,
+      48.846108
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71868",
+    "name": "Jourdain",
+    "coordinates": [
+      2.389503,
+      48.875176
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71521",
+    "name": "Jules Joffrin",
+    "coordinates": [
+      2.344634,
+      48.892431
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71148",
+    "name": "Jussieu",
+    "coordinates": [
+      2.35496,
+      48.846144
+    ],
+    "lines": [
+      "IDFM:C01377",
+      "IDFM:C01380"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73656",
+    "name": "Kléber",
+    "coordinates": [
+      2.293231,
+      48.871283
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:69974",
+    "name": "L'Haÿ-les-Roses",
+    "coordinates": [
+      2.354077,
+      48.775519
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71434",
+    "name": "La Chapelle",
+    "coordinates": [
+      2.360391,
+      48.884368
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73696",
+    "name": "La Courneuve - 8 Mai 1945",
+    "coordinates": [
+      2.410221,
+      48.920246
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:490782",
+    "name": "La Dhuys",
+    "coordinates": [
+      2.465498,
+      48.877959
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71517",
+    "name": "La Défense",
+    "coordinates": [
+      2.237042,
+      48.892199
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71474",
+    "name": "La Fourche",
+    "coordinates": [
+      2.325816,
+      48.886958
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71199",
+    "name": "La Motte-Picquet - Grenelle",
+    "coordinates": [
+      2.298685,
+      48.849533
+    ],
+    "lines": [
+      "IDFM:C01376",
+      "IDFM:C01378",
+      "IDFM:C01380"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:474150",
+    "name": "La Muette",
+    "coordinates": [
+      2.274096,
+      48.858092
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71242",
+    "name": "La Tour-Maubourg",
+    "coordinates": [
+      2.310358,
+      48.857614
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71492",
+    "name": "Lamarck - Caulaincourt",
+    "coordinates": [
+      2.338584,
+      48.889682
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71957",
+    "name": "Laumière",
+    "coordinates": [
+      2.379312,
+      48.885201
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70452",
+    "name": "Le Kremlin-Bicêtre",
+    "coordinates": [
+      2.362238,
+      48.810379
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:478885",
+    "name": "Le Peletier",
+    "coordinates": [
+      2.340206,
+      48.874852
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71693",
+    "name": "Ledru-Rollin",
+    "coordinates": [
+      2.376141,
+      48.851338
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72240",
+    "name": "Les Agnettes",
+    "coordinates": [
+      2.286359,
+      48.923061
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71076",
+    "name": "Les Gobelins",
+    "coordinates": [
+      2.352662,
+      48.835843
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73794",
+    "name": "Les Halles",
+    "coordinates": [
+      2.345867,
+      48.862733
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:425779",
+    "name": "Les Sablons",
+    "coordinates": [
+      2.272304,
+      48.88105
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71558",
+    "name": "Liberté",
+    "coordinates": [
+      2.406491,
+      48.826148
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71382",
+    "name": "Liège",
+    "coordinates": [
+      2.327009,
+      48.88012
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71407",
+    "name": "Louis Blanc",
+    "coordinates": [
+      2.364839,
+      48.880768
+    ],
+    "lines": [
+      "IDFM:C01377",
+      "IDFM:C01387"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73667",
+    "name": "Louise Michel",
+    "coordinates": [
+      2.288265,
+      48.888458
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71086",
+    "name": "Lourmel",
+    "coordinates": [
+      2.281834,
+      48.838604
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73630",
+    "name": "Louvre - Rivoli",
+    "coordinates": [
+      2.340203,
+      48.861137
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73639",
+    "name": "Mabillon",
+    "coordinates": [
+      2.335033,
+      48.852897
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71324",
+    "name": "Madeleine",
+    "coordinates": [
+      2.326176,
+      48.869629
+    ],
+    "lines": [
+      "IDFM:C01378",
+      "IDFM:C01382",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72524",
+    "name": "Mairie d'Aubervilliers",
+    "coordinates": [
+      2.380729,
+      48.913631
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70671",
+    "name": "Mairie d'Issy",
+    "coordinates": [
+      2.273709,
+      48.8243
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70488",
+    "name": "Mairie d'Ivry",
+    "coordinates": [
+      2.383498,
+      48.81121
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72118",
+    "name": "Mairie de Clichy",
+    "coordinates": [
+      2.305351,
+      48.903973
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71785",
+    "name": "Mairie de Montreuil",
+    "coordinates": [
+      2.44156,
+      48.862282
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70586",
+    "name": "Mairie de Montrouge",
+    "coordinates": [
+      2.319524,
+      48.818472
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72168",
+    "name": "Mairie de Saint-Ouen",
+    "coordinates": [
+      2.334322,
+      48.912852
+    ],
+    "lines": [
+      "IDFM:C01383",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71909",
+    "name": "Mairie des Lilas",
+    "coordinates": [
+      2.416298,
+      48.879744
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70645",
+    "name": "Maison Blanche",
+    "coordinates": [
+      2.358578,
+      48.822285
+    ],
+    "lines": [
+      "IDFM:C01377",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70358",
+    "name": "Maisons-Alfort - Les Juilliottes",
+    "coordinates": [
+      2.445956,
+      48.803219
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70426",
+    "name": "Maisons-Alfort - Stade",
+    "coordinates": [
+      2.434924,
+      48.808977
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73766",
+    "name": "Malakoff - Plateau de Vanves",
+    "coordinates": [
+      2.298199,
+      48.822297
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70562",
+    "name": "Malakoff - Rue Étienne Dolet",
+    "coordinates": [
+      2.297027,
+      48.815293
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71416",
+    "name": "Malesherbes",
+    "coordinates": [
+      2.309411,
+      48.882799
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71703",
+    "name": "Maraîchers",
+    "coordinates": [
+      2.406039,
+      48.852731
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71511",
+    "name": "Marcadet - Poissonniers",
+    "coordinates": [
+      2.349979,
+      48.891453
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01382"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71054",
+    "name": "Marcel Sembat",
+    "coordinates": [
+      2.243468,
+      48.833808
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71510",
+    "name": "Marx Dormoy",
+    "coordinates": [
+      2.359946,
+      48.890607
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71190",
+    "name": "Maubert - Mutualité",
+    "coordinates": [
+      2.348069,
+      48.850109
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71595",
+    "name": "Michel Bizot",
+    "coordinates": [
+      2.402367,
+      48.837077
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71206",
+    "name": "Michel-Ange - Auteuil",
+    "coordinates": [
+      2.263809,
+      48.847709
+    ],
+    "lines": [
+      "IDFM:C01379",
+      "IDFM:C01380"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73658",
+    "name": "Michel-Ange - Molitor",
+    "coordinates": [
+      2.26146,
+      48.84474
+    ],
+    "lines": [
+      "IDFM:C01379",
+      "IDFM:C01380"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71162",
+    "name": "Mirabeau",
+    "coordinates": [
+      2.273064,
+      48.847078
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71346",
+    "name": "Miromesnil",
+    "coordinates": [
+      2.314956,
+      48.873784
+    ],
+    "lines": [
+      "IDFM:C01379",
+      "IDFM:C01383"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73671",
+    "name": "Monceau",
+    "coordinates": [
+      2.309413,
+      48.880569
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71631",
+    "name": "Montgallet",
+    "coordinates": [
+      2.390522,
+      48.844064
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71139",
+    "name": "Montparnasse Bienvenue",
+    "coordinates": [
+      2.323811,
+      48.843895
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01376",
+      "IDFM:C01382",
+      "IDFM:C01383"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71897",
+    "name": "Montreuil - Hôpital",
+    "coordinates": [
+      2.454519,
+      48.878341
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:73653",
+    "name": "Mouton-Duvernet",
+    "coordinates": [
+      2.32979,
+      48.831382
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71815",
+    "name": "Ménilmontant",
+    "coordinates": [
+      2.383691,
+      48.866297
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71673",
+    "name": "Nation",
+    "coordinates": [
+      2.395847,
+      48.848966
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01372",
+      "IDFM:C01376",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71043",
+    "name": "Nationale",
+    "coordinates": [
+      2.362858,
+      48.833182
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71350",
+    "name": "Notre-Dame-de-Lorette",
+    "coordinates": [
+      2.337546,
+      48.876042
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71138",
+    "name": "Notre-Dame-des-Champs",
+    "coordinates": [
+      2.328696,
+      48.845078
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71803",
+    "name": "Oberkampf",
+    "coordinates": [
+      2.368224,
+      48.864872
+    ],
+    "lines": [
+      "IDFM:C01375",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73618",
+    "name": "Odéon",
+    "coordinates": [
+      2.340619,
+      48.851948
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01380"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71557",
+    "name": "Olympiades",
+    "coordinates": [
+      2.367045,
+      48.827142
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71337",
+    "name": "Opéra",
+    "coordinates": [
+      2.332094,
+      48.870665
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01377",
+      "IDFM:C01378"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71972",
+    "name": "Ourcq",
+    "coordinates": [
+      2.386677,
+      48.88715
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71297",
+    "name": "Palais Royal - Musée du Louvre",
+    "coordinates": [
+      2.336951,
+      48.862828
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01377"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71801",
+    "name": "Parmentier",
+    "coordinates": [
+      2.374681,
+      48.865162
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71237",
+    "name": "Passy",
+    "coordinates": [
+      2.285731,
+      48.857487
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71125",
+    "name": "Pasteur",
+    "coordinates": [
+      2.312652,
+      48.842824
+    ],
+    "lines": [
+      "IDFM:C01376",
+      "IDFM:C01382"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71828",
+    "name": "Pelleport",
+    "coordinates": [
+      2.401418,
+      48.868222
+    ],
+    "lines": [
+      "IDFM:C01386"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71453",
+    "name": "Pereire",
+    "coordinates": [
+      2.297683,
+      48.884844
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:412687",
+    "name": "Pernety",
+    "coordinates": [
+      2.317947,
+      48.833896
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71751",
+    "name": "Philippe Auguste",
+    "coordinates": [
+      2.390589,
+      48.858112
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71639",
+    "name": "Picpus",
+    "coordinates": [
+      2.401275,
+      48.845103
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70537",
+    "name": "Pierre et Marie Curie",
+    "coordinates": [
+      2.377363,
+      48.815878
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71409",
+    "name": "Pigalle",
+    "coordinates": [
+      2.338218,
+      48.882197
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01382"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71133",
+    "name": "Place Monge",
+    "coordinates": [
+      2.352155,
+      48.842666
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71033",
+    "name": "Place d'Italie",
+    "coordinates": [
+      2.355547,
+      48.831712
+    ],
+    "lines": [
+      "IDFM:C01375",
+      "IDFM:C01376",
+      "IDFM:C01377"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71435",
+    "name": "Place de Clichy",
+    "coordinates": [
+      2.327958,
+      48.883669
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01383"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71885",
+    "name": "Place des Fêtes",
+    "coordinates": [
+      2.393301,
+      48.876859
+    ],
+    "lines": [
+      "IDFM:C01381",
+      "IDFM:C01387"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71039",
+    "name": "Plaisance",
+    "coordinates": [
+      2.313901,
+      48.831769
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:69884",
+    "name": "Pointe du Lac",
+    "coordinates": [
+      2.464317,
+      48.768761
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71363",
+    "name": "Poissonnière",
+    "coordinates": [
+      2.3487,
+      48.877048
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71475",
+    "name": "Pont Cardinet",
+    "coordinates": [
+      2.315491,
+      48.889138
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71217",
+    "name": "Pont Marie (Cité des Arts)",
+    "coordinates": [
+      2.357294,
+      48.853558
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71253",
+    "name": "Pont Neuf",
+    "coordinates": [
+      2.341777,
+      48.858546
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72057",
+    "name": "Pont de Levallois - Bécon",
+    "coordinates": [
+      2.280413,
+      48.897126
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71442",
+    "name": "Pont de Neuilly",
+    "coordinates": [
+      2.260716,
+      48.884685
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70698",
+    "name": "Pont de Sèvres",
+    "coordinates": [
+      2.230505,
+      48.829669
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:474152",
+    "name": "Porte Dauphine",
+    "coordinates": [
+      2.277633,
+      48.871397
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71591",
+    "name": "Porte Dorée",
+    "coordinates": [
+      2.405874,
+      48.835017
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71379",
+    "name": "Porte Maillot",
+    "coordinates": [
+      2.282452,
+      48.877802
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71169",
+    "name": "Porte d'Auteuil",
+    "coordinates": [
+      2.258539,
+      48.847933
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70596",
+    "name": "Porte d'Italie",
+    "coordinates": [
+      2.35953,
+      48.819107
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70636",
+    "name": "Porte d'Ivry",
+    "coordinates": [
+      2.369511,
+      48.821489
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70657",
+    "name": "Porte d'Orléans",
+    "coordinates": [
+      2.325493,
+      48.823416
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71799",
+    "name": "Porte de Bagnolet",
+    "coordinates": [
+      2.408823,
+      48.864328
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71450",
+    "name": "Porte de Champerret",
+    "coordinates": [
+      2.292112,
+      48.885652
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71579",
+    "name": "Porte de Charenton",
+    "coordinates": [
+      2.402512,
+      48.833449
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70604",
+    "name": "Porte de Choisy",
+    "coordinates": [
+      2.364625,
+      48.820132
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71545",
+    "name": "Porte de Clichy",
+    "coordinates": [
+      2.312713,
+      48.895049
+    ],
+    "lines": [
+      "IDFM:C01383",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:478883",
+    "name": "Porte de Clignancourt",
+    "coordinates": [
+      2.344624,
+      48.897526
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71710",
+    "name": "Porte de Montreuil",
+    "coordinates": [
+      2.410704,
+      48.853564
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71989",
+    "name": "Porte de Pantin",
+    "coordinates": [
+      2.391925,
+      48.888472
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71084",
+    "name": "Porte de Saint-Cloud",
+    "coordinates": [
+      2.257047,
+      48.837904
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72078",
+    "name": "Porte de Saint-Ouen",
+    "coordinates": [
+      2.328939,
+      48.897506
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71006",
+    "name": "Porte de Vanves",
+    "coordinates": [
+      2.304723,
+      48.827417
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71045",
+    "name": "Porte de Versailles",
+    "coordinates": [
+      2.288117,
+      48.83249
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71663",
+    "name": "Porte de Vincennes",
+    "coordinates": [
+      2.40798,
+      48.847381
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72064",
+    "name": "Porte de la Chapelle",
+    "coordinates": [
+      2.359551,
+      48.897224
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72430",
+    "name": "Porte de la Villette",
+    "coordinates": [
+      2.385869,
+      48.897803
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71889",
+    "name": "Porte des Lilas",
+    "coordinates": [
+      2.406523,
+      48.877231
+    ],
+    "lines": [
+      "IDFM:C01381",
+      "IDFM:C01386"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71911",
+    "name": "Pré-Saint-Gervais",
+    "coordinates": [
+      2.398581,
+      48.88016
+    ],
+    "lines": [
+      "IDFM:C01387"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73788",
+    "name": "Pyramides",
+    "coordinates": [
+      2.334474,
+      48.865728
+    ],
+    "lines": [
+      "IDFM:C01377",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71864",
+    "name": "Pyrénées",
+    "coordinates": [
+      2.385265,
+      48.873878
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71787",
+    "name": "Père Lachaise",
+    "coordinates": [
+      2.386539,
+      48.862957
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01373"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71597",
+    "name": "Quai de la Gare",
+    "coordinates": [
+      2.372825,
+      48.837003
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71637",
+    "name": "Quai de la Rapée",
+    "coordinates": [
+      2.365885,
+      48.846427
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71313",
+    "name": "Quatre Septembre",
+    "coordinates": [
+      2.336415,
+      48.869588
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71273",
+    "name": "Rambuteau",
+    "coordinates": [
+      2.353274,
+      48.86119
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71243",
+    "name": "Ranelagh",
+    "coordinates": [
+      2.269948,
+      48.855504
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71088",
+    "name": "Raspail",
+    "coordinates": [
+      2.330467,
+      48.839156
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01376"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73640",
+    "name": "Rennes",
+    "coordinates": [
+      2.328021,
+      48.84819
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71654",
+    "name": "Reuilly - Diderot",
+    "coordinates": [
+      2.387201,
+      48.847213
+    ],
+    "lines": [
+      "IDFM:C01371",
+      "IDFM:C01378"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73648",
+    "name": "Richard-Lenoir",
+    "coordinates": [
+      2.371814,
+      48.859841
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71330",
+    "name": "Richelieu - Drouot",
+    "coordinates": [
+      2.338616,
+      48.872239
+    ],
+    "lines": [
+      "IDFM:C01378",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71977",
+    "name": "Riquet",
+    "coordinates": [
+      2.37348,
+      48.887945
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71725",
+    "name": "Robespierre",
+    "coordinates": [
+      2.422959,
+      48.85571
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71947",
+    "name": "Romainville - Carnot",
+    "coordinates": [
+      2.44069,
+      48.883691
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71408",
+    "name": "Rome",
+    "coordinates": [
+      2.321404,
+      48.882256
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:426280",
+    "name": "Rosny-Bois-Perrier",
+    "coordinates": [
+      2.480517,
+      48.8828
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71795",
+    "name": "Rue Saint-Maur",
+    "coordinates": [
+      2.38046,
+      48.86405
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71292",
+    "name": "Rue de la Pompe",
+    "coordinates": [
+      2.277916,
+      48.864037
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71694",
+    "name": "Rue des Boulets",
+    "coordinates": [
+      2.38943,
+      48.852369
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71227",
+    "name": "Rue du Bac",
+    "coordinates": [
+      2.325673,
+      48.855876
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73636",
+    "name": "Réaumur - Sébastopol",
+    "coordinates": [
+      2.352024,
+      48.866283
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01374"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71311",
+    "name": "République",
+    "coordinates": [
+      2.363302,
+      48.867512
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01375",
+      "IDFM:C01378",
+      "IDFM:C01379",
+      "IDFM:C01381"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71781",
+    "name": "Saint-Ambroise",
+    "coordinates": [
+      2.373996,
+      48.86148
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73690",
+    "name": "Saint-Augustin",
+    "coordinates": [
+      2.321032,
+      48.874632
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:490784",
+    "name": "Saint-Denis - Pleyel",
+    "coordinates": [
+      2.345875,
+      48.917448
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:72285",
+    "name": "Saint-Denis - Porte de Paris",
+    "coordinates": [
+      2.356104,
+      48.930003
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72358",
+    "name": "Saint-Denis - Université",
+    "coordinates": [
+      2.364549,
+      48.945876
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71860",
+    "name": "Saint-Fargeau",
+    "coordinates": [
+      2.404364,
+      48.871681
+    ],
+    "lines": [
+      "IDFM:C01386"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71204",
+    "name": "Saint-François-Xavier",
+    "coordinates": [
+      2.314412,
+      48.851953
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71366",
+    "name": "Saint-Georges",
+    "coordinates": [
+      2.337571,
+      48.878417
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71216",
+    "name": "Saint-Germain-des-Prés",
+    "coordinates": [
+      2.333987,
+      48.853674
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71041",
+    "name": "Saint-Jacques",
+    "coordinates": [
+      2.337097,
+      48.832857
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71370",
+    "name": "Saint-Lazare",
+    "coordinates": [
+      2.324492,
+      48.874967
+    ],
+    "lines": [
+      "IDFM:C01373",
+      "IDFM:C01382",
+      "IDFM:C01383",
+      "IDFM:C01384"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71647",
+    "name": "Saint-Mandé",
+    "coordinates": [
+      2.419015,
+      48.846427
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71092",
+    "name": "Saint-Marcel",
+    "coordinates": [
+      2.36064,
+      48.838539
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73620",
+    "name": "Saint-Michel",
+    "coordinates": [
+      2.343748,
+      48.85344
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72126",
+    "name": "Saint-Ouen",
+    "coordinates": [
+      2.322026,
+      48.904644
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71222",
+    "name": "Saint-Paul (Le Marais)",
+    "coordinates": [
+      2.36087,
+      48.855286
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71334",
+    "name": "Saint-Philippe-du-Roule",
+    "coordinates": [
+      2.310004,
+      48.87201
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71184",
+    "name": "Saint-Placide",
+    "coordinates": [
+      2.326972,
+      48.847096
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71202",
+    "name": "Saint-Sulpice",
+    "coordinates": [
+      2.330802,
+      48.851237
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71777",
+    "name": "Saint-Sébastien - Froissart",
+    "coordinates": [
+      2.36737,
+      48.860987
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73634",
+    "name": "Sentier",
+    "coordinates": [
+      2.347514,
+      48.867283
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:490779",
+    "name": "Serge Gainsbourg",
+    "coordinates": [
+      2.427229,
+      48.881343
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71556",
+    "name": "Simplon",
+    "coordinates": [
+      2.347781,
+      48.893878
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71270",
+    "name": "Solférino",
+    "coordinates": [
+      2.323103,
+      48.85855
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71961",
+    "name": "Stalingrad",
+    "coordinates": [
+      2.368996,
+      48.884315
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01375",
+      "IDFM:C01377"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:73633",
+    "name": "Strasbourg - Saint-Denis",
+    "coordinates": [
+      2.353635,
+      48.869457
+    ],
+    "lines": [
+      "IDFM:C01374",
+      "IDFM:C01378",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71201",
+    "name": "Sully - Morland",
+    "coordinates": [
+      2.361859,
+      48.85137
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71203",
+    "name": "Sèvres - Babylone",
+    "coordinates": [
+      2.326171,
+      48.85104
+    ],
+    "lines": [
+      "IDFM:C01380",
+      "IDFM:C01382"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71144",
+    "name": "Sèvres-Lecourbe",
+    "coordinates": [
+      2.309481,
+      48.845593
+    ],
+    "lines": [
+      "IDFM:C01376"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71157",
+    "name": "Ségur",
+    "coordinates": [
+      2.306951,
+      48.847324
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71296",
+    "name": "Temple",
+    "coordinates": [
+      2.361589,
+      48.866685
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71367",
+    "name": "Ternes",
+    "coordinates": [
+      2.298114,
+      48.878201
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:69677",
+    "name": "Thiais - Orly (Pont de Rungis)",
+    "coordinates": [
+      2.372761,
+      48.747188
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:71001",
+    "name": "Tolbiac",
+    "coordinates": [
+      2.357318,
+      48.826137
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71355",
+    "name": "Trinité - d'Estienne d'Orves",
+    "coordinates": [
+      2.333357,
+      48.876307
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71285",
+    "name": "Trocadéro",
+    "coordinates": [
+      2.286826,
+      48.863088
+    ],
+    "lines": [
+      "IDFM:C01376",
+      "IDFM:C01379"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71284",
+    "name": "Tuileries",
+    "coordinates": [
+      2.329102,
+      48.864735
+    ],
+    "lines": [
+      "IDFM:C01371"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71870",
+    "name": "Télégraphe",
+    "coordinates": [
+      2.398594,
+      48.875483
+    ],
+    "lines": [
+      "IDFM:C01381"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71170",
+    "name": "Vaneau",
+    "coordinates": [
+      2.321228,
+      48.848701
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71232",
+    "name": "Varenne",
+    "coordinates": [
+      2.31494,
+      48.856399
+    ],
+    "lines": [
+      "IDFM:C01383"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71091",
+    "name": "Vaugirard",
+    "coordinates": [
+      2.301075,
+      48.839438
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71117",
+    "name": "Vavin",
+    "coordinates": [
+      2.328863,
+      48.842052
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71315",
+    "name": "Victor Hugo",
+    "coordinates": [
+      2.286024,
+      48.869936
+    ],
+    "lines": [
+      "IDFM:C01372"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:478860",
+    "name": "Villejuif - Gustave Roussy",
+    "coordinates": [
+      2.349297,
+      48.793248
+    ],
+    "lines": [
+      "IDFM:C01384"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 1
+  },
+  {
+    "id": "IDFM:70143",
+    "name": "Villejuif - Louis Aragon",
+    "coordinates": [
+      2.367839,
+      48.787537
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70375",
+    "name": "Villejuif Léo Lagrange",
+    "coordinates": [
+      2.364069,
+      48.804367
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70248",
+    "name": "Villejuif Paul Vaillant-Couturier",
+    "coordinates": [
+      2.368358,
+      48.796381
+    ],
+    "lines": [
+      "IDFM:C01377"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71403",
+    "name": "Villiers",
+    "coordinates": [
+      2.315815,
+      48.881073
+    ],
+    "lines": [
+      "IDFM:C01372",
+      "IDFM:C01373"
+    ],
+    "is_hub": true,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71113",
+    "name": "Volontaires",
+    "coordinates": [
+      2.307602,
+      48.841392
+    ],
+    "lines": [
+      "IDFM:C01382"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71750",
+    "name": "Voltaire",
+    "coordinates": [
+      2.38007,
+      48.857887
+    ],
+    "lines": [
+      "IDFM:C01379"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71423",
+    "name": "Wagram",
+    "coordinates": [
+      2.304625,
+      48.883761
+    ],
+    "lines": [
+      "IDFM:C01373"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71224",
+    "name": "École Militaire",
+    "coordinates": [
+      2.306468,
+      48.854947
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:70522",
+    "name": "École Vétérinaire de Maisons-Alfort",
+    "coordinates": [
+      2.422308,
+      48.81484
+    ],
+    "lines": [
+      "IDFM:C01378"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:71166",
+    "name": "Église d'Auteuil",
+    "coordinates": [
+      2.269221,
+      48.847135
+    ],
+    "lines": [
+      "IDFM:C01380"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:72024",
+    "name": "Église de Pantin",
+    "coordinates": [
+      2.413075,
+      48.893245
+    ],
+    "lines": [
+      "IDFM:C01375"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  },
+  {
+    "id": "IDFM:479068",
+    "name": "Étienne Marcel",
+    "coordinates": [
+      2.348976,
+      48.863703
+    ],
+    "lines": [
+      "IDFM:C01374"
+    ],
+    "is_hub": false,
+    "wheelchair_boarding": 2
+  }
+]

@@ -9,6 +9,7 @@ import { loadRollingStock } from './sim/rolling_stock';
 import type { TrainMarker } from './map/trains_layer';
 import type { LineMetadata, StationMetadata } from '@paris-subway/shared';
 import { PARIS_CENTER, DEFAULT_PITCH, DEFAULT_BEARING, DEFAULT_ZOOM } from '@paris-subway/shared';
+import { PARIS_LANDMARKS_GLTF } from './map/landmarks_layer';
 
 // API Key for IDFM PRIM SIRI-Lite feed (injected via Vite env or empty)
 const PRIM_API_KEY = import.meta.env.VITE_PRIM_API_KEY || '';
@@ -46,50 +47,13 @@ async function bootstrap() {
   const rtToggleBtn = (document.getElementById('rt-toggle-btn') || document.getElementById('rt-badge')) as HTMLButtonElement | HTMLElement | null;
   const rtBadgeTextEl = document.getElementById('rt-badge-text');
   const mapEl = document.getElementById('map')!;
-  const threeContainerEl = document.getElementById('three-container')!;
   const tooltipEl = document.getElementById('tooltip')!;
   const studioNavBar = document.getElementById('studio-nav-bar')!;
-  const groundSlider = document.getElementById('ground-opacity-slider') as HTMLInputElement | null;
 
   // 2. Initialize MapLibre
   const map = createMap('map');
   (window as any).__map = map;
   (window as any).map = map;
-
-  // 3. Dynamic Three.js 3D Paris Studio Loader (Code-Splitting)
-  let parisStudio: any = null;
-  let isStudioMode = false;
-
-  async function ensureParisStudio() {
-    if (!parisStudio) {
-      console.log('[app] Code-splitting: Loading Three.js Paris 3D scene...');
-      const { ParisThreeStudio } = await import('./three/paris_scene');
-      parisStudio = new ParisThreeStudio(threeContainerEl);
-      parisStudio.loadMetroTracks(shapesMap, lines);
-      parisStudio.loadRerLines(rerLines);
-
-      try {
-        const urbanRes = await fetch('/data/paris_urban_mesh.json');
-        if (urbanRes.ok) {
-          const urbanData = await urbanRes.json();
-          parisStudio.loadUrbanMesh(urbanData);
-        }
-      } catch (e) {
-        console.warn('[app] Could not load paris_urban_mesh.json:', e);
-      }
-
-      (window as any).parisStudio = parisStudio;
-
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('debug') === '1') {
-        setTimeout(() => {
-          parisStudio.dumpDiagnostics();
-          (window as any).__PARIS_STUDIO_READY__ = true;
-        }, 400);
-      }
-    }
-    return parisStudio;
-  }
 
   // 4. Initialize deck.gl overlay with Station & Train Handlers
   const deckOverlay = new SubwayDeckOverlay({
@@ -282,73 +246,10 @@ async function bootstrap() {
     }
   });
 
-  // 9. Camera & Studio Mode Controls
-  const btnStudioMode = document.getElementById('btn-studio-mode')!;
-  const dockEl = document.getElementById('dock')!;
-  btnStudioMode.addEventListener('click', async () => {
-    isStudioMode = !isStudioMode;
-    if (isStudioMode) {
-      mapEl.style.display = 'none';
-      threeContainerEl.style.display = 'block';
-      if (studioNavBar) studioNavBar.style.display = 'flex';
-      btnStudioMode.textContent = '🗺️';
-      btnStudioMode.title = 'Revenir à la Vue Cartographique';
-      dockEl.classList.add('collapsed');
-      const studio = await ensureParisStudio();
-      studio.start();
-      studio.onResize();
-    } else {
-      threeContainerEl.style.display = 'none';
-      if (studioNavBar) studioNavBar.style.display = 'none';
-      mapEl.style.display = 'block';
-      btnStudioMode.textContent = '🗼';
-      btnStudioMode.title = 'Basculer en vue Studio 3D Paris (Three.js)';
-      dockEl.classList.remove('collapsed');
-      if (parisStudio) {
-        parisStudio.stop();
-      }
-      map.resize();
-    }
-  });
-
-  // Auto-switch to Studio mode if URL has ?debug=1 or ?studio=1
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('debug') === '1' || urlParams.get('studio') === '1') {
-    btnStudioMode.click();
-  }
-
-  // Landmark navigation bar listeners
-  if (studioNavBar) {
-    studioNavBar.querySelectorAll('.landmark-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const lm = btn.getAttribute('data-landmark');
-        const studio = await ensureParisStudio();
-        studioNavBar.querySelectorAll('.landmark-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        if (lm === 'Overview') {
-          studio.flyToOverview();
-        } else if (lm) {
-          studio.flyToLandmark(lm);
-        }
-      });
-    });
-  }
-
-  if (groundSlider) {
-    groundSlider.addEventListener('input', async () => {
-      const studio = await ensureParisStudio();
-      studio.setGroundOpacity(parseInt(groundSlider.value, 10) / 100);
-    });
-  }
-
+  // 9. Camera Controls & Landmark Navigator
   const btnPitch = document.getElementById('btn-pitch')!;
   let is3D = true;
   btnPitch.addEventListener('click', () => {
-    if (isStudioMode) {
-      if (parisStudio) parisStudio.resetView();
-      return;
-    }
     is3D = !is3D;
     map.easeTo({
       pitch: is3D ? DEFAULT_PITCH : 0,
@@ -360,13 +261,12 @@ async function bootstrap() {
 
   const btnRecenter = document.getElementById('btn-recenter')!;
   btnRecenter.addEventListener('click', () => {
-    if (isStudioMode) {
-      if (parisStudio) parisStudio.resetView();
-      return;
-    }
     dock.selectLine(null);
     deckOverlay.setSelectedLine(null);
     engine.setFocusedLine(null);
+    if (studioNavBar) {
+      studioNavBar.querySelectorAll('.landmark-btn').forEach(b => b.classList.remove('active'));
+    }
     map.flyTo({
       center: PARIS_CENTER,
       zoom: DEFAULT_ZOOM,
@@ -375,6 +275,32 @@ async function bootstrap() {
       duration: 1000
     });
   });
+
+  // Landmark navigation bar listeners (MapLibre flyTo)
+  if (studioNavBar) {
+    studioNavBar.querySelectorAll('.landmark-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lmName = btn.getAttribute('data-landmark');
+        studioNavBar.querySelectorAll('.landmark-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (lmName === 'Overview') {
+          btnRecenter.click();
+        } else if (lmName) {
+          const lm = PARIS_LANDMARKS_GLTF.find(l => l.name.toLowerCase().includes(lmName.toLowerCase()));
+          if (lm) {
+            map.flyTo({
+              center: lm.coords,
+              zoom: 16,
+              pitch: 55,
+              bearing: (lm.yaw || 0) + 35,
+              duration: 1200
+            });
+          }
+        }
+      });
+    });
+  }
 
   // 10. Initialize Autonomous Subway Simulation Engine (Realtime is disabled by default to save quota)
   const engine = new BrowserSubwayEngine(PRIM_API_KEY);
@@ -429,9 +355,6 @@ async function bootstrap() {
   engine.start({
     onTick: (trains, activeCount) => {
       deckOverlay.setTrains(trains);
-      if (isStudioMode && parisStudio) {
-        parisStudio.updateTrains(trains);
-      }
       const now = performance.now();
       if (now - lastDomUpdateTime >= 1000) {
         lastDomUpdateTime = now;

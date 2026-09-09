@@ -30,7 +30,6 @@
   <body>
     <div id="app">
       <div id="map"></div>
-      <div id="three-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: none;"></div>
 
       <!-- Header status badge -->
       <header class="header-badge" id="header-badge">
@@ -47,22 +46,21 @@
         <div id="search-container"></div>
       </header>
 
-      <!-- 3D Studio Paris Landmark Navigation Bar -->
-      <nav class="studio-nav-bar" id="studio-nav-bar" aria-label="Navigation monuments 3D" style="display: none;">
-        <button class="landmark-btn active" data-landmark="Tour Eiffel">🗼 Tour Eiffel</button>
-        <button class="landmark-btn" data-landmark="Notre-Dame">🏛️ Cité</button>
-        <button class="landmark-btn" data-landmark="Arc de Triomphe">🌟 Étoile</button>
-        <button class="landmark-btn" data-landmark="Sacré-Cœur">⛪ Montmartre</button>
-        <button class="landmark-btn" data-landmark="Overview">🌐 Vue Globale</button>
-        <div class="studio-opacity-wrap" title="Transparence du sol (effet Rayons X)">
-          <span class="xray-label">Rayons X</span>
-          <input type="range" id="ground-opacity-slider" min="10" max="100" value="76" aria-label="Transparence du sol" />
-        </div>
+      <!-- Navigation monuments 3D (pilotage caméra MapLibre) -->
+      <nav class="studio-nav-bar" id="studio-nav-bar" aria-label="Navigation monuments 3D">
+        <button class="landmark-btn" data-landmark="Tour Eiffel">Tour Eiffel</button>
+        <button class="landmark-btn" data-landmark="Notre-Dame">Notre-Dame</button>
+        <button class="landmark-btn" data-landmark="Arc de Triomphe">Arc de Triomphe</button>
+        <button class="landmark-btn" data-landmark="Sacré-Cœur">Sacré-Cœur</button>
+        <button class="landmark-btn" data-landmark="Invalides">Invalides</button>
+        <button class="landmark-btn" data-landmark="Montparnasse">Montparnasse</button>
+        <button class="landmark-btn" data-landmark="Louvre">Louvre</button>
+        <button class="landmark-btn" data-landmark="Panthéon">Panthéon</button>
+        <button class="landmark-btn" data-landmark="Overview">Vue Globale</button>
       </nav>
 
       <!-- Camera & view controls -->
       <aside class="map-controls">
-        <button class="map-control-btn" id="btn-studio-mode" title="Basculer en vue Studio 3D Paris (Three.js)">🗼</button>
         <button class="map-control-btn" id="btn-pitch" title="Basculer 2D / 3D">3D</button>
         <button class="map-control-btn" id="btn-recenter" title="Recentrer sur Paris">⊙</button>
       </aside>

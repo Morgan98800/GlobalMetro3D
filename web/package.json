@@ -16,10 +16,10 @@
     "@deck.gl/extensions": "^9.1.4",
     "@deck.gl/layers": "^9.1.4",
     "@deck.gl/mapbox": "^9.1.4",
+    "@deck.gl/mesh-layers": "^9.1.4",
+    "@loaders.gl/gltf": "^4.3.3",
     "@paris-subway/shared": "*",
-    "@types/three": "^0.185.4",
-    "maplibre-gl": "^4.7.1",
-    "three": "^0.186.0"
+    "maplibre-gl": "^4.7.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

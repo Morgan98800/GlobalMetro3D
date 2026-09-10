@@ -20,9 +20,9 @@ Le filtrage extrait exclusivement :
    - Lignes 1 à 14, 3bis, 7bis.
    - Récupération des couleurs autoritaires officielles : `route_color` (hexadécimal sans `#`) et `route_text_color`.
    - Préservation des drapeaux d'extensions futures.
-2. **Les tronçons centraux des RER A, B, C, D, E** :
-   - Filtrage géographique sur la zone métropolitaine de Paris intra-muros et proche banlieue (`lng [2.15, 2.55]`, `lat [48.75, 48.98]`).
-   - Exclusion des branches lointaines jusqu'en province pour éviter des fichiers surdimensionnés.
+2. **Les RER A, B, C, D, E natifs** :
+   - Lecture directe des routes GTFS IDFM (`route_type = 2`, agence IDFM), avec couleurs et couleurs de texte autoritaires.
+   - Les stations RER sont fusionnées dans `stations.json` par `parent_station` (repli sur `stop_id`) et les tracés sont publiés dans `rer_lines.json`.
 
 ---
 
@@ -103,16 +103,39 @@ Contient la totalité des 11 252 courses actives de la journée pour l'ensemble 
   avec pour chaque arrêt : `[heure_arrivee_s, heure_depart_s, distance_m, station_index]`.
 
 ### 4. `stations.json` (70.7 Ko)
-Les 321 stations du métro parisien avec leurs identifiants autoritaires, coordonnées WGS84, lignes desservies, et statut de correspondance majeure (*Hub*).
+Le comptage retenu est celui des **stations commerciales métro + RER** : pour chaque point d'arrêt
+référencé par au moins une course métro active, on utilise `parent_station` quand le GTFS le
+fournit, sinon `stop_id`. Les quais/points d'arrêt d'une même station commerciale sont donc
+regroupés par identifiant GTFS, jamais par nom ou proximité géographique. Les stations
+commerciales desservies par plusieurs lignes ne comptent qu'une fois dans le total et portent
+la liste complète de leurs lignes. Le dernier artefact validé contient 321 stations selon cette
+règle (803 points d'arrêt GTFS actifs et 321 identifiants commerciaux).
 
-### 5. `paris_urban_mesh.json` (268.6 Ko) — Maquette 3D de Paris
+Le dernier artefact validé contient 546 stations (321 métro complétées par les stations RER fusionnées) et 21 lignes visibles dans l'interface.
+
+Le pipeline compare le nouveau nombre à celui de l'exécution précédente avant de remplacer
+`stations.json` et échoue si l'écart dépasse 2 %. Ce contrôle protège contre une déduplication,
+un filtrage géographique ou un GTFS amont modifié sans signalement.
+
+### 5. `sections.json` — inventaire OSM pour la politique de caméra
+Cet artefact est dérivé des ways OSM `railway=subway` puis projeté sur les tracés GTFS
+rééchantillonnés, pour chaque ligne et chaque sens. La classification est stricte :
+`tunnel=yes` ou `layer < 0` donne `souterrain`, `bridge=yes` ou `layer > 0` donne
+`aerien`, et l'absence des deux donne `sol`. Un conflit de tags est conservé et marqué
+avec priorité au souterrain ; il n'est jamais corrigé silencieusement. Chaque intervalle
+porte `d_start_m`, `d_end_m`, `type`, les ways OSM sources et les stations d'extrémité.
+Les sections courtes ou dont les deux extrémités sont la même station portent
+`review_flags` et restent soumises à validation humaine. `sections-overrides.json` est
+appliqué après la dérivation OSM.
+
+### 6. `paris_urban_mesh.json` (268.6 Ko) — Maquette 3D de Paris
 Généré par [`scripts/generate_paris_3d_data.py`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/scripts/generate_paris_3d_data.py) :
 - Tracé de la Seine de Charenton à Boulogne avec largeur variable (180 à 250 m).
 - Polygones de l'Île de la Cité et de l'Île Saint-Louis.
 - 15 ponts parisiens (position, longueur, largeur, orientation).
 - 3 923 blocs d'immeubles haussmanniens et tours de La Défense (coordonnées, dimensions, orientation).
 
-### 6. `rolling-stock.json` (12.3 Ko) — Matériel Roulant & Dimensions Métriques
+### 7. `rolling-stock.json` (12.3 Ko) — Matériel Roulant & Dimensions Métriques
 Définit les caractéristiques géométriques réelles de chaque modèle de train (MP14, MP89, MP05, MF01, MF77, MF67, MF88, MP73) et la table d'affectation par ligne :
 - `cars_count` : Nombre de voitures (3 pour les lignes bis, 5 en fer standard, 8 sur la ligne 14).
 - `car_length_m` : Longueur individuelle d'une caisse en mètres (~15 m).
@@ -120,6 +143,34 @@ Définit les caractéristiques géométriques réelles de chaque modèle de trai
 - `width_m` : Largeur physique réelle de caisse (2,40 m pour le matériel fer, 2,45 m pour le pneu).
 - `total_length_m` : Longueur totale hors-tout de la rame en circulation.
 - Attribut `"verified": false` et sources techniques documentées pour chaque ligne.
+
+### 8. `model-assets-manifest.json` — Contrat glTF, licences et livrées
+Le manifeste [`data/model-assets-manifest.json`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/data/model-assets-manifest.json)
+est généré par [`scripts/build_train_asset_manifest.py`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/scripts/build_train_asset_manifest.py).
+Il prépare l'intégration des trois grandes familles demandées sans télécharger d'actif
+externe :
+
+- une voiture glTF par famille (`steel_classic`, `pneumatic`, `automatic_recent`), instanciée
+  selon `cars_count` le long de l'abscisse curviligne ;
+- trois LOD, compression Draco ou meshopt, moins de 150 Ko par voiture et par LOD, origine
+  au centre de la voiture et axe longitudinal `+X` ;
+- une source et une licence à renseigner et valider humainement avant toute redistribution ;
+- une teinte de livrée validée par famille. Les couleurs GTFS sont recopiées pour repérage,
+  mais sont explicitement marquées comme **couleurs de ligne**, pas comme livrées physiques.
+
+Au 10 septembre 2026, aucun modèle de rame glTF n'est encore présent dans
+`web/public/models/` : le manifeste reste donc en statut
+`awaiting_human_asset_approval`. Cette barrière est volontaire ; elle empêche de confondre
+les modèles de monuments déjà présents avec des actifs de matériel roulant et empêche tout
+téléchargement de marketplace sans accord de licence.
+
+### 9. `station-rankings.json` — Desserte et records
+
+Le script `scripts/build_station_rankings.py` agrège les passages planifiés GTFS par station et
+par station-ligne, séparément pour semaine, samedi et dimanche. Les rangs et compteurs sont
+recopiés dans `stations.json` et exposés dans le bouton « Records du réseau ».
+La fréquentation annuelle IDFM/RATP 2015 n'est pas jointe : le jeu officiel disponible expose
+un nom de station mais aucun identifiant GTFS fiable pour une jointure sans ambiguïté.
 
 ---
 

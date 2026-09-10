@@ -1,0 +1,31 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Inventaire OSM — sections aériennes</title>
+<style>
+  body { font: 14px -apple-system, BlinkMacSystemFont, sans-serif; background: #0e1512; color: #efe9dd; padding: 28px; max-width: 1000px; margin: auto; }
+  h1 { font-size: 22px; }
+  p { color: #a8a398; }
+  table { border-collapse: collapse; width: 100%; background: #141d19; }
+  th, td { padding: 9px 11px; border: 1px solid #2a3a32; text-align: left; }
+  th { color: #79d6b5; }
+  .warn { color: #ffcf70; }
+</style>
+<h1>Inventaire OSM — sections aériennes du métro</h1>
+<p>OpenStreetMap / Overpass · 1 547 ways récupérés · 861 raccordés aux 16 lignes GTFS</p>
+<p><b>Km aérien estimé :</b> 10,124 km physiques (20,249 km directionnels). Résultat à valider car la couverture des tags OSM est inégale.</p>
+<p class="warn">⚠ 686 ways sans ligne explicite et 2 conflits de tags sont conservés dans sections.json, sans être inventés.</p>
+<table>
+  <thead><tr><th>Ligne</th><th>Sens</th><th>Stations d’extrémité</th><th>Longueur</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>0/1</td><td>Esplanade de la Défense ↔ Pont de Neuilly</td><td>213 m</td></tr>
+    <tr><td>2</td><td>0/1</td><td>Barbès - Rochechouart ↔ Jaurès</td><td>1 906 m</td></tr>
+    <tr><td>5</td><td>0/1</td><td>Saint-Marcel ↔ Quai de la Rapée</td><td>~760 m</td></tr>
+    <tr><td>6</td><td>0/1</td><td>Passy ↔ Pasteur</td><td>2 666 m</td></tr>
+    <tr><td>6</td><td>0/1</td><td>Saint-Jacques ↔ Corvisart</td><td>~865 m</td></tr>
+    <tr><td>6</td><td>0/1</td><td>Nationale ↔ Bercy</td><td>1 439 m</td></tr>
+    <tr><td>8</td><td>0/1</td><td>Maisons-Alfort / Créteil (sections courtes)</td><td>~420 m cumulés</td></tr>
+    <tr><td>11</td><td>0/1</td><td>La Dhuys ↔ Coteaux Beauclair</td><td>547 m</td></tr>
+    <tr><td>13</td><td>0/1</td><td>Malakoff - Plateau de Vanves ↔ Châtillon - Montrouge</td><td>1 250 m</td></tr>
+  </tbody>
+</table>
+<p class="warn">Sections courtes / station = station sur les lignes 1, 5 et 8 : revue manuelle recommandée.</p>

@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "description": "Corrections manuelles appliquées après la dérivation OSM. Les distances sont en mètres curvilignes et référencées par line/direction/shape_id.",
+  "replace": [],
+  "add": [],
+  "remove": []
+}

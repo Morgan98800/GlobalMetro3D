@@ -73,12 +73,18 @@ function runTests() {
   // (Hairpin loops with raw GTFS chord shortcuts like L10 Auteuil will be cleansed in Tâche 3)
   const candidateShapes: ShapeEntry[] = [];
   for (const shape of shapesMap.values()) {
-    if (shape.totalLengthM < 300 || shape.ptCount < 10) continue;
+    const totLen = shape.totalLengthM || shape.length;
+    const count = shape.ptCount || shape.dist.length;
+    if (totLen < 300 || count < 10) continue;
     let hasAnomaly = false;
-    const pts = shape.points;
-    for (let i = 0; i < shape.ptCount - 1; i++) {
-      const stepD = pts[(i + 1) * 3 + 2] - pts[i * 3 + 2];
-      const m = equirectDistM(pts[i * 3], pts[i * 3 + 1], pts[(i + 1) * 3], pts[(i + 1) * 3 + 1]);
+    for (let i = 0; i < count - 1; i++) {
+      const stepD = shape.dist[i + 1] - shape.dist[i];
+      const m = equirectDistM(
+        shape.coords[i * 2],
+        shape.coords[i * 2 + 1],
+        shape.coords[(i + 1) * 2],
+        shape.coords[(i + 1) * 2 + 1]
+      );
       if (Math.abs(m - stepD) > 0.4) {
         hasAnomaly = true;
         break;

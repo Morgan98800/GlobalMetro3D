@@ -10,9 +10,12 @@ Criteria defined in section A.4 of the technical brief:
 """
 
 import json
+import math
 import os
 import sqlite3
 import pytest
+
+from ingest.src.build_artifacts import assert_station_count_drift_within_tolerance
 
 # Known commercial lengths (in km) from RATP official reference
 OFFICIAL_LINE_LENGTHS_KM = {
@@ -63,6 +66,20 @@ class TestPhaseAAcceptance:
             assert line["color"].startswith("#"), f"Line {line['short_name']} has invalid color: {line['color']}"
             assert line["text_color"].startswith("#"), f"Line {line['short_name']} has invalid text_color"
             assert "0" in line["destinations"] or "1" in line["destinations"], f"Line {line['short_name']} missing destinations"
+
+    def test_rer_destinations_are_passenger_facing(self, processed_data_dir):
+        """RER direction labels must use station names, not mission codes."""
+        with open(os.path.join(processed_data_dir, "lines.json"), "r", encoding="utf-8") as f:
+            lines = json.load(f)
+        expected = {"A", "B", "C", "D", "E"}
+        rer = {line["short_name"]: line for line in lines if line.get("mode") == "rail"}
+        assert expected <= set(rer)
+        for short_name in expected:
+            for destination in rer[short_name]["destinations"].values():
+                assert destination and any(ch.islower() for ch in destination)
+                assert not (destination.isupper() and destination.isalpha()), (
+                    f"RER {short_name} still exposes a mission code: {destination}"
+                )
 
     def test_criterion_2_monotonic_stop_distances(self, processed_data_dir):
         """For 100% of trips, stop distances along the shape must be strictly increasing."""
@@ -168,3 +185,20 @@ class TestPhaseAAcceptance:
         }
         missing = EXPECTED_METRO_SHORT_NAMES - line_names_in_tracks
         assert not missing, f"Missing lines in control GeoJSON: {missing}"
+
+    def test_station_count_drift_guard(self, processed_data_dir):
+        """A successive ingestion may not silently change the metro count by >2%."""
+        stations_file = os.path.join(processed_data_dir, "stations.json")
+        with open(stations_file, "r", encoding="utf-8") as f:
+            current_count = len(json.load(f))
+
+        # The current artifact is compared to itself here; the pipeline compares
+        # against the previous stations.json before replacing it. These synthetic
+        # boundary cases verify the guard used by that comparison.
+        assert_station_count_drift_within_tolerance(current_count, current_count)
+        # Use the closest integer that remains inside the tolerance. Python's
+        # round() can land just beyond 2% because station counts are discrete.
+        boundary_count = math.ceil(current_count * (1 - 0.02))
+        assert_station_count_drift_within_tolerance(current_count, boundary_count)
+        with pytest.raises(RuntimeError):
+            assert_station_count_drift_within_tolerance(current_count, round(current_count * 0.95))

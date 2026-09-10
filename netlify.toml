@@ -1,0 +1,25 @@
+[build]
+  command = "npm run build:web"
+  publish = "web/dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions."prim_relay"]
+  schedule = "*/3 * * * *"
+
+[[redirects]]
+  from = "/api/prim"
+  to = "/.netlify/functions/prim_relay"
+  status = 200
+
+[[redirects]]
+  from = "/api/prim_delays"
+  to = "/.netlify/functions/prim_relay"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

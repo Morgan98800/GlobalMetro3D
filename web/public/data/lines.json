@@ -24,7 +24,7 @@
       "0": "Boulogne Pont de Saint-Cloud",
       "1": "Gare d'Austerlitz"
     },
-    "measured_length_km": 11.74,
+    "measured_length_km": 11.75,
     "elevation_offset": 4.5
   },
   {
@@ -80,7 +80,7 @@
       "0": "Saint-Denis - Pleyel",
       "1": "Aéroport d'Orly"
     },
-    "measured_length_km": 27.73,
+    "measured_length_km": 27.72,
     "elevation_offset": 14.0
   },
   {
@@ -150,7 +150,7 @@
       "0": "Bobigny - Pablo Picasso",
       "1": "Place d'Italie"
     },
-    "measured_length_km": 14.7,
+    "measured_length_km": 14.69,
     "elevation_offset": 3.0
   },
   {
@@ -164,7 +164,7 @@
       "0": "Nation",
       "1": "Charles de Gaulle - Étoile"
     },
-    "measured_length_km": 13.64,
+    "measured_length_km": 13.65,
     "elevation_offset": 5.0
   },
   {
@@ -178,7 +178,7 @@
       "0": "La Courneuve - 8 Mai 1945",
       "1": "Villejuif - Louis Aragon"
     },
-    "measured_length_km": 21.14,
+    "measured_length_km": 21.13,
     "elevation_offset": 7.0
   },
   {
@@ -222,5 +222,75 @@
     },
     "measured_length_km": 19.57,
     "elevation_offset": 9.0
+  },
+  {
+    "id": "IDFM:C01742",
+    "short_name": "A",
+    "long_name": "A",
+    "color": "#EB2132",
+    "text_color": "#FFFFFF",
+    "mode": "rail",
+    "destinations": {
+      "0": "Cergy–Le Haut · Poissy · Saint-Germain-en-Laye",
+      "1": "Marne-la-Vallée–Chessy · Boissy-Saint-Léger"
+    },
+    "measured_length_km": 76.32,
+    "elevation_offset": -2.0
+  },
+  {
+    "id": "IDFM:C01743",
+    "short_name": "B",
+    "long_name": "B",
+    "color": "#5091CB",
+    "text_color": "#FFFFFF",
+    "mode": "rail",
+    "destinations": {
+      "0": "Aéroport Charles-de-Gaulle 2 TGV · Mitry–Claye",
+      "1": "Saint-Rémy-lès-Chevreuse · Robinson"
+    },
+    "measured_length_km": 64.89,
+    "elevation_offset": -2.0
+  },
+  {
+    "id": "IDFM:C01727",
+    "short_name": "C",
+    "long_name": "C",
+    "color": "#FFCC30",
+    "text_color": "#000000",
+    "mode": "rail",
+    "destinations": {
+      "0": "Pontoise · Versailles Château Rive Gauche · Saint-Quentin-en-Yvelines",
+      "1": "Massy–Palaiseau · Dourdan–La Forêt · Saint-Martin-d'Étampes"
+    },
+    "measured_length_km": 96.34,
+    "elevation_offset": -2.0
+  },
+  {
+    "id": "IDFM:C01728",
+    "short_name": "D",
+    "long_name": "D",
+    "color": "#008B5B",
+    "text_color": "#FFFFFF",
+    "mode": "rail",
+    "destinations": {
+      "0": "Creil",
+      "1": "Malesherbes · Melun"
+    },
+    "measured_length_km": 90.38,
+    "elevation_offset": -2.0
+  },
+  {
+    "id": "IDFM:C01729",
+    "short_name": "E",
+    "long_name": "E",
+    "color": "#B94E9A",
+    "text_color": "#FFFFFF",
+    "mode": "rail",
+    "destinations": {
+      "0": "Nanterre–La Folie",
+      "1": "Tournan · Chelles–Gournay"
+    },
+    "measured_length_km": 115.5,
+    "elevation_offset": -2.0
   }
 ]

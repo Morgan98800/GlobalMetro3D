@@ -24,6 +24,25 @@ from .project import project_trip_stops_monotonically
 from .export_geojson import export_control_geojson
 
 
+STATION_COUNT_DRIFT_TOLERANCE = 0.02
+
+
+def assert_station_count_drift_within_tolerance(
+    previous_count: int,
+    current_count: int,
+    tolerance: float = STATION_COUNT_DRIFT_TOLERANCE,
+) -> None:
+    """Reject silent station-count drift between successive ingestion runs."""
+    if previous_count <= 0 or current_count < 0:
+        raise ValueError(f"Invalid station counts: previous={previous_count}, current={current_count}")
+    drift = abs(current_count - previous_count) / previous_count
+    if drift > tolerance:
+        raise RuntimeError(
+            "Metro station count drift exceeds the allowed "
+            f"{tolerance:.1%}: previous={previous_count}, current={current_count}, drift={drift:.1%}"
+        )
+
+
 def normalize_text(text: str) -> str:
     """Removes accents and converts to lowercase for fast search."""
     nfkd = unicodedata.normalize('NFKD', text)
@@ -201,6 +220,7 @@ def build_all_phase_a_artifacts(zip_path: str, output_dir: str) -> None:
     lines_artifact = []
     # Map for stations: station_id -> {id, name, lon, lat, lines: set()}
     stations_map: Dict[str, Dict[str, Any]] = {}
+    station_coordinate_samples: Dict[str, List[Tuple[float, float]]] = defaultdict(list)
 
     for rid, r in sorted(data.routes.items(), key=lambda x: x[1]["short_name"]):
         sname = r["short_name"]
@@ -257,7 +277,10 @@ def build_all_phase_a_artifacts(zip_path: str, output_dir: str) -> None:
                 parent = s.get("parent_station", "")
                 station_key = parent if parent else stop_id
 
-                # Use stop coordinates or parent if already registered
+                # Keep every active metro stop-point for this commercial
+                # station. A station may expose several platform IDs and the
+                # first one encountered is not a stable geographic anchor.
+                station_coordinate_samples[station_key].append((s["lon"], s["lat"]))
                 if station_key not in stations_map:
                     stations_map[station_key] = {
                         "id": station_key,
@@ -270,6 +293,14 @@ def build_all_phase_a_artifacts(zip_path: str, output_dir: str) -> None:
 
     stations_artifact = []
     for s_id, s_obj in stations_map.items():
+        samples = station_coordinate_samples.get(s_id, [])
+        if samples:
+            lons = sorted(point[0] for point in samples)
+            lats = sorted(point[1] for point in samples)
+            middle = len(samples) // 2
+            median_lon = lons[middle] if len(samples) % 2 else (lons[middle - 1] + lons[middle]) / 2
+            median_lat = lats[middle] if len(samples) % 2 else (lats[middle - 1] + lats[middle]) / 2
+            s_obj["coordinates"] = [round(median_lon, 6), round(median_lat, 6)]
         lines_list = sorted(list(s_obj["lines"]))
         stations_artifact.append({
             "id": s_id,
@@ -288,6 +319,17 @@ def build_all_phase_a_artifacts(zip_path: str, output_dir: str) -> None:
         json.dump(lines_artifact, f, ensure_ascii=False, indent=2)
 
     stations_path = os.path.join(output_dir, "stations.json")
+    if os.path.exists(stations_path):
+        with open(stations_path, "r", encoding="utf-8") as f:
+            previous_stations = json.load(f)
+        # A previous in-place build can already include native RER stations;
+        # compare only the metro subset so the guard still catches real metro
+        # drift without rejecting a normal metro+RER rebuild.
+        previous_metro_count = sum(
+            1 for station in previous_stations
+            if any(line_id in data.routes for line_id in station.get("lines", []))
+        )
+        assert_station_count_drift_within_tolerance(previous_metro_count, len(stations_artifact))
     with open(stations_path, "w", encoding="utf-8") as f:
         json.dump(stations_artifact, f, ensure_ascii=False, indent=2)
 

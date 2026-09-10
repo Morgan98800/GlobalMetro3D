@@ -40,23 +40,17 @@ export class StationLadder {
   private onStationClick: (coords: [number, number], name: string) => void;
   private onTrainClick: (train: TrainMarker) => void;
   private onLineSwitch: (lineId: string) => void;
-  private onDirectionChange: (dirId: string) => void;
-  private onClose: () => void;
 
   constructor(options: {
     containerId: string;
     onStationClick: (coords: [number, number], name: string) => void;
     onTrainClick: (train: TrainMarker) => void;
     onLineSwitch: (lineId: string) => void;
-    onDirectionChange: (dirId: string) => void;
-    onClose: () => void;
   }) {
     this.containerEl = document.getElementById(options.containerId)!;
     this.onStationClick = options.onStationClick;
     this.onTrainClick = options.onTrainClick;
     this.onLineSwitch = options.onLineSwitch;
-    this.onDirectionChange = options.onDirectionChange;
-    this.onClose = options.onClose;
   }
 
   public setLine(line: LineLadderData | null, directionId: string = '0') {
@@ -69,36 +63,7 @@ export class StationLadder {
     this.currentTrains = trains;
     if (this.lineData) {
       this.updateTrainPositions();
-      this.updateHeadwayMetrics();
     }
-  }
-
-  public getDirection(): string {
-    return this.currentDirectionId;
-  }
-
-  private calculateHeadway(): { avgHeadwayS: number; trainCount: number } {
-    if (!this.lineData) return { avgHeadwayS: 0, trainCount: 0 };
-    const dir = parseInt(this.currentDirectionId, 10);
-    const lineTrains = this.currentTrains.filter(
-      t => t.line === this.lineData!.id && (dir === 0 || dir === 1 ? (t as any).dir === dir : true)
-    );
-
-    if (lineTrains.length < 2) {
-      return { avgHeadwayS: 0, trainCount: lineTrains.length };
-    }
-
-    // Estimate commercial duration of line in seconds
-    const dirData = this.lineData.directions[this.currentDirectionId];
-    if (!dirData || dirData.stations.length < 2) {
-      return { avgHeadwayS: 0, trainCount: lineTrains.length };
-    }
-    const totDist = dirData.stations[dirData.stations.length - 1].distance_m;
-    // Average speed ~30 km/h = 8.33 m/s
-    const approxDurationS = totDist / 8.33;
-    const avgHeadwayS = Math.round(approxDurationS / lineTrains.length);
-
-    return { avgHeadwayS, trainCount: lineTrains.length };
   }
 
   private render() {
@@ -107,64 +72,11 @@ export class StationLadder {
       return;
     }
 
-    const { short_name, color, text_color, directions } = this.lineData;
+    const { color, directions } = this.lineData;
     const dirData = directions[this.currentDirectionId] || directions['0'];
     if (!dirData) return;
 
-    const { avgHeadwayS, trainCount } = this.calculateHeadway();
-    const headwayText =
-      avgHeadwayS > 0
-        ? `${Math.floor(avgHeadwayS / 60)} min ${String(avgHeadwayS % 60).padStart(2, '0')} s`
-        : 'Calcul...';
-
-    // Direction labels
-    const dir0 = directions['0'];
-    const dir1 = directions['1'];
-
     let html = `
-      <div class="ladder-header" style="border-left: 4px solid ${color};">
-        <div class="ladder-title-row">
-          <div class="ladder-badge" style="background-color: ${color}; color: ${text_color};">
-            ${short_name}
-          </div>
-          <div class="ladder-info">
-            <div class="ladder-line-title">Ligne ${short_name}</div>
-            <div class="ladder-dest-sub">Terminus : <strong>${dirData.terminus}</strong></div>
-          </div>
-          <button class="ladder-close-btn" id="ladder-close-btn" title="Retour au réseau global">✕</button>
-        </div>
-
-        <!-- Direction Switcher Tabs -->
-        <div class="ladder-dir-tabs">
-          ${
-            dir0
-              ? `<button class="ladder-dir-tab ${this.currentDirectionId === '0' ? 'active' : ''}" data-dir="0" style="${this.currentDirectionId === '0' ? `border-color: ${color}; color: ${color};` : ''}">
-                  → ${dir0.terminus}
-                </button>`
-              : ''
-          }
-          ${
-            dir1
-              ? `<button class="ladder-dir-tab ${this.currentDirectionId === '1' ? 'active' : ''}" data-dir="1" style="${this.currentDirectionId === '1' ? `border-color: ${color}; color: ${color};` : ''}">
-                  → ${dir1.terminus}
-                </button>`
-              : ''
-          }
-        </div>
-
-        <!-- Live Metrics Bar -->
-        <div class="ladder-metrics-bar">
-          <div class="ladder-metric">
-            <span class="ladder-metric-val" id="ladder-train-count">${trainCount}</span>
-            <span class="ladder-metric-lbl">rames</span>
-          </div>
-          <div class="ladder-metric">
-            <span class="ladder-metric-val" id="ladder-headway-val">${headwayText}</span>
-            <span class="ladder-metric-lbl">intervalle moyen</span>
-          </div>
-        </div>
-      </div>
-
       <!-- Vertical Station Track -->
       <div class="ladder-track-container" id="ladder-track-container">
         <div class="ladder-track-line" style="background-color: ${color};"></div>
@@ -211,25 +123,6 @@ export class StationLadder {
   }
 
   private bindEvents() {
-    // Close button
-    const closeBtn = document.getElementById('ladder-close-btn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => this.onClose());
-    }
-
-    // Direction switcher tabs
-    const dirTabs = this.containerEl.querySelectorAll('.ladder-dir-tab');
-    dirTabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const dir = (tab as HTMLElement).dataset.dir;
-        if (dir && dir !== this.currentDirectionId) {
-          this.currentDirectionId = dir;
-          this.onDirectionChange(dir);
-          this.render();
-        }
-      });
-    });
-
     // Station nodes click
     const nodes = this.containerEl.querySelectorAll('.ladder-station-node');
     nodes.forEach(node => {
@@ -256,19 +149,6 @@ export class StationLadder {
         }
       });
     });
-  }
-
-  private updateHeadwayMetrics() {
-    const { avgHeadwayS, trainCount } = this.calculateHeadway();
-    const countEl = document.getElementById('ladder-train-count');
-    const headwayEl = document.getElementById('ladder-headway-val');
-    if (countEl) countEl.textContent = String(trainCount);
-    if (headwayEl) {
-      headwayEl.textContent =
-        avgHeadwayS > 0
-          ? `${Math.floor(avgHeadwayS / 60)} min ${String(avgHeadwayS % 60).padStart(2, '0')} s`
-          : 'Calcul...';
-    }
   }
 
   private updateTrainPositions() {
@@ -313,10 +193,12 @@ export class StationLadder {
 
           const cursor = document.createElement('div');
           cursor.className = 'ladder-train-cursor';
-          cursor.title = `Rame en approche de ${dirData.stations[matchedIdx].name} (${tr.spd} km/h)`;
+          const destination = tr.dest?.trim() || dirData.terminus || 'destination inconnue';
+          cursor.title = `Rame vers ${destination}, en approche de ${dirData.stations[matchedIdx].name} (${tr.spd} km/h)`;
           cursor.innerHTML = `
             <div class="train-cursor-pulse"></div>
             <div class="train-cursor-body">
+              <span class="train-cursor-dest">→ ${destination}</span>
               <span class="train-cursor-spd">${tr.spd} km/h</span>
               ${delayBadge}
             </div>

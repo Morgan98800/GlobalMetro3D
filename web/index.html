@@ -2,13 +2,34 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>Paris Subway 3D — Visualiseur Cartographique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Métro de Paris 3D — Visualiseur cartographique</title>
+
+    <meta name="description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
+    <meta name="theme-color" content="#150E12" />
+    <link rel="canonical" href="https://parisian3dsubway.netlify.app/" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Métro de Paris 3D" />
+    <meta property="og:title" content="Métro de Paris 3D — Visualiseur cartographique" />
+    <meta property="og:description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
+    <meta property="og:url" content="https://parisian3dsubway.netlify.app/" />
+    <meta property="og:image" content="https://parisian3dsubway.netlify.app/og-image.png" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Métro de Paris 3D — Visualiseur cartographique" />
+    <meta name="twitter:description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
+    <meta name="twitter:image" content="https://parisian3dsubway.netlify.app/og-image.png" />
     
-    <!-- Typography: Inter for UI & Archivo bold for Title -->
+    <!-- Typography: Switzer & Cabinet Grotesk from Fontshare (with Inter fallback) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&f[]=cabinet-grotesk@500,700,800&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
     <link rel="stylesheet" href="/src/styles/tokens.css" />
@@ -28,46 +49,53 @@
     </script>
   </head>
   <body>
+    <!-- Semantic header for robots & assistive technology -->
+    <h1 class="sr-only">Métro de Paris 3D — Visualiseur cartographique et simulation en temps réel</h1>
+
+    <noscript>
+      <div style="padding: 2rem; background: #150E12; color: #F1EFEA; font-family: sans-serif; text-align: center;">
+        <h2>Métro de Paris 3D — Visualiseur cartographique</h2>
+        <p>Cette application interactive 3D nécessite l'activation de JavaScript et le support de WebGL pour le rendu de la carte vectorielle et la simulation cinématique en temps réel.</p>
+        <p><a href="/methode.html" style="color: #C9A227; text-decoration: underline;">Consulter la documentation et méthode technique</a></p>
+      </div>
+    </noscript>
+
     <div id="app">
       <div id="map"></div>
 
       <!-- Modal / popup container for station search -->
       <div id="search-container" class="search-modal-wrap" style="display: none;"></div>
 
-      <!-- Navigation monuments 3D (pilotage caméra MapLibre) -->
-      <nav class="studio-nav-bar" id="studio-nav-bar" aria-label="Navigation monuments 3D">
-        <button class="landmark-btn" data-landmark="Tour Eiffel">Tour Eiffel</button>
-        <button class="landmark-btn" data-landmark="Notre-Dame">Notre-Dame</button>
-        <button class="landmark-btn" data-landmark="Arc de Triomphe">Arc de Triomphe</button>
-        <button class="landmark-btn" data-landmark="Sacré-Cœur">Sacré-Cœur</button>
-        <button class="landmark-btn" data-landmark="Invalides">Invalides</button>
-        <button class="landmark-btn" data-landmark="Montparnasse">Montparnasse</button>
-        <button class="landmark-btn" data-landmark="Louvre">Louvre</button>
-        <button class="landmark-btn" data-landmark="Panthéon">Panthéon</button>
-        <button class="landmark-btn" data-landmark="Overview">Vue Globale</button>
-      </nav>
-
       <!-- Camera & view controls -->
       <aside class="map-controls">
-        <button class="map-control-btn" id="btn-pitch" title="Basculer 2D / 3D">3D</button>
-        <button class="map-control-btn" id="btn-recenter" title="Recentrer sur Paris">⊙</button>
+        <button class="map-control-btn" id="btn-pitch" title="Passer en vue 2D" aria-label="Passer en vue 2D" aria-pressed="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z M4 7.5 12 12l8-4.5 M12 12v9"/></svg>
+        </button>
+        <button class="map-control-btn" id="btn-recenter" title="Recentrer sur le réseau" aria-label="Recentrer la vue sur le réseau">
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+            <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+            <line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="2" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="19" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
       </aside>
 
       <!-- Lateral dock / Mobile Bottom Sheet ("Le Quai") -->
       <nav class="dock" id="dock" aria-label="Sélection de ligne et stations">
         <div class="dock-handle" id="dock-handle" title="Glisser pour afficher / masquer"></div>
         <div class="dock-header">
-          <span class="dock-title">Lignes de Métro</span>
+          <span class="dock-title">Lignes du réseau</span>
           <div class="dock-header-actions">
             <button class="dock-reset-btn" id="dock-reset" style="display: none;">Tout afficher</button>
             <button class="dock-collapse-btn" id="dock-collapse" aria-label="Réduire ou ouvrir le panneau">▾</button>
           </div>
         </div>
-        <div class="lines-grid" id="lines-grid" role="group" aria-label="Liste des 16 lignes"></div>
+        <div class="lines-grid" id="lines-grid" role="group" aria-label="Liste des 21 lignes"></div>
         <div class="dock-content" id="dock-content">
-          <div style="padding: 1rem 0; font-size: 0.8rem; color: var(--ceramique-dim); line-height: 1.5;">
-            Cliquez sur un indice de ligne pour filtrer son tracé et parcourir ses arrêts.
-          </div>
+          <div class="dock-empty-state"><p>Chargement des lignes, stations et horaires GTFS…</p></div>
         </div>
       </nav>
 

@@ -20,4 +20,15 @@ export interface StationMetadata {
   lines: string[];
   is_hub: boolean;
   wheelchair_boarding: number;
+  service_counts?: {
+    weekday: number;
+    saturday: number;
+    sunday: number;
+  };
+  service_rank?: {
+    weekday: number | null;
+    saturday: number | null;
+    sunday: number | null;
+  };
+  service_rank_by_line?: Record<string, Record<string, number>>;
 }

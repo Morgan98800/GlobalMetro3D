@@ -16,6 +16,12 @@ export default defineConfig({
     target: 'esnext',
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false
+    sourcemap: false,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        methode: path.resolve(__dirname, 'methode.html')
+      }
+    }
   }
 });

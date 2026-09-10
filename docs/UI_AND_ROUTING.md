@@ -33,9 +33,9 @@ Le composant [`SubwayDock`](file:///Users/morgancanteri/Documents/Paris%20subway
 
 ### Sur Ordinateur Desktop
 - Rail latéral escamotable fixé sur la gauche de l'écran.
-- Grille des 16 pastilles de lignes (1 à 14, 3bis, 7bis) avec leurs codes couleurs autoritaires GTFS.
+- Deux groupes de pastilles : 16 lignes de métro et les RER A à E, avec les couleurs et contrastes GTFS.
 - Clic sur une ligne :
-  - La caméra s'envole en douceur pour cadrer l'emprise totale de la ligne.
+  - La caméra s'envole en douceur pour cadrer l'emprise totale de la ligne, avec un padding mesuré sur le panneau réel.
   - Les 15 autres lignes sont atténuées à 25 % d'opacité.
   - Le Quai bascule sur le **Diagramme de Marche Vertical (Niveau 2)**.
 
@@ -59,13 +59,15 @@ Inspiré des schémas de ligne officiels affichés au-dessus des portes de rames
   - **Clic sur un curseur** : la caméra se verrouille sur la rame et s'oriente dans son cap de marche en 3D.
 - **Indicateur d'Intervalle Moyen (*Headway*)** : actualisé en direct selon le nombre de rames présentes dans la direction (ex: `2 min 40 s`).
 - **Support des Branches (Ligne 7 et Ligne 13)** : séparation visuelle des tronçons bifurqués (ex: vers *Asnières-Gennevilliers* vs *Saint-Denis-Université* sur la 13).
+- Résumé de ligne mis à jour à 1 Hz : rames par sens, headway, vitesse, stations, longueur, matériel et état du service.
+- Les noms des stations apparaissent dès le zoom 13 pour les pôles/correspondances, dès 14,5 pour toutes les stations, et pour toute ligne sélectionnée. Le placement priorisé évite les collisions ; le survol garde le nom et les correspondances accessibles.
 
 ---
 
 ## 4. Barre de Recherche Instantanée (`search_bar.ts`)
 
 Intégrée dans l'en-tête (avec raccourci clavier universel `⌘K` / `Ctrl+K`) :
-- **Recherche floue insensible aux accents et à la casse** sur les 321 stations du réseau.
+- **Recherche floue insensible aux accents et à la casse** sur les stations du réseau métro + RER.
 - **Affichage dynamique des résultats** :
   - Nom officiel de la station.
   - Macaron `Hub` doré pour les pôles majeurs d'échanges (Châtelet, Gare du Nord, Montparnasse...).
@@ -80,7 +82,7 @@ L'application gère un routage d'URL monopage propre et partageable :
 
 | URL | État déclenché |
 |---|---|
-| `/` | Vue générale du réseau parisien (16 lignes actives) |
+| `/` | Vue générale du réseau parisien (21 lignes actives) |
 | `/ligne/1` | Filtrage sur la ligne 1 (direction 0 par défaut) |
 | `/ligne/14?dir=1` | Filtrage sur la ligne 14 orientée vers Saint-Denis Pleyel |
 

@@ -1,4 +1,5 @@
-import type { ShapeData } from './shapes';
+import type { Shape } from './shapes_loader';
+import { coordAtDistance } from './shapes_loader';
 import type { TrainMarker } from '../map/trains_layer';
 
 const DEG_TO_RAD = Math.PI / 180;
@@ -15,48 +16,19 @@ export function calculateBearing(lon1: number, lat1: number, lon2: number, lat2:
   return Math.round((brg + 360) % 360);
 }
 
-export function getCoordAtDistance(shape: ShapeData, distM: number): [number, number] {
-  const pts = shape.points;
-  const count = shape.ptCount;
-  if (count === 0) return [0, 0];
-  if (distM <= 0) return [pts[0], pts[1]];
-  if (distM >= shape.totalLengthM) return [pts[(count - 1) * 3], pts[(count - 1) * 3 + 1]];
-
-  let low = 0;
-  let high = count - 1;
-  while (low <= high) {
-    const mid = (low + high) >> 1;
-    const dMid = pts[mid * 3 + 2];
-    if (dMid < distM) {
-      low = mid + 1;
-    } else {
-      high = mid - 1;
-    }
-  }
-
-  const i0 = Math.max(0, low - 1);
-  const i1 = Math.min(count - 1, i0 + 1);
-  if (i0 === i1) {
-    return [pts[i0 * 3], pts[i0 * 3 + 1]];
-  }
-
-  const d0 = pts[i0 * 3 + 2];
-  const d1 = pts[i1 * 3 + 2];
-  const span = d1 - d0;
-  const fraction = span > 1e-4 ? (distM - d0) / span : 0;
-
-  const lng = pts[i0 * 3] + fraction * (pts[i1 * 3] - pts[i0 * 3]);
-  const lat = pts[i0 * 3 + 1] + fraction * (pts[i1 * 3 + 1] - pts[i0 * 3 + 1]);
-  return [Number(lng.toFixed(5)), Number(lat.toFixed(5))];
+export function getCoordAtDistance(shape: Shape, distM: number): [number, number] {
+  const pt = coordAtDistance(shape, distM);
+  return [Number(pt[0].toFixed(5)), Number(pt[1].toFixed(5))];
 }
 
-export function getSmoothedBearing(shape: ShapeData, distM: number, windowM: number = 30): number {
+export function getSmoothedBearing(shape: Shape, distM: number, windowM: number = 30): number {
   const d1 = Math.max(0, distM - windowM);
-  const d2 = Math.min(shape.totalLengthM, distM + windowM);
+  const d2 = Math.min(shape.length, distM + windowM);
   const p1 = getCoordAtDistance(shape, d1);
   const p2 = getCoordAtDistance(shape, d2);
   return calculateBearing(p1[0], p1[1], p2[0], p2[1]);
 }
+
 
 export interface TripData {
   id: string;
@@ -71,7 +43,7 @@ export interface TripData {
 
 export function computeTripKinematics(
   trip: TripData,
-  shape: ShapeData,
+  shape: Shape,
   timeSeconds: number,
   delaySeconds: number,
   lineColor: string,
@@ -164,7 +136,7 @@ export function computeTripKinematics(
     delay: delaySeconds,
     dest: trip.destName,
     next: nextStationName,
-    conf: delaySeconds !== 0 ? 'rt' : 'sched',
+    conf: (delaySeconds !== 0 ? 'bracketed' : 'scheduled') as any,
     shapeId: trip.shapeId,
     currentDistM,
     direction: (trip.dir === 0 ? 0 : 1) as 0 | 1

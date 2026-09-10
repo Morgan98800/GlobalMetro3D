@@ -1,19 +1,67 @@
+import type { RtJourney, RtCall, MatchStats } from './rt_matching';
+import { parisClock } from './paris_time';
+
+export interface LineTrafficReport {
+  lineId: string;
+  status: 'normal' | 'disrupted' | 'interrupted';
+  severity: 'normal' | 'info' | 'warning' | 'alert';
+  title: string;
+  message: string;
+  updatedAt: string;
+  closedStations?: string[];
+}
+
 export interface PrimStatus {
   active: boolean;
   lastUpdate: number | null;
+  minutesAgo?: number;
   delays: Record<string, number>;
   requestCount: number;
   lastError: string | null;
+  feedHealthy: boolean;
+  matchStats?: MatchStats | null;
+  directionSuccessRate?: number;
+  trafficByLine?: Record<string, LineTrafficReport>;
+}
+
+export function normalizeStopName(name: string): string {
+  if (!name) return '';
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function isoToServiceSeconds(isoStr: string, currentServiceDate: string): number {
+  const d = new Date(isoStr);
+  const { date, secondsSinceMidnight } = parisClock(d);
+  if (date === currentServiceDate) {
+    return secondsSinceMidnight;
+  }
+  const [y1, m1, d1] = currentServiceDate.split('-').map(Number);
+  const [y2, m2, d2] = date.split('-').map(Number);
+  const dt1 = Date.UTC(y1, m1 - 1, d1);
+  const dt2 = Date.UTC(y2, m2 - 1, d2);
+  const diffDays = Math.round((dt2 - dt1) / 86400000);
+  return secondsSinceMidnight + diffDays * 86400;
 }
 
 export class PrimRealtimeClient {
   private apiKey: string;
-  private lineDelays = new Map<string, number>(); // lineId -> delay (seconds)
+  private lineDelays = new Map<string, number>();
+  private rawJourneys: RtJourney[] = [];
+  private trafficByLine: Record<string, LineTrafficReport> = {};
   private isPolling = false;
   private timerId: any = null;
   private requestCount = 0;
   private lastUpdate: number | null = null;
   private lastError: string | null = null;
+  private feedHealthy = false;
+  private matchStats: MatchStats | null = null;
+  private directionSuccessRate = 1.0;
   private onUpdateCallback?: (status: PrimStatus) => void;
 
   constructor(apiKey: string = '') {
@@ -26,6 +74,28 @@ export class PrimRealtimeClient {
 
   public getApiKey(): string {
     return this.apiKey;
+  }
+
+  public getJourneys(): readonly RtJourney[] {
+    return this.rawJourneys;
+  }
+
+  public getTrafficByLine(): Record<string, LineTrafficReport> {
+    return this.trafficByLine;
+  }
+
+  public isFeedHealthy(): boolean {
+    return this.feedHealthy;
+  }
+
+  public setMatchingStats(stats: MatchStats | null, dirRate?: number) {
+    this.matchStats = stats;
+    if (dirRate !== undefined) {
+      this.directionSuccessRate = dirRate;
+    }
+    if (this.onUpdateCallback) {
+      this.onUpdateCallback(this.getStatus());
+    }
   }
 
   public getLineDelay(lineId: string, dir?: number | string): number {
@@ -43,12 +113,20 @@ export class PrimRealtimeClient {
     for (const [k, v] of this.lineDelays.entries()) {
       delays[k] = v;
     }
+    const ageMs = this.lastUpdate ? Date.now() - this.lastUpdate : 0;
+    const minutesAgo = this.lastUpdate ? Math.max(0, Math.round(ageMs / 60000)) : undefined;
+
     return {
-      active: this.isPolling && !this.lastError,
+      active: this.isPolling && !this.lastError && minutesAgo !== undefined && minutesAgo <= 10 && this.feedHealthy,
       lastUpdate: this.lastUpdate,
+      minutesAgo,
       delays,
       requestCount: this.requestCount,
-      lastError: this.lastError
+      lastError: this.lastError,
+      feedHealthy: this.feedHealthy,
+      matchStats: this.matchStats,
+      directionSuccessRate: this.directionSuccessRate,
+      trafficByLine: this.trafficByLine
     };
   }
 
@@ -56,117 +134,150 @@ export class PrimRealtimeClient {
     this.onUpdateCallback = callback;
   }
 
-  /** Polls estimated-timetable for a single line */
-  public async pollLine(lineId: string): Promise<number | null> {
-    if (!this.apiKey) return null;
+  /**
+   * Lit le flux agrégé du relai partagé (1 seule requête toutes les 3 minutes)
+   */
+  public async pollRelay(): Promise<void> {
+    const urls = ['/api/prim', '/.netlify/functions/prim_relay', '/.netlify/functions/prim_delays', '/data/prim_delays.json'];
+    let json: any = null;
 
-    const rawLineNum = lineId.replace('IDFM:', '');
-    const url = `https://prim.iledefrance-mobilites.fr/marketplace/estimated-timetable?LineRef=STIF:Line::${rawLineNum}:`;
-
-    try {
-      const res = await fetch(url, {
-        headers: {
-          apikey: this.apiKey,
-          accept: 'application/json'
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          json = await res.json();
+          if (json && json.timestamp) break;
         }
-      });
-
-      this.requestCount++;
-
-      if (!res.ok) {
-        if (res.status === 401 || res.status === 403) {
-          this.lastError = `Clé PRIM invalide ou refusée (${res.status})`;
-        } else if (res.status === 429) {
-          this.lastError = `Quota PRIM atteint (429 Too Many Requests)`;
-        }
-        return null;
+      } catch {
+        // fallback to next url
       }
+    }
 
-      const json = await res.json();
-      const journeys =
-        json?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame?.[0]
-          ?.EstimatedVehicleJourney || [];
+    this.requestCount++;
 
-      let totalDelay = 0;
-      let delayCount = 0;
-      const dirDelays: Record<string, { total: number; count: number }> = {
-        '0': { total: 0, count: 0 },
-        '1': { total: 0, count: 0 }
-      };
+    // Si absent : bascule transparente en confiance 100% « théorique » sans bloquer
+    if (!json || !json.timestamp) {
+      this.lineDelays.clear();
+      this.rawJourneys = [];
+      this.trafficByLine = {};
+      this.lastUpdate = null;
+      this.feedHealthy = false;
+      this.lastError = 'Pas de flux disponible';
+      if (this.onUpdateCallback) {
+        this.onUpdateCallback(this.getStatus());
+      }
+      return;
+    }
 
-      for (const j of journeys) {
-        const dirVal = String(j.DirectionRef?.value || '0').trim();
-        const dirKey = dirVal.includes('1') || dirVal.toLowerCase().includes('b') || dirVal.toLowerCase().includes('retour') ? '1' : '0';
+    const ageMs = Date.now() - json.timestamp;
+    const minutesAgo = Math.max(0, Math.round(ageMs / 60000));
+    this.feedHealthy = Boolean(json.feedHealthy ?? true);
+    this.lastError = json.lastError || null;
+    this.trafficByLine = json.trafficByLine || {};
 
-        const calls = j.EstimatedCalls?.EstimatedCall || [];
-        for (const c of calls) {
-          const expStr = c.ExpectedDepartureTime || c.ExpectedArrivalTime;
-          const aimStr = c.AimedDepartureTime || c.AimedArrivalTime;
-          if (expStr && aimStr) {
-            const exp = new Date(expStr).getTime();
-            const aim = new Date(aimStr).getTime();
-            const delayS = Math.round((exp - aim) / 1000);
-            if (Math.abs(delayS) < 1800) {
-              totalDelay += delayS;
-              delayCount++;
-              dirDelays[dirKey].total += delayS;
-              dirDelays[dirKey].count++;
-            }
+    // Si périmé (> 10 min) : bascule transparente 100% théorique
+    if (minutesAgo > 10) {
+      this.lineDelays.clear();
+      this.rawJourneys = [];
+      this.lastUpdate = json.timestamp;
+      this.feedHealthy = false;
+      if (this.onUpdateCallback) {
+        this.onUpdateCallback(this.getStatus());
+      }
+      return;
+    }
+
+    // Données fraîches (<= 10 min)
+    this.lastUpdate = json.timestamp;
+    this.lineDelays.clear();
+    const delays = json.delays || {};
+    for (const [k, v] of Object.entries(delays)) {
+      if (typeof v === 'number') {
+        this.lineDelays.set(k, v);
+      }
+    }
+
+    // Parse full detailed journeys for Level 2 & 3 matching
+    const currentServiceDate = parisClock(new Date(json.timestamp)).date;
+    const parsedJourneys: RtJourney[] = [];
+    const journeysByLine = json.journeysByLine || {};
+
+    let totalDirQueried = 0;
+    let successfulDir = 0;
+
+    for (const [lineId, rawJourneysList] of Object.entries(journeysByLine)) {
+      if (!Array.isArray(rawJourneysList)) continue;
+
+      for (const rj of rawJourneysList as any[]) {
+        const calls: RtCall[] = [];
+        const rawCalls = rj?.calls || [];
+
+        for (const c of rawCalls) {
+          const stopName = c?.stopPointName || '';
+          const stopId = normalizeStopName(stopName);
+          if (!stopId) continue;
+
+          const aimedIso = c?.aimedDepartureTime || c?.aimedArrivalTime;
+          const expIso = c?.expectedDepartureTime || c?.expectedArrivalTime;
+
+          let aimedSec: number | null = null;
+          let expSec: number | null = null;
+
+          if (aimedIso) {
+            aimedSec = isoToServiceSeconds(aimedIso, currentServiceDate);
+          }
+          if (expIso) {
+            expSec = isoToServiceSeconds(expIso, currentServiceDate);
+          }
+
+          if (aimedSec !== null && expSec !== null) {
+            calls.push({ stopId, aimed: aimedSec, expected: expSec });
+          } else if (expSec !== null && c?.delaySeconds !== undefined) {
+            calls.push({ stopId, aimed: expSec - (c.delaySeconds || 0), expected: expSec });
+          } else if (aimedSec !== null) {
+            calls.push({ stopId, aimed: aimedSec, expected: aimedSec + (c?.delaySeconds || 0) });
           }
         }
-      }
 
-      this.lastError = null;
-      this.lastUpdate = Date.now();
-
-      if (delayCount > 0) {
-        const avgDelay = Math.round(totalDelay / delayCount);
-        const prev = this.lineDelays.get(lineId) || 0;
-        const smoothed = Math.round(0.3 * avgDelay + 0.7 * prev);
-        this.lineDelays.set(lineId, smoothed);
-
-        // Store per-direction smoothed delays
-        for (const d of ['0', '1']) {
-          if (dirDelays[d].count > 0) {
-            const dAvg = Math.round(dirDelays[d].total / dirDelays[d].count);
-            const dPrev = this.lineDelays.get(`${lineId}#${d}`) || smoothed;
-            this.lineDelays.set(`${lineId}#${d}`, Math.round(0.35 * dAvg + 0.65 * dPrev));
-          } else {
-            this.lineDelays.set(`${lineId}#${d}`, smoothed);
+        if (calls.length > 0) {
+          totalDirQueried++;
+          let dir: 0 | 1 | null = null;
+          if (rj.direction === '0' || rj.direction === 0) {
+            dir = 0;
+            successfulDir++;
+          } else if (rj.direction === '1' || rj.direction === 1) {
+            dir = 1;
+            successfulDir++;
           }
+
+          parsedJourneys.push({
+            lineId,
+            dir,
+            destination: rj.destinationName ? normalizeStopName(rj.destinationName) : null,
+            calls,
+            journeyRef: rj.journeyId
+          });
         }
-
-        if (this.onUpdateCallback) this.onUpdateCallback(this.getStatus());
-        return smoothed;
       }
+    }
 
-      return this.lineDelays.get(lineId) || 0;
-    } catch (err: any) {
-      this.lastError = err.message || 'Erreur réseau PRIM';
-      return null;
+    this.rawJourneys = parsedJourneys;
+    this.directionSuccessRate = totalDirQueried > 0 ? successfulDir / totalDirQueried : 1.0;
+
+    if (this.onUpdateCallback) {
+      this.onUpdateCallback(this.getStatus());
     }
   }
 
-  /** Cycles through lines at 1 poll per 4 seconds (15 req/min, safe within 20 req/min limit) */
-  public startPolling(lineIds: string[], getFocusedLineId?: () => string | null) {
-    if (this.isPolling || lineIds.length === 0) return;
+  /** Polling toutes les 3 minutes (180 000 ms) */
+  public startPolling(lineIds?: string[], getFocusedLineId?: () => string | null) {
+    if (this.isPolling) return;
     this.isPolling = true;
 
-    let index = 0;
-    const tick = async () => {
-      // Prioritize the focused/selected line if user has one selected
-      const focused = getFocusedLineId ? getFocusedLineId() : null;
-      const targetLine = (focused && Math.random() < 0.6) ? focused : lineIds[index % lineIds.length];
-      index++;
-
-      await this.pollLine(targetLine);
-    };
-
-    // First tick immediately
-    tick();
-
-    // Loop every 4 seconds
-    this.timerId = setInterval(tick, 4000);
+    this.pollRelay();
+    this.timerId = setInterval(() => {
+      this.pollRelay();
+    }, 180000);
   }
 
   public stopPolling() {
@@ -175,5 +286,12 @@ export class PrimRealtimeClient {
       this.timerId = null;
     }
     this.isPolling = false;
+    this.lineDelays.clear();
+    this.rawJourneys = [];
+    this.trafficByLine = {};
+    this.matchStats = null;
+    if (this.onUpdateCallback) {
+      this.onUpdateCallback(this.getStatus());
+    }
   }
 }

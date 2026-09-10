@@ -7,11 +7,15 @@ export interface TopBarOptions {
   stationCount: number;
   onSearch?: () => void;
   onToggleRealtime?: () => void;
+  onMethod?: () => void;
 }
 
 export class TopBar {
   private el: HTMLElement;
+  private metaEl: HTMLElement;
   private countValueEl: HTMLElement;
+  private countLabelEl: HTMLElement;
+  private distanceEl: HTMLElement;
   private rtStatusEl: HTMLElement;
   private rtLabelEl: HTMLElement;
 
@@ -40,9 +44,9 @@ export class TopBar {
     brand.appendChild(name);
 
     // Métadonnées réseau (masquées sur mobile via CSS)
-    const meta = document.createElement('span');
-    meta.className = 'topbar__meta';
-    meta.textContent = `${options.lineCount} lignes · ${options.stationCount} stations`;
+    this.metaEl = document.createElement('span');
+    this.metaEl.className = 'topbar__meta';
+    this.metaEl.textContent = `${options.lineCount} lignes · ${options.stationCount} stations`;
 
     // Spacer
     const spacer = document.createElement('div');
@@ -56,12 +60,12 @@ export class TopBar {
     this.countValueEl.className = 'topbar__count-value topbar__count-value--pending';
     this.countValueEl.textContent = '—';
 
-    const countLabel = document.createElement('span');
-    countLabel.className = 'topbar__count-label';
-    countLabel.textContent = 'rames en circulation';
+    this.countLabelEl = document.createElement('span');
+    this.countLabelEl.className = 'topbar__count-label';
+    this.countLabelEl.textContent = 'calcul des rames...';
 
     countContainer.appendChild(this.countValueEl);
-    countContainer.appendChild(countLabel);
+    countContainer.appendChild(this.countLabelEl);
 
     // Statut temps réel (un état, pas un contrôle)
     this.rtStatusEl = document.createElement('div');
@@ -73,7 +77,7 @@ export class TopBar {
 
     this.rtLabelEl = document.createElement('span');
     this.rtLabelEl.className = 'rt-status__label';
-    this.rtLabelEl.textContent = 'Temps réel : OFF';
+    this.rtLabelEl.textContent = 'théorique';
 
     this.rtStatusEl.appendChild(dot);
     this.rtStatusEl.appendChild(this.rtLabelEl);
@@ -102,7 +106,7 @@ export class TopBar {
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
-      <span class="topbar__search-text">Rechercher une station</span>
+      <span class="topbar__search-text">Rechercher</span>
       <kbd class="topbar__search-kbd">⌘K</kbd>
     `;
     searchBtn.addEventListener('click', () => this.options.onSearch?.());
@@ -120,12 +124,25 @@ export class TopBar {
     `;
     searchIconBtn.addEventListener('click', () => this.options.onSearch?.());
 
+    const methodBtn = document.createElement('button');
+    methodBtn.type = 'button';
+    methodBtn.className = 'topbar__method-btn';
+    methodBtn.setAttribute('aria-label', 'Méthode & Données');
+    methodBtn.textContent = 'Méthode';
+    methodBtn.addEventListener('click', () => this.options.onMethod?.());
+
     // Assemblage
     this.el.appendChild(brand);
-    this.el.appendChild(meta);
+    this.el.appendChild(this.metaEl);
     this.el.appendChild(spacer);
     this.el.appendChild(countContainer);
+    this.distanceEl = document.createElement('span');
+    this.distanceEl.className = 'topbar__distance';
+    this.distanceEl.title = 'Distance calculée sur les horaires GTFS, pas mesurée par géolocalisation.';
+    this.distanceEl.textContent = '0,0 km · depuis le début du service';
+    this.el.appendChild(this.distanceEl);
     this.el.appendChild(this.rtStatusEl);
+    this.el.appendChild(methodBtn);
     this.el.appendChild(searchBtn);
     this.el.appendChild(searchIconBtn);
   }
@@ -141,27 +158,53 @@ export class TopBar {
     document.documentElement.style.setProperty('--chrome-top', `${h}px`);
   }
 
-  public setTrainCount(count: number) {
-    this.countValueEl.textContent = String(count);
-    this.countValueEl.classList.remove('topbar__count-value--pending');
+  public setTrainCount(count: number | null | undefined) {
+    if (count === null || count === undefined) {
+      this.countValueEl.textContent = '—';
+      this.countValueEl.classList.add('topbar__count-value--pending');
+      this.countLabelEl.textContent = 'calcul des rames...';
+    } else if (count === 0) {
+      this.countValueEl.textContent = '0';
+      this.countValueEl.classList.remove('topbar__count-value--pending');
+      this.countLabelEl.textContent = 'rame · service terminé';
+    } else {
+      this.countValueEl.textContent = count.toLocaleString('fr-FR');
+      this.countValueEl.classList.remove('topbar__count-value--pending');
+      this.countLabelEl.textContent = count > 1 ? 'rames en circulation' : 'rame en circulation';
+    }
+  }
+
+  public setCounts(lineCount: number, stationCount: number) {
+    if (this.metaEl) {
+      this.metaEl.textContent = `${lineCount} lignes · ${stationCount} stations`;
+    }
+  }
+
+  public setNetworkDistance(distanceKm: number, theoretical = true) {
+    const value = Number.isFinite(distanceKm)
+      ? distanceKm.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+      : '0,0';
+    this.distanceEl.textContent = `${value} km · depuis le début du service`;
+    this.distanceEl.title = theoretical
+      ? 'Distance théorique calculée sur les horaires GTFS depuis le début du service.'
+      : 'Distance parcourue depuis le début du service.';
   }
 
   public setRealtimeState(status: any) {
     if (typeof status === 'string') {
       this.rtStatusEl.dataset.state = status;
-      if (status === 'live') this.rtLabelEl.textContent = 'En direct';
-      else if (status === 'error') this.rtLabelEl.textContent = 'PRIM : Hors ligne';
-      else this.rtLabelEl.textContent = 'Temps réel : OFF';
-    } else if (status && status.lastError) {
-      this.rtStatusEl.dataset.state = 'error';
-      this.rtLabelEl.textContent = 'PRIM : Hors ligne';
-    } else if (status && status.active) {
+      if (status === 'live') this.rtLabelEl.textContent = 'temps réel';
+      else this.rtLabelEl.textContent = 'théorique';
+    } else if (status && status.active && status.minutesAgo !== undefined && status.minutesAgo <= 10) {
       this.rtStatusEl.dataset.state = 'live';
-      const count = Object.keys(status.delays || {}).length;
-      this.rtLabelEl.textContent = count > 0 ? `PRIM (${count})` : 'En direct';
+      if (status.minutesAgo <= 1) {
+        this.rtLabelEl.textContent = 'temps réel (à l\'instant)';
+      } else {
+        this.rtLabelEl.textContent = `temps réel (mis à jour il y a ${status.minutesAgo} min)`;
+      }
     } else {
       this.rtStatusEl.dataset.state = 'standby';
-      this.rtLabelEl.textContent = 'Temps réel : OFF';
+      this.rtLabelEl.textContent = 'théorique';
     }
   }
 }

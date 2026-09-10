@@ -1,0 +1,7800 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "OpenStreetMap Overpass",
+    "query": "way[railway=subway]",
+    "bbox": [
+      48.72,
+      1.95,
+      49.08,
+      2.75
+    ],
+    "fetched_at": "2026-09-10T01:14:16.092221+00:00",
+    "classification": {
+      "souterrain": "tunnel=yes OR layer < 0",
+      "aerien": "bridge=yes OR layer > 0",
+      "sol": "neither",
+      "conflict_precedence": "souterrain"
+    }
+  },
+  "summary": {
+    "osm_ways_fetched": 1547,
+    "osm_ways_considered": 861,
+    "classified_way_counts": {
+      "aerien": 81,
+      "sol": 97,
+      "souterrain": 683
+    },
+    "unresolved_line_ways": 686,
+    "tag_conflicts": 2,
+    "aerial_sections": 30,
+    "aerial_sections_needing_manual_review": 12,
+    "aerial_km_directional": 20.249,
+    "aerial_km_network_physical_estimate": 10.124,
+    "aerial_km_by_line": {
+      "1": 0.2347,
+      "11": 0.5468,
+      "13": 1.2494,
+      "2": 1.9055,
+      "5": 0.7982,
+      "6": 4.9702,
+      "8": 0.4195
+    }
+  },
+  "aerial_sections": [
+    {
+      "line": "1",
+      "direction": 0,
+      "d_start_m": 1309.4,
+      "d_end_m": 1522.7,
+      "station_start": "Esplanade de la Défense",
+      "station_end": "Pont de Neuilly",
+      "length_m": 213.3,
+      "osm_way_ids": [
+        28302023,
+        529035237
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "1",
+      "direction": 0,
+      "d_start_m": 10807.3,
+      "d_end_m": 10828.7,
+      "station_start": "Bastille",
+      "station_end": "Bastille",
+      "length_m": 21.4,
+      "osm_way_ids": [
+        859801254,
+        922839350
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "1",
+      "direction": 1,
+      "d_start_m": 5696.7,
+      "d_end_m": 5718.1,
+      "station_start": "Bastille",
+      "station_end": "Bastille",
+      "length_m": 21.4,
+      "osm_way_ids": [
+        859801254,
+        922839350
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "1",
+      "direction": 1,
+      "d_start_m": 15012.8,
+      "d_end_m": 15226.0,
+      "station_start": "Pont de Neuilly",
+      "station_end": "Esplanade de la Défense",
+      "length_m": 213.2,
+      "osm_way_ids": [
+        28302023,
+        529035237
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "11",
+      "direction": 0,
+      "d_start_m": 10605.4,
+      "d_end_m": 11150.9,
+      "station_start": "La Dhuys",
+      "station_end": "Coteaux Beauclair",
+      "length_m": 545.5,
+      "osm_way_ids": [
+        856943920,
+        856943921,
+        1449404779,
+        1449404796,
+        1449404797
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "11",
+      "direction": 1,
+      "d_start_m": 1020.5,
+      "d_end_m": 1568.6,
+      "station_start": "Coteaux Beauclair",
+      "station_end": "La Dhuys",
+      "length_m": 548.1,
+      "osm_way_ids": [
+        856943920,
+        856943921,
+        1449404779,
+        1449404796,
+        1449404797
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "13",
+      "direction": 0,
+      "d_start_m": 16773.9,
+      "d_end_m": 18025.0,
+      "station_start": "Malakoff - Plateau de Vanves",
+      "station_end": "Châtillon - Montrouge",
+      "length_m": 1251.2,
+      "osm_way_ids": [
+        605875566,
+        605875571,
+        1214620870,
+        1214620873,
+        1214620874
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "13",
+      "direction": 1,
+      "d_start_m": 129.5,
+      "d_end_m": 1377.1,
+      "station_start": "Châtillon - Montrouge",
+      "station_end": "Malakoff - Plateau de Vanves",
+      "length_m": 1247.6,
+      "osm_way_ids": [
+        605875566,
+        605875571,
+        1214620870,
+        1214620873,
+        1214620874
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "2",
+      "direction": 0,
+      "d_start_m": 5879.1,
+      "d_end_m": 7782.3,
+      "station_start": "Barbès - Rochechouart",
+      "station_end": "Jaurès",
+      "length_m": 1903.1,
+      "osm_way_ids": [
+        117884562,
+        117884564,
+        117884565,
+        334709721,
+        334709722,
+        334709723,
+        860778570,
+        860778571,
+        860778572,
+        860778573,
+        1359697313,
+        1359697314
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "2",
+      "direction": 1,
+      "d_start_m": 4455.5,
+      "d_end_m": 6363.4,
+      "station_start": "Jaurès",
+      "station_end": "Barbès - Rochechouart",
+      "length_m": 1907.9,
+      "osm_way_ids": [
+        117884562,
+        117884564,
+        117884565,
+        334709721,
+        334709722,
+        334709723,
+        860778570,
+        860778571,
+        860778572,
+        860778573,
+        1359697313,
+        1359697314
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "5",
+      "direction": 0,
+      "d_start_m": 1152.8,
+      "d_end_m": 1915.0,
+      "station_start": "Saint-Marcel",
+      "station_end": "Quai de la Rapée",
+      "length_m": 762.3,
+      "osm_way_ids": [
+        23368037,
+        23368038,
+        23368039,
+        30835560,
+        334870898,
+        334870914,
+        334870915,
+        755335015,
+        1231426593,
+        1231426594,
+        1451410419,
+        1451410420,
+        1451410421,
+        1451410422
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "5",
+      "direction": 0,
+      "d_start_m": 2260.2,
+      "d_end_m": 2297.0,
+      "station_start": "Quai de la Rapée",
+      "station_end": "Quai de la Rapée",
+      "length_m": 36.8,
+      "osm_way_ids": [
+        31751763,
+        786608515
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "5",
+      "direction": 1,
+      "d_start_m": 12301.3,
+      "d_end_m": 12339.6,
+      "station_start": "Quai de la Rapée",
+      "station_end": "Quai de la Rapée",
+      "length_m": 38.3,
+      "osm_way_ids": [
+        31751763,
+        786608515
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "5",
+      "direction": 1,
+      "d_start_m": 12684.2,
+      "d_end_m": 13443.2,
+      "station_start": "Quai de la Rapée",
+      "station_end": "Saint-Marcel",
+      "length_m": 759.1,
+      "osm_way_ids": [
+        23368037,
+        23368038,
+        23368039,
+        30835560,
+        334870898,
+        334870914,
+        334870915,
+        755335015,
+        1231426593,
+        1231426594,
+        1451410419,
+        1451410420,
+        1451410421,
+        1451410422
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "6",
+      "direction": 0,
+      "d_start_m": 2187.7,
+      "d_end_m": 4853.6,
+      "station_start": "Passy",
+      "station_end": "Pasteur",
+      "length_m": 2665.9,
+      "osm_way_ids": [
+        371959822,
+        390827578,
+        404688617,
+        404688618,
+        677923096,
+        677923100
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "6",
+      "direction": 0,
+      "d_start_m": 7562.4,
+      "d_end_m": 8428.0,
+      "station_start": "Saint-Jacques",
+      "station_end": "Corvisart",
+      "length_m": 865.6,
+      "osm_way_ids": [
+        852352984,
+        852352985,
+        1056275128,
+        1056275129,
+        1056275130,
+        1056275131,
+        1056275132,
+        1056275133,
+        1315613652,
+        1315613653
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "6",
+      "direction": 0,
+      "d_start_m": 9224.0,
+      "d_end_m": 10663.4,
+      "station_start": "Nationale",
+      "station_end": "Bercy",
+      "length_m": 1439.4,
+      "osm_way_ids": [
+        680571161,
+        680571162
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "6",
+      "direction": 1,
+      "d_start_m": 2983.0,
+      "d_end_m": 4422.3,
+      "station_start": "Bercy",
+      "station_end": "Nationale",
+      "length_m": 1439.3,
+      "osm_way_ids": [
+        680571161,
+        680571162
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "6",
+      "direction": 1,
+      "d_start_m": 5218.5,
+      "d_end_m": 6081.9,
+      "station_start": "Corvisart",
+      "station_end": "Saint-Jacques",
+      "length_m": 863.3,
+      "osm_way_ids": [
+        852352984,
+        852352985,
+        1056275128,
+        1056275129,
+        1056275130,
+        1056275131,
+        1056275132,
+        1056275133,
+        1315613652,
+        1315613653
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "6",
+      "direction": 1,
+      "d_start_m": 8787.9,
+      "d_end_m": 11455.0,
+      "station_start": "Pasteur",
+      "station_end": "Passy",
+      "length_m": 2667.0,
+      "osm_way_ids": [
+        371959822,
+        390827578,
+        404688617,
+        404688618,
+        677923096,
+        677923100
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 2149.3,
+      "d_end_m": 2191.4,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 42.0,
+      "osm_way_ids": [
+        37096882,
+        593477245
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 2514.4,
+      "d_end_m": 2570.3,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 56.0,
+      "osm_way_ids": [
+        146827257,
+        740808701
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 2841.6,
+      "d_end_m": 2908.8,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 67.3,
+      "osm_way_ids": [
+        157889679,
+        594357090
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 3134.6,
+      "d_end_m": 3163.4,
+      "station_start": "Créteil - L'Échat",
+      "station_end": "Créteil - L'Échat",
+      "length_m": 28.9,
+      "osm_way_ids": [
+        157889678,
+        593477237
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 6795.8,
+      "d_end_m": 7021.1,
+      "station_start": "École Vétérinaire de Maisons-Alfort",
+      "station_end": "Charenton - Écoles",
+      "length_m": 225.3,
+      "osm_way_ids": [
+        27256005,
+        412987856
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 16175.2,
+      "d_end_m": 16400.4,
+      "station_start": "Charenton - Écoles",
+      "station_end": "École Vétérinaire de Maisons-Alfort",
+      "length_m": 225.2,
+      "osm_way_ids": [
+        27256005,
+        412987856
+      ],
+      "review_flags": []
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 20029.0,
+      "d_end_m": 20058.0,
+      "station_start": "Créteil - L'Échat",
+      "station_end": "Créteil - L'Échat",
+      "length_m": 28.9,
+      "osm_way_ids": [
+        157889678,
+        593477237
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 20285.2,
+      "d_end_m": 20352.8,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 67.6,
+      "osm_way_ids": [
+        157889679,
+        594357090
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 20623.8,
+      "d_end_m": 20679.8,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 55.9,
+      "osm_way_ids": [
+        146827257,
+        740808701
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 21005.1,
+      "d_end_m": 21047.1,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 42.0,
+      "osm_way_ids": [
+        37096882,
+        593477245
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    }
+  ],
+  "manual_review_sections": [
+    {
+      "line": "1",
+      "direction": 0,
+      "d_start_m": 10807.3,
+      "d_end_m": 10828.7,
+      "station_start": "Bastille",
+      "station_end": "Bastille",
+      "length_m": 21.4,
+      "osm_way_ids": [
+        859801254,
+        922839350
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "1",
+      "direction": 1,
+      "d_start_m": 5696.7,
+      "d_end_m": 5718.1,
+      "station_start": "Bastille",
+      "station_end": "Bastille",
+      "length_m": 21.4,
+      "osm_way_ids": [
+        859801254,
+        922839350
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "5",
+      "direction": 0,
+      "d_start_m": 2260.2,
+      "d_end_m": 2297.0,
+      "station_start": "Quai de la Rapée",
+      "station_end": "Quai de la Rapée",
+      "length_m": 36.8,
+      "osm_way_ids": [
+        31751763,
+        786608515
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "5",
+      "direction": 1,
+      "d_start_m": 12301.3,
+      "d_end_m": 12339.6,
+      "station_start": "Quai de la Rapée",
+      "station_end": "Quai de la Rapée",
+      "length_m": 38.3,
+      "osm_way_ids": [
+        31751763,
+        786608515
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 2149.3,
+      "d_end_m": 2191.4,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 42.0,
+      "osm_way_ids": [
+        37096882,
+        593477245
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 2514.4,
+      "d_end_m": 2570.3,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 56.0,
+      "osm_way_ids": [
+        146827257,
+        740808701
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 2841.6,
+      "d_end_m": 2908.8,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 67.3,
+      "osm_way_ids": [
+        157889679,
+        594357090
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "d_start_m": 3134.6,
+      "d_end_m": 3163.4,
+      "station_start": "Créteil - L'Échat",
+      "station_end": "Créteil - L'Échat",
+      "length_m": 28.9,
+      "osm_way_ids": [
+        157889678,
+        593477237
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 20029.0,
+      "d_end_m": 20058.0,
+      "station_start": "Créteil - L'Échat",
+      "station_end": "Créteil - L'Échat",
+      "length_m": 28.9,
+      "osm_way_ids": [
+        157889678,
+        593477237
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 20285.2,
+      "d_end_m": 20352.8,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 67.6,
+      "osm_way_ids": [
+        157889679,
+        594357090
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 20623.8,
+      "d_end_m": 20679.8,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 55.9,
+      "osm_way_ids": [
+        146827257,
+        740808701
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "d_start_m": 21005.1,
+      "d_end_m": 21047.1,
+      "station_start": "Créteil - Université",
+      "station_end": "Créteil - Université",
+      "length_m": 42.0,
+      "osm_way_ids": [
+        37096882,
+        593477245
+      ],
+      "review_flags": [
+        "short_section",
+        "same_endpoint_station"
+      ]
+    }
+  ],
+  "sections_by_line_direction": [
+    {
+      "line": "1",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_111",
+      "shape_length_m": 16513.1,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 1309.4,
+          "d_end_m": 1522.7,
+          "osm_way_ids": [
+            28302023,
+            529035237
+          ],
+          "station_start": "Esplanade de la Défense",
+          "station_end": "Pont de Neuilly",
+          "length_m": 213.3
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 10807.3,
+          "d_end_m": 10828.7,
+          "osm_way_ids": [
+            859801254,
+            922839350
+          ],
+          "station_start": "Bastille",
+          "station_end": "Bastille",
+          "length_m": 21.4
+        },
+        {
+          "type": "sol",
+          "d_start_m": 1143.4,
+          "d_end_m": 1309.6,
+          "osm_way_ids": [
+            28302055,
+            529035239
+          ],
+          "station_start": "Esplanade de la Défense",
+          "station_end": "Esplanade de la Défense",
+          "length_m": 166.1
+        },
+        {
+          "type": "sol",
+          "d_start_m": 1522.6,
+          "d_end_m": 1617.8,
+          "osm_way_ids": [
+            35666407,
+            529035238,
+            1445246982
+          ],
+          "station_start": "Pont de Neuilly",
+          "station_end": "Pont de Neuilly",
+          "length_m": 95.2
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 54.3,
+          "d_end_m": 1144.3,
+          "osm_way_ids": [
+            529035240,
+            529035241,
+            539498311,
+            642579392,
+            1445246983,
+            1445246984,
+            1445246985,
+            1445246986
+          ],
+          "station_start": "La Défense",
+          "station_end": "Esplanade de la Défense",
+          "length_m": 1090.0
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 1617.6,
+          "d_end_m": 16520.4,
+          "osm_way_ids": [
+            209249680,
+            241744596,
+            241744801,
+            432807830,
+            525012821,
+            525012828,
+            525012829,
+            531010502,
+            531012928,
+            531012930,
+            531016422,
+            531016424,
+            531016425,
+            531017156,
+            531017157,
+            531017839,
+            531017844,
+            531017851,
+            531017858,
+            531017865,
+            531017871,
+            531018896,
+            531018897,
+            531018898,
+            539498305,
+            680326851,
+            680326853,
+            680326856,
+            680326860,
+            680326865,
+            680326872,
+            680326879,
+            680326882,
+            680326939,
+            680424562,
+            680424564,
+            680424565,
+            680434142,
+            680434144,
+            680434145,
+            680434146,
+            680443641,
+            680443642,
+            680443646,
+            680443647,
+            682751346,
+            682751347,
+            756383635,
+            756383636,
+            756383637,
+            859801255,
+            922839346,
+            1020660165,
+            1382731117,
+            1382731118,
+            1382731119,
+            1382731120,
+            1445246981
+          ],
+          "station_start": "Pont de Neuilly",
+          "station_end": "Château de Vincennes",
+          "length_m": 14902.8
+        }
+      ]
+    },
+    {
+      "line": "1",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_47",
+      "shape_length_m": 16448.8,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 5696.7,
+          "d_end_m": 5718.1,
+          "osm_way_ids": [
+            859801254,
+            922839350
+          ],
+          "station_start": "Bastille",
+          "station_end": "Bastille",
+          "length_m": 21.4
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 15012.8,
+          "d_end_m": 15226.0,
+          "osm_way_ids": [
+            28302023,
+            529035237
+          ],
+          "station_start": "Pont de Neuilly",
+          "station_end": "Esplanade de la Défense",
+          "length_m": 213.2
+        },
+        {
+          "type": "sol",
+          "d_start_m": 14917.6,
+          "d_end_m": 15012.8,
+          "osm_way_ids": [
+            35666407,
+            529035238,
+            1445246982
+          ],
+          "station_start": "Pont de Neuilly",
+          "station_end": "Pont de Neuilly",
+          "length_m": 95.3
+        },
+        {
+          "type": "sol",
+          "d_start_m": 15226.0,
+          "d_end_m": 15392.5,
+          "osm_way_ids": [
+            28302055,
+            529035239
+          ],
+          "station_start": "Esplanade de la Défense",
+          "station_end": "Esplanade de la Défense",
+          "length_m": 166.4
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 14917.8,
+          "osm_way_ids": [
+            209249680,
+            241744596,
+            241744801,
+            432807830,
+            525012821,
+            525012828,
+            525012829,
+            531010502,
+            531012928,
+            531012930,
+            531016422,
+            531016424,
+            531016425,
+            531017156,
+            531017157,
+            531017839,
+            531017844,
+            531017851,
+            531017858,
+            531017865,
+            531017871,
+            531018896,
+            531018897,
+            531018898,
+            539498305,
+            680326851,
+            680326853,
+            680326856,
+            680326860,
+            680326865,
+            680326872,
+            680326879,
+            680326882,
+            680326939,
+            680424562,
+            680424564,
+            680424565,
+            680434142,
+            680434144,
+            680434145,
+            680434146,
+            680443641,
+            680443642,
+            680443646,
+            680443647,
+            682751346,
+            682751347,
+            756383635,
+            756383636,
+            756383637,
+            859801255,
+            922839346,
+            1020660165,
+            1382731117,
+            1382731118,
+            1382731119,
+            1382731120,
+            1445246981
+          ],
+          "station_start": "Château de Vincennes",
+          "station_end": "Pont de Neuilly",
+          "length_m": 14917.8
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 15392.2,
+          "d_end_m": 16465.7,
+          "osm_way_ids": [
+            529035240,
+            529035241,
+            539498311,
+            642579392,
+            1445246983,
+            1445246984,
+            1445246985,
+            1445246986
+          ],
+          "station_start": "Esplanade de la Défense",
+          "station_end": "La Défense",
+          "length_m": 1073.5
+        }
+      ]
+    },
+    {
+      "line": "10",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_57",
+      "shape_length_m": 11745.6,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.1,
+          "d_end_m": 11757.4,
+          "osm_way_ids": [
+            24380451,
+            49482893,
+            49483041,
+            406229061,
+            406229064,
+            433096695,
+            433096696,
+            699871159,
+            1026404341,
+            1026404344,
+            1271801345,
+            1272227881,
+            1272227882,
+            1477832765,
+            1477832766
+          ],
+          "station_start": "Gare d'Austerlitz",
+          "station_end": "Boulogne Pont de Saint-Cloud",
+          "length_m": 11757.3
+        }
+      ]
+    },
+    {
+      "line": "10",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_27",
+      "shape_length_m": 11537.7,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 11549.9,
+          "osm_way_ids": [
+            24380451,
+            49482893,
+            49483041,
+            406229061,
+            406229064,
+            433096695,
+            433096696,
+            699871159,
+            1272227881,
+            1477832765,
+            1477832766
+          ],
+          "station_start": "Boulogne Pont de Saint-Cloud",
+          "station_end": "Gare d'Austerlitz",
+          "length_m": 11549.9
+        }
+      ]
+    },
+    {
+      "line": "11",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_37",
+      "shape_length_m": 12155.0,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 10605.4,
+          "d_end_m": 11150.9,
+          "osm_way_ids": [
+            856943920,
+            856943921,
+            1449404779,
+            1449404796,
+            1449404797
+          ],
+          "station_start": "La Dhuys",
+          "station_end": "Coteaux Beauclair",
+          "length_m": 545.5
+        },
+        {
+          "type": "sol",
+          "d_start_m": 11311.1,
+          "d_end_m": 11335.7,
+          "osm_way_ids": [
+            1056385784,
+            1056385785,
+            1056385786,
+            1056385787
+          ],
+          "station_start": "Coteaux Beauclair",
+          "station_end": "Coteaux Beauclair",
+          "length_m": 24.6
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 10605.4,
+          "osm_way_ids": [
+            756780027,
+            756780029,
+            856943914,
+            996904314,
+            996904315,
+            1000539923,
+            1000539924,
+            1012102692,
+            1244037168,
+            1244037169,
+            1244037170,
+            1244037173,
+            1244037174,
+            1244037175,
+            1248871701,
+            1248871702,
+            1248871703,
+            1278765475,
+            1278765476,
+            1449404780,
+            1449404781,
+            1449404782,
+            1449404783,
+            1449404784,
+            1449404785,
+            1449404786,
+            1449404787,
+            1449404788,
+            1449404789,
+            1449404790,
+            1449404791,
+            1449404792,
+            1449404793,
+            1449404794,
+            1449404795
+          ],
+          "station_start": "Châtelet",
+          "station_end": "La Dhuys",
+          "length_m": 10605.4
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 11150.8,
+          "d_end_m": 12166.4,
+          "osm_way_ids": [
+            1278765484,
+            1278765485,
+            1279871550,
+            1449404778
+          ],
+          "station_start": "Coteaux Beauclair",
+          "station_end": "Rosny-Bois-Perrier",
+          "length_m": 1015.6
+        }
+      ]
+    },
+    {
+      "line": "11",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_220",
+      "shape_length_m": 12158.1,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 1020.5,
+          "d_end_m": 1568.6,
+          "osm_way_ids": [
+            856943920,
+            856943921,
+            1449404779,
+            1449404796,
+            1449404797
+          ],
+          "station_start": "Coteaux Beauclair",
+          "station_end": "La Dhuys",
+          "length_m": 548.1
+        },
+        {
+          "type": "sol",
+          "d_start_m": 838.3,
+          "d_end_m": 850.5,
+          "osm_way_ids": [
+            1056385784,
+            1056385785
+          ],
+          "station_start": "Coteaux Beauclair",
+          "station_end": "Coteaux Beauclair",
+          "length_m": 12.2
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.1,
+          "d_end_m": 1020.5,
+          "osm_way_ids": [
+            1278765484,
+            1278765485,
+            1279871550,
+            1449404778
+          ],
+          "station_start": "Rosny-Bois-Perrier",
+          "station_end": "Coteaux Beauclair",
+          "length_m": 1020.4
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 1568.6,
+          "d_end_m": 12164.9,
+          "osm_way_ids": [
+            756780027,
+            756780029,
+            856943914,
+            996904314,
+            996904315,
+            1000539923,
+            1000539924,
+            1012102692,
+            1244037168,
+            1244037169,
+            1244037170,
+            1244037173,
+            1244037174,
+            1244037175,
+            1248871701,
+            1248871702,
+            1248871703,
+            1278765475,
+            1278765476,
+            1449404780,
+            1449404781,
+            1449404782,
+            1449404783,
+            1449404784,
+            1449404785,
+            1449404786,
+            1449404787,
+            1449404788,
+            1449404789,
+            1449404790,
+            1449404791,
+            1449404792,
+            1449404793,
+            1449404794,
+            1449404795
+          ],
+          "station_start": "La Dhuys",
+          "station_end": "Châtelet",
+          "length_m": 10596.3
+        }
+      ]
+    },
+    {
+      "line": "12",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_122",
+      "shape_length_m": 16999.7,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 17006.8,
+          "osm_way_ids": [
+            24331466,
+            135681290,
+            246854048,
+            300653151,
+            354119188,
+            403647552,
+            404320670,
+            404320671,
+            404320674,
+            404320680,
+            404320681,
+            404320682,
+            404320683,
+            404509164,
+            404509165,
+            432925037,
+            432925038,
+            432925039,
+            432925040,
+            432925041,
+            682702942,
+            682702943,
+            682702946,
+            682702947,
+            682702948,
+            682839698,
+            682839699,
+            682841124,
+            682841125,
+            755700947,
+            755700948,
+            755700951
+          ],
+          "station_start": "Mairie d'Aubervilliers",
+          "station_end": "Mairie d'Issy",
+          "length_m": 17006.8
+        }
+      ]
+    },
+    {
+      "line": "12",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_124",
+      "shape_length_m": 16993.7,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.1,
+          "d_end_m": 17013.7,
+          "osm_way_ids": [
+            24331466,
+            135681290,
+            246854048,
+            300653151,
+            354119188,
+            403647552,
+            404320670,
+            404320671,
+            404320674,
+            404320680,
+            404320681,
+            404320682,
+            404320683,
+            404509164,
+            404509165,
+            432925037,
+            432925038,
+            432925039,
+            432925040,
+            432925041,
+            682702942,
+            682702943,
+            682702946,
+            682702947,
+            682702948,
+            682839698,
+            682839699,
+            682841124,
+            682841125,
+            755700947,
+            755700948,
+            755700951
+          ],
+          "station_start": "Mairie d'Issy",
+          "station_end": "Mairie d'Aubervilliers",
+          "length_m": 17013.6
+        }
+      ]
+    },
+    {
+      "line": "13",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_251",
+      "shape_length_m": 18141.5,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 16773.9,
+          "d_end_m": 18025.0,
+          "osm_way_ids": [
+            605875566,
+            605875571,
+            1214620870,
+            1214620873,
+            1214620874
+          ],
+          "station_start": "Malakoff - Plateau de Vanves",
+          "station_end": "Châtillon - Montrouge",
+          "length_m": 1251.2
+        },
+        {
+          "type": "sol",
+          "d_start_m": 18023.2,
+          "d_end_m": 18151.6,
+          "osm_way_ids": [
+            405986187,
+            1214620869,
+            1214620872
+          ],
+          "station_start": "Châtillon - Montrouge",
+          "station_end": "Châtillon - Montrouge",
+          "length_m": 128.3
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 16774.7,
+          "osm_way_ids": [
+            28660069,
+            30097441,
+            432918682,
+            432918683,
+            555994386,
+            555994387,
+            555994388,
+            555994395,
+            555994396,
+            555994397,
+            555994401,
+            555994402,
+            555994403,
+            555994404,
+            555994405,
+            555994407,
+            555994408,
+            555994409,
+            555994412,
+            555994413,
+            555994418,
+            555994425,
+            555994437,
+            639158211,
+            648852725,
+            648852726,
+            648852727,
+            648852728,
+            648852729,
+            648852730,
+            648852731,
+            648852732,
+            648852733,
+            648852734,
+            648852735,
+            648852736,
+            661689869,
+            666720747,
+            667741329,
+            667741332,
+            667741333,
+            680767055,
+            680767056,
+            680767057,
+            680767058,
+            680767059,
+            680767060,
+            680771803,
+            680771807,
+            682318620,
+            682318621,
+            683304845,
+            683304849,
+            928540525,
+            964309454,
+            964309455,
+            969227535,
+            969231814,
+            969231815,
+            969231816,
+            969231817,
+            969231818,
+            969231819,
+            969231821,
+            969231822,
+            982027027,
+            982027028,
+            982027029,
+            982027030,
+            982027031,
+            982027032,
+            982027033,
+            982027034,
+            982027035,
+            982027036,
+            982027037,
+            982027038,
+            982027039,
+            982027040,
+            982027041,
+            982027042,
+            982027043,
+            982027044,
+            982027045,
+            982235397,
+            982235398,
+            982235399,
+            982235400,
+            1365021254,
+            1432363831
+          ],
+          "station_start": "Saint-Denis - Université",
+          "station_end": "Malakoff - Plateau de Vanves",
+          "length_m": 16774.7
+        }
+      ]
+    },
+    {
+      "line": "13",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_66",
+      "shape_length_m": 18134.8,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 129.5,
+          "d_end_m": 1377.1,
+          "osm_way_ids": [
+            605875566,
+            605875571,
+            1214620870,
+            1214620873,
+            1214620874
+          ],
+          "station_start": "Châtillon - Montrouge",
+          "station_end": "Malakoff - Plateau de Vanves",
+          "length_m": 1247.6
+        },
+        {
+          "type": "sol",
+          "d_start_m": 0.0,
+          "d_end_m": 131.1,
+          "osm_way_ids": [
+            405986187,
+            1214620869,
+            1214620872
+          ],
+          "station_start": "Châtillon - Montrouge",
+          "station_end": "Châtillon - Montrouge",
+          "length_m": 131.1
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 1376.3,
+          "d_end_m": 18157.5,
+          "osm_way_ids": [
+            28660069,
+            30097441,
+            432918682,
+            432918683,
+            555994386,
+            555994387,
+            555994388,
+            555994395,
+            555994396,
+            555994397,
+            555994401,
+            555994402,
+            555994403,
+            555994404,
+            555994405,
+            555994407,
+            555994408,
+            555994409,
+            555994412,
+            555994413,
+            555994418,
+            555994425,
+            555994437,
+            639158211,
+            648852725,
+            648852726,
+            648852727,
+            648852728,
+            648852729,
+            648852730,
+            648852731,
+            648852732,
+            648852733,
+            648852734,
+            648852735,
+            648852736,
+            661689869,
+            666720747,
+            667741329,
+            667741332,
+            667741333,
+            680767055,
+            680767056,
+            680767057,
+            680767058,
+            680767059,
+            680767060,
+            680771803,
+            680771807,
+            682318620,
+            682318621,
+            683304845,
+            683304849,
+            928540525,
+            964309454,
+            964309455,
+            969227535,
+            969231814,
+            969231815,
+            969231816,
+            969231817,
+            969231818,
+            969231819,
+            969231821,
+            969231822,
+            982027027,
+            982027028,
+            982027029,
+            982027030,
+            982027031,
+            982027032,
+            982027033,
+            982027034,
+            982027035,
+            982027036,
+            982027037,
+            982027038,
+            982027039,
+            982027040,
+            982027041,
+            982027042,
+            982027043,
+            982027044,
+            982027045,
+            982235397,
+            982235398,
+            982235399,
+            982235400,
+            1365021254,
+            1432363831
+          ],
+          "station_start": "Malakoff - Plateau de Vanves",
+          "station_end": "Saint-Denis - Université",
+          "length_m": 16781.2
+        }
+      ]
+    },
+    {
+      "line": "14",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_6",
+      "shape_length_m": 27717.6,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 27255.1,
+          "osm_way_ids": [
+            125667163,
+            309364797,
+            374417456,
+            374417457,
+            432920738,
+            433096697,
+            445446055,
+            555720181,
+            597067220,
+            652513342,
+            1219562944,
+            1219562945,
+            1229873147,
+            1229873148,
+            1229873149,
+            1229873150,
+            1229873151,
+            1229873152,
+            1229873153,
+            1229873154,
+            1229873155,
+            1229873156,
+            1229873157,
+            1229873158,
+            1229918969,
+            1229918970,
+            1303146453,
+            1303146454,
+            1303146455,
+            1303146456,
+            1487915301,
+            1487915302,
+            1487915303,
+            1487915304
+          ],
+          "station_start": "Aéroport d'Orly",
+          "station_end": "Saint-Denis - Pleyel",
+          "length_m": 27255.1
+        }
+      ]
+    },
+    {
+      "line": "14",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_232",
+      "shape_length_m": 27722.6,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 517.0,
+          "d_end_m": 27738.0,
+          "osm_way_ids": [
+            125667163,
+            309364797,
+            374417456,
+            374417457,
+            432920738,
+            433096697,
+            445446055,
+            555720181,
+            597067220,
+            652513342,
+            1219562944,
+            1219562945,
+            1229873147,
+            1229873148,
+            1229873149,
+            1229873150,
+            1229873151,
+            1229873152,
+            1229873153,
+            1229873154,
+            1229873155,
+            1229873156,
+            1229873157,
+            1229873158,
+            1229918969,
+            1229918970,
+            1303146453,
+            1303146454,
+            1303146455,
+            1303146456,
+            1487915301,
+            1487915302,
+            1487915303,
+            1487915304
+          ],
+          "station_start": "Saint-Denis - Pleyel",
+          "station_end": "Aéroport d'Orly",
+          "length_m": 27221.0
+        }
+      ]
+    },
+    {
+      "line": "2",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_187",
+      "shape_length_m": 12344.1,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 5879.1,
+          "d_end_m": 7782.3,
+          "osm_way_ids": [
+            117884562,
+            117884564,
+            117884565,
+            334709721,
+            334709722,
+            334709723,
+            860778570,
+            860778571,
+            860778572,
+            860778573,
+            1359697313,
+            1359697314
+          ],
+          "station_start": "Barbès - Rochechouart",
+          "station_end": "Jaurès",
+          "length_m": 1903.1
+        },
+        {
+          "type": "sol",
+          "d_start_m": 5751.4,
+          "d_end_m": 5879.2,
+          "osm_way_ids": [
+            117884569,
+            334709719
+          ],
+          "station_start": "Barbès - Rochechouart",
+          "station_end": "Barbès - Rochechouart",
+          "length_m": 127.8
+        },
+        {
+          "type": "sol",
+          "d_start_m": 7781.6,
+          "d_end_m": 7969.1,
+          "osm_way_ids": [
+            3839425,
+            117884566
+          ],
+          "station_start": "Jaurès",
+          "station_end": "Colonel Fabien",
+          "length_m": 187.4
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 5751.5,
+          "osm_way_ids": [
+            334709724,
+            334709725,
+            366385022,
+            404509166,
+            404509167,
+            432807833,
+            432807834,
+            680335007,
+            680335008,
+            1432363814,
+            1432363821,
+            1432363824,
+            1432363825,
+            1432363826,
+            1432363827,
+            1432363828,
+            1432363829
+          ],
+          "station_start": "Porte Dauphine",
+          "station_end": "Barbès - Rochechouart",
+          "length_m": 5751.5
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 7968.7,
+          "d_end_m": 12353.6,
+          "osm_way_ids": [
+            24046308,
+            49992529,
+            209249679,
+            334709717,
+            334709718,
+            334709720,
+            366385024,
+            432809563
+          ],
+          "station_start": "Colonel Fabien",
+          "station_end": "Nation",
+          "length_m": 4384.9
+        }
+      ]
+    },
+    {
+      "line": "2",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_157",
+      "shape_length_m": 12235.2,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 4455.5,
+          "d_end_m": 6363.4,
+          "osm_way_ids": [
+            117884562,
+            117884564,
+            117884565,
+            334709721,
+            334709722,
+            334709723,
+            860778570,
+            860778571,
+            860778572,
+            860778573,
+            1359697313,
+            1359697314
+          ],
+          "station_start": "Jaurès",
+          "station_end": "Barbès - Rochechouart",
+          "length_m": 1907.9
+        },
+        {
+          "type": "sol",
+          "d_start_m": 4269.1,
+          "d_end_m": 4456.1,
+          "osm_way_ids": [
+            3839425,
+            117884566
+          ],
+          "station_start": "Colonel Fabien",
+          "station_end": "Jaurès",
+          "length_m": 187.1
+        },
+        {
+          "type": "sol",
+          "d_start_m": 6363.4,
+          "d_end_m": 6491.4,
+          "osm_way_ids": [
+            117884569,
+            334709719
+          ],
+          "station_start": "Barbès - Rochechouart",
+          "station_end": "Barbès - Rochechouart",
+          "length_m": 128.0
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 4269.3,
+          "osm_way_ids": [
+            24046308,
+            49992529,
+            209249679,
+            334709717,
+            334709718,
+            334709720,
+            366385024,
+            695892764
+          ],
+          "station_start": "Nation",
+          "station_end": "Colonel Fabien",
+          "length_m": 4269.3
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 6491.2,
+          "d_end_m": 12248.8,
+          "osm_way_ids": [
+            334709724,
+            334709725,
+            366385022,
+            404509166,
+            404509167,
+            432807833,
+            432807834,
+            680335007,
+            680335008,
+            1432363814,
+            1432363821,
+            1432363824,
+            1432363825,
+            1432363826,
+            1432363827,
+            1432363828,
+            1432363829,
+            1433319485
+          ],
+          "station_start": "Barbès - Rochechouart",
+          "station_end": "Porte Dauphine",
+          "length_m": 5757.6
+        }
+      ]
+    },
+    {
+      "line": "3",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_170",
+      "shape_length_m": 11637.3,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.1,
+          "d_end_m": 1357.6,
+          "osm_way_ids": [
+            432815231
+          ],
+          "station_start": "Pont de Levallois - Bécon",
+          "station_end": "Porte de Champerret",
+          "length_m": 1357.5
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 1569.3,
+          "d_end_m": 11642.3,
+          "osm_way_ids": [
+            114120357,
+            114120358,
+            432815230,
+            432815233,
+            475598698,
+            475598699,
+            483666081,
+            483666085,
+            627757366,
+            627757368,
+            627757369,
+            670938607,
+            670938610,
+            670939676,
+            680372302,
+            680372304,
+            756780031,
+            756780032,
+            1187810555,
+            1432363813,
+            1432363818,
+            1432363819,
+            1432363830
+          ],
+          "station_start": "Porte de Champerret",
+          "station_end": "Gallieni",
+          "length_m": 10073.0
+        }
+      ]
+    },
+    {
+      "line": "3",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_74",
+      "shape_length_m": 11628.3,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 10090.3,
+          "osm_way_ids": [
+            114120357,
+            114120358,
+            432815230,
+            432815233,
+            475598698,
+            475598699,
+            483666081,
+            483666085,
+            627757366,
+            627757368,
+            627757369,
+            670938607,
+            670938610,
+            670939676,
+            680372302,
+            680372304,
+            756780031,
+            756780032,
+            1187810555,
+            1432363813,
+            1432363818,
+            1432363819,
+            1432363830
+          ],
+          "station_start": "Gallieni",
+          "station_end": "Porte de Champerret",
+          "length_m": 10090.3
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 10281.5,
+          "d_end_m": 11639.3,
+          "osm_way_ids": [
+            432815231
+          ],
+          "station_start": "Porte de Champerret",
+          "station_end": "Pont de Levallois - Bécon",
+          "length_m": 1357.8
+        }
+      ]
+    },
+    {
+      "line": "3bis",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_67",
+      "shape_length_m": 1339.5,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 1340.8,
+          "osm_way_ids": [
+            24397962,
+            1000539933,
+            1000539934
+          ],
+          "station_start": "Gambetta",
+          "station_end": "Porte des Lilas",
+          "length_m": 1340.8
+        }
+      ]
+    },
+    {
+      "line": "3bis",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_183",
+      "shape_length_m": 1340.1,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 1341.4,
+          "osm_way_ids": [
+            24397962,
+            1000539933,
+            1000539934
+          ],
+          "station_start": "Porte des Lilas",
+          "station_end": "Gambetta",
+          "length_m": 1341.4
+        }
+      ]
+    },
+    {
+      "line": "4",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_7",
+      "shape_length_m": 13220.6,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 13237.1,
+          "osm_way_ids": [
+            405336688,
+            405336689,
+            432816250,
+            576317671,
+            576319285,
+            576319286,
+            576319354,
+            576319355,
+            576324436,
+            588798751,
+            588798752,
+            588798754,
+            588798757,
+            605581740,
+            605581741,
+            605581742,
+            629824239,
+            629824240,
+            682707953,
+            682707954,
+            996669199,
+            996669200,
+            996669201,
+            1244037176,
+            1244037177,
+            1244163539,
+            1244182541,
+            1244182542,
+            1445819575,
+            1445819576,
+            1445819577,
+            1445819578,
+            1445819579,
+            1445819580,
+            1445819581,
+            1445819582,
+            1445819583,
+            1445819584,
+            1445819585,
+            1445819586,
+            1445819587,
+            1445819588,
+            1445819589,
+            1445819590,
+            1445819591,
+            1445819592,
+            1445819593,
+            1445819594,
+            1445819595,
+            1445819596,
+            1445819597,
+            1445819598,
+            1445819599,
+            1445819600,
+            1445819601,
+            1445819602,
+            1445819603,
+            1445819604,
+            1445819605
+          ],
+          "station_start": "Bagneux - Lucie Aubrac",
+          "station_end": "Porte de Clignancourt",
+          "length_m": 13237.1
+        }
+      ]
+    },
+    {
+      "line": "4",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_184",
+      "shape_length_m": 13213.7,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 13223.1,
+          "osm_way_ids": [
+            405336688,
+            405336689,
+            432816250,
+            576317671,
+            576319285,
+            576319286,
+            576319354,
+            576319355,
+            576324436,
+            588798751,
+            588798752,
+            588798754,
+            588798757,
+            605581740,
+            605581741,
+            605581742,
+            629824239,
+            629824240,
+            682707953,
+            682707954,
+            996669199,
+            996669200,
+            996669201,
+            1244037176,
+            1244037177,
+            1244163539,
+            1244182541,
+            1244182542,
+            1445819575,
+            1445819576,
+            1445819577,
+            1445819578,
+            1445819579,
+            1445819580,
+            1445819581,
+            1445819582,
+            1445819583,
+            1445819584,
+            1445819585,
+            1445819586,
+            1445819587,
+            1445819588,
+            1445819589,
+            1445819590,
+            1445819591,
+            1445819592,
+            1445819593,
+            1445819594,
+            1445819595,
+            1445819596,
+            1445819597,
+            1445819598,
+            1445819599,
+            1445819600,
+            1445819601,
+            1445819602,
+            1445819603,
+            1445819604,
+            1445819605
+          ],
+          "station_start": "Porte de Clignancourt",
+          "station_end": "Bagneux - Lucie Aubrac",
+          "length_m": 13223.1
+        }
+      ]
+    },
+    {
+      "line": "5",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_169",
+      "shape_length_m": 14592.0,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 1152.8,
+          "d_end_m": 1915.0,
+          "osm_way_ids": [
+            23368037,
+            23368038,
+            23368039,
+            30835560,
+            334870898,
+            334870914,
+            334870915,
+            755335015,
+            1231426593,
+            1231426594,
+            1451410419,
+            1451410420,
+            1451410421,
+            1451410422
+          ],
+          "station_start": "Saint-Marcel",
+          "station_end": "Quai de la Rapée",
+          "length_m": 762.3
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 2260.2,
+          "d_end_m": 2297.0,
+          "osm_way_ids": [
+            31751763,
+            786608515
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 36.8
+        },
+        {
+          "type": "sol",
+          "d_start_m": 1016.6,
+          "d_end_m": 1152.8,
+          "osm_way_ids": [
+            182795405,
+            755335016
+          ],
+          "station_start": "Saint-Marcel",
+          "station_end": "Saint-Marcel",
+          "length_m": 136.2
+        },
+        {
+          "type": "sol",
+          "d_start_m": 1913.5,
+          "d_end_m": 2044.9,
+          "osm_way_ids": [
+            23368036,
+            334870900
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 131.4
+        },
+        {
+          "type": "sol",
+          "d_start_m": 2126.3,
+          "d_end_m": 2319.3,
+          "osm_way_ids": [
+            23814820,
+            334870910,
+            886442595,
+            886442596
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 193.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 12751.5,
+          "d_end_m": 12951.3,
+          "osm_way_ids": [
+            29979145,
+            131384683
+          ],
+          "station_start": "Bobigny-Pantin - Raymond Queneau",
+          "station_end": "Bobigny-Pantin - Raymond Queneau",
+          "length_m": 199.8
+        },
+        {
+          "type": "sol",
+          "d_start_m": 13135.7,
+          "d_end_m": 14257.2,
+          "osm_way_ids": [
+            112602573,
+            117590223,
+            948541075,
+            948541076
+          ],
+          "station_start": "Bobigny-Pantin - Raymond Queneau",
+          "station_end": "Bobigny - Pablo Picasso",
+          "length_m": 1121.5
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 1016.7,
+          "osm_way_ids": [
+            23368043,
+            334870912,
+            334870917,
+            1123450008,
+            1231424080,
+            1231424081,
+            1231426591,
+            1231426592
+          ],
+          "station_start": "Place d'Italie",
+          "station_end": "Saint-Marcel",
+          "length_m": 1016.7
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 2044.8,
+          "d_end_m": 2126.4,
+          "osm_way_ids": [
+            23814819,
+            334870916
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 81.6
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 2319.2,
+          "d_end_m": 12751.5,
+          "osm_way_ids": [
+            134764716,
+            334870906,
+            334870913,
+            432909897,
+            525002831,
+            525002833,
+            532695038,
+            532695039,
+            532695041,
+            585984943,
+            585984944,
+            585984950,
+            585984951,
+            585984952,
+            585984953,
+            585984954,
+            585984955,
+            585984956,
+            585984957,
+            586027859,
+            588798788,
+            588798789,
+            756780036,
+            756780039,
+            1231436446,
+            1231436447,
+            1231436448,
+            1231436449,
+            1231436450,
+            1231436451,
+            1231436452,
+            1231436453,
+            1231436454,
+            1231436455,
+            1231436456,
+            1231436457,
+            1231436458,
+            1231436459,
+            1231436460,
+            1231436461,
+            1316018378
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Bobigny-Pantin - Raymond Queneau",
+          "length_m": 10432.4
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 12950.7,
+          "d_end_m": 13135.9,
+          "osm_way_ids": [
+            112602572,
+            131384682
+          ],
+          "station_start": "Bobigny-Pantin - Raymond Queneau",
+          "station_end": "Bobigny-Pantin - Raymond Queneau",
+          "length_m": 185.2
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 14256.8,
+          "d_end_m": 14608.9,
+          "osm_way_ids": [
+            29979199,
+            165624512,
+            165624515,
+            948541073,
+            948541078,
+            948541079,
+            949224240,
+            949224241,
+            949224242
+          ],
+          "station_start": "Bobigny - Pablo Picasso",
+          "station_end": "Bobigny - Pablo Picasso",
+          "length_m": 352.1
+        }
+      ]
+    },
+    {
+      "line": "5",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_25",
+      "shape_length_m": 14694.3,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 12301.3,
+          "d_end_m": 12339.6,
+          "osm_way_ids": [
+            31751763,
+            786608515
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 38.3
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 12684.2,
+          "d_end_m": 13443.2,
+          "osm_way_ids": [
+            23368037,
+            23368038,
+            23368039,
+            30835560,
+            334870898,
+            334870914,
+            334870915,
+            755335015,
+            1231426593,
+            1231426594,
+            1451410419,
+            1451410420,
+            1451410421,
+            1451410422
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Saint-Marcel",
+          "length_m": 759.1
+        },
+        {
+          "type": "sol",
+          "d_start_m": 351.6,
+          "d_end_m": 1468.2,
+          "osm_way_ids": [
+            112602573,
+            117590223,
+            948541075,
+            948541076
+          ],
+          "station_start": "Bobigny - Pablo Picasso",
+          "station_end": "Bobigny-Pantin - Raymond Queneau",
+          "length_m": 1116.6
+        },
+        {
+          "type": "sol",
+          "d_start_m": 1652.4,
+          "d_end_m": 1851.3,
+          "osm_way_ids": [
+            29979145,
+            131384683
+          ],
+          "station_start": "Bobigny-Pantin - Raymond Queneau",
+          "station_end": "Bobigny-Pantin - Raymond Queneau",
+          "length_m": 199.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 12277.9,
+          "d_end_m": 12474.7,
+          "osm_way_ids": [
+            23814820,
+            334870910,
+            886442595,
+            886442596
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 196.8
+        },
+        {
+          "type": "sol",
+          "d_start_m": 12557.2,
+          "d_end_m": 12686.1,
+          "osm_way_ids": [
+            23368036,
+            334870900
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 128.9
+        },
+        {
+          "type": "sol",
+          "d_start_m": 13443.2,
+          "d_end_m": 13579.3,
+          "osm_way_ids": [
+            182795405,
+            755335016
+          ],
+          "station_start": "Saint-Marcel",
+          "station_end": "Saint-Marcel",
+          "length_m": 136.1
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 351.9,
+          "osm_way_ids": [
+            29979199,
+            165624512,
+            165624515,
+            948541073,
+            948541078,
+            948541079,
+            949224240,
+            949224241,
+            949224242
+          ],
+          "station_start": "Bobigny - Pablo Picasso",
+          "station_end": "Bobigny - Pablo Picasso",
+          "length_m": 351.9
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 1468.0,
+          "d_end_m": 1653.0,
+          "osm_way_ids": [
+            112602572,
+            131384682
+          ],
+          "station_start": "Bobigny-Pantin - Raymond Queneau",
+          "station_end": "Bobigny-Pantin - Raymond Queneau",
+          "length_m": 184.9
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 1851.3,
+          "d_end_m": 12278.2,
+          "osm_way_ids": [
+            134764716,
+            334870906,
+            334870913,
+            432909897,
+            525002831,
+            525002833,
+            532695038,
+            532695039,
+            532695041,
+            585984943,
+            585984944,
+            585984950,
+            585984951,
+            585984952,
+            585984953,
+            585984954,
+            585984955,
+            585984956,
+            585984957,
+            586027859,
+            588798788,
+            588798789,
+            756780036,
+            756780039,
+            1231436446,
+            1231436447,
+            1231436448,
+            1231436449,
+            1231436450,
+            1231436451,
+            1231436452,
+            1231436453,
+            1231436454,
+            1231436455,
+            1231436456,
+            1231436457,
+            1231436458,
+            1231436459,
+            1231436460,
+            1231436461,
+            1316018378
+          ],
+          "station_start": "Bobigny-Pantin - Raymond Queneau",
+          "station_end": "Quai de la Rapée",
+          "length_m": 10426.9
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 12474.7,
+          "d_end_m": 12557.2,
+          "osm_way_ids": [
+            23814819,
+            334870916
+          ],
+          "station_start": "Quai de la Rapée",
+          "station_end": "Quai de la Rapée",
+          "length_m": 82.6
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 13579.3,
+          "d_end_m": 14698.4,
+          "osm_way_ids": [
+            23368043,
+            334870912,
+            334870917,
+            1123450009,
+            1159249102,
+            1231424080,
+            1231424081,
+            1231426591,
+            1231426592
+          ],
+          "station_start": "Saint-Marcel",
+          "station_end": "Place d'Italie",
+          "length_m": 1119.2
+        }
+      ]
+    },
+    {
+      "line": "6",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_42",
+      "shape_length_m": 13647.2,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 2187.7,
+          "d_end_m": 4853.6,
+          "osm_way_ids": [
+            371959822,
+            390827578,
+            404688617,
+            404688618,
+            677923096,
+            677923100
+          ],
+          "station_start": "Passy",
+          "station_end": "Pasteur",
+          "length_m": 2665.9
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 7562.4,
+          "d_end_m": 8428.0,
+          "osm_way_ids": [
+            852352984,
+            852352985,
+            1056275128,
+            1056275129,
+            1056275130,
+            1056275131,
+            1056275132,
+            1056275133,
+            1315613652,
+            1315613653
+          ],
+          "station_start": "Saint-Jacques",
+          "station_end": "Corvisart",
+          "length_m": 865.6
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 9224.0,
+          "d_end_m": 10663.4,
+          "osm_way_ids": [
+            680571161,
+            680571162
+          ],
+          "station_start": "Nationale",
+          "station_end": "Bercy",
+          "length_m": 1439.4
+        },
+        {
+          "type": "sol",
+          "d_start_m": 7324.1,
+          "d_end_m": 7562.5,
+          "osm_way_ids": [
+            21840944,
+            852352986
+          ],
+          "station_start": "Saint-Jacques",
+          "station_end": "Saint-Jacques",
+          "length_m": 238.4
+        },
+        {
+          "type": "sol",
+          "d_start_m": 8428.0,
+          "d_end_m": 8574.0,
+          "osm_way_ids": [
+            371959803,
+            632992082,
+            852352983
+          ],
+          "station_start": "Corvisart",
+          "station_end": "Corvisart",
+          "length_m": 146.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 9113.7,
+          "d_end_m": 9224.2,
+          "osm_way_ids": [
+            31739553,
+            680571163
+          ],
+          "station_start": "Place d'Italie",
+          "station_end": "Nationale",
+          "length_m": 110.5
+        },
+        {
+          "type": "sol",
+          "d_start_m": 10663.3,
+          "d_end_m": 10859.2,
+          "osm_way_ids": [
+            680571156,
+            680571158
+          ],
+          "station_start": "Bercy",
+          "station_end": "Bercy",
+          "length_m": 196.0
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 2188.1,
+          "osm_way_ids": [
+            136698126,
+            371959811,
+            432807835,
+            677931342,
+            677931343,
+            678369244,
+            678369245,
+            678369246,
+            678369251,
+            678369254,
+            678369255,
+            678369256,
+            678369257,
+            680326926,
+            680326930,
+            680326934
+          ],
+          "station_start": "Charles de Gaulle - Étoile",
+          "station_end": "Passy",
+          "length_m": 2188.1
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 4853.6,
+          "d_end_m": 7324.4,
+          "osm_way_ids": [
+            369405313,
+            371959807,
+            371959816,
+            677923086,
+            677923091,
+            677923104,
+            677923265,
+            677923266
+          ],
+          "station_start": "Pasteur",
+          "station_end": "Saint-Jacques",
+          "length_m": 2470.8
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 8574.0,
+          "d_end_m": 9113.7,
+          "osm_way_ids": [
+            1109179985,
+            1123450013,
+            1123450014
+          ],
+          "station_start": "Corvisart",
+          "station_end": "Place d'Italie",
+          "length_m": 539.8
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 10848.8,
+          "d_end_m": 13658.0,
+          "osm_way_ids": [
+            23622326,
+            24044831,
+            371959798,
+            834252718,
+            834252719,
+            834252720,
+            834252721,
+            1111737842,
+            1244163537
+          ],
+          "station_start": "Bercy",
+          "station_end": "Nation",
+          "length_m": 2809.2
+        }
+      ]
+    },
+    {
+      "line": "6",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_158",
+      "shape_length_m": 13589.2,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 2983.0,
+          "d_end_m": 4422.3,
+          "osm_way_ids": [
+            680571161,
+            680571162
+          ],
+          "station_start": "Bercy",
+          "station_end": "Nationale",
+          "length_m": 1439.3
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 5218.5,
+          "d_end_m": 6081.9,
+          "osm_way_ids": [
+            852352984,
+            852352985,
+            1056275128,
+            1056275129,
+            1056275130,
+            1056275131,
+            1056275132,
+            1056275133,
+            1315613652,
+            1315613653
+          ],
+          "station_start": "Corvisart",
+          "station_end": "Saint-Jacques",
+          "length_m": 863.3
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 8787.9,
+          "d_end_m": 11455.0,
+          "osm_way_ids": [
+            371959822,
+            390827578,
+            404688617,
+            404688618,
+            677923096,
+            677923100
+          ],
+          "station_start": "Pasteur",
+          "station_end": "Passy",
+          "length_m": 2667.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 2786.2,
+          "d_end_m": 2983.1,
+          "osm_way_ids": [
+            680571156,
+            680571158
+          ],
+          "station_start": "Bercy",
+          "station_end": "Bercy",
+          "length_m": 196.9
+        },
+        {
+          "type": "sol",
+          "d_start_m": 4422.1,
+          "d_end_m": 4532.6,
+          "osm_way_ids": [
+            31739553,
+            680571163
+          ],
+          "station_start": "Nationale",
+          "station_end": "Place d'Italie",
+          "length_m": 110.5
+        },
+        {
+          "type": "sol",
+          "d_start_m": 5072.5,
+          "d_end_m": 5218.6,
+          "osm_way_ids": [
+            371959803,
+            632992082,
+            852352983
+          ],
+          "station_start": "Corvisart",
+          "station_end": "Corvisart",
+          "length_m": 146.1
+        },
+        {
+          "type": "sol",
+          "d_start_m": 6081.8,
+          "d_end_m": 6320.3,
+          "osm_way_ids": [
+            21840944,
+            852352986
+          ],
+          "station_start": "Saint-Jacques",
+          "station_end": "Saint-Jacques",
+          "length_m": 238.5
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 2794.3,
+          "osm_way_ids": [
+            23622326,
+            24044831,
+            371959798,
+            834252718,
+            834252719,
+            834252720,
+            834252721,
+            1111737842,
+            1244163537
+          ],
+          "station_start": "Nation",
+          "station_end": "Bercy",
+          "length_m": 2794.3
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 4532.6,
+          "d_end_m": 5072.6,
+          "osm_way_ids": [
+            1109179985,
+            1123450013,
+            1123450014
+          ],
+          "station_start": "Place d'Italie",
+          "station_end": "Corvisart",
+          "length_m": 540.0
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 6320.0,
+          "d_end_m": 8788.0,
+          "osm_way_ids": [
+            369405313,
+            371959807,
+            371959816,
+            677923086,
+            677923091,
+            677923104,
+            677923265,
+            677923266
+          ],
+          "station_start": "Saint-Jacques",
+          "station_end": "Pasteur",
+          "length_m": 2467.9
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 11454.5,
+          "d_end_m": 13603.8,
+          "osm_way_ids": [
+            136698126,
+            371959811,
+            432807835,
+            677931342,
+            677931343,
+            678369244,
+            678369245,
+            678369246,
+            678369251,
+            678369254,
+            678369255,
+            678369256,
+            678369257,
+            680326926,
+            680326930,
+            680326934
+          ],
+          "station_start": "Passy",
+          "station_end": "Charles de Gaulle - Étoile",
+          "length_m": 2149.4
+        }
+      ]
+    },
+    {
+      "line": "7",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_264",
+      "shape_length_m": 19783.8,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 19811.4,
+          "osm_way_ids": [
+            24395988,
+            49993490,
+            406229066,
+            406229067,
+            475598696,
+            475598697,
+            525002830,
+            525002832,
+            532695042,
+            532695043,
+            532695048,
+            537162102,
+            537162103,
+            537162104,
+            576298604,
+            576298610,
+            576298615,
+            576298636,
+            576298900,
+            576365296,
+            576365302,
+            576370730,
+            576370731,
+            576370852,
+            576370854,
+            576370855,
+            1123450002,
+            1123450003,
+            1123450004,
+            1192675358,
+            1312997018,
+            1313000903,
+            1313000904
+          ],
+          "station_start": "Villejuif - Louis Aragon",
+          "station_end": "La Courneuve - 8 Mai 1945",
+          "length_m": 19811.4
+        }
+      ]
+    },
+    {
+      "line": "7",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_114",
+      "shape_length_m": 21130.6,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.3,
+          "d_end_m": 21129.7,
+          "osm_way_ids": [
+            24395988,
+            49993490,
+            406229066,
+            406229067,
+            475598696,
+            475598697,
+            525002830,
+            525002832,
+            532695042,
+            532695043,
+            532695048,
+            537162102,
+            537162103,
+            537162104,
+            576298604,
+            576298610,
+            576298615,
+            576298636,
+            576298900,
+            576365296,
+            576365302,
+            576370730,
+            576370731,
+            576370852,
+            576370854,
+            576370855,
+            1123450002,
+            1123450003,
+            1123450004,
+            1192675358,
+            1312997018,
+            1313000903,
+            1313000904
+          ],
+          "station_start": "La Courneuve - 8 Mai 1945",
+          "station_end": "Villejuif - Louis Aragon",
+          "length_m": 21129.5
+        }
+      ]
+    },
+    {
+      "line": "7bis",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_104",
+      "shape_length_m": 3230.8,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 3232.2,
+          "osm_way_ids": [
+            24397854,
+            196309635,
+            196309638,
+            996904318,
+            1313000905,
+            1382808902
+          ],
+          "station_start": "Louis Blanc",
+          "station_end": "Pré-Saint-Gervais",
+          "length_m": 3232.2
+        }
+      ]
+    },
+    {
+      "line": "7bis",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_217",
+      "shape_length_m": 2883.7,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 2885.2,
+          "osm_way_ids": [
+            24397854,
+            196309638,
+            998384377,
+            1313000905,
+            1382808902,
+            1473643556,
+            1473643557,
+            1473643558,
+            1516574081
+          ],
+          "station_start": "Pré-Saint-Gervais",
+          "station_end": "Louis Blanc",
+          "length_m": 2885.2
+        }
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_171",
+      "shape_length_m": 23169.9,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 2149.3,
+          "d_end_m": 2191.4,
+          "osm_way_ids": [
+            37096882,
+            593477245
+          ],
+          "station_start": "Créteil - Université",
+          "station_end": "Créteil - Université",
+          "length_m": 42.0
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 2514.4,
+          "d_end_m": 2570.3,
+          "osm_way_ids": [
+            146827257,
+            740808701
+          ],
+          "station_start": "Créteil - Université",
+          "station_end": "Créteil - Université",
+          "length_m": 56.0
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 2841.6,
+          "d_end_m": 2908.8,
+          "osm_way_ids": [
+            157889679,
+            594357090
+          ],
+          "station_start": "Créteil - Université",
+          "station_end": "Créteil - Université",
+          "length_m": 67.3
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 3134.6,
+          "d_end_m": 3163.4,
+          "osm_way_ids": [
+            157889678,
+            593477237
+          ],
+          "station_start": "Créteil - L'Échat",
+          "station_end": "Créteil - L'Échat",
+          "length_m": 28.9
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 6795.8,
+          "d_end_m": 7021.1,
+          "osm_way_ids": [
+            27256005,
+            412987856
+          ],
+          "station_start": "École Vétérinaire de Maisons-Alfort",
+          "station_end": "Charenton - Écoles",
+          "length_m": 225.3
+        },
+        {
+          "type": "sol",
+          "d_start_m": 0.0,
+          "d_end_m": 3801.9,
+          "osm_way_ids": [
+            27407692,
+            79366079,
+            146827256,
+            146831142,
+            146831143,
+            157889670,
+            157889676,
+            157889691,
+            248275325,
+            280913922,
+            593477238,
+            593477239,
+            593477244,
+            593477246,
+            593477251,
+            593477259,
+            594355563,
+            594357822,
+            597819594,
+            597819595,
+            740808708,
+            740808710,
+            1021373978,
+            1021373979,
+            1021373980,
+            1021373981,
+            1021373982,
+            1021373983,
+            1246069042,
+            1246069043
+          ],
+          "station_start": "Pointe du Lac",
+          "station_end": "Créteil - L'Échat",
+          "length_m": 3801.9
+        },
+        {
+          "type": "sol",
+          "d_start_m": 6736.5,
+          "d_end_m": 6795.8,
+          "osm_way_ids": [
+            412987858,
+            412994011
+          ],
+          "station_start": "École Vétérinaire de Maisons-Alfort",
+          "station_end": "École Vétérinaire de Maisons-Alfort",
+          "length_m": 59.3
+        },
+        {
+          "type": "sol",
+          "d_start_m": 7021.1,
+          "d_end_m": 7080.1,
+          "osm_way_ids": [
+            27256031,
+            412987857
+          ],
+          "station_start": "Charenton - Écoles",
+          "station_end": "Charenton - Écoles",
+          "length_m": 59.0
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 3799.9,
+          "d_end_m": 6736.6,
+          "osm_way_ids": [
+            412994012,
+            412994013,
+            594357812,
+            594357817
+          ],
+          "station_start": "Créteil - L'Échat",
+          "station_end": "École Vétérinaire de Maisons-Alfort",
+          "length_m": 2936.7
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 7080.1,
+          "d_end_m": 23214.1,
+          "osm_way_ids": [
+            27408100,
+            27408185,
+            313420254,
+            390827576,
+            412987854,
+            412987855,
+            475598700,
+            756780045,
+            756780046,
+            916789596,
+            916789597,
+            916789598,
+            1244001805,
+            1244001806,
+            1487023514
+          ],
+          "station_start": "Charenton - Écoles",
+          "station_end": "Balard",
+          "length_m": 16134.0
+        }
+      ]
+    },
+    {
+      "line": "8",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_19",
+      "shape_length_m": 23157.8,
+      "sections": [
+        {
+          "type": "aerien",
+          "d_start_m": 16175.2,
+          "d_end_m": 16400.4,
+          "osm_way_ids": [
+            27256005,
+            412987856
+          ],
+          "station_start": "Charenton - Écoles",
+          "station_end": "École Vétérinaire de Maisons-Alfort",
+          "length_m": 225.2
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 20029.0,
+          "d_end_m": 20058.0,
+          "osm_way_ids": [
+            157889678,
+            593477237
+          ],
+          "station_start": "Créteil - L'Échat",
+          "station_end": "Créteil - L'Échat",
+          "length_m": 28.9
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 20285.2,
+          "d_end_m": 20352.8,
+          "osm_way_ids": [
+            157889679,
+            594357090
+          ],
+          "station_start": "Créteil - Université",
+          "station_end": "Créteil - Université",
+          "length_m": 67.6
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 20623.8,
+          "d_end_m": 20679.8,
+          "osm_way_ids": [
+            146827257,
+            740808701
+          ],
+          "station_start": "Créteil - Université",
+          "station_end": "Créteil - Université",
+          "length_m": 55.9
+        },
+        {
+          "type": "aerien",
+          "d_start_m": 21005.1,
+          "d_end_m": 21047.1,
+          "osm_way_ids": [
+            37096882,
+            593477245
+          ],
+          "station_start": "Créteil - Université",
+          "station_end": "Créteil - Université",
+          "length_m": 42.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 16116.3,
+          "d_end_m": 16175.3,
+          "osm_way_ids": [
+            27256031,
+            412987857
+          ],
+          "station_start": "Charenton - Écoles",
+          "station_end": "Charenton - Écoles",
+          "length_m": 59.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 16400.4,
+          "d_end_m": 16460.4,
+          "osm_way_ids": [
+            412987858,
+            412994011
+          ],
+          "station_start": "École Vétérinaire de Maisons-Alfort",
+          "station_end": "École Vétérinaire de Maisons-Alfort",
+          "length_m": 60.0
+        },
+        {
+          "type": "sol",
+          "d_start_m": 19395.4,
+          "d_end_m": 23186.5,
+          "osm_way_ids": [
+            27407692,
+            79366079,
+            146827256,
+            146831142,
+            146831143,
+            157889670,
+            157889676,
+            157889691,
+            248275325,
+            280913922,
+            593477238,
+            593477239,
+            593477244,
+            593477246,
+            593477251,
+            593477259,
+            594355563,
+            594357822,
+            597819594,
+            597819595,
+            740808708,
+            740808710,
+            1021373978,
+            1021373979,
+            1021373980,
+            1021373981,
+            1021373982,
+            1021373983
+          ],
+          "station_start": "Créteil - L'Échat",
+          "station_end": "Pointe du Lac",
+          "length_m": 3791.1
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 16116.6,
+          "osm_way_ids": [
+            27408100,
+            27408185,
+            313420254,
+            390827576,
+            412987854,
+            412987855,
+            475598700,
+            756780045,
+            756780046,
+            916789596,
+            916789597,
+            916789598,
+            1244001805,
+            1244001806,
+            1487023514
+          ],
+          "station_start": "Balard",
+          "station_end": "Charenton - Écoles",
+          "length_m": 16116.6
+        },
+        {
+          "type": "souterrain",
+          "d_start_m": 16460.1,
+          "d_end_m": 19396.3,
+          "osm_way_ids": [
+            27407928,
+            412994012,
+            412994013,
+            594357812,
+            594357817,
+            1301591564
+          ],
+          "station_start": "École Vétérinaire de Maisons-Alfort",
+          "station_end": "Créteil - L'Échat",
+          "length_m": 2936.2
+        }
+      ]
+    },
+    {
+      "line": "9",
+      "direction": 0,
+      "shape_id": "IDFM:shp_1_144",
+      "shape_length_m": 19568.0,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 19585.6,
+          "osm_way_ids": [
+            29873630,
+            142160899,
+            142160900,
+            142160901,
+            206318501,
+            432809564,
+            559551879,
+            756780037,
+            756780038,
+            756780042,
+            916789600,
+            916789601,
+            1191871435,
+            1244001803,
+            1244001804,
+            1382737920
+          ],
+          "station_start": "Mairie de Montreuil",
+          "station_end": "Pont de Sèvres",
+          "length_m": 19585.6
+        }
+      ]
+    },
+    {
+      "line": "9",
+      "direction": 1,
+      "shape_id": "IDFM:shp_1_176",
+      "shape_length_m": 19562.7,
+      "sections": [
+        {
+          "type": "souterrain",
+          "d_start_m": 0.0,
+          "d_end_m": 19589.0,
+          "osm_way_ids": [
+            29873630,
+            142160899,
+            142160900,
+            142160901,
+            206318501,
+            432809564,
+            559551879,
+            756780037,
+            756780038,
+            756780042,
+            916789600,
+            916789601,
+            1191871435,
+            1244001803,
+            1244001804,
+            1382737920
+          ],
+          "station_start": "Pont de Sèvres",
+          "station_end": "Mairie de Montreuil",
+          "length_m": 19589.0
+        }
+      ]
+    }
+  ],
+  "tag_conflicts": [
+    {
+      "osm_way_id": 152472784,
+      "line": "2",
+      "reason": "subterranean_and_aerial_tags"
+    },
+    {
+      "osm_way_id": 152472793,
+      "line": "2",
+      "reason": "subterranean_and_aerial_tags"
+    }
+  ],
+  "unresolved_line_ways": [
+    {
+      "osm_way_id": 20307393,
+      "ref": null,
+      "name": "Accès au site de Maintenance de Wissous Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 20307406,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 20307423,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 20307450,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 20307544,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 22797632,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 22797633,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 23651282,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 38144672,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 38144673,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 122245679,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 122245681,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 122245682,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 136698147,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 162270207,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 176334061,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 176334062,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 241744597,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 257638623,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638624,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638625,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638626,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638627,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638628,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638629,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638630,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638631,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638632,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638633,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638634,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638635,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638636,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638637,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638638,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638639,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638640,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638641,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638642,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638643,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 257638645,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187344,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187346,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187348,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187350,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187354,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187355,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187356,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187361,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187363,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187367,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187380,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187394,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187396,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187399,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187412,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187415,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187427,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187439,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187443,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187446,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187457,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187463,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187467,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187472,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187476,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189385,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189388,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189395,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189396,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189404,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340189406,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189409,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189413,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189419,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189428,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189429,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 348035139,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 366385027,
+      "ref": null,
+      "name": "Atelier de Maintenance de Porte-Maillot",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 366389105,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 366389109,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 403517624,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 403517626,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 405986179,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 405986181,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 405986182,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 405986183,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 405986184,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 405986185,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 412983923,
+      "ref": null,
+      "name": "Raccordement entre les lignes 2, 4 et 5",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 525012822,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 525012825,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 525012826,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 529035872,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 531012929,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 539498306,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 590815603,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 621606280,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606286,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606289,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606294,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606297,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606301,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606304,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606308,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606311,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606317,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606321,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606326,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606330,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606335,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606338,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606342,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606346,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606351,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606356,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606360,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606363,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606367,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606371,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606376,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606382,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606387,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606392,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606397,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606400,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606405,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606409,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606413,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606417,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606421,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606424,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606428,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606433,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606436,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 621606440,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 621606445,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 661689867,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 678369247,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 678369248,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 678369249,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 680326858,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 680326923,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 846879725,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 846879726,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 846879727,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 846879728,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 846879731,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377212,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 930377213,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 930377214,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 930377215,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 930377216,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 930377217,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1026399017,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1053336687,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1053336688,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1053336689,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1053336690,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1053336691,
+      "ref": null,
+      "name": "Accès au site de Maintenance de Wissous Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1053336692,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1053336693,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1053336694,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1062901567,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1096222369,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1096224836,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1111816914,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1111816915,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1111816917,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1111816918,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1111816919,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1174223727,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223729,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223730,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223731,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223732,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223733,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223734,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1174223735,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1214620871,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1225312067,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1225313714,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1225313715,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1228468624,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1228468625,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 1239521852,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1239521853,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1239521854,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1271801346,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1338708554,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1362767020,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1362767021,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382733527,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737917,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737918,
+      "ref": null,
+      "name": "Atelier d'Auteuil",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737919,
+      "ref": null,
+      "name": "Voie Murat",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737921,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737922,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737923,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737924,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737925,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737926,
+      "ref": null,
+      "name": "Voie Murat",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737927,
+      "ref": null,
+      "name": "Voie Murat",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382737928,
+      "ref": null,
+      "name": "Atelier d'Auteuil",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382738365,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382740158,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382740159,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1385052413,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1385056248,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1385056249,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1408905886,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1408905887,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1408905888,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1432363812,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1432363815,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1432363816,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1432363817,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1432363820,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1433252284,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1479051663,
+      "ref": "15",
+      "name": "Ligne 15 Sud du Grand Paris Express",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1479051664,
+      "ref": "15",
+      "name": "Ligne 15 Sud du Grand Paris Express",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1479051666,
+      "ref": "15",
+      "name": "Ligne 15 Sud du Grand Paris Express",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1528590467,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1528590468,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 10115362,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 10115484,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 109077701,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 109586889,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117590701,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117590706,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591659,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 117591660,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 117591661,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 150604291,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604296,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604298,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604306,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604307,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604310,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604313,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604314,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604316,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604317,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604324,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604325,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604327,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604328,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150604329,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 163070538,
+      "ref": null,
+      "name": "Voie 5",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 164384528,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 176333851,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 184623544,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 185687642,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 242889313,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 242889318,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 242889324,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 256044527,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 256044528,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 256044529,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 256044530,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 256044531,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 256044532,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 313420330,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 317155513,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155518,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155521,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155523,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155524,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155525,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155526,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 317155530,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187284,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187292,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187295,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187308,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187311,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 340187351,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187352,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187357,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187365,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187370,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187371,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187373,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187376,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187378,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187383,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187384,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187387,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187390,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187392,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187397,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187401,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187403,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187404,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187406,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187408,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187410,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187418,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187419,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187421,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187425,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187430,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187432,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187434,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187436,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187437,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187441,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187448,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187453,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187460,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187465,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187470,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187474,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187477,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340187478,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189384,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189390,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189392,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189393,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189394,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189397,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189398,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189399,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189400,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189401,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189402,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189403,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189405,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189407,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189408,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189410,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189411,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189412,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189414,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189415,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189416,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189417,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189418,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189421,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189422,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189423,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189425,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189426,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189427,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189430,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 340189431,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 366143011,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 366389107,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 366389112,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 412984248,
+      "ref": null,
+      "name": "Raccordement entre les lignes 2, 4 et 5 - Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 424479217,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 424479218,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 424479219,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 531021216,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 532695037,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 541752629,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 541773564,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 541773565,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 577023285,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 585984945,
+      "ref": null,
+      "name": "Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984946,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984947,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984948,
+      "ref": null,
+      "name": "Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984949,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984958,
+      "ref": null,
+      "name": "Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984959,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984960,
+      "ref": null,
+      "name": "Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984961,
+      "ref": null,
+      "name": "Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 585984963,
+      "ref": null,
+      "name": "Unité Spécialisée en Formation et Réglementation du Transport",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 588798772,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 670751690,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 740808702,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740808703,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 740808704,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740808709,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740818752,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740818753,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740818754,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740818755,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740818756,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740818757,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740821581,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 740821582,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 741629794,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 741629795,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 743596769,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 756383640,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 756383642,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 756780047,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 756780048,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 756780049,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 756780050,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 756780051,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 909156563,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 909156564,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 930377218,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 930377219,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 930377221,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377227,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377228,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377229,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377230,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377232,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377233,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377234,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377235,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377236,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377237,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377238,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 930377239,
+      "ref": null,
+      "name": "Orlyval",
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 998384373,
+      "ref": null,
+      "name": "Voie Navette",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 998384374,
+      "ref": null,
+      "name": "Voie des Fêtes",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 998384376,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539920,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539921,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539927,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539928,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539929,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539930,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539931,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539932,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539936,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539937,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1000539940,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541483,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541484,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541485,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541486,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541487,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541488,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541489,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541490,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1069541491,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1109179986,
+      "ref": null,
+      "name": "Raccordement lignes 5 et 7",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1109180851,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1109180852,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1109180853,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1109180854,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1123449987,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449988,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449989,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449990,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449991,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449992,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449993,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449994,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449995,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449996,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449997,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449998,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123449999,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123450000,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1123450001,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1188626672,
+      "ref": null,
+      "name": "Raccordement lignes 5 et 7",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1214795812,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1214795813,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1382742123,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382742124,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382742125,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1382742200,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1385049685,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1385053739,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1416343432,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1449404774,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1449404775,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1452393174,
+      "ref": "15",
+      "name": "Ligne 15 Sud du Grand Paris Express",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1452393175,
+      "ref": "15",
+      "name": "Ligne 15 Sud du Grand Paris Express",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1455527520,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1455527521,
+      "ref": "18",
+      "name": "Ligne 18",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1473643555,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1479051668,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1513096544,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1513098750,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 166612617,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 166612620,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 550499890,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 555994389,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 555994391,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 555994392,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 555994393,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 589341348,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 589341351,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341352,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341353,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341354,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341355,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341357,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341358,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341360,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 589341361,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1225401227,
+      "ref": "16/17",
+      "name": "Métro 16 / Métro 17",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 31884107,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 31884109,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 31884110,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 31884111,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 31884112,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 31884114,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 31884115,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 31884116,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 31884117,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96839562,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 96839565,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840562,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840563,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840564,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840565,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840567,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840570,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840571,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840573,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840575,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840813,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 96840817,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 109076648,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076650,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076651,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076662,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076669,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076689,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076693,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109076694,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077696,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077697,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077698,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077699,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077700,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077702,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077703,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077704,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077705,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077706,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077708,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077709,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077712,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109077713,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 109077714,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078675,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078679,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078680,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078681,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078682,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078683,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078684,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078685,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078686,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078687,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078688,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109078690,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586847,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586848,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586850,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586853,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586861,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586862,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586876,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586877,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586878,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586886,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 109586912,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117590702,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117590703,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117590704,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 117591656,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 117591657,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 117591658,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591891,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591893,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591894,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591895,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591896,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 117591897,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150203027,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 150203028,
+      "ref": null,
+      "name": null,
+      "section_type": "aerien"
+    },
+    {
+      "osm_way_id": 165624498,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 165624503,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 165624508,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 165624514,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853131,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 177853132,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853133,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 177853134,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853135,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 177853136,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853138,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853139,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853140,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853141,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853142,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853144,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853146,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853150,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853155,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853156,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853157,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853159,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853160,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 177853161,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 177853162,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853163,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853164,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853165,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853166,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853167,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 177853169,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 246104377,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485914,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485915,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485916,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485917,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485918,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485919,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485920,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485921,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485922,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485923,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485924,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 580485925,
+      "ref": null,
+      "name": "CDGVAL",
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 741272674,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 901206279,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 901206280,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 901206281,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 924891695,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 948541074,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 948541077,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 948541082,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 948541083,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 949227421,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227422,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227424,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227425,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227426,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227427,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227429,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227430,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227431,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227432,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227433,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227434,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227435,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227436,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949227437,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229492,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229493,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229494,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229495,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229500,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229501,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229502,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229503,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229504,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229505,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229507,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229509,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229511,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229513,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 949229515,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1071247534,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1071247535,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1071247536,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1071247538,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1096263725,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1096263747,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1125635119,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635120,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635121,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635122,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635123,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635125,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635126,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635127,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635128,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635129,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635130,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635131,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635132,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635133,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635134,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635135,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635136,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635137,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635138,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635139,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635140,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1125635141,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1416343435,
+      "ref": null,
+      "name": null,
+      "section_type": "souterrain"
+    },
+    {
+      "osm_way_id": 1416343436,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    },
+    {
+      "osm_way_id": 1527273273,
+      "ref": null,
+      "name": null,
+      "section_type": "sol"
+    }
+  ],
+  "overrides_applied": 0
+}

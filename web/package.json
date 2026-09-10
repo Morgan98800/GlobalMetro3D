@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "node --experimental-strip-types src/sim/shapes.test.ts",
-    "test:shapes": "node --experimental-strip-types src/sim/shapes.test.ts"
+    "test": "node --experimental-strip-types src/sim/shapes.test.ts && node --experimental-strip-types src/sim/paris_time.test.ts",
+    "test:shapes": "node --experimental-strip-types src/sim/shapes.test.ts",
+    "test:time": "node --experimental-strip-types src/sim/paris_time.test.ts"
   },
   "dependencies": {
     "@deck.gl/core": "^9.1.4",
@@ -16,8 +16,6 @@
     "@deck.gl/extensions": "^9.1.4",
     "@deck.gl/layers": "^9.1.4",
     "@deck.gl/mapbox": "^9.1.4",
-    "@deck.gl/mesh-layers": "^9.1.4",
-    "@loaders.gl/gltf": "^4.3.3",
     "@paris-subway/shared": "*",
     "maplibre-gl": "^4.7.1"
   },

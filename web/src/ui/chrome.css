@@ -100,6 +100,15 @@
   font-size: 13px;
 }
 
+.topbar__distance {
+  color: var(--ceramique-dim);
+  font-size: 11px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  white-space: nowrap;
+}
+
 /* --------------------------------------------------------------------------
    Statut temps réel — un état, pas un contrôle
    -------------------------------------------------------------------------- */
@@ -254,7 +263,9 @@
   font-feature-settings: "tnum" 1;
   line-height: 1;
   cursor: pointer;
-  transition: transform 100ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  transition: opacity 140ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1),
+    outline-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
   /* la couleur de fond et de texte sont posées en inline par lineBadge(),
      depuis route_color et route_text_color du GTFS */
 }
@@ -263,8 +274,11 @@
 .line-badge[data-len="2"] { font-size: 12px; }
 .line-badge[data-len="3"] { font-size: 10.5px; letter-spacing: -0.02em; }
 
-.line-badge:hover { transform: scale(1.06); }
-.line-badge:active { transform: scale(0.97); }
+.line-badge:hover {
+  outline: 1px solid color-mix(in srgb, var(--ceramique) 70%, transparent);
+  box-shadow: 0 0 0 2px var(--fonte), 0 0 0 3px color-mix(in srgb, var(--ceramique) 55%, transparent);
+}
+.line-badge:active { opacity: 0.82; }
 
 .line-badge:focus-visible {
   outline: none;
@@ -273,10 +287,6 @@
 
 .line-badge[aria-pressed="true"] {
   box-shadow: 0 0 0 2px var(--fonte), 0 0 0 3px var(--ceramique);
-}
-
-.line-badges[data-has-selection="true"] .line-badge[aria-pressed="false"] {
-  opacity: 0.42;
 }
 
 /* --------------------------------------------------------------------------
@@ -293,6 +303,7 @@
 
   /* les métadonnées réseau et le raccourci clavier n'ont pas de sens ici */
   .topbar__meta,
+  .topbar__distance,
   .topbar__search { display: none; }
 
   .topbar__search-icon-btn { display: inline-flex; }

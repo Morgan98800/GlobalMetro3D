@@ -8,6 +8,8 @@ import type { RollingStockDatabase, LineRollingStock } from '../sim/rolling_stoc
 import { getRollingStockForLine } from '../sim/rolling_stock';
 import { hexToRgba } from './deck_overlay';
 
+const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
+
 export interface CapsuleLayerParams {
   trains: TrainMarker[];
   shapes: Map<string, ShapeEntry>;
@@ -179,15 +181,17 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));
 
   // LOD thresholds:
-  // Desktop: pastille < 12, capsule entière 12–13.5, pile complète > 13.5, étiquettes >= 13
-  // Mobile:  pastille < 13, capsule entière 13–14.5, pile complète > 14.5, étiquettes >= 14
-  const minCapsuleZoom = isMobile ? 13.0 : 12.0;
+  // < z13: pastille haute visibilité
+  // z13–z14.5: capsule monolithique
+  // > z14.5: capsule détaillée avec voitures
+  // >= z13.5: étiquettes
+  const minCapsuleZoom = 13.0;
   const detailedZoom = isMobile ? 14.5 : 13.5;
   const labelZoom = isMobile ? 14.0 : 13.0;
 
   // Branch LOD BEFORE slicing loop: zero slicing computation for trains rendered as points
   if (zoom < minCapsuleZoom) {
-    return createTrainsLayers(trains, selectedLineId, onHover, onClick);
+    return createTrainsLayers(trains, selectedLineId, onHover, onClick, zoom);
   }
 
   let activeTrains = selectedLineId ? trains.filter(t => t.line === selectedLineId) : trains;
@@ -213,29 +217,40 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   const roofSegments: RenderCarSegment[] = [];
   const noseSegments: RenderCarSegment[] = [];
   const labelsData: RenderTrainLabel[] = [];
+  const fallbackTrains: TrainMarker[] = [];
 
   for (const train of activeTrains) {
-    if (!train.shapeId) continue;
+    if (!train.shapeId) {
+      fallbackTrains.push(train);
+      continue;
+    }
     const shape = shapes.get(train.shapeId);
-    if (!shape) continue;
+    if (!shape) {
+      fallbackTrains.push(train);
+      continue;
+    }
 
     const stock: LineRollingStock = getRollingStockForLine(rollingStockDb, train.line || train.lineName);
     const headD = train.currentDistM ?? 0;
     const tailD = Math.max(0, headD - stock.total_length_m);
     const elev = train.elevation || 0;
-    const alpha = train.conf === 'sched' ? 166 : 255; // 65% opacity for GTFS theoretical confidence
+    const alpha = train.conf === 'scheduled' ? 166 : 255; // 65% opacity for GTFS theoretical confidence
 
     // 1. Full train slice (always continuous for Layer 1 contour and monolithic body)
     const fullPath = sliceShape(shape, tailD, headD);
-    if (fullPath.length < 2) continue;
+    if (fullPath.length < 2) {
+      fallbackTrains.push(train);
+      continue;
+    }
 
     // Layer 1: Outline segment (entire train, width = width + 1.2m)
-    // Recalage PRIM: golden contour for real-time, dark charcoal for theoretical
+    // Recalage PRIM: golden contour for real-time ({measured, bracketed}), dark charcoal for theoretical
+    const isRealtime = train.conf === 'measured' || train.conf === 'bracketed';
     outlineSegments.push({
       path: fullPath,
       widthM: stock.width_m + 1.2,
-      color: train.conf === 'rt' ? [250, 204, 21, 255] : [15, 23, 42, alpha],
-      isSched: train.conf === 'sched',
+      color: isRealtime ? [201, 162, 39, 255] : [15, 23, 42, alpha],
+      isSched: train.conf === 'scheduled',
       elevation: elev + 1.0,
       train
     });
@@ -305,11 +320,14 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   const layers: any[] = [];
   const commonPathProps = {
     widthUnits: 'meters' as const,
-    widthMinPixels: 3,
+    widthMinPixels: 4,
     widthMaxPixels: 60,
     capRounded: true,
     jointRounded: true,
     billboard: false,
+    autoHighlight: true,
+    highlightColor: [255, 255, 255, 65],
+    transitions: { getColor: { duration: 140, easing: easeOut } },
     _pathType: 'open' as const,
     parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
   };
@@ -433,6 +451,10 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         }
       } as any)
     );
+  }
+
+  if (fallbackTrains.length > 0) {
+    layers.push(...createTrainsLayers(fallbackTrains, selectedLineId, onHover, onClick));
   }
 
   return layers;

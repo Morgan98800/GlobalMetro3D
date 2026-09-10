@@ -7,9 +7,12 @@ Reads NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN from .env.
 import os
 import io
 import sys
+import ssl
+import json
 import time
 import zipfile
-import requests
+import urllib.request
+import urllib.error
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -59,40 +62,61 @@ def main():
     url = f"https://api.netlify.com/api/v1/sites/{site_id}/deploys"
     headers = {
         "Authorization": f"Bearer {token}",
-        "Content-Type": "application/zip"
+        "Content-Type": "application/zip",
+        "User-Agent": "ParisSubway3D-DeployScript/1.0"
     }
 
-    resp = requests.post(url, headers=headers, data=zip_bytes)
-    if resp.status_code not in (200, 201):
-        print(f"Error: Netlify API returned {resp.status_code}: {resp.text}")
+    ssl_context = ssl.create_default_context()
+    try:
+        import certifi
+        ssl_context.load_verify_locations(certifi.where())
+    except Exception:
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+
+    req = urllib.request.Request(url, data=zip_bytes, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, context=ssl_context) as resp:
+            status_code = resp.getcode()
+            body = resp.read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        print(f"Error: Netlify API returned {e.code}: {e.read().decode('utf-8')}")
         sys.exit(1)
 
-    deploy_data = resp.json()
+    deploy_data = json.loads(body)
     deploy_id = deploy_data.get("id")
     print(f"[deploy] Deploy started with ID: {deploy_id}")
 
     # Poll deployment status until ready
     print("[deploy] Waiting for deployment to finalize on Netlify CDN...")
     poll_url = f"https://api.netlify.com/api/v1/deploys/{deploy_id}"
+    poll_headers = {
+        "Authorization": f"Bearer {token}",
+        "User-Agent": "ParisSubway3D-DeployScript/1.0"
+    }
+
     for attempt in range(30):
         time.sleep(2)
-        status_resp = requests.get(poll_url, headers=headers)
-        if status_resp.status_code == 200:
-            d = status_resp.json()
-            state = d.get("state")
-            print(f"[deploy] Status: {state} ({attempt + 1}/30)")
-            if state == "ready":
-                ssl_url = d.get("ssl_url") or d.get("url")
-                deploy_url = d.get("deploy_ssl_url") or d.get("deploy_url")
-                print("\n=======================================================")
-                print("🎉 DEPLOYMENT SUCCESSFUL!")
-                print(f"👉 Site URL:   {ssl_url}")
-                print(f"👉 Deploy URL: {deploy_url}")
-                print("=======================================================")
-                return
-            elif state == "error":
-                print(f"Error: Deployment failed: {d.get('error_message')}")
-                sys.exit(1)
+        poll_req = urllib.request.Request(poll_url, headers=poll_headers, method="GET")
+        try:
+            with urllib.request.urlopen(poll_req, context=ssl_context) as status_resp:
+                d = json.loads(status_resp.read().decode("utf-8"))
+                state = d.get("state")
+                print(f"[deploy] Status: {state} ({attempt + 1}/30)")
+                if state == "ready":
+                    ssl_url = d.get("ssl_url") or d.get("url")
+                    deploy_url = d.get("deploy_ssl_url") or d.get("deploy_url")
+                    print("\n=======================================================")
+                    print("🎉 DEPLOYMENT SUCCESSFUL!")
+                    print(f"👉 Site URL:   {ssl_url}")
+                    print(f"👉 Deploy URL: {deploy_url}")
+                    print("=======================================================")
+                    return
+                elif state == "error":
+                    print(f"Error: Deployment failed: {d.get('error_message')}")
+                    sys.exit(1)
+        except urllib.error.HTTPError as e:
+            print(f"Warning: Poll error {e.code}: {e.read().decode('utf-8')}")
 
     print("Warning: Deployment did not reach 'ready' state within timeout, check Netlify dashboard.")
 

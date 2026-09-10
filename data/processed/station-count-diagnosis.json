@@ -1,0 +1,10 @@
+{
+  "reported_display_count": 308,
+  "authoritative_artifact_count": 321,
+  "active_gtfs_stop_points": 803,
+  "commercial_station_keys": 321,
+  "missing_station_ids": [],
+  "missing_station_names": [],
+  "cause": "web/src/main.ts hard-coded topbar.setCounts(16, 308) when the RER selector was switched off; stations.json was not reduced.",
+  "counting_rule": "unique parent_station when present, otherwise stop_id, among points referenced by active metro trips"
+}

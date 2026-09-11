@@ -1,6 +1,8 @@
 # 🎨 Moteurs Graphiques & Rendu Visuel 3D
 
-Ce document détaille l'architecture graphique unifiée du projet : une scène 3D haute performance fonctionnant sur un **unique contexte WebGL** combinant MapLibre GL JS (fond vectoriel et bâti 3D extrudé) et deck.gl (infrastructure ferroviaire, rames en circulation et monuments historiques glTF).
+Ce document détaille l'architecture graphique unifiée du projet : une scène 3D haute performance fonctionnant sur un **unique contexte WebGL** combinant MapLibre GL JS 5.24 (fond vectoriel, relief et bâti 3D extrudé) et deck.gl 9.1 / 9.4 (infrastructure ferroviaire et rames en circulation).
+
+> **Pas de moteur secondaire et pas de monuments modélisés.** L'ancien Studio Three.js et son jeu de huit monuments `.glb` ont été retirés : ils ne subsistent nulle part dans `web/src/`, `web/public/models/` ni dans le code de rendu. Le seul contenu glTF réellement chargé aujourd'hui est le matériel roulant (§2.3). Le script `scripts/export_landmarks_gltf.mjs` reste présent dans le dépôt mais n'est appelé par aucun point d'entrée.
 
 ---
 
@@ -8,16 +10,30 @@ Ce document détaille l'architecture graphique unifiée du projet : une scène 3
 
 ### 1. Fond de Carte Vectoriel Industriel Sombre
 - **Source vectorielle** : Tuiles vectorielles OpenMapTiles hébergées par **OpenFreeMap** (`https://tiles.openfreemap.org/planet`), éliminant tout fond rasterisé et offrant l'accès direct aux géométries de bâtiments.
-- **Palette chromatique industrielle** conforme à `tokens.css` :
-  - Fond / Ardoise : `--fonte` (`#0E1512`), `--fonte-surface` (`#141D19`).
-  - Voies d'eau (La Seine & canaux) : `--ardoise-eau` (`#0A2E2B`).
-  - Réseau viaire : `--zinc-route` (`#18231E`) et `--zinc-autoroute` (`#22322B`).
-  - Aucun libellé de rue avant le zoom 14 (`minzoom: 14`) pour préserver la lisibilité du réseau de transport.
-- **Paramètres de vue par défaut** :
-  - Centre : Paris Châtelet (`lng: 2.3488`, `lat: 48.8534`).
-  - Zoom initial : `12.3`.
-  - Inclinaison (*Pitch*) : `52°` (vue 3D perspective) basculable en `0°` (vue 2D zénithale).
-  - Orientation (*Bearing*) : `-15°` (aligné sur l'axe historique de la Seine).
+- **Palette chromatique** : la charte `tokens.css` (rampe neutre chaude) est appliquée à l'interface. Le style cartographique, lui, code ses teintes en hexadécimal direct, alignées sur cette rampe :
+
+  | Couche | Type / source-layer | `minzoom` | Teinte | Opacité |
+  | :--- | :--- | :---: | :--- | :--- |
+  | `background` | `background` | — | `rgba(0,0,0,0)` | — |
+  | `paris-woods` | `fill` / `landcover` | — | `#111010` | 0.28 |
+  | `paris-water` | `fill` / `water` | 10 | `#141312` | 0.40 |
+  | `paris-waterways` | `line` / `waterway` | 10 | `#1C1A19` | 0.45 |
+  | `paris-canal-core` | `line` / `waterway` | 11 | `#2A2725` | 0.40 |
+  | `paris-ring-road` | `line` / `transportation` | 9 | `#2A2725` | 0.85 |
+  | `quiet-rail` | `line` / `transportation` | 11 | `#1C1A19` | 0.50, pointillés `[3,2]` |
+  | `quiet-roads` | `line` / `transportation` | 10 | `#141312` | 0.45 |
+  | `quiet-boundary` | `line` / `boundary` | 10 | `#1C1A19` | 0.35, pointillés `[4,3]` |
+  | `building-3d` | `fill-extrusion` / `building` | 14 | `#1C1A19` | voir §2.1 |
+
+  Aucune couche `symbol` n'est déclarée : **le fond de carte ne porte aucun libellé de rue, à aucun zoom.** La seule typographie de la scène est celle des étiquettes de rames (`TextLayer`) produite par deck.gl. Le champ `glyphs` pointe malgré tout vers `https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf`.
+- **Relief** : un `raster-dem` (`https://demotiles.maplibre.org/terrain-tiles/{z}/{x}/{y}.png`, `tileSize: 256`, `maxzoom: 12`) est monté via `map.setTerrain({ exaggeration: 1.5 })` au `style.load`, pour les collines de Montmartre, Belleville et Sainte-Geneviève.
+- **Attribution** : `AttributionControl` compact personnalisé (OpenMapTiles · OpenStreetMap · IDFM ODbL).
+- **Paramètres de vue** :
+  - Centre de référence : Paris Châtelet (`lng: 2.3488`, `lat: 48.8534`) — `PARIS_CENTER` dans `packages/shared`.
+  - Le cadrage d'ouverture est ajusté sur l'emprise réelle du réseau (`bounds`), pas sur un zoom fixe. Constantes partagées : `DEFAULT_ZOOM = 11.8`, `DEFAULT_PITCH = 30`, `DEFAULT_BEARING = -15`.
+  - La carte MapLibre est créée avec `pitch: 0`, `bearing: 0`, `maxPitch: 60`, `maxZoom: 18`.
+  - **Politique de caméra par palier** (`maxPitchForZoom`) : tant que le bâti extrudé n'est pas actif, l'inclinaison est plafonnée à `30°` ; au-delà de `z = 14` elle monte linéairement jusqu'à `60°` atteints à `z = 16.5`. Ce lissage évite le saut brutal d'inclinaison au franchissement du seuil `building-3d`.
+  - Un bouton de l'en-tête active/désactive le bâti 3D (`onToggleBuildings`), qui pilote la `visibility` de la couche `building-3d`.
 
 ### 2. Extrusion Altitudinale des Voies (`elevation_offset`)
 À Paris, de nombreuses lignes se croisent en sous-sol (ex: Châtelet-Les Halles, République, Montparnasse). Sans gestion de l'altitude, les tracés se chevauchent de manière confuse.
@@ -28,86 +44,111 @@ Chaque ligne se voit attribuer un décalage vertical autoritaire dans `lines.jso
 
 Le `PathLayer` de deck.gl prend en compte ce décalage pour extruder les polylignes avec jointures et extrémités arrondies.
 
-### 3. Rendu des Rames en Capsule (Addendum deck.gl — Pile 5 couches métriques)
+### 3. Rendu des Rames (deck.gl)
 
-Pour offrir une perception physique du matériel roulant sans le coût d'un maillage 3D, les rames sur la carte MapLibre/deck.gl sont matérialisées par une tranche géométrique découpée dans l'axe de la voie (`shapes.bin`) et épaissie à la largeur réelle du matériel (`widthUnits: 'meters'`). La capsule épouse ainsi fidèlement les courbes du tracé et s'agrandit avec le zoom.
+La représentation des rames — capsules métriques, modèles glTF ou marqueurs de repli — est décrite en détail au **§2.3**. Cette section ne couvre que l'interpolation cinématique qui s'applique quel que soit le mode de rendu.
 
-```text
-       ┌─────────────────────────────────────────────────────────┐
-       │                Couche 1 : Contour Noir/Or               │  (largeur = width + 1.2m, bague dorée PRIM / pointillés GTFS)
-       │  ┌──────────────┐   ┌──────────────┐   ┌─────────────┐  │
-       │  │  Voiture 3   │   │  Voiture 2   │   │  Voiture 1  │  │  (Couche 2 : Caisses, couleur ligne assombrie -35%)
-       │  │ ┌──────────┐ │   │ ┌──────────┐ │   │ ┌─────────┐ │  │  (Couche 3 : Toit, largeur = width * 0.35, +25% HSL)
-       │  │ └──────────┘ │   │ └──────────┘ │   │ █ Nez 2.5m│ │  │  (Couche 4 : Nez de tête, bandeau blanc éclatant)
-       │  └──────────────┘   └──────────────┘   └─────────────┘  │
-       └─────────────────────────────────────────────────────────┘
-                                       ▲
-                             Couche 5 : [ 1 ] Étiquette de ligne (offset [0, -22], collisionFilter)
-```
-
-#### A. Pile de 5 couches deck.gl (`parameters: { depthTest: false }`)
-1. **Couche 1 — Contour (`PathLayer`)** : Tranche entière non découpée, largeur $= \text{width} + 1.2\text{ m}$.
-   - **Recalage PRIM direct** : Bague dorée lumineuse (`[250, 204, 21, 255]`) en temps réel.
-   - **Confiance théorique GTFS** : Contour en pointillés (`PathStyleExtension`, `getDashArray: [3, 2]`) et opacité d'ensemble à 65 %.
-2. **Couche 2 — Caisses (`PathLayer`)** : Sous-tranches par voiture (séparées par les intercirculations) à la largeur métrique exacte du matériel (`width_m`). Couleur de ligne assombrie de 35 % pour créer la masse volumique du train.
-3. **Couche 3 — Toit (`PathLayer`)** : Sous-tranches par voiture, largeur $= \text{width} \times 0.35$, teinte de ligne éclaircie de +25 % en luminosité HSL (effet de chanfrein et reflet de toiture sans éclairage 3D).
-4. **Couche 4 — Nez de rame (`PathLayer`)** : Bandeau de 2,5 m situé sur la tête de rame, largeur $= \text{width}$, en blanc brillant (`#FFFFFF`) figurant le masque de face avant et l'éclairage frontal.
-5. **Couche 5 — Étiquettes (`TextLayer`)** : Pastille contrastée sur la tête de rame avec le numéro de ligne, `getPixelOffset: [0, -22]`, `backgroundPadding: [6, 4]`, dotée de `CollisionFilterExtension` priorisant la rame sélectionnée.
-
-#### B. Niveaux de détail (LOD) & Économie GPU
-Pour maximiser la fluidité à grande échelle, le branchement LOD s'exécute **avant** toute découpe géométrique :
-- **Zoom $< 12$** *(Mobile $< 13$)* : Pastille double disque haute performance (aucun calcul de tranche ni découpe de voie).
-- **Zoom $12 \le z \le 13.5$** *(Mobile $13 \le z \le 14.5$)* : Capsule entière monolithique métrique (couches 1 & 2 uniquement, sans toit ni nez).
-- **Zoom $> 13.5$** *(Mobile $> 14.5$)* : Pile complète avec découpe individuelle des voitures (`splitIntoCars`), toit biseauté et nez blanc.
-- **Zoom $\ge 13$** *(Mobile $\ge 14$)* : Affichage des étiquettes textuelles de rame (couche 5).
-- **Mobile Capping** : Plafonnement automatique à 150 rames découpées simultanées, sélectionnées par distance euclidienne croissante au centre de la carte.
-
-#### C. Interpolation Cinématique Sub-seconde (60 FPS)
-Bien que le moteur de simulation GTFS/PRIM cadence son état logique à 1 Hz, l'affichage tourne en continu à 60 FPS dans `requestAnimationFrame` :
-- **Extrapolation continue** : $\hat{d} = d_{\text{tick}} + v \times (t - t_{\text{tick}})$.
-- **Résorption douce des écarts** : À la réception de chaque tick, l'écart résiduel $(\hat{d} - d_{\text{tick}})$ est amorti linéairement sur 300 ms pour éliminer tout à-coup visuel.
-- **Recalage franc sur rupture** : Si un saut $> 20\text{ m}$ survient (recalage réel PRIM ou téléportation), la nouvelle position s'applique instantanément sans étirement artificiel.
-- **Accessibilité `prefers-reduced-motion`** : Si l'utilisateur a configuré son système pour réduire les mouvements, l'extrapolation continue est désactivée et les positions sautent doucement au pas discret de 1 Hz.
+#### Interpolation Cinématique Sub-seconde (60 FPS)
+Bien que le moteur de simulation cadence son état logique à 1 Hz, l'affichage tourne en continu à 60 FPS dans `requestAnimationFrame` :
+- **Extrapolation continue** : $\hat{d} = d_{\text{tick}} + v \times (t - t_{\text{tick}})$, plus le résidu de recalage éventuel.
+- **Résorption douce des écarts** : à la réception de chaque tick, l'écart résiduel est amorti **linéairement sur 300 ms** (`factor = 1 - elapsed/300`), ce qui élimine tout à-coup visuel.
+- **Recalage franc sur rupture** : si l'écart mesuré dépasse **20 m** (`Math.abs(rawError) > 20`), l'offset de résorption est remis à zéro et la nouvelle position s'applique immédiatement, sans étirement artificiel.
+- **Rames fantômes** : les rames supprimées par un tick sont conservées dans le jeu rendu puis fondues en **240 ms** avant d'être retirées.
+- **Accessibilité `prefers-reduced-motion`** : l'extrapolation continue est désactivée et les positions sautent doucement au pas discret de 1 Hz.
 
 ---
 
-## 2. Bâti Urbain 3D & Monuments Historiques (Contexte Unifié)
+## 2. Bâti Urbain 3D & Matériel Roulant (Contexte Unifié)
 
-Le rendu 3D de Paris ne fait plus appel à un second moteur WebGL (l'ancien Studio Three.js a été éliminé). Il est entièrement intégré dans la même scène que les voies et les rames, garantissant 60 FPS constants sans surcharge GPU.
+Aucun second moteur WebGL n'est instancié : le bâti, le relief, les voies, les stations et les rames vivent dans la même scène MapLibre, surimpressionnés par l'adaptateur `MapboxOverlay` de `@deck.gl/mapbox`, monté en `interleaved: false`. deck.gl n'expose pas d'export `MapLibreOverlay` distinct ; cet adaptateur est celui utilisé pour l'intégration MapLibre.
 
 ### 1. Bâti 3D en `fill-extrusion` (MapLibre GL)
-Les bâtiments parisiens sont générés en direct par le GPU à partir des géométries vectorielles d'OpenFreeMap :
-- **Couche** : `building-3d` de type `fill-extrusion`.
-- **Seuil d'apparition** : `minzoom: 14`, avec montée progressive de l'opacité entre zoom 14 (0.0) et zoom 15.5 (0.78) pour éviter tout effet de pop visuel.
-- **Calcul des hauteurs** :
+Les bâtiments parisiens sont extrudés par le GPU à partir des géométries vectorielles OpenFreeMap (schéma OpenMapTiles) :
+- **Couche** : `building-3d`, type `fill-extrusion`, `source-layer: 'building'`.
+- **Seuil d'apparition** : `minzoom: 14`.
+- **Visibilité** : la couche est déclarée avec `layout: { visibility: 'none' }`, c'est-à-dire **masquée par défaut**. Elle n'est révélée que par le bouton « Bâti 3D » de l'en-tête. C'est ce même bouton qui, combiné à `maxPitchForZoom`, autorise l'ouverture progressive de l'inclinaison.
+- **Rampes de profondeur** :
   ```json
-  ["coalesce", ["get", "render_height"], 18]
+  "fill-extrusion-base":   ["coalesce", ["get", "render_min_height"], 0],
+  "fill-extrusion-height": ["coalesce", ["get", "render_height"], 18]
   ```
-  Les bâtiments sans hauteur explicitée dans OpenStreetMap adoptent une hauteur médiane estimée à 18 mètres (gabarit haussmannien typique de 5 à 6 étages).
-- **Palette chromatique & occlusion** :
-  - Teinte ardoise/zinc sombre (`#18231F`) en harmonie avec l'univers nocturne.
-  - Masquage sélectif des polygones OSM bruts pour les monuments historiques (`['!=', 'hide_3d', true]`) afin d'éviter tout chevauchement avec les modèles glTF.
+  Les bâtiments sans hauteur explicite dans OpenStreetMap prennent les 18 mètres du gabarit haussmannien courant (5 à 6 étages).
+- **Opacité progressive** — clé de voûte de l'anti-« pop » visuel :
 
-### 2. Monuments Historiques en glTF (`deck.gl ScenegraphLayer`)
-Les monuments emblématiques de Paris sont modélisés sous forme d'actifs glTF binaires (`.glb`) ultra-légers (< 300 Ko chacun, 203 Ko cumulés) et intégrés via `ScenegraphLayer` :
+  | Zoom | 14 | 14.5 | 16 | 18 |
+  | :--- | :---: | :---: | :---: | :---: |
+  | `fill-extrusion-opacity` | 0.00 | 0.28 | 0.70 | 0.70 |
 
-| Monument | Fichier | Taille | Emplacement WGS84 | Yaw (Cap) | Particularités |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Tour Eiffel** | `tour_eiffel.glb` | 60.6 Ko | `[2.2945, 48.8584]` | 26° | Alignée axe Champ-de-Mars, dentelle ajourée |
-| **Arc de Triomphe** | `arc_de_triomphe.glb` | 11.1 Ko | `[2.2950, 48.8738]` | 26° | Voûte axée sur les Champs-Élysées |
-| **Sacré-Cœur** | `sacre_coeur.glb` | 62.2 Ko | `[2.3431, 48.8867]` | 0° | Dômes et campanile de Montmartre |
-| **Notre-Dame** | `notre_dame.glb` | 7.7 Ko | `[2.3499, 48.8530]` | -20° | Île de la Cité, tours et nef axées |
-| **Hôtel des Invalides** | `invalides.glb` | 25.1 Ko | `[2.3124, 48.8550]` | 0° | Dôme doré et cour d'honneur |
-| **Tour Montparnasse** | `montparnasse.glb` | 5.2 Ko | `[2.3217, 48.8421]` | 35° | Silhouette monolithique 210 m |
-| **Musée du Louvre** | `louvre.glb` | 7.4 Ko | `[2.3364, 48.8606]` | 0° | Ailes et Cour Carrée |
-| **Le Panthéon** | `pantheon.glb` | 24.0 Ko | `[2.3460, 48.8462]` | 0° | Dôme néo-classique et colonnade |
+- **Teinte** : `#1C1A19` (équivalent de la surface élevée `--eleve` de `tokens.css`), en harmonie avec l'univers nocturne neutre.
+- **Filtre** : `['!=', 'hide_3d', true]`, qui écarte les polygones OSM explicitement exclus de l'extrusion.
 
-#### A. Conventions de Coordonnées & Export
-- **Système d'axes** : Les modèles sont exportés avec une rotation native $X = +\pi/2$ lors de la conversion glTF, ce qui garantit qu'ils sont en convention **Z-up** conforme à deck.gl WGS84.
-- **Orientation runtime** : `getOrientation: (d) => [0, -(d.yaw || 0), 0]` (Pitch = 0, Roll = 0, Yaw = cap géographique en degrés).
-- **Chargement à la demande** : Les modèles ne sont instanciés que pour un zoom $\ge 13$ et dans un rayon géodésique autour du centre de vue (`viewRadiusDeg`), garantissant zéro surcharge mémoire quand l'utilisateur observe d'autres zones.
+### 2. Relief (terrain DEM)
+Au chargement du style, la carte monte un `setTerrain({ source: 'terrain', exaggeration: 1.5 })`. L'exagération volontaire (×1,5) rend lisibles les reliefs parisiens — Montmartre, Belleville, Sainte-Geneviève — sans écraser le bâti. La source est un `raster-dem` 256 px plafonné à `maxzoom: 12`.
 
-### 3. Pipeline de Composition & Ordre de Rendu
+### 3. Matériel roulant : trois stratégies de rendu
+Le choix de la représentation des rames est centralisé dans `web/src/map/train_render_fallback.ts` :
+
+```ts
+return modelLayers.length > 0 ? modelLayers : capsuleLayers;
+```
+
+Trois familles de couches sont donc possibles, dans cet ordre de priorité :
+
+#### A. Modèles glTF (`train_models_layer.ts`) — zoom > 16
+Seule utilisation réelle d'assets glTF du projet :
+- `ScenegraphLayer` + `GLBLoader` de `@loaders.gl/gltf`, éclairage `_lighting: 'pbr'`, délai de chargement de 5 s.
+- **Seuil** : `TRAIN_MODEL_ZOOM_THRESHOLD = 16`.
+- **Deux familles en place** dans `web/public/models/train/` :
+  `pneumatic_generic__neutral.glb` → `/models/train/pneumatic_generic__neutral.glb`
+  `steel_classic__neutral.glb` → `/models/train/steel_classic__neutral.glb`
+- **Désactivation explicite** : `?train-models=0` force `trainModelsEnabled()` à `false` (retour aux capsules). Un mode de diagnostic `?debug=trains` est géré par `capsule_layer.ts`.
+- **Un seul maillage instancié par voiture**, répété le long de l'abscisse curviligne ; l'orientation de chaque voiture est calculée sur **la corde des centres de bogies** (`getBogieCentresM(stock)`), pas sur une tangente locale — c'est ce qui supprime le ripage visuel des voitures en courbe.
+- **Politique de caméra** : `MODEL_RENDER_POLICY` porte `heightMeasured: false` et `grazingCameraApproved: false` pour les deux familles. Tant que ces drapeaux ne sont pas validés, la vue rasante (`grazingCamera`) fait délibérément renoncer les modèles au profit des capsules.
+- Un état de chargement par actif est exposé par `subscribeTrainModelAssets` / `assetStatus`.
+
+#### B. Capsules métriques (`capsule_layer.ts`) — zoom ≥ 9
+Stratégie par défaut à moyenne et haute échelle : une tranche géométrique découpée dans l'axe de la voie (`shapes.bin`) et épaissie à la largeur réelle du matériel (`widthUnits: 'meters'`).
+
+```text
+   ┌───────────────────────────────────────────────────────────┐
+   │  Couche 1 — Halo de contour (plus large que la voie)      │  or si confiance mesurée/bracketed,
+   │   ┌────────────┐  ┌────────────┐  ┌────────────┐          │  sinon blanc cassé + pointillés [3,2]
+   │   │  Voiture 3 │  │  Voiture 2 │  │  Voiture 1 │          │  Couche 2 — Caisses (neutre, contraste ≥ 3:1)
+   │   │ ┌────────┐ │  │ ┌────────┐ │  │ ┌────────┐ │          │  Couche 3 — Toitures (même découpe)
+   │   └─┴────────┴─┘  └─┴────────┴─┘  └─┴────────┴─┘          │  Couche 4 — Soufflets d'intercirculation
+   │      ══════          ══════          ══════      ▮ Nez    │  Couche 5 — Phares/feux LED + nez
+   └───────────────────────────────────────────────────────────┘
+                            ▲
+              Couche 6 — Étiquette de ligne (pixelOffset [0, -24])
+```
+
+1. **Halo de contour (`PathLayer`)** — tranche entière non découpée, plus large que la voie pour garantir une visibilité à 100 %.
+   - Rames **mesurées ou encadrées** (`conf === 'measured' | 'bracketed'`) : halo **or** `[255, 215, 0, 255]`.
+   - Autres niveaux : halo blanc cassé `[240, 240, 240, 240]`.
+   - Rames **théoriques GTFS** (`conf === 'scheduled'`) : `PathStyleExtension` actif, `getDashArray: [3, 2]`, `dashUnits: 'widths'`.
+2. **Caisses (`PathLayer`)** — sous-tranches par voiture, largeur métrique exacte (`width_m`). La teinte est choisie algorithmiquement : `getNeutralBodyColor()` parcourt `NEUTRAL_BODY_COLORS` et retient le premier neutre atteignant un **rapport de contraste ≥ 3:1** (`relativeLuminance` + `contrastRatio`) avec la couleur de la ligne. Aucune livrée n'est inventée.
+3. **Toitures (`PathLayer`)** — même découpe par voiture que les caisses.
+4. **Soufflets (`PathLayer`)** — segments d'intercirculation entre deux caisses consécutives, dérivés de `sliceShape(shape, carTailD, nextCarHeadD)`.
+5. **Signalisation lumineuse** — `computeTrainLights()` place deux phares blancs (`[255, 255, 210, 255]`, rayon 0,75 m) et deux feux rouges (`[255, 30, 50, 255]`, rayon 0,70 m), décalés latéralement de `widthM × 0.32` et surélevés de **+3,2 m**. Le nez de rame prend la teinte neutre opposée à celle de la caisse (`getNeutralNoseColor` : caisse claire → `#3B3D3D`, caisse sombre → `#F1EFEA`).
+6. **Étiquettes (`TextLayer`)** — pastille de numéro de ligne sur la tête de rame, `getPixelOffset: [0, -24]`.
+
+##### Niveaux de détail (LOD) — valeurs réelles
+| Palier | Desktop | Mobile |
+| :--- | :--- | :--- |
+| Capsules activées (`minCapsuleZoom`) | `z ≥ 9.0` | `z ≥ 9.0` |
+| Découpe individuelle des voitures + toitures + nez (`detailedZoom`) | `z ≥ 13.5` | `z ≥ 14.2` |
+| Étiquettes de rame (`labelZoom`) | `z ≥ 13.0` | `z ≥ 14.0` |
+
+Le mode mobile est détecté par `innerWidth <= 768` **ou** par le user-agent (`/Android|iPhone|iPad|iPod|Mobile/`). Sur mobile, le nombre de rames découpées est plafonné à **150**, retenues par distance croissante au centre de la carte.
+
+#### C. Marqueurs de repli (`trains_layer.ts`)
+Sous `z = 9` (et partout où les capsules ne peuvent pas être construites), on retombe sur `createTrainsLayers()`, un simple `ScatterplotLayer` (`TrainMarker`). Il porte les **quatre niveaux de confiance** du module de recalage temps réel :
+- `measured` — or `#C9A227` ;
+- `bracketed`, `extrapolated`, `scheduled` — nuances d'opale décroissantes.
+Le drapeau `isLowZoom = zoom < 11.5 && !selectedLineId` réduit encore le bruit de fond à bas zoom.
+
+### 4. Pipeline de Composition & Ordre de Rendu
 - L'overlay deck.gl est instancié avec `interleaved: false`.
-- Les voies de métro et les rames actives sont ainsi dessinées en surimpression sur le bâti extrudé MapLibre, évitant tout effet de masquage ou de clipping visuel des tunnels et voies en tranchée.
-- La barre de navigation en bas d'écran (`#studio-nav-bar`) pilote directement la caméra MapLibre (`map.flyTo()`) avec une inclinaison cinématique à 55° et une rotation orientée sur chaque monument.
+- Les voies de métro et les rames actives sont donc dessinées en surimpression sur le bâti extrudé MapLibre, ce qui évite tout masquage ou clipping visuel des tunnels et des voies en tranchée.
+- Les effets d'éclairage (`createTrainModelSpikeLighting()`) ne sont montés que si les modèles glTF ou le mode diagnostic sont effectivement actifs.
+- **Il n'existe plus de barre de navigation monuments (`#studio-nav-bar`)** : elle a été supprimée en même temps que le Studio Three.js. La caméra n'est plus pilotée que par le cadrage réseau, le bouton « Bâti 3D », la sélection de ligne et le clic sur une rame ou une station.

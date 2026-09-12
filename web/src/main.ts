@@ -1,10 +1,10 @@
-import { createMap, maxPitchForZoom, MapBounds } from './map/maplibre';
+import { applyMapTheme, createMap, maxPitchForZoom, MapBounds } from './map/maplibre';
 import { SubwayDeckOverlay, TrackItem } from './map/deck_overlay';
 import { SubwayDock } from './ui/dock';
 import { SubwaySearchBar } from './ui/search_bar';
 import { BrowserSubwayEngine } from './sim/browser_engine';
 import { SubwayRouter } from './state/router';
-import { loadShapes } from './sim/shapes_loader';
+import { coordAtDistance, loadShapes } from './sim/shapes_loader';
 import { loadRollingStock } from './sim/rolling_stock';
 import type { TrainMarker } from './map/trains_layer';
 import type { LineMetadata, StationMetadata } from '@paris-subway/shared';
@@ -12,6 +12,7 @@ import { DEFAULT_PITCH, DEFAULT_BEARING } from '@paris-subway/shared';
 import './ui/chrome.css';
 import { TopBar } from './ui/header';
 import { auditLineContrast, LineLike, lineBadge } from './ui/line_badge';
+import { FollowCamera } from './map/follow_camera';
 
 const DATA_REVISION = '20260910-07';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
@@ -118,15 +119,115 @@ function openMethodologyModal() {
         <p>
           <em>Mention légale :</em> Ce projet est une initiative indépendante et bénévole de cartographie et de visualisation. Il n'est ni affilié, ni approuvé, ni sponsorisé par la Régie Autonome des Transports Parisiens (RATP) ou Île-de-France Mobilités (IDFM).
         </p>
-      <div class="method-section" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.2rem;">
-        <span style="font-size: 0.74rem; color: var(--opale-dim);">Page statique indexable</span>
-        <a href="/methode" target="_blank" rel="noopener" style="color: var(--laiton); font-size: 0.82rem; font-weight: 600; text-decoration: underline;">Consulter la page méthode complète →</a>
+      <div class="method-footer">
+        <span class="method-footer-label">Page statique indexable</span>
+        <a href="/methode" target="_blank" rel="noopener" class="method-footer-link">Consulter la page méthode complète →</a>
       </div>
     </div>
   `;
   modal.addEventListener('click', event => { if (event.target === modal) modal.remove(); });
   modal.querySelector('.records-close')?.addEventListener('click', () => modal.remove());
   document.body.appendChild(modal);
+}
+
+function openAboutModal() {
+  document.getElementById('about-modal')?.remove();
+  const modal = document.createElement('div');
+  modal.id = 'about-modal';
+  modal.className = 'records-modal about-modal';
+  const ticketSvg = `
+    <svg class="ticket-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 280" role="img" aria-label="Ticket de transport parisien">
+      <defs>
+        <filter id="ticket-grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
+          <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0"/>
+        </filter>
+      </defs>
+      <rect x="4" y="4" width="642" height="272" rx="8" fill="#F5F0E8" stroke="#D1CFC8" stroke-width="2"/>
+      <rect x="4" y="4" width="14" height="272" rx="4" fill="#0A0A0A" opacity="0.10"/>
+      <rect x="4" y="4" width="642" height="272" rx="8" fill="#0A0A0A" opacity="0.12" filter="url(#ticket-grain)"/>
+      <g fill="#0A0A0A" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="900" letter-spacing="2">
+        <text x="36" y="60">T</text><text x="36" y="76">I</text><text x="36" y="92">C</text><text x="36" y="108">K</text><text x="36" y="124">E</text><text x="36" y="140">T</text>
+      </g>
+      <path d="M90 40V130Q90 160 60 160Q45 160 40 150L55 135Q60 140 70 140Q75 140 75 130V40Z" fill="#0A0A0A"/>
+      <rect x="50" y="90" width="50" height="12" fill="#0A0A0A"/>
+      <path d="M115 90h40v12h-40zM128 77h14v38h-14z" fill="#0A0A0A"/>
+      <text x="200" y="55" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#0A0A0A">optile</text>
+      <line x1="200" y1="60" x2="260" y2="60" stroke="#0A0A0A" stroke-width="2"/>
+      <circle cx="385" cy="50" r="18" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+      <path d="M380 42Q390 42 390 50Q390 58 380 58" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+      <text x="412" y="56" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#0A0A0A">RATP</text>
+      <rect x="530" y="32" width="90" height="36" rx="6" fill="#0A0A0A"/>
+      <text x="550" y="57" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="900" fill="#FFFFFF">SNCF</text>
+      <g fill="#0A0A0A">
+        <circle cx="215" cy="100" r="18"/><circle cx="290" cy="100" r="18"/><circle cx="365" cy="100" r="18"/><circle cx="440" cy="100" r="18"/>
+      </g>
+      <g text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#FFFFFF">
+        <text x="215" y="100" font-size="10">BUS</text><text x="290" y="100" font-size="14">T</text><text x="365" y="100" font-size="14">M</text><text x="440" y="100" font-size="10">RER</text>
+      </g>
+      <text x="470" y="96" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#0A0A0A">dans</text>
+      <text x="470" y="110" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#0A0A0A">Paris</text>
+      <g fill="#0075C9" font-family="Arial, Helvetica, sans-serif">
+        <text x="40" y="195" font-size="18" font-weight="700">Île-de-France</text><text x="40" y="210" font-size="11">mobilités</text>
+        <text x="360" y="195" font-size="18" font-weight="700">Île-de-France</text><text x="360" y="210" font-size="11">mobilités</text>
+      </g>
+      <rect x="180" y="180" width="32" height="32" rx="4" fill="#0075C9"/><text x="196" y="203" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">+</text>
+      <rect x="500" y="180" width="32" height="32" rx="4" fill="#0075C9"/><text x="516" y="203" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">+</text>
+      <text x="40" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">02070341 A 1111 A16</text>
+      <text x="440" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">EUR 1,90 CB</text>
+    </svg>`;
+  modal.innerHTML = `
+    <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <header class="about-sheet__header">
+        <h2 id="about-title">À propos</h2>
+        <button type="button" class="about-sheet__close" aria-label="Fermer">×</button>
+      </header>
+      <div class="about-sheet__body">
+        <section class="about-item">
+          <div class="about-item__ticket">${ticketSvg}</div>
+          <div class="about-item__content"><h3 class="about-item__title">Données</h3><p class="about-item__text">Données théoriques : <strong>GTFS Île-de-France Mobilités</strong></p><p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p></div>
+        </section>
+        <section class="about-item">
+          <div class="about-item__ticket">${ticketSvg}</div>
+          <div class="about-item__content"><h3 class="about-item__title">Licences</h3><p class="about-item__text">Fond cartographique : <strong>OpenMapTiles · OpenStreetMap</strong> (ODbL)</p><p class="about-item__text">Hébergement tuiles : <strong>OpenFreeMap</strong></p><p class="about-item__text">Typographie : <strong>Switzer</strong> (Fontshare)</p></div>
+        </section>
+        <section class="about-item">
+          <div class="about-item__ticket">${ticketSvg}</div>
+          <div class="about-item__content"><h3 class="about-item__title">Mentions</h3><p class="about-item__text">Projet indépendant, non affilié à la <strong>RATP</strong> ni à <strong>Île-de-France Mobilités</strong>.</p><a href="/methode" target="_blank" rel="noopener" class="about-item__link">Consulter la méthode complète <span aria-hidden="true">→</span></a></div>
+        </section>
+      </div>
+    </div>
+  `;
+  const closeButton = modal.querySelector<HTMLButtonElement>('.about-sheet__close');
+  const closeModal = () => {
+    modal.remove();
+    document.body.style.overflow = '';
+    document.querySelector<HTMLButtonElement>('.topbar__menu-btn')?.focus();
+  };
+  modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
+  modal.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(modal.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  closeButton?.addEventListener('click', closeModal);
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+  closeButton?.focus();
 }
 
 async function bootstrap() {
@@ -167,7 +268,41 @@ async function bootstrap() {
   const tooltipEl = document.getElementById('tooltip')!;
   // 2. Initialize Simulation Engine (pure theoretical by default, or reading server relay snapshot)
   const engine = new BrowserSubwayEngine();
-  await engine.initialize(lines);
+  await engine.initialize(lines, shapesMap);
+  const demoRer = new URLSearchParams(window.location.search).get('demo-rer');
+  const demoRerColors: Record<string, { colorHex: string; textColorHex: string }> = {
+    A: { colorHex: '#EB2132', textColorHex: '#FFFFFF' },
+    B: { colorHex: '#5091CB', textColorHex: '#FFFFFF' },
+    C: { colorHex: '#FFCC30', textColorHex: '#000000' },
+    D: { colorHex: '#008B5B', textColorHex: '#FFFFFF' },
+    E: { colorHex: '#B94E9A', textColorHex: '#FFFFFF' }
+  };
+  const createDemoRerTrain = (line: string) => {
+    const color = demoRerColors[line];
+    const [shapeId, shape] = [...shapesMap.entries()][0] || [];
+    if (!color || !shapeId || !shape) return null;
+    const headDistance = Math.min(shape.length * 0.65, shape.length - 1);
+    const coord = coordAtDistance(shape, headDistance);
+    return {
+      id: `demo-rer-${line}`,
+      line,
+      lineName: `RER ${line}`,
+      colorHex: color.colorHex,
+      textColorHex: color.textColorHex,
+      pos: [coord[0], coord[1]] as [number, number],
+      brg: 0,
+      spd: 18,
+      speedMps: 18,
+      delay: 0,
+      dest: `Démo RER ${line}`,
+      next: 'Station de démonstration',
+      conf: 'scheduled' as const,
+      shapeId,
+      currentDistM: headDistance,
+      direction: 0 as const,
+      atStop: false
+    };
+  };
   (window as any).__engine = engine;
   let isRealtimeEnabled = false;
 
@@ -177,6 +312,33 @@ async function bootstrap() {
   const map = createMap('map', { initialBounds: metroBounds || networkBounds || undefined, maxBounds: mapMaxBounds });
   (window as any).__map = map;
   (window as any).map = map;
+
+  // --- Mention légale MapLibre (LOT 1, point 2) -----------------------------
+  // Le contrôle d'attribution est posé dans le bas-droite de la carte (créé
+  // par maplibre.ts), il est le seul contenu de #map qui ne doit jamais être
+  // recouvert, et sa hauteur mesurée varie (replié/déplié selon la largeur).
+  // #map créant un contexte d'empilement (z-index: 1), aucun descendant ne
+  // peut passer au-dessus du tiroir (z-index: 150) : la seule correction
+  // possible est géométrique. On publie donc sa hauteur dans --attrib-h, que
+  // .dock consomme en bas de viewport (cf. main.css).
+  const attribEl = mapEl.querySelector<HTMLElement>('.maplibregl-ctrl-attrib');
+  attribEl?.classList.remove('maplibregl-compact-show');
+  let lastAttribH = -1;
+  const publishAttributionHeight = () => {
+    if (!attribEl) return;
+    const h = Math.ceil(attribEl.getBoundingClientRect().height);
+    if (h > 0 && h !== lastAttribH) {
+      lastAttribH = h;
+      document.documentElement.style.setProperty('--attrib-h', `${h}px`);
+    }
+  };
+  publishAttributionHeight();
+  map.on('load', publishAttributionHeight);
+  map.on('idle', publishAttributionHeight);
+  window.addEventListener('resize', publishAttributionHeight);
+  if (attribEl && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(publishAttributionHeight).observe(attribEl);
+  }
 
   const mapPadding = (): { top: number; right: number; bottom: number; left: number } => {
     const header = document.getElementById('topbar')?.getBoundingClientRect();
@@ -188,47 +350,106 @@ async function bootstrap() {
     const left = isMobile ? 40 : (dock?.width || 0) + 40;
     return { top, right, bottom, left };
   };
-  const btnRecenter = document.getElementById('btn-recenter')!;
-  let isLineSelected = false;
-  let hasUserMoved = false;
 
-  const updateRecenterVisibility = () => {
-    btnRecenter.classList.toggle('is-visible', isLineSelected || hasUserMoved);
-  };
+  const btnRecenter = document.getElementById('btn-recenter') as HTMLButtonElement | null;
+  let activeLineId: string | null = null;
+  let trackedTrain: TrainMarker | null = null;
+  let nominalMetroCenter: [number, number] | null = null;
+  let nominalMetroZoom: number = 12.5;
+  let isRecenterVisible = false;
 
-  const fitNetwork = (duration = 700) => {
+  const fitMetroNetwork = (duration = 750) => {
     const initialBounds = metroBounds || networkBounds;
     if (!initialBounds) return;
     map.fitBounds(initialBounds, { padding: mapPadding(), duration, maxZoom: 14 });
   };
+
+  const updateRecenterState = () => {
+    if (!btnRecenter) return;
+
+    let label = "Recadrer sur l'ensemble du réseau de métro";
+    let isContextActive = false;
+
+    if (trackedTrain) {
+      label = `Recentrer sur la rame ${trackedTrain.lineName} vers ${trackedTrain.dest}`;
+      isContextActive = true;
+    } else if (activeLineId) {
+      const line = lines.find(l => l.id === activeLineId);
+      label = `Recadrer sur la ligne ${line ? line.short_name : activeLineId}`;
+      isContextActive = true;
+    }
+
+    if (isContextActive) {
+      if (!isRecenterVisible) {
+        isRecenterVisible = true;
+        btnRecenter.classList.add('is-visible');
+      }
+      btnRecenter.setAttribute('aria-label', label);
+      btnRecenter.setAttribute('title', label);
+      return;
+    }
+
+    if (!nominalMetroCenter) {
+      if (isRecenterVisible) {
+        isRecenterVisible = false;
+        btnRecenter.classList.remove('is-visible');
+      }
+      return;
+    }
+
+    const currentCenter = map.getCenter();
+    const currentZoom = map.getZoom();
+    const currentPitch = map.getPitch();
+    const currentBearing = map.getBearing();
+
+    const dLat = currentCenter.lat - nominalMetroCenter[1];
+    const dLng = (currentCenter.lng - nominalMetroCenter[0]) * Math.cos(currentCenter.lat * Math.PI / 180);
+    const distDeg = Math.hypot(dLat, dLng);
+    const dZoom = Math.abs(currentZoom - nominalMetroZoom);
+    const dPitch = Math.abs(currentPitch);
+    const dBearing = Math.abs(currentBearing);
+
+    // Hysteresis:
+    // Seuil apparition (exceeds frame): dist > 0.0035° (~390m) OR dZoom > 0.35 OR pitch > 3° OR bearing > 3°
+    // Seuil disparition (within frame ~15% plus strict): dist < 0.0030° AND dZoom < 0.30 AND pitch < 2.5° AND bearing < 2.5°
+    const exceedsAppearThreshold = distDeg > 0.0035 || dZoom > 0.35 || dPitch > 3 || dBearing > 3;
+    const withinDisappearThreshold = distDeg < 0.0030 && dZoom < 0.30 && dPitch < 2.5 && dBearing < 2.5;
+
+    if (!isRecenterVisible && exceedsAppearThreshold) {
+      isRecenterVisible = true;
+      btnRecenter.classList.add('is-visible');
+      btnRecenter.setAttribute('aria-label', label);
+      btnRecenter.setAttribute('title', label);
+    } else if (isRecenterVisible && withinDisappearThreshold) {
+      isRecenterVisible = false;
+      btnRecenter.classList.remove('is-visible');
+    } else if (isRecenterVisible) {
+      btnRecenter.setAttribute('aria-label', label);
+      btnRecenter.setAttribute('title', label);
+    }
+  };
+
   let resizeTimer: ReturnType<typeof setTimeout> | null = null;
   window.addEventListener('resize', () => {
     if (resizeTimer) clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => fitNetwork(450), 140);
+    resizeTimer = setTimeout(() => {
+      fitMetroNetwork(450);
+      setTimeout(() => {
+        nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
+        nominalMetroZoom = map.getZoom();
+        updateRecenterState();
+      }, 500);
+    }, 140);
   });
 
-  map.on('dragstart', () => {
-    hasUserMoved = true;
-    updateRecenterVisibility();
-  });
-  map.on('zoomstart', (e) => {
-    if (e.originalEvent) {
-      hasUserMoved = true;
-      updateRecenterVisibility();
-    }
-  });
-  map.on('rotatestart', () => {
-    hasUserMoved = true;
-    updateRecenterVisibility();
-  });
-  map.on('pitchstart', () => {
-    hasUserMoved = true;
-    updateRecenterVisibility();
+  map.on('move', () => {
+    updateRecenterState();
   });
 
   // Option A: the low-zoom camera remains at 30°. Once the building extrusion
   // is visible, the allowed pitch opens progressively rather than jumping.
   const syncPitchPolicy = (animateCorrection = true) => {
+    if (followCamera?.isFollowing()) return;
     const maxPitch = maxPitchForZoom(map.getZoom());
     map.setMaxPitch(maxPitch);
     if (map.getPitch() > maxPitch + 0.1) {
@@ -238,12 +459,38 @@ async function bootstrap() {
   map.on('zoom', () => syncPitchPolicy(true));
   map.on('load', () => syncPitchPolicy(false));
 
+  const hideTooltip = () => {
+    tooltipEl.style.display = 'none';
+    tooltipEl.innerHTML = '';
+  };
+
+  let latestRenderedTrains = new Map<string, TrainMarker>();
+  let followCamera: FollowCamera | null = null;
+  const focusTrain = (train: TrainMarker) => {
+    hideTooltip();
+    trackedTrain = train;
+    if (!followCamera?.startFollow(train.id)) {
+      map.flyTo({
+        center: train.pos,
+        zoom: 15.5,
+        pitch: 0,
+        bearing: train.brg,
+        duration: 900
+      });
+    }
+    updateRecenterState();
+  };
+
   // 4. Initialize deck.gl overlay with Station & Train Handlers
   const deckOverlay = new SubwayDeckOverlay({
     onStationHover: (info) => {
-      if (info.object && info.x && info.y) {
-        const st = info.object as StationMetadata;
-        const servedLines = st.lines
+      if (info.object && Number.isFinite(info.x) && Number.isFinite(info.y)) {
+        const st = (info.object.station || info.object) as StationMetadata;
+        if (!st || !st.name) {
+          hideTooltip();
+          return;
+        }
+        const servedLines = (st.lines || [])
           .map(lid => lines.find(l => l.id === lid))
           .filter((l): l is LineMetadata => !!l);
 
@@ -271,10 +518,11 @@ async function bootstrap() {
         tooltipEl.style.top = `${info.y}px`;
         tooltipEl.style.display = 'block';
       } else {
-        tooltipEl.style.display = 'none';
+        hideTooltip();
       }
     },
     onStationClick: (station) => {
+      hideTooltip();
       map.flyTo({
         center: station.coordinates,
         zoom: Math.max(map.getZoom(), 15),
@@ -282,9 +530,13 @@ async function bootstrap() {
       });
     },
     onTrainHover: (info) => {
-      if (info.object && info.x && info.y) {
-        const tr = info.object as TrainMarker;
-        const delaySeconds = Math.round(tr.delay);
+      if (info.object && Number.isFinite(info.x) && Number.isFinite(info.y)) {
+        const tr = (info.object.train || info.object) as TrainMarker;
+        if (!tr || !tr.lineName || !tr.dest) {
+          hideTooltip();
+          return;
+        }
+        const delaySeconds = Math.round(tr.delay || 0);
         let delayText = '<span style="color: #4ade80;">À l\'heure</span>';
         if (Math.abs(delaySeconds) >= 15) {
           const sign = delaySeconds > 0 ? '+' : '-';
@@ -322,9 +574,9 @@ async function bootstrap() {
             <span class="train-tooltip-dest">${tr.dest}</span>
           </div>
           <div class="train-tooltip-body">
-            <div>Prochain arrêt : <strong>${tr.next}</strong></div>
+            <div>Prochain arrêt : <strong>${tr.next || '—'}</strong></div>
             <div class="train-tooltip-meta">
-              <span>Vitesse : <strong>${Number(tr.spd).toLocaleString('fr-FR')} km/h</strong></span>
+              <span>Vitesse : <strong>${Number(tr.spd || 0).toLocaleString('fr-FR')} km/h</strong></span>
               <span>Écart : ${delayText}</span>
               ${confBadge}
             </div>
@@ -334,28 +586,49 @@ async function bootstrap() {
         tooltipEl.style.top = `${info.y}px`;
         tooltipEl.style.display = 'block';
       } else {
-        tooltipEl.style.display = 'none';
+        hideTooltip();
       }
     },
     onTrainClick: (train) => {
-      map.flyTo({
-        center: train.pos,
-        zoom: Math.max(map.getZoom(), 15),
-        pitch: Math.min(55, maxPitchForZoom(Math.max(map.getZoom(), 15))),
-        bearing: train.brg,
-        duration: 1000
-      });
+      focusTrain(train);
+    },
+    onLineSelect: (lineId) => dock?.selectLine(lineId),
+    onBackgroundClick: () => {
+      if (!activeLineId && !trackedTrain) return;
+      const wasFollowingTrain = Boolean(trackedTrain && followCamera?.isFollowing());
+      hideTooltip();
+      followCamera?.stopFollow();
+      activeLineId = null;
+      trackedTrain = null;
+      deckOverlay.setSelectedLine(null);
+      deckOverlay.setSelectedTrain(null);
+      engine.setFocusedLine(null);
+      router.setRoute(null, '0');
+      dock?.selectLine(null);
+      if (!wasFollowingTrain) fitMetroNetwork();
+      updateRecenterState();
     }
   });
+
+  // Global dismiss listeners for tooltips
+  map.on('movestart', hideTooltip);
+  map.on('zoomstart', hideTooltip);
+  map.on('dragstart', hideTooltip);
+  map.on('rotatestart', hideTooltip);
+  map.on('pitchstart', hideTooltip);
+  map.on('click', hideTooltip);
+  mapEl.addEventListener('mouseleave', hideTooltip);
+  mapEl.addEventListener('pointerleave', hideTooltip);
+  window.addEventListener('blur', hideTooltip);
 
   // 5. Initialize Dock ("Le Quai" Niveau 2 with Station Ladder)
   const dock = new SubwayDock({
     rollingStockDb,
     onRecordsOpen: () => openNetworkRecords(stationRankings),
-    onMethodOpen: () => openMethodologyModal(),
     onLineSelect: (lineId, dir = '0') => {
-      isLineSelected = Boolean(lineId);
-      updateRecenterVisibility();
+      hideTooltip();
+      activeLineId = lineId;
+      trackedTrain = null;
       deckOverlay.setSelectedLine(lineId);
       engine.setFocusedLine(lineId);
 
@@ -378,27 +651,29 @@ async function bootstrap() {
           );
         }
       }
+      updateRecenterState();
     },
     onStationClick: (station) => {
-      hasUserMoved = true;
-      updateRecenterVisibility();
+      hideTooltip();
+      trackedTrain = null;
       map.flyTo({
         center: station.coordinates,
         zoom: 15.5,
         duration: 900
       });
+      updateRecenterState();
     },
     onTrainClick: (train) => {
-      hasUserMoved = true;
-      updateRecenterVisibility();
-      map.flyTo({
-        center: train.pos,
-        zoom: 15.5,
-        pitch: Math.min(55, maxPitchForZoom(Math.max(map.getZoom(), 15))),
-        bearing: train.brg,
-        duration: 900
-      });
+      focusTrain(train);
     },
+  });
+
+  followCamera = new FollowCamera({
+    map,
+    getTrain: tripId => latestRenderedTrains.get(tripId),
+    setFollowElevation: (lineId, offset) => deckOverlay.setFollowElevation(lineId, offset),
+    dock: document.getElementById('dock')!,
+    onStop: () => updateRecenterState()
   });
 
   dock.setData(lines, stations, laddersData);
@@ -407,21 +682,23 @@ async function bootstrap() {
 
   // 6. Initialize Search Bar Component (Instant Station Autocomplete)
   const searchBar = new SubwaySearchBar({
-    containerId: 'search-container',
+    triggerId: 'topbar-search-trigger',
     stations,
     lines,
     onStationSelect: (station) => {
-      hasUserMoved = true;
-      updateRecenterVisibility();
+      hideTooltip();
+      trackedTrain = null;
       if (station.lines.length > 0) {
+        activeLineId = station.lines[0];
         dock.selectLine(station.lines[0]);
       }
       map.flyTo({
         center: station.coordinates,
         zoom: 16,
-        pitch: Math.min(45, maxPitchForZoom(16)),
+        pitch: 0,
         duration: 900
       });
+      updateRecenterState();
     }
   });
 
@@ -430,10 +707,28 @@ async function bootstrap() {
     lineCount: lines.length,
     stationCount: stations.length,
     onSearch: () => {
+      hideTooltip();
       searchBar.open();
     },
-    onMethod: () => {
-      openMethodologyModal();
+    onAbout: () => {
+      hideTooltip();
+      openAboutModal();
+    },
+    onRecords: () => {
+      hideTooltip();
+      openNetworkRecords(stationRankings);
+    },
+    onToggleBuildings: (active: boolean) => {
+      try {
+        if (map.getLayer('building-3d')) {
+          map.setLayoutProperty('building-3d', 'visibility', active ? 'visible' : 'none');
+        }
+      } catch (err) {
+        console.warn('[map] Could not toggle building layer:', err);
+      }
+    },
+    onToggleTheme: (theme) => {
+      applyMapTheme(map, theme);
     },
     onToggleRealtime: () => {
       isRealtimeEnabled = !isRealtimeEnabled;
@@ -449,6 +744,17 @@ async function bootstrap() {
     }
   });
   topbar.mount();
+  const syncBuildingsState = () => {
+    if (!map.getLayer('building-3d')) return;
+    topbar.setBuildingsActive(map.getLayoutProperty('building-3d', 'visibility') !== 'none');
+  };
+  if (map.isStyleLoaded()) syncBuildingsState();
+  else map.once('style.load', syncBuildingsState);
+
+  const loader = document.getElementById('app-loader');
+  const hideLoader = () => loader?.classList.add('is-hidden');
+  if (map.loaded()) hideLoader();
+  else map.once('load', hideLoader);
 
   if (import.meta.env.DEV) {
     const lineLikes: LineLike[] = lines.map(l => ({
@@ -478,17 +784,30 @@ async function bootstrap() {
 
   // 8. Connect deck.gl to map
   map.on('load', () => {
-    fitNetwork(0);
+    fitMetroNetwork(0);
+    setTimeout(() => {
+      nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
+      nominalMetroZoom = map.getZoom();
+      updateRecenterState();
+    }, 200);
+
     map.addControl(deckOverlay.getOverlay() as any);
     deckOverlay.setData({
-    lines,
-    stations,
-    tracks,
+      lines,
+      stations,
+      tracks,
       lineLadders: laddersData,
       shapes: shapesMap,
       rollingStockDb
     });
     deckOverlay.setRerData(rerTracks);
+    const initialDemoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
+    if (initialDemoTrain) {
+      latestRenderedTrains = new Map([[initialDemoTrain.id, initialDemoTrain]]);
+      deckOverlay.setTrains([initialDemoTrain]);
+      topbar.setTrainCount(1);
+      dock.updateTrains([initialDemoTrain]);
+    }
     deckOverlay.startTrackReveal(1200);
 
     const syncOverlayView = () => {
@@ -499,7 +818,7 @@ async function bootstrap() {
             [b.getEast(), b.getNorth()]
           ]
         : null;
-      deckOverlay.setViewState(map.getZoom(), [map.getCenter().lng, map.getCenter().lat], boundsTuple);
+      deckOverlay.setViewState(map.getZoom(), [map.getCenter().lng, map.getCenter().lat], boundsTuple, map.getPitch());
     };
     map.on('move', syncOverlayView);
     syncOverlayView();
@@ -514,44 +833,68 @@ async function bootstrap() {
     }
   });
 
-  // 9. Camera controls. The 3D button is a real pitch toggle: the MapLibre
-  // extrusion layer becomes visible as the camera opens above zoom 13.
-  const btnPitch = document.getElementById('btn-pitch')!;
-  let is3D = true;
-  btnPitch.addEventListener('click', () => {
-    is3D = !is3D;
-    map.easeTo({
-      pitch: is3D ? Math.min(DEFAULT_PITCH, maxPitchForZoom(map.getZoom())) : 0,
-      bearing: is3D ? DEFAULT_BEARING : 0,
-      duration: 800
-    });
-    btnPitch.innerHTML = is3D
-      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z M4 7.5 12 12l8-4.5 M12 12v9"/></svg>'
-      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
-    btnPitch.setAttribute('aria-label', is3D ? 'Passer en vue 2D' : 'Activer la vue 3D');
-    btnPitch.setAttribute('aria-pressed', String(is3D));
+  // 9. Contextual Recenter Action
+  btnRecenter?.addEventListener('click', () => {
+    followCamera?.stopFollow();
+    if (trackedTrain) {
+      map.flyTo({
+        center: trackedTrain.pos,
+        zoom: 15.5,
+        pitch: 0,
+        bearing: trackedTrain.brg,
+        duration: 800
+      });
+    } else if (activeLineId) {
+      const lineStations = stations.filter(s => s.lines.includes(activeLineId!));
+      if (lineStations.length > 0) {
+        const lngs = lineStations.map(s => s.coordinates[0]);
+        const lats = lineStations.map(s => s.coordinates[1]);
+        map.fitBounds(
+          [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+          { padding: mapPadding(), maxZoom: 14.5, duration: 800 }
+        );
+      }
+    } else {
+      dock.selectLine(null);
+      deckOverlay.setSelectedLine(null);
+      engine.setFocusedLine(null);
+      fitMetroNetwork(800);
+      map.easeTo({ pitch: 0, bearing: 0, duration: 800 });
+    }
+    setTimeout(updateRecenterState, 850);
   });
 
-  btnRecenter.addEventListener('click', () => {
-    isLineSelected = false;
-    hasUserMoved = false;
-    updateRecenterVisibility();
-    dock.selectLine(null);
-    deckOverlay.setSelectedLine(null);
-    engine.setFocusedLine(null);
-    fitNetwork(900);
-    map.easeTo({ pitch: is3D ? Math.min(DEFAULT_PITCH, maxPitchForZoom(map.getZoom())) : 0, bearing: is3D ? DEFAULT_BEARING : 0, duration: 700 });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      hideTooltip();
+      document.getElementById('records-modal')?.remove();
+      document.getElementById('method-modal')?.remove();
+      topbar.closeMenu();
+    }
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+    if (e.key === 'b' || e.key === 'B') {
+      try {
+        const currentVis = map.getLayoutProperty('building-3d', 'visibility');
+        const nextActive = currentVis !== 'visible';
+        map.setLayoutProperty('building-3d', 'visibility', nextActive ? 'visible' : 'none');
+        topbar.setBuildingsActive(nextActive);
+      } catch (err) {
+        console.warn('[map] Error toggling buildings:', err);
+      }
+    }
   });
 
   // 10. Start Autonomous Subway Simulation Engine Loop
   let lastDomUpdateTime = 0;
   let lastDistanceDomUpdate = 0;
   let lastServiceStatusKey = '';
-  let currentActiveTrainsCount = 0;
   engine.start({
     onTick: (trains, activeCount) => {
-      currentActiveTrainsCount = trains.length;
-      deckOverlay.setTrains(trains);
+      const demoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
+      if (demoTrain) {
+        trains = [demoTrain];
+        activeCount = 1;
+      }
       topbar.setTrainCount(activeCount);
       const serviceStatus = engine.getServiceStatus();
       const serviceStatusKey = `${serviceStatus.state}:${Math.floor(serviceStatus.secondsUntilFirst / 60)}`;
@@ -569,6 +912,16 @@ async function bootstrap() {
         dock.updateTrains(trains);
       }
     },
+    onRender: (trains, activeCount) => {
+      const demoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
+      if (demoTrain) {
+        trains = [demoTrain];
+        activeCount = 1;
+      }
+      latestRenderedTrains = new Map(trains.map(train => [train.id, train]));
+      deckOverlay.setTrains(trains);
+      followCamera?.onSimulationFrame();
+    },
     onPrimStatus: (status) => {
       dock.setRealtimeState(status);
       if (isRealtimeEnabled) {
@@ -577,13 +930,6 @@ async function bootstrap() {
     }
   });
 
-  if (import.meta.env.DEV) {
-    import('./dev/fps_probe').then(({ installFpsProbe }) => {
-      installFpsProbe({
-        getTrainCount: () => currentActiveTrainsCount
-      });
-    });
-  }
 }
 
 bootstrap().catch(err => {

@@ -1,0 +1,46 @@
+{
+  "generator": "build_train_box_models.py",
+  "origin": "x_z_centered_y_railhead",
+  "long_axis": "+X",
+  "atlas_px": 512,
+  "livery": "clean_room_authored",
+  "line_colors_baked": false,
+  "assets": [
+    {
+      "file": "pneumatic_generic__neutral.glb",
+      "family": "pneumatic_generic",
+      "line": null,
+      "model_id": "MP89_CC_5V",
+      "triangles": 82,
+      "vertices": 182,
+      "bytes": 9468,
+      "dimensions_m": {
+        "length_x": 15.06,
+        "width_z": 2.44,
+        "height_y": 3.466
+      },
+      "height_source": "derived_from_pneumatic_generic_reference",
+      "height_measured": false,
+      "grazing_camera_approved": false,
+      "sha256": "e92ee9ff9f52d7cf2dffe260574863d400876d8d2964e1411a98e21201af5f56"
+    },
+    {
+      "file": "steel_classic__neutral.glb",
+      "family": "steel_classic",
+      "line": null,
+      "model_id": "MF77",
+      "triangles": 82,
+      "vertices": 182,
+      "bytes": 9460,
+      "dimensions_m": {
+        "length_x": 15.49,
+        "width_z": 2.46,
+        "height_y": 3.494
+      },
+      "height_source": "derived_from_pneumatic_generic_reference",
+      "height_measured": false,
+      "grazing_camera_approved": false,
+      "sha256": "2eaef52d2930cc88421aa3c4248357ead481a45d6e33aeba264dd0c9a1d9cedf"
+    }
+  ]
+}

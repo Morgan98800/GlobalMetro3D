@@ -8,7 +8,7 @@ import type { TrainMarker } from './trains_layer';
 import { carCenterSpacingM, compassBearingToDeckYaw } from './train_model_geometry';
 export { resolveTrainRenderLayers } from './train_render_fallback';
 
-export const TRAIN_MODEL_ZOOM_THRESHOLD = 14.8;
+export const TRAIN_MODEL_ZOOM_THRESHOLD = 13.5;
 const LOAD_TIMEOUT_MS = 5000;
 const FAMILY_URLS = {
   pneumatic_generic: '/models/train/pneumatic_generic__neutral.glb',
@@ -47,6 +47,7 @@ interface ModelLayerParams {
 }
 
 const assetStatus = new Map<TrainModelFamily, AssetStatus>();
+const parsedScenegraphs = new Map<TrainModelFamily, any>();
 const assetListeners = new Set<() => void>();
 const requestedFamilies = new Set<TrainModelFamily>();
 
@@ -81,7 +82,8 @@ function beginAssetLoad(family: TrainModelFamily): void {
       return response.arrayBuffer();
     })
     .then(buffer => GLBLoader.parse(buffer))
-    .then(() => {
+    .then(gltf => {
+      parsedScenegraphs.set(family, gltf);
       assetStatus.set(family, 'ready');
       notifyAssetListeners();
     })
@@ -145,13 +147,14 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
       if (train.pos[0] < west || train.pos[0] > east || train.pos[1] < south || train.pos[1] > north) continue;
     }
     const headDistance = train.currentDistM ?? 0;
+    const trainDir = (train.direction ?? 1) as 0 | 1;
     const carsForTrain = splitIntoCars(
       shape,
       headDistance,
       stock.cars_count,
       stock.car_length_m,
       stock.inter_car_gap_m,
-      1
+      trainDir
     );
     const bogieSpanM = getBogieCentresM(stock);
     for (let index = 0; index < carsForTrain.length; index++) {
@@ -197,6 +200,8 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
   for (const family of usedFamilies) {
     if (params.grazingCamera && !MODEL_RENDER_POLICY[family].grazingCameraApproved) continue;
     if (assetStatus.get(family) !== 'ready') continue;
+    const gltf = parsedScenegraphs.get(family);
+    if (!gltf) continue;
 
     const cars = buildFamilyCars(params, family);
     if (cars.length === 0) continue;
@@ -204,7 +209,7 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
     layers.push(new ScenegraphLayer<ModelCar>({
       id: `subway-train-model-${family}`,
       data: cars,
-      scenegraph: FAMILY_URLS[family],
+      scenegraph: gltf,
       getPosition: car => car.position,
       getOrientation: car => car.orientation,
       sizeScale: 1,

@@ -539,7 +539,7 @@ export class SubwayDeckOverlay {
     );
 
     const demoRer = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo-rer');
-    const showTrainModels = trainModelsEnabled() && (this.zoom > TRAIN_MODEL_ZOOM_THRESHOLD || Boolean(demoRer));
+    const showTrainModels = trainModelsEnabled() && (this.zoom > TRAIN_MODEL_ZOOM_THRESHOLD || this.pitch >= 20 || Boolean(this.selectedTrainId) || Boolean(demoRer));
     if (showTrainModels && this.data?.rollingStockDb) {
       for (const train of this.trains) {
         requestTrainModel(train, this.data.rollingStockDb);

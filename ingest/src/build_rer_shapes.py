@@ -23,25 +23,31 @@ from typing import List, Tuple, Dict, Any
 from ingest.src.resample import resample_polyline_10m, remove_uturn_kinks
 from ingest.write_shapes_v2 import ResampledShape, write_shapes_v2, verify_roundtrip
 
-RER_E_ROUTE_ID = "IDFM:C01729"
+RER_ROUTE_IDS = {
+    "IDFM:C01742": "A",
+    "IDFM:C01743": "B",
+    "IDFM:C01727": "C",
+    "IDFM:C01728": "D",
+    "IDFM:C01729": "E",
+}
 STEP_METERS = 10.0
 
 
-def extract_rer_e_shapes(raw_zip: Path | str) -> List[ResampledShape]:
+def extract_all_rer_shapes(raw_zip: Path | str) -> List[ResampledShape]:
     raw_zip = Path(raw_zip)
     if not raw_zip.exists():
         raise FileNotFoundError(f"GTFS archive not found: {raw_zip}")
 
-    print(f"[rer_shapes] Reading RER E shapes from {raw_zip}...")
+    print(f"[rer_shapes] Reading RER (A, B, C, D, E) shapes from {raw_zip}...")
     with zipfile.ZipFile(raw_zip) as z:
         routes: set[str] = set()
         with z.open("routes.txt") as f:
             for r in csv.DictReader(io.TextIOWrapper(f, encoding="utf-8-sig")):
-                if r.get("route_type") == "2" and r.get("route_short_name", "").strip() == "E":
+                if r.get("route_id") in RER_ROUTE_IDS and r.get("route_type") == "2":
                     routes.add(r["route_id"])
 
-        if not routes:
-            raise RuntimeError("RER E route not found in routes.txt")
+        if len(routes) != len(RER_ROUTE_IDS):
+            raise RuntimeError(f"Expected {len(RER_ROUTE_IDS)} RER routes, found {len(routes)}: {routes}")
 
         shape_ids: set[str] = set()
         with z.open("trips.txt") as f:
@@ -51,7 +57,7 @@ def extract_rer_e_shapes(raw_zip: Path | str) -> List[ResampledShape]:
                     if sid:
                         shape_ids.add(sid)
 
-        print(f"[rer_shapes] Found {len(shape_ids)} distinct shape_ids for RER E")
+        print(f"[rer_shapes] Found {len(shape_ids)} distinct shape_ids across 5 RER lines")
 
         shape_points: Dict[str, List[Tuple[int, float, float]]] = {sid: [] for sid in shape_ids}
         with z.open("shapes.txt") as f:
@@ -119,8 +125,12 @@ def compress_brotli(src: Path, dst: Path) -> None:
     subprocess.run(cmd, check=True)
 
 
+# Backward-compatible alias for existing tests
+extract_rer_e_shapes = extract_all_rer_shapes
+
+
 def build_rer_shapes(raw_zip: Path | str, out_bin_path: Path | str) -> dict:
-    shapes = extract_rer_e_shapes(raw_zip)
+    shapes = extract_all_rer_shapes(raw_zip)
     out_bin = Path(out_bin_path)
     out_bin.parent.mkdir(parents=True, exist_ok=True)
 

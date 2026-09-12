@@ -24,7 +24,14 @@ import numpy as np
 from ingest.src.project import project_trip_stops_monotonically
 from ingest.tests.test_acceptance_phase_a import TestPhaseAAcceptance
 
-RER_E_ROUTE_ID = "IDFM:C01729"
+RER_ROUTE_IDS = {
+    "IDFM:C01742": "A",
+    "IDFM:C01743": "B",
+    "IDFM:C01727": "C",
+    "IDFM:C01728": "D",
+    "IDFM:C01729": "E",
+}
+RER_E_ROUTE_ID = "IDFM:C01729"  # Backward compatibility
 NOMINAL_WEEKDAY_DATE = "20260916"  # Wednesday, standard nominal service
 
 
@@ -65,7 +72,7 @@ def build_rer_schedule(
     offset = max_metro_index + 1
     print(f"[rer_schedule] Metro stations: {len(metro_stations)}, max index: {max_metro_index}, dynamic offset: {offset}")
 
-    # 2. Load published stations to check bounding scope
+    # 2. Load published stations to check station names
     with open(stations_json_path, "r", encoding="utf-8") as f:
         stations_data = json.load(f)
     published_stations = {s["id"]: s for s in stations_data}
@@ -88,11 +95,12 @@ def build_rer_schedule(
             for r in csv.DictReader(io.TextIOWrapper(f, encoding="utf-8-sig")):
                 cal_dates[r["service_id"]][r["date"]] = int(r["exception_type"])
 
-        # Filter active trips for RER E on reference_date
+        # Filter active trips for all 5 RER lines on reference_date
         active_trips: List[Dict[str, Any]] = []
         with z.open("trips.txt") as f:
             for r in csv.DictReader(io.TextIOWrapper(f, encoding="utf-8-sig")):
-                if r.get("route_id") == RER_E_ROUTE_ID:
+                rid = r.get("route_id")
+                if rid in RER_ROUTE_IDS:
                     sid = r["service_id"]
                     c = calendar.get(sid)
                     active = False
@@ -109,7 +117,11 @@ def build_rer_schedule(
                     if active:
                         active_trips.append(r)
 
-        print(f"[rer_schedule] Active RER E trips on {reference_date}: {len(active_trips)}")
+        trips_per_line = defaultdict(int)
+        for t in active_trips:
+            trips_per_line[RER_ROUTE_IDS[t["route_id"]]] += 1
+        print(f"[rer_schedule] Active RER trips on {reference_date}: {len(active_trips)} "
+              f"({dict(sorted(trips_per_line.items()))})")
 
         # Load stops and parent stations
         stops: Dict[str, Dict[str, Any]] = {}
@@ -133,74 +145,59 @@ def build_rer_schedule(
     station_name_to_index: Dict[str, int] = {}
 
     out_trips: List[List[Any]] = []
-    truncated_trips_count = 0
-    dropped_stops_count = 0
     min_gtfs_time = float("inf")
     max_gtfs_time = 0
+    memo_projections: Dict[Tuple[str, Tuple[str, ...]], List[Dict[str, Any]]] = {}
 
     for trip in active_trips:
         tid = trip["trip_id"]
+        route_id = trip["route_id"]
         st_list = sorted(trip_stop_times[tid], key=lambda s: int(s["stop_sequence"]))
-        if not st_list:
-            continue
-
-        # Check scope against published stations
-        in_scope = []
-        for st in st_list:
-            sid = st["stop_id"].strip()
-            parent = parent_map.get(sid, sid)
-            in_scope.append(parent in published_stations or sid in published_stations)
-
-        first_in = next((i for i, fl in enumerate(in_scope) if fl), None)
-        if first_in is None:
-            continue
-        last_in = len(in_scope) - 1 - next(i for i, fl in enumerate(reversed(in_scope)) if fl)
-
-        dropped = len(st_list) - (last_in - first_in + 1)
-        if dropped > 0:
-            truncated_trips_count += 1
-            dropped_stops_count += dropped
-
-        kept_st_list = st_list[first_in : last_in + 1]
-        if len(kept_st_list) < 2:
+        if len(st_list) < 2:
             continue
 
         shape_id = trip.get("shape_id", "").strip()
         if shape_id not in rer_shapes:
             raise ValueError(f"Trip {tid} references shape {shape_id} missing from rer_shapes.bin")
 
-        shape_info = rer_shapes[shape_id]
-        shape_coords = np.array(shape_info["coords"])
-        step = shape_info["step"]
-        tail = shape_info["tail"]
-        last_dist = (len(shape_coords) - 2) * step + tail
-        cum_dists = np.array([0.0] + [i * step for i in range(1, len(shape_coords) - 1)] + [last_dist])
+        stop_ids = tuple(st["stop_id"].strip() for st in st_list)
+        memo_key = (shape_id, stop_ids)
 
-        stop_tuples: List[Tuple[str, float, float]] = []
-        stop_station_names: List[str] = []
-        for st in kept_st_list:
+        if memo_key not in memo_projections:
+            shape_info = rer_shapes[shape_id]
+            shape_coords = np.array(shape_info["coords"])
+            step = shape_info["step"]
+            tail = shape_info["tail"]
+            last_dist = (len(shape_coords) - 2) * step + tail
+            cum_dists = np.array([0.0] + [i * step for i in range(1, len(shape_coords) - 1)] + [last_dist])
+
+            stop_tuples: List[Tuple[str, float, float]] = []
+            for sid in stop_ids:
+                stop_obj = stops[sid]
+                stop_tuples.append((sid, float(stop_obj["stop_lon"]), float(stop_obj["stop_lat"])))
+
+            projections = project_trip_stops_monotonically(
+                stop_tuples,
+                shape_coords,
+                cum_dists,
+                min_station_gap_m=1.0,
+            )
+            memo_projections[memo_key] = projections
+        else:
+            projections = memo_projections[memo_key]
+
+        trip_stops_data: List[List[Any]] = []
+        for st, proj in zip(st_list, projections):
             sid = st["stop_id"].strip()
             stop_obj = stops[sid]
             parent = parent_map.get(sid, sid)
             st_meta = published_stations.get(parent) or published_stations.get(sid)
             station_name = st_meta["name"] if st_meta else stop_obj.get("stop_name", "").strip()
-            stop_tuples.append((sid, float(stop_obj["stop_lon"]), float(stop_obj["stop_lat"])))
-            stop_station_names.append(station_name)
 
-        # Monotonic projection onto SHP2 shape
-        projections = project_trip_stops_monotonically(
-            stop_tuples,
-            shape_coords,
-            cum_dists,
-            min_station_gap_m=1.0,
-        )
-
-        trip_stops_data: List[List[Any]] = []
-        for st, proj, st_name in zip(kept_st_list, projections, stop_station_names):
-            if st_name not in station_name_to_index:
-                station_name_to_index[st_name] = offset + len(rer_station_names)
-                rer_station_names.append(st_name)
-            st_idx = station_name_to_index[st_name]
+            if station_name not in station_name_to_index:
+                station_name_to_index[station_name] = offset + len(rer_station_names)
+                rer_station_names.append(station_name)
+            st_idx = station_name_to_index[station_name]
 
             arr_s = time_to_seconds(st["arrival_time"])
             dep_s = time_to_seconds(st["departure_time"])
@@ -219,7 +216,7 @@ def build_rer_schedule(
 
         out_trips.append([
             tid,
-            RER_E_ROUTE_ID,
+            route_id,
             dir_id,
             shape_id,
             start_s,
@@ -248,13 +245,12 @@ def build_rer_schedule(
 
     file_size = out_path.stat().st_size
     print(f"[rer_schedule] Saved {out_path}: {file_size} bytes ({file_size/1024:.1f} KB)")
-    print(f"[rer_schedule] Trips: {len(out_trips)}, Truncated: {truncated_trips_count}, Dropped stops: {dropped_stops_count}")
+    print(f"[rer_schedule] Total active trips: {len(out_trips)}, Unique patterns: {len(memo_projections)}, Unique RER stations: {len(rer_station_names)}")
     print(f"[rer_schedule] Min time: {min_gtfs_time} s, Max time: {max_gtfs_time} s")
 
     return {
         "trips_count": len(out_trips),
-        "truncated_trips": truncated_trips_count,
-        "dropped_stops": dropped_stops_count,
+        "unique_patterns": len(memo_projections),
         "rer_stations_count": len(rer_station_names),
         "offset": offset,
         "file_bytes": file_size,

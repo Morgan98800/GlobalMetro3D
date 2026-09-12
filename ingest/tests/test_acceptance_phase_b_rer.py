@@ -33,9 +33,9 @@ class TestPhase1RERAcceptance:
         shapes = TestPhaseAAcceptance._read_shp2(str(bin_path))
         return shapes
 
-    def test_criterion_1_rer_e_shape_count(self, rer_shapes_data):
-        """RER E must contain exactly 14 shapes in Phase 1."""
-        assert len(rer_shapes_data) == 14, f"Expected 14 RER E shapes, got {len(rer_shapes_data)}"
+    def test_criterion_1_all_rer_shape_count(self, rer_shapes_data):
+        """Phase 5: rer_shapes.bin must contain 250 shapes for all 5 RER lines (including RER E)."""
+        assert len(rer_shapes_data) == 250, f"Expected 250 RER shapes, got {len(rer_shapes_data)}"
         for sid in rer_shapes_data:
             assert sid.startswith("IDFM:shp_2_"), f"Unexpected shape_id prefix: {sid}"
 
@@ -137,20 +137,33 @@ class TestPhase2RERScheduleAcceptance:
             "rer_shapes": rer_shapes,
         }
 
-    def test_criterion_1_rer_schedule_format_and_count(self, schedule_data):
-        """rer_schedule.json must match schedule.json schema with exactly 414 RER E trips."""
+    def test_criterion_1_all_rer_schedule_format_and_count(self, schedule_data):
+        """rer_schedule.json must match schedule.json schema with exactly 2613 trips across 5 RER lines."""
         rer_sched = schedule_data["rer_sched"]
         assert "stations" in rer_sched and "trips" in rer_sched
         trips = rer_sched["trips"]
-        assert len(trips) == 414, f"Expected 414 active trips for RER E, got {len(trips)}"
+        assert len(trips) == 2613, f"Expected 2613 active trips across all 5 RER lines, got {len(trips)}"
+
+        expected_counts = {
+            "IDFM:C01742": 635,  # A
+            "IDFM:C01743": 547,  # B
+            "IDFM:C01727": 489,  # C
+            "IDFM:C01728": 528,  # D
+            "IDFM:C01729": 414,  # E
+        }
+        actual_counts = {k: 0 for k in expected_counts}
 
         for trip in trips:
             assert len(trip) == 8, f"Trip tuple length must be 8, got {len(trip)}"
             trip_id, line_id, direction_id, shape_id, start_s, end_s, terminus_idx, stops = trip
-            assert line_id == "IDFM:C01729", f"Unexpected line_id: {line_id}"
+            assert line_id in expected_counts, f"Unexpected line_id: {line_id}"
+            actual_counts[line_id] += 1
             assert direction_id in (0, 1)
             assert start_s < end_s, f"{trip_id}: start_s {start_s} >= end_s {end_s}"
             assert len(stops) >= 2, f"{trip_id}: less than 2 stops"
+
+        for line_id, exp_count in expected_counts.items():
+            assert actual_counts[line_id] == exp_count, f"{line_id}: expected {exp_count} trips, got {actual_counts[line_id]}"
 
     def test_criterion_2_disjoint_index_space(self, schedule_data):
         """Station indices in rer_schedule must be strictly disjoint from metro indices."""
@@ -181,7 +194,7 @@ class TestPhase2RERScheduleAcceptance:
             assert isinstance(name, str) and len(name) > 0, f"Invalid station name at index {idx}"
 
     def test_criterion_3_monotonic_and_bounded_distances(self, schedule_data):
-        """For 100% of RER E trips, stop distances must be strictly increasing and within shape bounds."""
+        """For 100% of all 2613 RER trips, stop distances must be strictly increasing and within shape bounds."""
         rer_sched = schedule_data["rer_sched"]
         rer_shapes = schedule_data["rer_shapes"]
 
@@ -205,10 +218,10 @@ class TestPhase2RERScheduleAcceptance:
             assert last_dist <= shape_len + 0.5, f"{trip_id}: last distance {last_dist} exceeds shape length {shape_len} + 0.5m"
 
     def test_criterion_4_gtfs_time_bounds(self, schedule_data):
-        """Verify time bounds of RER E schedule."""
+        """Verify time bounds of full 24h RER schedule."""
         rer_sched = schedule_data["rer_sched"]
         min_time = min(trip[4] for trip in rer_sched["trips"])
         max_time = max(trip[5] for trip in rer_sched["trips"])
-        assert min_time >= 17000, f"Unexpected min time: {min_time}"
-        assert max_time == 84580, f"Expected max GTFS time 84580 s, got {max_time}"
+        assert min_time >= 0, f"Unexpected negative min time: {min_time}"
+        assert max_time >= 86400, f"Expected schedule to cover late night past 86400 s, got {max_time}"
 

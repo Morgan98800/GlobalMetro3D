@@ -555,7 +555,14 @@ export class SubwayDeckOverlay {
           bounds: this.bounds,
           elevationOffset: this.followElevationLineId
             ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
-            : undefined
+            : undefined,
+          onClick: (train) => {
+            if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+            this.selectedTrainId = train.id;
+            this.onTrainClick(train);
+            this.updateLayers();
+          },
+          onHover: this.onTrainHover
         })
       : [];
     const capsuleLayers = this.data?.shapes && this.data?.rollingStockDb

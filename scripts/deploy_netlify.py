@@ -71,8 +71,9 @@ def main():
         import certifi
         ssl_context.load_verify_locations(certifi.where())
     except Exception:
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
+        pass
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
 
     req = urllib.request.Request(url, data=zip_bytes, headers=headers, method="POST")
     try:

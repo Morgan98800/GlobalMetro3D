@@ -1,5 +1,6 @@
 import { ScenegraphLayer } from '@deck.gl/mesh-layers';
-import { GLBLoader } from '@loaders.gl/gltf';
+import { parse } from '@loaders.gl/core';
+import { GLTFLoader } from '@loaders.gl/gltf';
 import type { ShapeEntry } from '../sim/shapes';
 import { coordAtDistance, splitIntoCars } from '../sim/shapes_loader';
 import type { RollingStockDatabase } from '../sim/rolling_stock';
@@ -8,7 +9,7 @@ import type { TrainMarker } from './trains_layer';
 import { carCenterSpacingM, compassBearingToDeckYaw } from './train_model_geometry';
 export { resolveTrainRenderLayers } from './train_render_fallback';
 
-export const TRAIN_MODEL_ZOOM_THRESHOLD = 13.5;
+export const TRAIN_MODEL_ZOOM_THRESHOLD = 13.0;
 const LOAD_TIMEOUT_MS = 5000;
 const FAMILY_URLS = {
   pneumatic_generic: '/models/train/pneumatic_generic__neutral.glb',
@@ -35,6 +36,7 @@ type AssetStatus = 'idle' | 'loading' | 'ready' | 'failed';
 interface ModelCar {
   position: [number, number, number];
   orientation: readonly [number, number, number];
+  train: TrainMarker;
 }
 
 interface ModelLayerParams {
@@ -44,6 +46,8 @@ interface ModelLayerParams {
   grazingCamera: boolean;
   bounds?: [[number, number], [number, number]] | null;
   elevationOffset?: { lineId: string; offset: number };
+  onClick?: (train: TrainMarker) => void;
+  onHover?: (info: any) => void;
 }
 
 const assetStatus = new Map<TrainModelFamily, AssetStatus>();
@@ -81,7 +85,7 @@ function beginAssetLoad(family: TrainModelFamily): void {
       if (!response.ok) throw new Error(`train model ${family}: HTTP ${response.status}`);
       return response.arrayBuffer();
     })
-    .then(buffer => GLBLoader.parse(buffer))
+    .then(buffer => parse(buffer, GLTFLoader))
     .then(gltf => {
       parsedScenegraphs.set(family, gltf);
       assetStatus.set(family, 'ready');
@@ -161,11 +165,15 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
       const car = carsForTrain[index];
       if (car.length < 2) continue;
       const spacingM = carCenterSpacingM(stock.car_length_m, stock.inter_car_gap_m);
-      // Rigid car body: orient/position by the chord between the two bogie
-      // pivots (not the full car length), otherwise it fans out in curves.
-      const centerDistance = headDistance - index * spacingM - stock.car_length_m / 2;
-      const bogieTailDistance = Math.max(0, centerDistance - bogieSpanM / 2);
-      const bogieHeadDistance = Math.max(0, centerDistance + bogieSpanM / 2);
+      const centerDistance = trainDir === 1
+        ? headDistance - index * spacingM - stock.car_length_m / 2
+        : headDistance + index * spacingM + stock.car_length_m / 2;
+      const bogieTailDistance = trainDir === 1
+        ? Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2))
+        : Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2));
+      const bogieHeadDistance = trainDir === 1
+        ? Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2))
+        : Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2));
       cars.push({
         position: modelPosition(
           shape,
@@ -175,7 +183,8 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
             ? params.elevationOffset.offset
             : 0)
         ),
-        orientation: modelOrientation(shape, bogieTailDistance, bogieHeadDistance)
+        orientation: modelOrientation(shape, bogieTailDistance, bogieHeadDistance),
+        train
       });
     }
   }
@@ -214,7 +223,17 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
       getOrientation: car => car.orientation,
       sizeScale: 1,
       _lighting: 'pbr',
-      pickable: false,
+      pickable: true,
+      onClick: (info: any) => {
+        if (info.object?.train && params.onClick) {
+          params.onClick(info.object.train);
+        }
+      },
+      onHover: (info: any) => {
+        if (params.onHover) {
+          params.onHover(info.object ? { ...info, object: info.object.train } : info);
+        }
+      },
       onFirstDraw: () => undefined
     }));
   }

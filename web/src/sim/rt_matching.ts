@@ -70,6 +70,7 @@ export interface TimelineStop extends SchedStop {
 
 export interface Timeline {
   tripId: string;
+  lineId: string;
   shapeId: string;
   dir: 0 | 1;
   stops: TimelineStop[];
@@ -80,25 +81,80 @@ export interface Timeline {
 
 /* ------------------------------------------------------------ réglages --- */
 
-export const CONFIG = {
+export const RER_LINE_IDS = new Set([
+  'IDFM:C01742', // RER A
+  'IDFM:C01743', // RER B
+  'IDFM:C01727', // RER C
+  'IDFM:C01728', // RER D
+  'IDFM:C01729', // RER E
+]);
+
+export function isRerLine(lineId: string): boolean {
+  return RER_LINE_IDS.has(lineId);
+}
+
+export interface KinematicProfile {
   /** fenêtre de rapprochement sur l'heure théorique, en secondes */
-  matchWindow: 120,
+  matchWindow: number;
   /** au-delà, un retard est jugé aberrant : la course est probablement supprimée */
-  maxDelay: 15 * 60,
+  maxDelay: number;
   /** lissage exponentiel du retard par course */
-  alpha: 0.4,
+  alpha: number;
   /** au-delà du dernier arrêt mesuré, le retard décroît sur cette distance (m) */
-  decayDistance: 4000,
+  decayDistance: number;
   /** une mesure plus vieille que ça n'est plus considérée comme fraîche */
-  staleAfter: 6 * 60,
+  staleAfter: number;
   /** accélération et décélération, m/s² */
+  accel: number;
+  decel: number;
+  /** vitesse maximale par défaut, m/s */
+  vMax: number;
+  /** temps de stationnement minimal si le GTFS n'en donne pas, s */
+  minDwell: number;
+  /** durée de résorption de l'erreur d'extrapolation en ms */
+  reconcileDurationMs: number;
+  /** seuil d'erreur pour recalage franc sans transition en m */
+  reconcileThresholdM: number;
+}
+
+export const METRO_PROFILE: KinematicProfile = {
+  matchWindow: 120,
+  maxDelay: 15 * 60,
+  alpha: 0.4,
+  decayDistance: 4000,
+  staleAfter: 6 * 60,
   accel: 1.0,
   decel: 1.2,
-  /** vitesse maximale par défaut, m/s (≈ 70 km/h) */
   vMax: 19.4,
-  /** temps de stationnement minimal si le GTFS n'en donne pas, s */
   minDwell: 20,
+  reconcileDurationMs: 300,
+  reconcileThresholdM: 20,
 };
+
+export const RER_PROFILE: KinematicProfile = {
+  matchWindow: 180,
+  maxDelay: 20 * 60,
+  alpha: 0.4,
+  decayDistance: 6000,
+  staleAfter: 6 * 60,
+  accel: 0.8,
+  decel: 0.9,
+  vMax: 30.5,
+  minDwell: 45,
+  reconcileDurationMs: 400,
+  reconcileThresholdM: 50,
+};
+
+export function getKinematicProfile(lineId: string): KinematicProfile {
+  return isRerLine(lineId) ? RER_PROFILE : METRO_PROFILE;
+}
+
+export const CONFIG = METRO_PROFILE;
+
+export function clampSpeed(speed: number, maxV = 25): number {
+  if (!Number.isFinite(speed)) return 0;
+  return Math.max(0, Math.min(maxV, speed));
+}
 
 /* -------------------------------------------------- niveau 2 : matching --- */
 
@@ -114,6 +170,7 @@ export function matchScore(journey: RtJourney, trip: SchedTrip): number {
   if (journey.lineId !== trip.lineId) return Infinity;
   if (journey.dir !== null && journey.dir !== trip.dir) return Infinity;
 
+  const profile = getKinematicProfile(trip.lineId);
   const byStop = new Map(trip.stops.map((s) => [s.stopId, s]));
   const diffs: number[] = [];
 
@@ -127,7 +184,7 @@ export function matchScore(journey: RtJourney, trip: SchedTrip): number {
 
   diffs.sort((a, b) => a - b);
   const median = diffs[Math.floor(diffs.length / 2)];
-  if (median > CONFIG.matchWindow) return Infinity;
+  if (median > profile.matchWindow) return Infinity;
 
   // un rapprochement appuyé sur plusieurs arrêts communs vaut mieux qu'un seul
   return median / Math.sqrt(diffs.length);
@@ -202,12 +259,13 @@ export function buildTimeline(
   calls: readonly RtCall[],
   previous?: Timeline
 ): Timeline {
+  const profile = getKinematicProfile(trip.lineId);
   const measured = new Map<string, number>();
   let lastMeasurementAt: number | null = null;
 
   for (const call of calls) {
     const offset = call.expected - call.aimed;
-    if (Math.abs(offset) > CONFIG.maxDelay) continue; // aberrant, ignoré
+    if (Math.abs(offset) > profile.maxDelay) continue; // aberrant, ignoré
     measured.set(call.stopId, offset);
     lastMeasurementAt = Math.max(lastMeasurementAt ?? -Infinity, call.expected);
   }
@@ -221,7 +279,7 @@ export function buildTimeline(
     const prev = previous?.stops.find((p) => p.stopId === s.stopId);
     if (prev?.measured) {
       const prevOffset = prev.cArr - prev.arr;
-      return CONFIG.alpha * raw + (1 - CONFIG.alpha) * prevOffset;
+      return profile.alpha * raw + (1 - profile.alpha) * prevOffset;
     }
     return raw;
   });
@@ -248,7 +306,7 @@ export function buildTimeline(
     // après la dernière mesure : décroissance, une rame retardée rattrape en partie
     if (before !== undefined) {
       const gap = trip.stops[i].dist - trip.stops[before].dist;
-      const k = Math.max(0, 1 - gap / CONFIG.decayDistance);
+      const k = Math.max(0, 1 - gap / profile.decayDistance);
       return offsets[before]! * k;
     }
 
@@ -258,7 +316,7 @@ export function buildTimeline(
 
   const stops: TimelineStop[] = trip.stops.map((s, i) => {
     const offset = resolve(i);
-    const dwell = Math.max(s.dep - s.arr, CONFIG.minDwell);
+    const dwell = Math.max(s.dep - s.arr, profile.minDwell);
     const cArr = s.arr + offset;
     return { ...s, cArr, cDep: cArr + dwell, measured: offsets[i] !== null };
   });
@@ -267,12 +325,13 @@ export function buildTimeline(
   for (let i = 1; i < stops.length; i++) {
     if (stops[i].cArr < stops[i - 1].cDep + 1) {
       stops[i].cArr = stops[i - 1].cDep + 1;
-      stops[i].cDep = Math.max(stops[i].cDep, stops[i].cArr + CONFIG.minDwell);
+      stops[i].cDep = Math.max(stops[i].cDep, stops[i].cArr + profile.minDwell);
     }
   }
 
   return {
     tripId: trip.tripId,
+    lineId: trip.lineId,
     shapeId: trip.shapeId,
     dir: trip.dir,
     stops,
@@ -296,19 +355,25 @@ export interface Position {
 }
 
 /** Profil trapézoïdal : fraction de distance parcourue à la fraction de temps tau. */
-function trapezoid(distance: number, duration: number, tau: number): { f: number; v: number } {
+function trapezoid(
+  distance: number,
+  duration: number,
+  tau: number,
+  profile: KinematicProfile = METRO_PROFILE
+): { f: number; v: number } {
   if (duration <= 0) return { f: tau >= 1 ? 1 : 0, v: 0 };
 
-  const { accel: a, decel: b } = CONFIG;
+  const { accel: a, decel: b, vMax } = profile;
   const vMean = distance / duration;
   // vitesse de palier résolue pour que l'aire du trapèze vaille la distance
   let vc = vMean / (1 - (vMean * (a + b)) / (2 * a * b * duration) || 1);
   if (!isFinite(vc) || vc <= 0) vc = vMean;
-  vc = Math.min(vc, CONFIG.vMax);
+  vc = Math.min(vc, vMax);
 
   const tA = vc / a;
   const tD = vc / b;
-  const t = tau * duration;
+  const boundedTau = Math.max(0, Math.min(1, tau));
+  const t = boundedTau * duration;
 
   if (t <= 0) return { f: 0, v: 0 };
   if (t >= duration) return { f: 1, v: 0 };
@@ -328,15 +393,18 @@ function trapezoid(distance: number, duration: number, tau: number): { f: number
     v = vc;
   }
 
-  return { f: Math.max(0, Math.min(1, travelled / distance)), v };
+  const maxClamp = profile.vMax * 1.15;
+  return { f: Math.max(0, Math.min(1, travelled / distance)), v: clampSpeed(v, maxClamp) };
 }
 
 /** Position de la rame à l'instant t (secondes de service). */
 export function positionAt(timeline: Timeline, t: number): Position | null {
   const { stops } = timeline;
   if (stops.length < 2) return null;
-  if (t < stops[0].cDep) return null;
+  if (t < stops[0].cArr) return null;
   if (t > stops[stops.length - 1].cArr) return null;
+
+  const profile = getKinematicProfile(timeline.lineId || '');
 
   for (let i = 0; i < stops.length - 1; i++) {
     const a = stops[i];
@@ -348,7 +416,7 @@ export function positionAt(timeline: Timeline, t: number): Position | null {
         dist: a.dist,
         speed: 0,
         delay: a.cArr - a.arr,
-        confidence: confidenceFor(timeline, a.measured, a.measured, t),
+        confidence: confidenceFor(timeline, a.measured, a.measured, t, profile),
         nextStopId: b.stopId,
         atStop: true,
       };
@@ -357,13 +425,13 @@ export function positionAt(timeline: Timeline, t: number): Position | null {
     if (t >= a.cDep && t <= b.cArr) {
       const distance = b.dist - a.dist;
       const duration = b.cArr - a.cDep;
-      const tau = duration > 0 ? (t - a.cDep) / duration : 1;
-      const { f, v } = trapezoid(distance, duration, tau);
+      const tau = duration > 0 ? Math.max(0, Math.min(1, (t - a.cDep) / duration)) : 1;
+      const { f, v } = trapezoid(distance, duration, tau, profile);
       return {
         dist: a.dist + f * distance,
-        speed: v,
+        speed: clampSpeed(v, profile.vMax * 1.15),
         delay: a.cArr - a.arr + tau * (b.cArr - b.arr - (a.cArr - a.arr)),
-        confidence: confidenceFor(timeline, a.measured, b.measured, t),
+        confidence: confidenceFor(timeline, a.measured, b.measured, t, profile),
         nextStopId: b.stopId,
         atStop: false,
       };
@@ -377,10 +445,11 @@ function confidenceFor(
   timeline: Timeline,
   aMeasured: boolean,
   bMeasured: boolean,
-  t: number
+  t: number,
+  profile: KinematicProfile = METRO_PROFILE
 ): Confidence {
   if (timeline.measuredCount === 0) return 'scheduled';
-  if (timeline.lastMeasurementAt !== null && t - timeline.lastMeasurementAt > CONFIG.staleAfter) {
+  if (timeline.lastMeasurementAt !== null && t - timeline.lastMeasurementAt > profile.staleAfter) {
     return 'scheduled';
   }
   if (aMeasured && bMeasured) return 'measured';

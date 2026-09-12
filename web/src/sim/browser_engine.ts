@@ -8,9 +8,12 @@ import {
   matchJourneys,
   buildTimeline,
   positionAt,
+  clampSpeed,
   createGhostTracker,
   updateGhosts,
   stats,
+  isRerLine,
+  getKinematicProfile,
   type SchedTrip,
   type Timeline,
   type Confidence
@@ -21,6 +24,7 @@ import type { LineMetadata } from '@paris-subway/shared';
 
 export interface EngineEvents {
   onTick: (trains: TrainMarker[], activeCount: number) => void;
+  onRender?: (trains: TrainMarker[], activeCount: number) => void;
   onPrimStatus: (status: PrimStatus) => void;
 }
 
@@ -80,6 +84,7 @@ export class BrowserSubwayEngine {
   private everMatchedTrips = new Set<string>();
   private timelines = new Map<string, Timeline>();
   private suppressedTripIds = new Set<string>();
+  private loggedDistanceClamps = new Set<string>();
 
   private serviceDistanceM = 0;
   private distanceServiceDate = '';
@@ -156,6 +161,82 @@ export class BrowserSubwayEngine {
 
     this.lineIds = lines.map(l => l.id);
     this.initializeServiceDistance(new Date());
+
+    // Asynchronous non-blocking loading of RER data
+    this.loadRerData().catch(err => {
+      console.warn('[engine] Failed to load RER data:', err);
+    });
+  }
+
+  public async loadRerData(): Promise<void> {
+    try {
+      console.log('[engine] Loading RER shapes and schedule...');
+      const [rerShapesMap, rerScheduleRes] = await Promise.all([
+        loadShapes(dataUrl('/data/rer_shapes.bin')),
+        fetch(dataUrl('/data/rer_schedule.json'))
+      ]);
+
+      if (!rerScheduleRes.ok) {
+        throw new Error(`HTTP ${rerScheduleRes.status}`);
+      }
+
+      const rerScheduleData = await rerScheduleRes.json();
+      const rerStations: string[] = rerScheduleData.stations || [];
+
+      for (let i = 0; i < rerStations.length; i++) {
+        if (rerStations[i]) {
+          this.stationNames[i] = rerStations[i];
+        }
+      }
+
+      for (const [id, shape] of rerShapesMap.entries()) {
+        this.shapes.set(id, shape);
+      }
+
+      const rerTrips: TripData[] = rerScheduleData.trips.map((t: any): TripData => {
+        const destName = this.stationNames[t[6]] || 'Terminus';
+        const stops: Array<[number, number, number, string]> = t[7].map((s: any) => [
+          s[0], // arr
+          s[1], // dep
+          s[2], // distM
+          this.stationNames[s[3]] || 'Station'
+        ]);
+
+        const tripId = t[0];
+        const lineId = t[1];
+        const dir = (t[2] === 0 ? 0 : 1) as 0 | 1;
+        const shapeId = t[3];
+
+        this.schedTripsMap.set(tripId, {
+          tripId,
+          lineId,
+          dir,
+          shapeId,
+          stops: stops.map(s => ({
+            stopId: normalizeStopName(s[3]),
+            arr: s[0],
+            dep: s[1],
+            dist: s[2]
+          }))
+        });
+
+        return {
+          id: tripId,
+          line: lineId,
+          dir,
+          shapeId,
+          t0: t[4],
+          t1: t[5],
+          destName,
+          stops
+        };
+      });
+
+      this.trips.push(...rerTrips);
+      console.log(`[engine] Loaded ${rerShapesMap.size} RER shapes and ${rerTrips.length} RER scheduled trips.`);
+    } catch (err) {
+      console.warn('[engine] Could not load RER dataset:', err);
+    }
   }
 
   public startRealtime() {
@@ -432,9 +513,21 @@ export class BrowserSubwayEngine {
         const posResult = positionAt(timeline, serviceSeconds);
         if (!posResult) continue;
 
-        const dTick = posResult.dist;
-        const vMps = posResult.speed;
-        const speedKmh = Math.round(vMps * 3.6);
+        const unclampedDistance = posResult.dist;
+        const distanceClampWarningToleranceM = 0.5;
+        const dTick = Math.max(0, Math.min(shape.length, unclampedDistance));
+        if (Math.abs(dTick - unclampedDistance) > distanceClampWarningToleranceM && !this.loggedDistanceClamps.has(trip.id)) {
+          this.loggedDistanceClamps.add(trip.id);
+          console.warn('[engine] Clamped out-of-bounds train distance', {
+            tripId: trip.id,
+            unclampedDistance,
+            shapeLength: shape.length,
+            terminalStation: trip.stops[trip.stops.length - 1]?.[3] || trip.destName
+          });
+        }
+        const vMps = clampSpeed(posResult.speed);
+        const maxDisplaySpeed = isRerLine(trip.line) ? 130 : 90;
+        const speedKmh = Math.round(Math.min(maxDisplaySpeed, vMps * 3.6));
         const delaySeconds = posResult.delay;
         const confidence: Confidence = posResult.confidence;
 
@@ -471,13 +564,14 @@ export class BrowserSubwayEngine {
           atStop: posResult.atStop
         };
 
+        const profile = getKinematicProfile(trip.line);
         const existing = this.trackedTrains.get(train.id);
         let reconcileOffset = 0;
         let reconcileStartTime = tickTimestamp;
 
         if (existing) {
           const rawError = existing.extrapolatedD - dTick;
-          if (Math.abs(rawError) > 20) {
+          if (Math.abs(rawError) > profile.reconcileThresholdM) {
             reconcileOffset = 0;
           } else {
             reconcileOffset = rawError;
@@ -501,10 +595,7 @@ export class BrowserSubwayEngine {
       this.trackedTrains = nextTrackedTrains;
       this.accumulateServiceDistance(activeTrainsList, now);
 
-      // If prefers-reduced-motion is active, positions apply per tick
-      if (this.reduceMotion) {
-        events.onTick(activeTrainsList, activeTrainsList.length);
-      }
+      events.onTick(activeTrainsList, activeTrainsList.length);
     };
 
     // First tick immediately
@@ -526,12 +617,13 @@ export class BrowserSubwayEngine {
           const { train, shape, dTick, speedMps, tTick, reconcileOffset, reconcileStartTime } = state;
 
           const dt = Math.max(0, (now - tTick) / 1000);
+          const profile = getKinematicProfile(train.line);
 
           let currentError = 0;
           if (reconcileOffset !== 0) {
             const elapsedReconcileMs = now - reconcileStartTime;
-            if (elapsedReconcileMs < 300) {
-              const factor = 1.0 - elapsedReconcileMs / 300;
+            if (elapsedReconcileMs < profile.reconcileDurationMs) {
+              const factor = 1.0 - elapsedReconcileMs / profile.reconcileDurationMs;
               currentError = reconcileOffset * factor;
             }
           }
@@ -557,12 +649,12 @@ export class BrowserSubwayEngine {
             this.fadingOutGhosts.delete(id);
           } else {
             // Keep ghost train in rendered set during 240ms fade
-            renderedTrains.push(ghost.train);
+            renderedTrains.push({ ...ghost.train, isGhost: true });
           }
         }
 
         // Report active trains count (excluding ghosts)
-        events.onTick(renderedTrains, this.trackedTrains.size);
+        events.onRender?.(renderedTrains, this.trackedTrains.size);
       }
 
       this.rafId = requestAnimationFrame(rafLoop);

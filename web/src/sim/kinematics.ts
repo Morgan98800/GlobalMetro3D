@@ -1,9 +1,15 @@
 import type { Shape } from './shapes_loader';
 import { coordAtDistance } from './shapes_loader';
 import type { TrainMarker } from '../map/trains_layer';
+import { isRerLine } from './rt_matching';
 
 const DEG_TO_RAD = Math.PI / 180;
 const RAD_TO_DEG = 180 / Math.PI;
+
+function clampSpeed(speed: number, maxSpeed = 25): number {
+  if (!Number.isFinite(speed)) return 0;
+  return Math.max(0, Math.min(maxSpeed, speed));
+}
 
 export function calculateBearing(lon1: number, lat1: number, lon2: number, lat2: number): number {
   const phi1 = lat1 * DEG_TO_RAD;
@@ -13,15 +19,17 @@ export function calculateBearing(lon1: number, lat1: number, lon2: number, lat2:
   const y = Math.sin(dlambda) * Math.cos(phi2);
   const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dlambda);
   const brg = Math.atan2(y, x) * RAD_TO_DEG;
-  return Math.round((brg + 360) % 360);
+  return (brg + 360) % 360;
 }
 
 export function getCoordAtDistance(shape: Shape, distM: number): [number, number] {
   const pt = coordAtDistance(shape, distM);
-  return [Number(pt[0].toFixed(5)), Number(pt[1].toFixed(5))];
+  // Conserver la précision du tracé : l'arrondi au 5e décimal créait des
+  // paliers d'environ un mètre dans les positions interpolées.
+  return [pt[0], pt[1]];
 }
 
-export function getSmoothedBearing(shape: Shape, distM: number, windowM: number = 30): number {
+export function getSmoothedBearing(shape: Shape, distM: number, windowM: number = 90): number {
   const d1 = Math.max(0, distM - windowM);
   const d2 = Math.min(shape.length, distM + windowM);
   const p1 = getCoordAtDistance(shape, d1);
@@ -111,8 +119,11 @@ export function computeTripKinematics(
           vMps = vCruise * (u / k);
         }
 
+        const isRer = isRerLine(trip.line);
+        const maxV = isRer ? 35 : 25;
         currentDistM = dist0 + Math.min(1.0, Math.max(0.0, progress)) * distSpanM;
-        speedKmh = Math.round(Math.min(85, Math.max(0, vMps * 3.6)));
+        vMps = clampSpeed(vMps, maxV);
+        speedKmh = Math.round(Math.min(isRer ? 130 : 90, vMps * 3.6));
         nextStationName = name1;
         break;
       }
@@ -132,7 +143,7 @@ export function computeTripKinematics(
     elevation: elevationOffset,
     brg,
     spd: speedKmh,
-    speedMps: vMps,
+    speedMps: clampSpeed(vMps),
     delay: delaySeconds,
     dest: trip.destName,
     next: nextStationName,

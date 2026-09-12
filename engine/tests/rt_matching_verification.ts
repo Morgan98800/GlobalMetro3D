@@ -165,4 +165,57 @@ assert.strictEqual(ghosts.size, 1, 'Suppressed after 3 misses');
 assert.ok(ghosts.has(missingTripId), 'Missing trip identified as ghost');
 console.log(`\n✓ Ghost train suppression verified (threshold = 3 polls)`);
 
-console.log('\n--- All RT Matching Tests PASSED ---');
+// --- RER E Real GTFS Schedule & Matching Verification ---
+console.log('\n--- Testing RER E RT Matching on rer_schedule.json ---');
+const rerSchedulePath = path.resolve('web/public/data/rer_schedule.json');
+if (fs.existsSync(rerSchedulePath)) {
+  const rerScheduleData = JSON.parse(fs.readFileSync(rerSchedulePath, 'utf8'));
+  const rerStations = rerScheduleData.stations;
+  const rerTrips = rerScheduleData.trips;
+  const rerPeakTrips = rerTrips.filter((t: any) => peakSeconds >= t[4] && peakSeconds <= t[5]);
+  console.log(`RER E trips: ${rerTrips.length}, active at peak 08:30: ${rerPeakTrips.length}`);
+
+  const rerActiveSchedTrips: SchedTrip[] = rerPeakTrips.map((t: any) => ({
+    tripId: t[0],
+    lineId: t[1],
+    dir: (t[2] === 0 ? 0 : 1) as 0 | 1,
+    shapeId: t[3],
+    stops: t[7].map((s: any) => ({
+      stopId: normalizeStopName(rerStations[s[3]] || ''),
+      arr: s[0],
+      dep: s[1],
+      dist: s[2]
+    }))
+  }));
+
+  const rerSimulatedJourneys: RtJourney[] = rerActiveSchedTrips.map((trip, idx) => {
+    const delay = Math.round((Math.sin(idx) * 60) + 45); // retards réalistes de -15s à 105s
+    const calls: RtCall[] = trip.stops.map(s => ({
+      stopId: s.stopId,
+      aimed: s.arr,
+      expected: s.arr + delay
+    }));
+    return {
+      lineId: trip.lineId,
+      dir: trip.dir,
+      destination: trip.stops[trip.stops.length - 1].stopId,
+      calls,
+      journeyRef: `rer_journey_${trip.tripId}`
+    };
+  });
+
+  const { matches: rerMatches } = matchJourneys(rerSimulatedJourneys, rerActiveSchedTrips);
+  const rerRate = (rerMatches.length / rerSimulatedJourneys.length) * 100;
+  console.log(`RER E Matching Rate (08:30): ${rerMatches.length}/${rerSimulatedJourneys.length} (${rerRate.toFixed(1)}%)`);
+  assert.ok(rerRate >= 95, `RER E Matching rate should be >= 95%, got ${rerRate}%`);
+
+  for (const rm of rerMatches) {
+    const timeline = buildTimeline(rm.trip, rm.journey.calls);
+    assert.strictEqual(timeline.lineId, 'IDFM:C01729');
+    const pos = positionAt(timeline, peakSeconds);
+    assert.ok(pos !== null, 'Train position must be computed');
+  }
+  console.log('✓ RER E Level 2 matching & Level 3 position verified successfully');
+}
+
+console.log('\n--- All RT Matching Tests (Metro + RER E) PASSED ---');

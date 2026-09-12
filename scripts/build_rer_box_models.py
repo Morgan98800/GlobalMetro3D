@@ -269,7 +269,53 @@ def cab_car(cfg: dict, corner_segments: int) -> Mesh:
 
 # --------------------------------------------------------------- texture
 
-def paint_texture(cfg: dict, corner_segments: int, belt_rgb, is_cab: bool) -> bytes:
+def make_rer_badge(letter: str, line_rgb: tuple[int, int, int], target_w: int = 38, target_h: int = 14, scale: int = 3):
+    """Génère le faux logo RER + pastille de ligne anti-aliasé en supersampling."""
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return None
+
+    H = target_h * scale
+    W = target_w * scale
+    pill_w = 22 * scale
+    circle_d = 14 * scale
+    gap = 2 * scale
+
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+
+    # 1. Cartouche RER sombre
+    pill_bg = (18, 22, 28, 255)
+    border_col = (255, 255, 255, 230)
+    draw.rounded_rectangle([0, 0, pill_w - 1, H - 1], radius=int(2.5 * scale), fill=pill_bg, outline=border_col, width=max(1, int(1 * scale)))
+
+    try:
+        font_rer = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", int(7.5 * scale))
+        font_letter = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", int(9 * scale))
+    except Exception:
+        font_rer = font_letter = ImageFont.load_default()
+
+    bb = draw.textbbox((0, 0), "RER", font=font_rer)
+    tx = (pill_w - (bb[2] - bb[0])) // 2
+    ty = (H - (bb[3] - bb[1])) // 2 - int(0.5 * scale)
+    draw.text((tx, ty), "RER", fill=(255, 255, 255), font=font_rer)
+
+    # 2. Pastille circulaire avec lettre de ligne
+    cx = pill_w + gap
+    draw.ellipse([cx, 0, cx + circle_d - 1, H - 1], fill=line_rgb + (255,), outline=(255, 255, 255, 230), width=max(1, int(1 * scale)))
+
+    # Contraste optimal (noir sur fond jaune pour le RER C, blanc sur les autres lignes)
+    text_col = (17, 24, 39) if letter == "C" else (255, 255, 255)
+    bb2 = draw.textbbox((0, 0), letter, font=font_letter)
+    lx = cx + (circle_d - (bb2[2] - bb2[0])) // 2
+    ly = (H - (bb2[3] - bb2[1])) // 2 - int(0.5 * scale)
+    draw.text((lx, ly), letter, fill=text_col, font=font_letter)
+
+    return img.resize((target_w, target_h), Image.Resampling.LANCZOS)
+
+
+def paint_texture(cfg: dict, corner_segments: int, belt_rgb, is_cab: bool, line_letter: str | None = None) -> bytes:
     """Peint l'albédo, ligne de pixels par ligne de pixels.
 
     Pour chaque rangée v on retrouve le point du profil correspondant, donc son
@@ -366,6 +412,39 @@ def paint_texture(cfg: dict, corner_segments: int, belt_rgb, is_cab: bool) -> by
             pixels[off] = rgb[0]
             pixels[off + 1] = rgb[1]
             pixels[off + 2] = rgb[2]
+
+    if line_letter:
+        badge = make_rer_badge(line_letter, belt_rgb)
+        if badge:
+            bw, bh = badge.size
+            badge_rgba = badge.convert("RGBA")
+            badge_data = list(badge_rgba.getdata())
+            positions_u = [2.0 / length, 7.5 / length, 13.0 / length]
+            for center_row in (43, 191):
+                for pu in positions_u:
+                    start_col = int(pu * TEX_WIDTH) - bw // 2
+                    start_row = center_row - bh // 2
+                    for by in range(bh):
+                        ty = start_row + by
+                        if ty < 0 or ty >= TEX_HEIGHT:
+                            continue
+                        for bx in range(bw):
+                            tx = start_col + bx
+                            if tx < 0 or tx >= TEX_WIDTH:
+                                continue
+                            pix = badge_data[by * bw + bx]
+                            alpha = pix[3] / 255.0
+                            if alpha <= 0:
+                                continue
+                            idx = (ty * TEX_WIDTH + tx) * 3
+                            if alpha >= 1.0:
+                                pixels[idx] = pix[0]
+                                pixels[idx + 1] = pix[1]
+                                pixels[idx + 2] = pix[2]
+                            else:
+                                pixels[idx] = int(pixels[idx] * (1.0 - alpha) + pix[0] * alpha)
+                                pixels[idx + 1] = int(pixels[idx + 1] * (1.0 - alpha) + pix[1] * alpha)
+                                pixels[idx + 2] = int(pixels[idx + 2] * (1.0 - alpha) + pix[2] * alpha)
 
     return write_png(pixels, TEX_WIDTH, TEX_HEIGHT)
 
@@ -512,7 +591,7 @@ def main() -> None:
             mesh = builder(cfg, segments)
             if args.forward_axis == "-z":
                 rotate_to_negative_z(mesh)
-            png = paint_texture(cfg, segments, belt, is_cab)
+            png = paint_texture(cfg, segments, belt, is_cab, line_letter=letter)
             if args.dump_texture and letter in (None, "A") and not is_cab:
                 Path(args.dump_texture).write_bytes(png)
             size = write_glb(out_dir / f"{name}.glb", mesh, png, name)

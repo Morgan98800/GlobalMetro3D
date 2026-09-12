@@ -195,12 +195,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_A__neutral.glb",
-          "source_sha256": "9fae7bd4ccad94477bca3c9568d7f496e28a4b1271cb8240c0caf0b273692bd1",
+          "source_sha256": "ee2a77d0f236efa2eab76b622e1b355dca00ff2fcf7dc20c5d192219b9396c1f",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_A__neutral.glb",
-        "sha256": "9fae7bd4ccad94477bca3c9568d7f496e28a4b1271cb8240c0caf0b273692bd1"
+        "sha256": "ee2a77d0f236efa2eab76b622e1b355dca00ff2fcf7dc20c5d192219b9396c1f"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -235,12 +235,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_B__neutral.glb",
-          "source_sha256": "d93e68d2d7eca314dc21b3b2e9e6e61f40c8cad387f41892a903231c270d1708",
+          "source_sha256": "bb73f0becd126f08578ce20437f0226fbf6f29a26c79f455741c5d5161b90d83",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_B__neutral.glb",
-        "sha256": "d93e68d2d7eca314dc21b3b2e9e6e61f40c8cad387f41892a903231c270d1708"
+        "sha256": "bb73f0becd126f08578ce20437f0226fbf6f29a26c79f455741c5d5161b90d83"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -275,12 +275,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_C__neutral.glb",
-          "source_sha256": "123c78d39f8d12c36e7a422bc138b0b2c45338d8f0beb784e58586d8bdc4536c",
+          "source_sha256": "6adf98bee2f1f9f5fbdfc3a0817405036fd975d38ce2ccab3803efe67722aad7",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_C__neutral.glb",
-        "sha256": "123c78d39f8d12c36e7a422bc138b0b2c45338d8f0beb784e58586d8bdc4536c"
+        "sha256": "6adf98bee2f1f9f5fbdfc3a0817405036fd975d38ce2ccab3803efe67722aad7"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -315,12 +315,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_D__neutral.glb",
-          "source_sha256": "006661cd7285cb584d0a5aa1f0b691163862c2c1a72a85c4f696ee740f095d54",
+          "source_sha256": "6c5e120df6571417cae59a212645e3399f4bd54f38c41ebd6167e3c88d96139e",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_D__neutral.glb",
-        "sha256": "006661cd7285cb584d0a5aa1f0b691163862c2c1a72a85c4f696ee740f095d54"
+        "sha256": "6c5e120df6571417cae59a212645e3399f4bd54f38c41ebd6167e3c88d96139e"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -355,12 +355,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_E__neutral.glb",
-          "source_sha256": "4377aa28383a56906848a8c19f22a4c1a046381ad5330e85da0603e3f0e89465",
+          "source_sha256": "31263ecaa75428f24256f9cacc603f774fa41a70f6cb0d9824f66d7438e5fd59",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_E__neutral.glb",
-        "sha256": "4377aa28383a56906848a8c19f22a4c1a046381ad5330e85da0603e3f0e89465"
+        "sha256": "31263ecaa75428f24256f9cacc603f774fa41a70f6cb0d9824f66d7438e5fd59"
       },
       "livery": {
         "status": "not_for_distribution",

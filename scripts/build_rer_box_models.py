@@ -382,7 +382,7 @@ def paint_texture(cfg: dict, corner_segments: int, belt_rgb, is_cab: bool, line_
             elif y < SKIRT_TOP:
                 rgb = TONE_SKIRT
             elif y > ROOF_BASE:
-                rgb = TONE_ROOF_EDGE if y < ROOF_BASE + 0.10 else TONE_ROOF
+                rgb = belt_rgb if abs(row - 118) <= 7 else (TONE_ROOF_EDGE if y < ROOF_BASE + 0.10 else TONE_ROOF)
             elif side < half_w * 0.72:
                 rgb = TONE_ROOF_EDGE        # congé de pavillon, hors flanc droit
             elif BELT[0] <= y <= BELT[1]:
@@ -420,7 +420,7 @@ def paint_texture(cfg: dict, corner_segments: int, belt_rgb, is_cab: bool, line_
             badge_rgba = badge.convert("RGBA")
             badge_data = list(badge_rgba.getdata())
             positions_u = [2.0 / length, 7.5 / length, 13.0 / length]
-            for center_row in (43, 191):
+            for center_row in (43, 118, 191):
                 for pu in positions_u:
                     start_col = int(pu * TEX_WIDTH) - bw // 2
                     start_row = center_row - bh // 2

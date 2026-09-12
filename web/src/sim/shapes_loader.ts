@@ -28,31 +28,34 @@ export type ShapeIndex = Map<string, Shape>;
 const SCALE = 1e-7;
 const MAGIC_V2 = 0x53485032; // 'SHP2'
 
-let pending: Promise<ShapeIndex> | null = null;
+const pendingRequests = new Map<string, Promise<ShapeIndex>>();
 
 /**
  * Charge et décode les tracés. Appelable depuis n'importe quel module :
- * le téléchargement n'a lieu qu'une fois.
+ * le téléchargement n'a lieu qu'une fois par URL distincte.
  */
 export function loadShapes(url = '/data/shapes.bin'): Promise<ShapeIndex> {
-  if (!pending) {
-    pending = fetch(url, { cache: 'force-cache' })
-      .then((res) => {
-        if (!res.ok) throw new Error(`shapes: HTTP ${res.status}`);
-        return res.arrayBuffer();
-      })
-      .then(decodeShapes)
-      .catch((err) => {
-        pending = null; // permet un nouvel essai après échec réseau
-        throw err;
-      });
-  }
-  return pending;
+  const existing = pendingRequests.get(url);
+  if (existing) return existing;
+
+  const promise = fetch(url, { cache: import.meta?.env?.DEV ? 'no-store' : 'force-cache' })
+    .then((res) => {
+      if (!res.ok) throw new Error(`shapes: HTTP ${res.status}`);
+      return res.arrayBuffer();
+    })
+    .then(decodeShapes)
+    .catch((err) => {
+      pendingRequests.delete(url); // permet un nouvel essai après échec réseau
+      throw err;
+    });
+
+  pendingRequests.set(url, promise);
+  return promise;
 }
 
 /** À n'utiliser qu'en test, pour repartir d'un état propre. */
 export function resetShapesCache(): void {
-  pending = null;
+  pendingRequests.clear();
 }
 
 export function decodeShapes(buffer: ArrayBuffer): ShapeIndex {

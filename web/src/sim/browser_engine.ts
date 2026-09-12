@@ -90,6 +90,8 @@ export class BrowserSubwayEngine {
   private distanceServiceDate = '';
   private distanceByTrip = new Map<string, number>();
 
+  private externalShapesMap?: Map<string, Shape>;
+
   constructor(apiKey?: string) {
     this.primClient = new PrimRealtimeClient(apiKey);
   }
@@ -98,11 +100,16 @@ export class BrowserSubwayEngine {
     return this.primClient;
   }
 
+  public getShapes(): Map<string, Shape> {
+    return this.shapes;
+  }
+
   public setFocusedLine(lineId: string | null) {
     this.focusedLineId = lineId;
   }
 
-  public async initialize(lines: LineMetadata[]) {
+  public async initialize(lines: LineMetadata[], externalShapesMap?: Map<string, Shape>) {
+    this.externalShapesMap = externalShapesMap;
     lines.forEach(l => this.linesMap.set(l.id, l));
 
     // 1. Fetch shapes.bin & schedule.json in parallel
@@ -191,6 +198,9 @@ export class BrowserSubwayEngine {
 
       for (const [id, shape] of rerShapesMap.entries()) {
         this.shapes.set(id, shape);
+        if (this.externalShapesMap) {
+          this.externalShapesMap.set(id, shape);
+        }
       }
 
       const rerTrips: TripData[] = rerScheduleData.trips.map((t: any): TripData => {

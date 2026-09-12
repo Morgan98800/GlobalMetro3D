@@ -109,3 +109,106 @@ class TestPhase1RERAcceptance:
 
             print(f"[test] {station_name} on {shape_id}: curv_dist={curv_dist:.1f}m, error={error_m:.1f}m")
             assert error_m < 50.0, f"Station {station_name} error {error_m:.1f}m exceeds 50m tolerance on {shape_id}"
+
+
+class TestPhase2RERScheduleAcceptance:
+
+    @pytest.fixture(scope="class")
+    def schedule_data(self):
+        root = Path(__file__).resolve().parent.parent.parent
+        rer_sched_path = root / "web" / "public" / "data" / "rer_schedule.json"
+        metro_sched_path = root / "web" / "public" / "data" / "schedule.json"
+        rer_shapes_path = root / "web" / "public" / "data" / "rer_shapes.bin"
+
+        assert rer_sched_path.exists(), f"rer_schedule.json missing: {rer_sched_path}"
+        assert metro_sched_path.exists(), f"schedule.json missing: {metro_sched_path}"
+        assert rer_shapes_path.exists(), f"rer_shapes.bin missing: {rer_shapes_path}"
+
+        with open(rer_sched_path, "r", encoding="utf-8") as f:
+            rer_sched = json.load(f)
+        with open(metro_sched_path, "r", encoding="utf-8") as f:
+            metro_sched = json.load(f)
+
+        rer_shapes = TestPhaseAAcceptance._read_shp2(str(rer_shapes_path))
+
+        return {
+            "rer_sched": rer_sched,
+            "metro_sched": metro_sched,
+            "rer_shapes": rer_shapes,
+        }
+
+    def test_criterion_1_rer_schedule_format_and_count(self, schedule_data):
+        """rer_schedule.json must match schedule.json schema with exactly 414 RER E trips."""
+        rer_sched = schedule_data["rer_sched"]
+        assert "stations" in rer_sched and "trips" in rer_sched
+        trips = rer_sched["trips"]
+        assert len(trips) == 414, f"Expected 414 active trips for RER E, got {len(trips)}"
+
+        for trip in trips:
+            assert len(trip) == 8, f"Trip tuple length must be 8, got {len(trip)}"
+            trip_id, line_id, direction_id, shape_id, start_s, end_s, terminus_idx, stops = trip
+            assert line_id == "IDFM:C01729", f"Unexpected line_id: {line_id}"
+            assert direction_id in (0, 1)
+            assert start_s < end_s, f"{trip_id}: start_s {start_s} >= end_s {end_s}"
+            assert len(stops) >= 2, f"{trip_id}: less than 2 stops"
+
+    def test_criterion_2_disjoint_index_space(self, schedule_data):
+        """Station indices in rer_schedule must be strictly disjoint from metro indices."""
+        metro_sched = schedule_data["metro_sched"]
+        rer_sched = schedule_data["rer_sched"]
+
+        metro_indices = set()
+        for t in metro_sched["trips"]:
+            metro_indices.add(t[6])
+            for s in t[7]:
+                metro_indices.add(s[3])
+
+        offset = max(metro_indices) + 1
+
+        rer_indices = set()
+        for t in rer_sched["trips"]:
+            rer_indices.add(t[6])
+            for s in t[7]:
+                rer_indices.add(s[3])
+
+        assert min(rer_indices) >= offset, f"Min RER index {min(rer_indices)} < offset {offset}"
+        assert metro_indices.isdisjoint(rer_indices), "Collision detected between metro and RER station indices!"
+
+        # Ensure stations array can be directly indexed by station_index
+        for idx in rer_indices:
+            assert idx < len(rer_sched["stations"]), f"Station index {idx} exceeds stations array length {len(rer_sched['stations'])}"
+            name = rer_sched["stations"][idx]
+            assert isinstance(name, str) and len(name) > 0, f"Invalid station name at index {idx}"
+
+    def test_criterion_3_monotonic_and_bounded_distances(self, schedule_data):
+        """For 100% of RER E trips, stop distances must be strictly increasing and within shape bounds."""
+        rer_sched = schedule_data["rer_sched"]
+        rer_shapes = schedule_data["rer_shapes"]
+
+        shape_lengths = {}
+        for sid, s in rer_shapes.items():
+            shape_lengths[sid] = (len(s["coords"]) - 2) * s["step"] + s["tail"]
+
+        for trip in rer_sched["trips"]:
+            trip_id = trip[0]
+            shape_id = trip[3]
+            stops = trip[7]
+            shape_len = shape_lengths.get(shape_id)
+            assert shape_len is not None, f"{trip_id}: shape {shape_id} missing from rer_shapes.bin"
+
+            for i in range(len(stops) - 1):
+                curr_dist = stops[i][2]
+                next_dist = stops[i + 1][2]
+                assert next_dist > curr_dist, f"{trip_id} ({shape_id}): non-increasing distances at stops {i}->{i+1}: {curr_dist} >= {next_dist}"
+
+            last_dist = stops[-1][2]
+            assert last_dist <= shape_len + 0.5, f"{trip_id}: last distance {last_dist} exceeds shape length {shape_len} + 0.5m"
+
+    def test_criterion_4_gtfs_time_bounds(self, schedule_data):
+        """Verify time bounds of RER E schedule."""
+        rer_sched = schedule_data["rer_sched"]
+        min_time = min(trip[4] for trip in rer_sched["trips"])
+        max_time = max(trip[5] for trip in rer_sched["trips"])
+        assert min_time >= 17000, f"Unexpected min time: {min_time}"
+        assert max_time == 84580, f"Expected max GTFS time 84580 s, got {max_time}"
+

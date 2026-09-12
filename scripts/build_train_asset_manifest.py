@@ -342,11 +342,20 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    rolling_stock_path = ROOT / "cities" / "paris" / "data" / "rolling-stock.json"
+    if not rolling_stock_path.exists():
+        rolling_stock_path = ROOT / "data" / "rolling-stock.json"
+
+    lines_path = ROOT / "cities" / "paris" / "data" / "processed" / "lines.json"
+    if not lines_path.exists():
+        lines_path = ROOT / "data" / "processed" / "lines.json"
+
     manifest = build_manifest(
-        load_json(ROOT / "data" / "rolling-stock.json"),
-        load_json(ROOT / "data" / "processed" / "lines.json"),
+        load_json(rolling_stock_path),
+        load_json(lines_path),
     )
-    for output in args.output or [Path("data/model-assets-manifest.json")]:
+    default_output = Path("cities/paris/data/model-assets-manifest.json")
+    for output in args.output or [default_output]:
         destination = output if output.is_absolute() else ROOT / output
         destination.parent.mkdir(parents=True, exist_ok=True)
         output_manifest = build_served_manifest(manifest) if destination == ROOT / "web" / "public" / "data" / "model-assets-manifest.json" else manifest

@@ -30,7 +30,13 @@ def load_env():
                     env[k.strip()] = v.strip().strip("'\"")
     return env
 
+import argparse
+
 def main():
+    parser = argparse.ArgumentParser(description="Deploy to Netlify via API")
+    parser.add_argument("--prod", action="store_true", help="Deploy to production (default is preview/draft)")
+    args = parser.parse_args()
+
     if not DIST_DIR.exists():
         print(f"Error: {DIST_DIR} does not exist. Run 'npm run build' first.")
         sys.exit(1)
@@ -43,6 +49,9 @@ def main():
         print("Error: NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID must be set in .env or environment.")
         sys.exit(1)
 
+    is_draft = not args.prod
+    deploy_type = "production" if args.prod else "preview (draft)"
+    print(f"[deploy] Deploy mode: {deploy_type}")
     print(f"[deploy] Packaging {DIST_DIR} into memory zip...")
     zip_buffer = io.BytesIO()
     file_count = 0
@@ -60,6 +69,8 @@ def main():
 
     print(f"[deploy] Uploading to Netlify site {site_id}...")
     url = f"https://api.netlify.com/api/v1/sites/{site_id}/deploys"
+    if is_draft:
+        url += "?draft=true"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/zip",

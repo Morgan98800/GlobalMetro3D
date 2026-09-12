@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_DIR = ROOT / "assets-src" / "models" / "train"
+SOURCE_DIR = ROOT / "cities" / "paris" / "assets" / "models" / "train"
 DESTINATION_DIR = ROOT / "web" / "public" / "models" / "train"
 
 

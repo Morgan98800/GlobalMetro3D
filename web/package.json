@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "test": "node --experimental-strip-types src/sim/shapes.test.ts && node --experimental-strip-types src/sim/paris_time.test.ts",
-    "test:train-models": "node --experimental-strip-types src/map/train_models_layer.test.ts",
-    "test:shapes": "node --experimental-strip-types src/sim/shapes.test.ts",
-    "test:time": "node --experimental-strip-types src/sim/paris_time.test.ts"
+    "test": "vitest run --root .. tests/shapes.test.ts tests/paris_time.test.ts",
+    "test:train-models": "vitest run --root .. tests/train_models_layer.test.ts",
+    "test:shapes": "vitest run --root .. tests/shapes.test.ts",
+    "test:time": "vitest run --root .. tests/paris_time.test.ts"
   },
   "dependencies": {
     "@deck.gl/core": "^9.1.4",

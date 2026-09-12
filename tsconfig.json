@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@core/*": ["core/*"],
+      "@city/*": ["cities/paris/*"],
+      "@paris-subway/shared": ["core/index.ts"]
+    }
+  },
+  "include": ["core", "cities", "tests", "web/src"]
+}

@@ -14,8 +14,14 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["../core/*"],
+      "@city/*": ["../cities/paris/*"],
+      "@paris-subway/shared": ["../core/index.ts"]
+    }
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.ts"]
+  "include": ["src", "../core", "../cities"],
+  "exclude": ["src/**/*.test.ts", "../core/**/*.test.ts"]
 }

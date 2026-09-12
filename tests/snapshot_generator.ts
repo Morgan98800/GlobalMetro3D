@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { decodeShapes } from '../web/src/sim/shapes_loader';
-import { selectActiveTrips } from '../web/src/sim/paris_time';
-import { computeTripKinematics, type TripData } from '../web/src/sim/kinematics';
+import { decodeShapes } from '@core/sim/shapes_loader';
+import { selectActiveTrips } from '@core/sim/paris_time';
+import { computeTripKinematics, type TripData } from '@core/sim/kinematics';
 
 export const SNAPSHOT_TIMESTAMP_ISO = '2026-06-09T06:30:00Z'; // Mardi 08:30:00 Paris (CEST)
 export const SNAPSHOT_SECONDS = 30600;

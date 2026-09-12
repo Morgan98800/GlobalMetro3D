@@ -12,7 +12,7 @@ import {
   type SchedTrip,
   type RtJourney,
   type RtCall
-} from '../../web/src/sim/rt_matching.ts';
+} from '@core/rt/rt_matching';
 
 function normalizeStopName(name: string): string {
   return name
@@ -37,7 +37,9 @@ describe('RER RT Matching Acceptance (Phase 5 - 5 Lines)', () => {
   });
 
   it('should match journeys at peak hour (08:30) with >= 95% rate across all 5 lines', () => {
-    const schedulePath = path.resolve('web/public/data/rer_schedule.json');
+    const schedulePath = fs.existsSync('web/public/data/rer_schedule.json')
+      ? path.resolve('web/public/data/rer_schedule.json')
+      : path.resolve(__dirname, '../../web/public/data/rer_schedule.json');
     const scheduleData = JSON.parse(fs.readFileSync(schedulePath, 'utf8'));
     const stations = scheduleData.stations;
     const trips = scheduleData.trips;

@@ -5,7 +5,9 @@ export default defineConfig({
   envDir: '../',
   resolve: {
     alias: {
-      '@paris-subway/shared': path.resolve(__dirname, '../packages/shared/src')
+      '@core': path.resolve(__dirname, '../core'),
+      '@city': path.resolve(__dirname, '../cities/paris'),
+      '@paris-subway/shared': path.resolve(__dirname, '../core')
     }
   },
   server: {

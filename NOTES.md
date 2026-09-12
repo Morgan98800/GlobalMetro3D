@@ -606,3 +606,86 @@ $$\text{dist}[N - 1] = (N - 2) \times \text{step} + \text{tailLength}$$
 ### 8.4 Encodage
 - Accents et apostrophes UTF-8 validés : `Station Lionel-Groulx`, `Station Côte-des-Neiges`, `Station Assomption` (note : le métro s'appelle officiellement `Station Assomption`, les arrêts de bus de surface sont `de l'Assomption`).
 
+---
+
+## 9. Phase 3 — Paramétrisation et Architecture Multi-Villes
+
+### 9.1 Contrat déclaratif `CityConfig`
+- Définition stricte dans `core/config.ts` de la configuration par ville :
+  - Métadonnées géographiques : `center`, `zoom`, `pitch`, `bearing`, `minZoom`, `maxZoom`, `ringRoadNames`.
+  - Intégration horaire : `timezone`, `locale`, `scheduleModel` (`trip-based` vs `frequency-expanded`).
+  - Intégration temps réel : `capability` (`per-trip-offsets` vs `service-status-only`), `pollIntervalMs`, `endpoints`.
+  - Chemins d'accès aux artefacts : `dataDir`, `modelsDir`, `paths.rer` optionnel.
+  - Attribution : `operatorName`, `datasetName`, `licenseText`, `licenseUrl`, `disclaimer`.
+- **Règle absolue** : Zéro `if (city === ...)` dans `core/sim`, `core/ui`, `core/rt`.
+- Instanciation dans `cities/paris/city.config.ts` et `cities/montreal/city.config.ts`.
+
+### 9.2 Routage Déclaratif
+- Routes gérées de façon unifiée :
+  - `/` $\to$ ville par défaut (`paris`)
+  - `/:city` $\to$ vue réseau de la ville (`/paris`, `/montreal`)
+  - `/:city/ligne/:line` $\to$ sélection directe d'une ligne
+- Sélecteur de ville accessible et intégration du titre dynamique dans le `Header`.
+
+---
+
+## 10. Phase 4 — Simulation Théorique de Montréal (STM)
+
+### 10.1 Pipeline d'ingestion STM
+- Script autonome `cities/montreal/ingest/ingest_stm.py` :
+  - Téléchargement et extraction du flux GTFS officiel STM 2026.
+  - Filtrage strict `route_type = 1` (4 lignes de métro).
+  - Traitement des 68 stations uniques et calcul des cordes métriques inter-stations.
+  - Génération de 9 artefacts conformes aux standards parisiens :
+    - `lines.json` (4 lignes)
+    - `stations.json` (68 stations)
+    - `shapes.bin` (format binaire SHP2 compact, 11 tracés)
+    - `schedule.json` (1 654 courses quotidiennes, 72 stations géographiques)
+    - `tracks.json`, `line_ladders.json`, `sections.json`, `station-rankings.json`, `rolling-stock.json`.
+- Stockage miroir dans `cities/montreal/data/` et `web/public/cities/montreal/data/`.
+
+### 10.2 Filet de sécurité cinématique
+- `tests/montreal-snapshot.test.ts` : validation déterministe à mardi 08:30 EDT (15 septembre 2026).
+- Exactement **72 rames actives** calculées avec $\Delta = 0.0000\text{ m}$ et 0.0000 m/s d'écart :
+  - Ligne 1 (Verte) : 27 rames
+  - Ligne 2 (Orange) : 32 rames
+  - Ligne 4 (Jaune) : 4 rames
+  - Ligne 5 (Bleue) : 9 rames
+
+---
+
+## 11. Phase 5 — Couche État du Service Montréal (API i3)
+
+### 11.1 Relais Netlify `stm_relay.ts`
+- Interrogation de l'endpoint officiel i3 : `https://api.stm.info/pub/od/i3/v1/messages/etatservice/`.
+- Heures d'exploitation dynamiques (05:15 à 02:00 EDT) basées sur le GTFS STM.
+- Cache mémoire inter-requêtes (120 s) et repli transparent théorique (`feedHealthy: false`).
+- Support de `STM_API_KEY` dans l'environnement serveur et `.env.local` (sécurité absolue : aucune clé dans le client).
+
+### 11.2 Suppression des rames fantômes
+- En cas d'interruption totale d'une ligne, 100 % des rames de cette ligne sont masquées dans `browser_engine.ts`.
+- En cas d'interruption partielle, extraction des `closedStations` et suppression ciblée des courses desservant le tronçon fermé.
+- Validation par `tests/stm_relay.test.ts` (7 tests) et `tests/montreal-interruption.test.ts` (4 tests).
+
+---
+
+## 12. Phase 6 — Remontée Info Trafic & Suppression des Trains Fantômes sur Paris
+
+### 12.1 Refactorisation & Durcissement du parseur PRIM SIRI `GeneralMessage`
+- Correction du piège regex historique `[^et]+` dans `netlify/functions/prim_relay.ts` :
+  - Capture paresseuse délimitée `/interrompu(?:e)?\s+(?:entre|de)\s+(.*?)\s+(?:et|a|à)\s+(.*?)(?:\s+(?:en raison|suite|consequence|conséquence|pour|jusqu|vers|[.,;])|$)/i`.
+  - Extraction fiable des stations fermées (ex. *Châtelet*, *Nation*, *Concorde*).
+- Priorité stricte des statuts : `interrupted` (3) > `disrupted` (2) > `normal` (1) (une interruption ne peut jamais être écrasée par une annonce secondaire).
+- Correspondance de ligne par `LineRef` puis par token délimité trié par longueur décroissante (évitant la confusion Ligne 14 vs Ligne 1).
+- Détection locale de `PRIM_API_KEY` dans `.env.local` via `loadLocalEnvFallback()`.
+
+### 12.2 Suppression des trains et interface
+- Intégration de la suppression dans `core/sim/browser_engine.ts` avec comparaison bidirectionnelle des arrêts (`normStop.includes(normCs) || normCs.includes(normStop)`).
+- TopBar (`core/ui/components/header.ts`) déclaratif : affichage propre `Ligne 1 interrompue / perturbée`, `RER A interrompu / perturbé`.
+
+### 12.3 Vérification & Filet de sécurité
+- `tests/prim_relay.test.ts` : 7 tests unitaires du parseur et des heures de service.
+- `tests/paris-interruption.test.ts` : 6 tests de simulation cinématique (nominal 764 rames, interruption totale L1 $\to 722$, interruption totale RER A $\to 706$, interruption Poissy $\to$ suppression de 10 rames ciblées, ralentissement sans suppression).
+- Snapshot nominal Paris (`tests/paris-snapshot.test.ts`) : strictement préservé avec **764 trains vérifiés à $\Delta = 0.0000\text{ m}$**.
+
+

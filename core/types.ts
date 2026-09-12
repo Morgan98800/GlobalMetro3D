@@ -35,6 +35,7 @@ export interface StationMetadata {
 
 export interface LineTrafficReport {
   lineId: string;
+  lineName?: string;
   status: 'normal' | 'disrupted' | 'interrupted';
   severity: 'normal' | 'info' | 'warning' | 'alert';
   title: string;

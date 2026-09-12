@@ -520,9 +520,16 @@ export class BrowserSubwayEngine {
         const lineTraffic = trafficByLine[trip.line];
         if (lineTraffic && lineTraffic.status === 'interrupted') {
           if (lineTraffic.closedStations && lineTraffic.closedStations.length > 0) {
-            const isInsideClosedSection = trip.stops.some(s =>
-              lineTraffic.closedStations!.some(cs => normalizeStopName(s[3]).includes(normalizeStopName(cs)))
-            );
+            const isInsideClosedSection = trip.stops.some(s => {
+              const normStop = normalizeStopName(s[3]);
+              return lineTraffic.closedStations!.some(cs => {
+                const normCs = normalizeStopName(cs);
+                return (
+                  (normStop.length >= 3 && normCs.length >= 3) &&
+                  (normStop.includes(normCs) || normCs.includes(normStop))
+                );
+              });
+            });
             if (isInsideClosedSection) continue;
           } else {
             // Line-level interruption without specific stations: suppress all trains on this line!

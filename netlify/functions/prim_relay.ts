@@ -1,5 +1,27 @@
 import https from 'https';
 import zlib from 'zlib';
+import fs from 'node:fs';
+import path from 'node:path';
+
+function loadLocalEnvFallback(): void {
+  if (process.env.PRIM_API_KEY) return;
+  try {
+    const envPath = path.resolve(process.cwd(), '.env.local');
+    if (fs.existsSync(envPath)) {
+      const content = fs.readFileSync(envPath, 'utf8');
+      for (const line of content.split('\n')) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('#') || !trimmed.includes('=')) continue;
+        const [k, ...v] = trimmed.split('=');
+        if (k.trim() === 'PRIM_API_KEY' && !process.env.PRIM_API_KEY) {
+          process.env.PRIM_API_KEY = v.join('=').trim().replace(/^['"]|['"]$/g, '');
+        }
+      }
+    }
+  } catch {}
+}
+
+loadLocalEnvFallback();
 
 export interface EstimatedCallData {
   stopPointRef: string;
@@ -28,6 +50,7 @@ export interface EstimatedVehicleJourneyData {
 
 export interface LineTrafficReport {
   lineId: string;
+  lineName?: string;
   status: 'normal' | 'disrupted' | 'interrupted';
   severity: 'normal' | 'info' | 'warning' | 'alert';
   title: string;
@@ -191,6 +214,213 @@ export function parseEstimatedTimetablePayload(
 }
 
 /**
+ * Normalise un nom de station ou libellé textuel pour comparaison
+ */
+export function normalizeParisText(str: string): string {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Extrait les stations fermées ou tronçons interrompus depuis un message texte PRIM
+ */
+export function extractParisClosedStations(text: string): string[] {
+  if (!text) return [];
+  const closedStations: string[] = [];
+
+  // Motif 1 : "interrompu entre X et Y" ou "interrompu de X à Y"
+  const matchBetween = text.match(
+    /interrompu(?:e)?\s+(?:entre|de)\s+(.*?)\s+(?:et|a|à)\s+(.*?)(?:\s+(?:en raison|suite|consequence|conséquence|pour|jusqu|vers|[.,;])|$)/i
+  );
+  if (matchBetween) {
+    const cleanSt1 = matchBetween[1]
+      .replace(/^(?:la\s+station|les\s+stations|l'arret|l'arrêt)\s+/i, '')
+      .replace(/[.,;:]+$/, '')
+      .trim();
+    const cleanSt2 = matchBetween[2]
+      .replace(/^(?:la\s+station|les\s+stations|l'arret|l'arrêt)\s+/i, '')
+      .replace(/[.,;:]+$/, '')
+      .trim();
+    if (cleanSt1.length >= 2) closedStations.push(cleanSt1);
+    if (cleanSt2.length >= 2) closedStations.push(cleanSt2);
+  }
+
+  // Motif 2 : fermeture ponctuelle de station e.g. "fermeture de la station Concorde" ou "la station Concorde est fermée"
+  const singleMatch = text.match(
+    /(?:fermeture\s+de\s+la\s+station|station|arret|arrêt)\s+([A-ZÀ-Ÿ][a-zà-ÿ0-9\s'-]+?)\s+(?:est\s+fermee|est\s+fermée|non\s+desservi|fermee|fermée|non\s+desservie)/i
+  );
+  if (singleMatch) {
+    const st = singleMatch[1].replace(/[.,;:]+$/, '').trim();
+    if (st.length >= 2 && !closedStations.includes(st)) {
+      closedStations.push(st);
+    }
+  }
+
+  return closedStations;
+}
+
+/**
+ * Parse le payload SIRI GeneralMessage de PRIM et retourne l'état de trafic par ligne.
+ */
+export function parseGeneralMessagesPayload(json: any): Record<string, LineTrafficReport> {
+  const traffic: Record<string, LineTrafficReport> = {};
+  const nowIso = new Date().toISOString();
+
+  // 1. Initialiser par défaut les 21 lignes en état normal
+  for (const line of METRO_RER_LINES) {
+    const isRer = line.mode === 'rail';
+    const prefix = isRer ? 'RER ' : 'Ligne ';
+    traffic[line.id] = {
+      lineId: line.id,
+      lineName: line.name,
+      status: 'normal',
+      severity: 'normal',
+      title: `${prefix}${line.name}`,
+      message: 'Trafic fluide sur l’ensemble de la ligne',
+      updatedAt: nowIso
+    };
+  }
+
+  if (!json) return traffic;
+
+  // 2. Extraire la liste des messages
+  let messages: any[] = [];
+  if (Array.isArray(json)) {
+    messages = json;
+  } else if (Array.isArray(json?.messages)) {
+    messages = json.messages;
+  } else {
+    const delivery = json?.Siri?.ServiceDelivery?.GeneralMessageDelivery;
+    const deliveryArr = Array.isArray(delivery) ? delivery : delivery ? [delivery] : [];
+    messages = deliveryArr.flatMap((d: any) => d?.InfoMessage || []);
+  }
+
+  const severityRank: Record<string, number> = { normal: 1, disrupted: 2, interrupted: 3 };
+
+  for (const msg of messages) {
+    if (!msg) continue;
+
+    // Extraire les références de ligne
+    const lineRefRaw =
+      msg?.LineRef?.value ||
+      msg?.LineRef ||
+      msg?.InfoChannelRef?.value ||
+      msg?.InfoChannelRef ||
+      msg?.lineId ||
+      msg?.line ||
+      '';
+    const lineRefStr = typeof lineRefRaw === 'string' ? lineRefRaw : '';
+
+    const content =
+      msg?.Content?.value ||
+      msg?.MessageText?.[0]?.value ||
+      (typeof msg?.Content === 'string' ? msg.Content : '') ||
+      msg?.message ||
+      msg?.texte ||
+      '';
+    const summary = msg?.Summary?.value || msg?.title || msg?.titre || '';
+    const fullText = `${summary} ${content}`.trim();
+    const messageType = String(msg?.MessageType || '').toLowerCase();
+    const impact = String(msg?.Impact || '').toLowerCase();
+
+    // Trouver la ligne correspondante
+    let matchingLine: (typeof METRO_RER_LINES)[number] | undefined = undefined;
+    if (lineRefStr) {
+      matchingLine = METRO_RER_LINES.find(
+        (l) => lineRefStr.includes(l.rawId) || lineRefStr === l.id || lineRefStr.includes(`::${l.name}:`)
+      );
+    }
+    if (!matchingLine) {
+      const normText = ` ${normalizeParisText(fullText)} `;
+      // Trier par longueur de nom décroissante (ex: "14" avant "1", "3bis" avant "3")
+      const sortedLines = [...METRO_RER_LINES].sort((a, b) => b.name.length - a.name.length);
+      matchingLine = sortedLines.find((l) => {
+        if (l.mode === 'rail') {
+          return normText.includes(` rer ${l.name.toLowerCase()} `);
+        } else {
+          return normText.includes(` ligne ${l.name.toLowerCase()} `) || normText.includes(` metro ${l.name.toLowerCase()} `);
+        }
+      });
+    }
+
+    if (!matchingLine) continue;
+
+    // Déterminer le statut
+    const fullTextLower = fullText.toLowerCase();
+    let status: 'normal' | 'disrupted' | 'interrupted' = 'disrupted';
+    if (
+      fullTextLower.includes('interrompu') ||
+      fullTextLower.includes('interruption') ||
+      fullTextLower.includes('aucun train') ||
+      fullTextLower.includes('arret de circulation') ||
+      fullTextLower.includes('arrêt de circulation') ||
+      impact.includes('interruption') ||
+      messageType.includes('interruption')
+    ) {
+      status = 'interrupted';
+    } else if (
+      fullTextLower.includes('fluide') ||
+      fullTextLower.includes('normal') ||
+      fullTextLower.includes('reprise normale')
+    ) {
+      status = 'normal';
+    }
+
+    const currentReport = traffic[matchingLine.id];
+    const currentRank = severityRank[currentReport.status] || 1;
+    const newRank = severityRank[status] || 1;
+
+    // Ne jamais écraser une sévérité supérieure par une sévérité inférieure
+    if (newRank < currentRank) {
+      continue;
+    }
+
+    const isRer = matchingLine.mode === 'rail';
+    const prefix = isRer ? 'RER ' : 'Ligne ';
+    let closedStations: string[] | undefined = undefined;
+
+    if (status === 'interrupted') {
+      const extracted = extractParisClosedStations(fullText);
+      if (extracted.length > 0) {
+        closedStations = extracted;
+      }
+      // Fusionner les stations fermées si la ligne était déjà interrompue
+      if (currentReport.status === 'interrupted' && currentReport.closedStations) {
+        closedStations = Array.from(new Set([...(closedStations || []), ...currentReport.closedStations]));
+      }
+    }
+
+    const reportTitle =
+      status === 'interrupted'
+        ? closedStations && closedStations.length > 0
+          ? `${prefix}${matchingLine.name} (Interruption partielle)`
+          : `${prefix}${matchingLine.name} (Interruption de service)`
+        : status === 'disrupted'
+          ? `${prefix}${matchingLine.name} (Trafic perturbé)`
+          : `${prefix}${matchingLine.name} (Trafic normal)`;
+
+    traffic[matchingLine.id] = {
+      lineId: matchingLine.id,
+      lineName: matchingLine.name,
+      status,
+      severity: status === 'interrupted' ? 'alert' : status === 'disrupted' ? 'warning' : 'normal',
+      title: reportTitle,
+      message: content || summary || (status === 'normal' ? 'Trafic fluide sur l’ensemble de la ligne' : 'Perturbation signalée.'),
+      updatedAt: msg?.RecordedAtTime || msg?.updatedAt || nowIso,
+      closedStations
+    };
+  }
+
+  return traffic;
+}
+
+/**
  * Fetch general traffic disruption messages from PRIM Marketplace
  */
 export function fetchGeneralMessages(apiKey: string, timeoutMs = 6000): Promise<Record<string, LineTrafficReport>> {
@@ -208,72 +438,27 @@ export function fetchGeneralMessages(apiKey: string, timeoutMs = 6000): Promise<
       },
       (res) => {
         if (res.statusCode !== 200) {
-          resolve({});
+          resolve(parseGeneralMessagesPayload(null));
           return;
         }
         let data = '';
-        res.on('data', chunk => data += chunk);
+        res.on('data', (chunk) => (data += chunk));
         res.on('end', () => {
           try {
             const json = JSON.parse(data);
-            const messages = json?.Siri?.ServiceDelivery?.GeneralMessageDelivery?.[0]?.InfoMessage || [];
-            const traffic: Record<string, LineTrafficReport> = {};
-
-            for (const msg of messages) {
-              const lineRef = msg?.LineRef?.value || msg?.InfoChannelRef?.value || '';
-              const matchingLine = METRO_RER_LINES.find(l => lineRef.includes(l.rawId) || lineRef.includes(`::${l.name}:`));
-              if (!matchingLine) continue;
-
-              const content = msg?.Content?.value || msg?.MessageText?.[0]?.value || '';
-              const messageType = (msg?.MessageType || '').toLowerCase();
-              const impact = (msg?.Impact || '').toLowerCase();
-
-              let status: 'normal' | 'disrupted' | 'interrupted' = 'disrupted';
-              if (content.toLowerCase().includes('interrompu') || impact.includes('interruption') || messageType.includes('interruption')) {
-                status = 'interrupted';
-              }
-
-              const closedStations: string[] = [];
-              const matchBetween = content.match(/interrompu entre ([^et]+) et ([^.]+)/i);
-              if (matchBetween) {
-                closedStations.push(matchBetween[1].trim(), matchBetween[2].trim());
-              }
-
-              traffic[matchingLine.id] = {
-                lineId: matchingLine.id,
-                status,
-                severity: status === 'interrupted' ? 'alert' : 'warning',
-                title: status === 'interrupted' ? 'Trafic interrompu' : 'Trafic perturbé',
-                message: content,
-                updatedAt: msg?.RecordedAtTime || new Date().toISOString(),
-                closedStations
-              };
-            }
-
-            // Fill default normal status for lines without disruptions
-            for (const line of METRO_RER_LINES) {
-              if (!traffic[line.id]) {
-                traffic[line.id] = {
-                  lineId: line.id,
-                  status: 'normal',
-                  severity: 'normal',
-                  title: 'Trafic normal',
-                  message: 'Trafic fluide sur l’ensemble de la ligne',
-                  updatedAt: new Date().toISOString(),
-                  closedStations: []
-                };
-              }
-            }
-
+            const traffic = parseGeneralMessagesPayload(json);
             resolve(traffic);
           } catch {
-            resolve({});
+            resolve(parseGeneralMessagesPayload(null));
           }
         });
       }
     );
-    req.on('error', () => resolve({}));
-    req.on('timeout', () => { req.destroy(); resolve({}); });
+    req.on('error', () => resolve(parseGeneralMessagesPayload(null)));
+    req.on('timeout', () => {
+      req.destroy();
+      resolve(parseGeneralMessagesPayload(null));
+    });
   });
 }
 

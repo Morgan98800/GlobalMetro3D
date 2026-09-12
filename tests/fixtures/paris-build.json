@@ -287,11 +287,11 @@
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-BBf7W1Hu.js",
+      "originalPath": "assets/main-827JWqYG.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2560943,
-      "minSize1Pct": 2535333,
-      "maxSize1Pct": 2586552
+      "sizeBytes": 2561337,
+      "minSize1Pct": 2535723,
+      "maxSize1Pct": 2586951
     },
     {
       "originalPath": "assets/main-GOnbpGGR.css",
@@ -364,7 +364,7 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-BBf7W1Hu.js",
+      "url": "/assets/main-827JWqYG.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

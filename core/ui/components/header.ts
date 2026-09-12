@@ -441,13 +441,21 @@ export class TopBar {
     // Dominant disruption priority across all providers
     if (interrupted) {
       this.rtStatusEl.dataset.state = 'error';
-      this.rtLabelEl.textContent = `Ligne ${interrupted.lineId} interrompue`;
+      const lineName = interrupted.lineName || String(interrupted.lineId).replace(/^IDFM:C0?/, '').replace(/^IDFM:/, '');
+      const isRer = ['A', 'B', 'C', 'D', 'E'].includes(lineName);
+      const prefix = isRer ? 'RER ' : 'Ligne ';
+      const suffix = isRer ? 'interrompu' : 'interrompue';
+      this.rtLabelEl.textContent = `${prefix}${lineName} ${suffix}`;
       this.rtStatusEl.title = interrupted.message || interrupted.title || 'Interruption de service signalée.';
       return;
     }
     if (disrupted) {
       this.rtStatusEl.dataset.state = 'warning';
-      this.rtLabelEl.textContent = `Ligne ${disrupted.lineId} perturbée`;
+      const lineName = disrupted.lineName || String(disrupted.lineId).replace(/^IDFM:C0?/, '').replace(/^IDFM:/, '');
+      const isRer = ['A', 'B', 'C', 'D', 'E'].includes(lineName);
+      const prefix = isRer ? 'RER ' : 'Ligne ';
+      const suffix = isRer ? 'perturbé' : 'perturbée';
+      this.rtLabelEl.textContent = `${prefix}${lineName} ${suffix}`;
       this.rtStatusEl.title = disrupted.message || disrupted.title || 'Perturbation signalée.';
       return;
     }

@@ -4,6 +4,7 @@ const DATA_REVISION = '20260910-09';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
 import { TripData, getCoordAtDistance, getSmoothedBearing } from './kinematics';
 import { PrimRealtimeClient, PrimStatus, normalizeStopName } from '@city/rt/prim_client';
+import { StmRealtimeClient, type StmStatus } from '@cities/montreal/rt/stm_client';
 import {
   matchJourneys,
   buildTimeline,
@@ -27,7 +28,8 @@ import { parisConfig } from '@cities/paris/city.config';
 export interface EngineEvents {
   onTick: (trains: TrainMarker[], activeCount: number) => void;
   onRender?: (trains: TrainMarker[], activeCount: number) => void;
-  onPrimStatus: (status: PrimStatus) => void;
+  onPrimStatus?: (status: PrimStatus) => void;
+  onRealtimeStatus?: (status: any) => void;
 }
 
 export type ServiceState = 'loading' | 'before_first' | 'active' | 'ended';
@@ -70,7 +72,7 @@ export class BrowserSubwayEngine {
   private schedTripsMap = new Map<string, SchedTrip>();
   private stationNames: string[] = [];
   private linesMap = new Map<string, LineMetadata>();
-  private primClient: PrimRealtimeClient;
+  private primClient: PrimRealtimeClient | StmRealtimeClient;
   private isRunning = false;
   private timerId: any = null;
   private rafId: number | null = null;
@@ -97,10 +99,18 @@ export class BrowserSubwayEngine {
 
   constructor(apiKey?: string, config: CityConfig = parisConfig) {
     this.config = config;
-    this.primClient = new PrimRealtimeClient(apiKey);
+    if (this.config.realtime.provider === 'stm-i3') {
+      this.primClient = new StmRealtimeClient(this.config.realtime.pollIntervalMs);
+    } else {
+      this.primClient = new PrimRealtimeClient(apiKey);
+    }
   }
 
-  public getPrimClient(): PrimRealtimeClient {
+  public getPrimClient(): any {
+    return this.primClient;
+  }
+
+  public getRealtimeClient(): any {
     return this.primClient;
   }
 
@@ -418,7 +428,12 @@ export class BrowserSubwayEngine {
       });
     }
 
-    this.primClient.onUpdate(events.onPrimStatus);
+    if (events.onPrimStatus) {
+      this.primClient.onUpdate(events.onPrimStatus as any);
+    }
+    if (events.onRealtimeStatus) {
+      this.primClient.onUpdate(events.onRealtimeStatus);
+    }
 
     const onTick = () => {
       if (!this.isRunning) return;
@@ -431,10 +446,11 @@ export class BrowserSubwayEngine {
       const activeSchedTrips = activeTrips.map(a => this.schedTripsMap.get(a.trip.id)!).filter(Boolean);
       const trafficByLine = this.primClient.getTrafficByLine();
 
-      // Level 2 & 3: Real-Time Matching and Timeline Updates
+      // Level 2 & 3: Real-Time Matching and Timeline Updates (only for per-trip-offsets capability)
       const isRtActive = this.primClient.getStatus().active;
-      if (isRtActive) {
-        const journeys = this.primClient.getJourneys();
+      if (isRtActive && this.config.realtime.capability?.kind === 'per-trip-offsets' && 'getJourneys' in this.primClient) {
+        const prim = this.primClient as PrimRealtimeClient;
+        const journeys = prim.getJourneys();
         const { matches } = matchJourneys(journeys, activeSchedTrips);
 
         // Track ever-matched courses
@@ -449,7 +465,7 @@ export class BrowserSubwayEngine {
           activeSchedTrips,
           matchedTripIds,
           this.everMatchedTrips,
-          this.primClient.isFeedHealthy()
+          prim.isFeedHealthy()
         );
 
         // Initiate smooth 240ms fade out for newly suppressed ghosts
@@ -489,7 +505,7 @@ export class BrowserSubwayEngine {
           Array.from(this.timelines.values()),
           this.suppressedTripIds
         );
-        this.primClient.setMatchingStats(matchStats);
+        prim.setMatchingStats(matchStats);
       }
 
       const tickTimestamp = performance.now();
@@ -508,6 +524,9 @@ export class BrowserSubwayEngine {
               lineTraffic.closedStations!.some(cs => normalizeStopName(s[3]).includes(normalizeStopName(cs)))
             );
             if (isInsideClosedSection) continue;
+          } else {
+            // Line-level interruption without specific stations: suppress all trains on this line!
+            continue;
           }
         }
 

@@ -30,6 +30,7 @@ export const parisConfig: CityConfig = {
   },
   realtime: {
     provider: 'prim',
+    capability: { kind: 'per-trip-offsets' },
     pollIntervalMs: 180000,
     endpoints: {
       relay: '/api/prim',

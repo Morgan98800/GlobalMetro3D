@@ -91,6 +91,10 @@ if (!netlifyToml.includes('prim_relay')) {
   console.error('❌ netlify.toml missing prim_relay function configuration');
   process.exit(1);
 }
+if (!netlifyToml.includes('stm_relay')) {
+  console.error('❌ netlify.toml missing stm_relay function configuration');
+  process.exit(1);
+}
 console.log(`✅ Netlify functions verified (${fixture.netlifyFunctions.length} functions).`);
 
 // 3. Replay First Render HTTP requests (without external network socket requirement)

@@ -9,6 +9,9 @@
 [functions."prim_relay"]
   schedule = "*/3 * * * *"
 
+[functions."stm_relay"]
+  schedule = "*/2 * * * *"
+
 [[redirects]]
   from = "/api/prim"
   to = "/.netlify/functions/prim_relay"
@@ -17,6 +20,11 @@
 [[redirects]]
   from = "/api/prim_delays"
   to = "/.netlify/functions/prim_relay"
+  status = 200
+
+[[redirects]]
+  from = "/api/stm"
+  to = "/.netlify/functions/stm_relay"
   status = 200
 
 [[redirects]]

@@ -16,9 +16,9 @@
     {
       "originalPath": "_redirects",
       "normalizedPath": "_redirects",
-      "sizeBytes": 149,
-      "minSize1Pct": 147,
-      "maxSize1Pct": 151
+      "sizeBytes": 198,
+      "minSize1Pct": 196,
+      "maxSize1Pct": 200
     },
     {
       "originalPath": "index.html",
@@ -287,18 +287,18 @@
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-BmIlJdXQ.js",
+      "originalPath": "assets/main-BBf7W1Hu.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2557568,
-      "minSize1Pct": 2531992,
-      "maxSize1Pct": 2583144
+      "sizeBytes": 2560943,
+      "minSize1Pct": 2535333,
+      "maxSize1Pct": 2586552
     },
     {
-      "originalPath": "assets/main-BwmFSn1c.css",
+      "originalPath": "assets/main-GOnbpGGR.css",
       "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 50469,
-      "minSize1Pct": 49964,
-      "maxSize1Pct": 50973
+      "sizeBytes": 50641,
+      "minSize1Pct": 50134,
+      "maxSize1Pct": 51147
     },
     {
       "originalPath": "assets/tokens-D3M_eBDk.css",
@@ -326,6 +326,15 @@
         "/api/prim_delays",
         "/.netlify/functions/prim_delays"
       ]
+    },
+    {
+      "name": "stm_relay",
+      "entry": "netlify/functions/stm_relay.ts",
+      "schedule": "*/2 * * * *",
+      "endpoints": [
+        "/api/stm",
+        "/.netlify/functions/stm_relay"
+      ]
     }
   ],
   "firstRenderResources": [
@@ -350,12 +359,12 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-BwmFSn1c.css",
+      "url": "/assets/main-GOnbpGGR.css",
       "expectedStatus": 200,
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-BmIlJdXQ.js",
+      "url": "/assets/main-BBf7W1Hu.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

@@ -25,8 +25,12 @@ export const montrealConfig: CityConfig = {
     maxZoom: 18
   },
   realtime: {
-    provider: 'none',
-    pollIntervalMs: 30000
+    provider: 'stm-i3',
+    capability: { kind: 'service-status-only' },
+    pollIntervalMs: 120000,
+    endpoints: {
+      relay: '/api/stm'
+    }
   },
   attribution: {
     operatorName: 'Société de transport de Montréal (STM)',

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import type { CityAttribution, RealtimeProvider, ScheduleModel } from '@core/config';
+import type { CityAttribution, RealtimeCapability, RealtimeProvider, ScheduleModel } from '@core/config';
 
 export interface CityItem {
   id: string;
@@ -15,6 +15,7 @@ export interface TopBarOptions {
   timezone?: string;
   displayName?: string;
   realtimeProvider?: RealtimeProvider;
+  realtimeCapability?: RealtimeCapability;
   attribution?: CityAttribution;
   scheduleModel?: ScheduleModel;
   onCitySelect?: (cityId: string) => void;
@@ -432,6 +433,49 @@ export class TopBar {
       return;
     }
 
+    const trafficByLine = status?.trafficByLine || {};
+    const trafficReports: any[] = Object.values(trafficByLine);
+    const interrupted = trafficReports.find((t: any) => t.status === 'interrupted');
+    const disrupted = trafficReports.find((t: any) => t.status === 'disrupted');
+
+    // Dominant disruption priority across all providers
+    if (interrupted) {
+      this.rtStatusEl.dataset.state = 'error';
+      this.rtLabelEl.textContent = `Ligne ${interrupted.lineId} interrompue`;
+      this.rtStatusEl.title = interrupted.message || interrupted.title || 'Interruption de service signalée.';
+      return;
+    }
+    if (disrupted) {
+      this.rtStatusEl.dataset.state = 'warning';
+      this.rtLabelEl.textContent = `Ligne ${disrupted.lineId} perturbée`;
+      this.rtStatusEl.title = disrupted.message || disrupted.title || 'Perturbation signalée.';
+      return;
+    }
+
+    // Provider / Capability specific wording
+    if (this.options.realtimeCapability?.kind === 'service-status-only') {
+      if (status && status.serviceActive === false) {
+        this.rtStatusEl.dataset.state = 'standby';
+        this.rtLabelEl.textContent = 'service terminé';
+        this.rtStatusEl.title = status.serviceMessage || 'Service terminé sur le réseau.';
+        return;
+      }
+
+      if (status && status.minutesAgo !== undefined) {
+        this.rtStatusEl.dataset.state = 'live';
+        const timeStr = status.minutesAgo <= 1 ? "à l'instant" : `il y a ${status.minutesAgo} min`;
+        this.rtLabelEl.textContent = `cadence théorique · service vérifié ${timeStr}`;
+        this.rtStatusEl.title = 'Cadence théorique STM · état du service vérifié en direct via l\'API i3 de la STM.';
+        return;
+      }
+
+      this.rtStatusEl.dataset.state = 'standby';
+      this.rtLabelEl.textContent = 'cadence théorique';
+      this.rtStatusEl.title = 'Cadence théorique · intervalle nominal calculé sur la grille officielle GTFS STM.';
+      return;
+    }
+
+    // Default: per-trip-offsets (Paris / PRIM)
     if (typeof status === 'string') {
       this.rtStatusEl.dataset.state = status;
       if (status === 'live') {

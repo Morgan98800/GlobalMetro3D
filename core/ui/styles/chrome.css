@@ -280,6 +280,16 @@
   color: var(--carmin);
 }
 
+/* État Warning / Perturbation */
+.rt-status[data-state="warning"] .rt-status__dot {
+  background: var(--ambre, #FF9900);
+}
+
+.rt-status[data-state="warning"] .rt-status__label {
+  display: inline;
+  color: var(--ambre, #FF9900);
+}
+
 @keyframes rt-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.4; }

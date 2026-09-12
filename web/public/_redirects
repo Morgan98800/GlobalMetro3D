@@ -1,4 +1,5 @@
 /api/prim    /.netlify/functions/prim_relay   200
+/api/stm     /.netlify/functions/stm_relay   200
 /methode     /methode.html                   200
 /*           /index.html                     200
 

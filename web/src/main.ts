@@ -786,6 +786,7 @@ async function bootstrap() {
     timezone: cityConfig.timezone,
     displayName: cityConfig.displayName,
     realtimeProvider: cityConfig.realtime.provider,
+    realtimeCapability: cityConfig.realtime.capability,
     attribution: cityConfig.attribution,
     scheduleModel: cityConfig.gtfs.scheduleModel,
     onCitySelect: (cityId: string) => {
@@ -1004,6 +1005,12 @@ async function bootstrap() {
       followCamera?.onSimulationFrame();
     },
     onPrimStatus: (status) => {
+      dock.setRealtimeState(status);
+      if (isRealtimeEnabled) {
+        topbar.setRealtimeState(status);
+      }
+    },
+    onRealtimeStatus: (status) => {
       dock.setRealtimeState(status);
       if (isRealtimeEnabled) {
         topbar.setRealtimeState(status);

@@ -1,5 +1,8 @@
 export type ScheduleModel = 'trip-based' | 'frequency-expanded';
-export type RealtimeProvider = 'prim' | 'gtfs-rt' | 'none';
+export type RealtimeCapability =
+  | { kind: 'per-trip-offsets' }
+  | { kind: 'service-status-only' };
+export type RealtimeProvider = 'prim' | 'stm-i3' | 'gtfs-rt' | 'none';
 
 export interface CityGtfsConfig {
   sourceUrl: string;
@@ -24,6 +27,7 @@ export interface CityMapConfig {
 
 export interface CityRealtimeConfig {
   provider: RealtimeProvider;
+  capability?: RealtimeCapability;
   pollIntervalMs: number;
   endpoints?: {
     relay?: string;

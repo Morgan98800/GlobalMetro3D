@@ -32,3 +32,14 @@ export interface StationMetadata {
   };
   service_rank_by_line?: Record<string, Record<string, number>>;
 }
+
+export interface LineTrafficReport {
+  lineId: string;
+  status: 'normal' | 'disrupted' | 'interrupted';
+  severity: 'normal' | 'info' | 'warning' | 'alert';
+  title: string;
+  message: string;
+  updatedAt: string;
+  closedStations?: string[];
+}
+

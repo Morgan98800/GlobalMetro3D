@@ -1,321 +1,97 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-09-10",
+  "generated_on": "2026-09-12",
   "status": "awaiting_human_asset_approval",
   "policy": {
-    "external_downloads": "blocked_until_human_source_and_license_approval",
-    "marketplace_models": "never_download_without_explicit_license_approval",
-    "train_models_present": false,
-    "train_model_files": []
-  },
-  "render_contract": {
-    "representation": "one_car_instanced_along_curvilinear_path",
-    "zoom_model_threshold": 16,
-    "crossfade_range": [
-      15.5,
-      16.0
-    ],
-    "desktop_instance_cap": 400,
-    "mobile_policy": "one_lod_and_lower_cap_after_measurement"
+    "train_models_present": true
   },
   "families": [
     {
       "family_id": "steel_classic",
-      "label": "Matériel fer à roulement classique",
-      "drive_type": "steel",
-      "candidate_model_ids": [
-        "MF01",
-        "MF77",
-        "MF67",
-        "MF67_3V",
-        "MF88"
-      ],
-      "asset": {
-        "status": "awaiting_human_source_and_license",
-        "car_only": true,
-        "lod_count": 3,
-        "compression": [
-          "draco",
-          "meshopt"
-        ],
-        "max_bytes_per_lod": 153600,
-        "origin": "car_center",
-        "long_axis": "+X",
-        "materials": "matte_metalness_near_zero",
-        "source_uri": null,
-        "license": null
-      },
-      "livery": {
-        "status": "awaiting_human_validation",
-        "approved_hex": null,
-        "note": "Aucune teinte physique n'est supposée à partir de la couleur de ligne."
-      }
+      "status": "awaiting_human_source_and_license",
+      "dimensions_m": null,
+      "asset_file": null,
+      "sha256": null
     },
     {
       "family_id": "pneumatic",
-      "label": "Matériel pneumatique",
-      "drive_type": "tire",
-      "candidate_model_ids": [
-        "MP14_5V",
-        "MP89_CC_5V",
-        "MP73"
-      ],
-      "asset": {
-        "status": "awaiting_human_source_and_license",
-        "car_only": true,
-        "lod_count": 3,
-        "compression": [
-          "draco",
-          "meshopt"
-        ],
-        "max_bytes_per_lod": 153600,
-        "origin": "car_center",
-        "long_axis": "+X",
-        "materials": "matte_metalness_near_zero",
-        "source_uri": null,
-        "license": null
-      },
-      "livery": {
-        "status": "awaiting_human_validation",
-        "approved_hex": null,
-        "note": "Aucune teinte physique n'est supposée à partir de la couleur de ligne."
-      }
+      "status": "awaiting_human_source_and_license",
+      "dimensions_m": null,
+      "asset_file": null,
+      "sha256": null
     },
     {
       "family_id": "automatic_recent",
-      "label": "Matériel automatique récent",
-      "drive_type": "tire",
-      "candidate_model_ids": [
-        "MP14_8V",
-        "MP14_6V",
-        "MP05",
-        "MP89_CA"
-      ],
-      "asset": {
-        "status": "awaiting_human_source_and_license",
-        "car_only": true,
-        "lod_count": 3,
-        "compression": [
-          "draco",
-          "meshopt"
-        ],
-        "max_bytes_per_lod": 153600,
-        "origin": "car_center",
-        "long_axis": "+X",
-        "materials": "matte_metalness_near_zero",
-        "source_uri": null,
-        "license": null
+      "status": "awaiting_human_source_and_license",
+      "dimensions_m": null,
+      "asset_file": null,
+      "sha256": null
+    },
+    {
+      "family_id": "pneumatic_generic",
+      "status": "awaiting_human_asset_approval",
+      "dimensions_m": {
+        "car_length_m": 15.5,
+        "car_height_m": 3.48,
+        "width_m": 2.45
       },
-      "livery": {
-        "status": "awaiting_human_validation",
-        "approved_hex": null,
-        "note": "Aucune teinte physique n'est supposée à partir de la couleur de ligne."
-      }
+      "asset_file": null,
+      "sha256": null
+    },
+    {
+      "family_id": "rer_generic_A",
+      "status": "awaiting_human_asset_approval",
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset_file": "train/rer_generic_A__neutral.glb",
+      "sha256": "6e844892879327fda1e2d34d1ea7e42471d60d2c71a8ca303983725719d48fb0"
+    },
+    {
+      "family_id": "rer_generic_B",
+      "status": "awaiting_human_asset_approval",
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset_file": "train/rer_generic_B__neutral.glb",
+      "sha256": "03a8bc8565d4f4f9d8009225e976ed5e5d98cd8fad9702ef84ed2992350e5f24"
+    },
+    {
+      "family_id": "rer_generic_C",
+      "status": "awaiting_human_asset_approval",
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset_file": "train/rer_generic_C__neutral.glb",
+      "sha256": "64a2f244af7605ac355c78d5e54722c0b325ab4070071442f90f65b8a4635f2a"
+    },
+    {
+      "family_id": "rer_generic_D",
+      "status": "awaiting_human_asset_approval",
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset_file": "train/rer_generic_D__neutral.glb",
+      "sha256": "963283f4bac16e4ac4cd13748b7b975d3eb03b28a18022937a58e10cde5844c3"
+    },
+    {
+      "family_id": "rer_generic_E",
+      "status": "awaiting_human_asset_approval",
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset_file": "train/rer_generic_E__neutral.glb",
+      "sha256": "bd04c606b1ba28292aa85d44d5cac8170a3b8317c0551c13704b5a3d8a631670"
     }
-  ],
-  "line_assignments": [
-    {
-      "short_name": "1",
-      "model_id": "MP05",
-      "family_id": "automatic_recent",
-      "route_color": "#FFBE00",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "10",
-      "model_id": "MF67",
-      "family_id": "steel_classic",
-      "route_color": "#DC9600",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "11",
-      "model_id": "MP14_5V",
-      "family_id": "pneumatic",
-      "route_color": "#6E491E",
-      "route_text_color": "#FFFFFF",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "12",
-      "model_id": "MF67",
-      "family_id": "steel_classic",
-      "route_color": "#00643C",
-      "route_text_color": "#FFFFFF",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "13",
-      "model_id": "MF77",
-      "family_id": "steel_classic",
-      "route_color": "#82C8E6",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "14",
-      "model_id": "MP14_8V",
-      "family_id": "automatic_recent",
-      "route_color": "#640082",
-      "route_text_color": "#FFFFFF",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "2",
-      "model_id": "MF01",
-      "family_id": "steel_classic",
-      "route_color": "#0055C8",
-      "route_text_color": "#FFFFFF",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "3",
-      "model_id": "MF67",
-      "family_id": "steel_classic",
-      "route_color": "#6E6E00",
-      "route_text_color": "#FFFFFF",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "3bis",
-      "model_id": "MF67_3V",
-      "family_id": "steel_classic",
-      "route_color": "#82C8E6",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "4",
-      "model_id": "MP89_CA",
-      "family_id": "automatic_recent",
-      "route_color": "#A0006E",
-      "route_text_color": "#FFFFFF",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "5",
-      "model_id": "MF01",
-      "family_id": "steel_classic",
-      "route_color": "#FF5A00",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "6",
-      "model_id": "MP89_CC_5V",
-      "family_id": "pneumatic",
-      "route_color": "#82DC73",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "7",
-      "model_id": "MF77",
-      "family_id": "steel_classic",
-      "route_color": "#FF82B4",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "7bis",
-      "model_id": "MF88",
-      "family_id": "steel_classic",
-      "route_color": "#82DC73",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "8",
-      "model_id": "MF77",
-      "family_id": "steel_classic",
-      "route_color": "#D282BE",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    },
-    {
-      "short_name": "9",
-      "model_id": "MF01",
-      "family_id": "steel_classic",
-      "route_color": "#D2D200",
-      "route_text_color": "#000000",
-      "livery_color_status": "pending_human_validation"
-    }
-  ],
-  "livery_palette": {
-    "status": "awaiting_human_validation",
-    "route_colours_are_not_physical_liveries": true,
-    "gtfs_route_colours": {
-      "1": {
-        "route_color": "#FFBE00",
-        "route_text_color": "#000000"
-      },
-      "10": {
-        "route_color": "#DC9600",
-        "route_text_color": "#000000"
-      },
-      "11": {
-        "route_color": "#6E491E",
-        "route_text_color": "#FFFFFF"
-      },
-      "12": {
-        "route_color": "#00643C",
-        "route_text_color": "#FFFFFF"
-      },
-      "13": {
-        "route_color": "#82C8E6",
-        "route_text_color": "#000000"
-      },
-      "14": {
-        "route_color": "#640082",
-        "route_text_color": "#FFFFFF"
-      },
-      "2": {
-        "route_color": "#0055C8",
-        "route_text_color": "#FFFFFF"
-      },
-      "3": {
-        "route_color": "#6E6E00",
-        "route_text_color": "#FFFFFF"
-      },
-      "3bis": {
-        "route_color": "#82C8E6",
-        "route_text_color": "#000000"
-      },
-      "4": {
-        "route_color": "#A0006E",
-        "route_text_color": "#FFFFFF"
-      },
-      "5": {
-        "route_color": "#FF5A00",
-        "route_text_color": "#000000"
-      },
-      "6": {
-        "route_color": "#82DC73",
-        "route_text_color": "#000000"
-      },
-      "7": {
-        "route_color": "#FF82B4",
-        "route_text_color": "#000000"
-      },
-      "7bis": {
-        "route_color": "#82DC73",
-        "route_text_color": "#000000"
-      },
-      "8": {
-        "route_color": "#D282BE",
-        "route_text_color": "#000000"
-      },
-      "9": {
-        "route_color": "#D2D200",
-        "route_text_color": "#000000"
-      }
-    }
-  },
-  "next_human_inputs": [
-    "Une source ou un fichier glTF pour chacune des trois familles.",
-    "La licence autorisant la redistribution dans cette application.",
-    "Une teinte de livrée validée pour chaque famille (ou autorisation explicite d'utiliser les couleurs GTFS comme proxy visuel)."
   ]
 }

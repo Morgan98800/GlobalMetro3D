@@ -1,12 +1,26 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-09-10",
+  "generated_on": "2026-09-12",
   "status": "awaiting_human_asset_approval",
   "policy": {
     "external_downloads": "blocked_until_human_source_and_license_approval",
     "marketplace_models": "never_download_without_explicit_license_approval",
-    "train_models_present": false,
-    "train_model_files": []
+    "train_models_present": true,
+    "train_model_files": [
+      "train/pneumatic_generic__neutral.glb",
+      "train/rer_generic_A__cab.glb",
+      "train/rer_generic_A__neutral.glb",
+      "train/rer_generic_B__cab.glb",
+      "train/rer_generic_B__neutral.glb",
+      "train/rer_generic_C__cab.glb",
+      "train/rer_generic_C__neutral.glb",
+      "train/rer_generic_D__cab.glb",
+      "train/rer_generic_D__neutral.glb",
+      "train/rer_generic_E__cab.glb",
+      "train/rer_generic_E__neutral.glb",
+      "train/rer_generic__neutral.glb",
+      "train/steel_classic__neutral.glb"
+    ]
   },
   "render_contract": {
     "representation": "one_car_instanced_along_curvilinear_path",
@@ -28,7 +42,13 @@
         "MF77",
         "MF67",
         "MF67_3V",
-        "MF88"
+        "MF88",
+        "RER_A_MI09_UM2",
+        "RER_B_MI79_UM2",
+        "RER_C_Z2N_UM2",
+        "RER_D_Z2N_UM2",
+        "RER_E_Z50000_UM2",
+        "rer_generic"
       ],
       "asset": {
         "status": "awaiting_human_source_and_license",
@@ -110,6 +130,242 @@
         "status": "awaiting_human_validation",
         "approved_hex": null,
         "note": "Aucune teinte physique n'est supposée à partir de la couleur de ligne."
+      }
+    },
+    {
+      "family_id": "pneumatic_generic",
+      "label": "Référence pneumatique générique interne",
+      "drive_type": "tire",
+      "candidate_model_ids": [],
+      "dimensions_m": {
+        "car_length_m": 15.5,
+        "car_height_m": 3.48,
+        "width_m": 2.45
+      },
+      "asset": {
+        "status": "awaiting_human_asset_approval",
+        "role": "reference",
+        "car_only": true,
+        "lod_count": 0,
+        "compression": [],
+        "max_bytes_per_lod": 0,
+        "origin": "x,z centred; y = 0 at rail head",
+        "long_axis": "+X",
+        "materials": "not_for_distribution",
+        "source_uri": null,
+        "license": "unresolved",
+        "provenance": {
+          "source_kind": "reference_hero",
+          "source_location": "<to be filled: external storage location>",
+          "source_sha256": "<to be filled: SHA-256>",
+          "derivative_policy": "internal_reference_only_never_publish",
+          "reference_directory": "assets-src/reference/pneumatic_generic"
+        }
+      },
+      "livery": {
+        "status": "not_for_distribution",
+        "approved_hex": null,
+        "note": "Dérivés de référence internes uniquement ; livrée, logos, lettrage et pictogrammes non redistribuables."
+      }
+    },
+    {
+      "family_id": "rer_generic_A",
+      "label": "Matériel RER générique clean-room",
+      "drive_type": "steel",
+      "candidate_model_ids": [
+        "rer_generic_A"
+      ],
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset": {
+        "status": "awaiting_human_asset_approval",
+        "role": "reference",
+        "car_only": true,
+        "lod_count": 0,
+        "compression": [],
+        "max_bytes_per_lod": 0,
+        "origin": "x,z centred; y = 0 at rail head",
+        "long_axis": "+X",
+        "materials": "matte_metalness_near_zero",
+        "source_uri": null,
+        "license": "unresolved",
+        "provenance": {
+          "source_kind": "clean_room_generated",
+          "source_location": "assets-src/models/train/rer_generic_A__neutral.glb",
+          "source_sha256": "6e844892879327fda1e2d34d1ea7e42471d60d2c71a8ca303983725719d48fb0",
+          "derivative_policy": "internal_reference_only_never_publish",
+          "reference_directory": "assets-src/models/train"
+        },
+        "asset_file": "train/rer_generic_A__neutral.glb",
+        "sha256": "6e844892879327fda1e2d34d1ea7e42471d60d2c71a8ca303983725719d48fb0"
+      },
+      "livery": {
+        "status": "not_for_distribution",
+        "approved_hex": null,
+        "note": "Modèle neutre ; aucune livrée physique n'est supposée."
+      }
+    },
+    {
+      "family_id": "rer_generic_B",
+      "label": "Matériel RER générique clean-room",
+      "drive_type": "steel",
+      "candidate_model_ids": [
+        "rer_generic_B"
+      ],
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset": {
+        "status": "awaiting_human_asset_approval",
+        "role": "reference",
+        "car_only": true,
+        "lod_count": 0,
+        "compression": [],
+        "max_bytes_per_lod": 0,
+        "origin": "x,z centred; y = 0 at rail head",
+        "long_axis": "+X",
+        "materials": "matte_metalness_near_zero",
+        "source_uri": null,
+        "license": "unresolved",
+        "provenance": {
+          "source_kind": "clean_room_generated",
+          "source_location": "assets-src/models/train/rer_generic_B__neutral.glb",
+          "source_sha256": "03a8bc8565d4f4f9d8009225e976ed5e5d98cd8fad9702ef84ed2992350e5f24",
+          "derivative_policy": "internal_reference_only_never_publish",
+          "reference_directory": "assets-src/models/train"
+        },
+        "asset_file": "train/rer_generic_B__neutral.glb",
+        "sha256": "03a8bc8565d4f4f9d8009225e976ed5e5d98cd8fad9702ef84ed2992350e5f24"
+      },
+      "livery": {
+        "status": "not_for_distribution",
+        "approved_hex": null,
+        "note": "Modèle neutre ; aucune livrée physique n'est supposée."
+      }
+    },
+    {
+      "family_id": "rer_generic_C",
+      "label": "Matériel RER générique clean-room",
+      "drive_type": "steel",
+      "candidate_model_ids": [
+        "rer_generic_C"
+      ],
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset": {
+        "status": "awaiting_human_asset_approval",
+        "role": "reference",
+        "car_only": true,
+        "lod_count": 0,
+        "compression": [],
+        "max_bytes_per_lod": 0,
+        "origin": "x,z centred; y = 0 at rail head",
+        "long_axis": "+X",
+        "materials": "matte_metalness_near_zero",
+        "source_uri": null,
+        "license": "unresolved",
+        "provenance": {
+          "source_kind": "clean_room_generated",
+          "source_location": "assets-src/models/train/rer_generic_C__neutral.glb",
+          "source_sha256": "64a2f244af7605ac355c78d5e54722c0b325ab4070071442f90f65b8a4635f2a",
+          "derivative_policy": "internal_reference_only_never_publish",
+          "reference_directory": "assets-src/models/train"
+        },
+        "asset_file": "train/rer_generic_C__neutral.glb",
+        "sha256": "64a2f244af7605ac355c78d5e54722c0b325ab4070071442f90f65b8a4635f2a"
+      },
+      "livery": {
+        "status": "not_for_distribution",
+        "approved_hex": null,
+        "note": "Modèle neutre ; aucune livrée physique n'est supposée."
+      }
+    },
+    {
+      "family_id": "rer_generic_D",
+      "label": "Matériel RER générique clean-room",
+      "drive_type": "steel",
+      "candidate_model_ids": [
+        "rer_generic_D"
+      ],
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset": {
+        "status": "awaiting_human_asset_approval",
+        "role": "reference",
+        "car_only": true,
+        "lod_count": 0,
+        "compression": [],
+        "max_bytes_per_lod": 0,
+        "origin": "x,z centred; y = 0 at rail head",
+        "long_axis": "+X",
+        "materials": "matte_metalness_near_zero",
+        "source_uri": null,
+        "license": "unresolved",
+        "provenance": {
+          "source_kind": "clean_room_generated",
+          "source_location": "assets-src/models/train/rer_generic_D__neutral.glb",
+          "source_sha256": "963283f4bac16e4ac4cd13748b7b975d3eb03b28a18022937a58e10cde5844c3",
+          "derivative_policy": "internal_reference_only_never_publish",
+          "reference_directory": "assets-src/models/train"
+        },
+        "asset_file": "train/rer_generic_D__neutral.glb",
+        "sha256": "963283f4bac16e4ac4cd13748b7b975d3eb03b28a18022937a58e10cde5844c3"
+      },
+      "livery": {
+        "status": "not_for_distribution",
+        "approved_hex": null,
+        "note": "Modèle neutre ; aucune livrée physique n'est supposée."
+      }
+    },
+    {
+      "family_id": "rer_generic_E",
+      "label": "Matériel RER générique clean-room",
+      "drive_type": "steel",
+      "candidate_model_ids": [
+        "rer_generic_E"
+      ],
+      "dimensions_m": {
+        "car_length_m": 15.0,
+        "car_height_m": 2.85,
+        "width_m": 2.8
+      },
+      "asset": {
+        "status": "awaiting_human_asset_approval",
+        "role": "reference",
+        "car_only": true,
+        "lod_count": 0,
+        "compression": [],
+        "max_bytes_per_lod": 0,
+        "origin": "x,z centred; y = 0 at rail head",
+        "long_axis": "+X",
+        "materials": "matte_metalness_near_zero",
+        "source_uri": null,
+        "license": "unresolved",
+        "provenance": {
+          "source_kind": "clean_room_generated",
+          "source_location": "assets-src/models/train/rer_generic_E__neutral.glb",
+          "source_sha256": "bd04c606b1ba28292aa85d44d5cac8170a3b8317c0551c13704b5a3d8a631670",
+          "derivative_policy": "internal_reference_only_never_publish",
+          "reference_directory": "assets-src/models/train"
+        },
+        "asset_file": "train/rer_generic_E__neutral.glb",
+        "sha256": "bd04c606b1ba28292aa85d44d5cac8170a3b8317c0551c13704b5a3d8a631670"
+      },
+      "livery": {
+        "status": "not_for_distribution",
+        "approved_hex": null,
+        "note": "Modèle neutre ; aucune livrée physique n'est supposée."
       }
     }
   ],
@@ -240,6 +496,46 @@
       "family_id": "steel_classic",
       "route_color": "#D2D200",
       "route_text_color": "#000000",
+      "livery_color_status": "pending_human_validation"
+    },
+    {
+      "short_name": "A",
+      "model_id": "rer_generic",
+      "family_id": "rer_generic_A",
+      "route_color": "#EB2132",
+      "route_text_color": "#FFFFFF",
+      "livery_color_status": "pending_human_validation"
+    },
+    {
+      "short_name": "B",
+      "model_id": "rer_generic",
+      "family_id": "rer_generic_B",
+      "route_color": "#5091CB",
+      "route_text_color": "#FFFFFF",
+      "livery_color_status": "pending_human_validation"
+    },
+    {
+      "short_name": "C",
+      "model_id": "rer_generic",
+      "family_id": "rer_generic_C",
+      "route_color": "#FFCC30",
+      "route_text_color": "#000000",
+      "livery_color_status": "pending_human_validation"
+    },
+    {
+      "short_name": "D",
+      "model_id": "rer_generic",
+      "family_id": "rer_generic_D",
+      "route_color": "#008B5B",
+      "route_text_color": "#FFFFFF",
+      "livery_color_status": "pending_human_validation"
+    },
+    {
+      "short_name": "E",
+      "model_id": "rer_generic",
+      "family_id": "rer_generic_E",
+      "route_color": "#B94E9A",
+      "route_text_color": "#FFFFFF",
       "livery_color_status": "pending_human_validation"
     }
   ],

@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
-"""Génération clean-room des modèles glTF du matériel roulant RER.
+"""Génération clean-room des modèles glTF du matériel roulant RER — v2.
 
-Aucune dépendance externe : le GLB est sérialisé à la main (bibliothèque
-standard uniquement), comme scripts/build_train_box_models.py.
+Changement par rapport à la v1 : la caisse n'est plus peinte par cinq
+`baseColorFactor` sur cinq primitives, mais par une **texture d'albédo générée
+procéduralement** appliquée sur un dépliage UV cylindrique. Cela aligne le
+modèle de matériau sur celui des GLB métro (`baseColorTexture`), supprime
+l'incohérence de rendu entre les deux familles, et permet des fenêtres
+individualisées plutôt que des bandeaux continus.
 
-Rien n'est copié d'un modèle existant. La géométrie est entièrement
-paramétrique et dérivée du gabarit déclaré dans rolling-stock.json.
+Aucune dépendance externe : le PNG est encodé à la main avec `zlib`, le GLB est
+sérialisé à la main. Rien n'est copié d'un modèle existant, aucune marque n'est
+reproduite.
 
-  rer_generic__neutral.glb   voiture de rame, répétée le long de l'abscisse
-                             curviligne par le ScenegraphLayer
-  rer_generic__cab.glb       variante avec nez (OPTIONNEL, voir README)
+Convention d'axes (alignée sur les GLB métro, vérifiée) :
+  longueur sur X, CENTRÉE  -> X ∈ [-L/2, +L/2]
+  hauteur sur Y, origine au DESSOUS DE CAISSE -> Y ∈ [0, H]
+  largeur sur Z, centrée   -> Z ∈ [-W/2, +W/2]
 
-Convention d'axes par défaut : longueur sur +X, hauteur sur +Y, largeur sur Z,
-origine au niveau du rail (y = 0) et centrée en largeur. Si les GLB métro
-utilisent -Z comme axe de marche, passer --forward-axis=-z. Vérifier avec
-inspect_glb.py avant d'intégrer.
+Dépliage UV : u = (x + L/2) / L, v = abscisse curviligne le long du profil,
+normalisée. La caisse étant une extrusion de section fermée, c'est un cylindre
+déplié : le mapping est exact et sans couture visible hors du bas de caisse.
 """
 
 from __future__ import annotations
@@ -23,35 +28,98 @@ import argparse
 import json
 import math
 import struct
+import zlib
 from pathlib import Path
 
 # ---------------------------------------------------------------- gabarit RER
-# Valeurs par défaut alignées sur l'entrée `rer_generic` de rolling-stock.json.
-# ATTENTION : car_length doit être IDENTIQUE à car_length_m dans ce fichier,
-# sinon les voitures se chevauchent ou laissent des trous à la découpe.
+# car_length DOIT être identique à car_length_m dans rolling-stock.json, sinon
+# les voitures se chevauchent ou laissent des trous à la découpe.
 DEFAULTS = dict(
-    car_length=15.0,   # m — cf. rolling-stock.json (voir note de réalisme, README)
+    car_length=15.0,   # m
     width=2.80,        # m — gabarit RER (métro : ~2,40)
-    height=3.80,       # m — du plan de rail à la toiture
-    floor=0.95,        # m — dessous de caisse
+    height=2.85,       # m — du dessous de caisse à la toiture
     corner_r=0.34,     # m — rayon des angles de caisse
     chamfer=0.22,      # m — retrait d'about, dessine le joint entre voitures
     nose_length=2.40,  # m — longueur du nez de la variante cabine
 )
 
-# Deux bandeaux vitrés : signature visuelle du RER à deux niveaux.
-GLAZING_BANDS = ((1.18, 1.78), (2.42, 3.02))  # (y_bas, y_haut) en m
-DOORS_PER_SIDE = 2
-DOOR_WIDTH = 1.30  # m
+# Stratification verticale, en mètres depuis le dessous de caisse.
+# C'est la seule source de vérité : la géométrie ne la connaît pas, seule la
+# texture la peint, en fonction du y réel de chaque ligne de pixels.
+SKIRT_TOP = 0.34
+WINDOWS_LOWER = (0.56, 1.16)
+BELT = (1.26, 1.56)
+WINDOWS_UPPER = (1.70, 2.30)
+ROOF_BASE = 2.44
+
+# Découpe horizontale, en fraction de la longueur de voiture.
+DOOR_COUNT = 2
+DOOR_WIDTH_M = 1.30
+WINDOW_WIDTH_M = 1.05
+WINDOW_GAP_M = 0.30
+
+TEX_WIDTH = 1024
+TEX_HEIGHT = 320
+V_BODY = 0.92          # le profil occupe v ∈ [0, V_BODY]
+V_SOLID = 0.965        # bande réservée aux faces d'about (couleur unie)
+
+# Tons saisis en sRGB 0–255, comme on les veut à l'écran. Une texture PNG est
+# interprétée en sRGB par glTF : ici, pas de conversion linéaire à faire —
+# contrairement à baseColorFactor, qui est en espace linéaire. C'est
+# précisément le piège qui délavait la v1.
+TONE_BODY = (196, 199, 201)
+TONE_BODY_ALT = (186, 189, 192)   # léger panneautage vertical
+TONE_SKIRT = (54, 56, 58)
+TONE_ROOF = (112, 115, 117)
+TONE_ROOF_EDGE = (92, 95, 97)
+TONE_GLASS = (23, 26, 30)
+TONE_GLASS_HL = (38, 44, 52)      # reflet haut de vitre
+TONE_DOOR = (150, 154, 157)
+TONE_DOOR_EDGE = (70, 73, 76)
+TONE_BELT = (108, 112, 115)       # remplacé par la couleur de ligne si --livery=line
+TONE_FILET = (86, 89, 92)
+TONE_GANGWAY = (58, 60, 63)        # faces d'about : soufflet d'intercirculation
+
+# Couleurs GTFS autoritaires (cf. audit géographique du réseau).
+RER_COLOURS = {"A": "#EB2132", "B": "#5091CB", "C": "#FFCC30",
+               "D": "#008B5B", "E": "#B94E9A"}
+RER_LINE_IDS = {"A": "C01742", "B": "C01743", "C": "C01727",
+                "D": "C01728", "E": "C01729"}
 
 
-# --------------------------------------------------------------------- outils
+# --------------------------------------------------------------- encodeur PNG
 
-def rounded_rect_profile(width: float, y_bottom: float, y_top: float,
-                         radius: float, corner_segments: int) -> list[tuple[float, float]]:
-    """Section transversale fermée dans le plan (z, y), sens anti-horaire."""
+def write_png(pixels: bytearray, width: int, height: int) -> bytes:
+    """PNG RGB8 minimal, sans dépendance (zlib + struct)."""
+    raw = bytearray()
+    stride = width * 3
+    for row in range(height):
+        raw.append(0)  # filtre None
+        raw += pixels[row * stride:(row + 1) * stride]
+
+    def chunk(tag: bytes, payload: bytes) -> bytes:
+        return (struct.pack(">I", len(payload)) + tag + payload
+                + struct.pack(">I", zlib.crc32(tag + payload) & 0xFFFFFFFF))
+
+    header = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    return (b"\x89PNG\r\n\x1a\n"
+            + chunk(b"IHDR", header)
+            + chunk(b"IDAT", zlib.compress(bytes(raw), 9))
+            + chunk(b"IEND", b""))
+
+
+def hex_to_rgb(value: str) -> tuple[int, int, int]:
+    value = value.lstrip("#")
+    return tuple(int(value[i:i + 2], 16) for i in (0, 2, 4))
+
+
+# ------------------------------------------------------------------- géométrie
+
+def rounded_rect_profile(width: float, height: float, radius: float,
+                         corner_segments: int) -> list[tuple[float, float]]:
+    """Section fermée dans le plan (z, y), sens anti-horaire, y ∈ [0, height]."""
     half = width / 2.0
-    r = min(radius, half * 0.9, (y_top - y_bottom) * 0.45)
+    r = min(radius, half * 0.9, height * 0.45)
     pts: list[tuple[float, float]] = []
 
     def arc(cz: float, cy: float, start: float, end: float) -> None:
@@ -59,246 +127,247 @@ def rounded_rect_profile(width: float, y_bottom: float, y_top: float,
             a = start + (end - start) * i / corner_segments
             pts.append((cz + r * math.cos(a), cy + r * math.sin(a)))
 
-    arc(half - r, y_bottom + r, -math.pi / 2, 0.0)          # bas droite
-    arc(half - r, y_top - r, 0.0, math.pi / 2)              # haut droite
-    arc(-(half - r), y_top - r, math.pi / 2, math.pi)       # haut gauche
-    arc(-(half - r), y_bottom + r, math.pi, 3 * math.pi / 2)  # bas gauche
+    arc(half - r, r, -math.pi / 2, 0.0)
+    arc(half - r, height - r, 0.0, math.pi / 2)
+    arc(-(half - r), height - r, math.pi / 2, math.pi)
+    arc(-(half - r), r, math.pi, 3 * math.pi / 2)
 
-    deduped: list[tuple[float, float]] = []
+    out: list[tuple[float, float]] = []
     for p in pts:
-        if not deduped or abs(p[0] - deduped[-1][0]) > 1e-9 or abs(p[1] - deduped[-1][1]) > 1e-9:
-            deduped.append(p)
-    if abs(deduped[0][0] - deduped[-1][0]) < 1e-9 and abs(deduped[0][1] - deduped[-1][1]) < 1e-9:
-        deduped.pop()
-    return deduped
+        if not out or abs(p[0] - out[-1][0]) > 1e-9 or abs(p[1] - out[-1][1]) > 1e-9:
+            out.append(p)
+    if abs(out[0][0] - out[-1][0]) < 1e-9 and abs(out[0][1] - out[-1][1]) < 1e-9:
+        out.pop()
+    return out
 
 
-def side_z_at(profile: list[tuple[float, float]], y: float) -> float:
-    """Demi-largeur de la caisse à la hauteur y (pour poser les vitrages)."""
-    best = 0.0
-    for z, py in profile:
-        if abs(py - y) < 0.35:
-            best = max(best, abs(z))
-    return best or max(abs(z) for z, _ in profile)
+def profile_arclength(profile: list[tuple[float, float]]) -> list[float]:
+    """Abscisse curviligne cumulée, avec un point final dupliqué à s = périmètre.
+
+    Le doublon évite la couture : sans lui, le dernier quad interpolerait v de
+    0,92 vers 0, et la texture entière défilerait à l'envers sur ce quad.
+    """
+    s = [0.0]
+    n = len(profile)
+    for i in range(1, n + 1):
+        a, b = profile[i - 1], profile[i % n]
+        s.append(s[-1] + math.hypot(b[0] - a[0], b[1] - a[1]))
+    return s
 
 
 class Mesh:
-    """Accumulateur de triangles avec normales par face, winding auto-corrigé."""
-
     def __init__(self) -> None:
         self.positions: list[tuple[float, float, float]] = []
         self.normals: list[tuple[float, float, float]] = []
+        self.uvs: list[tuple[float, float]] = []
         self.indices: list[int] = []
         self._index: dict[tuple, int] = {}
 
-    def _vertex(self, p: tuple[float, float, float], n: tuple[float, float, float]) -> int:
+    def _vertex(self, p, n, uv) -> int:
         key = (round(p[0], 5), round(p[1], 5), round(p[2], 5),
-               round(n[0], 3), round(n[1], 3), round(n[2], 3))
+               round(n[0], 3), round(n[1], 3), round(n[2], 3),
+               round(uv[0], 5), round(uv[1], 5))
         got = self._index.get(key)
         if got is not None:
             return got
         self.positions.append(p)
         self.normals.append(n)
-        idx = len(self.positions) - 1
-        self._index[key] = idx
-        return idx
+        self.uvs.append(uv)
+        self._index[key] = len(self.positions) - 1
+        return self._index[key]
 
-    def add_quad(self, a, b, c, d, outward) -> None:
-        self.add_tri(a, b, c, outward)
-        self.add_tri(a, c, d, outward)
-
-    def add_tri(self, a, b, c, outward) -> None:
+    def add_tri(self, verts, uvs, outward) -> None:
+        a, b, c = verts
         u = (b[0] - a[0], b[1] - a[1], b[2] - a[2])
         v = (c[0] - a[0], c[1] - a[1], c[2] - a[2])
         n = (u[1] * v[2] - u[2] * v[1],
              u[2] * v[0] - u[0] * v[2],
              u[0] * v[1] - u[1] * v[0])
-        length = math.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2)
-        if length < 1e-12:
+        ln = math.sqrt(n[0] ** 2 + n[1] ** 2 + n[2] ** 2)
+        if ln < 1e-12:
             return
-        n = (n[0] / length, n[1] / length, n[2] / length)
-        # La normale doit pointer vers l'extérieur : sinon on inverse le triangle.
+        n = (n[0] / ln, n[1] / ln, n[2] / ln)
         if n[0] * outward[0] + n[1] * outward[1] + n[2] * outward[2] < 0.0:
-            a, c = c, a
+            verts = (c, b, a)
+            uvs = (uvs[2], uvs[1], uvs[0])
             n = (-n[0], -n[1], -n[2])
-        for p in (a, b, c):
-            self.indices.append(self._vertex(p, n))
+        for p, uv in zip(verts, uvs):
+            self.indices.append(self._vertex(p, n, uv))
+
+    def add_quad(self, verts, uvs, outward) -> None:
+        self.add_tri((verts[0], verts[1], verts[2]), (uvs[0], uvs[1], uvs[2]), outward)
+        self.add_tri((verts[0], verts[2], verts[3]), (uvs[0], uvs[2], uvs[3]), outward)
 
     @property
     def triangle_count(self) -> int:
         return len(self.indices) // 3
 
 
-# ------------------------------------------------------------------ géométrie
+def build_body(rings, profile, height, length) -> Mesh:
+    """Extrusion de la section le long de X, avec dépliage UV cylindrique."""
+    mesh = Mesh()
+    arc = profile_arclength(profile)
+    perimeter = arc[-1]
+    n = len(profile)
+    half_len = length / 2.0
+    y_mid = height / 2.0
 
-def build_shell(rings: list[tuple[float, float, float, float]],
-                profile: list[tuple[float, float]],
-                y_bottom: float, y_top: float,
-                cap_front: bool, cap_back: bool) -> dict[str, Mesh]:
-    """Extrude la section le long de X.
-
-    rings : (x, scale_z, scale_y, y_shift). Un segment par couple consécutif,
-    avec duplication des sommets aux ruptures de pente pour des arêtes nettes.
-    """
-    parts = {"caisse": Mesh(), "soubassement": Mesh(), "toiture": Mesh()}
-    y_mid = (y_bottom + y_top) / 2.0
-
-    def bucket(y: float) -> Mesh:
-        if y < Y_SKIRT_TOP:
-            return parts["soubassement"]
-        if y > Y_ROOF_BASE:
-            return parts["toiture"]
-        return parts["caisse"]
-
-    def ring_points(ring) -> list[tuple[float, float, float]]:
-        x, sz, sy, dy = ring
-        out = []
-        for z, y in profile:
-            out.append((x, y_bottom + (y - y_bottom) * sy + dy, z * sz))
-        return out
+    def ring_points(ring):
+        x, sz, sy = ring
+        pts = []
+        for j in range(n + 1):
+            z, y = profile[j % n]
+            pts.append((x - half_len, y * sy, z * sz))
+        return pts
 
     for i in range(len(rings) - 1):
-        a_pts = ring_points(rings[i])
-        b_pts = ring_points(rings[i + 1])
-        n = len(profile)
+        a_pts, b_pts = ring_points(rings[i]), ring_points(rings[i + 1])
+        ua = rings[i][0] / length
+        ub = rings[i + 1][0] / length
         for j in range(n):
-            k = (j + 1) % n
-            p0, p1, p2, p3 = a_pts[j], a_pts[k], b_pts[k], b_pts[j]
+            p0, p1, p2, p3 = a_pts[j], a_pts[j + 1], b_pts[j + 1], b_pts[j]
+            v0 = arc[j] / perimeter * V_BODY
+            v1 = arc[j + 1] / perimeter * V_BODY
             cz = (p0[2] + p1[2]) / 2.0
-            mean_y = (p0[1] + p1[1] + p2[1] + p3[1]) / 4.0
             cy = (p0[1] + p1[1]) / 2.0 - y_mid
-            norm = math.sqrt(cz * cz + cy * cy) or 1.0
-            bucket(mean_y).add_quad(p0, p1, p2, p3, (0.0, cy / norm, cz / norm))
+            norm = math.hypot(cz, cy) or 1.0
+            mesh.add_quad((p0, p1, p2, p3),
+                          ((ua, v0), (ua, v1), (ub, v1), (ub, v0)),
+                          (0.0, cy / norm, cz / norm))
 
-    for do_cap, ring, outward in ((cap_front, rings[0], (-1.0, 0.0, 0.0)),
-                                  (cap_back, rings[-1], (1.0, 0.0, 0.0))):
-        if not do_cap:
-            continue
+    # Faces d'about : renvoyées vers la bande unie réservée de la texture.
+    for ring, outward in ((rings[0], (-1.0, 0.0, 0.0)), (rings[-1], (1.0, 0.0, 0.0))):
         pts = ring_points(ring)
-        centre = (ring[0], y_mid, 0.0)
-        for j in range(len(pts)):
-            a, b = pts[j], pts[(j + 1) % len(pts)]
-            bucket((a[1] + b[1] + y_mid) / 3.0).add_tri(centre, a, b, outward)
-    return parts
-
-
-def build_belt(profile: list[tuple[float, float]], length: float,
-               x_start: float) -> Mesh:
-    """Ceinture d'inter-niveau : bandeau plein entre les deux rangs de vitres.
-
-    C'est cette bande qui porte la couleur de ligne avec --livery=line.
-    """
-    mesh = Mesh()
-    y0, y1 = BELT_BAND
-    half = side_z_at(profile, (y0 + y1) / 2.0) + 0.014
-    xa, xb = x_start + 0.16, x_start + length - 0.16
-    if xb <= xa:
-        return mesh
-    for sign in (1.0, -1.0):
-        z = half * sign
-        mesh.add_quad((xa, y0, z), (xb, y0, z), (xb, y1, z), (xa, y1, z),
-                      (0.0, 0.0, sign))
+        centre = (ring[0] - half_len, y_mid, 0.0)
+        solid = (0.5, V_SOLID)
+        for j in range(n):
+            mesh.add_tri((centre, pts[j], pts[j + 1]), (solid, solid, solid), outward)
     return mesh
 
 
-def build_glazing(profile: list[tuple[float, float]], length: float,
-                  x_start: float, car_length: float) -> Mesh:
-    """Bandeaux vitrés et vantaux de portes, en léger relief sur les flancs."""
-    mesh = Mesh()
-    inset = 0.30
-    for y0, y1 in GLAZING_BANDS:
-        half = side_z_at(profile, (y0 + y1) / 2.0) + 0.012
-        xa, xb = x_start + inset, x_start + length - inset
-        if xb <= xa:
-            continue
-        for sign in (1.0, -1.0):
-            z = half * sign
-            out = (0.0, 0.0, sign)
-            mesh.add_quad((xa, y0, z), (xb, y0, z), (xb, y1, z), (xa, y1, z), out)
-
-    # Portes : réparties le long de la voiture, du bas de caisse au haut du
-    # premier bandeau, ce qui reste cohérent quand la voiture est répétée.
-    door_top = GLAZING_BANDS[0][1] + 0.10
-    door_bottom = 0.98
-    for d in range(DOORS_PER_SIDE):
-        centre = x_start + car_length * (d + 0.5) / DOORS_PER_SIDE
-        xa, xb = centre - DOOR_WIDTH / 2.0, centre + DOOR_WIDTH / 2.0
-        xa, xb = max(xa, x_start + 0.05), min(xb, x_start + length - 0.05)
-        if xb <= xa:
-            continue
-        half = side_z_at(profile, (door_bottom + door_top) / 2.0) + 0.008
-        for sign in (1.0, -1.0):
-            z = half * sign
-            out = (0.0, 0.0, sign)
-            mesh.add_quad((xa, door_bottom, z), (xb, door_bottom, z),
-                          (xb, door_top, z), (xa, door_top, z), out)
-    return mesh
-
-
-def body_car(cfg: dict, corner_segments: int) -> dict[str, Mesh]:
-    length = cfg["car_length"]
-    profile = rounded_rect_profile(cfg["width"], cfg["floor"], cfg["height"],
+def body_car(cfg: dict, corner_segments: int) -> Mesh:
+    length, c = cfg["car_length"], cfg["chamfer"]
+    profile = rounded_rect_profile(cfg["width"], cfg["height"],
                                    cfg["corner_r"], corner_segments)
-    c = cfg["chamfer"]
     inset = 0.955
-    rings = [
-        (0.0, inset, inset, 0.0),
-        (c, 1.0, 1.0, 0.0),
-        (length - c, 1.0, 1.0, 0.0),
-        (length, inset, inset, 0.0),
-    ]
-    parts = build_shell(rings, profile, cfg["floor"], cfg["height"],
-                        cap_front=True, cap_back=True)
-    parts["vitrage"] = build_glazing(profile, length, 0.0, length)
-    parts["ceinture"] = build_belt(profile, length, 0.0)
-    return parts
+    rings = [(0.0, inset, inset), (c, 1.0, 1.0),
+             (length - c, 1.0, 1.0), (length, inset, inset)]
+    return build_body(rings, profile, cfg["height"], length)
 
 
-def cab_car(cfg: dict, corner_segments: int) -> dict[str, Mesh]:
-    length = cfg["car_length"]
-    nose = cfg["nose_length"]
-    profile = rounded_rect_profile(cfg["width"], cfg["floor"], cfg["height"],
+def cab_car(cfg: dict, corner_segments: int) -> Mesh:
+    length, c, nose = cfg["car_length"], cfg["chamfer"], cfg["nose_length"]
+    profile = rounded_rect_profile(cfg["width"], cfg["height"],
                                    cfg["corner_r"], corner_segments)
-    c = cfg["chamfer"]
-    # Le facteur vertical (sy) abaisse la TOITURE en gardant le dessous de
-    # caisse fixe : c'est ce qui donne un nez incliné sans faire plonger la
-    # caisse sous le plan de rail. Aucun décalage vertical, donc.
-    drop = 0.0
-    rings = [
-        (0.0, 0.46, 0.58, drop),
-        (nose * 0.18, 0.64, 0.74, drop),
-        (nose * 0.42, 0.83, 0.89, drop),
-        (nose * 0.72, 0.95, 0.97, drop),
-        (nose, 1.0, 1.0, 0.0),
-        (length - c, 1.0, 1.0, 0.0),
-        (length, 0.955, 0.955, 0.0),
-    ]
-    parts = build_shell(rings, profile, cfg["floor"], cfg["height"],
-                        cap_front=True, cap_back=True)
-    parts["vitrage"] = build_glazing(profile, length - nose, nose, length - nose)
-    parts["ceinture"] = build_belt(profile, length - nose, nose)
+    # sy < 1 abaisse la TOITURE en gardant le dessous de caisse fixe : nez
+    # incliné sans faire plonger la caisse sous le plan de rail.
+    rings = [(0.0, 0.46, 0.58), (nose * 0.18, 0.64, 0.74),
+             (nose * 0.42, 0.83, 0.89), (nose * 0.72, 0.95, 0.97),
+             (nose, 1.0, 1.0), (length - c, 1.0, 1.0), (length, 0.955, 0.955)]
+    return build_body(rings, profile, cfg["height"], length)
 
-    # Pare-brise et bandeau d'afficheur de mission : deux surfaces sombres sur
-    # le nez. Aucun texte, aucune marque — juste les surfaces vitrees.
-    windscreen = parts["vitrage"]
+
+# --------------------------------------------------------------- texture
+
+def paint_texture(cfg: dict, corner_segments: int, belt_rgb, is_cab: bool) -> bytes:
+    """Peint l'albédo, ligne de pixels par ligne de pixels.
+
+    Pour chaque rangée v on retrouve le point du profil correspondant, donc son
+    y réel : la texture connaît exactement la stratification de la caisse, sans
+    qu'aucune constante ne soit dupliquée entre géométrie et peinture.
+    """
+    profile = rounded_rect_profile(cfg["width"], cfg["height"],
+                                   cfg["corner_r"], corner_segments)
+    arc = profile_arclength(profile)
+    perimeter = arc[-1]
+    length = cfg["car_length"]
+    n = len(profile)
+
+    def y_at_v(v: float) -> tuple[float, float]:
+        """(y, |z|) du profil à la position v ∈ [0, V_BODY]."""
+        s = max(0.0, min(v / V_BODY, 1.0)) * perimeter
+        for i in range(n):
+            if arc[i] <= s <= arc[i + 1]:
+                span = arc[i + 1] - arc[i]
+                t = 0.0 if span < 1e-9 else (s - arc[i]) / span
+                z0, y0 = profile[i]
+                z1, y1 = profile[(i + 1) % n]
+                return y0 + t * (y1 - y0), abs(z0 + t * (z1 - z0))
+        return profile[0][1], abs(profile[0][0])
+
     half_w = cfg["width"] / 2.0
-    y_low, y_high = 2.30, 3.05
-    x_front, x_back = nose * 0.30, nose * 0.92
-    for sign in (1.0, -1.0):
-        windscreen.add_quad(
-            (x_front, y_low, sign * half_w * 0.30),
-            (x_back, y_low, sign * half_w * 0.78),
-            (x_back, y_high, sign * half_w * 0.74),
-            (x_front, y_high, sign * half_w * 0.28),
-            (-0.55, 0.35, sign * 0.75))
-    display_y = (1.55, 1.92)
-    windscreen.add_quad(
-        (x_front * 0.72, display_y[0], -half_w * 0.26),
-        (x_front * 0.72, display_y[0], half_w * 0.26),
-        (x_front * 0.72, display_y[1], half_w * 0.26),
-        (x_front * 0.72, display_y[1], -half_w * 0.26),
-        (-1.0, 0.0, 0.0))
-    return parts
+
+    # Découpe longitudinale : fenêtres régulières, interrompues par les portes.
+    doors = []
+    for d in range(DOOR_COUNT):
+        centre = length * (d + 0.5) / DOOR_COUNT
+        doors.append((centre - DOOR_WIDTH_M / 2.0, centre + DOOR_WIDTH_M / 2.0))
+
+    def in_door(x: float) -> int:
+        for a, b in doors:
+            if a <= x <= b:
+                return 2 if (x - a < 0.06 or b - x < 0.06) else 1
+        return 0
+
+    pitch = WINDOW_WIDTH_M + WINDOW_GAP_M
+
+    def in_window(x: float) -> bool:
+        if x < 0.45 or x > length - 0.45:
+            return False
+        phase = (x - 0.45) % pitch
+        return phase < WINDOW_WIDTH_M
+
+    nose_u = (cfg["nose_length"] / length) if is_cab else 0.0
+
+    pixels = bytearray(TEX_WIDTH * TEX_HEIGHT * 3)
+    for row in range(TEX_HEIGHT):
+        v = (row + 0.5) / TEX_HEIGHT
+        if v > V_BODY:
+            colour_row = TONE_GANGWAY       # bande unie des faces d'about
+            y = side = None
+        else:
+            y, side = y_at_v(v)
+            colour_row = None
+        for col in range(TEX_WIDTH):
+            u = (col + 0.5) / TEX_WIDTH
+            x = u * length
+            if colour_row is not None:
+                rgb = colour_row
+            elif y < SKIRT_TOP:
+                rgb = TONE_SKIRT
+            elif y > ROOF_BASE:
+                rgb = TONE_ROOF_EDGE if y < ROOF_BASE + 0.10 else TONE_ROOF
+            elif side < half_w * 0.72:
+                rgb = TONE_ROOF_EDGE        # congé de pavillon, hors flanc droit
+            elif BELT[0] <= y <= BELT[1]:
+                rgb = belt_rgb
+            elif u < nose_u * 0.95:
+                # Nez : pare-brise sur la partie haute, tôle sinon.
+                rgb = TONE_GLASS if y > WINDOWS_UPPER[0] else TONE_BODY
+            else:
+                door = in_door(x)
+                if door == 2:
+                    rgb = TONE_DOOR_EDGE
+                elif door == 1:
+                    band = (WINDOWS_LOWER[0] + 0.22 <= y <= WINDOWS_LOWER[1]
+                            or WINDOWS_UPPER[0] <= y <= WINDOWS_UPPER[1])
+                    rgb = TONE_GLASS if band else TONE_DOOR
+                elif ((WINDOWS_LOWER[0] <= y <= WINDOWS_LOWER[1]
+                       or WINDOWS_UPPER[0] <= y <= WINDOWS_UPPER[1])
+                      and in_window(x)):
+                    top = (WINDOWS_LOWER[1] if y <= WINDOWS_LOWER[1]
+                           else WINDOWS_UPPER[1])
+                    rgb = TONE_GLASS_HL if top - y < 0.09 else TONE_GLASS
+                elif abs(y - (SKIRT_TOP + 0.06)) < 0.022:
+                    rgb = TONE_FILET        # filet de bas de caisse
+                else:
+                    rgb = TONE_BODY_ALT if int(x / 2.5) % 2 else TONE_BODY
+            off = (row * TEX_WIDTH + col) * 3
+            pixels[off] = rgb[0]
+            pixels[off + 1] = rgb[1]
+            pixels[off + 2] = rgb[2]
+
+    return write_png(pixels, TEX_WIDTH, TEX_HEIGHT)
 
 
 # ----------------------------------------------------------- sérialisation GLB
@@ -308,67 +377,75 @@ def pad4(data: bytearray, fill: int = 0) -> None:
         data.append(fill)
 
 
-def write_glb(path: Path, primitives: list[tuple[Mesh, int]],
-              materials: list[dict], name: str) -> int:
-    """primitives : liste de (mesh, index de matériau)."""
+def write_glb(path: Path, mesh: Mesh, texture_png: bytes, name: str) -> int:
     binary = bytearray()
-    buffer_views: list[dict] = []
-    accessors: list[dict] = []
-    gltf_primitives: list[dict] = []
 
-    for mesh, material in primitives:
-        if mesh.triangle_count == 0:
-            continue
-        pos_offset = len(binary)
-        for p in mesh.positions:
-            binary += struct.pack("<3f", *p)
-        pad4(binary)
-        nrm_offset = len(binary)
-        for n in mesh.normals:
-            binary += struct.pack("<3f", *n)
-        pad4(binary)
-        idx_offset = len(binary)
-        for i in mesh.indices:
-            binary += struct.pack("<H", i)
-        pad4(binary)
+    pos_off = len(binary)
+    for p in mesh.positions:
+        binary += struct.pack("<3f", *p)
+    pad4(binary)
+    nrm_off = len(binary)
+    for n in mesh.normals:
+        binary += struct.pack("<3f", *n)
+    pad4(binary)
+    uv_off = len(binary)
+    for uv in mesh.uvs:
+        binary += struct.pack("<2f", *uv)
+    pad4(binary)
+    idx_off = len(binary)
+    for i in mesh.indices:
+        binary += struct.pack("<H", i)
+    pad4(binary)
+    img_off = len(binary)
+    binary += texture_png
+    pad4(binary)
 
-        mins = [min(p[k] for p in mesh.positions) for k in range(3)]
-        maxs = [max(p[k] for p in mesh.positions) for k in range(3)]
-
-        base = len(buffer_views)
-        buffer_views += [
-            {"buffer": 0, "byteOffset": pos_offset,
-             "byteLength": len(mesh.positions) * 12, "target": 34962},
-            {"buffer": 0, "byteOffset": nrm_offset,
-             "byteLength": len(mesh.normals) * 12, "target": 34962},
-            {"buffer": 0, "byteOffset": idx_offset,
-             "byteLength": len(mesh.indices) * 2, "target": 34963},
-        ]
-        acc = len(accessors)
-        accessors += [
-            {"bufferView": base, "componentType": 5126, "count": len(mesh.positions),
-             "type": "VEC3", "min": mins, "max": maxs},
-            {"bufferView": base + 1, "componentType": 5126, "count": len(mesh.normals),
-             "type": "VEC3"},
-            {"bufferView": base + 2, "componentType": 5123, "count": len(mesh.indices),
-             "type": "SCALAR"},
-        ]
-        gltf_primitives.append({
-            "attributes": {"POSITION": acc, "NORMAL": acc + 1},
-            "indices": acc + 2,
-            "material": material,
-            "mode": 4,
-        })
+    mins = [min(p[k] for p in mesh.positions) for k in range(3)]
+    maxs = [max(p[k] for p in mesh.positions) for k in range(3)]
 
     gltf = {
-        "asset": {"version": "2.0", "generator": "build_rer_box_models.py (clean-room)"},
+        "asset": {"version": "2.0",
+                  "generator": "build_rer_box_models.py v2 (clean-room)"},
         "scene": 0,
         "scenes": [{"nodes": [0]}],
         "nodes": [{"mesh": 0, "name": name}],
-        "meshes": [{"name": name, "primitives": gltf_primitives}],
-        "materials": materials,
-        "accessors": accessors,
-        "bufferViews": buffer_views,
+        "meshes": [{"name": name, "primitives": [{
+            "attributes": {"POSITION": 0, "NORMAL": 1, "TEXCOORD_0": 2},
+            "indices": 3, "material": 0, "mode": 4}]}],
+        "materials": [{
+            "name": "caisse_rer",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {"index": 0, "texCoord": 0},
+                "metallicFactor": 0.16,
+                "roughnessFactor": 0.52,
+            },
+            "doubleSided": False,
+        }],
+        "textures": [{"sampler": 0, "source": 0}],
+        "samplers": [{"magFilter": 9729, "minFilter": 9987,
+                      "wrapS": 33071, "wrapT": 33071}],
+        "images": [{"bufferView": 4, "mimeType": "image/png"}],
+        "accessors": [
+            {"bufferView": 0, "componentType": 5126, "count": len(mesh.positions),
+             "type": "VEC3", "min": mins, "max": maxs},
+            {"bufferView": 1, "componentType": 5126, "count": len(mesh.normals),
+             "type": "VEC3"},
+            {"bufferView": 2, "componentType": 5126, "count": len(mesh.uvs),
+             "type": "VEC2"},
+            {"bufferView": 3, "componentType": 5123, "count": len(mesh.indices),
+             "type": "SCALAR"},
+        ],
+        "bufferViews": [
+            {"buffer": 0, "byteOffset": pos_off,
+             "byteLength": len(mesh.positions) * 12, "target": 34962},
+            {"buffer": 0, "byteOffset": nrm_off,
+             "byteLength": len(mesh.normals) * 12, "target": 34962},
+            {"buffer": 0, "byteOffset": uv_off,
+             "byteLength": len(mesh.uvs) * 8, "target": 34962},
+            {"buffer": 0, "byteOffset": idx_off,
+             "byteLength": len(mesh.indices) * 2, "target": 34963},
+            {"buffer": 0, "byteOffset": img_off, "byteLength": len(texture_png)},
+        ],
         "buffers": [{"byteLength": len(binary)}],
     }
 
@@ -389,111 +466,9 @@ def write_glb(path: Path, primitives: list[tuple[Mesh, int]],
     return len(out)
 
 
-def srgb_to_linear(component: float) -> float:
-    if component <= 0.04045:
-        return component / 12.92
-    return ((component + 0.055) / 1.055) ** 2.4
-
-
-def grey(srgb: float) -> list[float]:
-    """Ton neutre saisi en sRGB, converti en lineaire.
-
-    PIEGE : baseColorFactor est en espace LINEAIRE dans glTF. Saisir 0,80 en
-    pensant a un gris clair d'ecran donne en realite du quasi-blanc et efface
-    toute la stratification. On saisit donc les tons comme on les veut a
-    l'ecran, et on convertit.
-    """
-    v = round(srgb_to_linear(srgb), 4)
-    return [v, v, v, 1.0]
-
-
-def hex_to_linear(value: str) -> list[float]:
-    value = value.lstrip("#")
-    rgb = [int(value[i:i + 2], 16) / 255.0 for i in (0, 2, 4)]
-    return [round(srgb_to_linear(c), 4) for c in rgb] + [1.0]
-
-
-# Cinq tons neutres stratifies comme une caisse reelle, saisis en sRGB.
-# Aucune livree inventee, aucune marque : seule la structure tonale est
-# modelisee. Le moteur applique la teinte de ligne par-dessus
-# (getNeutralBodyColor garantit un contraste >= 3:1) et les ecarts relatifs
-# entre tons survivent a cette teinte.
-MATERIALS = [
-    {   # 0 — caisse : le ton dominant
-        "name": "caisse_neutre",
-        "pbrMetallicRoughness": {"baseColorFactor": grey(0.78),
-                                 "metallicFactor": 0.16, "roughnessFactor": 0.50},
-        "doubleSided": False,
-    },
-    {   # 1 — vitrage : bandeaux, portes, pare-brise
-        "name": "vitrage_sombre",
-        "pbrMetallicRoughness": {"baseColorFactor": grey(0.09),
-                                 "metallicFactor": 0.32, "roughnessFactor": 0.24},
-        "doubleSided": False,
-    },
-    {   # 2 — soubassement : sous la ligne de plancher, toujours dans l'ombre
-        "name": "soubassement",
-        "pbrMetallicRoughness": {"baseColorFactor": grey(0.21),
-                                 "metallicFactor": 0.22, "roughnessFactor": 0.72},
-        "doubleSided": False,
-    },
-    {   # 3 — toiture : mate, nettement plus sombre (equipements, salissure)
-        "name": "toiture",
-        "pbrMetallicRoughness": {"baseColorFactor": grey(0.44),
-                                 "metallicFactor": 0.10, "roughnessFactor": 0.86},
-        "doubleSided": False,
-    },
-    {   # 4 — ceinture : bandeau d'inter-niveau, porte la couleur de ligne
-        #     avec --livery=line
-        "name": "ceinture",
-        "pbrMetallicRoughness": {"baseColorFactor": grey(0.34),
-                                 "metallicFactor": 0.20, "roughnessFactor": 0.46},
-        "doubleSided": False,
-    },
-]
-
-# Couleurs GTFS autoritaires (cf. audit geographique du reseau). Utilisees
-# uniquement avec --livery=line, pour teinter la ceinture a la generation.
-RER_COLOURS = {"A": "#EB2132", "B": "#5091CB", "C": "#FFCC30",
-               "D": "#008B5B", "E": "#B94E9A"}
-RER_LINE_IDS = {"A": "C01742", "B": "C01743", "C": "C01727",
-                "D": "C01728", "E": "C01729"}
-
-# Bornes verticales de stratification, en metres depuis le plan de rail.
-Y_SKIRT_TOP = 1.06     # au-dessous : soubassement
-Y_ROOF_BASE = 3.28     # au-dessus : toiture
-BELT_BAND = (1.88, 2.32)   # ceinture, entre les deux bandeaux vitres
-
-
-def srgb_to_linear(component: float) -> float:
-    if component <= 0.04045:
-        return component / 12.92
-    return ((component + 0.055) / 1.055) ** 2.4
-
-
-def hex_to_linear(value: str) -> list[float]:
-    value = value.lstrip("#")
-    rgb = [int(value[i:i + 2], 16) / 255.0 for i in (0, 2, 4)]
-    return [round(srgb_to_linear(c), 4) for c in rgb] + [1.0]
-
-
-# Ordre de rendu et affectation des matériaux.
-PART_MATERIAL = (("soubassement", 2), ("caisse", 0), ("toiture", 3),
-                 ("ceinture", 4), ("vitrage", 1))
-
-
 def rotate_to_negative_z(mesh: Mesh) -> None:
-    """Passe de +X vers -Z comme axe de marche (rotation de -90 degres sur Y)."""
     mesh.positions = [(-p[2], p[1], -p[0]) for p in mesh.positions]
     mesh.normals = [(-n[2], n[1], -n[0]) for n in mesh.normals]
-
-
-def center_on_rail_head(mesh: Mesh, car_length: float, floor: float) -> None:
-    """Centre la voiture sur X et place son dessous de caisse sur Y=0."""
-    mesh.positions = [
-        (x - car_length / 2.0, y - floor, z)
-        for x, y, z in mesh.positions
-    ]
 
 
 def main() -> None:
@@ -503,64 +478,48 @@ def main() -> None:
     parser.add_argument("--width", type=float, default=DEFAULTS["width"])
     parser.add_argument("--height", type=float, default=DEFAULTS["height"])
     parser.add_argument("--corner-segments", type=int, default=3)
-    parser.add_argument("--cab-corner-segments", type=int, default=2,
-                        help="la cabine a plus d'anneaux : on tesselle moins "
-                             "les angles pour rester sous 15 Ko")
+    parser.add_argument("--cab-corner-segments", type=int, default=2)
     parser.add_argument("--forward-axis", choices=["x", "-z"], default="x",
                         help="axe de marche ; doit correspondre aux GLB metro")
-    parser.add_argument("--livery", choices=["neutral", "line"], default="neutral",
-                        help="neutral (defaut, comme les GLB metro : le moteur "
-                             "applique la teinte) ou line (ceinture teintee a la "
-                             "couleur GTFS, un fichier par ligne RER)")
-    parser.add_argument("--no-cab", action="store_true",
-                        help="ne pas generer la variante cabine")
+    parser.add_argument("--livery", choices=["neutral", "line"], default="line",
+                        help="line (defaut) : ceinture a la couleur GTFS, un "
+                             "fichier par ligne RER ; neutral : ceinture grise")
+    parser.add_argument("--no-cab", action="store_true")
+    parser.add_argument("--dump-texture", metavar="PNG",
+                        help="ecrit aussi la texture seule, pour inspection")
     args = parser.parse_args()
 
     cfg = dict(DEFAULTS)
     cfg.update(car_length=args.car_length, width=args.width, height=args.height)
     out_dir = Path(args.out_dir)
 
-    builders = [("neutral", body_car)]
+    builders = [("neutral", body_car, False)]
     if not args.no_cab:
-        builders.append(("cab", cab_car))
+        builders.append(("cab", cab_car, True))
 
     if args.livery == "line":
-        variants = [(letter, RER_COLOURS[letter]) for letter in "ABCDE"]
+        variants = [(letter, hex_to_rgb(RER_COLOURS[letter])) for letter in "ABCDE"]
     else:
-        variants = [(None, None)]
+        variants = [(None, TONE_BELT)]
 
-    print(f"{'fichier':<38}{'triangles':>10}{'sommets':>9}{'octets':>9}")
-    total_bytes = 0
-    for letter, colour in variants:
-        materials = [dict(m) for m in MATERIALS]
-        if colour is not None:
-            materials[4] = {
-                "name": f"ceinture_rer_{letter}",
-                "pbrMetallicRoughness": {
-                    "baseColorFactor": hex_to_linear(colour),
-                    "metallicFactor": 0.18, "roughnessFactor": 0.44},
-                "doubleSided": False,
-            }
-        for kind, builder in builders:
+    print(f"{'fichier':<38}{'tri':>6}{'sommets':>9}{'texture':>9}{'octets':>9}")
+    total = 0
+    for letter, belt in variants:
+        for kind, builder, is_cab in builders:
             suffix = f"__{kind}" if letter is None else f"_{letter}__{kind}"
             name = f"rer_generic{suffix}"
-            segments = args.cab_corner_segments if kind == "cab" else args.corner_segments
-            parts = builder(cfg, segments)
-            primitives = []
-            for key, material in PART_MATERIAL:
-                mesh = parts.get(key)
-                if mesh is None or mesh.triangle_count == 0:
-                    continue
-                center_on_rail_head(mesh, cfg["car_length"], cfg["floor"])
-                if args.forward_axis == "-z":
-                    rotate_to_negative_z(mesh)
-                primitives.append((mesh, material))
-            size = write_glb(out_dir / f"{name}.glb", primitives, materials, name)
-            tris = sum(m.triangle_count for m, _ in primitives)
-            verts = sum(len(m.positions) for m, _ in primitives)
-            total_bytes += size
-            print(f"{name + '.glb':<38}{tris:>10}{verts:>9}{size:>9}")
-    print(f"{'total':<38}{'':>10}{'':>9}{total_bytes:>9}")
+            segments = args.cab_corner_segments if is_cab else args.corner_segments
+            mesh = builder(cfg, segments)
+            if args.forward_axis == "-z":
+                rotate_to_negative_z(mesh)
+            png = paint_texture(cfg, segments, belt, is_cab)
+            if args.dump_texture and letter in (None, "A") and not is_cab:
+                Path(args.dump_texture).write_bytes(png)
+            size = write_glb(out_dir / f"{name}.glb", mesh, png, name)
+            total += size
+            print(f"{name + '.glb':<38}{mesh.triangle_count:>6}"
+                  f"{len(mesh.positions):>9}{len(png):>9}{size:>9}")
+    print(f"{'total':<38}{'':>6}{'':>9}{'':>9}{total:>9}")
 
 
 if __name__ == "__main__":

@@ -3,11 +3,12 @@ import type { StationMetadata } from '@paris-subway/shared';
 
 type Point = [number, number];
 
-// Keep the complete Latin block used by station names in the atlas. The
-// explicit punctuation covers official labels such as Saint-Denis–Université.
-const LATIN_CHARACTER_SET = Array.from({ length: 0x0180 - 0x20 }, (_, index) =>
-  String.fromCodePoint(0x20 + index)
-).join('') + '–—';
+// Complete Latin-1 Supplement + Latin Extended-A + French punctuation & typography
+// (covers Montparnasse - Bienvenüe, Pont de Sèvres, Saint-Denis–Université, etc.)
+export const LATIN_CHARACTER_SET = [
+  ...Array.from({ length: 0x0180 - 0x20 }, (_, index) => String.fromCodePoint(0x20 + index)),
+  '–', '—', '’', '‘', '“', '”', '…', '«', '»', '•', '·'
+].join('');
 
 const isUltraHub = (station: StationMetadata) =>
   station.lines.length >= 4 ||

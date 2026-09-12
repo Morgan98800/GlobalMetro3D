@@ -1,0 +1,120 @@
+{
+ "accueil_w1440": {
+  "total": 2,
+  "parType": {
+   "rayon hors barème": 2
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ]
+  ]
+ },
+ "accueil_w390": {
+  "total": 2,
+  "parType": {
+   "rayon hors barème": 2
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ]
+  ]
+ },
+ "ligne14_w1440": {
+  "total": 2,
+  "parType": {
+   "rayon hors barème": 2
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ]
+  ]
+ },
+ "ligne14_w390": {
+  "total": 2,
+  "parType": {
+   "rayon hors barème": 2
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ]
+  ]
+ },
+ "methode_w1440": {
+  "total": 0,
+  "parType": {},
+  "rows": []
+ },
+ "methode_w390": {
+  "total": 0,
+  "parType": {},
+  "rows": []
+ },
+ "methode_app_w1440": {
+  "total": 2,
+  "parType": {
+   "rayon hors barème": 2
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ]
+  ]
+ },
+ "methode_app_w390": {
+  "total": 2,
+  "parType": {
+   "rayon hors barème": 2
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ]
+  ]
+ }
+}

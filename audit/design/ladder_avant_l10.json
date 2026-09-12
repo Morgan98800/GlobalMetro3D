@@ -1,0 +1,1204 @@
+[
+ {
+  "w": 1440,
+  "h": 900,
+  "line": "10",
+  "tag": "avant",
+  "rail": {
+   "x": 51,
+   "w": 4,
+   "top": 349,
+   "bottom": 1030
+  },
+  "nodeCount": 20,
+  "distinctRowHeights": [
+   33,
+   30
+  ],
+  "fixedHeight": false,
+  "stepMin": 33,
+  "stepMax": 37,
+  "bulletStepMin": 35,
+  "bulletStepMax": 37,
+  "stationsWithTwoCursors": [],
+  "stationsWithCursor": [
+   "Gare d'Austerlitz (1)",
+   "Maubert - Mutualité (1)",
+   "Cluny - La Sorbonne (1)",
+   "Sèvres - Babylone (1)",
+   "Vaneau (1)",
+   "La Motte-Picquet - Grenelle (1)",
+   "Avenue Émile Zola (1)",
+   "Javel - André Citroën (1)",
+   "Boulogne Jean Jaurès (1)"
+  ],
+  "maxOverflowTop": 0,
+  "maxOverflowBottom": 0,
+  "rows": [
+   {
+    "i": 0,
+    "name": "Gare d'Austerlitz",
+    "y": 335,
+    "h": 33,
+    "rowCentre": 351,
+    "bulletY": 342,
+    "bulletH": 18,
+    "bulletCentre": 351,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 341,
+      "bottom": 361
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 174
+   },
+   {
+    "i": 1,
+    "name": "Jussieu",
+    "y": 372,
+    "h": 33,
+    "rowCentre": 388,
+    "bulletY": 381,
+    "bulletH": 14,
+    "bulletCentre": 388,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 2,
+    "name": "Cardinal Lemoine",
+    "y": 408,
+    "h": 30,
+    "rowCentre": 423,
+    "bulletY": 416,
+    "bulletH": 14,
+    "bulletCentre": 423,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 3,
+    "name": "Maubert - Mutualité",
+    "y": 442,
+    "h": 33,
+    "rowCentre": 458,
+    "bulletY": 451,
+    "bulletH": 14,
+    "bulletCentre": 458,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 448,
+      "bottom": 468
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 194
+   },
+   {
+    "i": 4,
+    "name": "Cluny - La Sorbonne",
+    "y": 479,
+    "h": 33,
+    "rowCentre": 495,
+    "bulletY": 488,
+    "bulletH": 14,
+    "bulletCentre": 495,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 104,
+      "h": 20,
+      "y": 485,
+      "bottom": 505
+     }
+    ],
+    "slotW": 104,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 204
+   },
+   {
+    "i": 5,
+    "name": "Odéon",
+    "y": 515,
+    "h": 33,
+    "rowCentre": 532,
+    "bulletY": 525,
+    "bulletH": 14,
+    "bulletCentre": 532,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 6,
+    "name": "Mabillon",
+    "y": 552,
+    "h": 30,
+    "rowCentre": 567,
+    "bulletY": 560,
+    "bulletH": 14,
+    "bulletCentre": 567,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 7,
+    "name": "Sèvres - Babylone",
+    "y": 586,
+    "h": 33,
+    "rowCentre": 602,
+    "bulletY": 595,
+    "bulletH": 14,
+    "bulletCentre": 602,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 592,
+      "bottom": 612
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 174
+   },
+   {
+    "i": 8,
+    "name": "Vaneau",
+    "y": 623,
+    "h": 33,
+    "rowCentre": 639,
+    "bulletY": 632,
+    "bulletH": 14,
+    "bulletCentre": 639,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 104,
+      "h": 20,
+      "y": 629,
+      "bottom": 649
+     }
+    ],
+    "slotW": 104,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 204
+   },
+   {
+    "i": 9,
+    "name": "Duroc",
+    "y": 659,
+    "h": 33,
+    "rowCentre": 676,
+    "bulletY": 669,
+    "bulletH": 14,
+    "bulletCentre": 676,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 10,
+    "name": "Ségur",
+    "y": 696,
+    "h": 30,
+    "rowCentre": 711,
+    "bulletY": 704,
+    "bulletH": 14,
+    "bulletCentre": 711,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 11,
+    "name": "La Motte-Picquet - Grenelle",
+    "y": 730,
+    "h": 33,
+    "rowCentre": 746,
+    "bulletY": 739,
+    "bulletH": 14,
+    "bulletCentre": 746,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 736,
+      "bottom": 756
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": true,
+    "nameW": 150
+   },
+   {
+    "i": 12,
+    "name": "Avenue Émile Zola",
+    "y": 767,
+    "h": 33,
+    "rowCentre": 783,
+    "bulletY": 776,
+    "bulletH": 14,
+    "bulletCentre": 783,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 773,
+      "bottom": 793
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 194
+   },
+   {
+    "i": 13,
+    "name": "Charles Michels",
+    "y": 803,
+    "h": 30,
+    "rowCentre": 818,
+    "bulletY": 811,
+    "bulletH": 14,
+    "bulletCentre": 818,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 14,
+    "name": "Javel - André Citroën",
+    "y": 837,
+    "h": 33,
+    "rowCentre": 853,
+    "bulletY": 846,
+    "bulletH": 14,
+    "bulletCentre": 853,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 108,
+      "h": 20,
+      "y": 843,
+      "bottom": 863
+     }
+    ],
+    "slotW": 108,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 200
+   },
+   {
+    "i": 15,
+    "name": "Église d'Auteuil",
+    "y": 874,
+    "h": 30,
+    "rowCentre": 888,
+    "bulletY": 881,
+    "bulletH": 14,
+    "bulletCentre": 888,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 16,
+    "name": "Michel-Ange - Auteuil",
+    "y": 907,
+    "h": 33,
+    "rowCentre": 924,
+    "bulletY": 917,
+    "bulletH": 14,
+    "bulletCentre": 924,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 17,
+    "name": "Porte d'Auteuil",
+    "y": 944,
+    "h": 30,
+    "rowCentre": 959,
+    "bulletY": 952,
+    "bulletH": 14,
+    "bulletCentre": 959,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 18,
+    "name": "Boulogne Jean Jaurès",
+    "y": 978,
+    "h": 33,
+    "rowCentre": 994,
+    "bulletY": 987,
+    "bulletH": 14,
+    "bulletCentre": 994,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 108,
+      "h": 20,
+      "y": 984,
+      "bottom": 1004
+     }
+    ],
+    "slotW": 108,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 200
+   },
+   {
+    "i": 19,
+    "name": "Boulogne Pont de Saint-Cloud",
+    "y": 1014,
+    "h": 30,
+    "rowCentre": 1029,
+    "bulletY": 1020,
+    "bulletH": 18,
+    "bulletCentre": 1029,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   }
+  ],
+  "step": [
+   {
+    "from": "Gare d'Austerlitz",
+    "to": "Jussieu",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Jussieu",
+    "to": "Cardinal Lemoine",
+    "dY": 36,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Cardinal Lemoine",
+    "to": "Maubert - Mutualité",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Maubert - Mutualité",
+    "to": "Cluny - La Sorbonne",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Cluny - La Sorbonne",
+    "to": "Odéon",
+    "dY": 36,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Odéon",
+    "to": "Mabillon",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Mabillon",
+    "to": "Sèvres - Babylone",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Sèvres - Babylone",
+    "to": "Vaneau",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Vaneau",
+    "to": "Duroc",
+    "dY": 36,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Duroc",
+    "to": "Ségur",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Ségur",
+    "to": "La Motte-Picquet - Grenelle",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "La Motte-Picquet - Grenelle",
+    "to": "Avenue Émile Zola",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Avenue Émile Zola",
+    "to": "Charles Michels",
+    "dY": 36,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Charles Michels",
+    "to": "Javel - André Citroën",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Javel - André Citroën",
+    "to": "Église d'Auteuil",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Église d'Auteuil",
+    "to": "Michel-Ange - Auteuil",
+    "dY": 33,
+    "bulletDelta": 36
+   },
+   {
+    "from": "Michel-Ange - Auteuil",
+    "to": "Porte d'Auteuil",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Porte d'Auteuil",
+    "to": "Boulogne Jean Jaurès",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Boulogne Jean Jaurès",
+    "to": "Boulogne Pont de Saint-Cloud",
+    "dY": 36,
+    "bulletDelta": 35
+   }
+  ]
+ },
+ {
+  "w": 1024,
+  "h": 768,
+  "line": "10",
+  "tag": "avant",
+  "rail": {
+   "x": 51,
+   "w": 4,
+   "top": 349,
+   "bottom": 1030
+  },
+  "nodeCount": 20,
+  "distinctRowHeights": [
+   33,
+   30
+  ],
+  "fixedHeight": false,
+  "stepMin": 34,
+  "stepMax": 37,
+  "bulletStepMin": 34,
+  "bulletStepMax": 37,
+  "stationsWithTwoCursors": [
+   "Boulogne Jean Jaurès"
+  ],
+  "stationsWithCursor": [
+   "Gare d'Austerlitz (1)",
+   "Maubert - Mutualité (1)",
+   "Cluny - La Sorbonne (1)",
+   "Sèvres - Babylone (1)",
+   "Vaneau (1)",
+   "La Motte-Picquet - Grenelle (1)",
+   "Avenue Émile Zola (1)",
+   "Église d'Auteuil (1)",
+   "Boulogne Jean Jaurès (2)"
+  ],
+  "maxOverflowTop": 0,
+  "maxOverflowBottom": 0,
+  "rows": [
+   {
+    "i": 0,
+    "name": "Gare d'Austerlitz",
+    "y": 335,
+    "h": 33,
+    "rowCentre": 351,
+    "bulletY": 342,
+    "bulletH": 18,
+    "bulletCentre": 351,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 341,
+      "bottom": 361
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 174
+   },
+   {
+    "i": 1,
+    "name": "Jussieu",
+    "y": 372,
+    "h": 33,
+    "rowCentre": 388,
+    "bulletY": 381,
+    "bulletH": 14,
+    "bulletCentre": 388,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 2,
+    "name": "Cardinal Lemoine",
+    "y": 408,
+    "h": 30,
+    "rowCentre": 423,
+    "bulletY": 416,
+    "bulletH": 14,
+    "bulletCentre": 423,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 3,
+    "name": "Maubert - Mutualité",
+    "y": 442,
+    "h": 33,
+    "rowCentre": 458,
+    "bulletY": 451,
+    "bulletH": 14,
+    "bulletCentre": 458,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 448,
+      "bottom": 468
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 194
+   },
+   {
+    "i": 4,
+    "name": "Cluny - La Sorbonne",
+    "y": 479,
+    "h": 33,
+    "rowCentre": 495,
+    "bulletY": 488,
+    "bulletH": 14,
+    "bulletCentre": 495,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 104,
+      "h": 20,
+      "y": 485,
+      "bottom": 505
+     }
+    ],
+    "slotW": 104,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 204
+   },
+   {
+    "i": 5,
+    "name": "Odéon",
+    "y": 515,
+    "h": 33,
+    "rowCentre": 532,
+    "bulletY": 525,
+    "bulletH": 14,
+    "bulletCentre": 532,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 6,
+    "name": "Mabillon",
+    "y": 552,
+    "h": 30,
+    "rowCentre": 567,
+    "bulletY": 560,
+    "bulletH": 14,
+    "bulletCentre": 567,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 7,
+    "name": "Sèvres - Babylone",
+    "y": 586,
+    "h": 33,
+    "rowCentre": 602,
+    "bulletY": 595,
+    "bulletH": 14,
+    "bulletCentre": 602,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 592,
+      "bottom": 612
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 174
+   },
+   {
+    "i": 8,
+    "name": "Vaneau",
+    "y": 623,
+    "h": 33,
+    "rowCentre": 639,
+    "bulletY": 632,
+    "bulletH": 14,
+    "bulletCentre": 639,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 629,
+      "bottom": 649
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 194
+   },
+   {
+    "i": 9,
+    "name": "Duroc",
+    "y": 659,
+    "h": 33,
+    "rowCentre": 676,
+    "bulletY": 669,
+    "bulletH": 14,
+    "bulletCentre": 676,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 10,
+    "name": "Ségur",
+    "y": 696,
+    "h": 30,
+    "rowCentre": 711,
+    "bulletY": 704,
+    "bulletH": 14,
+    "bulletCentre": 711,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 11,
+    "name": "La Motte-Picquet - Grenelle",
+    "y": 730,
+    "h": 33,
+    "rowCentre": 746,
+    "bulletY": 739,
+    "bulletH": 14,
+    "bulletCentre": 746,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 736,
+      "bottom": 756
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": true,
+    "nameW": 150
+   },
+   {
+    "i": 12,
+    "name": "Avenue Émile Zola",
+    "y": 767,
+    "h": 33,
+    "rowCentre": 783,
+    "bulletY": 776,
+    "bulletH": 14,
+    "bulletCentre": 783,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 773,
+      "bottom": 793
+     }
+    ],
+    "slotW": 114,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 194
+   },
+   {
+    "i": 13,
+    "name": "Charles Michels",
+    "y": 803,
+    "h": 30,
+    "rowCentre": 818,
+    "bulletY": 811,
+    "bulletH": 14,
+    "bulletCentre": 818,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 14,
+    "name": "Javel - André Citroën",
+    "y": 837,
+    "h": 30,
+    "rowCentre": 852,
+    "bulletY": 845,
+    "bulletH": 14,
+    "bulletCentre": 852,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 15,
+    "name": "Église d'Auteuil",
+    "y": 871,
+    "h": 33,
+    "rowCentre": 887,
+    "bulletY": 880,
+    "bulletH": 14,
+    "bulletCentre": 887,
+    "cursors": 1,
+    "cursorBoxes": [
+     {
+      "w": 104,
+      "h": 20,
+      "y": 877,
+      "bottom": 897
+     }
+    ],
+    "slotW": 104,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": false,
+    "nameW": 204
+   },
+   {
+    "i": 16,
+    "name": "Michel-Ange - Auteuil",
+    "y": 907,
+    "h": 33,
+    "rowCentre": 924,
+    "bulletY": 917,
+    "bulletH": 14,
+    "bulletCentre": 924,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -16,
+    "slotOverflowBottom": -16,
+    "nameClipped": false,
+    "nameW": 289
+   },
+   {
+    "i": 17,
+    "name": "Porte d'Auteuil",
+    "y": 944,
+    "h": 30,
+    "rowCentre": 959,
+    "bulletY": 952,
+    "bulletH": 14,
+    "bulletCentre": 959,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   },
+   {
+    "i": 18,
+    "name": "Boulogne Jean Jaurès",
+    "y": 978,
+    "h": 33,
+    "rowCentre": 994,
+    "bulletY": 987,
+    "bulletH": 14,
+    "bulletCentre": 994,
+    "cursors": 2,
+    "cursorBoxes": [
+     {
+      "w": 114,
+      "h": 20,
+      "y": 984,
+      "bottom": 1004
+     },
+     {
+      "w": 104,
+      "h": 20,
+      "y": 984,
+      "bottom": 1004
+     }
+    ],
+    "slotW": 223,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -6,
+    "slotOverflowBottom": -6,
+    "nameClipped": true,
+    "nameW": 86
+   },
+   {
+    "i": 19,
+    "name": "Boulogne Pont de Saint-Cloud",
+    "y": 1014,
+    "h": 30,
+    "rowCentre": 1029,
+    "bulletY": 1020,
+    "bulletH": 18,
+    "bulletCentre": 1029,
+    "cursors": 0,
+    "cursorBoxes": [],
+    "slotW": 0,
+    "slotDir": "row",
+    "slotClass": "ladder-node-train-slot",
+    "slotOverflowTop": -15,
+    "slotOverflowBottom": -15,
+    "nameClipped": false,
+    "nameW": 309
+   }
+  ],
+  "step": [
+   {
+    "from": "Gare d'Austerlitz",
+    "to": "Jussieu",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Jussieu",
+    "to": "Cardinal Lemoine",
+    "dY": 36,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Cardinal Lemoine",
+    "to": "Maubert - Mutualité",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Maubert - Mutualité",
+    "to": "Cluny - La Sorbonne",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Cluny - La Sorbonne",
+    "to": "Odéon",
+    "dY": 36,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Odéon",
+    "to": "Mabillon",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Mabillon",
+    "to": "Sèvres - Babylone",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Sèvres - Babylone",
+    "to": "Vaneau",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Vaneau",
+    "to": "Duroc",
+    "dY": 36,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Duroc",
+    "to": "Ségur",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Ségur",
+    "to": "La Motte-Picquet - Grenelle",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "La Motte-Picquet - Grenelle",
+    "to": "Avenue Émile Zola",
+    "dY": 37,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Avenue Émile Zola",
+    "to": "Charles Michels",
+    "dY": 36,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Charles Michels",
+    "to": "Javel - André Citroën",
+    "dY": 34,
+    "bulletDelta": 34
+   },
+   {
+    "from": "Javel - André Citroën",
+    "to": "Église d'Auteuil",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Église d'Auteuil",
+    "to": "Michel-Ange - Auteuil",
+    "dY": 36,
+    "bulletDelta": 37
+   },
+   {
+    "from": "Michel-Ange - Auteuil",
+    "to": "Porte d'Auteuil",
+    "dY": 37,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Porte d'Auteuil",
+    "to": "Boulogne Jean Jaurès",
+    "dY": 34,
+    "bulletDelta": 35
+   },
+   {
+    "from": "Boulogne Jean Jaurès",
+    "to": "Boulogne Pont de Saint-Cloud",
+    "dY": 36,
+    "bulletDelta": 35
+   }
+  ]
+ }
+]

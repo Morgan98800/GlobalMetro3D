@@ -1,18 +1,15 @@
 /* ===========================================================================
-   chrome.css — bandeau supérieur, indices de lignes, statut temps réel
-   À importer après tokens.css. Ajoute --signal et --ceramique-faint aux tokens
-   existants s'ils n'y sont pas déjà.
+   chrome.css — bandeau supérieur, déclencheur de recherche, menu navigation,
+   statut temps réel discret, et palette de commandes modale.
    =========================================================================== */
 
 :root {
-  --signal: #c8362b;
-  --ceramique-faint: #6e6a60;
-  --header-h: 52px;
-  --header-h-mobile: 48px;
+  --header-h: var(--h-topbar);
+  --header-h-mobile: var(--h-topbar);
 }
 
 /* --------------------------------------------------------------------------
-   Bandeau
+   Bandeau supérieur
    -------------------------------------------------------------------------- */
 
 .topbar {
@@ -23,22 +20,65 @@
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: 20px;
-  height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  gap: var(--gap-lg);
+  height: calc(var(--h-topbar) + env(safe-area-inset-top, 0px));
   padding: env(safe-area-inset-top, 0px) 16px 0;
-  background: var(--fonte);
-  border-bottom: 1px solid var(--fonte-border);
-  font-family: var(--font-ui, "Inter", system-ui, sans-serif);
-  /* pas de border-radius, pas d'ombre : le bandeau encadre la carte,
-     il ne flotte pas dessus */
+  background: var(--surface);
+  border-bottom: 1px solid var(--bord);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: var(--font-ui, system-ui, sans-serif);
 }
 
 .topbar__brand {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: var(--gap-sm);
   flex-shrink: 0;
   text-decoration: none;
+  border-radius: var(--r-xs);
+}
+
+.topbar__brand:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+}
+
+.topbar__clock {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 135px;
+  height: 50px;
+  padding: 6px 12px;
+  flex: 0 0 auto;
+  transform: none;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--r-xs);
+  background: #0A0806;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--laiton) 35%, transparent), inset 0 1px 0 rgba(0, 0, 0, 0.8);
+  color: #FFA500;
+}
+
+.topbar__clock::after {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 0, 0, 0.13) 2px, rgba(0, 0, 0, 0.13) 3px);
+  content: '';
+  pointer-events: none;
+}
+
+.topbar__clock-svg {
+  display: block;
+  width: 111px;
+  height: 35px;
+  overflow: visible;
+}
+
+.topbar__clock-svg circle {
+  fill: #FFA500;
+  filter: drop-shadow(0 0 3px #FF8C00) drop-shadow(0 0 6px rgba(255, 140, 0, 0.6));
 }
 
 .topbar__mark {
@@ -49,17 +89,17 @@
 }
 
 .topbar__name {
-  color: var(--ceramique);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  color: var(--texte);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: var(--tr-sub);
   white-space: nowrap;
-  /* bas de casse : la signalétique du métro n'est pas en capitales */
   text-transform: none;
+  font-family: var(--font-title);
 }
 
 .topbar__meta {
-  color: var(--ceramique-dim);
+  color: var(--secondaire);
   font-size: 13px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -70,8 +110,7 @@
   min-width: 0;
 }
 
-/* Compteur de rames : nombre avant le mot, chiffres tabulaires,
-   largeur minimale fixe pour supprimer le décalage de mise en page. */
+/* Compteur de rames */
 .topbar__count {
   display: flex;
   align-items: baseline;
@@ -81,7 +120,7 @@
 }
 
 .topbar__count-value {
-  color: var(--ceramique);
+  color: var(--texte);
   font-size: 15px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -91,18 +130,18 @@
 }
 
 .topbar__count-value--pending {
-  color: var(--ceramique-dim);
+  color: var(--secondaire);
   font-weight: 400;
 }
 
 .topbar__count-label {
-  color: var(--ceramique-dim);
+  color: var(--secondaire);
   font-size: 13px;
 }
 
 .topbar__distance {
-  color: var(--ceramique-dim);
-  font-size: 11px;
+  color: var(--secondaire);
+  font-size: 12px;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
@@ -110,51 +149,70 @@
 }
 
 /* --------------------------------------------------------------------------
-   Statut temps réel — un état, pas un contrôle
+   Bloc 4 : Statut temps réel discret (point 6px sans texte au repos)
    -------------------------------------------------------------------------- */
 
 .rt-status {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--gap-xs);
   flex-shrink: 0;
   white-space: nowrap;
   cursor: default;
+  padding: 4px 6px;
+  border-radius: var(--r-xs);
+  transition: background-color var(--t-state) var(--ease);
+}
+
+.rt-status:hover {
+  background-color: var(--eleve);
+}
+
+.rt-status:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
 }
 
 .rt-status__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--r-full);
   flex-shrink: 0;
-  background: var(--ceramique-dim);
+  background: var(--secondaire);
 }
 
 .rt-status__label {
-  color: var(--ceramique-dim);
-  font-size: 13px;
+  color: var(--secondaire);
+  font-size: var(--fs-xs);
+  display: none;
 }
 
+/* État Calé (PRIM actif). Plus de lueur : le point pulse déjà, il n'a pas
+   besoin d'un halo pour se signaler (§États — pas de lueur, pas de halo). */
 .rt-status[data-state="live"] .rt-status__dot {
   background: var(--laiton);
   animation: rt-pulse 2.4s ease-in-out infinite;
 }
 
 .rt-status[data-state="live"] .rt-status__label {
+  display: inline;
   color: var(--laiton);
+  font-weight: 500;
 }
 
+/* État Erreur / Quota */
 .rt-status[data-state="error"] .rt-status__dot {
-  background: var(--signal);
+  background: var(--carmin);
 }
 
 .rt-status[data-state="error"] .rt-status__label {
-  color: var(--signal);
+  display: inline;
+  color: var(--carmin);
 }
 
 @keyframes rt-pulse {
   0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
+  50%      { opacity: 0.4; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -162,42 +220,56 @@
 }
 
 /* --------------------------------------------------------------------------
-   Recherche
+   Bloc 5 : Déclencheur de recherche dans le bandeau
    -------------------------------------------------------------------------- */
 
-.topbar__search {
+.topbar__search-trigger {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 32px;
-  width: 210px;
-  padding: 0 10px;
+  gap: var(--gap-sm);
+  /* Cible tactile de 44 px à toutes les largeurs : le bandeau ne doit jamais
+     rendre la recherche inopérable au doigt (cf. LOT 1, point 1). */
+  min-height: var(--h-btn-quiet);
+  height: var(--h-btn-quiet);
+  width: 220px;
+  padding: 0 var(--pad-btn-quiet);
   flex-shrink: 0;
-  background: var(--fonte-surface);
-  border: 1px solid var(--fonte-border);
-  border-radius: 6px;
-  color: var(--ceramique-dim);
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  border-radius: var(--r-sm);
+  color: var(--secondaire);
   font: inherit;
-  font-size: 13px;
-  cursor: text;
-  transition: border-color 120ms ease;
+  font-size: var(--fs-md);
+  cursor: pointer;
+  border: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4);
+  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), transform var(--t-press) var(--ease), box-shadow var(--t-state) var(--ease);
+  user-select: none;
 }
 
-.topbar__search:hover {
-  border-color: var(--guimard);
+.topbar__search-trigger:hover {
+  background: var(--eleve-hi);
+  color: var(--texte);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.5), 0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
-.topbar__search:focus-visible {
+.topbar__search-trigger:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.topbar__search-trigger:focus-visible {
   outline: none;
-  border-color: var(--laiton);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--laiton) 22%, transparent);
+  --ring-offset: var(--fond);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4), 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
 }
 
 .topbar__search-icon {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  color: var(--ceramique-dim);
+  color: var(--secondaire);
 }
 
 .topbar__search-text {
@@ -209,125 +281,497 @@
 }
 
 .topbar__search-kbd {
-  color: var(--ceramique-faint);
-  font-size: 11px;
+  color: var(--inactif);
+  font-size: var(--fs-xs);
   font-family: inherit;
   flex-shrink: 0;
 }
 
-/* Bouton loupe seul, mobile */
-.topbar__search-icon-btn {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin-right: -10px;
-  background: none;
-  border: 0;
-  border-radius: 6px;
-  color: var(--ceramique-dim);
-  cursor: pointer;
+/* --------------------------------------------------------------------------
+   Bloc 6 : Menu Navigation ☰
+   -------------------------------------------------------------------------- */
+
+.topbar__menu-container {
+  position: relative;
+  flex-shrink: 0;
 }
 
-.topbar__search-icon-btn:focus-visible {
+.topbar__menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Idem recherche : 44 px à toutes les largeurs. L'ancienne valeur (36 px)
+     n'était relevée à 44 px qu'en dessous de 767 px, ce qui laissait un trou
+     exactement à 768 px (bouton de 36 px hors viewport). */
+  width: var(--h-btn-quiet);
+  height: var(--h-btn-quiet);
+  min-width: var(--h-btn-quiet);
+  min-height: var(--h-btn-quiet);
+  background: var(--eleve);
+  border: none;
+  border-radius: var(--r-sm);
+  color: var(--secondaire);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4);
+  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), transform var(--t-press) var(--ease), box-shadow var(--t-state) var(--ease);
+}
+
+.topbar__menu-btn:hover {
+  color: var(--texte);
+  background: var(--eleve-hi);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.5), 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.topbar__menu-btn:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.topbar__menu-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--laiton);
+  --ring-offset: var(--fond);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4), 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+}
+
+/* Menu flottant : ombre, donc pas de filet (§3.2). */
+.topbar__dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 160px;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--r-sm);
+  box-shadow: var(--sh-2);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 100;
+}
+
+.topbar__dropdown-menu.is-open {
+  display: flex;
+}
+
+.topbar__menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--r-xs);
+  color: var(--texte);
+  font: inherit;
+  font-size: var(--fs-md);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
+}
+
+.topbar__menu-item:hover {
+  background-color: var(--eleve);
+  color: var(--laiton);
+}
+
+.topbar__menu-item:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
+.topbar__menu-toggle-state {
+  font-size: var(--fs-xs);
+  color: var(--tertiaire);
+  background: var(--eleve);
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  border: 1px solid var(--bord);
+}
+
+/* État actif : le motif unique de la charte — fond laiton dilué, texte
+   laiton, filet laiton. Pas de second jeu de couleurs. */
+.topbar__menu-toggle-state.is-active {
+  background: var(--laiton-soft);
+  color: var(--laiton);
+  border-color: var(--laiton);
 }
 
 /* --------------------------------------------------------------------------
-   Indices de lignes
+   Bloc 5 : Palette de commandes modale (Recherche)
+   -------------------------------------------------------------------------- */
+
+.cmd-palette-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  place-items: start center;
+  padding: calc(var(--header-h, 52px) + 24px) 16px 24px;
+  background: var(--backdrop);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cmd-palette-backdrop.is-open {
+  display: grid;
+}
+
+.cmd-palette-dialog {
+  width: min(560px, 100%);
+  background: var(--surface);
+  border: none;
+  border-radius: var(--r-modal);
+  box-shadow: var(--sh-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
+  animation: cmd-fade-in var(--t-surface) var(--ease);
+}
+
+@keyframes cmd-fade-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cmd-palette-header {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--gap-lg);
+  border-bottom: 1px solid var(--bord);
+  background: var(--eleve);
+  gap: var(--gap-md);
+  height: 52px;
+}
+
+.cmd-palette-search-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--secondaire);
+  flex-shrink: 0;
+}
+
+.cmd-palette-input {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--texte);
+  font: inherit;
+  font-size: var(--fs-lg);
+  min-width: 0;
+}
+
+.cmd-palette-input::placeholder {
+  color: var(--secondaire);
+}
+
+.cmd-palette-close {
+  background: transparent;
+  border: none;
+  color: var(--secondaire);
+  font-size: 22px;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
+}
+
+.cmd-palette-close:hover {
+  background: var(--surface);
+  color: var(--texte);
+}
+
+.cmd-palette-close:active {
+  transform: scale(0.95);
+}
+
+.cmd-palette-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+}
+
+.cmd-palette-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--gap-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cmd-palette-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--r-card);
+  cursor: pointer;
+  transition: background-color var(--t-state) var(--ease);
+  user-select: none;
+}
+
+.cmd-palette-item:hover,
+.cmd-palette-item.is-active {
+  background-color: var(--eleve);
+}
+
+.cmd-palette-item:active {
+  background-color: var(--bord);
+}
+
+.cmd-palette-item:focus-visible {
+  outline: none;
+  /* Les entrées vivent dans la boîte de la palette, posée sur --surface. */
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
+.cmd-palette-item-name {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  color: var(--texte);
+  font-size: var(--fs-base);
+  font-weight: 500;
+}
+
+/* Marqueur « correspondance » : donnée, pas interaction — donc pas de laiton,
+   pas de majuscules espacées (§Interdits : pas d'eyebrow). */
+.cmd-palette-hub {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: var(--eleve);
+  color: var(--secondaire);
+  border: 1px solid var(--bord);
+}
+
+.cmd-palette-item-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  flex-wrap: wrap;
+}
+
+.search-line-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.cmd-palette-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--secondaire);
+  font-size: var(--fs-base);
+}
+
+.cmd-palette-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-lg);
+  padding: var(--gap-sm) var(--gap-lg);
+  background: var(--surface);
+  border-top: 1px solid var(--bord);
+  color: var(--secondaire);
+  font-size: var(--fs-xs);
+}
+
+.cmd-palette-footer kbd {
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  border-radius: var(--r-xs);
+  padding: 2px 5px;
+  font-size: var(--fs-xs);
+  font-family: inherit;
+  color: var(--texte);
+}
+
+/* --------------------------------------------------------------------------
+   Indices de lignes (Dock)
    -------------------------------------------------------------------------- */
 
 .line-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: var(--gap-sm);
 }
 
 .line-badge {
   --badge-size: 30px;
   width: var(--badge-size);
+  aspect-ratio: 1;
+  min-width: 0;
   height: var(--badge-size);
-  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--r-full);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   line-height: 1;
   cursor: pointer;
-  transition: opacity 140ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 140ms cubic-bezier(0.16, 1, 0.3, 1),
-    outline-color 140ms cubic-bezier(0.16, 1, 0.3, 1);
-  /* la couleur de fond et de texte sont posées en inline par lineBadge(),
-     depuis route_color et route_text_color du GTFS */
+  transition: opacity var(--t-exit) var(--ease),
+    box-shadow var(--t-exit) var(--ease);
 }
 
-/* 3bis / 7bis : deux caractères, texte réduit pour ne pas déformer le cercle */
-.line-badge[data-len="2"] { font-size: 12px; }
-.line-badge[data-len="3"] { font-size: 10.5px; letter-spacing: -0.02em; }
+/* Pas de règle [data-len] : elle descendait à 10.5 px avec un interlettrage
+   négatif, sous le plancher de 0.75rem. Le plancher est absolu, la pastille
+   s'élargit d'elle-même si le numéro est long. */
 
 .line-badge:hover {
-  outline: 1px solid color-mix(in srgb, var(--ceramique) 70%, transparent);
-  box-shadow: 0 0 0 2px var(--fonte), 0 0 0 3px color-mix(in srgb, var(--ceramique) 55%, transparent);
+  /* Un seul anneau. Le survol est plus étroit et neutre : il ne doit jamais
+     se confondre avec l'anneau de focus. */
+  --ring-offset: var(--surface);
+  box-shadow: 0 0 0 2px var(--ring-offset), 0 0 0 3px var(--secondaire);
 }
 .line-badge:active { opacity: 0.82; }
 
 .line-badge:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--fonte), 0 0 0 4px var(--laiton);
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
+/* L'état actif ne peut pas poser de fond : le fond de la pastille EST la
+   couleur de la ligne, écrite en style en ligne par line_badge.ts. Il est
+   donc porté par le filet de laiton seul — même décision que main.css. */
 .line-badge[aria-pressed="true"] {
-  box-shadow: 0 0 0 2px var(--fonte), 0 0 0 3px var(--ceramique);
+  --ring-offset: var(--surface);
+  box-shadow: 0 0 0 2px var(--ring-offset), 0 0 0 3px var(--laiton);
 }
 
 /* --------------------------------------------------------------------------
-   Mobile
+   Responsive & Mobile (< 1100px & ≤ 768px)
    -------------------------------------------------------------------------- */
 
-@media (max-width: 767px) {
+/* Sous 1100 px le champ de recherche (220 px) ne rentre plus dans le bandeau
+   à côté de la marque, des compteurs et des deux contrôles : on le replie en
+   bouton-icône 44×44. Seuil relevé de 900 px à 1100 px car à 1024 px le
+   bandeau débordait de 22 px (search-trigger à x=774, menu-btn coupé à x=1046). */
+@media (max-width: 1100px) {
+  .topbar__search-trigger {
+    width: var(--h-btn-quiet);
+    height: var(--h-btn-quiet);
+    padding: 0;
+    justify-content: center;
+  }
+  .topbar__search-text,
+  .topbar__search-kbd {
+    display: none;
+  }
+}
+
+/* Seuil unique à 768 px : il était à 767 px ici, alors que main.css (bloc
+   mobile), main.ts (184), labels_layer.ts (57) et capsule_layer.ts (226)
+   basculent à 768 px. Il en résultait un trou exactement à 768 px. */
+@media (max-width: 768px) {
   .topbar {
-    gap: 10px;
-    height: calc(var(--header-h-mobile) + env(safe-area-inset-top, 0px));
+    gap: var(--gap-sm);
+    height: calc(var(--h-topbar) + env(safe-area-inset-top, 0px));
     padding-left: max(12px, env(safe-area-inset-left, 0px));
     padding-right: max(12px, env(safe-area-inset-right, 0px));
   }
 
-  /* les métadonnées réseau et le raccourci clavier n'ont pas de sens ici */
-  .topbar__meta,
-  .topbar__distance,
-  .topbar__search { display: none; }
-
-  .topbar__search-icon-btn { display: inline-flex; }
+  .topbar__distance { display: none; }
 
   .topbar__name { font-size: 14px; }
-
   .topbar__count-label { display: none; }
 
-  /* le compteur et le statut fusionnent : point + nombre + « rames » */
-  .rt-status__label { display: none; }
-
-  .rt-status::after {
-    content: "rames";
-    color: var(--ceramique-dim);
-    font-size: 13px;
-  }
-
-  /* cible tactile minimale 44 px : le cercle reste à 40 px,
-     la zone cliquable est étendue par le padding du conteneur */
-  .line-badge { --badge-size: 40px; font-size: 16px; }
+  .line-badge { --badge-size: 30px; font-size: 14px; }
   .line-badge[data-len="2"] { font-size: 14px; }
   .line-badge[data-len="3"] { font-size: 12px; }
-  .line-badges { gap: 10px; }
+  .line-badges {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    width: 100%;
+    min-width: 0;
+    gap: var(--gap-sm);
+    overflow: visible;
+    touch-action: manipulation;
+  }
+
+  .line-badges .line-badge {
+    width: var(--badge-size);
+    min-width: 0;
+  }
+  .dock-handle {
+    position: relative;
+    width: 14px;
+    height: 8px;
+    margin: 2px auto 0;
+    background: transparent;
+  }
+  .dock-handle::before,
+  .dock-handle::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    bottom: auto;
+    min-height: 0;
+    width: 7px;
+    height: 1px;
+    background: var(--secondaire);
+    transform-origin: center;
+    transition: transform var(--t-state) var(--ease), border-color var(--t-state) var(--ease);
+  }
+  .dock-handle::before { left: 0; right: auto; transform: rotate(-30deg); }
+  .dock-handle::after { left: auto; right: 0; transform: rotate(30deg); }
+  .dock[data-sheet="open"] .dock-handle::after {
+    transform: rotate(-30deg);
+  }
+  .dock[data-sheet="open"] .dock-handle::before {
+    transform: rotate(30deg);
+  }
+  .dock-handle:active::after,
+  .dock-handle:focus-visible::after,
+  .dock-handle:active::before,
+  .dock-handle:focus-visible::before {
+    background: var(--laiton);
+  }
   .line-badge:hover { transform: none; }
+
+  .topbar__count,
+  .rt-status { display: none; }
+
+  .topbar__clock {
+    width: 135px;
+    height: 50px;
+  }
+
+  .cmd-palette-backdrop {
+    padding: calc(var(--header-h-mobile, 48px) + 12px) 12px 12px;
+  }
 }
 
 @media (max-width: 359px) {

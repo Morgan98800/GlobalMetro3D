@@ -1,0 +1,99 @@
+/* ============================================================
+   TYPOGRAPHIE — Paris Subway 3D
+   ============================================================
+   Switzer seul. Il n'y a plus de seconde famille : la
+   hiérarchie passe par le poids, la taille et l'interlettrage.
+
+   Trois règles, et elles sont absolues :
+
+   1. Plancher 0.75rem. Rien en dessous. Ni un label, ni une
+      métadonnée, ni un raccourci clavier.
+   2. Les majuscules ne sont pas un registre. Sentence case
+      partout. L'acronyme de ligne reste un acronyme, ça n'a
+      rien à voir.
+   3. Tout chiffre porte tabular-nums. Sans exception — un
+      chiffre proportionnel danse à chaque mise à jour.
+
+   Les polices sont chargées depuis index.html via <link> +
+   preconnect, et non en @import : sur file:// l'import distant
+   est bloqué par l'origine opaque.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   LES SIX REGISTRES
+   Chaque registre est une combinaison complète poids/taille/
+   interligne/interlettrage. On en choisit un, on ne bricole
+   pas trois propriétés sur quatre.
+   ------------------------------------------------------------ */
+
+/* Titre — en-tête de modale, titre de palette. */
+.t-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Sous-titre — en-tête de section, nom de station. */
+.t-subtitle {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+/* Corps — le texte courant. */
+.t-body {
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* Corps fort — sélection, élément actif. */
+.t-body-strong {
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* UI — boutons, libellés de champ. */
+.t-ui {
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* Donnée — horaires, compteurs, métadonnées. */
+.t-data {
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+
+/* ------------------------------------------------------------
+   LE CHIFFRE QUI NE BOUGE PAS
+   Une classe, une propriété. À poser sur tout nœud qui
+   contient une valeur mesurée ou un identifiant numéroté.
+   ------------------------------------------------------------ */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+
+/* ------------------------------------------------------------
+   NOMBRE DE LIGNE — seule tolérance de tracking
+   Un badge de trois caractères demande un cheveu de serrage
+   optique. C'est le seul cas, et il est plafonné.
+   ------------------------------------------------------------ */
+.t-badge-3 {
+  letter-spacing: -0.02em;
+}

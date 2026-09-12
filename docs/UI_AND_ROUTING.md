@@ -1,29 +1,53 @@
 # 📱 Interface Utilisateur, Ergonomie & Routage SPA
 
-Ce document détaille les composants de l'interface utilisateur, le design system inspiré de l'identité visuelle de la RATP, l'optimisation pour smartphone, et la gestion du routage d'URL monopage (SPA).
+Ce document détaille les composants de l'interface utilisateur, le design system (une rampe neutre chaude librement inspirée de l'imagerie du métro parisien, sans affiliation à la RATP), l'optimisation pour smartphone et la gestion du routage d'URL monopage (SPA).
 
 ---
 
-## 1. Le Design System « Guimard Moderne »
+## 1. Le Design System — Rampe Neutre Chaude
 
-L'interface s'inspire du patrimoine historique du métro parisien (les entourages Art Nouveau d'Hector Guimard et le carrelage biseauté en céramique blanche des stations) réinterprété dans un style d'interface moderne et sombre :
+L'interface s'inspire du patrimoine du métro parisien (entourages Art Nouveau, carrelage biseauté) mais l'implémentation actuelle de [`tokens.css`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/web/src/styles/tokens.css) **a abandonné les verts profonds au profit d'une rampe neutre chaude** (commentaire de source : « Nouvelle rampe chromatique neutre, chaleur 2 % au lieu de 10 % »). C'est cette rampe qui fait autorité ; l'ancienne palette « Guimard / céramique » n'existe plus que sous forme d'**alias de compatibilité**.
 
 ### Palette de Couleurs Principales (`tokens.css`)
 
 | Token CSS | Hexadécimal | Rôle dans l'UI |
 |---|:---:|---|
-| `--fonte` | `#0E1512` | Fond principal sombre des panneaux et de la carte |
-| `--fonte-surface` | `#16221D` | Cartes, conteneurs et fonds d'éléments surélevés |
-| `--fonte-border` | `#23352D` | Bordures fines et séparateurs subtils |
-| `--guimard` | `#1F4A3B` | Vert impérial iconique pour les états actifs et survols |
-| `--ceramique` | `#EFE9DD` | Blanc cassé chaud pour les textes principaux |
-| `--ceramique-dim` | `#A69F91` | Texte secondaire, sous-titres et métadonnées |
-| `--laiton` | `#B4894F` | Dorure chaude Art Déco pour les indicateurs de statut et accents |
+| `--fond` | `#0C0B0B` | Fond principal de l'application et de la carte |
+| `--surface` | `#141312` | Cartes, conteneurs et éléments surélevés |
+| `--eleve` | `#1C1A19` | Surfaces de troisième niveau (bâti extrudé, tuiles) |
+| `--bord` | `#2A2725` | Bordures fines et séparateurs |
+| `--inactif` | `#4E4945` | Éléments désactivés / patine |
+| `--secondaire` | `#9A938C` | Texte secondaire et métadonnées |
+| `--texte` | `#F2EFE9` | Texte principal |
+| `--laiton` | `#C9A227` | Accent doré : statuts, rame mesurée, records |
+| `--laiton-hover` | `#D8B438` | État survol de l'accent |
+| `--carmin` / `--signal` | `#D9463C` | Alertes et signaux |
+
+Deux variables complètent la charte : `--vignette` (dégradé radial `#141312 → #0C0B0B → #050505`) et `--grain-opacity: 0.055`.
+
+**Alias de compatibilité encore utilisés par `main.css`** — ils pointent tous vers la rampe ci-dessus :
+
+| Ancien token | Pointe vers |
+|---|---|
+| `--laque`, `--fonte` | `--fond` |
+| `--velours`, `--fonte-surface` | `--surface` |
+| `--capiton`, `--guimard` | `--eleve` |
+| `--couture`, `--fonte-border`, `--guimard-light` | `--bord` |
+| `--patine`, `--ceramique-faint` | `--inactif` |
+| `--opale-dim`, `--ceramique-dim` | `--secondaire` |
+| `--opale`, `--ceramique` | `--texte` |
+
+Les noms historiques (`--guimard`, `--ceramique`, `--fonte`…) fonctionnent donc toujours, mais **ne désignent plus les teintes vertes et ivoire d'origine**. Les valeurs citées dans [`CHARTE-intERVALLE-sprague.md`](CHARTE-intERVALLE-sprague.md) (par ex. `--laque #150E12`, `--carmin #E0483F`) sont la spécification d'origine et diffèrent de l'implémentation.
 
 ### Typographie & Chiffres Tabulaires
-- **Interface courante** : Police **Inter** (400, 500, 600, 700), ultra-lisible aux petites tailles et neutre.
-- **Titres & Identité** : Police **Archivo 800** (extra-bold), imposante et institutionnelle.
-- **Chiffres Tabulaires (`font-feature-settings: "tnum" 1`)** : Activés sur tous les indices de lignes, les chronomètres de retards, les vitesses instantanées et le compteur de rames pour garantir un alignement numérique vertical strict sans décalage horizontal pendant les incrémentations.
+- **Interface courante** : police **Switzer** (400, 500, 600, 700), chargée depuis Fontshare — `--font-main` / `--font-ui`.
+- **Titres & Identité** : police **Cabinet Grotesk** (500, 700, 800), également Fontshare — `--font-title`.
+- **Repli** : **Inter** (400, 500, 600, 700) depuis Google Fonts si Fontshare échoue. `--font-title` déclare aussi `Archivo` en repli, mais **Archivo n'est jamais téléchargé** : ce n'est qu'un nom de *fallback*, pas une police servie.
+- **Chiffres Tabulaires (`font-feature-settings: "tnum" 1`)** : activés sur les indices de lignes, les chronomètres de retard, les vitesses instantanées et le compteur de rames, afin d'éviter tout décalage horizontal pendant les incrémentations.
+
+### Mouvement & Cibles Tactiles
+- Durées : `--t-press: 90ms`, `--t-state: 200ms`, `--t-surface: 240ms`, `--t-camera: 700ms`, courbe `cubic-bezier(0.32, 0.72, 0, 1)`.
+- Hauteurs de contrôles : `--h-btn: 48px`, `--h-btn-quiet: 44px`, `--h-btn-touch: 52px` (mobile), `--w-btn-min: 104px`.
 
 ---
 
@@ -33,7 +57,7 @@ Le composant [`SubwayDock`](file:///Users/morgancanteri/Documents/Paris%20subway
 
 ### Sur Ordinateur Desktop
 - Rail latéral escamotable fixé sur la gauche de l'écran.
-- Deux groupes de pastilles : 16 lignes de métro et les RER A à E, avec les couleurs et contrastes GTFS.
+- Deux groupes de pastilles : les 16 lignes de métro et les 5 lignes RER natives (A à E), avec les couleurs et contrastes GTFS contrôlés par `auditLineContrast()` (`line_badge.ts`).
 - Clic sur une ligne :
   - La caméra s'envole en douceur pour cadrer l'emprise totale de la ligne, avec un padding mesuré sur le panneau réel.
   - Les 15 autres lignes sont atténuées à 25 % d'opacité.
@@ -60,11 +84,33 @@ Inspiré des schémas de ligne officiels affichés au-dessus des portes de rames
 - **Indicateur d'Intervalle Moyen (*Headway*)** : actualisé en direct selon le nombre de rames présentes dans la direction (ex: `2 min 40 s`).
 - **Support des Branches (Ligne 7 et Ligne 13)** : séparation visuelle des tronçons bifurqués (ex: vers *Asnières-Gennevilliers* vs *Saint-Denis-Université* sur la 13).
 - Résumé de ligne mis à jour à 1 Hz : rames par sens, headway, vitesse, stations, longueur, matériel et état du service.
-- Les noms des stations apparaissent dès le zoom 13 pour les pôles/correspondances, dès 14,5 pour toutes les stations, et pour toute ligne sélectionnée. Le placement priorisé évite les collisions ; le survol garde le nom et les correspondances accessibles.
+- Les étiquettes de stations sont posées par `labels_layer.ts` avec un **tassement glouton en pixels** — deck.gl v9 n'expose pas de `CollisionFilterExtension` utilisable pour un `TextLayer` de stations, contrairement à ce qu'indiquait une version antérieure de ce document. Les paliers réels d'affichage sont :
+  - `z < 12.5` : uniquement les ultra-pôles (15 stations maximum) ;
+  - `12.5 ≤ z < 14.0` : pôles et correspondances ;
+  - `z ≥ 14.0` : toutes les stations ;
+  - dès qu'une ligne est sélectionnée, ses stations sont prioritaires.
 
 ---
 
-## 4. Barre de Recherche Instantanée (`search_bar.ts`)
+## 4. En-tête, Statuts & Modales (`header.ts` + `main.ts`)
+
+Le composant [`TopBar`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/web/src/ui/header.ts) regroupe :
+
+- **Marque et titre** (lien de retour à l'accueil).
+- **Compteurs** : nombre de lignes, nombre de stations.
+- **Distance de recherche** et **statut temps réel** (`rtStatusEl` + `rtLabelEl`) : état du flux PRIM et dernier rafraîchissement.
+- **Bouton de recherche** (ouvre la barre instantanée, §5).
+- **Bascule « Bâti 3D »** (`onToggleBuildings`) : pilote la `visibility` de la couche `building-3d` de MapLibre.
+- **Menu déroulant** ouvrant la modale Méthode et la modale Records.
+
+Deux modales sont implémentées dans `main.ts` :
+
+- **`openMethodologyModal()`** : expose les **4 niveaux de méthode** (tracé 3D + GTFS théorique → recalage PRIM → extrapolation → confiance), les **4 badges de confiance** (`measured`, `bracketed`, `extrapolated`, `scheduled`), les licences ODbL et la clause explicite de non-affiliation avec la RATP et Île-de-France Mobilités. Un lien renvoie vers la page statique `/methode`.
+- **`openNetworkRecords()`** : records de desserte calculés par `station-rankings.json`, en trois onglets (semaine / samedi / dimanche), avec les cinq stations les plus desservies et les cinq moins desservies. La fréquentation annuelle IDFM 2015 n'est volontairement pas jointe, faute d'identifiant GTFS fiable dans le jeu officiel.
+
+---
+
+## 5. Barre de Recherche Instantanée (`search_bar.ts`)
 
 Intégrée dans l'en-tête (avec raccourci clavier universel `⌘K` / `Ctrl+K`) :
 - **Recherche floue insensible aux accents et à la casse** sur les stations du réseau métro + RER.
@@ -76,7 +122,7 @@ Intégrée dans l'en-tête (avec raccourci clavier universel `⌘K` / `Ctrl+K`) 
 
 ---
 
-## 5. Routage d'URL SPA & Historique de Navigation (`router.ts`)
+## 6. Routage d'URL SPA & Historique de Navigation (`router.ts`)
 
 L'application gère un routage d'URL monopage propre et partageable :
 

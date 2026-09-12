@@ -1,0 +1,90 @@
+{
+ "accueil_w1440": {
+  "total": 1,
+  "parType": {
+   "rayon hors barème": 1
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ]
+  ]
+ },
+ "accueil_w390": {
+  "total": 1,
+  "parType": {
+   "rayon hors barème": 1
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ]
+  ]
+ },
+ "ligne14_w1440": {
+  "total": 1,
+  "parType": {
+   "rayon hors barème": 1
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ]
+  ]
+ },
+ "ligne14_w390": {
+  "total": 1,
+  "parType": {
+   "rayon hors barème": 1
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ]
+  ]
+ },
+ "methode_w1440": {
+  "total": 0,
+  "parType": {},
+  "rows": []
+ },
+ "methode_w390": {
+  "total": 0,
+  "parType": {},
+  "rows": []
+ },
+ "methode_app_w1440": {
+  "total": 1,
+  "parType": {
+   "rayon hors barème": 1
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ]
+  ]
+ },
+ "methode_app_w390": {
+  "total": 1,
+  "parType": {
+   "rayon hors barème": 1
+  },
+  "rows": [
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ]
+  ]
+ }
+}

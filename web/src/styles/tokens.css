@@ -1,32 +1,85 @@
 :root {
-  /* Rampe Laque */
-  --laque: #150E12;
-  --velours: #1E1419;
-  --capiton: #291B21;
-  --couture: #3B2830;
-  --patine: #6E505A;
-  --opale-dim: #A8949C;
-  --opale: #F1EFEA;
+   --h-topbar: 72px;
+  /* ------------------------------------------------------------
+     RAMPE — cinq pas de gris, pas un de plus (charte, §Jetons).
+     La chaleur du fond passe de 10 % à 2 % : le gris devient
+     franchement neutre. C'est la condition pour que la seule
+     couleur du chrome — le laiton — se lise comme un signal.
+     ------------------------------------------------------------ */
+  --fond:        #0B0A09;   /* vide de la carte, tunnels, page */
+  --surface:     #161413;   /* bandeau, dock, panneaux        */
+  --eleve:       #211E1C;   /* champs, boutons, cartons       */
+  --bord:        #302B27;   /* filet au repos                 */
+  --inactif:     #57514C;   /* désactivé, bâti, non-actif     */
+  --texte:       #F4F1EB;   /* texte principal                */
+  --secondaire:  #A9A29A;   /* texte secondaire               */
+  --tertiaire:   #8A837B;   /* hint, placeholder              */
 
-  /* Accents, rôle exclusif */
-  --laiton: #C9A227;
-  --laiton-hover: #D8B438;
-  --carmin: #E0483F;
-  --signal: #E0483F;
+  /* Le laiton ne sert qu'à l'interaction : focus, état actif,
+     action primaire. Jamais un fond de panneau, jamais un accent
+     décoratif, jamais une bordure « pour faire joli » (§3.1). */
+  --laiton:       #C9A227;
+  --laiton-hover: #DDB63F;
+  /* Aplat de laiton pour les états actifs (fond d'un élément
+     sélectionné). Comme il est seul pigment, il n'a pas besoin
+     d'être fort. */
+  --laiton-soft:  rgba(201, 162, 39, 0.14);
+
+  /* Le carmin ne sert qu'à la perturbation réelle du réseau.
+     Ce n'est pas une couleur d'erreur de formulaire (§3.3). */
+  --carmin: #D9463C;
+  --carmin-soft: rgba(217, 70, 60, 0.14);
+  --signal: var(--carmin);
 
   /* Aliases de compatibilité */
-  --fonte: var(--laque);
-  --fonte-surface: var(--velours);
-  --fonte-border: var(--couture);
-  --ceramique: var(--opale);
-  --ceramique-dim: var(--opale-dim);
-  --ceramique-faint: var(--patine);
-  --guimard: #291B21;
-  --guimard-light: #3B2830;
+  --laque: var(--fond);
+  --velours: var(--surface);
+  --capiton: var(--eleve);
+  --couture: var(--bord);
+  --patine: var(--inactif);
+  --opale-dim: var(--secondaire);
+  --opale: var(--texte);
 
-  /* Fond */
-  --vignette: radial-gradient(115% 85% at 50% 38%, #241820 0%, #150E12 58%, #0B070A 100%);
+  --fonte: var(--fond);
+  --fonte-surface: var(--surface);
+  --fonte-border: var(--bord);
+  --ceramique: var(--texte);
+  --ceramique-dim: var(--secondaire);
+  --ceramique-faint: var(--inactif);
+  --guimard: var(--eleve);
+  --guimard-light: var(--bord);
+
+  /* Fond & vignettage — recalés sur la nouvelle rampe. Le centre est
+     --surface, les bords tombent sous --fond. */
+  --vignette: radial-gradient(75% 65% at 50% 45%, #161413 0%, #0B0A09 60%, #050505 100%);
   --grain-opacity: 0.055;
+
+  /* Géométrie — rayons. Cinq paliers, et le rayon encode la
+     profondeur : 6 une étiquette, 10 un contrôle, 14 un contenant,
+     20 une couche au-dessus de tout. Ce n'est pas un goût. */
+  --r-xs: 6px;        /* badges et pastilles non cliquables */
+  --r-sm: 10px;       /* boutons, champs, chips, onglets    */
+  --r-card: 14px;     /* dock, cartes, panneaux             */
+  --r-modal: 20px;    /* modales, palette de commandes      */
+  --r-pill: 9999px;   /* pastilles de ligne et de corresp.  */
+  --r-full: 50%;      /* points, puces, pouces de slider    */
+  --r-md: var(--r-sm);
+  --r-lg: var(--r-card);
+  --r-xl: var(--r-modal);
+  --r-petit: var(--r-sm);
+
+   /* Échelle de vitesse — 4 paliers réservés aux données des rames. */
+   --vit-rapide: #6ECA97;
+   --vit-moyen:  #D5C900;
+   --vit-lent:   #F28E42;
+   --vit-arret:  #D9463C;
+
+  /* Géométrie — espacements */
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 12px;
+  --gap-lg: 16px;
+  --gap-xl: 24px;
 
   /* Boutons */
   --h-btn: 48px;
@@ -36,17 +89,108 @@
   --pad-btn: 24px;
   --pad-btn-quiet: 18px;
 
-  /* Typographie */
-  --font-main: 'Switzer', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-ui: 'Switzer', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-title: 'Cabinet Grotesk', 'Switzer', 'Archivo', 'Inter', sans-serif;
+  /* Typographie — Switzer seul. Cabinet Grotesk, Inter et JetBrains
+     Mono sont retirés du produit : la hiérarchie passe par le poids,
+     la taille et l'interlettrage. Voir typography.css.
+     Plancher absolu : 0.75rem. 10px n'est pas une taille, c'est un
+     aveu de manque de place. */
+  --font: 'Switzer', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-main: var(--font);
+  --font-ui: var(--font);
+  --font-title: var(--font);
 
-  /* Mouvement & Transitions */
+  --fs-xs:   0.75rem;    /* 12 — plancher absolu      */
+  --fs-sm:   0.75rem;    /* 12 — donnée, métadonnée   */
+  --fs-md:   0.8125rem;  /* 13 — UI                   */
+  --fs-base: 0.875rem;   /* 14 — corps                */
+  --fs-lg:   1rem;       /* 16 — sous-titre           */
+  --fs-xl:   1.25rem;    /* 20 — titre                */
+
+  /* Le tracking négatif est réservé aux tailles >= 1rem : en dessous,
+     il dégrade la lisibilité. */
+  --tr-tight: -0.02em;
+  --tr-sub:   -0.01em;
+  --lh-tight: 1.15;
+  --lh-base:  1.5;
+
+  /* Mouvement — une seule courbe pour tout le produit.
+     press 90 · état 180 · surface 240 · sortie 150. */
   --t-press: 90ms;
-  --t-state: 200ms;
+  --t-state: 180ms;
   --t-surface: 240ms;
+  --t-exit: 150ms;
   --t-camera: 700ms;
+  --t-enter: var(--t-surface);
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out: var(--ease);
+
+  /* ------------------------------------------------------------
+     PROFONDEUR — trois niveaux, un par vraie couche.
+     --elev-0 n'est pas « none » : il est concaténé dans des listes
+     de box-shadow, et « none » invaliderait la liste entière.
+     ------------------------------------------------------------ */
+  --sh-1: 0 2px 8px rgba(0, 0, 0, 0.5);     /* infobulle       */
+  --sh-2: 0 8px 28px rgba(0, 0, 0, 0.55);   /* dock, panneau   */
+  --sh-3: 0 24px 72px rgba(0, 0, 0, 0.7);   /* modale, palette */
+  --backdrop: rgba(0, 0, 0, 0.72);
+  --elev-0: 0 0 #0000;
+  --elev-1: var(--sh-1);
+  --elev-2: var(--sh-1);
+  --elev-3: var(--sh-2);
+  --elev-4: var(--sh-3);
+
+  /* ------------------------------------------------------------
+     ANNEAU DE FOCUS — un seul anneau, jamais de halo.
+     Chaque conteneur redéclare --ring-offset sur sa propre couleur
+     de fond : c'est ce qui rend l'anneau lisible là où il se pose.
+     ------------------------------------------------------------ */
+  --ring-offset: var(--fond);
+  --ring-focus: 0 0 0 2px var(--ring-offset),
+                0 0 0 4px var(--laiton);
+  --ring-inset: inset 0 0 0 1px transparent;
+
+  /* ------------------------------------------------------------
+     COMPATIBILITÉ HÉRITÉE
+     Jetons encore appelés par main.css et chrome.css. Ce ne sont pas
+     des jetons de la charte : ce sont des alias, et ils disparaîtront
+     quand les étapes ③ (chrome) et ④ (composants) auront repris les
+     composants qui les appellent.
+     --ombre-1 et --ombre-2 n'étaient définis nulle part : les
+     déclarations qui les consommaient étaient donc invalides, et leur
+     box-shadow entièrement annulée. --ombre-1 reste volontairement
+     transparent — la surface qu'il concerne porte un filet, et la
+     charte interdit l'ombre ET le filet sur une même surface (§5).
+     ------------------------------------------------------------ */
+  --ombre-1: var(--elev-0);
+  --ombre-2: var(--sh-2);
+  --ombre-modale: var(--sh-3);
+  --ombre-toast: var(--sh-1);
+  --bord-hi: var(--bord);
+  --eleve-hi: var(--bord);
+  --surface-2: var(--surface);
+  --recess: var(--fond);
+}
+
+html[data-theme="light"] {
+   --fond:        #F2F0EB;
+   --surface:     #FCFBF8;
+   --eleve:       #E7E3DB;
+   --bord:        #D2CCC2;
+   --inactif:     #81796F;
+   --texte:       #24211E;
+   --secondaire:  #5E5851;
+   --tertiaire:   #81796F;
+   --vignette:    radial-gradient(75% 65% at 50% 45%, #FCFBF8 0%, #F2F0EB 60%, #E7E3DB 100%);
+   --laiton-soft: rgba(153, 119, 20, 0.15);
+   --laiton:      #997714;
+   --laiton-hover:#7B5F0F;
+   --carmin-soft: rgba(183, 47, 40, 0.12);
+   --backdrop:    rgba(36, 33, 30, 0.42);
+   --sh-1: 0 2px 8px rgba(36, 33, 30, 0.14);
+   --sh-2: 0 8px 28px rgba(36, 33, 30, 0.16);
+   --sh-3: 0 24px 72px rgba(36, 33, 30, 0.22);
+   --ring-offset: var(--surface);
+   --grain-opacity: 0.025;
 }
 
 * {
@@ -59,8 +203,8 @@ body, html {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: var(--laque);
-  color: var(--opale);
+  background-color: var(--fond);
+  color: var(--texte);
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -12,7 +12,11 @@ describe('train_models_layer and RER specifications', () => {
     const capsuleLayers = ['capsule-base', 'capsule-core'];
     const modelLayers = ['model-pneumatic', 'model-steel'];
 
-    assert.deepEqual(resolveTrainRenderLayers(modelLayers, capsuleLayers), modelLayers);
+    assert.deepEqual(
+      resolveTrainRenderLayers(modelLayers, capsuleLayers),
+      [...capsuleLayers, ...modelLayers],
+      'les capsules restent visibles pendant que les modèles 3D sont disponibles'
+    );
     assert.deepEqual(
       resolveTrainRenderLayers([], capsuleLayers),
       capsuleLayers,

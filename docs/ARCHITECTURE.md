@@ -21,7 +21,7 @@ graph TD
     subgraph 1. Pipeline Statique Hors-Ligne
         A[GTFS IDFM Officiel] --> B[Filtrage Métro & RER]
         B --> C[Projection Curviligne Monotone]
-        C --> D1[shapes.bin SHP2 0.80 Mo]
+        C --> D1[shapes.bin SHP2 0.58 Mo]
         C --> D2[schedule.json 8.31 Mo]
         C --> D3[tracks.json 24.6 Ko]
         C --> D4[line_ladders.json 409 Ko]
@@ -71,7 +71,7 @@ graph TD
 - **Artefacts produits** :
   - `lines.json` : **21 lignes** (16 lignes de métro + 5 lignes RER natives) avec identifiants, codes couleurs autoritaires et décalages altimétriques.
   - `stations.json` : **468 stations publiées** avec coordonnées WGS84, correspondances et rangs de desserte, dont 164 stations RER dans l'emprise filtrée. (Le fichier a absorbé les rangs de desserte : il est passé d'environ 70 Ko à environ 296 Ko.)
-  - `shapes.bin` : format SHP2, origine `int32` et deltas `int16` quantifiés, avec pas et longueur de queue par tracé — 804 816 octets, plus une copie Brotli de 168 167 octets.
+  - `shapes.bin` : format SHP2, origine `int32` et deltas `int16` quantifiés, avec un pas régulier et la longueur du dernier segment par tracé — 116 tracés et 145 021 points, 583 804 octets, plus une copie Brotli de 144 511 octets. La queue est le dernier segment, bornée dans `[0, pas)`, et non une longueur totale de tracé.
   - `tracks.json` : 24 polylignes dédupliquées, conservant les branches nécessaires (24 468 octets).
   - `schedule.json` : extraction des 11 252 courses actives de la journée parisienne (8 312 582 octets).
   - `line_ladders.json` : arborescence ordonnée des stations pour chaque ligne et terminus (419 226 octets).

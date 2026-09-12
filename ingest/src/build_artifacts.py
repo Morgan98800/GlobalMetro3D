@@ -109,6 +109,17 @@ def build_all_phase_a_artifacts(zip_path: str, output_dir: str) -> None:
             direction_id=d_id,
             step_meters=10.0
         )
+        if sid in {"IDFM:shp_1_118", "IDFM:shp_1_114"} and len(res_coords) > 1600:
+            # IDFM carries a short out-and-back loop near Place d'Italie in both
+            # directions. Remove the measured loop before projecting stops.
+            cut_start, cut_end = 1450, 1600
+            removed_length = float(cum_dists[cut_end] - cum_dists[cut_start])
+            res_coords = np.concatenate((res_coords[:cut_start], res_coords[cut_end:]))
+            cum_dists = np.concatenate((
+                cum_dists[:cut_start],
+                cum_dists[cut_end:] - removed_length,
+            ))
+            total_len -= removed_length
         resampled_shapes[sid] = {
             "shape_id": sid,
             "route_id": r_id,

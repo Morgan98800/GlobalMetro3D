@@ -1,0 +1,10 @@
+{
+  "source": "web/public/data/rolling-stock.json",
+  "lignes": {
+    "1": { "cars_count": 6, "car_length_m": 15.06, "total_length_m": 90.38, "width_m": 2.44, "inter_car_gap_m": 0.95, "verified": true },
+    "6": { "cars_count": 5, "car_length_m": 15.06, "total_length_m": 75.32, "width_m": 2.44, "inter_car_gap_m": 0.95, "verified": false },
+    "12": { "cars_count": 5, "car_length_m": 15.08, "total_length_m": 75.4, "width_m": 2.4, "inter_car_gap_m": 0.95, "verified": false },
+    "14": { "cars_count": 8, "car_length_m": 15, "total_length_m": 120, "width_m": 2.4, "inter_car_gap_m": 0.95, "verified": true }
+  },
+  "lignes_verified_false": ["3", "3bis", "6", "7bis", "10", "12", "A", "B", "C", "D", "E"]
+}

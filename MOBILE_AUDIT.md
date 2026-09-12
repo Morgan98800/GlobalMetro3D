@@ -1,5 +1,26 @@
 # Audit Mobile & Performance — Paris Subway 3D
 
+> **Statut des mesures : baseline historique.** Les mesures ci-dessous décrivent
+> l'état audité avant les optimisations SHP2, la déduplication des tracés et la
+> mutualisation du chargement des formes. Elles ne décrivent pas les tailles
+> actuelles publiées; conserver cette distinction lors de toute comparaison.
+
+> [!NOTE]
+> **Ce qui a changé depuis cet audit.** Plusieurs anomalies et recommandations
+> documentées ici ont été traitées ; les lignes concernées sont conservées telles
+> quelles car elles constituent la preuve avant/après :
+>
+> | Constat de l'audit | État actuel |
+> |---|---|
+> | Double téléchargement de `shapes.bin` | ✅ **corrigé** — `shapes_loader.ts` mémoïse la promesse (`let pending`), un seul `fetch` même en appels concurrents |
+> | `shapes.bin` servi sans compression | ✅ **corrigé** — `shapes.bin` (804 816 o) est désormais accompagné de `shapes.bin.br` (168 167 o) |
+> | Double contexte WebGL (Three.js + MapLibre) | ✅ **supprimé** — plus aucune dépendance Three.js ; `dist/` ne contient aucun chunk Three.js |
+> | Bâti 3D absent du mobile (fond raster Esri) | ✅ **remplacé** — bascule sur OpenFreeMap vectoriel + couche `building-3d` (`fill-extrusion`, `minzoom: 14`) |
+> | Polices « Archivo + Inter » | ⚠️ **obsolète** — les fontes servies sont **Switzer** et **Cabinet Grotesk** (Fontshare), avec Inter en repli |
+> | Tuiles « Esri Canvas » | ⚠️ **obsolète** — la ligne ne sert plus qu'à documenter l'ancien fond |
+> | Bouton et barre « Studio 3D » (`#btn-studio-mode`, `#studio-nav-bar`) | ❌ **supprimés du produit** — les mesures de la §4 les concernant sont purement historiques |
+> | « 321 stations » (§1.3) | ℹ️ **sans contradiction** — 321 est le nombre de **stations desservies par au moins une ligne de métro**, celles que le moteur simule. Le référentiel publié `stations.json` en compte 468 au total (304 métro seules, 147 RER seules, 17 correspondances). Voir [DATA_PIPELINE.md](docs/DATA_PIPELINE.md) §4.4 |
+
 > **Cible auditée** : Site déployé en production sur [`https://parisian3dsubway.netlify.app`](https://parisian3dsubway.netlify.app)  
 > **Méthodologie** : Mesures Chrome DevTools Protocol (CDP) automatisées en conditions réelles, cache vidé, bridage réseau standard DevTools (Fast 4G, Slow 4G), bridage CPU (4x, 6x), et émulation d'écrans tactiles (380×820 et 320×568).  
 > **Règle stricte** : Mesures objectives et chiffrées uniquement.

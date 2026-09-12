@@ -1,0 +1,82 @@
+{
+ "w1440": {
+  "avant": {
+   "pas": [
+    52
+   ],
+   "tousEgaaux": true
+  },
+  "res": {
+   "station": "Duroc",
+   "rowTop": 803,
+   "rowBottom": 851,
+   "rowH": 48,
+   "slotDir": "column",
+   "slotW": 125,
+   "debordHaut": 3,
+   "debordBas": 3,
+   "boites": [
+    {
+     "w": 125.4,
+     "h": 26,
+     "top": 800,
+     "bottom": 826
+    },
+    {
+     "w": 125.4,
+     "h": 26,
+     "top": 828,
+     "bottom": 854
+    }
+   ],
+   "nomTronque": false,
+   "nomW": 155
+  },
+  "apres": {
+   "pas": [
+    52
+   ],
+   "tousEgaaux": true
+  }
+ },
+ "w1024": {
+  "avant": {
+   "pas": [
+    52
+   ],
+   "tousEgaaux": true
+  },
+  "res": {
+   "station": "Duroc",
+   "rowTop": 803,
+   "rowBottom": 851,
+   "rowH": 48,
+   "slotDir": "column",
+   "slotW": 118,
+   "debordHaut": 3,
+   "debordBas": 3,
+   "boites": [
+    {
+     "w": 118.4,
+     "h": 26,
+     "top": 800,
+     "bottom": 826
+    },
+    {
+     "w": 118.4,
+     "h": 26,
+     "top": 828,
+     "bottom": 854
+    }
+   ],
+   "nomTronque": false,
+   "nomW": 162
+  },
+  "apres": {
+   "pas": [
+    52
+   ],
+   "tousEgaaux": true
+  }
+ }
+}

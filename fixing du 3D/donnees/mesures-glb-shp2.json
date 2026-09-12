@@ -1,0 +1,18 @@
+{
+  "glb": {
+    "pneumatic_generic__neutral.glb": { "bytes": 9468 },
+    "steel_classic__neutral.glb": { "bytes": 9460 },
+    "total_bytes": 18928,
+    "source": "web/public/models/train/"
+  },
+  "shapes": {
+    "current": { "path": "web/public/data/shapes.bin", "bytes": 583804, "header": "SHP2", "version": 2 },
+    "historical_pre_shp2_candidate": { "path": "/tmp/shapes-pre-candidate.bin", "bytes": 1750612, "format": "MSHP historique" },
+    "processed_old_copy": { "path": "data/processed/shapes.bin", "bytes": 1745980, "format": "MSHP" }
+  },
+  "comparison_avant_apres": {
+    "status": "non_conclu",
+    "reason": "La capture avant/apres n'a pas pu etre executee avec la meme camera : la session navigateur est restee sur le chargement, en viewport 390x844, avec des reponses 404.",
+    "visual_verdict": null
+  }
+}

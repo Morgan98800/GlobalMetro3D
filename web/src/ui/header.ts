@@ -7,46 +7,76 @@ export interface TopBarOptions {
   stationCount: number;
   onSearch?: () => void;
   onToggleRealtime?: () => void;
-  onMethod?: () => void;
+  onAbout?: () => void;
+  onRecords?: () => void;
+  onToggleBuildings?: (active: boolean) => void;
+  onToggleTheme?: (theme: 'dark' | 'light') => void;
+}
+
+const LED_MATRICES: Record<string, string[]> = {
+  '0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
+  '1': ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
+  '2': ['01110', '10001', '00001', '00010', '00100', '01000', '11111'],
+  '3': ['11111', '00010', '00100', '00010', '00001', '10001', '01110'],
+  '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
+  '5': ['11111', '10000', '11110', '00001', '00001', '10001', '01110'],
+  '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
+  '7': ['11111', '00001', '00010', '00100', '01000', '01000', '01000'],
+  '8': ['01110', '10001', '10001', '01110', '10001', '10001', '01110'],
+  '9': ['01110', '10001', '10001', '01111', '00001', '00010', '01100'],
+  ':': ['00000', '00100', '00100', '00000', '00100', '00100', '00000']
+};
+
+function renderLedClock(value: string, scale = 5): string {
+  const gap = scale;
+  const dotRadius = scale * 0.34;
+  const characterWidth = 5 * gap;
+  const characterSpacing = scale * 0.65;
+  const width = value.length * characterWidth + (value.length - 1) * characterSpacing;
+  const height = 7 * gap;
+  const dots: string[] = [];
+
+  [...value].forEach((character, characterIndex) => {
+    const matrix = LED_MATRICES[character];
+    if (!matrix) return;
+    const offsetX = characterIndex * (characterWidth + characterSpacing);
+    matrix.forEach((row, y) => {
+      [...row].forEach((enabled, x) => {
+        if (enabled === '1') {
+          dots.push(`<circle cx="${offsetX + x * gap + gap / 2}" cy="${y * gap + gap / 2}" r="${dotRadius}"/>`);
+        }
+      });
+    });
+  });
+
+  return `<svg class="topbar__clock-svg" viewBox="0 0 ${width} ${height}" role="img" aria-hidden="true">${dots.join('')}</svg>`;
 }
 
 export class TopBar {
   private el: HTMLElement;
-  private metaEl: HTMLElement;
   private countValueEl: HTMLElement;
   private countLabelEl: HTMLElement;
   private distanceEl: HTMLElement;
   private rtStatusEl: HTMLElement;
   private rtLabelEl: HTMLElement;
+  private clockEl: HTMLTimeElement;
+  private clockTimer: ReturnType<typeof setTimeout> | null = null;
+  private searchBtn: HTMLButtonElement;
+  private menuBtn!: HTMLButtonElement;
+  private dropdownMenu!: HTMLElement;
+  private buildingsBtn!: HTMLButtonElement;
+  private isBuildingsActive: boolean = true;
+  private themeBtn!: HTMLButtonElement;
 
   constructor(private options: TopBarOptions) {
     this.el = document.createElement('header');
     this.el.className = 'topbar';
     this.el.id = 'topbar';
 
-    // 1. Marque & Titre
-    const brand = document.createElement('a');
-    brand.className = 'topbar__brand';
-    brand.href = '#';
-    brand.setAttribute('aria-label', 'Accueil Métro de Paris');
-
-    const mark = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    mark.setAttribute('class', 'topbar__mark');
-    mark.setAttribute('viewBox', '0 0 24 24');
-    mark.innerHTML = `<circle cx="12" cy="12" r="10" stroke="var(--ceramique)" stroke-width="2" fill="none"/>
-      <circle cx="12" cy="12" r="5" fill="var(--guimard)"/>`;
-
-    const name = document.createElement('span');
-    name.className = 'topbar__name';
-    name.textContent = 'Métro de Paris';
-
-    brand.appendChild(mark);
-    brand.appendChild(name);
-
-    // Métadonnées réseau (masquées sur mobile via CSS)
-    this.metaEl = document.createElement('span');
-    this.metaEl.className = 'topbar__meta';
-    this.metaEl.textContent = `${options.lineCount} lignes · ${options.stationCount} stations`;
+    this.clockEl = document.createElement('time');
+    this.clockEl.className = 'topbar__clock';
+    this.clockEl.setAttribute('aria-label', 'Heure de Paris');
+    this.updateParisClock();
 
     // Spacer
     const spacer = document.createElement('div');
@@ -67,26 +97,28 @@ export class TopBar {
     countContainer.appendChild(this.countValueEl);
     countContainer.appendChild(this.countLabelEl);
 
-    // Statut temps réel (un état, pas un contrôle)
+    // Distance totale
+    this.distanceEl = document.createElement('span');
+    this.distanceEl.className = 'topbar__distance';
+    this.distanceEl.title = 'Distance cumulée calculée sur les horaires théoriques GTFS depuis le début du service.';
+    this.distanceEl.textContent = '0,0 km · depuis le début du service';
+
+    // Bloc 4: Statut temps réel discret (point 6px sans texte au repos, texte visible si live ou erreur)
     this.rtStatusEl = document.createElement('div');
     this.rtStatusEl.className = 'rt-status';
     this.rtStatusEl.dataset.state = 'standby';
-
-    const dot = document.createElement('span');
-    dot.className = 'rt-status__dot';
+    this.rtStatusEl.title = 'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
 
     this.rtLabelEl = document.createElement('span');
     this.rtLabelEl.className = 'rt-status__label';
-    this.rtLabelEl.textContent = 'théorique';
+    this.rtLabelEl.textContent = ''; // Aucun libellé au repos
 
-    this.rtStatusEl.appendChild(dot);
     this.rtStatusEl.appendChild(this.rtLabelEl);
 
     if (this.options.onToggleRealtime) {
       this.rtStatusEl.style.cursor = 'pointer';
       this.rtStatusEl.setAttribute('role', 'button');
       this.rtStatusEl.setAttribute('tabindex', '0');
-      this.rtStatusEl.setAttribute('title', 'Cliquer pour activer / désactiver le suivi en direct PRIM');
       this.rtStatusEl.addEventListener('click', () => this.options.onToggleRealtime?.());
       this.rtStatusEl.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -96,55 +128,171 @@ export class TopBar {
       });
     }
 
-    // Recherche desktop
-    const searchBtn = document.createElement('button');
-    searchBtn.type = 'button';
-    searchBtn.className = 'topbar__search';
-    searchBtn.setAttribute('aria-label', 'Rechercher une station (⌘K)');
-    searchBtn.innerHTML = `
-      <svg class="topbar__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    // Bloc 5: Déclencheur unique de recherche
+    this.searchBtn = document.createElement('button');
+    this.searchBtn.type = 'button';
+    this.searchBtn.className = 'topbar__search-trigger';
+    this.searchBtn.id = 'topbar-search-trigger';
+    this.searchBtn.setAttribute('aria-label', 'Rechercher une station (⌘K)');
+    this.searchBtn.innerHTML = `
+      <svg class="topbar__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
-      <span class="topbar__search-text">Rechercher</span>
+      <span class="topbar__search-text">rechercher une station</span>
       <kbd class="topbar__search-kbd">⌘K</kbd>
     `;
-    searchBtn.addEventListener('click', () => this.options.onSearch?.());
+    this.searchBtn.addEventListener('click', () => this.options.onSearch?.());
 
-    // Bouton loupe mobile (cible 44px)
-    const searchIconBtn = document.createElement('button');
-    searchIconBtn.type = 'button';
-    searchIconBtn.className = 'topbar__search-icon-btn';
-    searchIconBtn.setAttribute('aria-label', 'Rechercher une station');
-    searchIconBtn.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    // Bloc 6: Menu ☰ navigation
+    const menuContainer = document.createElement('div');
+    menuContainer.className = 'topbar__menu-container';
+
+    this.menuBtn = document.createElement('button');
+    this.menuBtn.type = 'button';
+    this.menuBtn.className = 'topbar__menu-btn';
+    this.menuBtn.setAttribute('aria-label', 'Menu principal');
+    this.menuBtn.setAttribute('aria-expanded', 'false');
+    this.menuBtn.setAttribute('aria-haspopup', 'true');
+    this.menuBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
       </svg>
     `;
-    searchIconBtn.addEventListener('click', () => this.options.onSearch?.());
 
-    const methodBtn = document.createElement('button');
-    methodBtn.type = 'button';
-    methodBtn.className = 'topbar__method-btn';
-    methodBtn.setAttribute('aria-label', 'Méthode & Données');
-    methodBtn.textContent = 'Méthode';
-    methodBtn.addEventListener('click', () => this.options.onMethod?.());
+    this.dropdownMenu = document.createElement('div');
+    this.dropdownMenu.className = 'topbar__dropdown-menu';
+    this.dropdownMenu.setAttribute('role', 'menu');
+    this.dropdownMenu.innerHTML = `
+      <button type="button" class="topbar__menu-item" id="menu-item-about" role="menuitem">
+        <span aria-hidden="true">ⓘ</span>
+        <span>À propos</span>
+      </button>
+      <button type="button" class="topbar__menu-item" id="menu-item-records" role="menuitem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+          <path d="M4 22h16"></path>
+          <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34"></path>
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+        </svg>
+        <span>Records</span>
+      </button>
+      <button type="button" class="topbar__menu-item" id="menu-item-buildings" role="menuitemcheckbox" aria-checked="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 21h18M5 21V7l8-4v18M13 10l6 3v8"></path>
+        </svg>
+        <span style="flex: 1;">Bâti 3D</span>
+        <span class="topbar__menu-toggle-state is-active" id="menu-buildings-state">Actif</span>
+      </button>
+      <button type="button" class="topbar__menu-item" id="menu-item-theme" role="menuitemcheckbox">
+        <span aria-hidden="true">◐</span>
+        <span style="flex: 1;">Mode clair</span>
+        <span class="topbar__menu-toggle-state" id="menu-theme-state"></span>
+      </button>
+    `;
 
-    // Assemblage
-    this.el.appendChild(brand);
-    this.el.appendChild(this.metaEl);
+    this.buildingsBtn = this.dropdownMenu.querySelector('#menu-item-buildings') as HTMLButtonElement;
+    this.themeBtn = this.dropdownMenu.querySelector('#menu-item-theme') as HTMLButtonElement;
+    this.syncThemeState();
+
+    this.menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = this.dropdownMenu.classList.toggle('is-open');
+      this.menuBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    this.dropdownMenu.querySelector('#menu-item-records')?.addEventListener('click', () => {
+      this.closeMenu();
+      this.options.onRecords?.();
+    });
+
+    this.dropdownMenu.querySelector('#menu-item-about')?.addEventListener('click', () => {
+      this.closeMenu();
+      this.options.onAbout?.();
+    });
+
+    this.buildingsBtn?.addEventListener('click', () => {
+      this.setBuildingsActive(!this.isBuildingsActive);
+      this.options.onToggleBuildings?.(this.isBuildingsActive);
+    });
+
+    this.themeBtn?.addEventListener('click', () => {
+      const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem('paris-subway-theme', theme);
+      this.syncThemeState();
+      this.options.onToggleTheme?.(theme);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menuContainer.contains(e.target as Node)) {
+        this.closeMenu();
+      }
+    });
+
+    menuContainer.appendChild(this.menuBtn);
+    menuContainer.appendChild(this.dropdownMenu);
+
+    // Assemblage final
+    this.el.appendChild(this.clockEl);
     this.el.appendChild(spacer);
     this.el.appendChild(countContainer);
-    this.distanceEl = document.createElement('span');
-    this.distanceEl.className = 'topbar__distance';
-    this.distanceEl.title = 'Distance calculée sur les horaires GTFS, pas mesurée par géolocalisation.';
-    this.distanceEl.textContent = '0,0 km · depuis le début du service';
     this.el.appendChild(this.distanceEl);
     this.el.appendChild(this.rtStatusEl);
-    this.el.appendChild(methodBtn);
-    this.el.appendChild(searchBtn);
-    this.el.appendChild(searchIconBtn);
+    this.el.appendChild(this.searchBtn);
+    this.el.appendChild(menuContainer);
+  }
+
+  public getSearchTriggerElement(): HTMLElement {
+    return this.searchBtn;
+  }
+
+  private updateParisClock = (): void => {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('fr-FR', {
+      timeZone: 'Europe/Paris',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23'
+    }).formatToParts(now);
+    const hour = parts.find(part => part.type === 'hour')?.value ?? '00';
+    const minute = parts.find(part => part.type === 'minute')?.value ?? '00';
+    const requestedTestValue = new URLSearchParams(window.location.search).get('clockTest');
+    const value = requestedTestValue && /^[0-9]{2}:[0-9]{2}$/.test(requestedTestValue)
+      ? requestedTestValue
+      : `${hour}:${minute}`;
+    this.clockEl.dateTime = now.toISOString();
+    this.clockEl.setAttribute('aria-label', `Heure de Paris : ${value}`);
+    this.clockEl.innerHTML = renderLedClock(value);
+    const delay = 1000 - (Date.now() % 1000);
+    this.clockTimer = setTimeout(this.updateParisClock, delay);
+  };
+
+  public setBuildingsActive(active: boolean) {
+    this.isBuildingsActive = active;
+    if (this.buildingsBtn) {
+      this.buildingsBtn.setAttribute('aria-checked', String(active));
+      const stateEl = this.buildingsBtn.querySelector('#menu-buildings-state');
+      if (stateEl) {
+        stateEl.textContent = active ? 'Actif' : 'Inactif';
+        stateEl.classList.toggle('is-active', active);
+      }
+    }
+  }
+
+  private syncThemeState() {
+    const light = document.documentElement.dataset.theme === 'light';
+    this.themeBtn?.setAttribute('aria-checked', String(light));
+    const state = this.themeBtn?.querySelector('#menu-theme-state');
+    if (state) state.textContent = light ? 'Actif' : '';
+  }
+
+  public closeMenu() {
+    this.dropdownMenu.classList.remove('is-open');
+    this.menuBtn.setAttribute('aria-expanded', 'false');
   }
 
   public mount(parent: HTMLElement = document.body) {
@@ -175,9 +323,7 @@ export class TopBar {
   }
 
   public setCounts(lineCount: number, stationCount: number) {
-    if (this.metaEl) {
-      this.metaEl.textContent = `${lineCount} lignes · ${stationCount} stations`;
-    }
+    // Conservé pour compatibilité avec les appelants existants.
   }
 
   public setNetworkDistance(distanceKm: number, theoretical = true) {
@@ -186,25 +332,39 @@ export class TopBar {
       : '0,0';
     this.distanceEl.textContent = `${value} km · depuis le début du service`;
     this.distanceEl.title = theoretical
-      ? 'Distance théorique calculée sur les horaires GTFS depuis le début du service.'
+      ? 'Distance cumulée calculée sur les horaires théoriques GTFS depuis le début du service.'
       : 'Distance parcourue depuis le début du service.';
   }
 
   public setRealtimeState(status: any) {
     if (typeof status === 'string') {
       this.rtStatusEl.dataset.state = status;
-      if (status === 'live') this.rtLabelEl.textContent = 'temps réel';
-      else this.rtLabelEl.textContent = 'théorique';
+      if (status === 'live') {
+        this.rtLabelEl.textContent = 'recalé';
+        this.rtStatusEl.title = 'Suivi cinématique temps réel recalé sur les estimations PRIM (Île-de-France Mobilités).';
+      } else if (status === 'error') {
+        this.rtLabelEl.textContent = 'temps réel indisponible';
+        this.rtStatusEl.title = 'Service temps réel PRIM indisponible : repli sur les horaires théoriques GTFS.';
+      } else {
+        this.rtLabelEl.textContent = '';
+        this.rtStatusEl.title = 'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
+      }
     } else if (status && status.active && status.minutesAgo !== undefined && status.minutesAgo <= 10) {
       this.rtStatusEl.dataset.state = 'live';
       if (status.minutesAgo <= 1) {
-        this.rtLabelEl.textContent = 'temps réel (à l\'instant)';
+        this.rtLabelEl.textContent = 'recalé · à l\'instant';
       } else {
-        this.rtLabelEl.textContent = `temps réel (mis à jour il y a ${status.minutesAgo} min)`;
+        this.rtLabelEl.textContent = `recalé · il y a ${status.minutesAgo} min`;
       }
+      this.rtStatusEl.title = 'Suivi cinématique temps réel recalé sur les estimations PRIM (Île-de-France Mobilités).';
+    } else if (status && status.error) {
+      this.rtStatusEl.dataset.state = 'error';
+      this.rtLabelEl.textContent = 'temps réel indisponible';
+      this.rtStatusEl.title = 'Service temps réel PRIM indisponible : repli sur les horaires théoriques GTFS.';
     } else {
       this.rtStatusEl.dataset.state = 'standby';
-      this.rtLabelEl.textContent = 'théorique';
+      this.rtLabelEl.textContent = '';
+      this.rtStatusEl.title = 'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
     }
   }
 }

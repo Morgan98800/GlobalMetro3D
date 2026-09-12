@@ -1,0 +1,94 @@
+/* ============================================================
+   MOTION — vocabulaire d'animation partagé
+   Carte, chrome et feedback puisent dans les mêmes courbes.
+   ============================================================ */
+
+/* ---------- INDICATEURS ---------- */
+
+@keyframes rt-pulse {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(1.06); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  0%, 45%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ---------- ENTRÉES ---------- */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- CHARGEMENT ---------- */
+
+@keyframes skeleton-sweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+@keyframes progress-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(340%); }
+}
+
+/* ---------- ACCESSIBILITÉ ---------- */
+
+/* Repos du mouvement réduit : une opacité qui respire.
+   C'est la seule animation autorisée après réduction, parce
+   qu'elle ne translate rien et n'échelle rien. */
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Les translations et les échelles ne sont pas raccourcies :
+     elles sont retirées. Les animations d'entrée retombent donc
+     sur leur état final, identité comprise. */
+  .progress--indeterminate .progress__bar {
+    width: 100%;
+    transform: none !important;
+    animation: pulse-opacity 1.6s linear infinite !important;
+  }
+
+  .skeleton::after {
+    transform: none !important;
+    background: none !important;
+  }
+
+  .spinner {
+    border-top-color: var(--laiton);
+    animation: pulse-opacity 1.6s linear infinite !important;
+  }
+}

@@ -14,12 +14,18 @@ export interface DockServiceStatus {
 }
 
 export class SubwayDock {
+  private static readonly COLLAPSED_STORAGE_KEY = 'paris-subway-dock-collapsed';
   private dockEl: HTMLElement;
   private linesGridEl: HTMLElement;
   private dockContentEl: HTMLElement;
   private resetBtnEl: HTMLElement;
+  private collapseBtnEl: HTMLButtonElement;
   private handleEl: HTMLElement | null;
-  private collapseBtnEl: HTMLElement | null;
+  private sheetState: 'closed' | 'open' = 'closed';
+  private sheetDragStartY = 0;
+  private sheetDragStartHeight = 0;
+  private sheetDragging = false;
+  private suppressSheetClick = false;
   private lines: LineMetadata[] = [];
   private stations: StationMetadata[] = [];
   private laddersData: Record<string, LineLadderData> = {};
@@ -31,12 +37,31 @@ export class SubwayDock {
   private onStationClick: (station: StationMetadata) => void;
   private onTrainClick: (train: TrainMarker) => void;
   private onRecordsOpen?: () => void;
-  private onMethodOpen?: () => void;
   private serviceStatus: DockServiceStatus | null = null;
   private realtimeAvailable = false;
   private rollingStockDb: RollingStockDatabase | null = null;
   private latestTrains: TrainMarker[] = [];
   private trafficByLine: Record<string, LineTrafficReport> = {};
+  private collapsed = false;
+  private hideResetWhileClosed = false;
+
+  private syncCollapsedState() {
+    this.dockEl.classList.toggle('dock--collapsed', this.collapsed);
+    this.collapseBtnEl.setAttribute('aria-expanded', String(!this.collapsed));
+    this.collapseBtnEl.setAttribute('aria-label', this.collapsed ? 'Déployer le panneau' : 'Réduire le panneau');
+    this.collapseBtnEl.setAttribute('title', this.collapsed ? 'Déployer le panneau' : 'Réduire le panneau');
+    this.resetBtnEl.style.display = this.selectedLineId && !this.collapsed && !this.hideResetWhileClosed ? 'flex' : 'none';
+    this.collapseBtnEl.innerHTML = this.collapsed
+      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>';
+  }
+
+  private setSheetState(state: 'closed' | 'open') {
+    this.sheetState = state;
+    this.dockEl.dataset.sheet = state;
+    if (state !== 'closed') this.collapsed = false;
+    this.syncCollapsedState();
+  }
 
   constructor(options: {
     onLineSelect: (lineId: string | null, dir?: string) => void;
@@ -44,20 +69,22 @@ export class SubwayDock {
     onTrainClick: (train: TrainMarker) => void;
     rollingStockDb?: RollingStockDatabase;
     onRecordsOpen?: () => void;
-    onMethodOpen?: () => void;
   }) {
     this.dockEl = document.getElementById('dock')!;
     this.linesGridEl = document.getElementById('lines-grid')!;
     this.dockContentEl = document.getElementById('dock-content')!;
     this.resetBtnEl = document.getElementById('dock-reset')!;
+    this.collapseBtnEl = document.getElementById('dock-collapse') as HTMLButtonElement;
     this.handleEl = document.getElementById('dock-handle');
-    this.collapseBtnEl = document.getElementById('dock-collapse');
+    this.collapsed = window.matchMedia('(max-width: 768px)').matches
+      ? false
+      : localStorage.getItem(SubwayDock.COLLAPSED_STORAGE_KEY) === 'true';
+    this.syncCollapsedState();
     this.onLineSelect = options.onLineSelect;
     this.onStationClick = options.onStationClick;
     this.onTrainClick = options.onTrainClick;
     this.rollingStockDb = options.rollingStockDb || null;
     this.onRecordsOpen = options.onRecordsOpen;
-    this.onMethodOpen = options.onMethodOpen;
 
     this.stationLadder = new StationLadder({
       containerId: 'dock-content',
@@ -72,9 +99,18 @@ export class SubwayDock {
         this.selectLine(lineId);
       }
     });
+    // Boucle d'animation 10 Hz : les vitesses des rames évoluent en continu
+    // entre les ticks du moteur (1 Hz) pour un rendu fluide.
+    this.stationLadder.startAnimation();
 
     this.resetBtnEl.addEventListener('click', () => {
       this.selectLine(null);
+    });
+
+    this.collapseBtnEl.addEventListener('click', () => {
+      this.collapsed = !this.collapsed;
+      localStorage.setItem(SubwayDock.COLLAPSED_STORAGE_KEY, String(this.collapsed));
+      this.syncCollapsedState();
     });
 
     this.setupInteractivity();
@@ -82,28 +118,56 @@ export class SubwayDock {
   }
 
   private setupInteractivity() {
-    let isCollapsed = false;
-    this.collapseBtnEl?.addEventListener('click', () => {
-      isCollapsed = !isCollapsed;
-      this.dockEl.classList.toggle('dock--collapsed', isCollapsed);
-      this.collapseBtnEl?.setAttribute('aria-expanded', String(!isCollapsed));
-      this.collapseBtnEl?.setAttribute('aria-label', isCollapsed ? 'Déplier le panneau' : 'Replier le panneau');
-    });
+    this.dockEl.dataset.sheet = this.sheetState;
 
-    let startY = 0;
-    let startHeight = 0;
-    const onTouchStart = (e: TouchEvent) => {
-      startY = e.touches[0].clientY;
-      startHeight = this.dockEl.getBoundingClientRect().height;
+    const onPointerStart = (clientY: number) => {
+      this.sheetDragStartY = clientY;
+      this.sheetDragStartHeight = this.dockEl.getBoundingClientRect().height;
+      this.sheetDragging = true;
+      this.suppressSheetClick = false;
+      this.dockEl.dataset.dragging = 'true';
     };
-    const onTouchMove = (e: TouchEvent) => {
-      const deltaY = startY - e.touches[0].clientY;
-      const newH = Math.min(window.innerHeight * 0.85, Math.max(120, startHeight + deltaY));
-      this.dockEl.style.height = `${newH}px`;
-      document.documentElement.style.setProperty('--dock-height', `${newH}px`);
+    const onPointerMove = (clientY: number) => {
+      if (!this.sheetDragging) return;
+      const deltaY = this.sheetDragStartY - clientY;
+      const newHeight = Math.min(window.innerHeight * 0.56, Math.max(window.innerHeight * 0.3, this.sheetDragStartHeight + deltaY));
+      this.dockEl.style.height = `${newHeight}px`;
     };
-    this.handleEl?.addEventListener('touchstart', onTouchStart, { passive: true });
-    this.handleEl?.addEventListener('touchmove', onTouchMove, { passive: true });
+    const onPointerEnd = () => {
+      if (!this.sheetDragging) return;
+      const currentHeight = this.dockEl.getBoundingClientRect().height;
+      const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const heights = { closed: rootFontSize * 3.5, open: window.innerHeight * 0.56 };
+      const nearest = (Object.keys(heights) as Array<'closed' | 'open'>)
+        .sort((a, b) => Math.abs(heights[a] - currentHeight) - Math.abs(heights[b] - currentHeight))[0];
+      this.suppressSheetClick = Math.abs(currentHeight - this.sheetDragStartHeight) > 8;
+      this.sheetDragging = false;
+      delete this.dockEl.dataset.dragging;
+      this.dockEl.style.height = '';
+      this.setSheetState(nearest);
+    };
+    const start = (event: PointerEvent) => onPointerStart(event.clientY);
+    const move = (event: PointerEvent) => onPointerMove(event.clientY);
+    const end = () => onPointerEnd();
+    this.handleEl?.addEventListener('pointerdown', start);
+    this.dockEl.addEventListener('pointermove', move);
+    this.dockEl.addEventListener('pointerup', end);
+    this.dockEl.addEventListener('pointercancel', end);
+    this.handleEl?.addEventListener('click', () => {
+      if (this.suppressSheetClick) {
+        this.suppressSheetClick = false;
+        return;
+      }
+      if (!this.sheetDragging) {
+        if (this.sheetState === 'closed') {
+          this.hideResetWhileClosed = false;
+          this.setSheetState('open');
+        } else {
+          this.hideResetWhileClosed = true;
+          this.setSheetState('closed');
+        }
+      }
+    });
   }
 
   public setData(
@@ -179,7 +243,6 @@ export class SubwayDock {
       this.trafficByLine = status.trafficByLine;
     }
     if (this.selectedLineId) {
-      this.refreshRealtimeNotice();
       this.renderContent();
     }
   }
@@ -194,12 +257,23 @@ export class SubwayDock {
   }
 
   public selectLine(lineId: string | null, dir: string = '0') {
-    if (this.selectedLineId === lineId && this.selectedDir === dir) return;
+    if (this.selectedLineId === lineId && this.selectedDir === dir) {
+      if (lineId && window.matchMedia('(max-width: 768px)').matches && this.sheetState === 'closed') {
+        this.hideResetWhileClosed = false;
+        this.setSheetState('open');
+      }
+      return;
+    }
     this.selectedLineId = lineId;
     this.selectedDir = dir;
     this.setGridSelected?.(lineId);
-    this.resetBtnEl.style.display = lineId ? 'flex' : 'none';
+    this.hideResetWhileClosed = false;
+    this.resetBtnEl.style.display = lineId && !this.collapsed ? 'flex' : 'none';
+    this.dockEl.classList.toggle('has-selection', Boolean(lineId));
     this.renderContent();
+    if (lineId && window.matchMedia('(max-width: 768px)').matches) {
+      this.setSheetState('open');
+    }
     this.onLineSelect(lineId, dir);
   }
 
@@ -239,8 +313,19 @@ export class SubwayDock {
     for (const s of lineStations) {
       const item = document.createElement('div');
       item.className = 'station-item';
-      item.innerHTML = `<span class="station-name">${s.name}</span>`;
+      // Même contrat clavier que .ladder-station-node : div cliquable, donc
+      // role + tabindex + Entrée/Espace, sinon la ligne est inutilisable
+      // au clavier (LOT 1, point 6).
+      item.setAttribute('role', 'button');
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('aria-label', `Station ${s.name}`);
+      item.innerHTML = `<span class="station-name" title="${s.name}">${s.name}</span>`;
       item.addEventListener('click', () => this.onStationClick(s));
+      item.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+        e.preventDefault();
+        this.onStationClick(s);
+      });
       list.appendChild(item);
     }
     this.dockContentEl.appendChild(title);
@@ -377,8 +462,8 @@ export class SubwayDock {
       return hours > 0 ? `${hours} h ${String(minutes).padStart(2, '0')}` : `${minutes} min`;
     };
 
-    let title = 'Service en cours';
-    let message = 'Sélectionnez une ligne pour afficher ses stations et son service.';
+    let title = '';
+    let message = '';
     if (status.state === 'ended') {
       title = 'Service terminé';
       message = `Premier métro demain à ${status.firstMetroLabel}.`;
@@ -387,31 +472,6 @@ export class SubwayDock {
       message = `Premier métro à ${status.firstMetroLabel}, dans ${formatDuration(status.secondsUntilFirst)}.`;
     }
 
-    const realtimeNotice = this.realtimeAvailable
-      ? ''
-      : '<p class="dock-feed-note">Flux temps réel indisponible : affichage théorique GTFS.</p>';
-    this.dockContentEl.innerHTML = `
-      <div class="dock-empty-state">
-        <div class="dock-empty-kicker">${title}</div>
-        <p>${message}</p>
-        ${realtimeNotice}
-        <div class="dock-actions-row">
-          <button type="button" class="dock-records-btn" id="dock-records">Records du réseau</button>
-          <button type="button" class="dock-method-btn" id="dock-method">Méthode & Données</button>
-        </div>
-      </div>
-    `;
-    this.dockContentEl.querySelector<HTMLButtonElement>('#dock-records')?.addEventListener('click', () => this.onRecordsOpen?.());
-    this.dockContentEl.querySelector<HTMLButtonElement>('#dock-method')?.addEventListener('click', () => this.onMethodOpen?.());
-  }
-
-  private refreshRealtimeNotice() {
-    this.dockContentEl.querySelector('.dock-feed-note')?.remove();
-    if (!this.realtimeAvailable) {
-      const note = document.createElement('p');
-      note.className = 'dock-feed-note';
-      note.textContent = 'Flux temps réel indisponible : affichage théorique GTFS.';
-      this.dockContentEl.prepend(note);
-    }
+    this.dockContentEl.replaceChildren();
   }
 }

@@ -10,7 +10,16 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    open: true
+    open: true,
+    configureServer(server) {
+      server.middlewares.use((request, response, next) => {
+        if (request.url?.startsWith('/data/')) {
+          response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+          response.setHeader('Pragma', 'no-cache');
+        }
+        next();
+      });
+    }
   },
   build: {
     target: 'esnext',

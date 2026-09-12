@@ -1,0 +1,7809 @@
+[
+ {
+  "w": 320,
+  "h": 568,
+  "state": "home",
+  "innerWidth": 320,
+  "innerHeight": 568,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 320,
+   "h": 568,
+   "bottom": 568,
+   "right": 320
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 320,
+   "h": 48,
+   "bottom": 48,
+   "right": 320
+  },
+  "dock": {
+   "x": 10,
+   "y": 286,
+   "w": 301,
+   "h": 273,
+   "bottom": 558,
+   "right": 310
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "272.64px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 377,
+   "w": 299,
+   "h": 310,
+   "bottom": 687,
+   "right": 309,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 687,
+   "w": 299,
+   "h": 16,
+   "bottom": 703,
+   "right": 309,
+   "clientH": 16,
+   "scrollH": 292,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 25,
+   "y": 334,
+   "w": 103,
+   "h": 17,
+   "bottom": 351,
+   "right": 128
+  },
+  "collapse": {
+   "x": 247,
+   "y": 318,
+   "w": 48,
+   "h": 48,
+   "bottom": 366,
+   "right": 295
+  },
+  "kicker": {
+   "x": 23,
+   "y": 711,
+   "w": 273,
+   "h": 19,
+   "bottom": 730,
+   "right": 297
+  },
+  "desc": {
+   "x": 23,
+   "y": 735,
+   "w": 273,
+   "h": 57,
+   "bottom": 792,
+   "right": 297
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 15,
+  "badgesOffScreen": [
+   "14",
+   "A",
+   "B",
+   "C",
+   "D",
+   "E"
+  ],
+  "badgeRows": [
+   406,
+   456,
+   506,
+   556,
+   638
+  ],
+  "attrib": {
+   "x": 10,
+   "y": 494,
+   "w": 300,
+   "h": 64,
+   "bottom": 558,
+   "right": 310
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 3,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "line-badges",
+  "attribCentreEl": "div.line-badges",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "button.line-badge",
+   "div.line-badges",
+   "button.line-badge"
+  ],
+  "searchTrigger": {
+   "x": 210,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 254
+  },
+  "menuBtn": {
+   "x": 264,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 308
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": true,
+  "menuBtnOK": true,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 144,
+     "y": 14,
+     "w": 28,
+     "h": 20,
+     "bottom": 34,
+     "right": 172
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 320,
+  "h": 568,
+  "state": "ligne14",
+  "innerWidth": 320,
+  "innerHeight": 568,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 320,
+   "h": 568,
+   "bottom": 568,
+   "right": 320
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 320,
+   "h": 48,
+   "bottom": 48,
+   "right": 320
+  },
+  "dock": {
+   "x": 10,
+   "y": 286,
+   "w": 301,
+   "h": 273,
+   "bottom": 558,
+   "right": 310
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "272.64px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 232,
+   "w": 299,
+   "h": 310,
+   "bottom": 542,
+   "right": 309,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 542,
+   "w": 299,
+   "h": 16,
+   "bottom": 558,
+   "right": 309,
+   "clientH": 16,
+   "scrollH": 927,
+   "scrollTop": 289,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 131,
+   "y": 178,
+   "w": 108,
+   "h": 38,
+   "bottom": 216,
+   "right": 239
+  },
+  "title": {
+   "x": 25,
+   "y": 189,
+   "w": 103,
+   "h": 17,
+   "bottom": 206,
+   "right": 128
+  },
+  "collapse": {
+   "x": 247,
+   "y": 173,
+   "w": 48,
+   "h": 48,
+   "bottom": 221,
+   "right": 295
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 15,
+  "badgesOffScreen": [
+   "14",
+   "A",
+   "B",
+   "C",
+   "D",
+   "E"
+  ],
+  "badgeRows": [
+   406,
+   456,
+   506,
+   556,
+   638
+  ],
+  "attrib": {
+   "x": 10,
+   "y": 494,
+   "w": 300,
+   "h": 64,
+   "bottom": 558,
+   "right": 310
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 3,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "line-badges",
+  "attribCentreEl": "div.line-badges",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "button.line-badge",
+   "div.line-badges",
+   "button.line-badge"
+  ],
+  "searchTrigger": {
+   "x": 210,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 254
+  },
+  "menuBtn": {
+   "x": 264,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 308
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": true,
+  "menuBtnOK": true,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 144,
+     "y": 14,
+     "w": 28,
+     "h": 20,
+     "bottom": 34,
+     "right": 172
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 112,
+    "y": 973,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 993,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "6",
+    "x": 112,
+    "y": 1146,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1166,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 112,
+    "y": 1188,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1208,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 63,
+    "y": 1231,
+    "w": 20,
+    "h": 20,
+    "right": 83,
+    "bottom": 1251,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "4",
+    "x": 86,
+    "y": 1231,
+    "w": 20,
+    "h": 20,
+    "right": 106,
+    "bottom": 1251,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 109,
+    "y": 1231,
+    "w": 20,
+    "h": 20,
+    "right": 129,
+    "bottom": 1251,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "11",
+    "x": 132,
+    "y": 1231,
+    "w": 20,
+    "h": 20,
+    "right": 152,
+    "bottom": 1251,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 112,
+    "y": 1273,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1293,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "8",
+    "x": 89,
+    "y": 1322,
+    "w": 20,
+    "h": 20,
+    "right": 109,
+    "bottom": 1342,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 112,
+    "y": 1322,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1342,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "3",
+    "x": 66,
+    "y": 1364,
+    "w": 20,
+    "h": 20,
+    "right": 86,
+    "bottom": 1384,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 89,
+    "y": 1364,
+    "w": 20,
+    "h": 20,
+    "right": 109,
+    "bottom": 1384,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 112,
+    "y": 1364,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1384,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 112,
+    "y": 1449,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1469,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 112,
+    "y": 1540,
+    "w": 20,
+    "h": 20,
+    "right": 132,
+    "bottom": 1560,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "7",
+   "6",
+   "1",
+   "1",
+   "4",
+   "7",
+   "11",
+   "7",
+   "8",
+   "12",
+   "3",
+   "12",
+   "13",
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [
+   {
+    "txt": "Aéroport d'Orly",
+    "scrollW": 88,
+    "clientW": 70
+   },
+   {
+    "txt": "Thiais - Orly (Pont de Rungis)",
+    "scrollW": 166,
+    "clientW": 70
+   },
+   {
+    "txt": "Chevilly-Larue (Marché International)",
+    "scrollW": 215,
+    "clientW": 70
+   },
+   {
+    "txt": "L'Haÿ-les-Roses",
+    "scrollW": 95,
+    "clientW": 70
+   },
+   {
+    "txt": "Villejuif - Gustave Roussy",
+    "scrollW": 144,
+    "clientW": 70
+   },
+   {
+    "txt": "Hôpital Bicêtre",
+    "scrollW": 84,
+    "clientW": 70
+   },
+   {
+    "txt": "Maison Blanche",
+    "scrollW": 96,
+    "clientW": 50
+   },
+   {
+    "txt": "Bibliothèque François Mitterrand",
+    "scrollW": 188,
+    "clientW": 70
+   },
+   {
+    "txt": "Cour Saint-Emilion",
+    "scrollW": 107,
+    "clientW": 70
+   },
+   {
+    "txt": "Gare de Lyon",
+    "scrollW": 78,
+    "clientW": 50
+   },
+   {
+    "txt": "Châtelet",
+    "scrollW": 51,
+    "clientW": 0
+   },
+   {
+    "txt": "Pyramides",
+    "scrollW": 65,
+    "clientW": 50
+   },
+   {
+    "txt": "Madeleine",
+    "scrollW": 63,
+    "clientW": 26
+   },
+   {
+    "txt": "Saint-Lazare",
+    "scrollW": 77,
+    "clientW": 3
+   },
+   {
+    "txt": "Pont Cardinet",
+    "scrollW": 78,
+    "clientW": 70
+   },
+   {
+    "txt": "Porte de Clichy",
+    "scrollW": 90,
+    "clientW": 50
+   },
+   {
+    "txt": "Mairie de Saint-Ouen",
+    "scrollW": 126,
+    "clientW": 50
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "scrollW": 112,
+    "clientW": 70
+   }
+  ],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [
+   "Aéroport d'Orly",
+   "Thiais - Orly (Pont de Rungis)",
+   "Chevilly-Larue (Marché International)",
+   "L'Haÿ-les-Roses",
+   "Villejuif - Gustave Roussy",
+   "Hôpital Bicêtre",
+   "Maison Blanche",
+   "Bibliothèque François Mitterrand",
+   "Cour Saint-Emilion",
+   "Gare de Lyon",
+   "Châtelet",
+   "Pyramides",
+   "Madeleine",
+   "Saint-Lazare",
+   "Pont Cardinet",
+   "Porte de Clichy",
+   "Mairie de Saint-Ouen",
+   "Saint-Denis - Pleyel"
+  ],
+  "nameWidth": 70,
+  "nameX": 55,
+  "bulletX": 25,
+  "ladderFirstY": 715,
+  "ladderLastY": 1582,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 390,
+  "h": 844,
+  "state": "home",
+  "innerWidth": 390,
+  "innerHeight": 844,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "bottom": 844,
+   "right": 390
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 48,
+   "bottom": 48,
+   "right": 390
+  },
+  "dock": {
+   "x": 10,
+   "y": 429,
+   "w": 371,
+   "h": 405,
+   "bottom": 834,
+   "right": 380
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "405.12px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 520,
+   "w": 369,
+   "h": 260,
+   "bottom": 780,
+   "right": 379,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 780,
+   "w": 369,
+   "h": 53,
+   "bottom": 833,
+   "right": 379,
+   "clientH": 53,
+   "scrollH": 273,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 25,
+   "y": 477,
+   "w": 103,
+   "h": 17,
+   "bottom": 494,
+   "right": 128
+  },
+  "collapse": {
+   "x": 317,
+   "y": 462,
+   "w": 48,
+   "h": 48,
+   "bottom": 510,
+   "right": 365
+  },
+  "kicker": {
+   "x": 23,
+   "y": 804,
+   "w": 343,
+   "h": 19,
+   "bottom": 823,
+   "right": 367
+  },
+  "desc": {
+   "x": 23,
+   "y": 828,
+   "w": 343,
+   "h": 38,
+   "bottom": 866,
+   "right": 367
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   550,
+   600,
+   650,
+   731
+  ],
+  "attrib": {
+   "x": 10,
+   "y": 790,
+   "w": 370,
+   "h": 44,
+   "bottom": 834,
+   "right": 380
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 2,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "dock-empty-kicker",
+  "attribCentreEl": "div.dock-empty-kicker",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "div.dock-empty-kicker",
+   "div.dock-empty-kicker",
+   "div.dock-empty-kicker"
+  ],
+  "searchTrigger": {
+   "x": 280,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 324
+  },
+  "menuBtn": {
+   "x": 334,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 378
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": true,
+  "menuBtnOK": true,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 214,
+     "y": 14,
+     "w": 28,
+     "h": 20,
+     "bottom": 34,
+     "right": 242
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 41,
+     "y": 14,
+     "w": 95,
+     "h": 19,
+     "bottom": 33,
+     "right": 136
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 390,
+  "h": 844,
+  "state": "ligne14",
+  "innerWidth": 390,
+  "innerHeight": 844,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "bottom": 844,
+   "right": 390
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 48,
+   "bottom": 48,
+   "right": 390
+  },
+  "dock": {
+   "x": 10,
+   "y": 429,
+   "w": 371,
+   "h": 405,
+   "bottom": 834,
+   "right": 380
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "405.12px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 520,
+   "w": 369,
+   "h": 260,
+   "bottom": 780,
+   "right": 379,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 780,
+   "w": 369,
+   "h": 53,
+   "bottom": 833,
+   "right": 379,
+   "clientH": 53,
+   "scrollH": 916,
+   "scrollTop": 270,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 201,
+   "y": 467,
+   "w": 108,
+   "h": 38,
+   "bottom": 505,
+   "right": 309
+  },
+  "title": {
+   "x": 25,
+   "y": 477,
+   "w": 103,
+   "h": 17,
+   "bottom": 494,
+   "right": 128
+  },
+  "collapse": {
+   "x": 317,
+   "y": 462,
+   "w": 48,
+   "h": 48,
+   "bottom": 510,
+   "right": 365
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   550,
+   600,
+   650,
+   731
+  ],
+  "attrib": {
+   "x": 10,
+   "y": 790,
+   "w": 370,
+   "h": 44,
+   "bottom": 834,
+   "right": 380
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 2,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "ladder-node-details",
+  "attribCentreEl": "div.ladder-node-details",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "span.ladder-node-name",
+   "div.ladder-node-details",
+   "div.ladder-train-cursor"
+  ],
+  "searchTrigger": {
+   "x": 280,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 324
+  },
+  "menuBtn": {
+   "x": 334,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 378
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": true,
+  "menuBtnOK": true,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 214,
+     "y": 14,
+     "w": 28,
+     "h": 20,
+     "bottom": 34,
+     "right": 242
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 41,
+     "y": 14,
+     "w": 95,
+     "h": 19,
+     "bottom": 33,
+     "right": 136
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 182,
+    "y": 1067,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1087,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "6",
+    "x": 182,
+    "y": 1239,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1259,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 182,
+    "y": 1282,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1302,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 113,
+    "y": 1324,
+    "w": 20,
+    "h": 20,
+    "right": 133,
+    "bottom": 1344,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "4",
+    "x": 136,
+    "y": 1324,
+    "w": 20,
+    "h": 20,
+    "right": 156,
+    "bottom": 1344,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 159,
+    "y": 1324,
+    "w": 20,
+    "h": 20,
+    "right": 179,
+    "bottom": 1344,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "11",
+    "x": 182,
+    "y": 1324,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1344,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 182,
+    "y": 1367,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1387,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "8",
+    "x": 159,
+    "y": 1415,
+    "w": 20,
+    "h": 20,
+    "right": 179,
+    "bottom": 1435,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 182,
+    "y": 1415,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1435,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "3",
+    "x": 136,
+    "y": 1458,
+    "w": 20,
+    "h": 20,
+    "right": 156,
+    "bottom": 1478,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 159,
+    "y": 1458,
+    "w": 20,
+    "h": 20,
+    "right": 179,
+    "bottom": 1478,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 182,
+    "y": 1458,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1478,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 182,
+    "y": 1543,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1563,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 182,
+    "y": 1628,
+    "w": 20,
+    "h": 20,
+    "right": 202,
+    "bottom": 1648,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "7",
+   "6",
+   "1",
+   "1",
+   "4",
+   "7",
+   "11",
+   "7",
+   "8",
+   "12",
+   "3",
+   "12",
+   "13",
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [
+   {
+    "txt": "Thiais - Orly (Pont de Rungis)",
+    "scrollW": 166,
+    "clientW": 140
+   },
+   {
+    "txt": "Chevilly-Larue (Marché International)",
+    "scrollW": 215,
+    "clientW": 140
+   },
+   {
+    "txt": "Villejuif - Gustave Roussy",
+    "scrollW": 144,
+    "clientW": 140
+   },
+   {
+    "txt": "Bibliothèque François Mitterrand",
+    "scrollW": 188,
+    "clientW": 140
+   },
+   {
+    "txt": "Saint-Lazare",
+    "scrollW": 77,
+    "clientW": 73
+   },
+   {
+    "txt": "Mairie de Saint-Ouen",
+    "scrollW": 126,
+    "clientW": 120
+   }
+  ],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [
+   "Thiais - Orly (Pont de Rungis)",
+   "Chevilly-Larue (Marché International)",
+   "Villejuif - Gustave Roussy",
+   "Bibliothèque François Mitterrand",
+   "Saint-Lazare",
+   "Mairie de Saint-Ouen"
+  ],
+  "nameWidth": 140,
+  "nameX": 55,
+  "bulletX": 25,
+  "ladderFirstY": 808,
+  "ladderLastY": 1664,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 430,
+  "h": 932,
+  "state": "home",
+  "innerWidth": 430,
+  "innerHeight": 932,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 430,
+   "h": 932,
+   "bottom": 932,
+   "right": 430
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 430,
+   "h": 48,
+   "bottom": 48,
+   "right": 430
+  },
+  "dock": {
+   "x": 10,
+   "y": 475,
+   "w": 411,
+   "h": 447,
+   "bottom": 922,
+   "right": 420
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "447.36px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 566,
+   "w": 409,
+   "h": 210,
+   "bottom": 776,
+   "right": 419,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 776,
+   "w": 409,
+   "h": 146,
+   "bottom": 921,
+   "right": 419,
+   "clientH": 146,
+   "scrollH": 273,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 25,
+   "y": 523,
+   "w": 103,
+   "h": 17,
+   "bottom": 540,
+   "right": 128
+  },
+  "collapse": {
+   "x": 357,
+   "y": 508,
+   "w": 48,
+   "h": 48,
+   "bottom": 556,
+   "right": 405
+  },
+  "kicker": {
+   "x": 23,
+   "y": 800,
+   "w": 383,
+   "h": 19,
+   "bottom": 819,
+   "right": 407
+  },
+  "desc": {
+   "x": 23,
+   "y": 824,
+   "w": 383,
+   "h": 38,
+   "bottom": 862,
+   "right": 407
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   595,
+   645,
+   727
+  ],
+  "attrib": {
+   "x": 10,
+   "y": 878,
+   "w": 410,
+   "h": 44,
+   "bottom": 922,
+   "right": 420
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 2,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "dock-network-traffic dock-network-traffic--normal",
+  "attribCentreEl": "div.dock-network-traffic.dock-network-traffic--normal",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "div.dock-network-traffic.dock-network-traffic--normal",
+   "div.dock-network-traffic.dock-network-traffic--normal",
+   "div.dock-network-traffic.dock-network-traffic--normal"
+  ],
+  "searchTrigger": {
+   "x": 320,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 364
+  },
+  "menuBtn": {
+   "x": 374,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 418
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": true,
+  "menuBtnOK": true,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 254,
+     "y": 14,
+     "w": 28,
+     "h": 20,
+     "bottom": 34,
+     "right": 282
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 41,
+     "y": 14,
+     "w": 95,
+     "h": 19,
+     "bottom": 33,
+     "right": 136
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 430,
+  "h": 932,
+  "state": "ligne14",
+  "innerWidth": 430,
+  "innerHeight": 932,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 430,
+   "h": 932,
+   "bottom": 932,
+   "right": 430
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 430,
+   "h": 48,
+   "bottom": 48,
+   "right": 430
+  },
+  "dock": {
+   "x": 10,
+   "y": 475,
+   "w": 411,
+   "h": 447,
+   "bottom": 922,
+   "right": 420
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "447.36px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 566,
+   "w": 409,
+   "h": 210,
+   "bottom": 776,
+   "right": 419,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 776,
+   "w": 409,
+   "h": 146,
+   "bottom": 921,
+   "right": 419,
+   "clientH": 146,
+   "scrollH": 938,
+   "scrollTop": 224,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 241,
+   "y": 513,
+   "w": 108,
+   "h": 38,
+   "bottom": 551,
+   "right": 349
+  },
+  "title": {
+   "x": 25,
+   "y": 523,
+   "w": 103,
+   "h": 17,
+   "bottom": 540,
+   "right": 128
+  },
+  "collapse": {
+   "x": 357,
+   "y": 508,
+   "w": 48,
+   "h": 48,
+   "bottom": 556,
+   "right": 405
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   595,
+   645,
+   727
+  ],
+  "attrib": {
+   "x": 10,
+   "y": 878,
+   "w": 410,
+   "h": 44,
+   "bottom": 922,
+   "right": 420
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 2,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "ladder-node-name ",
+  "attribCentreEl": "span.ladder-node-name",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "span.ladder-node-name",
+   "span.ladder-node-name",
+   "div#slot-station-2.ladder-node-train-slot"
+  ],
+  "searchTrigger": {
+   "x": 320,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 364
+  },
+  "menuBtn": {
+   "x": 374,
+   "y": 2,
+   "w": 44,
+   "h": 44,
+   "bottom": 46,
+   "right": 418
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": true,
+  "menuBtnOK": true,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "none",
+    "r": {
+     "x": 0,
+     "y": 0,
+     "w": 0,
+     "h": 0,
+     "bottom": 0,
+     "right": 0
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 254,
+     "y": 14,
+     "w": 28,
+     "h": 20,
+     "bottom": 34,
+     "right": 282
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 41,
+     "y": 14,
+     "w": 95,
+     "h": 19,
+     "bottom": 33,
+     "right": 136
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 222,
+    "y": 1063,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1083,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "6",
+    "x": 222,
+    "y": 1235,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1255,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 222,
+    "y": 1278,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1298,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 153,
+    "y": 1326,
+    "w": 20,
+    "h": 20,
+    "right": 173,
+    "bottom": 1346,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "4",
+    "x": 176,
+    "y": 1326,
+    "w": 20,
+    "h": 20,
+    "right": 196,
+    "bottom": 1346,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 199,
+    "y": 1326,
+    "w": 20,
+    "h": 20,
+    "right": 219,
+    "bottom": 1346,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "11",
+    "x": 222,
+    "y": 1326,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1346,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 222,
+    "y": 1374,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1394,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "8",
+    "x": 199,
+    "y": 1422,
+    "w": 20,
+    "h": 20,
+    "right": 219,
+    "bottom": 1442,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 222,
+    "y": 1422,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1442,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "3",
+    "x": 176,
+    "y": 1465,
+    "w": 20,
+    "h": 20,
+    "right": 196,
+    "bottom": 1485,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 199,
+    "y": 1465,
+    "w": 20,
+    "h": 20,
+    "right": 219,
+    "bottom": 1485,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 222,
+    "y": 1465,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1485,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 222,
+    "y": 1550,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1570,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 222,
+    "y": 1640,
+    "w": 20,
+    "h": 20,
+    "right": 242,
+    "bottom": 1660,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "7",
+   "6",
+   "1",
+   "1",
+   "4",
+   "7",
+   "11",
+   "7",
+   "8",
+   "12",
+   "3",
+   "12",
+   "13",
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [
+   {
+    "txt": "Chevilly-Larue (Marché International)",
+    "scrollW": 215,
+    "clientW": 180
+   },
+   {
+    "txt": "Bibliothèque François Mitterrand",
+    "scrollW": 188,
+    "clientW": 180
+   }
+  ],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [
+   "Chevilly-Larue (Marché International)",
+   "Bibliothèque François Mitterrand"
+  ],
+  "nameWidth": 180,
+  "nameX": 55,
+  "bulletX": 25,
+  "ladderFirstY": 804,
+  "ladderLastY": 1683,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 768,
+  "h": 1024,
+  "state": "home",
+  "innerWidth": 768,
+  "innerHeight": 1024,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 768,
+   "h": 1024,
+   "bottom": 1024,
+   "right": 768
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 768,
+   "h": 52,
+   "bottom": 52,
+   "right": 768
+  },
+  "dock": {
+   "x": 10,
+   "y": 524,
+   "w": 749,
+   "h": 491,
+   "bottom": 1014,
+   "right": 758
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "491.52px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 615,
+   "w": 747,
+   "h": 144,
+   "bottom": 759,
+   "right": 757,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 759,
+   "w": 747,
+   "h": 254,
+   "bottom": 1013,
+   "right": 757,
+   "clientH": 254,
+   "scrollH": 254,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 25,
+   "y": 572,
+   "w": 103,
+   "h": 17,
+   "bottom": 589,
+   "right": 128
+  },
+  "collapse": {
+   "x": 695,
+   "y": 556,
+   "w": 48,
+   "h": 48,
+   "bottom": 604,
+   "right": 743
+  },
+  "kicker": {
+   "x": 23,
+   "y": 783,
+   "w": 721,
+   "h": 19,
+   "bottom": 802,
+   "right": 745
+  },
+  "desc": {
+   "x": 23,
+   "y": 807,
+   "w": 721,
+   "h": 19,
+   "bottom": 826,
+   "right": 745
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   646,
+   718
+  ],
+  "attrib": {
+   "x": 124,
+   "y": 990,
+   "w": 634,
+   "h": 24,
+   "bottom": 1014,
+   "right": 758
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "dock-empty-state",
+  "attribCentreEl": "div.dock-empty-state",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "div.dock-empty-state",
+   "div.dock-empty-state",
+   "div.dock-empty-state"
+  ],
+  "searchTrigger": {
+   "x": 774,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 810
+  },
+  "menuBtn": {
+   "x": 826,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 862
+  },
+  "searchTriggerInViewport": false,
+  "menuBtnInViewport": false,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 501,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 724
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 332,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 485
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 768,
+  "h": 1024,
+  "state": "ligne14",
+  "innerWidth": 768,
+  "innerHeight": 1024,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 768,
+   "h": 1024,
+   "bottom": 1024,
+   "right": 768
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 768,
+   "h": 52,
+   "bottom": 52,
+   "right": 768
+  },
+  "dock": {
+   "x": 10,
+   "y": 523,
+   "w": 749,
+   "h": 492,
+   "bottom": 1014,
+   "right": 758
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "491.52px",
+   "position": "absolute",
+   "zIndex": "150"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 11,
+   "y": 614,
+   "w": 747,
+   "h": 144,
+   "bottom": 758,
+   "right": 757,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 11,
+   "y": 758,
+   "w": 747,
+   "h": 255,
+   "bottom": 1013,
+   "right": 757,
+   "clientH": 255,
+   "scrollH": 913,
+   "scrollTop": 155,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 579,
+   "y": 560,
+   "w": 108,
+   "h": 38,
+   "bottom": 598,
+   "right": 687
+  },
+  "title": {
+   "x": 25,
+   "y": 571,
+   "w": 103,
+   "h": 17,
+   "bottom": 588,
+   "right": 128
+  },
+  "collapse": {
+   "x": 695,
+   "y": 555,
+   "w": 48,
+   "h": 48,
+   "bottom": 603,
+   "right": 743
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   646,
+   717
+  ],
+  "attrib": {
+   "x": 124,
+   "y": 990,
+   "w": 634,
+   "h": 24,
+   "bottom": 1014,
+   "right": 758
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": true,
+  "inDockAtAttribCentre": "ladder-node-name ",
+  "attribCentreEl": "span.ladder-node-name",
+  "attribCentreInDock": true,
+  "attribCentreInMap": false,
+  "attribCentreInAttrib": false,
+  "attribHits": [
+   "span.ladder-node-name",
+   "span.ladder-node-name",
+   "div.ladder-station-node"
+  ],
+  "searchTrigger": {
+   "x": 774,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 810
+  },
+  "menuBtn": {
+   "x": 826,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 862
+  },
+  "searchTriggerInViewport": false,
+  "menuBtnInViewport": false,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 501,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 724
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 332,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 485
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 560,
+    "y": 1031,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1051,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "6",
+    "x": 560,
+    "y": 1203,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1223,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 560,
+    "y": 1246,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1266,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 491,
+    "y": 1294,
+    "w": 20,
+    "h": 20,
+    "right": 511,
+    "bottom": 1314,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "4",
+    "x": 514,
+    "y": 1294,
+    "w": 20,
+    "h": 20,
+    "right": 534,
+    "bottom": 1314,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 537,
+    "y": 1294,
+    "w": 20,
+    "h": 20,
+    "right": 557,
+    "bottom": 1314,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "11",
+    "x": 560,
+    "y": 1294,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1314,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 560,
+    "y": 1342,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1362,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "8",
+    "x": 537,
+    "y": 1385,
+    "w": 20,
+    "h": 20,
+    "right": 557,
+    "bottom": 1405,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 560,
+    "y": 1385,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1405,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "3",
+    "x": 514,
+    "y": 1422,
+    "w": 20,
+    "h": 20,
+    "right": 534,
+    "bottom": 1442,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 537,
+    "y": 1422,
+    "w": 20,
+    "h": 20,
+    "right": 557,
+    "bottom": 1442,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 560,
+    "y": 1422,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1442,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 560,
+    "y": 1507,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1527,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 560,
+    "y": 1597,
+    "w": 20,
+    "h": 20,
+    "right": 580,
+    "bottom": 1617,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "7",
+   "6",
+   "1",
+   "1",
+   "4",
+   "7",
+   "11",
+   "7",
+   "8",
+   "12",
+   "3",
+   "12",
+   "13",
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [],
+  "nameWidth": 518,
+  "nameX": 55,
+  "bulletX": 25,
+  "ladderFirstY": 786,
+  "ladderLastY": 1640,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 1024,
+  "h": 768,
+  "state": "home",
+  "innerWidth": 1024,
+  "innerHeight": 768,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 1024,
+   "h": 768,
+   "bottom": 768,
+   "right": 1024
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 1024,
+   "h": 52,
+   "bottom": 52,
+   "right": 1024
+  },
+  "dock": {
+   "x": 24,
+   "y": 64,
+   "w": 390,
+   "h": 680,
+   "bottom": 744,
+   "right": 414
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "none",
+   "position": "absolute",
+   "zIndex": "10"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 25,
+   "y": 112,
+   "w": 388,
+   "h": 178,
+   "bottom": 289,
+   "right": 413,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 25,
+   "y": 289,
+   "w": 388,
+   "h": 454,
+   "bottom": 743,
+   "right": 413,
+   "clientH": 454,
+   "scrollH": 454,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 45,
+   "y": 79,
+   "w": 109,
+   "h": 17,
+   "bottom": 96,
+   "right": 154
+  },
+  "collapse": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "kicker": {
+   "x": 41,
+   "y": 317,
+   "w": 356,
+   "h": 19,
+   "bottom": 337,
+   "right": 397
+  },
+  "desc": {
+   "x": 41,
+   "y": 341,
+   "w": 356,
+   "h": 38,
+   "bottom": 379,
+   "right": 397
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   145,
+   183,
+   254
+  ],
+  "attrib": {
+   "x": 380,
+   "y": 734,
+   "w": 634,
+   "h": 24,
+   "bottom": 758,
+   "right": 1014
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": false,
+  "inDockAtAttribCentre": "",
+  "attribCentreEl": "a",
+  "attribCentreInDock": false,
+  "attribCentreInMap": true,
+  "attribCentreInAttrib": true,
+  "attribHits": [
+   "a",
+   "a",
+   "div.maplibregl-ctrl-attrib-inner"
+  ],
+  "searchTrigger": {
+   "x": 774,
+   "y": 9,
+   "w": 220,
+   "h": 34,
+   "bottom": 43,
+   "right": 994
+  },
+  "menuBtn": {
+   "x": 1010,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 1046
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": false,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 501,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 724
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 332,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 485
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 1024,
+  "h": 768,
+  "state": "ligne14",
+  "innerWidth": 1024,
+  "innerHeight": 768,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 1024,
+   "h": 768,
+   "bottom": 768,
+   "right": 1024
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 1024,
+   "h": 52,
+   "bottom": 52,
+   "right": 1024
+  },
+  "dock": {
+   "x": 24,
+   "y": 64,
+   "w": 390,
+   "h": 680,
+   "bottom": 744,
+   "right": 414
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "none",
+   "position": "absolute",
+   "zIndex": "10"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 25,
+   "y": 133,
+   "w": 388,
+   "h": 178,
+   "bottom": 310,
+   "right": 413,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 25,
+   "y": 310,
+   "w": 388,
+   "h": 433,
+   "bottom": 743,
+   "right": 413,
+   "clientH": 433,
+   "scrollH": 961,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 285,
+   "y": 79,
+   "w": 108,
+   "h": 38,
+   "bottom": 117,
+   "right": 393
+  },
+  "title": {
+   "x": 45,
+   "y": 90,
+   "w": 109,
+   "h": 17,
+   "bottom": 107,
+   "right": 154
+  },
+  "collapse": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   166,
+   204,
+   275
+  ],
+  "attrib": {
+   "x": 380,
+   "y": 734,
+   "w": 634,
+   "h": 24,
+   "bottom": 758,
+   "right": 1014
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": false,
+  "inDockAtAttribCentre": "",
+  "attribCentreEl": "a",
+  "attribCentreInDock": false,
+  "attribCentreInMap": true,
+  "attribCentreInAttrib": true,
+  "attribHits": [
+   "a",
+   "a",
+   "div.maplibregl-ctrl-attrib-inner"
+  ],
+  "searchTrigger": {
+   "x": 774,
+   "y": 9,
+   "w": 220,
+   "h": 34,
+   "bottom": 43,
+   "right": 994
+  },
+  "menuBtn": {
+   "x": 1010,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 1046
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": false,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 501,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 724
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 332,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 485
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 213,
+    "y": 616,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 636,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "6",
+    "x": 213,
+    "y": 788,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 808,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 213,
+    "y": 831,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 851,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "1",
+    "x": 143,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 163,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "4",
+    "x": 166,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 186,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 189,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "11",
+    "x": 213,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "7",
+    "x": 213,
+    "y": 927,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 947,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "8",
+    "x": 189,
+    "y": 975,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 995,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 213,
+    "y": 975,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 995,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "3",
+    "x": 166,
+    "y": 1018,
+    "w": 20,
+    "h": 20,
+    "right": 186,
+    "bottom": 1038,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 189,
+    "y": 1018,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 1038,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1018,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1038,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1103,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1123,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1193,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1213,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "6",
+   "1",
+   "1",
+   "4",
+   "7",
+   "11",
+   "7",
+   "8",
+   "12",
+   "3",
+   "12",
+   "13",
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [
+   {
+    "txt": "Thiais - Orly (Pont de Rungis)",
+    "scrollW": 166,
+    "clientW": 152
+   },
+   {
+    "txt": "Chevilly-Larue (Marché International)",
+    "scrollW": 215,
+    "clientW": 152
+   },
+   {
+    "txt": "Bibliothèque François Mitterrand",
+    "scrollW": 188,
+    "clientW": 152
+   }
+  ],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [
+   "Thiais - Orly (Pont de Rungis)",
+   "Chevilly-Larue (Marché International)",
+   "Bibliothèque François Mitterrand"
+  ],
+  "nameWidth": 152,
+  "nameX": 72,
+  "bulletX": 43,
+  "ladderFirstY": 342,
+  "ladderLastY": 1236,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 1440,
+  "h": 900,
+  "state": "home",
+  "innerWidth": 1440,
+  "innerHeight": 900,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "bottom": 900,
+   "right": 1440
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 52,
+   "bottom": 52,
+   "right": 1440
+  },
+  "dock": {
+   "x": 24,
+   "y": 64,
+   "w": 390,
+   "h": 812,
+   "bottom": 876,
+   "right": 414
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "none",
+   "position": "absolute",
+   "zIndex": "10"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 25,
+   "y": 112,
+   "w": 388,
+   "h": 178,
+   "bottom": 289,
+   "right": 413,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 25,
+   "y": 289,
+   "w": 388,
+   "h": 586,
+   "bottom": 875,
+   "right": 413,
+   "clientH": 586,
+   "scrollH": 586,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 45,
+   "y": 79,
+   "w": 109,
+   "h": 17,
+   "bottom": 96,
+   "right": 154
+  },
+  "collapse": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "kicker": {
+   "x": 41,
+   "y": 317,
+   "w": 356,
+   "h": 19,
+   "bottom": 337,
+   "right": 397
+  },
+  "desc": {
+   "x": 41,
+   "y": 341,
+   "w": 356,
+   "h": 38,
+   "bottom": 379,
+   "right": 397
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   145,
+   183,
+   254
+  ],
+  "attrib": {
+   "x": 796,
+   "y": 866,
+   "w": 634,
+   "h": 24,
+   "bottom": 890,
+   "right": 1430
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": false,
+  "inDockAtAttribCentre": "",
+  "attribCentreEl": "a",
+  "attribCentreInDock": false,
+  "attribCentreInMap": true,
+  "attribCentreInAttrib": true,
+  "attribHits": [
+   "a",
+   "a",
+   "div.maplibregl-ctrl-attrib-inner"
+  ],
+  "searchTrigger": {
+   "x": 1152,
+   "y": 9,
+   "w": 220,
+   "h": 34,
+   "bottom": 43,
+   "right": 1372
+  },
+  "menuBtn": {
+   "x": 1388,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 1424
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 879,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 1102
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 710,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 863
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 1440,
+  "h": 900,
+  "state": "ligne14",
+  "innerWidth": 1440,
+  "innerHeight": 900,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 900,
+   "bottom": 900,
+   "right": 1440
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 52,
+   "bottom": 52,
+   "right": 1440
+  },
+  "dock": {
+   "x": 24,
+   "y": 64,
+   "w": 390,
+   "h": 812,
+   "bottom": 876,
+   "right": 414
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "none",
+   "position": "absolute",
+   "zIndex": "10"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 25,
+   "y": 133,
+   "w": 388,
+   "h": 178,
+   "bottom": 310,
+   "right": 413,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 25,
+   "y": 310,
+   "w": 388,
+   "h": 565,
+   "bottom": 875,
+   "right": 413,
+   "clientH": 565,
+   "scrollH": 958,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 285,
+   "y": 79,
+   "w": 108,
+   "h": 38,
+   "bottom": 117,
+   "right": 393
+  },
+  "title": {
+   "x": 45,
+   "y": 90,
+   "w": 109,
+   "h": 17,
+   "bottom": 107,
+   "right": 154
+  },
+  "collapse": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   166,
+   204,
+   275
+  ],
+  "attrib": {
+   "x": 796,
+   "y": 866,
+   "w": 634,
+   "h": 24,
+   "bottom": 890,
+   "right": 1430
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": false,
+  "inDockAtAttribCentre": "",
+  "attribCentreEl": "a",
+  "attribCentreInDock": false,
+  "attribCentreInMap": true,
+  "attribCentreInAttrib": true,
+  "attribHits": [
+   "a",
+   "a",
+   "div.maplibregl-ctrl-attrib-inner"
+  ],
+  "searchTrigger": {
+   "x": 1152,
+   "y": 9,
+   "w": 220,
+   "h": 34,
+   "bottom": 43,
+   "right": 1372
+  },
+  "menuBtn": {
+   "x": 1388,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 1424
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 879,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 1102
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 710,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 863
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 213,
+    "y": 601,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 621,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "6",
+    "x": 213,
+    "y": 774,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 794,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "1",
+    "x": 213,
+    "y": 816,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 836,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "1",
+    "x": 143,
+    "y": 864,
+    "w": 20,
+    "h": 20,
+    "right": 163,
+    "bottom": 884,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "4",
+    "x": 166,
+    "y": 864,
+    "w": 20,
+    "h": 20,
+    "right": 186,
+    "bottom": 884,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "7",
+    "x": 189,
+    "y": 864,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 884,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "11",
+    "x": 213,
+    "y": 864,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 884,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "7",
+    "x": 213,
+    "y": 913,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 933,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "8",
+    "x": 189,
+    "y": 961,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 981,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 213,
+    "y": 961,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 981,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "3",
+    "x": 166,
+    "y": 1009,
+    "w": 20,
+    "h": 20,
+    "right": 186,
+    "bottom": 1029,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "12",
+    "x": 189,
+    "y": 1009,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 1029,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1009,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1029,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1100,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1120,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1190,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1210,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "7",
+   "8",
+   "12",
+   "3",
+   "12",
+   "13",
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [
+   {
+    "txt": "Thiais - Orly (Pont de Rungis)",
+    "scrollW": 166,
+    "clientW": 152
+   },
+   {
+    "txt": "Chevilly-Larue (Marché International)",
+    "scrollW": 215,
+    "clientW": 152
+   },
+   {
+    "txt": "Bibliothèque François Mitterrand",
+    "scrollW": 188,
+    "clientW": 152
+   }
+  ],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [
+   "Thiais - Orly (Pont de Rungis)",
+   "Chevilly-Larue (Marché International)",
+   "Bibliothèque François Mitterrand"
+  ],
+  "nameWidth": 152,
+  "nameX": 72,
+  "bulletX": 43,
+  "ladderFirstY": 335,
+  "ladderLastY": 1233,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 1920,
+  "h": 1080,
+  "state": "home",
+  "innerWidth": 1920,
+  "innerHeight": 1080,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 1920,
+   "h": 1080,
+   "bottom": 1080,
+   "right": 1920
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 1920,
+   "h": 52,
+   "bottom": 52,
+   "right": 1920
+  },
+  "dock": {
+   "x": 24,
+   "y": 64,
+   "w": 390,
+   "h": 992,
+   "bottom": 1056,
+   "right": 414
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "none",
+   "position": "absolute",
+   "zIndex": "10"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 25,
+   "y": 112,
+   "w": 388,
+   "h": 178,
+   "bottom": 289,
+   "right": 413,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 25,
+   "y": 289,
+   "w": 388,
+   "h": 766,
+   "bottom": 1055,
+   "right": 413,
+   "clientH": 766,
+   "scrollH": 766,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "title": {
+   "x": 45,
+   "y": 79,
+   "w": 109,
+   "h": 17,
+   "bottom": 96,
+   "right": 154
+  },
+  "collapse": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "kicker": {
+   "x": 41,
+   "y": 317,
+   "w": 356,
+   "h": 19,
+   "bottom": 337,
+   "right": 397
+  },
+  "desc": {
+   "x": 41,
+   "y": 341,
+   "w": 356,
+   "h": 38,
+   "bottom": 379,
+   "right": 397
+  },
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   145,
+   183,
+   254
+  ],
+  "attrib": {
+   "x": 1276,
+   "y": 1046,
+   "w": 634,
+   "h": 24,
+   "bottom": 1070,
+   "right": 1910
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": false,
+  "inDockAtAttribCentre": "",
+  "attribCentreEl": "a",
+  "attribCentreInDock": false,
+  "attribCentreInMap": true,
+  "attribCentreInAttrib": true,
+  "attribHits": [
+   "a",
+   "a",
+   "div.maplibregl-ctrl-attrib-inner"
+  ],
+  "searchTrigger": {
+   "x": 1632,
+   "y": 9,
+   "w": 220,
+   "h": 34,
+   "bottom": 43,
+   "right": 1852
+  },
+  "menuBtn": {
+   "x": 1868,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 1904
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 1359,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 1582
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 1190,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 1343
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [],
+  "pillsTotal": 0,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [],
+  "nameClippedScrollW": [],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": false,
+    "ringChanged": false,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": false
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [],
+  "stationItems": [],
+  "ladderNodeCount": 0,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 0,
+  "nameClipped": [],
+  "nameWidth": null,
+  "nameX": null,
+  "bulletX": null,
+  "ladderFirstY": null,
+  "ladderLastY": null,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ },
+ {
+  "w": 1920,
+  "h": 1080,
+  "state": "ligne14",
+  "innerWidth": 1920,
+  "innerHeight": 1080,
+  "devicePixelRatio": 1,
+  "map": {
+   "x": 0,
+   "y": 0,
+   "w": 1920,
+   "h": 1080,
+   "bottom": 1080,
+   "right": 1920
+  },
+  "topbar": {
+   "x": 0,
+   "y": 0,
+   "w": 1920,
+   "h": 52,
+   "bottom": 52,
+   "right": 1920
+  },
+  "dock": {
+   "x": 24,
+   "y": 64,
+   "w": 390,
+   "h": 992,
+   "bottom": 1056,
+   "right": 414
+  },
+  "dockCS": {
+   "overflow": "hidden",
+   "maxHeight": "none",
+   "position": "absolute",
+   "zIndex": "10"
+  },
+  "mapZ": "1",
+  "grid": {
+   "x": 25,
+   "y": 133,
+   "w": 388,
+   "h": 178,
+   "bottom": 310,
+   "right": 413,
+   "overflow": "visible",
+   "position": "static"
+  },
+  "content": {
+   "x": 25,
+   "y": 310,
+   "w": 388,
+   "h": 745,
+   "bottom": 1055,
+   "right": 413,
+   "clientH": 745,
+   "scrollH": 972,
+   "scrollTop": 0,
+   "overflowY": "auto"
+  },
+  "reset": {
+   "x": 285,
+   "y": 79,
+   "w": 108,
+   "h": 38,
+   "bottom": 117,
+   "right": 393
+  },
+  "title": {
+   "x": 45,
+   "y": 90,
+   "w": 109,
+   "h": 17,
+   "bottom": 107,
+   "right": 154
+  },
+  "collapse": {
+   "x": 0,
+   "y": 0,
+   "w": 0,
+   "h": 0,
+   "bottom": 0,
+   "right": 0
+  },
+  "kicker": null,
+  "desc": null,
+  "badgeCount": 21,
+  "badgesOnScreen": 21,
+  "badgesOffScreen": [],
+  "badgeRows": [
+   166,
+   204,
+   275
+  ],
+  "attrib": {
+   "x": 1276,
+   "y": 1046,
+   "w": 634,
+   "h": 24,
+   "bottom": 1070,
+   "right": 1910
+  },
+  "attribZ": "auto",
+  "attribPE": "auto",
+  "attribText": "© OpenMapTiles · © OpenStreetMap · IDFM ODbL | OpenFreeMap © OpenMapTiles Data from OpenStreetMap",
+  "attribLines": 1,
+  "attribCovered": false,
+  "inDockAtAttribCentre": "",
+  "attribCentreEl": "a",
+  "attribCentreInDock": false,
+  "attribCentreInMap": true,
+  "attribCentreInAttrib": true,
+  "attribHits": [
+   "a",
+   "a",
+   "div.maplibregl-ctrl-attrib-inner"
+  ],
+  "searchTrigger": {
+   "x": 1632,
+   "y": 9,
+   "w": 220,
+   "h": 34,
+   "bottom": 43,
+   "right": 1852
+  },
+  "menuBtn": {
+   "x": 1868,
+   "y": 8,
+   "w": 36,
+   "h": 36,
+   "bottom": 44,
+   "right": 1904
+  },
+  "searchTriggerInViewport": true,
+  "menuBtnInViewport": true,
+  "searchTriggerOK": false,
+  "menuBtnOK": false,
+  "topbarHidden": [
+   {
+    "sel": ".topbar__meta",
+    "display": "block",
+    "r": {
+     "x": 163,
+     "y": 17,
+     "w": 137,
+     "h": 17,
+     "bottom": 34,
+     "right": 300
+    }
+   },
+   {
+    "sel": ".topbar__distance",
+    "display": "block",
+    "r": {
+     "x": 1359,
+     "y": 18,
+     "w": 223,
+     "h": 16,
+     "bottom": 34,
+     "right": 1582
+    }
+   },
+   {
+    "sel": ".topbar__count",
+    "display": "flex",
+    "r": {
+     "x": 1190,
+     "y": 16,
+     "w": 153,
+     "h": 20,
+     "bottom": 36,
+     "right": 1343
+    }
+   },
+   {
+    "sel": ".topbar__name",
+    "display": "block",
+    "r": {
+     "x": 45,
+     "y": 16,
+     "w": 102,
+     "h": 20,
+     "bottom": 36,
+     "right": 147
+    }
+   }
+  ],
+  "transferPills": [
+   {
+    "t": "7",
+    "x": 213,
+    "y": 616,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 636,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "6",
+    "x": 213,
+    "y": 788,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 808,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "1",
+    "x": 213,
+    "y": 831,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 851,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "1",
+    "x": 143,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 163,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "4",
+    "x": 166,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 186,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "7",
+    "x": 189,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "11",
+    "x": 213,
+    "y": 879,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 899,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "7",
+    "x": 213,
+    "y": 927,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 947,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "8",
+    "x": 189,
+    "y": 975,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 995,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "12",
+    "x": 213,
+    "y": 975,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 995,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "3",
+    "x": 166,
+    "y": 1023,
+    "w": 20,
+    "h": 20,
+    "right": 186,
+    "bottom": 1043,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "12",
+    "x": 189,
+    "y": 1023,
+    "w": 20,
+    "h": 20,
+    "right": 209,
+    "bottom": 1043,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1023,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1043,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": false
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1114,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1134,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   },
+   {
+    "t": "13",
+    "x": 213,
+    "y": 1205,
+    "w": 20,
+    "h": 20,
+    "right": 233,
+    "bottom": 1225,
+    "scrollW": 20,
+    "clientW": 20,
+    "textClipped": false,
+    "cutRight": false,
+    "cutDockRight": false,
+    "offScreen": true
+   }
+  ],
+  "pillsTotal": 15,
+  "pillsTextClipped": [],
+  "pillsCutRight": [],
+  "pillsOffScreen": [
+   "13",
+   "13"
+  ],
+  "nameClippedScrollW": [
+   {
+    "txt": "Thiais - Orly (Pont de Rungis)",
+    "scrollW": 166,
+    "clientW": 152
+   },
+   {
+    "txt": "Chevilly-Larue (Marché International)",
+    "scrollW": 215,
+    "clientW": 152
+   },
+   {
+    "txt": "Bibliothèque François Mitterrand",
+    "scrollW": 188,
+    "clientW": 152
+   }
+  ],
+  "focusRingRaw": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "rgb(42, 39, 37) 0px 0px 0px 1px inset",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(0, 0, 0)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(0, 0, 0)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(242, 239, 233)",
+    "outlineOffset": "0px",
+    "boxShadow": "none",
+    "borderColor": "rgb(242, 239, 233)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "focusDiff": [
+   {
+    "sel": ".dock-reset-btn",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|rgb(42, 39, 37) 0px 0px 0px 1px inset|rgb(242, 239, 233)|rgb(28, 26, 25)"
+   },
+   {
+    "sel": ".dock-line-close",
+    "found": false
+   },
+   {
+    "sel": ".dock-line-direction",
+    "found": false
+   },
+   {
+    "sel": ".transfer-pill",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(0, 0, 0)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(0, 0, 0)|rgb(255, 130, 180)"
+   },
+   {
+    "sel": ".rt-status",
+    "found": true,
+    "focused": true,
+    "ringChanged": true,
+    "before": "none|3px|rgb(242, 239, 233)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)",
+    "after": "auto|1px|rgb(0, 95, 204)|0px|none|rgb(242, 239, 233)|rgba(0, 0, 0, 0)"
+   },
+   {
+    "sel": ".records-close",
+    "found": false
+   }
+  ],
+  "ladderNodes": [
+   {
+    "txt": "Aéroport d'Orly",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Thiais - Orly (Pont de R",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Chevilly-Larue (Marché I",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "L'Haÿ-les-Roses\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Villejuif - Gustave Rous",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Hôpital Bicêtre\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Maison Blanche\n         ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Olympiades",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bibliothèque François Mi",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Cour Saint-Emilion\n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Bercy\n            \n     ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Gare de Lyon\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Châtelet\n            \n  ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pyramides\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Madeleine\n            \n ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Lazare\n           ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Pont Cardinet\n          ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Porte de Clichy\n        ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Ouen\n            \n",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Mairie de Saint-Ouen\n   ",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   },
+   {
+    "txt": "Saint-Denis - Pleyel",
+    "tag": "DIV",
+    "role": null,
+    "tabindexAttr": null,
+    "tabIndex": -1,
+    "focusable": false,
+    "ariaLabel": null
+   }
+  ],
+  "stationItems": [],
+  "ladderNodeCount": 21,
+  "stationItemCount": 0,
+  "ladderNodesFocusable": 0,
+  "ladder": 21,
+  "nameClipped": [
+   "Thiais - Orly (Pont de Rungis)",
+   "Chevilly-Larue (Marché International)",
+   "Bibliothèque François Mitterrand"
+  ],
+  "nameWidth": 152,
+  "nameX": 72,
+  "bulletX": 43,
+  "ladderFirstY": 335,
+  "ladderLastY": 1247,
+  "fontsLoaded": [
+   "Switzer 400",
+   "Switzer 500",
+   "Switzer 600",
+   "Switzer 700",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 400",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 500",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 600",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700",
+   "Inter 700"
+  ],
+  "titleFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif",
+  "bodyFont": "Switzer, Inter, -apple-system, \"system-ui\", \"Segoe UI\", Roboto, sans-serif"
+ }
+]

@@ -1,0 +1,433 @@
+{
+  "meta": {
+    "description": "Paris Build Footprint and First-Render Safety Net",
+    "buildDate": "2026-09-12",
+    "distDirectory": "web/dist",
+    "totalFiles": 43
+  },
+  "distFiles": [
+    {
+      "originalPath": "_headers",
+      "normalizedPath": "_headers",
+      "sizeBytes": 335,
+      "minSize1Pct": 331,
+      "maxSize1Pct": 339
+    },
+    {
+      "originalPath": "_redirects",
+      "normalizedPath": "_redirects",
+      "sizeBytes": 149,
+      "minSize1Pct": 147,
+      "maxSize1Pct": 151
+    },
+    {
+      "originalPath": "index.html",
+      "normalizedPath": "index.html",
+      "sizeBytes": 7693,
+      "minSize1Pct": 7616,
+      "maxSize1Pct": 7770
+    },
+    {
+      "originalPath": "methode.html",
+      "normalizedPath": "methode.html",
+      "sizeBytes": 17448,
+      "minSize1Pct": 17273,
+      "maxSize1Pct": 17623
+    },
+    {
+      "originalPath": "og-image.png",
+      "normalizedPath": "og-image.png",
+      "sizeBytes": 26885,
+      "minSize1Pct": 26616,
+      "maxSize1Pct": 27154
+    },
+    {
+      "originalPath": "og-image.svg",
+      "normalizedPath": "og-image.svg",
+      "sizeBytes": 5483,
+      "minSize1Pct": 5428,
+      "maxSize1Pct": 5538
+    },
+    {
+      "originalPath": "sections-report.html",
+      "normalizedPath": "sections-report.html",
+      "sizeBytes": 2065,
+      "minSize1Pct": 2044,
+      "maxSize1Pct": 2086
+    },
+    {
+      "originalPath": "models/train/pneumatic_generic__neutral.glb",
+      "normalizedPath": "models/train/pneumatic_generic__neutral.glb",
+      "sizeBytes": 9468,
+      "minSize1Pct": 9373,
+      "maxSize1Pct": 9563
+    },
+    {
+      "originalPath": "models/train/rer_generic_A__cab.glb",
+      "normalizedPath": "models/train/rer_generic_A__cab.glb",
+      "sizeBytes": 21712,
+      "minSize1Pct": 21494,
+      "maxSize1Pct": 21930
+    },
+    {
+      "originalPath": "models/train/rer_generic_A__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_A__neutral.glb",
+      "sizeBytes": 16836,
+      "minSize1Pct": 16667,
+      "maxSize1Pct": 17005
+    },
+    {
+      "originalPath": "models/train/rer_generic_B__cab.glb",
+      "normalizedPath": "models/train/rer_generic_B__cab.glb",
+      "sizeBytes": 21672,
+      "minSize1Pct": 21455,
+      "maxSize1Pct": 21889
+    },
+    {
+      "originalPath": "models/train/rer_generic_B__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_B__neutral.glb",
+      "sizeBytes": 16800,
+      "minSize1Pct": 16632,
+      "maxSize1Pct": 16969
+    },
+    {
+      "originalPath": "models/train/rer_generic_C__cab.glb",
+      "normalizedPath": "models/train/rer_generic_C__cab.glb",
+      "sizeBytes": 21728,
+      "minSize1Pct": 21510,
+      "maxSize1Pct": 21946
+    },
+    {
+      "originalPath": "models/train/rer_generic_C__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_C__neutral.glb",
+      "sizeBytes": 16852,
+      "minSize1Pct": 16683,
+      "maxSize1Pct": 17021
+    },
+    {
+      "originalPath": "models/train/rer_generic_D__cab.glb",
+      "normalizedPath": "models/train/rer_generic_D__cab.glb",
+      "sizeBytes": 21592,
+      "minSize1Pct": 21376,
+      "maxSize1Pct": 21808
+    },
+    {
+      "originalPath": "models/train/rer_generic_D__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_D__neutral.glb",
+      "sizeBytes": 16716,
+      "minSize1Pct": 16548,
+      "maxSize1Pct": 16884
+    },
+    {
+      "originalPath": "models/train/rer_generic_E__cab.glb",
+      "normalizedPath": "models/train/rer_generic_E__cab.glb",
+      "sizeBytes": 21412,
+      "minSize1Pct": 21197,
+      "maxSize1Pct": 21627
+    },
+    {
+      "originalPath": "models/train/rer_generic_E__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_E__neutral.glb",
+      "sizeBytes": 16536,
+      "minSize1Pct": 16370,
+      "maxSize1Pct": 16702
+    },
+    {
+      "originalPath": "models/train/rer_generic__neutral.glb",
+      "normalizedPath": "models/train/rer_generic__neutral.glb",
+      "sizeBytes": 10852,
+      "minSize1Pct": 10743,
+      "maxSize1Pct": 10961
+    },
+    {
+      "originalPath": "models/train/steel_classic__neutral.glb",
+      "normalizedPath": "models/train/steel_classic__neutral.glb",
+      "sizeBytes": 9460,
+      "minSize1Pct": 9365,
+      "maxSize1Pct": 9555
+    },
+    {
+      "originalPath": "data/line_ladders.json",
+      "normalizedPath": "data/line_ladders.json",
+      "sizeBytes": 1000502,
+      "minSize1Pct": 990496,
+      "maxSize1Pct": 1010508
+    },
+    {
+      "originalPath": "data/lines.json",
+      "normalizedPath": "data/lines.json",
+      "sizeBytes": 6691,
+      "minSize1Pct": 6624,
+      "maxSize1Pct": 6758
+    },
+    {
+      "originalPath": "data/model-assets-manifest.json",
+      "normalizedPath": "data/model-assets-manifest.json",
+      "sizeBytes": 2736,
+      "minSize1Pct": 2708,
+      "maxSize1Pct": 2764
+    },
+    {
+      "originalPath": "data/prim_delays.json",
+      "normalizedPath": "data/prim_delays.json",
+      "sizeBytes": 49,
+      "minSize1Pct": 48,
+      "maxSize1Pct": 50
+    },
+    {
+      "originalPath": "data/rer_lines.json",
+      "normalizedPath": "data/rer_lines.json",
+      "sizeBytes": 2708449,
+      "minSize1Pct": 2681364,
+      "maxSize1Pct": 2735534
+    },
+    {
+      "originalPath": "data/rer_lines_meta.json",
+      "normalizedPath": "data/rer_lines_meta.json",
+      "sizeBytes": 1760,
+      "minSize1Pct": 1742,
+      "maxSize1Pct": 1778
+    },
+    {
+      "originalPath": "data/rer_schedule.json",
+      "normalizedPath": "data/rer_schedule.json",
+      "sizeBytes": 1757717,
+      "minSize1Pct": 1740139,
+      "maxSize1Pct": 1775295
+    },
+    {
+      "originalPath": "data/rer_shapes.bin",
+      "normalizedPath": "data/rer_shapes.bin",
+      "sizeBytes": 4306088,
+      "minSize1Pct": 4263027,
+      "maxSize1Pct": 4349149
+    },
+    {
+      "originalPath": "data/rer_shapes.bin.br",
+      "normalizedPath": "data/rer_shapes.bin.br",
+      "sizeBytes": 431057,
+      "minSize1Pct": 426746,
+      "maxSize1Pct": 435368
+    },
+    {
+      "originalPath": "data/rolling-stock.json",
+      "normalizedPath": "data/rolling-stock.json",
+      "sizeBytes": 18162,
+      "minSize1Pct": 17980,
+      "maxSize1Pct": 18344
+    },
+    {
+      "originalPath": "data/schedule.json",
+      "normalizedPath": "data/schedule.json",
+      "sizeBytes": 8243325,
+      "minSize1Pct": 8160891,
+      "maxSize1Pct": 8325759
+    },
+    {
+      "originalPath": "data/sections.json",
+      "normalizedPath": "data/sections.json",
+      "sizeBytes": 167937,
+      "minSize1Pct": 166257,
+      "maxSize1Pct": 169617
+    },
+    {
+      "originalPath": "data/shapes.bin",
+      "normalizedPath": "data/shapes.bin",
+      "sizeBytes": 583804,
+      "minSize1Pct": 577965,
+      "maxSize1Pct": 589643
+    },
+    {
+      "originalPath": "data/shapes.bin.br",
+      "normalizedPath": "data/shapes.bin.br",
+      "sizeBytes": 144511,
+      "minSize1Pct": 143065,
+      "maxSize1Pct": 145957
+    },
+    {
+      "originalPath": "data/station-rankings.json",
+      "normalizedPath": "data/station-rankings.json",
+      "sizeBytes": 803499,
+      "minSize1Pct": 795464,
+      "maxSize1Pct": 811534
+    },
+    {
+      "originalPath": "data/stations.json",
+      "normalizedPath": "data/stations.json",
+      "sizeBytes": 295699,
+      "minSize1Pct": 292742,
+      "maxSize1Pct": 298656
+    },
+    {
+      "originalPath": "data/tracks.json",
+      "normalizedPath": "data/tracks.json",
+      "sizeBytes": 24468,
+      "minSize1Pct": 24223,
+      "maxSize1Pct": 24713
+    },
+    {
+      "originalPath": "assets/expression-Bl_GL2tO.js",
+      "normalizedPath": "assets/expression.[hash].js",
+      "sizeBytes": 1188,
+      "minSize1Pct": 1176,
+      "maxSize1Pct": 1200
+    },
+    {
+      "originalPath": "assets/index-B6dRVx7v.js",
+      "normalizedPath": "assets/index.[hash].js",
+      "sizeBytes": 18994,
+      "minSize1Pct": 18804,
+      "maxSize1Pct": 19184
+    },
+    {
+      "originalPath": "assets/index-DfSR4f3n.js",
+      "normalizedPath": "assets/index.[hash].js",
+      "sizeBytes": 16706,
+      "minSize1Pct": 16538,
+      "maxSize1Pct": 16874
+    },
+    {
+      "originalPath": "assets/main-B_NeCQha.js",
+      "normalizedPath": "assets/main.[hash].js",
+      "sizeBytes": 2477428,
+      "minSize1Pct": 2452653,
+      "maxSize1Pct": 2502203
+    },
+    {
+      "originalPath": "assets/main-sZ46zSDm.css",
+      "normalizedPath": "assets/main.[hash].css",
+      "sizeBytes": 49311,
+      "minSize1Pct": 48817,
+      "maxSize1Pct": 49805
+    },
+    {
+      "originalPath": "assets/tokens-D3M_eBDk.css",
+      "normalizedPath": "assets/tokens.[hash].css",
+      "sizeBytes": 3387,
+      "minSize1Pct": 3353,
+      "maxSize1Pct": 3421
+    }
+  ],
+  "netlifyFunctions": [
+    {
+      "name": "prim_relay",
+      "entry": "netlify/functions/prim_relay.ts",
+      "schedule": "*/3 * * * *",
+      "endpoints": [
+        "/api/prim",
+        "/.netlify/functions/prim_relay"
+      ]
+    },
+    {
+      "name": "prim_delays",
+      "entry": "netlify/functions/prim_delays.ts",
+      "schedule": null,
+      "endpoints": [
+        "/api/prim_delays",
+        "/.netlify/functions/prim_delays"
+      ]
+    }
+  ],
+  "firstRenderResources": [
+    {
+      "url": "/",
+      "expectedStatus": 200,
+      "expectedMime": "text/html"
+    },
+    {
+      "url": "/index.html",
+      "expectedStatus": 200,
+      "expectedMime": "text/html"
+    },
+    {
+      "url": "/methode.html",
+      "expectedStatus": 200,
+      "expectedMime": "text/html"
+    },
+    {
+      "url": "/assets/tokens-D3M_eBDk.css",
+      "expectedStatus": 200,
+      "expectedMime": "text/css"
+    },
+    {
+      "url": "/assets/main-sZ46zSDm.css",
+      "expectedStatus": 200,
+      "expectedMime": "text/css"
+    },
+    {
+      "url": "/assets/main-B_NeCQha.js",
+      "expectedStatus": 200,
+      "expectedMime": "javascript"
+    },
+    {
+      "url": "/data/lines.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/stations.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/tracks.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/line_ladders.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/rer_lines.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/station-rankings.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/rolling-stock.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/shapes.bin",
+      "expectedStatus": 200,
+      "expectedMime": "application/octet-stream"
+    },
+    {
+      "url": "/data/schedule.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/data/rer_shapes.bin",
+      "expectedStatus": 200,
+      "expectedMime": "application/octet-stream"
+    },
+    {
+      "url": "/data/rer_schedule.json",
+      "expectedStatus": 200,
+      "expectedMime": "application/json"
+    },
+    {
+      "url": "/models/train/pneumatic_generic__neutral.glb",
+      "expectedStatus": 200,
+      "expectedMime": "model/gltf-binary"
+    },
+    {
+      "url": "/models/train/steel_classic__neutral.glb",
+      "expectedStatus": 200,
+      "expectedMime": "model/gltf-binary"
+    },
+    {
+      "url": "/models/train/rer_generic__neutral.glb",
+      "expectedStatus": 200,
+      "expectedMime": "model/gltf-binary"
+    }
+  ]
+}

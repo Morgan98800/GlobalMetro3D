@@ -7,15 +7,19 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "node --experimental-strip-types src/sim/shapes.test.ts && node --experimental-strip-types src/sim/paris_time.test.ts",
+    "test:train-models": "node --experimental-strip-types src/map/train_models_layer.test.ts",
     "test:shapes": "node --experimental-strip-types src/sim/shapes.test.ts",
     "test:time": "node --experimental-strip-types src/sim/paris_time.test.ts"
   },
   "dependencies": {
     "@deck.gl/core": "^9.1.4",
-    "@deck.gl/geo-layers": "^9.1.4",
     "@deck.gl/extensions": "^9.1.4",
+    "@deck.gl/geo-layers": "^9.1.4",
     "@deck.gl/layers": "^9.1.4",
     "@deck.gl/mapbox": "^9.1.4",
+    "@deck.gl/mesh-layers": "^9.4.0",
+    "@loaders.gl/gltf": "^4.5.1",
+    "@luma.gl/gltf": "^9.4.0",
     "@paris-subway/shared": "*",
     "maplibre-gl": "^5.24.0"
   },

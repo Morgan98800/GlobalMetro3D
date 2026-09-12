@@ -24,6 +24,17 @@ venv/
 data/raw/
 *.zip
 *.tar.gz
+web/public/models/*.glb
+web/public/models/.DS_Store
+web/public/models/train/
+
+# Captures de diagnostic locales, jamais publiées avec le site
+web/public/diagnostic-*.png
+web/public/step*.png
+web/public/phase*.png
+fixing du 3D/captures/*.png
+fixing du 3D/captures/*.gif
+fixing du 3D/captures/*.mp4
 
 # System
 .DS_Store

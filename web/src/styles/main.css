@@ -10,12 +10,47 @@
 #map {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 1px;
   width: 100%;
   height: 100%;
   z-index: 1;
   background: var(--vignette);
   touch-action: none;
+}
+
+/* Mention légale MapLibre. #map crée un contexte d'empilement (z-index: 1) :
+   aucun de ses descendants ne peut passer au-dessus du tiroir (z-index: 150).
+   La seule correction possible est géométrique : le tiroir se pose au-dessus
+   du contrôle, qui remonte par ailleurs avec la safe-area. La hauteur du
+   contrôle est publiée dans --attrib-h par main.ts (elle varie : 24 px replié,
+   44 px, jusqu'à 64 px déplié). */
+#map .maplibregl-ctrl-bottom-right {
+  bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Mention légale MapLibre, habillage. Le rayon livré par la feuille du
+   fournisseur (12 px) est hors barème : il remonte à l'étape --r-xs, et le
+   bouton d'information devient rond (--r-full). Aucun fichier tiers modifié :
+   c'est un simple recouvrement, ici, après la feuille de MapLibre. */
+.maplibregl-ctrl.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib.maplibregl-compact {
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
+  background: var(--eleve);
+  color: var(--secondaire);
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--secondaire);
+}
+
+.maplibregl-ctrl-attrib-button {
+  border-radius: var(--r-full);
+}
+
+.maplibregl-ctrl-attrib:hover,
+.maplibregl-ctrl-attrib.maplibregl-compact-show {
+  background: var(--eleve);
 }
 
 /* Screen reader and bot accessibility helper */
@@ -31,13 +66,13 @@
   border-width: 0;
 }
 
-/* Couche 3 : Grain statique monochrome subtil */
+/* Couche 3 : Grain statique monochrome à 5,5 % */
 #app::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.035;
+  opacity: var(--grain-opacity, 0.055);
   pointer-events: none;
   z-index: 3;
 }
@@ -64,32 +99,40 @@ iframe[src*="netlify"] {
 /* Search Modal Wrap */
 .search-modal-wrap {
   position: fixed;
-  top: calc(var(--chrome-top, 52px) + 8px);
+  top: calc(var(--chrome-top, var(--h-topbar)) + 8px);
   right: 16px;
   z-index: 100;
 }
-@media (max-width: 767px) {
+/* Seuil 768 px aligné sur chrome.css (bloc mobile) et sur les tests
+   JS (`matchMedia('(max-width: 768px)')`). */
+@media (max-width: 768px) {
   .search-modal-wrap {
-    top: calc(var(--header-h-mobile, 48px) + env(safe-area-inset-top, 0px) + 8px);
+    top: calc(var(--chrome-top, var(--h-topbar)) + 8px);
     left: 12px;
     right: 12px;
   }
 }
 
-/* Realtime Status Badge & Toggle Button */
+/* Realtime Status Badge & Toggle Button
+   Quatre états, deux couleurs : le laiton est réservé à l'interaction et
+   le carmin à la perturbation réelle du réseau. « À l'heure » est un état
+   nominal : il n'a pas de couleur, il a un mot. Les verts, ambre et bleus
+   d'origine (§3) sont retirés — la rampe compte cinq gris, pas un de plus. */
 .rt-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   font-family: inherit;
-  font-size: 0.75rem;
+  font-size: var(--fs-xs);
   font-weight: 500;
   padding: 0.25rem 0.6rem;
-  border-radius: 9999px;
-  background: rgba(22, 101, 52, 0.25);
-  border: 1px solid rgba(74, 222, 128, 0.4);
-  color: #4ade80;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--r-pill);
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  color: var(--secondaire);
+  transition: background-color var(--t-state) var(--ease),
+              border-color var(--t-state) var(--ease),
+              color var(--t-state) var(--ease);
   white-space: nowrap;
   outline: none;
 }
@@ -100,64 +143,63 @@ iframe[src*="netlify"] {
 }
 
 .rt-badge.rt-btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.15);
-}
-
-.rt-badge.rt-btn:active {
-  transform: translateY(0);
+  background: var(--bord);
+  color: var(--texte);
 }
 
 .rt-badge.standby {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(148, 163, 184, 0.25);
-  color: #94a3b8;
+  background: var(--surface);
+  border-color: var(--bord);
+  color: var(--tertiaire);
 }
 
 .rt-badge.standby:hover {
-  border-color: rgba(148, 163, 184, 0.5);
-  background: rgba(51, 65, 85, 0.7);
-  color: #cbd5e1;
+  background: var(--eleve);
+  border-color: var(--inactif);
+  color: var(--secondaire);
 }
 
 .rt-badge.standby .rt-pulse-dot {
   animation: none;
-  background-color: #64748b;
+  background-color: var(--inactif);
   box-shadow: none;
 }
 
+/* En cours de synchronisation : un filet discontinu dit « provisoire ».
+   Aucune couleur n'est disponible pour cet état, et il n'en a pas besoin. */
 .rt-badge.syncing {
-  background: rgba(202, 138, 4, 0.25);
-  border-color: rgba(250, 204, 21, 0.4);
-  color: #facc15;
+  background: var(--surface);
+  border-style: dashed;
+  border-color: var(--inactif);
+  color: var(--secondaire);
 }
 
 .rt-badge.offline {
-  background: rgba(120, 53, 15, 0.25);
-  border-color: rgba(251, 146, 60, 0.4);
-  color: #fb923c;
+  background: var(--carmin-soft);
+  border-color: var(--carmin);
+  color: var(--carmin);
 }
 
 .rt-pulse-dot {
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: var(--r-full);
   background-color: currentColor;
   animation: pulse-glow 2s infinite;
 }
 
+/* Boucle de signal : un pouls d'opacité, sans halo ni mise à l'échelle.
+   Les valeurs précédentes projetaient une ombre verte de 6 px et faisaient
+   respirer l'échelle : deux effets décoratifs, et une couleur en dur. */
 @keyframes pulse-glow {
   0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+    opacity: 1;
   }
   70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
+    opacity: 0.35;
   }
   100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+    opacity: 1;
   }
 }
 
@@ -172,27 +214,55 @@ iframe[src*="netlify"] {
 /* Le Quai - Lateral Dock */
 .dock {
   position: absolute;
-  top: calc(var(--chrome-top, 52px) + 12px);
+  top: calc(var(--chrome-top, var(--h-topbar)) + 12px);
   left: 1.5rem;
-  bottom: 1.5rem;
-  width: 330px;
+  /* 2.5rem et non 1.5rem : le contrôle d'attribution occupe le bas-droite de
+     la carte et chevauche horizontalement les 24 derniers pixels du tiroir
+     (390 + 24 > viewport à 1024). L'empilement ne peut pas être corrigé
+     (#map crée un contexte d'empilement), donc on réserve la hauteur. */
+  bottom: 2.5rem;
+  width: 440px;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  background: rgba(30, 20, 25, 0.94);
-  border: 1px solid var(--couture);
-  border-radius: 12px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  /* Une surface a une ombre OU un filet, jamais les deux (§3.2). Le tiroir
+     flotte au-dessus de la carte : il a l'ombre, donc pas de bordure. */
+  background: var(--surface);
+  border: none;
+  border-radius: var(--r-card);
+  box-shadow: var(--sh-2);
   overflow: hidden;
-  transition: transform var(--t-surface, 240ms) var(--ease), max-height var(--t-surface, 240ms) var(--ease);
+  transition: transform var(--t-surface) var(--ease), max-height var(--t-surface) var(--ease);
 }
+
+.app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  background: var(--fond);
+  color: var(--texte);
+  text-align: center;
+  transition: opacity 220ms var(--ease), visibility 220ms var(--ease);
+}
+
+.app-loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.app-loader p { margin: 0; color: var(--secondaire); font-size: var(--fs-md); }
+.app-loader__train { display: flex; gap: 0.35rem; justify-content: center; }
+.app-loader__train span { width: 42px; height: 20px; border: 2px solid var(--laiton); border-radius: 3px; animation: loader-car 900ms var(--ease) infinite alternate; }
+.app-loader__train span:nth-child(2) { animation-delay: 120ms; }
+.app-loader__train span:nth-child(3) { animation-delay: 240ms; }
+
+@keyframes loader-car { from { opacity: 0.35; transform: translateY(2px); } to { opacity: 1; transform: translateY(-2px); } }
 
 .dock-handle {
   display: none;
   position: relative;
   width: 40px;
   height: 4px;
-  border-radius: 2px;
+  border-radius: var(--r-pill);
   background: var(--couture);
   margin: 12px auto 6px;
   cursor: pointer;
@@ -211,24 +281,29 @@ iframe[src*="netlify"] {
 
 .dock-header {
   padding: 0.9rem 1.25rem;
-  border-bottom: 1px solid var(--couture);
+  border-bottom: 1px solid var(--bord);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--velours);
+  /* Pas de seconde surface : l'en-tête se détache par le filet et l'espace,
+     pas par un aplat de plus. Un seul niveau de bordure dans le tiroir. */
+  background: transparent;
+  /* L'en-tête ne doit jamais être comprimé par la zone défilante. */
+  flex-shrink: 0;
 }
 
 .dock-title {
-  font-size: 0.85rem;
+  font-size: var(--fs-base);
   font-weight: 600;
-  color: var(--opale);
-  letter-spacing: 0.01em;
+  color: var(--texte);
+  letter-spacing: 0;
+  font-family: var(--font-title);
 }
 
 .dock-header-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--gap-sm);
 }
 
 .dock-reset-btn {
@@ -240,17 +315,17 @@ iframe[src*="netlify"] {
   box-shadow: inset 0 0 0 1px var(--couture);
   color: var(--opale);
   font-family: var(--font-ui, var(--font-main));
-  font-size: 13.5px;
+  font-size: var(--fs-md);
   font-weight: 500;
-  letter-spacing: -0.003em;
+  letter-spacing: 0;
   text-transform: none;
-  min-height: 38px;
-  padding: 0 16px;
-  border-radius: 6px;
+  min-height: var(--h-btn-quiet);
+  padding: 0 var(--pad-btn-quiet);
+  border-radius: var(--r-sm);
   cursor: pointer;
-  transition: background-color var(--t-state, 200ms) var(--ease),
-              box-shadow var(--t-state, 200ms) var(--ease),
-              transform var(--t-press, 90ms) var(--ease);
+  transition: background-color var(--t-state) var(--ease),
+              box-shadow var(--t-state) var(--ease),
+              transform var(--t-press) var(--ease);
 }
 
 .dock-reset-btn:hover {
@@ -259,37 +334,107 @@ iframe[src*="netlify"] {
 }
 
 .dock-reset-btn:active {
-  transform: scale(0.972);
+  transform: scale(0.97);
   background: var(--velours);
 }
 
+.dock-reset-btn:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
 .dock-collapse-btn {
-  display: none;
+  display: flex;
   background: var(--capiton);
   border: none;
   box-shadow: inset 0 0 0 1px var(--couture);
   color: var(--opale-dim);
-  font-size: 1rem;
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  min-height: 48px;
-  border-radius: 6px;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: var(--r-sm);
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  transition: transform var(--t-press, 90ms) var(--ease), background var(--t-state, 200ms) var(--ease);
+  transition: transform var(--t-press) var(--ease), background var(--t-state) var(--ease);
+}
+
+.dock-collapse-btn svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .dock-collapse-btn:active {
-  transform: scale(0.972);
+  transform: scale(0.97);
 }
 
-/* Line Selector Grid Container */
+.dock-collapse-btn:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
+.dock.dock--collapsed {
+  width: 56px;
+  min-width: 56px;
+}
+
+.dock.dock--collapsed .dock-title,
+.dock.dock--collapsed .dock-scroll,
+.dock.dock--collapsed .dock-reset-btn {
+  display: none;
+}
+
+.dock.dock--collapsed .dock-header {
+  padding: 0;
+  border-bottom: 0;
+  min-height: 56px;
+  justify-content: center;
+}
+
+.dock.dock--collapsed .dock-header-actions {
+  width: 56px;
+  justify-content: center;
+}
+
+.dock.dock--collapsed .dock-collapse-btn {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* Line Selector Grid Container
+   .dock-scroll est la zone défilante unique du tiroir : elle contient la
+   grille des lignes ET le détail de ligne, sinon la grille reste hors de la
+   zone défilante et se fait rogner par .dock{overflow:hidden}. */
+.dock-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+
 .lines-grid {
   display: block;
   padding: 0.75rem 1rem 0.25rem;
-  border-bottom: 1px solid var(--fonte-border);
+}
+
+.line-badges {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: var(--gap-sm);
+}
+
+.line-badges .line-badge {
+  min-width: 0;
+  width: var(--badge-size, 30px);
 }
 
 .line-group + .line-group {
@@ -300,11 +445,13 @@ iframe[src*="netlify"] {
 
 .line-group-title {
   margin-bottom: 0.45rem;
-  color: var(--ceramique-dim);
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  color: var(--tertiaire);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  /* Majuscules et interlettrage ouvert : c'est un « eyebrow », interdit par
+     la charte (§Interdits). Un groupe se nomme en capitale initiale. */
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .line-badge-btn {
@@ -312,46 +459,116 @@ iframe[src*="netlify"] {
   align-items: center;
   justify-content: center;
   height: 38px;
-  border-radius: 8px;
+  border-radius: var(--r-card);
   border: 2px solid transparent;
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 600;
+  font-size: var(--fs-lg);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform var(--t-state) var(--ease), box-shadow var(--t-state) var(--ease), filter var(--t-state) var(--ease);
   user-select: none;
   font-feature-settings: "tnum" 1;
   font-variant-numeric: tabular-nums;
 }
 
 .line-badge-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   filter: brightness(1.15);
 }
 
+.line-badge-btn:active {
+  transform: scale(0.97);
+}
+
+.line-badge-btn:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
+/* Décision : la pastille de ligne EST une donnée — son fond est la couleur de
+   la ligne, écrite en style en ligne par line_badge.ts. L'état actif ne peut
+   donc pas poser de fond : il est porté par le filet de laiton seul. Pas de
+   halo, pas de mise à l'échelle (§États — un seul anneau). */
 .line-badge-btn.active {
   border-color: var(--laiton);
-  box-shadow: 0 0 12px var(--laiton);
-  transform: scale(1.05);
 }
 
 /* Station Details List */
 .dock-content {
-  flex: 1;
-  overflow-y: auto;
   padding: 0.75rem 1rem;
+}
+
+.dock:not(.has-selection) .dock-content {
+  display: none;
 }
 
 .dock-empty-state {
   padding: 1rem 0;
-  color: var(--ceramique-dim);
-  font-size: 0.8rem;
+  color: var(--secondaire);
+  font-size: var(--fs-base);
   line-height: 1.5;
 }
 
 .dock-empty-state p {
   margin: 0 0 0.65rem;
 }
+
+.dock-intro h2 {
+  margin: 0;
+  color: var(--texte);
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  line-height: 1.15;
+}
+
+.dock-intro p {
+  margin-top: 0.45rem;
+  color: var(--secondaire);
+}
+
+.dock-countdown {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--bord);
+  border-radius: var(--r-sm);
+  background: var(--capiton);
+}
+
+.dock-countdown-heading {
+  margin-bottom: 0.5rem;
+  color: var(--secondaire);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.dock-countdown-row {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0;
+  border: 0;
+  border-top: 1px solid var(--fonte-border);
+  background: transparent;
+  color: var(--texte);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dock-countdown-dot { width: 10px; height: 10px; border-radius: var(--r-full); }
+.dock-countdown-line { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dock-countdown-time { display: inline-flex; align-items: baseline; gap: 0.25rem; color: #F28E42; font-variant-numeric: tabular-nums; }
+.dock-countdown-time strong { font-size: 1.25rem; font-weight: 700; }
+.dock-countdown-time small { color: var(--secondaire); font-size: var(--fs-xs); }
+.dock-countdown-row:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+
+.dock-random-line {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 0.75rem;
+}
+
+.dock-footer-link-wrap { margin-top: 1rem; }
 
 .dock-empty-kicker {
   color: var(--ceramique);
@@ -361,7 +578,7 @@ iframe[src*="netlify"] {
 
 .dock-feed-note {
   color: var(--ceramique-dim);
-  font-size: 0.72rem;
+  font-size: var(--fs-md);
 }
 
 .dock-line-summary {
@@ -380,9 +597,9 @@ iframe[src*="netlify"] {
 .dock-line-summary-title {
   margin-bottom: 0.55rem;
   color: var(--ceramique);
-  font-size: 0.74rem;
+  font-size: var(--fs-md);
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
 }
 
 .dock-line-summary-badge {
@@ -392,8 +609,8 @@ iframe[src*="netlify"] {
   align-items: center;
   justify-content: center;
   margin-right: 0.25rem;
-  border-radius: 50%;
-  font-size: 0.68rem;
+  border-radius: var(--r-full);
+  font-size: var(--fs-xs);
   font-variant-numeric: tabular-nums;
 }
 
@@ -402,17 +619,24 @@ iframe[src*="netlify"] {
   width: 32px;
   height: 32px;
   border: 1px solid var(--fonte-border);
-  border-radius: 5px;
+  border-radius: var(--r-xs);
   background: transparent;
   color: var(--ceramique-dim);
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
+  transition: border-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
 }
 
 .dock-line-close:hover {
   border-color: var(--ceramique);
   color: var(--ceramique);
+}
+
+.dock-line-close:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 .dock-line-directions {
@@ -429,21 +653,28 @@ iframe[src*="netlify"] {
   min-height: 2.4em;
   padding: 0.38rem 0.45rem;
   border: 1px solid var(--fonte-border);
-  border-radius: 5px;
+  border-radius: var(--r-xs);
   background: transparent;
   color: var(--ceramique-dim);
   font: inherit;
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   line-height: 1.2;
   text-align: left;
   white-space: normal;
   cursor: pointer;
+  transition: border-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
 }
 
 .dock-line-direction:hover,
 .dock-line-direction.active {
   border-color: var(--laiton);
   color: var(--ceramique);
+}
+
+.dock-line-direction:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 .dock-line-summary-grid {
@@ -459,14 +690,14 @@ iframe[src*="netlify"] {
 .dock-stat-label {
   display: block;
   color: var(--ceramique-dim);
-  font-size: 0.63rem;
+  font-size: var(--fs-xs);
   line-height: 1.2;
 }
 
 .dock-line-summary strong {
   display: block;
   color: var(--ceramique);
-  font-size: 0.74rem;
+  font-size: var(--fs-md);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   line-height: 1.2;
@@ -477,7 +708,7 @@ iframe[src*="netlify"] {
   display: block;
   margin-top: 0.6rem;
   color: var(--laiton);
-  font-size: 0.64rem;
+  font-size: var(--fs-xs);
   line-height: 1.35;
 }
 
@@ -485,17 +716,24 @@ iframe[src*="netlify"] {
   margin-top: 0.8rem;
   padding: 0.4rem 0.6rem;
   border: 1px solid var(--fonte-border);
-  border-radius: 4px;
+  border-radius: var(--r-xs);
   background: var(--fonte-surface);
   color: var(--ceramique-dim);
   font: inherit;
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
   cursor: pointer;
+  transition: border-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
 }
 
 .dock-records-btn:hover {
   border-color: var(--laiton);
   color: var(--ceramique);
+}
+
+.dock-records-btn:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 .records-modal {
@@ -505,7 +743,13 @@ iframe[src*="netlify"] {
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgba(5, 10, 8, 0.72);
+  background: var(--backdrop);
+  animation: modal-fade-in var(--t-surface) var(--ease);
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .records-dialog {
@@ -514,22 +758,31 @@ iframe[src*="netlify"] {
   max-height: 86vh;
   overflow: auto;
   padding: 1.25rem;
-  border: 1px solid var(--fonte-border);
-  border-radius: 10px;
-  background: var(--fonte-surface);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: var(--r-modal);
+  background: var(--surface);
+  box-shadow: var(--sh-3);
+  animation: modal-dialog-in var(--t-surface) var(--ease);
+}
+
+@keyframes modal-dialog-in {
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .records-dialog h2 {
   margin: 0 0 0.45rem;
-  color: var(--ceramique);
-  font-size: 1rem;
+  color: var(--texte);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  letter-spacing: var(--tr-sub);
+  font-family: var(--font-title);
 }
 
 .records-method {
   margin: 0 0 1rem;
   color: var(--ceramique-dim);
-  font-size: 0.72rem;
+  font-size: var(--fs-md);
   line-height: 1.45;
 }
 
@@ -542,27 +795,28 @@ iframe[src*="netlify"] {
 .records-dialog h3,
 .records-dialog h4 {
   margin: 0 0 0.45rem;
-  color: var(--ceramique);
-  font-size: 0.76rem;
+  color: var(--texte);
+  font-size: var(--fs-md);
+  font-weight: 500;
 }
 
 .records-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: var(--gap-lg);
 }
 
 .records-columns ol {
   margin: 0;
   padding-left: 1.2rem;
   color: var(--ceramique-dim);
-  font-size: 0.7rem;
+  font-size: var(--fs-md);
 }
 
 .records-columns li {
   display: flex;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: var(--gap-sm);
   padding: 0.14rem 0;
 }
 
@@ -579,86 +833,165 @@ iframe[src*="netlify"] {
   width: 36px;
   height: 36px;
   border: 1px solid var(--fonte-border);
-  border-radius: 5px;
+  border-radius: var(--r-sm);
   background: transparent;
   color: var(--ceramique-dim);
   font-size: 1.2rem;
   cursor: pointer;
+  transition: border-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
+}
+
+.records-close:hover {
+  border-color: var(--ceramique);
+  color: var(--ceramique);
+}
+
+.records-close:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 @media (max-width: 600px) {
   .records-columns { grid-template-columns: 1fr; }
 }
 
-.dock-actions-row {
+.dock-empty-desc {
+  font-size: var(--fs-base);
+  color: var(--secondaire);
+  line-height: 1.45;
+  margin-bottom: 0.75rem;
+}
+
+.dock-network-traffic {
+  margin: 0.6rem 0;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+}
+
+/* Trafic régulier : nominal, donc sans couleur. Il est lu au mot, pas à la
+   teinte — « aucun état ne se lit par la couleur seule » (§Contraste). */
+.dock-network-traffic--normal {
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  color: var(--secondaire);
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.dock-network-traffic--alert {
+  background: var(--carmin-soft);
+  border: 1px solid var(--carmin);
+  color: var(--texte);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.dock-disturbed-badges {
+  display: flex;
+  gap: var(--gap-xs);
   flex-wrap: wrap;
 }
 
-.dock-method-btn {
-  background: var(--capiton);
-  color: var(--opale);
-  border: 1px solid var(--couture);
-  padding: 0.45rem 0.8rem;
-  border-radius: 6px;
-  font-size: 0.76rem;
-  cursor: pointer;
-  transition: all var(--t-state) var(--ease);
+.dock-network-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-sm);
+  margin: 0.8rem 0;
+  padding: 0.65rem 0.8rem;
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  border-radius: var(--r-sm);
 }
 
-.dock-method-btn:hover {
-  background: var(--couture);
-  border-color: var(--patine);
+.dock-network-stat strong {
+  display: block;
+  font-size: var(--fs-md);
+  color: var(--texte);
+  margin-top: 2px;
+}
+
+.dock-footer-link-wrap {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--bord);
+}
+
+.dock-method-link {
+  color: var(--secondaire);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  transition: color var(--t-state) var(--ease);
+}
+
+.dock-method-link:hover {
+  color: var(--laiton);
+  text-decoration: underline;
+}
+
+.dock-method-link:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+  border-radius: var(--r-xs);
 }
 
 .dock-traffic-alert {
   margin: 0.5rem 0;
   padding: 0.45rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.74rem;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
   line-height: 1.4;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--gap-xs);
 }
 
 .dock-traffic-alert--normal {
-  background: rgba(33, 197, 94, 0.08);
-  border: 1px solid rgba(33, 197, 94, 0.25);
-  color: var(--ceramique-dim);
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  color: var(--secondaire);
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--gap-xs);
 }
 
+/* Plus de pastille verte à halo : le vert n'existe pas dans la rampe, et une
+   lueur colorée est un halo (§États — un seul anneau). */
 .dock-traffic-dot {
   width: 7px;
   height: 7px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+  border-radius: var(--r-full);
+  /* --ring-offset est redéclaré ici : le point vit sur --eleve. */
+  --ring-offset: var(--eleve);
+  background: var(--inactif);
 }
 
 .dock-traffic-alert--carmin {
-  background: rgba(224, 72, 63, 0.15);
+  background: var(--carmin-soft);
   border: 1px solid var(--carmin);
-  color: var(--opale);
+  color: var(--texte);
 }
 
 .dock-traffic-head {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  color: #ff8b82;
+  gap: var(--gap-xs);
+  color: var(--carmin);
   font-weight: 600;
 }
 
 .dock-traffic-msg {
   color: var(--opale);
-  font-size: 0.72rem;
+  font-size: var(--fs-md);
 }
 
 .method-dialog {
@@ -673,15 +1006,15 @@ iframe[src*="netlify"] {
 
 .method-section h3 {
   margin: 0 0 0.4rem;
-  color: var(--opale);
-  font-size: 0.85rem;
+  color: var(--texte);
+  font-size: var(--fs-base);
   font-weight: 600;
 }
 
 .method-section p {
   margin: 0 0 0.5rem;
-  color: var(--ceramique-dim);
-  font-size: 0.76rem;
+  color: var(--secondaire);
+  font-size: var(--fs-md);
   line-height: 1.5;
 }
 
@@ -689,7 +1022,7 @@ iframe[src*="netlify"] {
   margin: 0.4rem 0 0.8rem 1.2rem;
   padding: 0;
   color: var(--ceramique-dim);
-  font-size: 0.74rem;
+  font-size: var(--fs-md);
   line-height: 1.5;
 }
 
@@ -703,24 +1036,188 @@ iframe[src*="netlify"] {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.74rem;
+  gap: var(--gap-xs);
+  font-size: var(--fs-md);
   color: var(--ceramique-dim);
 }
 
 .method-badges-list li {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--gap-sm);
 }
 
 .method-disclaimer {
   background: var(--capiton);
   padding: 0.6rem 0.8rem;
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   border: 1px solid var(--couture);
-  font-size: 0.7rem;
+  font-size: var(--fs-md);
   color: var(--opale-dim);
+}
+
+.method-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.2rem;
+}
+
+.method-footer-label {
+  font-size: var(--fs-xs);
+  color: var(--opale-dim);
+}
+
+.method-footer-link {
+  color: var(--laiton);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  text-decoration: underline;
+  border-radius: var(--r-xs);
+}
+
+.method-footer-link:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
+.about-modal {
+  padding: 1rem;
+}
+
+.about-sheet {
+  position: relative;
+  width: min(620px, 94vw);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 1rem;
+  background: #0a0a0a;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+  animation: modal-dialog-in var(--t-surface) var(--ease);
+}
+
+.about-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  color: #f5f0e8;
+}
+
+.about-sheet__header h2 {
+  margin: 0;
+  color: inherit;
+  font-size: var(--fs-lg);
+}
+
+.about-sheet__close {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(245, 240, 232, 0.35);
+  border-radius: 50%;
+  background: transparent;
+  color: #f5f0e8;
+  font: inherit;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.about-sheet__close:hover {
+  border-color: #f07c00;
+  color: #f07c00;
+}
+
+.about-sheet__close:focus-visible,
+.ticket__link:focus-visible {
+  outline: 2px solid #f07c00;
+  outline-offset: 3px;
+}
+
+.about-sheet__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bord) transparent;
+}
+
+.about-item {
+  margin: 0;
+}
+
+.about-item__ticket {
+  margin: 0 auto 0.9rem;
+  max-width: 380px;
+}
+
+.ticket-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.about-item__content {
+  padding: 0 0.35rem;
+}
+
+.about-item__title {
+  margin: 0 0 0.45rem;
+  color: var(--texte);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.about-item__text {
+  margin: 0 0 0.25rem;
+  color: var(--secondaire);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.about-item__text strong {
+  color: var(--texte);
+  font-weight: 500;
+}
+
+.about-item__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+  color: var(--laiton);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.about-item__link:hover {
+  color: var(--laiton-hover);
+}
+
+@media (max-width: 600px) {
+  .about-modal {
+    align-items: end;
+    padding: 0;
+  }
+
+  .about-sheet {
+    width: 100%;
+    max-height: 88vh;
+    padding: 0.8rem;
+    border-radius: 14px 14px 0 0;
+    animation-name: about-sheet-up;
+  }
+
+  .about-item__ticket {
+    max-width: 360px;
+  }
+}
+
+@keyframes about-sheet-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .dock-content::-webkit-scrollbar {
@@ -728,34 +1225,40 @@ iframe[src*="netlify"] {
 }
 
 .dock-content::-webkit-scrollbar-thumb {
-  background: var(--fonte-border);
-  border-radius: 2px;
+  background: var(--bord);
+  border-radius: var(--r-xs);
 }
 
 .station-item {
   padding: 0.6rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-base);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: background 0.15s ease;
-  margin-bottom: 0.25rem;
+  transition: background var(--t-state) var(--ease);
+  margin-bottom: var(--gap-xs);
 }
 
 .station-item:hover {
-  background: var(--fonte-surface);
+  background: var(--eleve);
+}
+
+.station-item:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 .station-item-name {
-  color: var(--ceramique);
+  color: var(--texte);
   font-weight: 500;
 }
 
 .station-item-badges {
   display: flex;
-  gap: 0.25rem;
+  gap: var(--gap-xs);
 }
 
 .pill-mini {
@@ -764,61 +1267,58 @@ iframe[src*="netlify"] {
   justify-content: center;
   width: 20px;
   height: 20px;
-  border-radius: 4px;
-  font-size: 0.7rem;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
   font-weight: 700;
   font-feature-settings: "tnum" 1;
   font-variant-numeric: tabular-nums;
 }
 
-/* Tooltip */
+/* Infobulle : elle flotte au-dessus de la carte, donc elle a l'ombre et pas de
+   filet (§3.2). Un cran au-dessus du tiroir : --eleve. */
 .map-tooltip {
   position: absolute;
   z-index: 100;
-  pointer-events: none;
-  background: rgba(14, 21, 18, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--laiton);
-  border-radius: 8px;
+  pointer-events: none !important;
+  background: var(--eleve);
+  border: none;
+  border-radius: var(--r-sm);
   padding: 0.6rem 0.9rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+  box-shadow: var(--sh-1);
   transform: translate(-50%, -120%);
   display: none;
+  transition: opacity var(--t-press) var(--ease);
 }
 
 .tooltip-name {
   font-weight: 600;
-  font-size: 0.85rem;
-  color: var(--ceramique);
+  font-size: var(--fs-base);
+  color: var(--texte);
   margin-bottom: 0.3rem;
 }
 
 .tooltip-lines {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--gap-xs);
 }
 
 .map-tooltip .line-badge {
   --badge-size: 22px;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   cursor: default;
 }
-
-.map-tooltip .line-badge[data-len="2"] { font-size: 0.64rem; }
-.map-tooltip .line-badge[data-len="3"] { font-size: 0.58rem; }
 .map-tooltip .line-badge:hover { outline: none; box-shadow: none; }
 
 .tooltip-service {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: var(--gap-xs);
   margin-top: 0.45rem;
   padding-top: 0.4rem;
   border-top: 1px solid var(--fonte-border);
   color: var(--ceramique-dim);
-  font-size: 0.68rem;
+  font-size: var(--fs-xs);
 }
 
 .tooltip-service strong {
@@ -831,140 +1331,160 @@ iframe[src*="netlify"] {
 .train-tooltip-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--gap-sm);
   margin-bottom: 0.35rem;
 }
 
 .train-tooltip-header .line-badge {
   --badge-size: 22px;
-  font-size: 0.72rem;
+  font-size: var(--fs-xs);
   cursor: default;
 }
 
 .train-tooltip-dest {
   font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--ceramique);
+  font-size: var(--fs-base);
+  color: var(--texte);
 }
 
 .train-tooltip-body {
-  font-size: 0.75rem;
-  color: var(--ceramique-dim);
+  font-size: var(--fs-xs);
+  color: var(--secondaire);
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: var(--gap-xs);
 }
 
 .train-tooltip-meta {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--gap-sm);
   margin-top: 0.25rem;
   padding-top: 0.25rem;
   border-top: 1px solid var(--fonte-border);
 }
 
+/* Les quatre niveaux de confiance ne se distinguent pas par la teinte — la
+   rampe n'a que cinq gris et le laiton appartient à l'interaction. Ils se
+   distinguent par le MOT, le poids et le style de filet (§Contraste : aucun
+   état lisible par la couleur seule). */
 .badge-conf {
   padding: 0.12rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.65rem;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  letter-spacing: 0.02em;
+  gap: var(--gap-xs);
+  letter-spacing: 0;
 }
 
 .badge-conf--measured {
-  background: rgba(201, 162, 39, 0.25);
-  color: #f7d568;
-  border: 1px solid rgba(201, 162, 39, 0.8);
+  background: var(--eleve);
+  color: var(--texte);
+  border: 1px solid var(--bord);
 }
 
 .badge-conf--bracketed {
-  background: rgba(180, 137, 79, 0.2);
-  color: #eed6aa;
-  border: 1px solid rgba(180, 137, 79, 0.6);
+  background: var(--eleve);
+  color: var(--secondaire);
+  border: 1px solid var(--inactif);
 }
 
 .badge-conf--extrapolated {
-  background: rgba(180, 137, 79, 0.1);
-  color: rgba(241, 239, 234, 0.7);
-  border: 1px dashed rgba(180, 137, 79, 0.4);
+  background: transparent;
+  color: var(--tertiaire);
+  border: 1px dashed var(--inactif);
 }
 
 .badge-conf--scheduled {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--ceramique-dim);
-  border: 1px solid var(--fonte-border);
+  background: transparent;
+  color: var(--tertiaire);
+  border: 1px solid var(--bord);
 }
 
+/* Marqueur de donnée temps réel. Aucune couleur ne lui est disponible : le
+   laiton est pris par l'interaction, le carmin par la perturbation. Il est
+   donc neutre et se lit au mot. Décision, la charte est muette ici. */
 .badge-rt {
-  background: rgba(180, 137, 79, 0.3);
-  color: #f3c98b;
-  border: 1px solid #b4894f;
+  background: var(--eleve);
+  color: var(--texte);
+  border: 1px solid var(--bord);
   padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  font-size: 0.65rem;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
   font-weight: 600;
 }
 
 .badge-sched {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--ceramique-dim);
-  border: 1px solid var(--fonte-border);
+  background: transparent;
+  color: var(--tertiaire);
+  border: 1px solid var(--bord);
   padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  font-size: 0.65rem;
+  border-radius: var(--r-xs);
+  font-size: var(--fs-xs);
   font-weight: 600;
 }
 
-/* Controls (3D tilt, reset camera) */
+/* Controls (Contextual Recenter Button) */
 .map-controls {
   position: absolute;
-  top: calc(var(--chrome-top, 52px) + 12px);
+  top: calc(var(--chrome-top, var(--h-topbar)) + 12px);
   right: 1.5rem;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--gap-sm);
+  pointer-events: none;
 }
 
 .map-control-btn {
-  background: var(--capiton);
-  box-shadow: inset 0 0 0 1px var(--couture);
-  color: var(--opale);
-  width: var(--h-btn, 48px);
-  height: var(--h-btn, 48px);
-  min-width: var(--h-btn, 48px);
-  min-height: var(--h-btn, 48px);
-  border-radius: 8px;
+  background: var(--eleve);
+  box-shadow: inset 0 0 0 1px var(--bord);
+  color: var(--texte);
+  width: var(--h-btn);
+  height: var(--h-btn);
+  min-width: var(--h-btn);
+  min-height: var(--h-btn);
+  border-radius: var(--r-card);
   border: none;
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color var(--t-state, 200ms) var(--ease),
-              box-shadow var(--t-state, 200ms) var(--ease),
-              color var(--t-state, 200ms) var(--ease),
-              transform var(--t-press, 90ms) var(--ease);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity var(--t-surface) var(--ease),
+              transform var(--t-surface) var(--ease),
+              background-color var(--t-press) var(--ease),
+              box-shadow var(--t-press) var(--ease),
+              color var(--t-press) var(--ease);
+}
+
+.map-control-btn.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
 }
 
 .map-control-btn:hover {
-  background: var(--couture);
-  box-shadow: inset 0 0 0 1px var(--patine);
+  background: var(--surface);
+  color: var(--laiton);
+  box-shadow: inset 0 0 0 1px var(--inactif);
 }
 
 .map-control-btn:active {
-  transform: scale(0.972);
-  background: var(--velours);
+  transform: scale(0.96);
+  background: var(--fond);
 }
 
 .map-control-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--laque), 0 0 0 4px var(--laiton);
+  /* Le bouton flotte au-dessus de la carte : son décalage est le fond. */
+  --ring-offset: var(--fond);
+  box-shadow: var(--ring-focus);
 }
 
 .map-control-btn svg {
@@ -972,29 +1492,41 @@ iframe[src*="netlify"] {
   height: 18px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-#btn-recenter {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.85);
-  transition: opacity var(--t-state, 200ms) var(--ease),
-              transform var(--t-state, 200ms) var(--ease),
-              background-color var(--t-state, 200ms) var(--ease),
-              box-shadow var(--t-state, 200ms) var(--ease);
+.map__info {
+  position: absolute;
+  right: 1rem;
+  bottom: calc(var(--attrib-h, 24px) + 1rem);
+  z-index: 160;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(242, 239, 233, 0.72);
+  border-radius: 50%;
+  background: rgba(12, 11, 11, 0.84);
+  color: var(--texte);
+  cursor: pointer;
+  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), border-color var(--t-state) var(--ease);
 }
 
-#btn-recenter.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
+.map__info:hover {
+  border-color: var(--laiton);
+  background: var(--laiton);
+  color: var(--fond);
 }
 
-#btn-recenter.is-visible:active {
-  transform: scale(0.972);
+.map__info:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+}
+
+.map__info:active {
+  transform: scale(0.97);
 }
 
 /* =========================================================================
@@ -1003,16 +1535,15 @@ iframe[src*="netlify"] {
 @media (max-width: 768px) {
   /* Map Controls on Mobile */
   .map-controls {
-    top: calc(var(--header-h-mobile, 48px) + env(safe-area-inset-top, 0px) + 8px);
+    top: calc(var(--chrome-top, var(--h-topbar)) + 8px);
     right: calc(0.6rem + env(safe-area-inset-right, 0px));
-    gap: 0.4rem;
   }
 
   .map-control-btn {
-    width: 44px;
-    height: 44px;
-    font-size: 1rem;
-    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
   /* Bottom Drawer Dock on Mobile */
@@ -1020,78 +1551,128 @@ iframe[src*="netlify"] {
     top: auto;
     left: calc(0.6rem + env(safe-area-inset-left, 0px));
     right: calc(0.6rem + env(safe-area-inset-right, 0px));
-    bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
+    /* Le tiroir se pose au-dessus du contrôle d'attribution : sa hauteur est
+       publiée par main.ts dans --attrib-h (≈24 px replié, jusqu'à 64 px
+       déplié). Sans cela la mention légale était recouverte par le tiroir
+       (elementFromPoint au centre renvoyait un enfant de .dock). */
+    bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px) + var(--attrib-h, 0px) + 0.4rem);
     width: auto;
     z-index: 150;
-    border-radius: 16px;
-    max-height: 48vh;
+    border-radius: var(--r-modal);
+    max-height: 56vh;
     min-height: 0;
-    box-shadow: 0 -6px 28px rgba(0, 0, 0, 0.65);
-    transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease;
+    box-shadow: var(--sh-2);
+    height: 260px;
+    transition: height var(--t-surface) var(--ease), max-height var(--t-surface) var(--ease), transform var(--t-surface) var(--ease);
     touch-action: pan-y;
     overscroll-behavior-y: contain;
+  }
+
+  .dock[data-sheet="closed"] { height: 56px; max-height: 56px; }
+  .dock[data-sheet="open"] { height: 260px; max-height: 56vh; }
+  .dock[data-dragging="true"] { transition: none; }
+
+  .dock[data-sheet="closed"] .dock-scroll {
+    display: none;
+  }
+  .dock[data-sheet="closed"] .dock-handle {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
   }
 
   /* After a line is selected, make the bottom sheet tall enough to expose
      the summary and the station ladder. The list itself remains the only
      scrolling region, so a vertical swipe never gets captured by MapLibre. */
   .dock.has-selection {
-    max-height: min(82vh, calc(100vh - env(safe-area-inset-top, 0px) - 1rem));
-    max-height: min(82dvh, calc(100dvh - env(safe-area-inset-top, 0px) - 1rem));
+    height: min(56vh, calc(100vh - env(safe-area-inset-top, 0px) - 1rem));
+    height: min(56dvh, calc(100dvh - env(safe-area-inset-top, 0px) - 1rem));
+    max-height: min(56vh, calc(100vh - env(safe-area-inset-top, 0px) - 1rem));
+    max-height: min(56dvh, calc(100dvh - env(safe-area-inset-top, 0px) - 1rem));
   }
 
-  .dock.collapsed {
-    max-height: 52px;
-    overflow: hidden;
+  .dock[data-sheet="closed"].has-selection {
+    height: 56px;
+    max-height: 56px;
   }
 
-  .dock.collapsed .lines-grid,
-  .dock.collapsed .dock-content {
-    display: none;
-  }
+  .dock.dock--collapsed { width: auto; min-width: 56px; height: 56px; max-height: 56px; }
 
   .dock-handle {
     display: block;
   }
 
   .dock-collapse-btn {
-    display: flex;
+    display: none;
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    min-height: 56px;
   }
 
-  .dock.collapsed .dock-collapse-btn {
-    transform: rotate(180deg);
-  }
-
-  .dock-header {
-    padding: 0.6rem 0.9rem;
-  }
+  .dock-header { padding: 0.6rem 0.9rem; }
 
   .dock-title {
-    font-size: 0.8rem;
+    font-size: var(--fs-base);
   }
 
-  /* Compact grid container for mobile thumb-tapping */
+  /* Sur mobile, chaque groupe devient un rail horizontal indépendant. La
+     grille desktop reste volontairement inchangée pour conserver une lecture
+     compacte des 21 lignes. */
   .lines-grid {
-    display: block;
-    padding: 0.65rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.65rem 0.8rem 0.75rem;
   }
 
-  .line-badge-btn {
-    height: 32px;
-    font-size: 0.82rem;
-    border-radius: 6px;
+  .line-group {
+    min-width: 0;
   }
 
-  .dock-content {
+  .line-group + .line-group {
+    margin-top: 0;
+    padding-top: 0.65rem;
+  }
+
+  .line-group-title {
+    margin-bottom: 0.45rem;
+  }
+
+  .line-badges {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    width: 100%;
+    min-width: 0;
+    gap: 0.55rem;
+    padding: 0.15rem 0.15rem 0.55rem;
+    overflow: visible;
+    touch-action: manipulation;
+  }
+
+  .line-badge {
+    width: 30px;
+    height: 30px;
+    min-width: 0;
+    font-size: var(--fs-base);
+  }
+
+  .dock-scroll {
     flex: 1 1 auto;
     min-height: 0;
-    max-height: none;
-    padding: 0.5rem 0.8rem;
     overflow-y: auto;
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
+
+  .dock-content {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .dock-countdown { margin-inline: 0; }
 
   .dock-content button,
   .dock-content .station-item,
@@ -1101,36 +1682,36 @@ iframe[src*="netlify"] {
 
   .station-item {
     padding: 0.45rem 0.6rem;
-    font-size: 0.8rem;
+    font-size: var(--fs-base);
   }
 
   /* Mobile Tooltip positioning */
   .map-tooltip {
     max-width: 88vw;
-    font-size: 0.8rem;
+    font-size: var(--fs-base);
     padding: 0.45rem 0.7rem;
-    border-radius: 8px;
+    border-radius: var(--r-sm);
   }
 }
 
 @media (max-width: 480px) {
   .lines-grid {
-    grid-template-columns: repeat(8, 1fr);
-    gap: 0.25rem;
-    padding: 0.5rem;
+    padding-inline: 0.7rem;
   }
 
-  .line-badge-btn {
+  .line-badge {
+    width: 30px;
     height: 30px;
-    font-size: 0.75rem;
+    min-width: 0;
+    font-size: var(--fs-sm);
   }
 
   .brand-title {
-    font-size: 0.8rem;
+    font-size: var(--fs-base);
   }
 
   .trains-stats {
-    font-size: 0.7rem;
+    font-size: var(--fs-xs);
   }
 }
 
@@ -1150,28 +1731,50 @@ iframe[src*="netlify"] {
   bottom: 14px;
   left: 10px;
   width: 4px;
-  border-radius: 2px;
+  border-radius: var(--r-pill);
   opacity: 0.9;
 }
 
 .ladder-stations-list {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--gap-xs);
 }
 
 .ladder-station-node {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  /* Piste forcée à 48 px. Sans elle, la piste `auto` s'étire à la hauteur
+     du contenu quand deux pastilles s'empilent (54 px) : la rangée grandit
+     au-delà de sa hauteur fixe et les pastilles débordaient de 6 px vers le
+     bas seulement — relevé au navigateur. La piste contrainte recentre
+     l'empilement : 3 px de débordement symétrique, invisible. */
+  grid-template-rows: 48px;
   align-items: center;
-  padding: 0.4rem 0.5rem 0.4rem 0.2rem;
-  border-radius: 6px;
+  gap: var(--gap-sm);
+  /* Hauteur FIXE : la rangée ne grandit jamais, même quand une ou deux pastilles
+     de rame s'y ajoutent. Avant correction elle mesurait 30 px sans rame et
+     33 px avec rame — relevé au navigateur — d'où un pas de rail irrégulier
+     (34 → 37 px). Les pastilles sont désormais ancrées au centre vertical.
+     48 px porte aussi la cible tactile de 30 px à 48 px, au-dessus du plancher
+     de 44 px exigé pour un élément cliquable. */
+  height: 48px;
+  padding: 0 0.5rem 0 0.2rem;
+  border-radius: var(--r-sm);
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--t-state) var(--ease);
 }
 
 .ladder-station-node:hover {
-  background: var(--fonte-surface);
+  background: var(--eleve);
+}
+
+.ladder-station-node:focus-visible {
+  outline: none;
+  /* --ring-offset est redéclaré par le conteneur : le nœud vit sur --surface. */
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 .ladder-node-bullet {
@@ -1179,9 +1782,9 @@ iframe[src*="netlify"] {
   left: -24px;
   width: 14px;
   height: 14px;
-  border-radius: 50%;
-  background: var(--fonte);
-  border: 2.5px solid #fff;
+  border-radius: var(--r-full);
+  background: var(--fond);
+  border: 2px solid var(--texte);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1194,129 +1797,259 @@ iframe[src*="netlify"] {
   left: -26px;
 }
 
-.ladder-node-bullet.hub {
-  box-shadow: 0 0 6px var(--laiton);
-}
+/* Plus de halo de laiton : une lueur colorée est un halo, et le laiton
+   appartient à l'interaction (§États — un seul anneau, pas de lueur).
+   Le statut de correspondance est déjà porté par le remplissage de
+   .ladder-node-inner, écrit par station_ladder.ts depuis lines.json. */
 
 .ladder-node-inner {
   width: 5px;
   height: 5px;
-  border-radius: 50%;
+  border-radius: var(--r-full);
 }
 
 .ladder-node-details {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: var(--gap-sm);
 }
 
 .ladder-node-name {
-  font-size: 0.8rem;
-  color: var(--ceramique);
+  min-width: 0;
+  flex: 1 1 auto;
+  font-size: var(--fs-base);
+  color: var(--texte);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .ladder-node-name.bold {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .ladder-node-transfers {
   display: flex;
-  gap: 0.2rem;
+  gap: var(--gap-xs);
   flex-shrink: 0;
 }
 
 .transfer-pill {
   border: none;
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform var(--t-state) var(--ease);
 }
 
 .transfer-pill:hover {
-  transform: scale(1.15);
+  background: var(--bord);
+}
+
+.transfer-pill:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }
 
 .ladder-node-train-slot {
-  margin-left: 0.4rem;
-  min-width: 65px;
+  /* Ancrée au centre vertical de la ligne de station, jamais dans le flux.
+     Vide, elle ne consomme aucune largeur — la colonne `auto` de la grille vaut
+     alors 0 — et le nom de station garde toute la place : c'est le correctif
+     précédent, on le conserve, seul le mécanisme change (grille au lieu de
+     flex + wrap). */
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: var(--gap-xs);
+  min-width: 0;
+}
+
+/* Deux rames sur la même station : on empile au lieu d'élargir. Avant
+   correction les deux pastilles s'alignaient côte à côte et prenaient 223 px
+   au nom à 1024 px. Empilées, elles n'en prennent plus que la plus large des
+   deux. Elles dépassent alors de 3 px au-dessus et au-dessous de la rangée :
+   c'est volontaire, invisible, et c'est ce qui garantit que la ligne ne bouge
+   pas d'un pixel quand les vitesses se rafraîchissent. */
+.ladder-node-train-slot--double {
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
 }
 
 /* Approaching Train Cursor */
 .ladder-train-cursor {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  background: rgba(31, 74, 59, 0.65);
-  border: 1px solid var(--laiton);
-  border-radius: 9999px;
-  padding: 0.12rem 0.4rem;
+  height: auto;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background var(--t-state) var(--ease), box-shadow var(--t-state) var(--ease);
+  min-width: 0;
+  /* Largeur naturelle : la pastille était plafonnée à 72 px (scrollWidth 96,
+     clientWidth 70) sans ellipse interne, ce qui coupait « À l'heure » en
+     « A l'he » sur ligne14_w1024/1440/1920. */
+  flex: 0 1 auto;
   max-width: 100%;
 }
 
-.ladder-train-cursor:hover {
-  background: var(--guimard);
-  transform: scale(1.06);
+/* Filet vertical de 2 px : identifie la pastille sans ajouter de bordure.
+   Le laiton n'y apparaît qu'à l'état « à quai ». */
+.ladder-train-cursor::before {
+  content: none;
 }
 
-.train-cursor-pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #facc15;
-  box-shadow: 0 0 6px #facc15;
-  animation: pulse-glow 1.5s infinite;
+.ladder-train-cursor:hover {
+  background: transparent;
+}
+
+.ladder-train-cursor:focus-visible {
+  outline: none;
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
+}
+
+/* Rame à quai — le seul état de la pastille qui reçoive le laiton. */
+.ladder-train-cursor--quai {
+  background: transparent;
+  box-shadow: none;
 }
 
 .train-cursor-body {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+  display: contents;
   min-width: 0;
 }
 
-.train-cursor-dest {
-  max-width: 8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--ceramique);
-  font-size: 0.62rem;
-  font-weight: 600;
-}
-
 .train-cursor-spd {
-  font-size: 0.65rem;
+  /* Plancher typographique : rien en dessous de 0.75rem (12 px). */
+  font-size: var(--fs-xs);
   font-weight: 600;
-  color: var(--ceramique);
+  color: var(--texte);
   font-feature-settings: "tnum" 1;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   BANDEAU DE VITESSE
+   ══════════════════════════════════════════════════════════════════════ */
+.sig {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  height: 26px;
+  padding: 0 var(--gap-sm) 0 calc(var(--gap-sm) + 2px);
+  border-radius: var(--r-xs);
+  background: var(--eleve);
+  box-shadow: inset 0 0 0 1px var(--bord);
+  position: relative;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  max-width: 100%;
+  transition: background var(--t-state) var(--ease), box-shadow var(--t-state) var(--ease);
+}
+
+.sig::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--tertiaire);
+  transition: background var(--t-state) var(--ease);
+}
+
+.sig--quai {
+  background: var(--eleve);
+  box-shadow: inset 0 0 0 1px var(--laiton);
+}
+
+.sig--quai::before { background: var(--laiton); }
+
+.sig__num {
+  font-size: .8125rem;
+  font-weight: 500;
+  color: var(--speed-color, var(--texte));
+  letter-spacing: -.01em;
+}
+
+.sig__unit {
+  font-size: .6875rem;
+  color: var(--tertiaire);
+}
+
+.sig__quai {
+  font-size: .8125rem;
+  font-weight: 500;
+  color: var(--laiton);
+}
+
+.sig__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--laiton);
+  flex: none;
+}
+
+.sig__sep {
+  width: 1px;
+  height: 12px;
+  background: var(--bord);
+  flex: none;
+}
+
+.sig--quai .sig__sep { background: rgba(212, 175, 55, .3); }
+
+.sig__arrow {
+  width: 8px;
+  height: 8px;
+  color: var(--tertiaire);
+  flex: none;
+  margin-right: 2px;
+}
+
+.sig--quai .sig__arrow { color: var(--laiton); }
+
+.sig__dest {
+  font-size: .75rem;
+  color: var(--secondaire);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 88px;
+}
+
 
 .train-cursor-delay {
-  font-size: 0.6rem;
+  /* Plancher typographique : rien en dessous de 0.75rem (12 px). */
+  font-size: var(--fs-xs);
   font-weight: 600;
   padding: 0.05rem 0.25rem;
-  border-radius: 2px;
+  border-radius: var(--r-xs);
 }
 
+/* L'écart à l'horaire est un état lu au mot (« À l'heure », « +2 min »).
+   La teinte ne fait que hiérarchiser l'attention : neutre pour l'horaire
+   tenu, carmin pour le retard — la seule perturbation réelle du réseau
+   autorisée à porter cette couleur (§3.3). */
 .train-cursor-delay.on-time {
-  color: #4ade80;
+  color: var(--secondaire);
 }
 
 .train-cursor-delay.late {
-  color: #facc15;
+  color: var(--carmin);
 }
 
 .train-cursor-delay.early {
-  color: #60a5fa;
+  color: var(--texte);
 }
 
 /* -------------------------------------------------------------
@@ -1335,38 +2068,39 @@ iframe[src*="netlify"] {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(10, 16, 13, 0.75);
-  border: 1px solid var(--fonte-border);
-  border-radius: 8px;
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  border-radius: var(--r-sm);
   padding: 0.35rem 0.6rem;
-  transition: all 0.2s ease;
+  transition: border-color var(--t-state) var(--ease);
 }
 
+/* Un seul anneau, pas de lueur. --ring-offset : le champ vit sur --eleve. */
 .search-input-wrapper:focus-within {
   border-color: var(--laiton);
-  box-shadow: 0 0 10px rgba(180, 137, 79, 0.3);
-  background: rgba(10, 16, 13, 0.95);
+  --ring-offset: var(--eleve);
+  box-shadow: var(--ring-focus);
 }
 
 .search-icon {
-  font-size: 0.8rem;
-  opacity: 0.7;
+  font-size: var(--fs-base);
+  color: var(--tertiaire);
 }
 
 .search-input {
   background: transparent;
   border: none;
   outline: none;
-  color: var(--ceramique);
+  color: var(--texte);
   font-family: var(--font-ui);
-  font-size: 0.8rem;
+  font-size: var(--fs-base);
   width: 170px;
-  transition: width 0.3s ease;
+  transition: width var(--t-state) var(--ease);
 }
 
 .search-input::placeholder {
-  color: var(--ceramique-dim);
-  font-size: 0.75rem;
+  color: var(--tertiaire);
+  font-size: var(--fs-xs);
 }
 
 .search-input:focus {
@@ -1374,16 +2108,17 @@ iframe[src*="netlify"] {
 }
 
 .search-kbd {
-  font-size: 0.65rem;
+  font-size: var(--fs-xs);
   font-family: inherit;
-  color: var(--ceramique-dim);
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  color: var(--tertiaire);
+  background: var(--eleve);
+  border-radius: var(--r-xs);
   padding: 0.1rem 0.3rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--bord);
   pointer-events: none;
 }
 
+/* Liste flottante : ombre, donc pas de filet (§3.2). */
 .search-dropdown {
   position: absolute;
   top: calc(100% + 6px);
@@ -1391,12 +2126,10 @@ iframe[src*="netlify"] {
   width: 320px;
   max-height: 340px;
   overflow-y: auto;
-  background: rgba(14, 21, 18, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--fonte-border);
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  background: var(--surface);
+  border: none;
+  border-radius: var(--r-sm);
+  box-shadow: var(--sh-2);
   z-index: 100;
   padding: 0.35rem 0;
 }
@@ -1407,8 +2140,8 @@ iframe[src*="netlify"] {
   justify-content: space-between;
   padding: 0.55rem 0.85rem;
   cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  transition: background 0.15s ease;
+  border-bottom: 1px solid var(--bord);
+  transition: background var(--t-state) var(--ease);
 }
 
 .search-item:last-child {
@@ -1416,26 +2149,26 @@ iframe[src*="netlify"] {
 }
 
 .search-item:hover {
-  background: rgba(31, 74, 59, 0.45);
+  background: var(--eleve);
 }
 
 .search-item-name {
-  font-size: 0.82rem;
+  font-size: var(--fs-base);
   font-weight: 500;
-  color: var(--ceramique);
+  color: var(--texte);
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
 
 .search-hub-tag {
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  background: rgba(180, 137, 79, 0.25);
-  color: var(--laiton);
-  border: 1px solid rgba(180, 137, 79, 0.4);
-  border-radius: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: 0;
+  background: var(--eleve);
+  color: var(--secondaire);
+  border: 1px solid var(--bord);
+  border-radius: var(--r-xs);
   padding: 0.05rem 0.3rem;
 }
 
@@ -1447,35 +2180,63 @@ iframe[src*="netlify"] {
 }
 
 .search-line-pill {
-  font-size: 0.7rem;
+  font-size: var(--fs-xs);
   font-weight: 700;
   font-family: var(--font-title);
   padding: 0.1rem 0.35rem;
-  border-radius: 4px;
+  border-radius: var(--r-pill);
   font-feature-settings: "tnum" 1;
 }
 
 .search-no-result {
   padding: 0.8rem;
-  font-size: 0.8rem;
-  color: var(--ceramique-dim);
+  font-size: var(--fs-base);
+  color: var(--secondaire);
   text-align: center;
 }
 
 .topbar__method-btn {
   background: transparent;
-  color: var(--opale-dim);
-  border: 1px solid var(--couture);
+  color: var(--secondaire);
+  border: 1px solid var(--bord);
   padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.72rem;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
   font-weight: 500;
   cursor: pointer;
-  transition: all var(--t-state) var(--ease);
+  transition: background-color var(--t-state) var(--ease),
+              border-color var(--t-state) var(--ease),
+              color var(--t-state) var(--ease);
 }
 
 .topbar__method-btn:hover {
-  background: var(--capiton);
-  color: var(--opale);
-  border-color: var(--patine);
+  background: var(--eleve);
+  color: var(--texte);
+  border-color: var(--inactif);
+}
+
+/* =========================================================================
+   Anneau de focus unifié — LOT 1, points 5 et 6.
+   Six composants n'avaient aucun :focus-visible propre (.dock-reset-btn,
+   .dock-line-close, .dock-line-direction, .transfer-pill, .rt-status,
+   .records-close) : ils héritaient de l'anneau bleu par défaut du navigateur
+   (outline auto 1px rgb(0,95,204)), incohérent avec le reste de l'interface.
+   Les deux composants rendus opérables au clavier (point 6) sont traités par
+   la même règle. Anneau identique à celui déjà utilisé par .line-badge
+   (chrome.css) et .map-control-btn (plus haut dans ce fichier).
+   ========================================================================= */
+.dock-reset-btn:focus-visible,
+.dock-line-close:focus-visible,
+.dock-line-direction:focus-visible,
+.transfer-pill:focus-visible,
+.rt-status:focus-visible,
+.records-close:focus-visible,
+.ladder-station-node:focus-visible,
+.station-item:focus-visible {
+  outline: none;
+  /* Tous ces composants vivent dans le tiroir ou une modale posée dessus,
+     c'est-à-dire sur --surface. --ring-offset est redéclaré ici plutôt que
+     d'être figé sur --fond. */
+  --ring-offset: var(--surface);
+  box-shadow: var(--ring-focus);
 }

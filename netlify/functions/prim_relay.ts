@@ -112,6 +112,84 @@ interface FetchLineResult {
   error?: string;
 }
 
+export function parseEstimatedTimetablePayload(
+  payload: any,
+  line: { id: string; rawId: string; mode: 'metro' | 'rail' }
+): FetchLineResult {
+  const frames = payload?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame || [];
+  const rawJourneys = frames.flatMap((frame: any) => frame?.EstimatedVehicleJourney || []);
+  const parsedJourneys: EstimatedVehicleJourneyData[] = [];
+  const dirTotals: Record<string, { totalS: number; count: number }> = {
+    '0': { totalS: 0, count: 0 },
+    '1': { totalS: 0, count: 0 }
+  };
+
+  for (const j of rawJourneys) {
+    const journeyId =
+      j?.FramedVehicleJourneyRef?.DatedVehicleJourneyRef ||
+      j?.VehicleJourneyName?.[0]?.value ||
+      `j_${Math.random().toString(36).substring(2, 9)}`;
+    const dirVal = String(j?.DirectionRef?.value || '0').trim();
+    const dir: '0' | '1' = dirVal.includes('1') || dirVal.toLowerCase().includes('retour') ? '1' : '0';
+    const parsedCalls: EstimatedCallData[] = [];
+
+    for (const c of j?.EstimatedCalls?.EstimatedCall || []) {
+      const aimedArr = c?.AimedArrivalTime || null;
+      const expArr = c?.ExpectedArrivalTime || null;
+      const aimedDep = c?.AimedDepartureTime || null;
+      const expDep = c?.ExpectedDepartureTime || null;
+      const aimedTime = aimedDep || aimedArr;
+      const expectedTime = expDep || expArr;
+      let delaySeconds: number | null = null;
+      if (aimedTime && expectedTime) {
+        const diffS = Math.round((new Date(expectedTime).getTime() - new Date(aimedTime).getTime()) / 1000);
+        if (Number.isFinite(diffS) && Math.abs(diffS) <= 1800) {
+          delaySeconds = diffS;
+          dirTotals[dir].totalS += diffS;
+          dirTotals[dir].count++;
+        }
+      }
+      parsedCalls.push({
+        stopPointRef: c?.StopPointRef?.value || '',
+        stopPointName: c?.StopPointName?.[0]?.value || '',
+        order: typeof c?.Order === 'number' ? c.Order : parsedCalls.length + 1,
+        aimedArrivalTime: aimedArr,
+        expectedArrivalTime: expArr,
+        aimedDepartureTime: aimedDep,
+        expectedDepartureTime: expDep,
+        delaySeconds,
+        arrivalStatus: c?.ArrivalStatus,
+        departureStatus: c?.DepartureStatus
+      });
+    }
+
+    parsedJourneys.push({
+      journeyId,
+      lineId: line.id,
+      lineRef: `STIF:Line::${line.rawId}:`,
+      direction: dir,
+      destinationRef: j?.DestinationRef?.value || '',
+      destinationName: j?.DestinationName?.[0]?.value || '',
+      vehicleMode: line.mode,
+      recordedAt: j?.RecordedAtTime || new Date().toISOString(),
+      calls: parsedCalls
+    });
+  }
+
+  const delaysByDir: Record<string, number> = {};
+  for (const dir of ['0', '1']) {
+    if (dirTotals[dir].count > 0) {
+      delaysByDir[`${line.id}#${dir}`] = Math.round(dirTotals[dir].totalS / dirTotals[dir].count);
+    }
+  }
+  const totalCount = dirTotals['0'].count + dirTotals['1'].count;
+  if (totalCount > 0) {
+    delaysByDir[line.id] = Math.round((dirTotals['0'].totalS + dirTotals['1'].totalS) / totalCount);
+  }
+
+  return { lineId: line.id, journeys: parsedJourneys, delaysByDir, statusCode: 200 };
+}
+
 /**
  * Fetch general traffic disruption messages from PRIM Marketplace
  */
@@ -238,107 +316,9 @@ export function fetchLineEstimatedTimetable(
         res.on('end', () => {
           try {
             const json = JSON.parse(data);
-            const delivery =
-              json?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame?.[0];
-            const rawJourneys = delivery?.EstimatedVehicleJourney || [];
-
-            const parsedJourneys: EstimatedVehicleJourneyData[] = [];
-            const dirTotals: Record<string, { totalS: number; count: number }> = {
-              '0': { totalS: 0, count: 0 },
-              '1': { totalS: 0, count: 0 }
-            };
-
-            for (const j of rawJourneys) {
-              const journeyId =
-                j?.FramedVehicleJourneyRef?.DatedVehicleJourneyRef ||
-                j?.VehicleJourneyName?.[0]?.value ||
-                `j_${Math.random().toString(36).substring(2, 9)}`;
-
-              const dirVal = String(j?.DirectionRef?.value || '0').trim();
-              const dir: '0' | '1' =
-                dirVal.includes('1') || dirVal.toLowerCase().includes('retour') ? '1' : '0';
-
-              const destRef = j?.DestinationRef?.value || '';
-              const destName = j?.DestinationName?.[0]?.value || '';
-              const recordedAt = j?.RecordedAtTime || new Date().toISOString();
-
-              const rawCalls = j?.EstimatedCalls?.EstimatedCall || [];
-              const parsedCalls: EstimatedCallData[] = [];
-
-              for (const c of rawCalls) {
-                const stopRef = c?.StopPointRef?.value || '';
-                const stopName = c?.StopPointName?.[0]?.value || '';
-                const order = typeof c?.Order === 'number' ? c.Order : parsedCalls.length + 1;
-
-                const aimedArr = c?.AimedArrivalTime || null;
-                const expArr = c?.ExpectedArrivalTime || null;
-                const aimedDep = c?.AimedDepartureTime || null;
-                const expDep = c?.ExpectedDepartureTime || null;
-
-                const aimedTimeStr = aimedDep || aimedArr;
-                const expTimeStr = expDep || expArr;
-
-                let delaySeconds: number | null = null;
-                if (aimedTimeStr && expTimeStr) {
-                  const aimedMs = new Date(aimedTimeStr).getTime();
-                  const expMs = new Date(expTimeStr).getTime();
-                  if (Number.isFinite(aimedMs) && Number.isFinite(expMs)) {
-                    const diffS = Math.round((expMs - aimedMs) / 1000);
-                    if (Math.abs(diffS) <= 1800) {
-                      delaySeconds = diffS;
-                      dirTotals[dir].totalS += diffS;
-                      dirTotals[dir].count += 1;
-                    }
-                  }
-                }
-
-                parsedCalls.push({
-                  stopPointRef: stopRef,
-                  stopPointName: stopName,
-                  order,
-                  aimedArrivalTime: aimedArr,
-                  expectedArrivalTime: expArr,
-                  aimedDepartureTime: aimedDep,
-                  expectedDepartureTime: expDep,
-                  delaySeconds,
-                  arrivalStatus: c?.ArrivalStatus,
-                  departureStatus: c?.DepartureStatus
-                });
-              }
-
-              parsedJourneys.push({
-                journeyId,
-                lineId: line.id,
-                lineRef: `STIF:Line::${line.rawId}:`,
-                direction: dir,
-                destinationRef: destRef,
-                destinationName: destName,
-                vehicleMode: line.mode,
-                recordedAt,
-                calls: parsedCalls
-              });
-            }
-
-            const delaysByDir: Record<string, number> = {};
-            if (dirTotals['0'].count > 0) {
-              delaysByDir[`${line.id}#0`] = Math.round(dirTotals['0'].totalS / dirTotals['0'].count);
-            }
-            if (dirTotals['1'].count > 0) {
-              delaysByDir[`${line.id}#1`] = Math.round(dirTotals['1'].totalS / dirTotals['1'].count);
-            }
-            const overallCount = dirTotals['0'].count + dirTotals['1'].count;
-            if (overallCount > 0) {
-              delaysByDir[line.id] = Math.round(
-                (dirTotals['0'].totalS + dirTotals['1'].totalS) / overallCount
-              );
-            }
-
-            resolve({
-              lineId: line.id,
-              journeys: parsedJourneys,
-              delaysByDir,
-              statusCode: 200
-            });
+            const parsed = parseEstimatedTimetablePayload(json, line);
+            resolve(parsed);
+            return;
           } catch (err: any) {
             resolve({
               lineId: line.id,

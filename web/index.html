@@ -6,8 +6,17 @@
     <title>Métro de Paris 3D — Visualiseur cartographique</title>
 
     <meta name="description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
-    <meta name="theme-color" content="#150E12" />
+    <meta name="theme-color" content="#F2F0EB" />
     <link rel="canonical" href="https://parisian3dsubway.netlify.app/" />
+
+    <script>
+      (function () {
+        var theme = localStorage.getItem('paris-subway-theme');
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.dataset.theme = theme;
+        }
+      })();
+    </script>
 
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website" />
@@ -24,15 +33,21 @@
     <meta name="twitter:description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
     <meta name="twitter:image" content="https://parisian3dsubway.netlify.app/og-image.png" />
     
-    <!-- Typography: Switzer & Cabinet Grotesk from Fontshare (with Inter fallback) -->
+    <!-- Typographie : Switzer seul. Cabinet Grotesk et Inter sont retirés
+         du produit (charte, §Typographie). Une police distante se charge
+         par <link> dans le <head>, jamais par @import : sur file://
+         l'import distant échoue silencieusement (origine opaque). -->
     <link rel="preconnect" href="https://api.fontshare.com">
-    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&f[]=cabinet-grotesk@500,700,800&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
     
     <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <!-- Ordre de dépendance des feuilles (annexe B du prompt) :
+         jetons → typographie → mouvement → couche d'application.
+         main.css reste en dernier : c'est le seul mécanisme d'override
+         du dépôt, il n'y a pas de !important de confort. -->
     <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/src/styles/typography.css" />
+    <link rel="stylesheet" href="/src/styles/motion.css" />
     <link rel="stylesheet" href="/src/styles/main.css" />
 
     <script>
@@ -49,6 +64,10 @@
     </script>
   </head>
   <body>
+    <div class="app-loader" id="app-loader" role="status" aria-live="polite">
+      <div class="app-loader__train" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p>Chargement du réseau parisien</p>
+    </div>
     <!-- Semantic header for robots & assistive technology -->
     <h1 class="sr-only">Métro de Paris 3D — Visualiseur cartographique et simulation en temps réel</h1>
 
@@ -66,13 +85,10 @@
       <!-- Modal / popup container for station search -->
       <div id="search-container" class="search-modal-wrap" style="display: none;"></div>
 
-      <!-- Camera & view controls -->
-      <aside class="map-controls">
-        <button class="map-control-btn" id="btn-pitch" title="Passer en vue 2D" aria-label="Passer en vue 2D" aria-pressed="true">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z M4 7.5 12 12l8-4.5 M12 12v9"/></svg>
-        </button>
-        <button class="map-control-btn" id="btn-recenter" title="Recentrer sur le réseau" aria-label="Recentrer la vue sur le réseau">
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+      <!-- View controls (Contextual Recenter) -->
+      <aside class="map-controls" id="map-controls" aria-label="Contrôles de vue">
+        <button class="map-control-btn" id="btn-recenter" title="Recadrer sur le réseau" aria-label="Recadrer sur le réseau de métro">
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
             <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/>
             <circle cx="12" cy="12" r="2" fill="currentColor"/>
             <line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -89,13 +105,19 @@
         <div class="dock-header">
           <span class="dock-title">Lignes du réseau</span>
           <div class="dock-header-actions">
+            <button class="dock-collapse-btn" id="dock-collapse" type="button" aria-label="Réduire le panneau" aria-expanded="true" title="Réduire le panneau"></button>
             <button class="dock-reset-btn" id="dock-reset" style="display: none;">Tout afficher</button>
-            <button class="dock-collapse-btn" id="dock-collapse" aria-label="Réduire ou ouvrir le panneau">▾</button>
           </div>
         </div>
-        <div class="lines-grid" id="lines-grid" role="group" aria-label="Liste des 21 lignes"></div>
-        <div class="dock-content" id="dock-content">
-          <div class="dock-empty-state"><p>Chargement des lignes, stations et horaires GTFS…</p></div>
+        <!-- Grille et contenu partagent une seule zone défilante : la grille
+             était auparavant une soeur de .dock-content, donc hors de la zone
+             défilante, et se retrouvait rognée par .dock{overflow:hidden}
+             au-delà de sa hauteur maximale (à 320 px : 6 pastilles coupées). -->
+        <div class="dock-scroll" id="dock-scroll">
+          <div class="lines-grid" id="lines-grid" role="group" aria-label="Liste des 21 lignes"></div>
+          <div class="dock-content" id="dock-content">
+            <div class="dock-empty-state"><p>Chargement des lignes, stations et horaires GTFS…</p></div>
+          </div>
         </div>
       </nav>
 

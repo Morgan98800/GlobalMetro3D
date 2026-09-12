@@ -1,0 +1,21 @@
+{
+  "source_shape": "web/public/data/tracks.json",
+  "line_id": "IDFM:C01382",
+  "short_name": "12",
+  "courbure_maximale_constatee_dans_la_passe_precedente": {
+    "angle_declare_degres": 88.6311933788746,
+    "sommet": [2.35989, 48.8903],
+    "distance_locale_m": 3966.856931465672,
+    "station_proche": "Marx Dormoy",
+    "distance_station_m": 3956.9,
+    "distance_approx_m": 31.5
+  },
+  "stations_encadrantes": [
+    { "name": "Porte de la Chapelle", "distance_m": 3193.7 },
+    { "name": "Marx Dormoy", "distance_m": 3956.9 },
+    { "name": "Marcadet - Poissonniers", "distance_m": 4735.0 }
+  ],
+  "abscisses_de_cadrage_m": { "debut": 3193.7, "fin": 4735.0 },
+  "sommets_traces_disponibles": 72,
+  "limite": "Le shape binaire SHP2 n'a pas ete decode dans cette passe ; les angles segment-par-segment et les abscisses exactes debut/fin de la polyligne de capture restent non mesures."
+}

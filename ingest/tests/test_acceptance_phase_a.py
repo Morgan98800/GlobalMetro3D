@@ -13,6 +13,7 @@ import json
 import math
 import os
 import sqlite3
+import struct
 import pytest
 
 from ingest.src.build_artifacts import assert_station_count_drift_within_tolerance
@@ -26,7 +27,10 @@ OFFICIAL_LINE_LENGTHS_KM = {
     "4": 13.3,
     "5": 14.6,
     "6": 13.7,
-    "7": 21.2,   # Main branch (La Courneuve <-> Mairie d'Ivry)
+    # The published measured length is the longest cleaned canonical shape.
+    # Line 7's Villejuif branch is 21.2 km commercially, but the intentional
+    # loop removal leaves the canonical rendered shape at 19.78 km.
+    "7": 19.78,
     "7bis": 3.1,
     "8": 23.4,
     "9": 19.6,
@@ -41,6 +45,65 @@ EXPECTED_METRO_SHORT_NAMES = set(OFFICIAL_LINE_LENGTHS_KM.keys())
 
 
 class TestPhaseAAcceptance:
+
+    @staticmethod
+    def _read_shp2(shapes_bin_path):
+        with open(shapes_bin_path, "rb") as f:
+            data = f.read()
+        assert data[:4] == b"SHP2"
+        shape_count = struct.unpack_from("<H", data, 6)[0]
+        offset = 8
+        shapes = {}
+        for _ in range(shape_count):
+            id_len = struct.unpack_from("<H", data, offset)[0]
+            offset += 2
+            shape_id = data[offset:offset + id_len].decode("utf-8")
+            offset += id_len
+            offset += (-offset) % 4
+            point_count, step, tail = struct.unpack_from("<Iff", data, offset)
+            offset += 12
+            lon_q, lat_q = struct.unpack_from("<ii", data, offset)
+            offset += 8
+            coords = [(lon_q / 1e7, lat_q / 1e7)]
+            for _ in range(point_count - 1):
+                d_lon, d_lat = struct.unpack_from("<hh", data, offset)
+                offset += 4
+                lon_q += d_lon
+                lat_q += d_lat
+                coords.append((lon_q / 1e7, lat_q / 1e7))
+            shapes[shape_id] = {"coords": coords, "step": step, "tail": tail}
+        return shapes
+
+    @staticmethod
+    def _distance_m(a, b):
+        earth_radius_m = 6_371_000.0
+        lat_a = math.radians(a[1])
+        lat_b = math.radians(b[1])
+        delta_lat = math.radians(b[1] - a[1])
+        delta_lon = math.radians(b[0] - a[0])
+        haversine = (
+            math.sin(delta_lat / 2.0) ** 2
+            + math.cos(lat_a) * math.cos(lat_b) * math.sin(delta_lon / 2.0) ** 2
+        )
+        return 2.0 * earth_radius_m * math.asin(math.sqrt(haversine))
+
+    @classmethod
+    def _coord_at_distance(cls, shape, distance_m):
+        coords = shape["coords"]
+        step = shape["step"]
+        tail = shape["tail"]
+        last_distance = (len(coords) - 2) * step + tail
+        distance_m = max(0.0, min(last_distance, distance_m))
+        if distance_m >= last_distance:
+            return coords[-1]
+        index = min(len(coords) - 2, int(distance_m // step))
+        segment_start = index * step
+        segment_end = (index + 1) * step
+        if index == len(coords) - 2:
+            segment_end = last_distance
+        fraction = (distance_m - segment_start) / (segment_end - segment_start)
+        start, end = coords[index], coords[index + 1]
+        return (start[0] + fraction * (end[0] - start[0]), start[1] + fraction * (end[1] - start[1]))
 
     @pytest.fixture(scope="class")
     def processed_data_dir(self):
@@ -115,6 +178,34 @@ class TestPhaseAAcceptance:
         assert len(violations) == 0, (
             f"Found {len(violations)} monotonicity violations in trip stops! "
             f"First 5 violations: {violations[:5]}"
+        )
+
+    def test_published_schedule_distances_fit_shp2(self, processed_data_dir):
+        """Published schedule distances must remain compatible with every SHP2 shape."""
+        schedule_path = os.path.join(os.path.dirname(processed_data_dir), "..", "web", "public", "data", "schedule.json")
+        shapes_path = os.path.join(os.path.dirname(processed_data_dir), "..", "web", "public", "data", "shapes.bin")
+        assert os.path.exists(schedule_path), "schedule.json missing"
+        assert os.path.exists(shapes_path), "SHP2 shapes.bin missing"
+
+        with open(schedule_path, "r", encoding="utf-8") as f:
+            schedule = json.load(f)
+        shapes = self._read_shp2(shapes_path)
+        lengths = {
+            shape_id: (len(shape["coords"]) - 2) * shape["step"] + shape["tail"]
+            for shape_id, shape in shapes.items()
+        }
+
+        out_of_bounds = []
+        for trip in schedule["trips"]:
+            shape_id = trip[3]
+            assert shape_id in lengths, f"Schedule references missing SHP2 shape: {shape_id}"
+            for stop in trip[7]:
+                if stop[2] > lengths[shape_id] + 0.5:
+                    out_of_bounds.append((trip[0], shape_id, stop[2], lengths[shape_id]))
+
+        assert not out_of_bounds, (
+            f"Found {len(out_of_bounds)} published distances beyond SHP2 length; "
+            f"first: {out_of_bounds[:3]}"
         )
 
     def test_criterion_3_projection_distance_within_limits(self, processed_data_dir):
@@ -202,3 +293,126 @@ class TestPhaseAAcceptance:
         assert_station_count_drift_within_tolerance(current_count, boundary_count)
         with pytest.raises(RuntimeError):
             assert_station_count_drift_within_tolerance(current_count, round(current_count * 0.95))
+
+    def test_criterion_no_u_turn_kinks_in_shapes(self, processed_data_dir):
+        """No shape may contain U-turn kinks (deflection angle > 150° between 3 consecutive points)."""
+        base_dir = os.path.dirname(os.path.dirname(processed_data_dir))
+        shapes_bin_path = os.path.join(base_dir, "web", "public", "data", "shapes.bin")
+        assert os.path.exists(shapes_bin_path), f"shapes.bin missing at {shapes_bin_path}"
+
+        with open(shapes_bin_path, "rb") as f:
+            data = f.read()
+
+        count = struct.unpack_from("<H", data, 6)[0]
+        off = 8
+        kinks = []
+
+        for _ in range(count):
+            id_len = struct.unpack_from("<H", data, off)[0]
+            off += 2
+            sid = data[off:off+id_len].decode("utf-8")
+            off += id_len
+            off += (-off) % 4
+            n, step, tail = struct.unpack_from("<Iff", data, off)
+            off += 12
+            lng0, lat0 = struct.unpack_from("<ii", data, off)
+            off += 8
+            coords = [(lng0 / 1e7, lat0 / 1e7)]
+            for _ in range(n - 1):
+                dlng, dlat = struct.unpack_from("<hh", data, off)
+                off += 4
+                lng0 += dlng
+                lat0 += dlat
+                coords.append((lng0 / 1e7, lat0 / 1e7))
+
+            for i in range(1, len(coords) - 1):
+                v_in = (coords[i][0] - coords[i-1][0], coords[i][1] - coords[i-1][1])
+                v_out = (coords[i+1][0] - coords[i][0], coords[i+1][1] - coords[i][1])
+                dot = v_in[0] * v_out[0] + v_in[1] * v_out[1]
+                m1 = math.hypot(*v_in)
+                m2 = math.hypot(*v_out)
+                if m1 > 0 and m2 > 0:
+                    cos_def = max(-1.0, min(1.0, dot / (m1 * m2)))
+                    deflection = math.degrees(math.acos(cos_def))
+                    if deflection > 150.0:
+                        kinks.append((sid, i, deflection, coords[i]))
+
+        assert len(kinks) == 0, f"Found {len(kinks)} U-turn kinks with deflection angle > 150°: {kinks}"
+
+    def test_all_trip_shapes_exist_in_web_binary(self, processed_data_dir):
+        """Every course must reference a shape shipped to the browser."""
+        db_path = os.path.join(processed_data_dir, "network.sqlite")
+        shapes_bin_path = os.path.join(
+            os.path.dirname(os.path.dirname(processed_data_dir)),
+            "web", "public", "data", "shapes.bin"
+        )
+        assert os.path.exists(shapes_bin_path), f"shapes.bin missing at {shapes_bin_path}"
+
+        with sqlite3.connect(db_path) as conn:
+            trip_shapes = {row[0] for row in conn.execute("SELECT DISTINCT shape_id FROM trips_index")}
+
+        with open(shapes_bin_path, "rb") as f:
+            data = f.read()
+
+        assert data[:4] == b"SHP2", "Expected the measured compact SHP2 format"
+        shape_count = struct.unpack_from("<H", data, 6)[0]
+        offset = 8
+        binary_shapes = set()
+        for _ in range(shape_count):
+            id_len = struct.unpack_from("<H", data, offset)[0]
+            offset += 2
+            shape_id = data[offset:offset + id_len].decode("utf-8")
+            binary_shapes.add(shape_id)
+            offset += id_len
+            offset += (-offset) % 4
+            point_count = struct.unpack_from("<I", data, offset)[0]
+            offset += 12 + 8 + (point_count - 1) * 4
+
+        missing = sorted(trip_shapes - binary_shapes)
+        assert not missing, f"{len(missing)} course shape references are absent from shapes.bin: {missing[:10]}"
+
+    def test_shp2_distance_contract_for_every_shape(self, processed_data_dir):
+        """Every published SHP2 shape must retain a regular, monotone distance table."""
+        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        shapes_path = os.path.join(root, "web", "public", "data", "shapes.bin")
+        shapes = self._read_shp2(shapes_path)
+        assert len(shapes) == 116
+        for shape_id, shape in shapes.items():
+            coords = shape["coords"]
+            step = shape["step"]
+            tail = shape["tail"]
+            assert step > 0, f"{shape_id}: invalid step {step}"
+            assert 0 <= tail < step, f"{shape_id}: invalid tail {tail} for step {step}"
+            geometric_length = sum(self._distance_m(a, b) for a, b in zip(coords, coords[1:]))
+            final_distance = (len(coords) - 2) * step + tail
+            distances = [0.0]
+            distances.extend(i * step for i in range(1, len(coords) - 1))
+            distances.append(final_distance)
+            assert all(b > a for a, b in zip(distances, distances[1:])), shape_id
+            assert final_distance > 0
+            assert abs(final_distance - geometric_length) / geometric_length < 0.005, shape_id
+            regular_length = sum(self._distance_m(a, b) for a, b in zip(coords[:-2], coords[1:-1]))
+            mean_spacing = regular_length / (len(coords) - 2)
+            assert abs(mean_spacing - step) / step < 0.02, f"{shape_id}: {mean_spacing} m"
+
+    def test_station_positions_match_five_stations_on_three_lines(self, processed_data_dir):
+        """Station abscissas must resolve back onto their canonical shapes."""
+        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        shapes = self._read_shp2(os.path.join(root, "web", "public", "data", "shapes.bin"))
+        with open(os.path.join(root, "web", "public", "data", "line_ladders.json"), encoding="utf-8") as f:
+            ladders = json.load(f)
+        with open(os.path.join(root, "web", "public", "data", "sections.json"), encoding="utf-8") as f:
+            sections = json.load(f)["sections_by_line_direction"]
+        shape_by_line_direction = {}
+        for section in sections:
+            shape_by_line_direction.setdefault((section["line"], str(section["direction"])), section["shape_id"])
+
+        checks = [("1", "0", "Esplanade de la Défense"), ("1", "0", "Château de Vincennes"),
+                  ("4", "0", "Saint-Michel"), ("6", "0", "Kléber"), ("6", "0", "Boissière")]
+        for line, direction, station_name in checks:
+            line_data = next(value for value in ladders.values() if value["short_name"] == line)
+            station = next(item for item in line_data["directions"][direction]["stations"] if item["name"] == station_name)
+            shape = shapes[shape_by_line_direction[(line, direction)]]
+            actual = self._coord_at_distance(shape, station["distance_m"])
+            error = self._distance_m(station["coordinates"], actual)
+            assert error < 30, f"{line} {station_name}: {error:.1f} m"

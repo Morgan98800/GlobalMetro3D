@@ -4,7 +4,8 @@ import {
   METRO_RER_LINES,
   isParisMetroServiceHours,
   type PrimSnapshot,
-  type EstimatedVehicleJourneyData
+  type EstimatedVehicleJourneyData,
+  parseEstimatedTimetablePayload
 } from '../../netlify/functions/prim_relay.ts';
 
 console.log('--- Testing PRIM Relay & Quota Calculations ---');
@@ -16,6 +17,25 @@ const rerLines = METRO_RER_LINES.filter(l => l.mode === 'rail');
 assert.strictEqual(metroLines.length, 16, '16 metro lines');
 assert.strictEqual(rerLines.length, 5, '5 RER lines (A, B, C, D, E)');
 console.log('✓ 21 lines configured (16 Metro + 5 RER)');
+
+// 1b. SIRI may split a line response across several journey frames.
+const framePayload = {
+  Siri: {
+    ServiceDelivery: {
+      EstimatedTimetableDelivery: [{
+        EstimatedJourneyVersionFrame: [
+          { EstimatedVehicleJourney: [{ FramedVehicleJourneyRef: { DatedVehicleJourneyRef: 'frame-1' }, DirectionRef: { value: '0' }, EstimatedCalls: { EstimatedCall: [{ AimedArrivalTime: '2026-09-10T12:00:00Z', ExpectedArrivalTime: '2026-09-10T12:00:30Z' }] } }] },
+          { EstimatedVehicleJourney: [{ FramedVehicleJourneyRef: { DatedVehicleJourneyRef: 'frame-2' }, DirectionRef: { value: '1' }, EstimatedCalls: { EstimatedCall: [{ AimedArrivalTime: '2026-09-10T12:00:00Z', ExpectedArrivalTime: '2026-09-10T12:01:00Z' }] } }] }
+        ]
+      }]
+    }
+  }
+};
+const parsedFrames = parseEstimatedTimetablePayload(framePayload, METRO_RER_LINES[0]);
+assert.strictEqual(parsedFrames.journeys.length, 2, 'All SIRI journey frames must be aggregated');
+assert.strictEqual(parsedFrames.delaysByDir['IDFM:C01371#0'], 30);
+assert.strictEqual(parsedFrames.delaysByDir['IDFM:C01371#1'], 60);
+console.log('✓ Multi-frame SIRI payload aggregated with direction-specific delays');
 
 // 2. Service Hours Verification (derived from GTFS schedule: 05:15 to 02:30 Paris time)
 assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T12:00:00+02:00')), true, '12:00 is active');

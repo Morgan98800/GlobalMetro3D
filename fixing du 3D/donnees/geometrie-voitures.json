@@ -1,0 +1,19 @@
+{
+  "source": ["web/public/data/rolling-stock.json", "web/src/sim/shapes_loader.ts"],
+  "line_id": "IDFM:C01382",
+  "short_name": "12",
+  "cars_count": 5,
+  "car_length_m": 15.08,
+  "inter_car_gap_m": 0.95,
+  "spacing_between_car_heads_m": 16.03,
+  "head_distance_reference_m": null,
+  "cars": [
+    { "index": 0, "head_distance_m": null, "tail_distance_m": null, "arc_length_m": 15.08, "chord_length_m": null, "arc_minus_chord_m": null },
+    { "index": 1, "head_distance_m": null, "tail_distance_m": null, "arc_length_m": 15.08, "chord_length_m": null, "arc_minus_chord_m": null },
+    { "index": 2, "head_distance_m": null, "tail_distance_m": null, "arc_length_m": 15.08, "chord_length_m": null, "arc_minus_chord_m": null },
+    { "index": 3, "head_distance_m": null, "tail_distance_m": null, "arc_length_m": 15.08, "chord_length_m": null, "arc_minus_chord_m": null },
+    { "index": 4, "head_distance_m": null, "tail_distance_m": null, "arc_length_m": 15.08, "chord_length_m": null, "arc_minus_chord_m": null }
+  ],
+  "formule": "direction=1 : carHead=headDistanceM-i*(carLengthM+interCarGapM), carTail=carHead-carLengthM",
+  "limite": "Les distances tete/queue et corde exigent un headDistanceM et le shape decode ; non mesures dans cette passe."
+}

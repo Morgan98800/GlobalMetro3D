@@ -156,39 +156,6 @@ function computeTrainLights(
     );
   }
 
-  // 2. Dual Taillights (Arrière / Queue de rame)
-  const pTail = coordAtDistance(shape, tailD);
-  const pNext = coordAtDistance(shape, Math.min(shape.length, tailD + 1.5));
-  const cosLatTail = Math.cos((pTail[1] * Math.PI) / 180);
-  const dxTail = (pNext[0] - pTail[0]) * cosLatTail * latFactor;
-  const dyTail = (pNext[1] - pTail[1]) * latFactor;
-  const lenTail = Math.hypot(dxTail, dyTail);
-
-  if (lenTail > 0.001) {
-    const nx = -dyTail / lenTail;
-    const ny = dxTail / lenTail;
-    const lateralDist = widthM * 0.32;
-    const offLng = (nx * lateralDist) / (latFactor * cosLatTail);
-    const offLat = (ny * lateralDist) / latFactor;
-
-    // Luminous bright ruby red LED taillights (100% opaque)
-    const taillightColor: [number, number, number, number] = [255, 30, 50, 255];
-    points.push(
-      {
-        pos: [pTail[0] + offLng, pTail[1] + offLat],
-        radiusM: 0.70,
-        color: taillightColor,
-        elevation: elevation + 3.2
-      },
-      {
-        pos: [pTail[0] - offLng, pTail[1] - offLat],
-        radiusM: 0.70,
-        color: taillightColor,
-        elevation: elevation + 3.2
-      }
-    );
-  }
-
   return points;
 }
 
@@ -281,8 +248,13 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     }
 
     const stock: LineRollingStock = getRollingStockForLine(rollingStockDb, train.line || train.lineName);
-    const headD = train.currentDistM ?? 0;
-    const tailD = Math.max(0, headD - stock.total_length_m);
+    const trainDirection = (train.direction ?? 1) as 0 | 1;
+    const referenceDistance = (train.currentDistM ?? 0)
+      + (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
+    const headD = referenceDistance;
+    const tailD = trainDirection === 1
+      ? headD - stock.total_length_m
+      : headD + stock.total_length_m;
     const elev = train.elevation || 0;
     const lodLevel = zoom < minCapsuleZoom ? 'dot' : zoom >= detailedZoom ? 'full' : 'capsule';
     const debugShape = shapes.get(train.shapeId);
@@ -360,7 +332,14 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       // Detailed 3D Model LOD (>= 13.5 desktop / 14.2 mobile):
       // Individual 3D extruded cars, gangways, and LED lighting
       // -----------------------------------------------------------------------
-      const cars = splitIntoCars(shape, headD, stock.cars_count, stock.car_length_m, stock.inter_car_gap_m, 1);
+      const cars = splitIntoCars(
+        shape,
+        headD,
+        stock.cars_count,
+        stock.car_length_m,
+        stock.inter_car_gap_m,
+        trainDirection
+      );
 
       // A. Car bodies are path slices, never screen-aligned polygons.
       for (const carPath of cars) {

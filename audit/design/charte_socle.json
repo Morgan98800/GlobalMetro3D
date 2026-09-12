@@ -1,0 +1,677 @@
+{
+ "accueil_w1440": {
+  "total": 22,
+  "parType": {
+   "sous 12px": 14,
+   "ombre + filet": 4,
+   "rayon hors barème": 2,
+   "majuscules": 2
+  },
+  "rows": [
+   [
+    "sous 12px",
+    "11px",
+    "topbar__search-kbd"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "topbar__dropdown-menu"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "topbar__menu-toggle-state"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "dock"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.08px",
+    "dock-stat-label"
+   ],
+   [
+    "sous 12px",
+    "10.08px",
+    "dock-stat-label"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "map-tooltip"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "cmd-palette-dialog"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "cmd-palette-footer"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ]
+  ]
+ },
+ "accueil_w390": {
+  "total": 23,
+  "parType": {
+   "sous 12px": 14,
+   "ombre + filet": 4,
+   "rayon hors barème": 3,
+   "majuscules": 2
+  },
+  "rows": [
+   [
+    "sous 12px",
+    "11px",
+    "topbar__search-kbd"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "topbar__dropdown-menu"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "topbar__menu-toggle-state"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "dock"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.08px",
+    "dock-stat-label"
+   ],
+   [
+    "sous 12px",
+    "10.08px",
+    "dock-stat-label"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "map-tooltip"
+   ],
+   [
+    "rayon hors barème",
+    "8px",
+    "map-tooltip"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "cmd-palette-dialog"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "cmd-palette-footer"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ]
+  ]
+ },
+ "ligne14_w1440": {
+  "total": 44,
+  "parType": {
+   "sous 12px": 27,
+   "ombre + filet": 13,
+   "rayon hors barème": 2,
+   "majuscules": 2
+  },
+  "rows": [
+   [
+    "sous 12px",
+    "11px",
+    "topbar__search-kbd"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "topbar__dropdown-menu"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "topbar__menu-toggle-state"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "dock"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "map-tooltip"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "cmd-palette-dialog"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "cmd-palette-footer"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ]
+  ]
+ },
+ "ligne14_w390": {
+  "total": 45,
+  "parType": {
+   "sous 12px": 27,
+   "ombre + filet": 13,
+   "rayon hors barème": 3,
+   "majuscules": 2
+  },
+  "rows": [
+   [
+    "sous 12px",
+    "11px",
+    "topbar__search-kbd"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "topbar__dropdown-menu"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "topbar__menu-toggle-state"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl maplibregl-ctrl-attrib maplibregl-compact maplibregl-compact-show"
+   ],
+   [
+    "rayon hors barème",
+    "12px",
+    "maplibregl-ctrl-attrib-button"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "dock"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "majuscules",
+    "",
+    "line-group-title"
+   ],
+   [
+    "sous 12px",
+    "10.56px",
+    "line-group-title"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "ladder-node-bullet  hub"
+   ],
+   [
+    "sous 12px",
+    "11.2px",
+    "pill-mini transfer-pill"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "map-tooltip"
+   ],
+   [
+    "rayon hors barème",
+    "8px",
+    "map-tooltip"
+   ],
+   [
+    "ombre + filet",
+    "",
+    "cmd-palette-dialog"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "cmd-palette-footer"
+   ],
+   [
+    "sous 12px",
+    "11px",
+    "SPAN"
+   ],
+   [
+    "sous 12px",
+    "10px",
+    "KBD"
+   ]
+  ]
+ },
+ "methode_w1440": {
+  "error": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.line-badge') to be visible\u001b[22m\n"
+ },
+ "methode_w390": {
+  "error": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.line-badge') to be visible\u001b[22m\n"
+ }
+}

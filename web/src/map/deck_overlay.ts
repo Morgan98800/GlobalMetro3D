@@ -6,6 +6,7 @@ import type { LineMetadata, StationMetadata } from '@paris-subway/shared';
 import { createTrainsLayers, TrainMarker } from './trains_layer';
 import { createStationLabelsLayer } from './labels_layer';
 import { createCapsuleLayers } from './capsule_layer';
+import { roundPathCorners } from './rounded_path';
 import { PathStyleExtension } from '@deck.gl/extensions';
 import {
   createTrainModelSpikeLayer,
@@ -357,7 +358,7 @@ export class SubwayDeckOverlay {
     const pathForTrack = (d: TrackItem): [number, number, number][] => {
       const line = lineMap.get(d.line_id);
       const z = line ? line.elevation_offset : 0;
-      return d.coordinates.map((pt: [number, number]) => [pt[0], pt[1], z]);
+      return roundPathCorners(d.coordinates).map((pt: [number, number]) => [pt[0], pt[1], z]);
     };
 
     const pathLayers: any[] = [];
@@ -542,8 +543,7 @@ export class SubwayDeckOverlay {
       this.zoom
     );
 
-    const demoRer = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo-rer');
-    const showTrainModels = trainModelsEnabled() && (this.zoom > TRAIN_MODEL_ZOOM_THRESHOLD || this.pitch >= 20 || Boolean(this.selectedTrainId) || Boolean(demoRer));
+    const showTrainModels = trainModelsEnabled();
     if (showTrainModels && this.data?.rollingStockDb) {
       for (const train of this.trains) {
         requestTrainModel(train, this.data.rollingStockDb);
@@ -604,7 +604,7 @@ export class SubwayDeckOverlay {
         pickable: false,
         widthUnits: 'pixels',
         getWidth: 3.5, // 3.5px vs 2.5px métro
-        getPath: ((d: RerTrackSegment) => d.coordinates.map(pt => [pt[0], pt[1], -1])) as any, // Tracé sous les lignes de métro
+        getPath: ((d: RerTrackSegment) => roundPathCorners(d.coordinates).map(pt => [pt[0], pt[1], -1])) as any, // Tracé sous les lignes de métro
         getColor: (d: RerTrackSegment) => {
           const baseAlpha = d.isBanlieue ? 130 : 230;
           return hexToRgba(d.color, baseAlpha);

@@ -14,6 +14,8 @@ from typing import Any
 
 RER_NAMES = {"A", "B", "C", "D", "E"}
 RER_ROUTE_TYPE = "2"
+# Geographic scope used by the existing network inventory and camera policy.
+RER_STATION_BBOX = (1.95, 48.72, 2.75, 49.08)  # west, south, east, north
 
 # IDFM's mission codes (for example UZAR, ERIO or VACK) are useful for
 # operations but are not passenger-facing destinations. Keep the complete
@@ -60,6 +62,11 @@ def _distance_km(coords: list[list[float]]) -> float:
         dy = math.radians(lat2 - lat1) * 6371.0088
         total += math.hypot(dx, dy)
     return total
+
+
+def _in_rer_station_scope(lon: float, lat: float) -> bool:
+    west, south, east, north = RER_STATION_BBOX
+    return west <= lon <= east and south <= lat <= north
 
 
 def build_rer_artifacts(raw_zip: str | Path, processed_dir: str | Path, web_data_dir: str | Path) -> None:
@@ -115,6 +122,8 @@ def build_rer_artifacts(raw_zip: str | Path, processed_dir: str | Path, web_data
                 continue
             station_id = stop.get("parent_station", "").strip() or stop_id
             coordinate = (float(stop.get("stop_lon", 0) or 0), float(stop.get("stop_lat", 0) or 0))
+            if not _in_rer_station_scope(*coordinate):
+                continue
             rer_station_samples[station_id].append(coordinate)
             station = rer_stations.setdefault(
                 station_id,

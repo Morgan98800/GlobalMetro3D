@@ -1,5 +1,4 @@
-import { ScatterplotLayer } from '@deck.gl/layers';
-import { hexToRgba } from './deck_overlay';
+import { IconLayer } from '@deck.gl/layers';
 import type { Confidence } from '../sim/rt_matching';
 
 export interface TrainMarker {
@@ -21,6 +20,7 @@ export interface TrainMarker {
   currentDistM?: number;
   direction?: 0 | 1;
   atStop?: boolean;
+  isGhost?: boolean;
 }
 
 /**
@@ -36,33 +36,38 @@ export function createTrainsLayers(
   onHover: (info: any) => void,
   onClick: (train: TrainMarker) => void,
   zoom: number = 13
-): ScatterplotLayer[] {
+): IconLayer<TrainMarker>[] {
   const filtered = selectedLineId ? trains.filter(t => t.line === selectedLineId) : trains;
 
   const isLowZoom = zoom < 11.5 && !selectedLineId;
-  const baseRadiusMin = isLowZoom ? 3 : zoom < 13 ? 4.5 : 6;
-  const coreRadiusMin = isLowZoom ? 2 : zoom < 13 ? 3 : 4;
+  const iconCache = new Map<string, { url: string; width: number; height: number; anchorY: number }>();
+  const iconFor = (train: TrainMarker) => {
+    const key = `${train.colorHex}-${train.conf}`;
+    const cached = iconCache.get(key);
+    if (cached) return cached;
+    const border = train.conf === 'measured' ? '#FFD700'
+      : train.conf === 'bracketed' ? '#C9A227'
+        : train.conf === 'extrapolated' ? '#C9A227' : '#F1EFEA';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M16 2 30 16 16 30 2 16Z" fill="${train.colorHex}" stroke="${border}" stroke-width="2.5"/><path d="M16 8 24 16 16 24 8 16Z" fill="none" stroke="#F4F1EB" stroke-opacity=".72" stroke-width="1.5"/></svg>`;
+    const icon = { url: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`, width: 32, height: 32, anchorY: 16 };
+    iconCache.set(key, icon);
+    return icon;
+  };
 
-  // 1. High-contrast opaline white base with dark border
-  const baseLayer = new ScatterplotLayer({
-    id: 'subway-trains-base',
+  const markerLayer = new IconLayer<TrainMarker>({
+    id: 'subway-trains-fallback',
     data: filtered,
     pickable: true,
     opacity: 1.0,
-    stroked: true,
-    filled: true,
-    radiusScale: 1,
-    radiusMinPixels: baseRadiusMin,
-    radiusMaxPixels: 14,
     getPosition: (d: TrainMarker) => [d.pos[0], d.pos[1], (d.elevation || 0) + 4],
-    getRadius: isLowZoom ? 35 : 68,
-    getFillColor: [241, 239, 234, 255], // --opale
-    getLineColor: [21, 14, 18, 255], // --laque border
-    getLineWidth: isLowZoom ? 1.2 : 2.0,
-    lineWidthUnits: 'pixels',
+    getIcon: iconFor,
+    getSize: isLowZoom ? 28 : zoom < 13 ? 24 : 30,
+    sizeUnits: 'pixels',
+    sizeMinPixels: isLowZoom ? 20 : 18,
+    sizeMaxPixels: 36,
+    billboard: true,
     autoHighlight: true,
     highlightColor: [255, 255, 255, 80],
-    transitions: { getFillColor: { duration: 140 } },
     parameters: { depthTest: false, depthWriteEnabled: false } as any,
     onHover,
     onClick: (info: any) => {
@@ -72,46 +77,10 @@ export function createTrainsLayers(
     },
     updateTriggers: {
       getPosition: [trains],
-      getRadius: [zoom, selectedLineId],
-      getLineColor: [trains]
+      getIcon: [trains],
+      getSize: [zoom, selectedLineId]
     }
   });
 
-  // 2. Line color core with 4-level confidence ring
-  const coreLayer = new ScatterplotLayer({
-    id: 'subway-trains-core',
-    data: filtered,
-    pickable: false,
-    opacity: 1.0,
-    stroked: true,
-    filled: true,
-    radiusScale: 1,
-    radiusMinPixels: coreRadiusMin,
-    radiusMaxPixels: 9,
-    getPosition: (d: TrainMarker) => [d.pos[0], d.pos[1], (d.elevation || 0) + 4.5],
-    getRadius: isLowZoom ? 20 : 38,
-    getFillColor: (d: TrainMarker) => hexToRgba(d.colorHex, 255), // Line identity
-    getLineColor: (d: TrainMarker) => {
-      if (d.conf === 'measured') return [255, 215, 0, 255]; // Or franc éclatant
-      if (d.conf === 'bracketed') return [201, 162, 39, 240]; // Laiton affirmé
-      if (d.conf === 'extrapolated') return [201, 162, 39, 130]; // Ambre discret
-      return [241, 239, 234, 190]; // Opaline blanche théorique
-    },
-    getLineWidth: (d: TrainMarker) => {
-      if (d.conf === 'measured' || d.conf === 'bracketed') return isLowZoom ? 1.4 : 2.0;
-      if (d.conf === 'extrapolated') return isLowZoom ? 1.0 : 1.4;
-      return isLowZoom ? 0.8 : 1.0;
-    },
-    lineWidthUnits: 'pixels',
-    parameters: { depthTest: false, depthWriteEnabled: false } as any,
-    updateTriggers: {
-      getPosition: [trains],
-      getRadius: [zoom, selectedLineId],
-      getFillColor: [trains],
-      getLineColor: [trains],
-      getLineWidth: [trains]
-    }
-  });
-
-  return [baseLayer, coreLayer];
+  return [markerLayer];
 }

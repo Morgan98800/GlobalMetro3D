@@ -114,7 +114,9 @@ export function preloadTrainModels(): void {
 
 export function trainModelsEnabled(): boolean {
   if (typeof window === 'undefined') return false;
-  return new URLSearchParams(window.location.search).get('train-models') !== '0';
+  // Les modèles GLB sont le rendu principal ; les capsules restent le
+  // fallback pendant le chargement et pour les familles sans asset.
+  return true;
 }
 
 export function trainModelsReady(): boolean {
@@ -151,11 +153,13 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
       const [[west, south], [east, north]] = params.bounds;
       if (train.pos[0] < west || train.pos[0] > east || train.pos[1] < south || train.pos[1] > north) continue;
     }
-    const headDistance = train.currentDistM ?? 0;
+    const trainDirection = (train.direction ?? 1) as 0 | 1;
+    const referenceDistance = (train.currentDistM ?? 0)
+      + (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
     const trainDir = (train.direction ?? 1) as 0 | 1;
     const carsForTrain = splitIntoCars(
       shape,
-      headDistance,
+      referenceDistance,
       stock.cars_count,
       stock.car_length_m,
       stock.inter_car_gap_m,
@@ -167,8 +171,8 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
       if (car.length < 2) continue;
       const spacingM = carCenterSpacingM(stock.car_length_m, stock.inter_car_gap_m);
       const centerDistance = trainDir === 1
-        ? headDistance - index * spacingM - stock.car_length_m / 2
-        : headDistance + index * spacingM + stock.car_length_m / 2;
+        ? referenceDistance - index * spacingM - stock.car_length_m / 2
+        : referenceDistance + index * spacingM + stock.car_length_m / 2;
       const bogieTailDistance = trainDir === 1
         ? Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2))
         : Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2));

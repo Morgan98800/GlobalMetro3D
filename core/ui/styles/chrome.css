@@ -43,6 +43,76 @@
   box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
 }
 
+/* Sélecteur de ville multi-villes */
+.topbar__cities {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.topbar__cities-list {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.topbar__city-item {
+  display: flex;
+  align-items: center;
+}
+
+.topbar__city-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--secondaire);
+  text-decoration: none;
+  font-family: var(--font-title);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  letter-spacing: var(--tr-sub);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), border-color var(--t-state) var(--ease);
+}
+
+.topbar__city-btn:hover {
+  background: var(--eleve);
+  color: var(--texte);
+}
+
+.topbar__city-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+}
+
+/* État actif : signalée par le REMPLISSAGE (fond plein), avec filet et texte franc */
+.topbar__city-btn.is-active {
+  background: var(--eleve-hi);
+  border-color: var(--laiton);
+  color: var(--texte);
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.topbar__city-btn .topbar__mark {
+  width: 16px;
+  height: 16px;
+}
+
+.topbar__city-name {
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
 .topbar__clock {
   position: relative;
   display: inline-flex;

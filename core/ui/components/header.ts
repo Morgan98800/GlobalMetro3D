@@ -1,10 +1,19 @@
-/**
- * header.ts — Composant TopBar sobre, accessible et performant.
- */
+import { DateTime } from 'luxon';
+
+export interface CityItem {
+  id: string;
+  slug: string;
+  displayName: string;
+}
 
 export interface TopBarOptions {
   lineCount: number;
   stationCount: number;
+  cities?: CityItem[];
+  activeCityId?: string;
+  timezone?: string;
+  displayName?: string;
+  onCitySelect?: (cityId: string) => void;
   onSearch?: () => void;
   onToggleRealtime?: () => void;
   onAbout?: () => void;
@@ -67,16 +76,71 @@ export class TopBar {
   private buildingsBtn!: HTMLButtonElement;
   private isBuildingsActive: boolean = true;
   private themeBtn!: HTMLButtonElement;
+  private activeCityId: string;
+  private timezone: string;
+  private displayName: string;
 
   constructor(private options: TopBarOptions) {
     this.el = document.createElement('header');
     this.el.className = 'topbar';
     this.el.id = 'topbar';
 
+    this.activeCityId = this.options.activeCityId || 'paris';
+    this.timezone = this.options.timezone || 'Europe/Paris';
+    this.displayName = this.options.displayName || 'Paris';
+
+    // Sélecteur de ville (liste accessible avec remplissage pour la ville active)
+    const citiesNav = document.createElement('nav');
+    citiesNav.className = 'topbar__cities';
+    citiesNav.setAttribute('aria-label', 'Choix du réseau métropolitain');
+
+    const citiesList = document.createElement('ul');
+    citiesList.className = 'topbar__cities-list';
+
+    const cities = this.options.cities || [
+      { id: 'paris', slug: 'paris', displayName: 'paris' },
+      { id: 'montreal', slug: 'montreal', displayName: 'montréal' }
+    ];
+
+    cities.forEach(city => {
+      const li = document.createElement('li');
+      li.className = 'topbar__city-item';
+
+      const link = document.createElement('a');
+      link.href = `/${city.slug}`;
+      link.className = 'topbar__city-btn';
+      link.dataset.cityId = city.id;
+      const isActive = city.id === this.activeCityId;
+      if (isActive) {
+        link.classList.add('is-active');
+        link.setAttribute('aria-current', 'page');
+      }
+
+      link.innerHTML = `
+        <svg class="topbar__mark" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+          <circle cx="12" cy="12" r="5" fill="currentColor"/>
+        </svg>
+        <span class="topbar__city-name">${city.displayName.toLowerCase()}</span>
+      `;
+
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (city.id !== this.activeCityId) {
+          this.options.onCitySelect?.(city.id);
+        }
+      });
+
+      li.appendChild(link);
+      citiesList.appendChild(li);
+    });
+
+    citiesNav.appendChild(citiesList);
+
     this.clockEl = document.createElement('time');
     this.clockEl.className = 'topbar__clock';
-    this.clockEl.setAttribute('aria-label', 'Heure de Paris');
-    this.updateParisClock();
+    this.clockEl.setAttribute('aria-label', `Heure de ${this.displayName}`);
+    this.updateCityClock();
 
     // Spacer
     const spacer = document.createElement('div');
@@ -237,6 +301,7 @@ export class TopBar {
     menuContainer.appendChild(this.dropdownMenu);
 
     // Assemblage final
+    this.el.appendChild(citiesNav);
     this.el.appendChild(this.clockEl);
     this.el.appendChild(spacer);
     this.el.appendChild(countContainer);
@@ -250,25 +315,43 @@ export class TopBar {
     return this.searchBtn;
   }
 
-  private updateParisClock = (): void => {
+  public setActiveCity(cityId: string, timezone: string, displayName: string): void {
+    this.activeCityId = cityId;
+    this.timezone = timezone;
+    this.displayName = displayName;
+    this.el.querySelectorAll('.topbar__city-btn').forEach(btn => {
+      const el = btn as HTMLAnchorElement;
+      const isActive = el.dataset.cityId === cityId;
+      el.classList.toggle('is-active', isActive);
+      if (isActive) {
+        el.setAttribute('aria-current', 'page');
+      } else {
+        el.removeAttribute('aria-current');
+      }
+    });
+    if (this.clockTimer) {
+      clearTimeout(this.clockTimer);
+      this.clockTimer = null;
+    }
+    this.updateCityClock();
+  }
+
+  private updateCityClock = (): void => {
     const now = new Date();
-    const parts = new Intl.DateTimeFormat('fr-FR', {
-      timeZone: 'Europe/Paris',
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: 'h23'
-    }).formatToParts(now);
-    const hour = parts.find(part => part.type === 'hour')?.value ?? '00';
-    const minute = parts.find(part => part.type === 'minute')?.value ?? '00';
-    const requestedTestValue = new URLSearchParams(window.location.search).get('clockTest');
+    const dt = DateTime.fromJSDate(now).setZone(this.timezone);
+    const hour = dt.toFormat('HH');
+    const minute = dt.toFormat('mm');
+    const requestedTestValue = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('clockTest')
+      : null;
     const value = requestedTestValue && /^[0-9]{2}:[0-9]{2}$/.test(requestedTestValue)
       ? requestedTestValue
       : `${hour}:${minute}`;
     this.clockEl.dateTime = now.toISOString();
-    this.clockEl.setAttribute('aria-label', `Heure de Paris : ${value}`);
+    this.clockEl.setAttribute('aria-label', `Heure de ${this.displayName} : ${value}`);
     this.clockEl.innerHTML = renderLedClock(value);
     const delay = 1000 - (Date.now() % 1000);
-    this.clockTimer = setTimeout(this.updateParisClock, delay);
+    this.clockTimer = setTimeout(this.updateCityClock, delay);
   };
 
   public setBuildingsActive(active: boolean) {

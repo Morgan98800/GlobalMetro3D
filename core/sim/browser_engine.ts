@@ -18,9 +18,11 @@ import {
   type Timeline,
   type Confidence
 } from '@core/rt/rt_matching';
-import { parisClock, selectActiveTrips, serviceCandidates } from './paris_time';
+import { cityClock, selectActiveTrips, serviceCandidates } from './paris_time';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
 import type { LineMetadata } from '@core/types';
+import type { CityConfig } from '@core/config';
+import { parisConfig } from '@cities/paris/city.config';
 
 export interface EngineEvents {
   onTick: (trains: TrainMarker[], activeCount: number) => void;
@@ -91,8 +93,10 @@ export class BrowserSubwayEngine {
   private distanceByTrip = new Map<string, number>();
 
   private externalShapesMap?: Map<string, Shape>;
+  private config: CityConfig;
 
-  constructor(apiKey?: string) {
+  constructor(apiKey?: string, config: CityConfig = parisConfig) {
+    this.config = config;
     this.primClient = new PrimRealtimeClient(apiKey);
   }
 
@@ -113,10 +117,11 @@ export class BrowserSubwayEngine {
     lines.forEach(l => this.linesMap.set(l.id, l));
 
     // 1. Fetch shapes.bin & schedule.json in parallel
+    const dataDir = this.config.paths.dataDir;
     console.log('[engine] Loading shapes and schedule in browser...');
     const [shapesMap, scheduleRes] = await Promise.all([
-      loadShapes(dataUrl('/data/shapes.bin')),
-      fetch(dataUrl('/data/schedule.json'))
+      loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
+      fetch(dataUrl(`${dataDir}/schedule.json`))
     ]);
 
     this.shapes = shapesMap;
@@ -169,18 +174,23 @@ export class BrowserSubwayEngine {
     this.lineIds = lines.map(l => l.id);
     this.initializeServiceDistance(new Date());
 
-    // Asynchronous non-blocking loading of RER data
-    this.loadRerData().catch(err => {
-      console.warn('[engine] Failed to load RER data:', err);
-    });
+    // Asynchronous non-blocking loading of RER data if configured
+    if (this.config.paths.rer) {
+      this.loadRerData().catch(err => {
+        console.warn('[engine] Failed to load RER data:', err);
+      });
+    }
   }
 
   public async loadRerData(): Promise<void> {
+    const rerConfig = this.config.paths.rer;
+    if (!rerConfig) return;
+
     try {
       console.log('[engine] Loading RER shapes and schedule...');
       const [rerShapesMap, rerScheduleRes] = await Promise.all([
-        loadShapes(dataUrl('/data/rer_shapes.bin')),
-        fetch(dataUrl('/data/rer_schedule.json'))
+        loadShapes(dataUrl(rerConfig.shapesBin)),
+        fetch(dataUrl(rerConfig.scheduleJson))
       ]);
 
       if (!rerScheduleRes.ok) {
@@ -268,7 +278,7 @@ export class BrowserSubwayEngine {
   }
 
   public setVirtualTimeSeconds(secondsSinceMidnight: number) {
-    const nowSeconds = parisClock(new Date()).secondsSinceMidnight;
+    const nowSeconds = cityClock(new Date(), this.config.timezone).secondsSinceMidnight;
     this.virtualTimeOffsetS = secondsSinceMidnight - nowSeconds;
   }
 
@@ -281,9 +291,9 @@ export class BrowserSubwayEngine {
   }
 
   private serviceDateFor(now: Date): string {
-    const clock = parisClock(now);
+    const clock = cityClock(now, this.config.timezone);
     const firstTrip = this.trips.reduce((min, trip) => Math.min(min, trip.t0), Number.POSITIVE_INFINITY);
-    const candidates = serviceCandidates(now);
+    const candidates = serviceCandidates(now, this.config.timezone);
     if (clock.secondsSinceMidnight < firstTrip && candidates.length > 1) {
       return candidates[1].serviceDate;
     }
@@ -310,8 +320,8 @@ export class BrowserSubwayEngine {
 
   private initializeServiceDistance(now: Date) {
     const serviceDate = this.serviceDateFor(now);
-    const candidate = serviceCandidates(now).find(item => item.serviceDate === serviceDate);
-    const serviceSeconds = candidate?.seconds ?? parisClock(now).secondsSinceMidnight;
+    const candidate = serviceCandidates(now, this.config.timezone).find(item => item.serviceDate === serviceDate);
+    const serviceSeconds = candidate?.seconds ?? cityClock(now, this.config.timezone).secondsSinceMidnight;
     this.serviceDistanceM = this.trips.reduce(
       (sum, trip) => sum + this.distanceAtTripTime(trip, serviceSeconds),
       0
@@ -343,7 +353,7 @@ export class BrowserSubwayEngine {
   }
 
   public getServiceStatus(now: Date = new Date()): ServiceStatus {
-    const { secondsSinceMidnight } = parisClock(now);
+    const { secondsSinceMidnight } = cityClock(now, this.config.timezone);
     if (this.trips.length === 0) {
       return {
         state: 'loading',
@@ -356,7 +366,7 @@ export class BrowserSubwayEngine {
 
     const firstMetroSeconds = Math.min(...this.trips.map(trip => trip.t0));
     const lastServiceSeconds = Math.max(...this.trips.map(trip => trip.t1));
-    const active = serviceCandidates(now).some(candidate =>
+    const active = serviceCandidates(now, this.config.timezone).some(candidate =>
       candidate.seconds >= firstMetroSeconds && candidate.seconds <= lastServiceSeconds
     );
 
@@ -417,7 +427,7 @@ export class BrowserSubwayEngine {
         ? new Date(Date.now() + this.virtualTimeOffsetS * 1000)
         : new Date();
 
-      const activeTrips = selectActiveTrips(this.trips, now);
+      const activeTrips = selectActiveTrips(this.trips, now, undefined, 0, this.config.timezone);
       const activeSchedTrips = activeTrips.map(a => this.schedTripsMap.get(a.trip.id)!).filter(Boolean);
       const trafficByLine = this.primClient.getTrafficByLine();
 

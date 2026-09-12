@@ -7,6 +7,7 @@ export default defineConfig({
     alias: {
       '@core': path.resolve(__dirname, '../core'),
       '@city': path.resolve(__dirname, '../cities/paris'),
+      '@cities': path.resolve(__dirname, '../cities'),
       '@paris-subway/shared': path.resolve(__dirname, '../core')
     }
   },

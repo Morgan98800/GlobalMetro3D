@@ -70,29 +70,42 @@ function createFacadePattern(size = 64): { width: number; height: number; data: 
   return { width: size, height: size, data };
 }
 
+export interface CreateMapOptions {
+  initialBounds?: MapBounds;
+  maxBounds?: MapBounds;
+  center?: [number, number];
+  zoom?: number;
+  pitch?: number;
+  bearing?: number;
+  attribution?: string;
+}
+
 export function createMap(
   containerId: string,
-  options: { initialBounds?: MapBounds; maxBounds?: MapBounds } = {}
+  options: CreateMapOptions = {}
 ): maplibregl.Map {
   const theme: MapTheme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+  const customAttribution = options.attribution || '© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · IDFM ODbL';
   const map = new maplibregl.Map({
     container: containerId,
     style: createVectorDarkStyle(theme),
+    ...(options.center ? { center: options.center } : {}),
+    ...(options.zoom !== undefined ? { zoom: options.zoom } : {}),
     ...(options.initialBounds ? { bounds: options.initialBounds } : {}),
     ...(options.maxBounds ? { maxBounds: options.maxBounds } : {}),
-    // The initial viewport is fitted from the loaded network geometry.
-    pitch: 0,
-    bearing: 0,
+    // The initial viewport is fitted from the loaded network geometry or config center.
+    pitch: options.pitch ?? 0,
+    bearing: options.bearing ?? 0,
     maxPitch: HIGH_ZOOM_MAX_PITCH,
     maxZoom: 18,
     attributionControl: false
   });
 
-  // Custom attribution bottom-right: OpenMapTiles, OpenStreetMap, IDFM
+  // Custom attribution bottom-right
   map.addControl(
     new maplibregl.AttributionControl({
       compact: true,
-      customAttribution: '© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · IDFM ODbL'
+      customAttribution
     }),
     'bottom-right'
   );

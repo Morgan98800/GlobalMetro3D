@@ -12,5 +12,11 @@
     "dev:web": "npm --workspace=web run dev",
     "test:snapshot": "vitest run tests/paris-snapshot.test.ts",
     "test:footprint": "node tests/verify_build_footprint.mjs"
+  },
+  "dependencies": {
+    "luxon": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.7.5"
   }
 }

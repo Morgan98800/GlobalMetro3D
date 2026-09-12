@@ -4,6 +4,7 @@ import { SubwayDock } from '@core/ui/components/dock';
 import { SubwaySearchBar } from '@core/ui/components/search_bar';
 import { BrowserSubwayEngine } from '@core/sim/browser_engine';
 import { SubwayRouter } from '@core/ui/router';
+import { CITIES, getCityConfig } from '@cities/index';
 import { coordAtDistance, loadShapes } from '@core/sim/shapes_loader';
 import { loadRollingStock } from '@core/sim/rolling_stock';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
@@ -231,21 +232,45 @@ function openAboutModal() {
 }
 
 async function bootstrap() {
-  console.log('[app] Initializing Métro de Paris 3D...');
+  let dock: SubwayDock | null = null;
+  let deckOverlay: SubwayDeckOverlay;
+  let engine: BrowserSubwayEngine;
+  let lines: LineMetadata[] = [];
+
+  const router = new SubwayRouter(({ lineShortName, dir }) => {
+    if (lineShortName && lines.length > 0) {
+      const line = lines.find(l => l.short_name.toLowerCase() === lineShortName.toLowerCase());
+      if (line) {
+        dock?.selectLine(line.id, dir || '0');
+        deckOverlay?.setSelectedLine(line.id);
+        engine?.setFocusedLine(line.id);
+      }
+    } else {
+      dock?.selectLine(null, '0');
+      deckOverlay?.setSelectedLine(null);
+      engine?.setFocusedLine(null);
+    }
+  });
+
+  const cityConfig = getCityConfig(router.getCurrentCity());
+  console.log(`[app] Initializing ${cityConfig.networkName} 3D (${cityConfig.displayName})...`);
 
   // 1. Fetch metadata in parallel (memoized loadShapes, deferred rer_lines)
+  const dataDir = cityConfig.paths.dataDir;
+  const rerLinesPath = cityConfig.paths.rer?.linesJson;
+
   const [linesRes, stationsRes, tracksRes, laddersRes, rerTracksRes, rankingsRes, shapesMap, rollingStockDb] = await Promise.all([
-    fetch(dataUrl('/data/lines.json')),
-    fetch(dataUrl('/data/stations.json')),
-    fetch(dataUrl('/data/tracks.json')),
-    fetch(dataUrl('/data/line_ladders.json')),
-    fetch(dataUrl('/data/rer_lines.json')),
-    fetch(dataUrl('/data/station-rankings.json')),
-    loadShapes(dataUrl('/data/shapes.bin')),
-    loadRollingStock(dataUrl('/data/rolling-stock.json'))
+    fetch(dataUrl(`${dataDir}/lines.json`)),
+    fetch(dataUrl(`${dataDir}/stations.json`)),
+    fetch(dataUrl(`${dataDir}/tracks.json`)),
+    fetch(dataUrl(`${dataDir}/line_ladders.json`)),
+    rerLinesPath ? fetch(dataUrl(rerLinesPath)) : Promise.resolve({ json: async () => [] }),
+    fetch(dataUrl(`${dataDir}/station-rankings.json`)),
+    loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
+    loadRollingStock(dataUrl(`${dataDir}/rolling-stock.json`))
   ]);
 
-  const lines: LineMetadata[] = await linesRes.json();
+  lines = await linesRes.json();
   const stations: StationMetadata[] = await stationsRes.json();
   const tracks: TrackItem[] = await tracksRes.json();
   const laddersData = await laddersRes.json();
@@ -267,7 +292,7 @@ async function bootstrap() {
   const mapEl = document.getElementById('map')!;
   const tooltipEl = document.getElementById('tooltip')!;
   // 2. Initialize Simulation Engine (pure theoretical by default, or reading server relay snapshot)
-  const engine = new BrowserSubwayEngine();
+  engine = new BrowserSubwayEngine(undefined, cityConfig);
   await engine.initialize(lines, shapesMap);
   const demoRer = new URLSearchParams(window.location.search).get('demo-rer');
   const demoRerColors: Record<string, { colorHex: string; textColorHex: string }> = {
@@ -307,9 +332,15 @@ async function bootstrap() {
   let isRealtimeEnabled = false;
 
   // 3. Initialize MapLibre
-  // Keep the default frame on the metro core; RER remains available without
-  // shrinking Paris to a point in the wider Île-de-France envelope.
-  const map = createMap('map', { initialBounds: metroBounds || networkBounds || undefined, maxBounds: mapMaxBounds });
+  const map = createMap('map', {
+    initialBounds: metroBounds || networkBounds || cityConfig.map.bounds,
+    maxBounds: mapMaxBounds,
+    center: cityConfig.map.center,
+    zoom: cityConfig.map.zoom,
+    pitch: cityConfig.map.pitch,
+    bearing: cityConfig.map.bearing,
+    attribution: `© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ${cityConfig.attribution.licenseText}`
+  });
   (window as any).__map = map;
   (window as any).map = map;
 
@@ -483,7 +514,7 @@ async function bootstrap() {
   };
 
   // 4. Initialize deck.gl overlay with Station & Train Handlers
-  const deckOverlay = new SubwayDeckOverlay({
+  deckOverlay = new SubwayDeckOverlay({
     onStationHover: (info) => {
       if (info.object && Number.isFinite(info.x) && Number.isFinite(info.y)) {
         const st = (info.object.station || info.object) as StationMetadata;
@@ -607,7 +638,7 @@ async function bootstrap() {
       deckOverlay.setSelectedLine(null);
       deckOverlay.setSelectedTrain(null);
       engine.setFocusedLine(null);
-      router.setRoute(null, '0');
+      router.setRoute(null, '0', cityConfig.slug);
       dock?.selectLine(null);
       if (!wasFollowingTrain) fitMetroNetwork();
       updateRecenterState();
@@ -626,7 +657,7 @@ async function bootstrap() {
   window.addEventListener('blur', hideTooltip);
 
   // 5. Initialize Dock ("Le Quai" Niveau 2 with Station Ladder)
-  const dock = new SubwayDock({
+  dock = new SubwayDock({
     rollingStockDb,
     onRecordsOpen: () => openNetworkRecords(stationRankings),
     onLineSelect: (lineId, dir = '0') => {
@@ -639,7 +670,7 @@ async function bootstrap() {
       engine.setFocusedLine(lineId);
 
       const line = lines.find(l => l.id === lineId);
-      router.setRoute(line ? line.short_name : null, dir);
+      router.setRoute(line ? line.short_name : null, dir, cityConfig.slug);
 
       if (lineId) {
         const lineStations = stations.filter(s => s.lines.includes(lineId));
@@ -717,6 +748,14 @@ async function bootstrap() {
   const topbar = new TopBar({
     lineCount: lines.length,
     stationCount: stations.length,
+    cities: CITIES.map(c => ({ id: c.id, slug: c.slug, displayName: c.displayName })),
+    activeCityId: cityConfig.id,
+    timezone: cityConfig.timezone,
+    displayName: cityConfig.displayName,
+    onCitySelect: (cityId: string) => {
+      router.setCity(cityId);
+      window.location.href = `/${cityId}`;
+    },
     onSearch: () => {
       hideTooltip();
       searchBar.open();
@@ -746,11 +785,11 @@ async function bootstrap() {
       if (isRealtimeEnabled) {
         engine.startRealtime();
         topbar.setRealtimeState({ active: true, delays: {} });
-        dock.setRealtimeState({ active: true, minutesAgo: 0 });
+        dock?.setRealtimeState({ active: true, minutesAgo: 0 });
       } else {
         engine.stopRealtime();
         topbar.setRealtimeState('standby');
-        dock.setRealtimeState('standby');
+        dock?.setRealtimeState('standby');
       }
     }
   });
@@ -777,21 +816,16 @@ async function bootstrap() {
     auditLineContrast(lineLikes);
   }
 
-  // 7. Router initialization
-  const router = new SubwayRouter(({ lineShortName, dir }) => {
-    if (lineShortName) {
-      const line = lines.find(l => l.short_name.toLowerCase() === lineShortName.toLowerCase());
-      if (line) {
-        dock.selectLine(line.id, dir || '0');
-        deckOverlay.setSelectedLine(line.id);
-        engine.setFocusedLine(line.id);
-      }
-    } else {
-      dock.selectLine(null, '0');
-      deckOverlay.setSelectedLine(null);
-      engine.setFocusedLine(null);
+  // 7. Route resolution for initial line selection
+  const initialRoute = router.getInitialRoute();
+  if (initialRoute.lineShortName) {
+    const line = lines.find(l => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase());
+    if (line) {
+      dock?.selectLine(line.id, initialRoute.dir || '0');
+      deckOverlay?.setSelectedLine(line.id);
+      engine?.setFocusedLine(line.id);
     }
-  });
+  }
 
   // 8. Connect deck.gl to map
   map.on('load', () => {

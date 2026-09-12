@@ -1,5 +1,5 @@
 /**
- * paris_time.ts — résolution de l'heure de service GTFS.
+ * paris_time.ts — résolution de l'heure de service GTFS basée sur Luxon.
  *
  * BUG CORRIGÉ : browser_engine.ts faisait `currentSec = sec % 86400`. Dans le GTFS,
  * les courses qui continuent après minuit portent des heures >= 86400 (24h30 = 88200).
@@ -8,42 +8,37 @@
  * Principe : un instant donné appartient à DEUX journées de service possibles.
  * À 00h30 le mardi, on est à la fois à 1800 s de la journée de mardi et à 88200 s
  * de la journée de lundi. Il faut évaluer les deux.
+ *
+ * Luxon est employé sans exception avec un fuseau explicite issu de CityConfig.
  */
 
-const PARIS_TZ = 'Europe/Paris';
+import { DateTime } from 'luxon';
 
-const partsFormatter = new Intl.DateTimeFormat('en-GB', {
-  timeZone: PARIS_TZ,
-  hour12: false,
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-});
-
-export interface ParisClock {
-  /** Date civile à Paris, 'YYYY-MM-DD' */
+export interface CityClock {
+  /** Date civile dans le fuseau, 'YYYY-MM-DD' */
   date: string;
-  /** Secondes depuis minuit civil à Paris, 0..86399 */
+  /** Secondes depuis minuit civil, 0..86399 */
   secondsSinceMidnight: number;
 }
 
-/** Heure civile à Paris, changements d'heure inclus. */
-export function parisClock(now: Date = new Date()): ParisClock {
-  const parts = partsFormatter.formatToParts(now);
-  const get = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === type)!.value;
+export type ParisClock = CityClock;
 
-  const hour = Number(get('hour')) % 24;
-  const minute = Number(get('minute'));
-  const second = Number(get('second'));
+/** Heure civile dans le fuseau spécifié, changements d'heure inclus via Luxon. */
+export function cityClock(now: Date = new Date(), timezone: string = 'Europe/Paris'): CityClock {
+  const dt = DateTime.fromJSDate(now).setZone(timezone);
+  const hour = dt.hour % 24;
+  const minute = dt.minute;
+  const second = dt.second;
 
   return {
-    date: `${get('year')}-${get('month')}-${get('day')}`,
+    date: dt.toISODate() || '',
     secondsSinceMidnight: hour * 3600 + minute * 60 + second,
   };
+}
+
+/** Heure civile à Paris (conservé pour rétrocompatibilité des appelants existants). */
+export function parisClock(now: Date = new Date()): ParisClock {
+  return cityClock(now, 'Europe/Paris');
 }
 
 export interface ServiceCandidate {
@@ -53,11 +48,9 @@ export interface ServiceCandidate {
   seconds: number;
 }
 
-function shiftDate(isoDate: string, days: number): string {
-  const [y, m, d] = isoDate.split('-').map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  dt.setUTCDate(dt.getUTCDate() + days);
-  return dt.toISOString().slice(0, 10);
+function shiftDate(isoDate: string, days: number, timezone: string): string {
+  const dt = DateTime.fromISO(isoDate, { zone: timezone }).plus({ days });
+  return dt.toISODate() || isoDate;
 }
 
 /**
@@ -65,14 +58,17 @@ function shiftDate(isoDate: string, days: number): string {
  * La seconde n'est retournée que si elle peut encore contenir des courses,
  * soit avant 05h00 civiles (le service de nuit ne va jamais au-delà de ~29h).
  */
-export function serviceCandidates(now: Date = new Date()): ServiceCandidate[] {
-  const { date, secondsSinceMidnight } = parisClock(now);
+export function serviceCandidates(
+  now: Date = new Date(),
+  timezone: string = 'Europe/Paris'
+): ServiceCandidate[] {
+  const { date, secondsSinceMidnight } = cityClock(now, timezone);
   const candidates: ServiceCandidate[] = [
     { serviceDate: date, seconds: secondsSinceMidnight },
   ];
   if (secondsSinceMidnight < 5 * 3600) {
     candidates.push({
-      serviceDate: shiftDate(date, -1),
+      serviceDate: shiftDate(date, -1, timezone),
       seconds: secondsSinceMidnight + 86400,
     });
   }
@@ -107,9 +103,10 @@ export function selectActiveTrips<T extends TripWindow>(
   trips: readonly T[],
   now: Date = new Date(),
   runsOn?: (trip: T, serviceDate: string) => boolean,
-  marginSeconds = 0
+  marginSeconds = 0,
+  timezone: string = 'Europe/Paris'
 ): ActiveTrip<T>[] {
-  const candidates = serviceCandidates(now);
+  const candidates = serviceCandidates(now, timezone);
   const active: ActiveTrip<T>[] = [];
 
   for (const trip of trips) {

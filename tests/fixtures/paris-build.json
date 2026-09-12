@@ -273,32 +273,32 @@
       "maxSize1Pct": 1200
     },
     {
-      "originalPath": "assets/index-B6dRVx7v.js",
+      "originalPath": "assets/index-Dl9L_49r.js",
       "normalizedPath": "assets/index.[hash].js",
       "sizeBytes": 18994,
       "minSize1Pct": 18804,
       "maxSize1Pct": 19184
     },
     {
-      "originalPath": "assets/index-DfSR4f3n.js",
+      "originalPath": "assets/index-DOm9pL3i.js",
       "normalizedPath": "assets/index.[hash].js",
       "sizeBytes": 16706,
       "minSize1Pct": 16538,
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-B_NeCQha.js",
+      "originalPath": "assets/main-yLXF3MYx.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2477428,
-      "minSize1Pct": 2452653,
-      "maxSize1Pct": 2502203
+      "sizeBytes": 2555929,
+      "minSize1Pct": 2530369,
+      "maxSize1Pct": 2581488
     },
     {
-      "originalPath": "assets/main-sZ46zSDm.css",
+      "originalPath": "assets/main-BwmFSn1c.css",
       "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 49311,
-      "minSize1Pct": 48817,
-      "maxSize1Pct": 49805
+      "sizeBytes": 50469,
+      "minSize1Pct": 49964,
+      "maxSize1Pct": 50973
     },
     {
       "originalPath": "assets/tokens-D3M_eBDk.css",
@@ -350,12 +350,12 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-sZ46zSDm.css",
+      "url": "/assets/main-BwmFSn1c.css",
       "expectedStatus": 200,
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-B_NeCQha.js",
+      "url": "/assets/main-yLXF3MYx.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

@@ -133,6 +133,8 @@ export function parseStmEtatService(
   let msgList: any[] = [];
   if (Array.isArray(raw)) {
     msgList = raw;
+  } else if (Array.isArray(raw.alerts)) {
+    msgList = raw.alerts;
   } else if (Array.isArray(raw.messages)) {
     msgList = raw.messages;
   } else if (Array.isArray(raw.etatservice)) {
@@ -143,33 +145,48 @@ export function parseStmEtatService(
     msgList = Object.values(raw.messages);
   }
 
+  const severityRank: Record<string, number> = { normal: 1, disrupted: 2, interrupted: 3 };
+
   for (const item of msgList) {
     if (!item) continue;
 
     // Determine target line(s)
+    const entityRoutes: string[] = Array.isArray(item.informed_entities)
+      ? item.informed_entities.map((e: any) => String(e.route_short_name || e.route_id || '').trim()).filter(Boolean)
+      : [];
     const lineKey = String(
       item.ligne || item.line || item.route_id || item.codeLigne || item.idLigne || ''
     ).trim();
 
-    const title = String(item.titre || item.title || item.header || '').trim();
+    const title = String(
+      item.header_texts?.[0]?.text || item.titre || item.title || item.header || ''
+    ).trim();
     const message = String(
-      item.message || item.texte || item.corps || item.description || item.detail || title
+      item.description_texts?.[0]?.text || item.message || item.texte || item.corps || item.description || item.detail || title
     ).trim();
     const fullText = `${title} ${message}`.toLowerCase();
 
     // Check if this pertains to Montreal Metro
     const targetLineIds: string[] = [];
-    if (lineKey === '1' || fullText.includes('ligne 1') || fullText.includes('verte') || fullText.includes('green')) {
-      targetLineIds.push('1');
-    }
-    if (lineKey === '2' || fullText.includes('ligne 2') || fullText.includes('orange')) {
-      targetLineIds.push('2');
-    }
-    if (lineKey === '4' || fullText.includes('ligne 4') || fullText.includes('jaune') || fullText.includes('yellow')) {
-      targetLineIds.push('4');
-    }
-    if (lineKey === '5' || fullText.includes('ligne 5') || fullText.includes('bleue') || fullText.includes('blue')) {
-      targetLineIds.push('5');
+    if (entityRoutes.length > 0) {
+      for (const r of entityRoutes) {
+        if (['1', '2', '4', '5'].includes(r) && !targetLineIds.includes(r)) {
+          targetLineIds.push(r);
+        }
+      }
+    } else {
+      if (lineKey === '1' || fullText.includes('ligne 1') || fullText.includes('verte') || fullText.includes('green')) {
+        targetLineIds.push('1');
+      }
+      if (lineKey === '2' || fullText.includes('ligne 2') || fullText.includes('orange')) {
+        targetLineIds.push('2');
+      }
+      if (lineKey === '4' || fullText.includes('ligne 4') || fullText.includes('jaune') || fullText.includes('yellow')) {
+        targetLineIds.push('4');
+      }
+      if (lineKey === '5' || fullText.includes('ligne 5') || fullText.includes('bleue') || fullText.includes('blue')) {
+        targetLineIds.push('5');
+      }
     }
 
     if (targetLineIds.length === 0) continue;
@@ -195,15 +212,22 @@ export function parseStmEtatService(
     for (const lid of targetLineIds) {
       const lineMeta = MONTREAL_METRO_LINES.find((l) => l.id === lid);
       const lineName = lineMeta ? lineMeta.displayName : lid;
+      const currentReport = result[lid];
+      const currentRank = severityRank[currentReport.status] || 1;
+      const newRank = isInterrupted ? 3 : isDisrupted ? 2 : 1;
+
+      // Do not overwrite higher severity with lower
+      if (newRank < currentRank) continue;
 
       if (isInterrupted) {
-        const closedStations = extractClosedStations(message, catalog);
+        const closedStations = extractClosedStations(`${title} ${message}`, catalog);
         const reportTitle = closedStations.length > 0
           ? `Ligne ${lid} - ${lineName} (Interruption partielle)`
           : `Ligne ${lid} - ${lineName} (Interruption de service)`;
 
         result[lid] = {
           lineId: lid,
+          lineName: lid,
           status: 'interrupted',
           severity: 'alert',
           title: reportTitle,
@@ -214,6 +238,7 @@ export function parseStmEtatService(
       } else if (isDisrupted) {
         result[lid] = {
           lineId: lid,
+          lineName: lid,
           status: 'disrupted',
           severity: 'warning',
           title: `Ligne ${lid} - ${lineName} (Ralentissement)`,

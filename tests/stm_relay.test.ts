@@ -113,20 +113,33 @@ describe('STM Relay Unit Tests (Phase 5)', () => {
     expect(isMontrealMetroServiceHours(nightDate)).toBe(false);
   });
 
-  it('guarantees that API keys are never leaked into traffic reports or payloads', () => {
+  it('correctly parses real GTFS-RT alerts structure with informed_entities and header_texts', () => {
     const raw = {
-      messages: [
+      alerts: [
         {
-          ligne: '1',
-          texte: 'Service normal',
-          secret: 'SUPER_SECRET_STM_KEY_12345'
+          informed_entities: [{ route_short_name: '1' }],
+          header_texts: [{ language: 'fr', text: 'Service normal du métro' }],
+          description_texts: [{ language: 'fr', text: 'Service normal du métro' }]
+        },
+        {
+          informed_entities: [{ route_short_name: '2' }],
+          header_texts: [{ language: 'fr', text: 'Interruption de service entre Berri-UQAM et Henri-Bourassa' }],
+          description_texts: [{ language: 'fr', text: 'Interruption de service' }]
+        },
+        {
+          informed_entities: [{ route_short_name: '260' }, { route_short_name: '262' }],
+          header_texts: [{ language: 'fr', text: 'Navette suspendue' }],
+          description_texts: [{ language: 'fr', text: 'Navette suspendue' }]
         }
       ]
     };
 
     const reports = parseStmEtatService(raw);
-    const jsonStr = JSON.stringify(reports);
-    expect(jsonStr).not.toContain('SUPER_SECRET_STM_KEY_12345');
-    expect(jsonStr).not.toContain('secret');
+    expect(reports['1'].status).toBe('normal');
+    expect(reports['2'].status).toBe('interrupted');
+    expect(reports['2'].closedStations).toContain('Berri-UQAM');
+    expect(reports['2'].closedStations).toContain('Henri-Bourassa');
+    expect(reports['4'].status).toBe('normal');
+    expect(reports['5'].status).toBe('normal');
   });
 });

@@ -503,3 +503,106 @@ $$\text{dist}[N - 1] = (N - 2) \times \text{step} + \text{tailLength}$$
 - `web/public/data/` : répertoire de service de l'ensemble des 17 artefacts GTFS et dérivés.
 - `web/public/models/train/` : répertoire de service des modèles 3D binaires glTF.
 - `data/processed/` : miroir hors-ligne et artefacts générés par le pipeline Python d'ingestion.
+
+---
+
+## 8. Phase 2 — Reconnaissance du GTFS Montréalais (STM)
+
+### 8.1 Source et Métadonnées
+- **URL officielle du GTFS** : `https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip`
+- **Portail développeurs STM** : `https://www.stm.info/fr/a-propos/developpeurs`
+- **Version du flux (`feed_info.txt`)** : `20260805110000_26S`
+- **Période de validité** : du 15 juin 2026 au 25 octobre 2026
+- **Date de publication** : 11 août 2026 (prise d'effet des horaires au 24 août 2026)
+
+---
+
+### 8.2 Réponses chiffrées aux onze questions
+
+1. **Combien de lignes ?**
+   - **4 lignes** (avec filtre strict `route_type = 1`).
+   - Ligne 1 : Verte (`route_id: "1"`, `route_color: "00B300"`, `route_text_color: "FFFFFF"`, Angrignon $\leftrightarrow$ Honoré-Beaugrand)
+   - Ligne 2 : Orange (`route_id: "2"`, `route_color: "D95700"`, `route_text_color: "FFFFFF"`, Côte-Vertu $\leftrightarrow$ Montmorency)
+   - Ligne 4 : Jaune (`route_id: "4"`, `route_color: "FFD900"`, `route_text_color: "000000"`, Berri-UQAM $\leftrightarrow$ Longueuil–Université-de-Sherbrooke)
+   - Ligne 5 : Bleue (`route_id: "5"`, `route_color: "0095E6"`, `route_text_color: "FFFFFF"`, Snowdon $\leftrightarrow$ Saint-Michel)
+   *(La ligne 3 n'a jamais été construite dans l'histoire du réseau montréalais).*
+
+2. **Combien de stations ?**
+   - **72 quais/arrêts physiques bruts** (`stop_id`) dans `stop_times.txt`.
+   - **68 stations uniques dédupliquées** par `parent_station` (`STATION_M...`) et par nom nettoyé.
+   - Les 4 stations de correspondance expliquent l'écart ($68 - 4 + 8 = 72$) :
+     - Station Lionel-Groulx (`STATION_M132`, lignes 1 et 2 sur le même quai `36`)
+     - Station Snowdon (`STATION_M236`, lignes 2 et 5, quais `9999492` et `9999495`)
+     - Station Jean-Talon (`STATION_M272`, lignes 2 et 5, quais `9999052` et `9999055`)
+     - Station Berri-UQAM (`STATION_M146`, lignes 1, 2 et 4, quais `9999111`, `9999112`, `9999114`).
+   - Répartition par ligne : Ligne 1 (27 arrêts), Ligne 2 (31 arrêts), Ligne 4 (3 arrêts), Ligne 5 (12 arrêts).
+
+3. **Combien de kilomètres de tracé ?**
+   - Longueur cumulée commerciale des 4 lignes : **61,65 km** (mesure euclidienne station-à-station issue de `shapes.txt`).
+     - Ligne 1 (Verte) : 20,07 km (27 sommets)
+     - Ligne 2 (Orange) : 28,26 km (31 sommets)
+     - Ligne 4 (Jaune) : 3,82 km (3 sommets)
+     - Ligne 5 (Bleue) : 9,50 km (12 sommets)
+   - Écart avec les ~69-71 km réels : `shapes.txt` ne fournit qu'un seul point par station (cordes droites inter-stations sans sommets de courbure), ce qui sous-estime légèrement le tracé sinueux réel en tunnel.
+
+4. **`frequencies.txt` est-il présent, et couvre-t-il les quatre lignes ?**
+   - **NON : `frequencies.txt` est TOTALEMENT ABSENT du flux officiel STM actuel (2026)**.
+   - La STM a abandonné la compression par fréquences pour publier directement un horaire détaillé complet :
+   - `trips.txt` contient **12 668 courses de métro** planifiées avec `stop_times.txt` horodaté à la seconde.
+   - Pour un jour de semaine type d'automne (période 26S) : **1 654 courses** planifiées par jour (Ligne 1 : 444, Ligne 2 : 552, Ligne 4 : 330, Ligne 5 : 328).
+
+5. **Quelle est la valeur de `exact_times` ?**
+   - **Absent** (car `frequencies.txt` est absent).
+   - Les horaires dans `stop_times.txt` sont des horaires absolus déterministes (départs planifiés précis à la seconde près). Le produit n'a donc pas à synthétiser des heures approximatives : le flux STM fournit désormais des courses réelles fixes, exactement comme Paris IDFM.
+
+6. **Les blocs de `frequencies.txt` se chevauchent-ils pour un même `trip_id` ?**
+   - **0 chevauchement** (pas de fichier `frequencies.txt`).
+   - Dans les courses planifiées `trips.txt` / `stop_times.txt`, 12 651 départs distincts sur les terminus, pour seulement 17 doublons ponctuels (courses d'injection ou services partiels).
+
+7. **Quelle est l'amplitude horaire couverte ? Des heures supérieures à 24:00:00 apparaissent-elles ?**
+   - **Oui : 10 636 enregistrements de `stop_times.txt` dépassent 24:00:00** (fins de service entre 24h00 et 01h53 du matin).
+   - Amplitude par ligne :
+     - Ligne 1 : 05:30:00 $\to$ 25:48:00 (01h48 le lendemain)
+     - Ligne 2 : 05:24:00 $\to$ 25:53:00 (01h53 le lendemain)
+     - Ligne 4 : 05:30:00 $\to$ 25:36:00 (01h36 le lendemain)
+     - Ligne 5 : 05:30:00 $\to$ 25:31:00 (01h31 le lendemain)
+
+8. **Quelle est la forme des `service_id` et du calendrier ?**
+   - Structure standard GTFS (`calendar.txt` + `calendar_dates.txt`).
+   - `service_id` sémantiques : `26S-GLOBAUX-01-S` (automne semaine), `26S-GLOBAUX-01-A` (samedi), `26S-GLOBAUX-01-I` (dimanche), suffixes `F1`/`F2` pour jours fériés (Fête du travail, Action de grâce).
+   - Parfaitement compatible avec la logique du moteur parisien (`serviceCandidates` et `activeTrips`).
+
+9. **Les `route_color` sont-ils présents ?**
+   - Ligne 1 (Verte) : `#00B300` (texte `#FFFFFF`)
+   - Ligne 2 (Orange) : `#D95700` (texte `#FFFFFF`)
+   - Ligne 4 (Jaune) : `#FFD900` (texte `#000000`)
+   - Ligne 5 (Bleue) : `#0095E6` (texte `#FFFFFF`)
+
+10. **Quelle est la qualité des `shapes.txt` ?**
+    - 11 tracés au total couvrant les 4 lignes dans les deux directions (plus missions partielles Henri-Bourassa sur ligne 2).
+    - **Géométrie très grossière** : exactement 1 sommet par station (27 pts sur L1, 31 sur L2, 3 sur L4, 12 sur L5).
+    - Tracé en cordes droites inter-stations, sans courbure souterraine.
+    - Conséquence pour Phase 4 : pour un rendu 3D de qualité, il faudra projeter et interpoler les tracés avec les voies souterraines OpenStreetMap (comme fait pour Paris).
+
+11. **Quels champs le pipeline parisien consomme-t-il qui seraient absents ou différents ici ?**
+    - **Identifiants de lignes** : `1`, `2`, `4`, `5` (STM) vs URNs IDFM `IDFM:C01371` (Paris).
+    - **Préfixe des stations** : Toutes les stations STM débutent par `Station ` (`Station Berri-UQAM`), à nettoyer pour les badges et ladders.
+    - **Structure de `shapes.txt`** : `shape_dist_traveled` est absent chez STM (présent chez IDFM). Le rééchantillonnage métrique maison (`resample.py` / `equirectDistM`) doit recalculer la distance cumulée.
+    - **Absence de réseau RER/train** : Le GTFS STM est strictement métro + bus (les trains de banlieue Exo et le REM font l'objet de flux ARTM distincts).
+    - **Flux temps réel** : Paris utilise PRIM (SIRI-Lite JSON/XML). Montréal utilise GTFS-Realtime (Protocol Buffers) et l'API i3.
+
+---
+
+### 8.3 Contrôle de vraisemblance (Mardi 8h30 heure de Montréal)
+- **72 rames actives simultanément** à 08h30 heure locale (EDT / UTC-4) un mardi type d'automne (15 septembre 2026) :
+  - Ligne 1 : **27 rames**
+  - Ligne 2 : **32 rames**
+  - Ligne 4 : **4 rames**
+  - Ligne 5 : **9 rames**
+- Flotte parfaitement cohérente avec la réalité d'exploitation de la STM en heure de pointe du matin (ordre de grandeur de plusieurs dizaines de rames).
+
+---
+
+### 8.4 Encodage
+- Accents et apostrophes UTF-8 validés : `Station Lionel-Groulx`, `Station Côte-des-Neiges`, `Station Assomption` (note : le métro s'appelle officiellement `Station Assomption`, les arrêts de bus de surface sont `de l'Assomption`).
+

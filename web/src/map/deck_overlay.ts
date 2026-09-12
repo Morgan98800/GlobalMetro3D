@@ -7,8 +7,23 @@ import { createTrainsLayers, TrainMarker } from './trains_layer';
 import { createStationLabelsLayer } from './labels_layer';
 import { createCapsuleLayers } from './capsule_layer';
 import { PathStyleExtension } from '@deck.gl/extensions';
+import {
+  createTrainModelSpikeLayer,
+  createTrainModelSpikeLighting,
+  isTrainModelSpikeEnabled
+} from './train_model_spike';
 import type { ShapeEntry } from '../sim/shapes';
 import type { RollingStockDatabase } from '../sim/rolling_stock';
+import {
+  createTrainModelLayers,
+  requestTrainModel,
+  preloadTrainModels,
+  subscribeTrainModelAssets,
+  trainModelsEnabled,
+  TRAIN_MODEL_ZOOM_THRESHOLD
+} from './train_models_layer';
+import { resolveTrainRenderLayers } from './train_render_fallback';
+import { createPlatformsLayer } from './platforms_layer';
 
 export interface TrackItem {
   line_id: string;
@@ -107,29 +122,44 @@ export class SubwayDeckOverlay {
   private rerTracks: RerTrackSegment[] = [];
   private showRer: boolean = false;
   private zoom: number = 13;
+  private pitch: number = 0;
+  private followElevationLineId: string | null = null;
+  private followElevationOffset = 0;
   private mapCenter: [number, number] = [2.3488, 48.8534];
   private bounds: [[number, number], [number, number]] | null = null;
   private trackRevealProgress = 1;
   private trackRevealFrame: number | null = null;
+  private layerUpdateFrame: number | null = null;
   private onStationHover: (info: any) => void;
   private onStationClick: (station: StationMetadata) => void;
   private onTrainHover: (info: any) => void;
   private onTrainClick: (train: TrainMarker) => void;
+  private onLineSelect: (lineId: string) => void;
+  private onBackgroundClick: () => void;
 
   constructor(options: {
     onStationHover: (info: any) => void;
     onStationClick: (station: StationMetadata) => void;
     onTrainHover: (info: any) => void;
     onTrainClick: (train: TrainMarker) => void;
+    onLineSelect?: (lineId: string) => void;
+    onBackgroundClick?: () => void;
   }) {
     this.onStationHover = options.onStationHover;
     this.onStationClick = options.onStationClick;
     this.onTrainHover = options.onTrainHover;
     this.onTrainClick = options.onTrainClick;
+    this.onLineSelect = options.onLineSelect || (() => undefined);
+    this.onBackgroundClick = options.onBackgroundClick || (() => undefined);
+    subscribeTrainModelAssets(() => this.updateLayers());
+    if (trainModelsEnabled()) {
+      preloadTrainModels();
+    }
 
     this.overlay = new MapboxOverlay({
       interleaved: false,
-      layers: []
+      layers: [],
+      effects: isTrainModelSpikeEnabled() || trainModelsEnabled() ? [createTrainModelSpikeLighting()] : []
     });
   }
 
@@ -193,17 +223,19 @@ export class SubwayDeckOverlay {
   public setViewState(
     zoom: number,
     mapCenter: [number, number],
-    bounds?: [[number, number], [number, number]] | null
+    bounds?: [[number, number], [number, number]] | null,
+    pitch: number = 0
   ) {
-    const zoomChangedLOD = Math.floor(this.zoom * 2) !== Math.floor(zoom * 2);
     this.zoom = zoom;
+    this.pitch = pitch;
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'trains') {
+      (window as any).__deckOverlayZoom = zoom;
+    }
     this.mapCenter = mapCenter;
     if (bounds) {
       this.bounds = bounds;
     }
-    if (zoomChangedLOD || bounds) {
-      this.updateLayers();
-    }
+    this.updateLayers();
   }
 
   public setData(data: SubwayMapData) {
@@ -222,7 +254,25 @@ export class SubwayDeckOverlay {
     this.updateLayers();
   }
 
+  public setFollowElevation(lineId: string | null, offset: number): void {
+    this.followElevationLineId = lineId;
+    this.followElevationOffset = offset;
+    this.updateLayers();
+  }
+
   private updateLayers() {
+    if (typeof requestAnimationFrame === 'undefined' || document.hidden) {
+      this.renderLayersNow();
+      return;
+    }
+    if (this.layerUpdateFrame !== null) return;
+    this.layerUpdateFrame = requestAnimationFrame(() => {
+      this.layerUpdateFrame = null;
+      this.renderLayersNow();
+    });
+  }
+
+  private renderLayersNow() {
     try {
       this.renderLayers();
     } catch (error) {
@@ -481,27 +531,54 @@ export class SubwayDeckOverlay {
 
     const lineElev = selectedLine ? selectedLine.elevation_offset : 0;
     const labelsLayer = createStationLabelsLayer(displayStations, this.selectedLineId, this.zoom, this.mapCenter, lineElev);
+    const platformsLayer = createPlatformsLayer(
+      displayStations,
+      selectedLine?.mode === 'metro' ? selectedLine : null,
+      selectedLine?.mode === 'metro' ? selectedLinePaths : [],
+      this.zoom
+    );
 
-    const showTrains = Boolean(this.selectedLineId) || this.zoom >= 12.5;
-    const trainLayers = showTrains
-      ? (this.data.shapes && this.data.rollingStockDb
-          ? createCapsuleLayers({
-              trains: this.trains,
-              shapes: this.data.shapes,
-              rollingStockDb: this.data.rollingStockDb,
-              zoom: this.zoom,
-              mapCenter: this.mapCenter,
-              selectedLineId: this.selectedLineId,
-              selectedTrainId: this.selectedTrainId,
-              onHover: this.onTrainHover,
-              onClick: (train) => {
-                this.selectedTrainId = train.id;
-                this.onTrainClick(train);
-                this.updateLayers();
-              }
-            })
-          : createTrainsLayers(this.trains, this.selectedLineId, this.onTrainHover, this.onTrainClick, this.zoom))
+    const demoRer = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('demo-rer');
+    const showTrainModels = trainModelsEnabled() && (this.zoom > TRAIN_MODEL_ZOOM_THRESHOLD || Boolean(demoRer));
+    if (showTrainModels && this.data?.rollingStockDb) {
+      for (const train of this.trains) {
+        requestTrainModel(train, this.data.rollingStockDb);
+      }
+    }
+
+    const modelLayers = showTrainModels && this.data?.shapes && this.data?.rollingStockDb
+      ? createTrainModelLayers({
+          trains: this.trains,
+          shapes: this.data.shapes,
+          rollingStockDb: this.data.rollingStockDb,
+          grazingCamera: this.pitch >= 45,
+          bounds: this.bounds,
+          elevationOffset: this.followElevationLineId
+            ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
+            : undefined
+        })
       : [];
+    const capsuleLayers = this.data?.shapes && this.data?.rollingStockDb
+      ? createCapsuleLayers({
+          trains: this.trains,
+          shapes: this.data.shapes,
+          tracks,
+          rollingStockDb: this.data.rollingStockDb,
+          mapCenter: this.mapCenter,
+          selectedLineId: this.selectedLineId,
+          selectedTrainId: this.selectedTrainId,
+          onHover: this.onTrainHover,
+          onClick: (train) => {
+            if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+            this.selectedTrainId = train.id;
+            this.onTrainClick(train);
+            this.updateLayers();
+          }
+        })
+      : createTrainsLayers(this.trains, this.selectedLineId, this.onTrainHover, this.onTrainClick, this.zoom);
+    const trainLayers = isTrainModelSpikeEnabled()
+      ? []
+      : resolveTrainRenderLayers(modelLayers, capsuleLayers);
 
     let rerLayer: any = null;
     if (this.showRer && this.rerTracks.length > 0) {
@@ -533,17 +610,44 @@ export class SubwayDeckOverlay {
     if (rerLayer) {
       layers.push(rerLayer); // RER placé SOUS les lignes de métro
     }
+    const lineHitboxes = visibleLineOrder.map(line => new PathLayer<any>({
+      id: `subway-track-${line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-')}-hitbox`,
+      data: tracksByLine.get(line.id) || [],
+      pickable: true,
+      widthUnits: 'pixels',
+      getWidth: () => trackWidthAtZoom(false) + 14,
+      getPath: pathForTrack as any,
+      getColor: [0, 0, 0, 0],
+      opacity: revealOpacityFor(line.id),
+      capRounded: true,
+      jointRounded: true,
+      parameters: { depthTest: false, depthWriteEnabled: false } as any,
+      onClick: () => this.onLineSelect(line.id),
+      onHover: this.onStationHover,
+      updateTriggers: { getWidth: [this.zoom] }
+    }));
     layers.push(
+      ...lineHitboxes,
       ...pathLayers,
+      ...(platformsLayer ? [platformsLayer] : []),
       stationsLayer,
       terminusLayer,
       ...trainLayers
     );
+    const trainModelSpikeLayer = createTrainModelSpikeLayer();
+    if (trainModelSpikeLayer) {
+      layers.push(trainModelSpikeLayer);
+    }
     if (labelsLayer) {
       layers.push(labelsLayer);
     }
 
-    this.overlay.setProps({ layers });
+    this.overlay.setProps({
+      layers,
+      onClick: (info: any) => {
+        if (!info.object) this.onBackgroundClick();
+      }
+    });
   }
 
   /**

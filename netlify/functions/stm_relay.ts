@@ -1,5 +1,25 @@
 import https from 'https';
+import fs from 'fs';
+import path from 'path';
 import type { LineTrafficReport } from '../../core/types';
+
+export function getStmApiKey(): string {
+  if (process.env.STM_API_KEY) return process.env.STM_API_KEY.trim();
+  for (const file of ['.env.local', '.env']) {
+    try {
+      const p = path.resolve(process.cwd(), file);
+      if (fs.existsSync(p)) {
+        const text = fs.readFileSync(p, 'utf8');
+        for (const line of text.split('\n')) {
+          if (line.trim().startsWith('STM_API_KEY=')) {
+            return line.split('=', 2)[1].trim().replace(/^['"]|['"]$/g, '');
+          }
+        }
+      }
+    } catch {}
+  }
+  return '';
+}
 
 export interface StmSnapshot {
   producedAt: string;
@@ -268,7 +288,7 @@ export async function fetchStmEtatService(
 
 export const handler = async (event: any, context: any) => {
   const now = Date.now();
-  const apiKey = (process.env.STM_API_KEY || '').trim();
+  const apiKey = getStmApiKey();
   const origin = (process.env.STM_ORIGIN || 'https://parisian3dsubway.netlify.app').trim();
 
   // 1. Operating hours check (Dynamic GTFS Montreal)

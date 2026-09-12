@@ -45,6 +45,7 @@ interface ModelLayerParams {
   rollingStockDb: RollingStockDatabase;
   grazingCamera: boolean;
   bounds?: [[number, number], [number, number]] | null;
+  selectedTrainId?: string | null;
   elevationOffset?: { lineId: string; offset: number };
   onClick?: (train: TrainMarker) => void;
   onHover?: (info: any) => void;
@@ -146,7 +147,7 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
     if (!shape) continue;
     const stock = getRollingStockForLine(params.rollingStockDb, train.line || train.lineName);
     if (familyForStock(stock) !== family) continue;
-    if (params.bounds) {
+    if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
       const [[west, south], [east, north]] = params.bounds;
       if (train.pos[0] < west || train.pos[0] > east || train.pos[1] < south || train.pos[1] > north) continue;
     }
@@ -195,7 +196,7 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
   if (!trainModelsEnabled()) return [];
   const usedFamilies = new Set<TrainModelFamily>();
   for (const train of params.trains) {
-    if (params.bounds) {
+    if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
       const [[west, south], [east, north]] = params.bounds;
       if (train.pos[0] < west || train.pos[0] > east || train.pos[1] < south || train.pos[1] > north) continue;
     }

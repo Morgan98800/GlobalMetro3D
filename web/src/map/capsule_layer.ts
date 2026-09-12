@@ -1,20 +1,73 @@
-import { PathLayer, TextLayer } from '@deck.gl/layers';
+import { PathLayer, TextLayer, ScatterplotLayer } from '@deck.gl/layers';
 import { PathStyleExtension, CollisionFilterExtension } from '@deck.gl/extensions';
 import type { TrainMarker } from './trains_layer';
 import { createTrainsLayers } from './trains_layer';
 import type { ShapeEntry } from '../sim/shapes';
 import { sliceShape, splitIntoCars } from '../sim/shapes';
+import { coordAtDistance } from '../sim/shapes_loader';
 import type { RollingStockDatabase, LineRollingStock } from '../sim/rolling_stock';
 import { getRollingStockForLine } from '../sim/rolling_stock';
 import { hexToRgba } from './deck_overlay';
+import { LATIN_CHARACTER_SET } from './labels_layer';
 
 const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
+const NEUTRAL_BODY_COLORS = [
+  '#F1EFEA', '#FFFFFF', '#767676', '#6E6E6E', '#686868',
+  '#646464', '#5F5F5F', '#4E4E4E', '#3B3D3D'
+];
+
+function relativeLuminance(hex: string): number {
+  const channels = [1, 3, 5].map((offset) => parseInt(hex.slice(offset, offset + 2), 16) / 255);
+  const linear = channels.map((channel) =>
+    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4
+  );
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+}
+
+function contrastRatio(first: string, second: string): number {
+  const firstLum = relativeLuminance(first);
+  const secondLum = relativeLuminance(second);
+  const lighter = Math.max(firstLum, secondLum);
+  const darker = Math.min(firstLum, secondLum);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function getNeutralBodyColor(lineColor: string): [number, number, number, number] {
+  const normalized = lineColor.toUpperCase();
+  const selected = NEUTRAL_BODY_COLORS.find((neutral) => contrastRatio(neutral, normalized) >= 3) ?? '#3B3D3D';
+  return hexToRgba(selected, 255);
+}
+
+function getNeutralNoseColor(bodyColor: [number, number, number, number]): [number, number, number, number] {
+  const isLight = bodyColor[0] + bodyColor[1] + bodyColor[2] > 450;
+  return isLight ? [59, 61, 61, 255] : [241, 239, 234, 255];
+}
+
+function pointToTrackDistanceM(point: [number, number], path: [number, number][]): number {
+  const latScale = 111320;
+  const lonScale = latScale * Math.cos((point[1] * Math.PI) / 180);
+  const px = point[0] * lonScale;
+  const py = point[1] * latScale;
+  let best = Number.POSITIVE_INFINITY;
+  for (let i = 1; i < path.length; i++) {
+    const ax = path[i - 1][0] * lonScale;
+    const ay = path[i - 1][1] * latScale;
+    const bx = path[i][0] * lonScale;
+    const by = path[i][1] * latScale;
+    const vx = bx - ax;
+    const vy = by - ay;
+    const lengthSquared = vx * vx + vy * vy;
+    const t = lengthSquared ? Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / lengthSquared)) : 0;
+    best = Math.min(best, Math.hypot(px - (ax + t * vx), py - (ay + t * vy)));
+  }
+  return best;
+}
 
 export interface CapsuleLayerParams {
   trains: TrainMarker[];
   shapes: Map<string, ShapeEntry>;
+  tracks?: Array<{ line_id: string; coordinates: [number, number][] }>;
   rollingStockDb: RollingStockDatabase;
-  zoom: number;
   mapCenter: [number, number];
   selectedLineId: string | null;
   selectedTrainId?: string | null;
@@ -39,6 +92,13 @@ export interface RenderCarSegment {
   train: TrainMarker;
 }
 
+export interface RenderLightPoint {
+  pos: [number, number];
+  radiusM: number;
+  color: [number, number, number, number];
+  elevation: number;
+}
+
 export interface RenderTrainLabel {
   headPos: [number, number];
   lineName: string;
@@ -50,125 +110,101 @@ export interface RenderTrainLabel {
 }
 
 /**
- * Lightens a hex color by a given percentage in HSL color space.
- * Used for the train roof highlight (Layer 3).
+ * Computes dual headlights and taillights points positioned on the left and right
+ * edges of the front and rear cabs.
  */
-export function lightenHexToRgba(hex: string, percent: number = 25, alpha: number = 255): [number, number, number, number] {
-  const c = hex.replace('#', '');
-  if (c.length !== 6) return [255, 255, 255, alpha];
-  const r = parseInt(c.substring(0, 2), 16) / 255;
-  const g = parseInt(c.substring(2, 4), 16) / 255;
-  const b = parseInt(c.substring(4, 6), 16) / 255;
+function computeTrainLights(
+  shape: ShapeEntry,
+  headD: number,
+  tailD: number,
+  widthM: number,
+  elevation: number
+): RenderLightPoint[] {
+  const points: RenderLightPoint[] = [];
+  const latFactor = 111320;
 
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h = 0;
-  let s = 0;
-  let l = (max + min) / 2;
+  // 1. Dual Headlights (Avant / Tête de rame)
+  const pHead = coordAtDistance(shape, headD);
+  const pPrev = coordAtDistance(shape, Math.max(0, headD - 1.5));
+  const cosLatHead = Math.cos((pHead[1] * Math.PI) / 180);
+  const dxHead = (pHead[0] - pPrev[0]) * cosLatHead * latFactor;
+  const dyHead = (pHead[1] - pPrev[1]) * latFactor;
+  const lenHead = Math.hypot(dxHead, dyHead);
 
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
+  if (lenHead > 0.001) {
+    const nx = -dyHead / lenHead;
+    const ny = dxHead / lenHead;
+    const lateralDist = widthM * 0.32;
+    const offLng = (nx * lateralDist) / (latFactor * cosLatHead);
+    const offLat = (ny * lateralDist) / latFactor;
+
+    // Luminous bright warm white LED headlights (100% opaque)
+    const headlightColor: [number, number, number, number] = [255, 255, 210, 255];
+    points.push(
+      {
+        pos: [pHead[0] + offLng, pHead[1] + offLat],
+        radiusM: 0.75,
+        color: headlightColor,
+        elevation: elevation + 3.2
+      },
+      {
+        pos: [pHead[0] - offLng, pHead[1] - offLat],
+        radiusM: 0.75,
+        color: headlightColor,
+        elevation: elevation + 3.2
+      }
+    );
   }
 
-  l = Math.min(1.0, l + percent / 100);
+  // 2. Dual Taillights (Arrière / Queue de rame)
+  const pTail = coordAtDistance(shape, tailD);
+  const pNext = coordAtDistance(shape, Math.min(shape.length, tailD + 1.5));
+  const cosLatTail = Math.cos((pTail[1] * Math.PI) / 180);
+  const dxTail = (pNext[0] - pTail[0]) * cosLatTail * latFactor;
+  const dyTail = (pNext[1] - pTail[1]) * latFactor;
+  const lenTail = Math.hypot(dxTail, dyTail);
 
-  const hue2rgb = (p: number, q: number, t: number) => {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
+  if (lenTail > 0.001) {
+    const nx = -dyTail / lenTail;
+    const ny = dxTail / lenTail;
+    const lateralDist = widthM * 0.32;
+    const offLng = (nx * lateralDist) / (latFactor * cosLatTail);
+    const offLat = (ny * lateralDist) / latFactor;
 
-  let rOut: number, gOut: number, bOut: number;
-  if (s === 0) {
-    rOut = gOut = bOut = l;
-  } else {
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-    rOut = hue2rgb(p, q, h + 1 / 3);
-    gOut = hue2rgb(p, q, h);
-    bOut = hue2rgb(p, q, h - 1 / 3);
+    // Luminous bright ruby red LED taillights (100% opaque)
+    const taillightColor: [number, number, number, number] = [255, 30, 50, 255];
+    points.push(
+      {
+        pos: [pTail[0] + offLng, pTail[1] + offLat],
+        radiusM: 0.70,
+        color: taillightColor,
+        elevation: elevation + 3.2
+      },
+      {
+        pos: [pTail[0] - offLng, pTail[1] - offLat],
+        radiusM: 0.70,
+        color: taillightColor,
+        elevation: elevation + 3.2
+      }
+    );
   }
 
-  return [Math.round(rOut * 255), Math.round(gOut * 255), Math.round(bOut * 255), alpha];
+  return points;
 }
 
 /**
- * Darkens a hex color by a given percentage in HSL color space.
- * Used for train body color (Layer 2, ~35% darker than line color).
- */
-export function darkenHexToRgba(hex: string, percent: number = 35, alpha: number = 255): [number, number, number, number] {
-  const c = hex.replace('#', '');
-  if (c.length !== 6) return [30, 30, 30, alpha];
-  const r = parseInt(c.substring(0, 2), 16) / 255;
-  const g = parseInt(c.substring(2, 4), 16) / 255;
-  const b = parseInt(c.substring(4, 6), 16) / 255;
-
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h = 0;
-  let s = 0;
-  let l = (max + min) / 2;
-
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-
-  l = Math.max(0.0, l * (1 - percent / 100));
-
-  const hue2rgb = (p: number, q: number, t: number) => {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
-
-  let rOut: number, gOut: number, bOut: number;
-  if (s === 0) {
-    rOut = gOut = bOut = l;
-  } else {
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-    rOut = hue2rgb(p, q, h + 1 / 3);
-    gOut = hue2rgb(p, q, h);
-    bOut = hue2rgb(p, q, h - 1 / 3);
-  }
-
-  return [Math.round(rOut * 255), Math.round(gOut * 255), Math.round(bOut * 255), alpha];
-}
-
-/**
- * Creates the 5-layer deck.gl capsule rendering stack:
- * 1. contour   — tranche entière non découpée, largeur = width + 1,2 m, teinte sombre
- * 2. caisses   — sous-tranches par voiture, largeur = width, couleur de ligne assombrie d'environ 35 %
- * 3. toit      — sous-tranches par voiture, largeur = width × 0,35, teinte éclaircie
- * 4. nez       — 2,5 m à la tête de la rame, largeur = width, teinte de livrée
- * 5. étiquettes — TextLayer positionné sur la tête de la rame
+ * Creates the high-contrast Deck.gl rolling stock rendering stack:
+ * - PathLayer car bodies sliced directly from the canonical shape
+ * - PathLayer roofs following the same per-car slices
+ * - High-visibility outline halo
+ * - Inter-car gangways & LED headlights/taillights
  */
 export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   const {
     trains,
     shapes,
+    tracks = [],
     rollingStockDb,
-    zoom,
     mapCenter,
     selectedLineId,
     selectedTrainId,
@@ -176,17 +212,21 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     onClick
   } = params;
 
+  const map = typeof window !== 'undefined' ? (window as any).__map : null;
+  const zoom = typeof map?.getZoom === 'function' ? map.getZoom() : 13;
+  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'trains') {
+    const overlayZoom = Number((window as any).__deckOverlayZoom ?? zoom);
+    if (Math.abs(overlayZoom - zoom) > 0.1) {
+      console.warn('[trains-debug] zoom désynchronisé', { mapZoom: zoom, overlayZoom });
+    }
+  }
+
   const isMobile =
     typeof window !== 'undefined' &&
     (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));
 
-  // LOD thresholds:
-  // < z13: pastille haute visibilité
-  // z13–z14.5: capsule monolithique
-  // > z14.5: capsule détaillée avec voitures
-  // >= z13.5: étiquettes
-  const minCapsuleZoom = 13.0;
-  const detailedZoom = isMobile ? 14.5 : 13.5;
+  const minCapsuleZoom = 9.0;
+  const detailedZoom = isMobile ? 14.2 : 13.5;
   const labelZoom = isMobile ? 14.0 : 13.0;
 
   // Branch LOD BEFORE slicing loop: zero slicing computation for trains rendered as points
@@ -194,11 +234,14 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     return createTrainsLayers(trains, selectedLineId, onHover, onClick, zoom);
   }
 
-  let activeTrains = selectedLineId ? trains.filter(t => t.line === selectedLineId) : trains;
+  let activeTrains = selectedLineId
+    ? trains.filter(t => t.line === selectedLineId || (selectedTrainId && t.id === selectedTrainId))
+    : trains;
 
   // Mobile capping: max 150 closest to map center
   if (isMobile && activeTrains.length > 150) {
     const [cLon, cLat] = mapCenter;
+    const selected = selectedTrainId ? activeTrains.find(t => t.id === selectedTrainId) : null;
     activeTrains = [...activeTrains]
       .sort((a, b) => {
         const dA = (a.pos[0] - cLon) ** 2 + (a.pos[1] - cLat) ** 2;
@@ -206,19 +249,26 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         return dA - dB;
       })
       .slice(0, 150);
+    if (selected && !activeTrains.some(t => t.id === selected.id)) {
+      activeTrains.push(selected);
+    }
   }
 
-  const isMonolithic = zoom < detailedZoom;
   const isDetailed = zoom >= detailedZoom;
   const showLabels = zoom >= labelZoom;
 
   const outlineSegments: RenderOutlineSegment[] = [];
-  const bodySegments: RenderCarSegment[] = [];
-  const roofSegments: RenderCarSegment[] = [];
+  const carBodies: RenderCarSegment[] = [];
+  const carRoofs: RenderCarSegment[] = [];
+  const gangwaySegments: RenderCarSegment[] = [];
   const noseSegments: RenderCarSegment[] = [];
+  const lightPoints: RenderLightPoint[] = [];
   const labelsData: RenderTrainLabel[] = [];
   const fallbackTrains: TrainMarker[] = [];
-
+  const debugTrains = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'trains';
+  const debugRows: Array<Record<string, unknown>> = [];
+  const debugSlices: Array<{ path: [number, number][]; color: [number, number, number, number]; widthM: number }> = [];
+  const debugShapeIds = new Set<string>();
   for (const train of activeTrains) {
     if (!train.shapeId) {
       fallbackTrains.push(train);
@@ -234,84 +284,147 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     const headD = train.currentDistM ?? 0;
     const tailD = Math.max(0, headD - stock.total_length_m);
     const elev = train.elevation || 0;
-    const alpha = train.conf === 'scheduled' ? 166 : 255; // 65% opacity for GTFS theoretical confidence
+    const lodLevel = zoom < minCapsuleZoom ? 'dot' : zoom >= detailedZoom ? 'full' : 'capsule';
+    const debugShape = shapes.get(train.shapeId);
+    const debugSlice = debugShape ? sliceShape(debugShape, tailD, headD) : [];
+    if (debugTrains) {
+      debugShapeIds.add(train.shapeId);
+      debugRows.push({
+        tripId: train.id,
+        lineId: train.line,
+        dir: train.direction,
+        shapeId: train.shapeId,
+        d: Number(headD.toFixed(1)),
+        shapeLength: Number((debugShape?.length ?? 0).toFixed(1)),
+        sliceLength: debugSlice.length,
+        carsCount: stock.cars_count,
+        widthM: stock.width_m,
+        lodLevel,
+        confidence: train.conf,
+        coordAtD: debugShape ? coordAtDistance(debugShape, headD) : null,
+        zoom: Number(zoom.toFixed(2)),
+        color: train.colorHex,
+        model: stock.model_id,
+        orphanShape: !debugShape,
+        outOfBounds: Boolean(debugShape && (headD < 0 || headD > debugShape.length)),
+        distanceToDisplayTrackM: Math.min(
+          ...tracks.filter((track) => track.line_id === train.line).map((track) => pointToTrackDistanceM(train.pos, track.coordinates)),
+          Number.POSITIVE_INFINITY
+        )
+      });
+      if (debugSlice.length >= 2) {
+        debugSlices.push({ path: debugSlice, color: [255, 255, 255, 255], widthM: 2 });
+      }
+    }
 
-    // 1. Full train slice (always continuous for Layer 1 contour and monolithic body)
+    // 1. Full train slice (always continuous for outline halo)
     const fullPath = sliceShape(shape, tailD, headD);
     if (fullPath.length < 2) {
       fallbackTrains.push(train);
       continue;
     }
 
-    // Layer 1: Outline segment (entire train, width = width + 1.2m)
-    // Recalage PRIM: golden contour for real-time ({measured, bracketed}), dark charcoal for theoretical
     const isRealtime = train.conf === 'measured' || train.conf === 'bracketed';
+    const lineColorRgba = hexToRgba(train.colorHex, 255);
+    const bodyColor = getNeutralBodyColor(train.colorHex);
+    const noseColor = getNeutralNoseColor(bodyColor);
+
+    // Layer 1: Outline halo (Wider than the track to ensure 100% visibility)
     outlineSegments.push({
       path: fullPath,
       widthM: stock.width_m + 1.2,
-      color: isRealtime ? [201, 162, 39, 255] : [15, 23, 42, alpha],
+      color: isRealtime ? [255, 215, 0, 255] : [240, 240, 240, 240],
       isSched: train.conf === 'scheduled',
-      elevation: elev + 1.0,
+      elevation: elev + 0.5,
       train
     });
 
-    if (isMonolithic) {
-      // Monolithic LOD (12-13.5): single capsule without car cuts, roof, or nose
-      bodySegments.push({
+    if (!isDetailed) {
+      // Monolithic path body for the intermediate LOD.
+      carBodies.push({
         path: fullPath,
-        widthM: stock.width_m,
-        color: darkenHexToRgba(train.colorHex, 35, alpha),
-        elevation: elev + 1.1,
+        widthM: Math.max(stock.width_m, 3.2),
+        color: bodyColor,
+        elevation: elev + 1.0,
+        train
+      });
+      carRoofs.push({
+        path: fullPath,
+        widthM: Math.max(stock.width_m * 0.30, 0.8),
+        color: lineColorRgba,
+        elevation: elev + 1.2,
         train
       });
     } else {
-      // Detailed LOD (> 13.5): individual cars split with inter-car gaps
+      // -----------------------------------------------------------------------
+      // Detailed 3D Model LOD (>= 13.5 desktop / 14.2 mobile):
+      // Individual 3D extruded cars, gangways, and LED lighting
+      // -----------------------------------------------------------------------
       const cars = splitIntoCars(shape, headD, stock.cars_count, stock.car_length_m, stock.inter_car_gap_m, 1);
+
+      // A. Car bodies are path slices, never screen-aligned polygons.
       for (const carPath of cars) {
         if (carPath.length >= 2) {
-          // Layer 2: Caisses
-          bodySegments.push({
+          carBodies.push({
             path: carPath,
-            widthM: stock.width_m,
-            color: darkenHexToRgba(train.colorHex, 35, alpha),
-            elevation: elev + 1.1,
+            widthM: Math.max(stock.width_m, 3.2),
+            color: bodyColor,
+            elevation: elev + 1.0,
             train
           });
-
-          // Layer 3: Toit (width = width * 0.35, lightened)
-          roofSegments.push({
+          carRoofs.push({
             path: carPath,
-            widthM: stock.width_m * 0.35,
-            color: lightenHexToRgba(train.colorHex, 25, alpha),
+            widthM: Math.max(stock.width_m * 0.30, 0.8),
+            color: lineColorRgba,
             elevation: elev + 1.2,
             train
           });
         }
       }
 
-      // Layer 4: Nez (2.5m band at the head of the train)
+      // C. Inter-car rubber gangways / soufflets
+      for (let i = 0; i < stock.cars_count - 1; i++) {
+        const carTailD = headD - i * (stock.car_length_m + stock.inter_car_gap_m) - stock.car_length_m;
+        const nextCarHeadD = headD - (i + 1) * (stock.car_length_m + stock.inter_car_gap_m);
+        const gangwayPath = sliceShape(shape, Math.max(0, nextCarHeadD), Math.max(0, carTailD));
+        if (gangwayPath.length >= 2) {
+          gangwaySegments.push({
+            path: gangwayPath,
+            widthM: Math.max(stock.width_m * 0.70, 2.2),
+            color: [40, 40, 42, 255],
+            elevation: elev + 1.6,
+            train
+          });
+        }
+      }
+
+      // D. Front cab aerodynamic nose highlight
       const noseTailD = Math.max(0, headD - 2.5);
       const nosePath = sliceShape(shape, noseTailD, headD);
       if (nosePath.length >= 2) {
         noseSegments.push({
           path: nosePath,
-          widthM: stock.width_m,
-          color: [255, 255, 255, alpha],
-          elevation: elev + 1.3,
+          widthM: Math.max(stock.width_m * 0.90, 2.9),
+          color: noseColor,
+          elevation: elev + 3.8,
           train
         });
       }
+
+      // E. LED Headlights & Taillights
+      const lights = computeTrainLights(shape, headD, tailD, stock.width_m, elev);
+      lightPoints.push(...lights);
     }
 
-    // Layer 5: Labels
+    // Layer: Labels
     if (showLabels) {
       labelsData.push({
         headPos: train.pos,
         lineName: train.lineName,
         colorHex: train.colorHex,
         textColorHex: train.textColorHex,
-        alpha,
-        elevation: elev + 2.0,
+        alpha: 255,
+        elevation: elev + 4.5,
         isSelected: train.id === selectedTrainId || train.line === selectedLineId
       });
     }
@@ -320,20 +433,20 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   const layers: any[] = [];
   const commonPathProps = {
     widthUnits: 'meters' as const,
-    widthMinPixels: 4,
+    widthMinPixels: 3,
     widthMaxPixels: 60,
     capRounded: true,
     jointRounded: true,
     billboard: false,
     autoHighlight: true,
-    highlightColor: [255, 255, 255, 65],
+    highlightColor: [255, 255, 255, 75],
     transitions: { getColor: { duration: 140, easing: easeOut } },
     _pathType: 'open' as const,
     parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
   };
 
   // ---------------------------------------------------------------------------
-  // Layer 1: Contour (Tranche entière, largeur = width + 1.2m, bague dorée / pointillés)
+  // Layer 1: Outline Halo (High contrast base on the tracks)
   // ---------------------------------------------------------------------------
   layers.push(
     new PathLayer<any>({
@@ -362,32 +475,64 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   );
 
   // ---------------------------------------------------------------------------
-  // Layer 2: Caisses (Couleur de ligne assombrie d'environ 35%, largeur = width)
+  // Layer 2: Car bodies as canonical shape slices.
   // ---------------------------------------------------------------------------
-  layers.push(
-    new PathLayer<any>({
-      id: 'subway-trains-capsule-body',
-      data: bodySegments,
-      ...commonPathProps,
-      pickable: false,
-      getWidth: (d: RenderCarSegment) => d.widthM,
-      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-      getColor: (d: RenderCarSegment) => d.color,
-      updateTriggers: {
-        getPath: [trains],
-        getColor: [trains]
-      }
-    })
-  );
+  if (carBodies.length > 0) {
+    layers.push(
+      new PathLayer<RenderCarSegment>({
+        id: 'subway-trains-car-bodies',
+        data: carBodies,
+        ...commonPathProps,
+        getWidth: (d: RenderCarSegment) => d.widthM,
+        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderCarSegment) => d.color,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+        onHover,
+        onClick: (info: any) => {
+          if (info.object && info.object.train) {
+            onClick(info.object.train);
+          }
+        },
+        updateTriggers: {
+          getPath: [trains],
+          getFillColor: [trains],
+          getWidth: [trains]
+        }
+      })
+    );
+  }
 
   // ---------------------------------------------------------------------------
-  // Layer 3: Toit (Sous-tranches, largeur = width × 0.35, teinte éclaircie)
+  // Layer 3: line identity on the same canonical path slices.
   // ---------------------------------------------------------------------------
-  if (isDetailed && roofSegments.length > 0) {
+  if (carRoofs.length > 0) {
+    layers.push(
+      new PathLayer<RenderCarSegment>({
+        id: 'subway-trains-car-roofs',
+        data: carRoofs,
+        ...commonPathProps,
+        pickable: false,
+        getWidth: (d: RenderCarSegment) => d.widthM,
+        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderCarSegment) => d.color,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+        updateTriggers: {
+          getPath: [trains],
+          getFillColor: [trains],
+          getWidth: [trains]
+        }
+      })
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Layer 4: Intercirculations / Soufflets en caoutchouc
+  // ---------------------------------------------------------------------------
+  if (gangwaySegments.length > 0) {
     layers.push(
       new PathLayer<any>({
-        id: 'subway-trains-capsule-roof',
-        data: roofSegments,
+        id: 'subway-trains-capsule-gangways',
+        data: gangwaySegments,
         ...commonPathProps,
         pickable: false,
         getWidth: (d: RenderCarSegment) => d.widthM,
@@ -402,9 +547,9 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   }
 
   // ---------------------------------------------------------------------------
-  // Layer 4: Nez (2.5m tête de rame, largeur = width, livrée blanche éclatante)
+  // Layer 5: Nez blanc éclatant
   // ---------------------------------------------------------------------------
-  if (isDetailed && noseSegments.length > 0) {
+  if (noseSegments.length > 0) {
     layers.push(
       new PathLayer<any>({
         id: 'subway-trains-capsule-nose',
@@ -422,7 +567,31 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   }
 
   // ---------------------------------------------------------------------------
-  // Layer 5: Étiquettes (TextLayer tête de rame, offset [0, -22], collisionFilter)
+  // Layer 6: Phares avant LED & feux arrière LED
+  // ---------------------------------------------------------------------------
+  if (lightPoints.length > 0) {
+    layers.push(
+      new ScatterplotLayer<RenderLightPoint>({
+        id: 'subway-trains-capsule-lights',
+        data: lightPoints,
+        pickable: false,
+        radiusUnits: 'meters',
+        getRadius: (d: RenderLightPoint) => d.radiusM,
+        radiusMinPixels: 4,
+        radiusMaxPixels: 14,
+        getPosition: (d: RenderLightPoint) => [d.pos[0], d.pos[1], d.elevation],
+        getFillColor: (d: RenderLightPoint) => d.color,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+        updateTriggers: {
+          getPosition: [trains],
+          getFillColor: [trains]
+        }
+      })
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Layer 7: Étiquettes de rame
   // ---------------------------------------------------------------------------
   if (showLabels && labelsData.length > 0) {
     layers.push(
@@ -432,14 +601,15 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         pickable: false,
         getPosition: (d: RenderTrainLabel) => [d.headPos[0], d.headPos[1], d.elevation],
         getText: (d: RenderTrainLabel) => d.lineName,
-        getPixelOffset: [0, -22],
+        getPixelOffset: [0, -24],
         getSize: 12,
         getColor: (d: RenderTrainLabel) => hexToRgba(d.textColorHex, d.alpha),
-        getBackgroundColor: (d: RenderTrainLabel) => hexToRgba(d.colorHex, Math.min(235, d.alpha)),
+        getBackgroundColor: (d: RenderTrainLabel) => hexToRgba(d.colorHex, 245),
         background: true,
         backgroundPadding: [6, 4],
         fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
         fontWeight: 700,
+        characterSet: LATIN_CHARACTER_SET,
         billboard: true,
         extensions: [new CollisionFilterExtension()],
         collisionGroup: 'train-labels',
@@ -457,5 +627,58 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     layers.push(...createTrainsLayers(fallbackTrains, selectedLineId, onHover, onClick));
   }
 
+  if (debugTrains) {
+    const line1Rows = debugRows.filter((row) => row.lineId === 'IDFM:C01371').slice(0, 10);
+    console.table(line1Rows);
+    const orphanByLine: Record<string, number> = {};
+    const outOfBoundsByLine: Record<string, number> = {};
+    for (const row of debugRows) {
+      if (row.orphanShape) orphanByLine[String(row.lineId)] = (orphanByLine[String(row.lineId)] || 0) + 1;
+      if (row.outOfBounds) outOfBoundsByLine[String(row.lineId)] = (outOfBoundsByLine[String(row.lineId)] || 0) + 1;
+    }
+    const debugReport = {
+      mapZoom: typeof map?.getZoom === 'function' ? map.getZoom() : null,
+      overlayZoom: typeof window !== 'undefined' ? (window as any).__deckOverlayZoom ?? null : null,
+      activeTrains: debugRows.length,
+      emptySlices: debugRows.filter((row) => Number(row.sliceLength) < 2).length,
+      emptySliceRate: debugRows.length ? debugRows.filter((row) => Number(row.sliceLength) < 2).length / debugRows.length : 0,
+      orphanShapes: debugRows.filter((row) => row.orphanShape).length,
+      orphanByLine,
+      outOfBounds: debugRows.filter((row) => row.outOfBounds).length,
+      outOfBoundsByLine,
+      shapeIdsLoaded: debugShapeIds.size,
+      lodAtCurrentZoom: debugRows[0]?.lodLevel ?? null,
+      colors: debugRows.map((row) => ({ lineId: row.lineId, color: row.color, model: row.model }))
+    };
+    (window as any).__trainDebugRows = debugRows;
+    (window as any).__trainDebugReport = debugReport;
+    console.log('[trains-debug] report', debugReport);
+
+    const debugSourcePaths = [...debugShapeIds].map((shapeId) => {
+      const shape = shapes.get(shapeId);
+      return shape ? { path: Array.from({ length: shape.coords.length / 2 }, (_, i) => [shape.coords[i * 2], shape.coords[i * 2 + 1]] as [number, number]), color: [255, 0, 255, 220] } : null;
+    }).filter(Boolean);
+    const debugDisplayPaths = tracks
+      .filter((track) => !selectedLineId || track.line_id === selectedLineId)
+      .map((track) => ({ path: track.coordinates, color: [0, 255, 255, 220] }));
+    layers.push(new PathLayer<any>({
+      id: 'trains-debug-source-magenta', data: debugSourcePaths, widthUnits: 'pixels', getWidth: 1,
+      getPath: (d: any) => d.path, getColor: (d: any) => d.color, pickable: false,
+      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
+    }));
+    layers.push(new PathLayer<any>({
+      id: 'trains-debug-display-cyan', data: debugDisplayPaths, widthUnits: 'pixels', getWidth: 1,
+      getPath: (d: any) => d.path, getColor: (d: any) => d.color, pickable: false,
+      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
+    }));
+    layers.push(new PathLayer<any>({
+      id: 'trains-debug-slice-white', data: debugSlices, widthUnits: 'pixels', getWidth: (d: any) => d.widthM,
+      getPath: (d: any) => d.path, getColor: (d: any) => d.color, pickable: false,
+      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
+    }));
+  }
+
   return layers;
 }
+
+

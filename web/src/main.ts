@@ -469,7 +469,8 @@ async function bootstrap() {
   const focusTrain = (train: TrainMarker) => {
     hideTooltip();
     trackedTrain = train;
-    if (!followCamera?.startFollow(train.id)) {
+    deckOverlay.setSelectedTrain(train.id);
+    if (!followCamera?.startFollow(train)) {
       map.flyTo({
         center: train.pos,
         zoom: 15.5,
@@ -580,6 +581,9 @@ async function bootstrap() {
               <span>Écart : ${delayText}</span>
               ${confBadge}
             </div>
+            <div class="train-tooltip-hint" style="margin-top: 0.35rem; font-size: 0.72rem; color: #94a3b8; display: flex; align-items: center; gap: 4px;">
+              <span>👆</span><span>Cliquer pour suivre en 3D</span>
+            </div>
           </div>
         `;
         tooltipEl.style.left = `${info.x}px`;
@@ -629,6 +633,8 @@ async function bootstrap() {
       hideTooltip();
       activeLineId = lineId;
       trackedTrain = null;
+      followCamera?.stopFollow();
+      deckOverlay.setSelectedTrain(null);
       deckOverlay.setSelectedLine(lineId);
       engine.setFocusedLine(lineId);
 
@@ -656,6 +662,8 @@ async function bootstrap() {
     onStationClick: (station) => {
       hideTooltip();
       trackedTrain = null;
+      followCamera?.stopFollow();
+      deckOverlay.setSelectedTrain(null);
       map.flyTo({
         center: station.coordinates,
         zoom: 15.5,
@@ -673,7 +681,10 @@ async function bootstrap() {
     getTrain: tripId => latestRenderedTrains.get(tripId),
     setFollowElevation: (lineId, offset) => deckOverlay.setFollowElevation(lineId, offset),
     dock: document.getElementById('dock')!,
-    onStop: () => updateRecenterState()
+    onStop: () => {
+      deckOverlay.setSelectedTrain(null);
+      updateRecenterState();
+    }
   });
 
   dock.setData(lines, stations, laddersData);

@@ -254,6 +254,10 @@ export class SubwayDeckOverlay {
     this.updateLayers();
   }
 
+  public setSelectedTrainId(trainId: string | null) {
+    this.setSelectedTrain(trainId);
+  }
+
   public setFollowElevation(lineId: string | null, offset: number): void {
     this.followElevationLineId = lineId;
     this.followElevationOffset = offset;
@@ -553,6 +557,7 @@ export class SubwayDeckOverlay {
           rollingStockDb: this.data.rollingStockDb,
           grazingCamera: this.pitch >= 45,
           bounds: this.bounds,
+          selectedTrainId: this.selectedTrainId,
           elevationOffset: this.followElevationLineId
             ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
             : undefined,

@@ -1,0 +1,1241 @@
+{
+  "meta": {
+    "description": "Montreal Subway 3D Reference Kinematic Simulation Snapshot",
+    "timestampIso": "2026-09-15T12:30:00Z",
+    "serviceDate": "2026-09-15",
+    "civilSeconds": 30600,
+    "totalTrains": 72,
+    "trainsByLine": {
+      "1": 27,
+      "2": 32,
+      "4": 4,
+      "5": 9
+    }
+  },
+  "trains": [
+    {
+      "tripId": "299969308",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 7306.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5522017,
+        45.5335037
+      ],
+      "bearing": 176.2,
+      "nextStation": "Papineau",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299969367",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 6380.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5541894,
+        45.5417168
+      ],
+      "bearing": 185.7,
+      "nextStation": "Frontenac",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299969413",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 5008.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5517493,
+        45.553687
+      ],
+      "bearing": 190.4,
+      "nextStation": "Joliette",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299969425",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 3207,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5473349,
+        45.5692851
+      ],
+      "bearing": 182.1,
+      "nextStation": "Viau",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299969467",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 1653.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5431335,
+        45.582736
+      ],
+      "bearing": 202.5,
+      "nextStation": "Cadillac",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299969525",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 850,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5392688,
+        45.5894313
+      ],
+      "bearing": 201.4,
+      "nextStation": "Radisson",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299969705",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 19217.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5392695,
+        45.589431
+      ],
+      "bearing": 21.4,
+      "nextStation": "Honoré-Beaugrand",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299969761",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 17702.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5467028,
+        45.5768423
+      ],
+      "bearing": 13.2,
+      "nextStation": "Langelier",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299969781",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 15904.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5475415,
+        45.5606892
+      ],
+      "bearing": 11.9,
+      "nextStation": "Assomption",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299969819",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 14296.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.551403,
+        45.5468337
+      ],
+      "bearing": 9.4,
+      "nextStation": "Pie-IX",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299969849",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 12231,
+      "speedKmh": 42,
+      "speedMps": 11.76,
+      "pos": [
+        -73.5524495,
+        45.5287459
+      ],
+      "bearing": 2.1,
+      "nextStation": "Frontenac",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299969883",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 10505.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5610763,
+        45.515223
+      ],
+      "bearing": 39,
+      "nextStation": "Beaudry",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299969914",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 9535.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5684274,
+        45.5082168
+      ],
+      "bearing": 34.7,
+      "nextStation": "Saint-Laurent",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299970009",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 7892.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5793125,
+        45.4955713
+      ],
+      "bearing": 35.4,
+      "nextStation": "Peel",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299970058",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 6149.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5801777,
+        45.4825111
+      ],
+      "bearing": 315.2,
+      "nextStation": "Atwater",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299970075",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 4763.6,
+      "speedKmh": 34,
+      "speedMps": 9.52,
+      "pos": [
+        -73.5678015,
+        45.4747641
+      ],
+      "bearing": 343.8,
+      "nextStation": "Charlevoix",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299970110",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 2841.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5720225,
+        45.4594435
+      ],
+      "bearing": 62.5,
+      "nextStation": "De l'Église",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299970120",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1071",
+      "direction": 0,
+      "currentDistM": 929.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5932425,
+        45.4511578
+      ],
+      "bearing": 55,
+      "nextStation": "Jolicoeur",
+      "destStation": "Honoré-Beaugrand"
+    },
+    {
+      "tripId": "299970340",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 19395.68,
+      "speedKmh": 25,
+      "speedMps": 6.89,
+      "pos": [
+        -73.5959853,
+        45.4498547
+      ],
+      "bearing": 235.9,
+      "nextStation": "Angrignon",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970372",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 18026.6,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5816872,
+        45.457005
+      ],
+      "bearing": 242.2,
+      "nextStation": "Monk",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970428",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 16753.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5670966,
+        45.4619027
+      ],
+      "bearing": 209.1,
+      "nextStation": "Verdun",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970481",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 14875.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5693553,
+        45.4784539
+      ],
+      "bearing": 140.9,
+      "nextStation": "LaSalle",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970489",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 13443.65,
+      "speedKmh": 38,
+      "speedMps": 10.54,
+      "pos": [
+        -73.5829961,
+        45.4862886
+      ],
+      "bearing": 152.4,
+      "nextStation": "Lionel-Groulx",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970511",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 12175.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5793134,
+        45.4955723
+      ],
+      "bearing": 215.4,
+      "nextStation": "Atwater",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970594",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 11054.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5715891,
+        45.5040653
+      ],
+      "bearing": 211.3,
+      "nextStation": "Peel",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970625",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 10114.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5649027,
+        45.5110353
+      ],
+      "bearing": 216.9,
+      "nextStation": "Place-des-Arts",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970633",
+      "line": "1",
+      "lineName": "1",
+      "shapeId": "1_1072",
+      "direction": 1,
+      "currentDistM": 8988.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5558406,
+        45.5188333
+      ],
+      "bearing": 214.3,
+      "nextStation": "Berri-UQAM",
+      "destStation": "Angrignon"
+    },
+    {
+      "tripId": "299970646",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 13121.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5692168,
+        45.5190598
+      ],
+      "bearing": 123.6,
+      "nextStation": "Berri-UQAM",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970656",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 11459.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5869069,
+        45.5273984
+      ],
+      "bearing": 122.5,
+      "nextStation": "Mont-Royal",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970710",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 9812.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6046899,
+        45.5353525
+      ],
+      "bearing": 123.3,
+      "nextStation": "Rosemont",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970762",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 8361.45,
+      "speedKmh": 50,
+      "speedMps": 13.85,
+      "pos": [
+        -73.6213339,
+        45.5411236
+      ],
+      "bearing": 111.7,
+      "nextStation": "Jean-Talon",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970772",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 6479.96,
+      "speedKmh": 38,
+      "speedMps": 10.52,
+      "pos": [
+        -73.6437644,
+        45.5473805
+      ],
+      "bearing": 111.5,
+      "nextStation": "Crémazie",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970815",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_238",
+      "direction": 1,
+      "currentDistM": 1072.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6560156,
+        45.5507586
+      ],
+      "bearing": 114.7,
+      "nextStation": "Sauvé",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970822",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 2574.46,
+      "speedKmh": 56,
+      "speedMps": 15.64,
+      "pos": [
+        -73.6898315,
+        45.5601917
+      ],
+      "bearing": 92.1,
+      "nextStation": "Cartier",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299970839",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 1049.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.7093888,
+        45.5606961
+      ],
+      "bearing": 84.1,
+      "nextStation": "De la Concorde",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971073",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 27974.16,
+      "speedKmh": 28,
+      "speedMps": 7.77,
+      "pos": [
+        -73.7188281,
+        45.5590644
+      ],
+      "bearing": 256.1,
+      "nextStation": "Montmorency",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971083",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 25691.21,
+      "speedKmh": 56,
+      "speedMps": 15.64,
+      "pos": [
+        -73.6898321,
+        45.5601917
+      ],
+      "bearing": 272.1,
+      "nextStation": "De la Concorde",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971137",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 23347.9,
+      "speedKmh": 43,
+      "speedMps": 11.92,
+      "pos": [
+        -73.6620942,
+        45.5530169
+      ],
+      "bearing": 298,
+      "nextStation": "Henri-Bourassa",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971193",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 21391,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6390515,
+        45.5460818
+      ],
+      "bearing": 291.7,
+      "nextStation": "Sauvé",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971240",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 19281,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6139026,
+        45.5390549
+      ],
+      "bearing": 295.8,
+      "nextStation": "Jarry",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971251",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 17293.6,
+      "speedKmh": 39,
+      "speedMps": 10.83,
+      "pos": [
+        -73.5923436,
+        45.529566
+      ],
+      "bearing": 299.6,
+      "nextStation": "Rosemont",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971280",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 15144.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5692177,
+        45.5190601
+      ],
+      "bearing": 303.6,
+      "nextStation": "Mont-Royal",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971307",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 13706.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5566254,
+        45.510047
+      ],
+      "bearing": 359,
+      "nextStation": "Berri-UQAM",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971341",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 12136.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5672358,
+        45.4980865
+      ],
+      "bearing": 37.8,
+      "nextStation": "Square-Victoria–OACI",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971372",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 10868.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5768479,
+        45.4888953
+      ],
+      "bearing": 27.4,
+      "nextStation": "Lucien-L'Allier",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971392",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 8963.97,
+      "speedKmh": 37,
+      "speedMps": 10.21,
+      "pos": [
+        -73.5913731,
+        45.4764257
+      ],
+      "bearing": 75,
+      "nextStation": "Place-Saint-Henri",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971438",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 6955.9,
+      "speedKmh": 37,
+      "speedMps": 10.39,
+      "pos": [
+        -73.615345,
+        45.4781514
+      ],
+      "bearing": 116.4,
+      "nextStation": "Vendôme",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971472",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 4804.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6331114,
+        45.4923484
+      ],
+      "bearing": 136.9,
+      "nextStation": "Snowdon",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971482",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 3193,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6528209,
+        45.4946554
+      ],
+      "bearing": 110.8,
+      "nextStation": "Plamondon",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971512",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_237",
+      "direction": 0,
+      "currentDistM": 831.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.674797,
+        45.5092578
+      ],
+      "bearing": 133.2,
+      "nextStation": "De la Savane",
+      "destStation": "Montmorency"
+    },
+    {
+      "tripId": "299971759",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 27665.07,
+      "speedKmh": 22,
+      "speedMps": 6.16,
+      "pos": [
+        -73.6770074,
+        45.5106411
+      ],
+      "bearing": 311.7,
+      "nextStation": "Côte-Vertu",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971802",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_238",
+      "direction": 1,
+      "currentDistM": 21144.55,
+      "speedKmh": 36,
+      "speedMps": 10.08,
+      "pos": [
+        -73.6571828,
+        45.4973468
+      ],
+      "bearing": 311.5,
+      "nextStation": "De la Savane",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971831",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 23937.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.638264,
+        45.4946345
+      ],
+      "bearing": 286.2,
+      "nextStation": "Namur",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971866",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 22142.2,
+      "speedKmh": 35,
+      "speedMps": 9.84,
+      "pos": [
+        -73.6237754,
+        45.4825709
+      ],
+      "bearing": 315.9,
+      "nextStation": "Snowdon",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971900",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 20297,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6037043,
+        45.4741144
+      ],
+      "bearing": 275.7,
+      "nextStation": "Villa-Maria",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971908",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 18536.2,
+      "speedKmh": 31,
+      "speedMps": 8.5,
+      "pos": [
+        -73.5834046,
+        45.4799145
+      ],
+      "bearing": 221.1,
+      "nextStation": "Place-Saint-Henri",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971944",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 16606.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.571072,
+        45.4947444
+      ],
+      "bearing": 216.8,
+      "nextStation": "Georges-Vanier",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299971994",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_236",
+      "direction": 1,
+      "currentDistM": 15594.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5631217,
+        45.5019382
+      ],
+      "bearing": 213.2,
+      "nextStation": "Bonaventure",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299972037",
+      "line": "2",
+      "lineName": "2",
+      "shapeId": "2_238",
+      "direction": 1,
+      "currentDistM": 9842.1,
+      "speedKmh": 27,
+      "speedMps": 7.46,
+      "pos": [
+        -73.5588235,
+        45.5126295
+      ],
+      "bearing": 148.8,
+      "nextStation": "Champ-de-Mars",
+      "destStation": "Côte-Vertu"
+    },
+    {
+      "tripId": "299972061",
+      "line": "4",
+      "lineName": "4",
+      "shapeId": "4_24",
+      "direction": 1,
+      "currentDistM": 3372.48,
+      "speedKmh": 43,
+      "speedMps": 12.08,
+      "pos": [
+        -73.5251618,
+        45.5214284
+      ],
+      "bearing": 31.8,
+      "nextStation": "Longueuil-Université de Sherbrooke",
+      "destStation": "Longueuil-Université de Sherbrooke"
+    },
+    {
+      "tripId": "299972137",
+      "line": "4",
+      "lineName": "4",
+      "shapeId": "4_24",
+      "direction": 1,
+      "currentDistM": 2194.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5331418,
+        45.5124513
+      ],
+      "bearing": 64.9,
+      "nextStation": "Jean-Drapeau",
+      "destStation": "Longueuil-Université de Sherbrooke"
+    },
+    {
+      "tripId": "299972218",
+      "line": "4",
+      "lineName": "4",
+      "shapeId": "4_25",
+      "direction": 0,
+      "currentDistM": 3459.6,
+      "speedKmh": 44,
+      "speedMps": 12.19,
+      "pos": [
+        -73.5563649,
+        45.5147306
+      ],
+      "bearing": 278,
+      "nextStation": "Berri-UQAM",
+      "destStation": "Berri-UQAM"
+    },
+    {
+      "tripId": "299972294",
+      "line": "4",
+      "lineName": "4",
+      "shapeId": "4_25",
+      "direction": 0,
+      "currentDistM": 1630.6,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.5331306,
+        45.5124337
+      ],
+      "bearing": 244.9,
+      "nextStation": "Jean-Drapeau",
+      "destStation": "Berri-UQAM"
+    },
+    {
+      "tripId": "299972689",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1762",
+      "direction": 1,
+      "currentDistM": 6927.55,
+      "speedKmh": 34,
+      "speedMps": 9.31,
+      "pos": [
+        -73.6152784,
+        45.5065541
+      ],
+      "bearing": 206.7,
+      "nextStation": "Université-de-Montréal",
+      "destStation": "Snowdon"
+    },
+    {
+      "tripId": "299972756",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1762",
+      "direction": 1,
+      "currentDistM": 4603.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6232348,
+        45.5234692
+      ],
+      "bearing": 145.2,
+      "nextStation": "Outremont",
+      "destStation": "Snowdon"
+    },
+    {
+      "tripId": "299972778",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1762",
+      "direction": 1,
+      "currentDistM": 2056.95,
+      "speedKmh": 38,
+      "speedMps": 10.63,
+      "pos": [
+        -73.610981,
+        45.5429525
+      ],
+      "bearing": 207.9,
+      "nextStation": "Jean-Talon",
+      "destStation": "Snowdon"
+    },
+    {
+      "tripId": "299973141",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1763",
+      "direction": 0,
+      "currentDistM": 8818.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6019938,
+        45.5536195
+      ],
+      "bearing": 22.6,
+      "nextStation": "Saint-Michel",
+      "destStation": "Saint-Michel"
+    },
+    {
+      "tripId": "299973175",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1763",
+      "direction": 0,
+      "currentDistM": 6649.05,
+      "speedKmh": 25,
+      "speedMps": 6.94,
+      "pos": [
+        -73.6168647,
+        45.5372944
+      ],
+      "bearing": 48.6,
+      "nextStation": "Jean-Talon",
+      "destStation": "Saint-Michel"
+    },
+    {
+      "tripId": "299973296",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1763",
+      "direction": 0,
+      "currentDistM": 4893.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6232365,
+        45.5234681
+      ],
+      "bearing": 325.2,
+      "nextStation": "Parc",
+      "destStation": "Saint-Michel"
+    },
+    {
+      "tripId": "299973400",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1763",
+      "direction": 0,
+      "currentDistM": 2569.25,
+      "speedKmh": 34,
+      "speedMps": 9.31,
+      "pos": [
+        -73.6152785,
+        45.5065539
+      ],
+      "bearing": 26.7,
+      "nextStation": "Édouard-Montpetit",
+      "destStation": "Saint-Michel"
+    },
+    {
+      "tripId": "299973417",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1763",
+      "direction": 0,
+      "currentDistM": 1317.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.623379,
+        45.4968437
+      ],
+      "bearing": 23.6,
+      "nextStation": "Côte-des-Neiges",
+      "destStation": "Saint-Michel"
+    },
+    {
+      "tripId": "299973728",
+      "line": "5",
+      "lineName": "5",
+      "shapeId": "5_1762",
+      "direction": 1,
+      "currentDistM": 9496.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -73.6277569,
+        45.4854032
+      ],
+      "bearing": 195,
+      "nextStation": "Snowdon",
+      "destStation": "Snowdon"
+    }
+  ]
+}

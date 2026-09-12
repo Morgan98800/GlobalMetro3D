@@ -9,9 +9,9 @@
     {
       "originalPath": "_headers",
       "normalizedPath": "_headers",
-      "sizeBytes": 335,
-      "minSize1Pct": 331,
-      "maxSize1Pct": 339
+      "sizeBytes": 406,
+      "minSize1Pct": 401,
+      "maxSize1Pct": 411
     },
     {
       "originalPath": "_redirects",
@@ -287,11 +287,11 @@
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-yLXF3MYx.js",
+      "originalPath": "assets/main-BmIlJdXQ.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2555929,
-      "minSize1Pct": 2530369,
-      "maxSize1Pct": 2581488
+      "sizeBytes": 2557568,
+      "minSize1Pct": 2531992,
+      "maxSize1Pct": 2583144
     },
     {
       "originalPath": "assets/main-BwmFSn1c.css",
@@ -355,7 +355,7 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-yLXF3MYx.js",
+      "url": "/assets/main-BmIlJdXQ.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

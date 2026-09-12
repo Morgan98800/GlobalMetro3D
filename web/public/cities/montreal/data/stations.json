@@ -1,0 +1,755 @@
+[
+  {
+    "id": "STATION_M542",
+    "name": "Acadie",
+    "coordinates": [
+      -73.623285,
+      45.523383
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M118",
+    "name": "Angrignon",
+    "coordinates": [
+      -73.603118,
+      45.446466
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M162",
+    "name": "Assomption",
+    "coordinates": [
+      -73.547566,
+      45.569257
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M134",
+    "name": "Atwater",
+    "coordinates": [
+      -73.586078,
+      45.489796
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M270",
+    "name": "Beaubien",
+    "coordinates": [
+      -73.605037,
+      45.535078
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M148",
+    "name": "Beaudry",
+    "coordinates": [
+      -73.557307,
+      45.519488
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M146",
+    "name": "Berri-UQAM",
+    "coordinates": [
+      -73.561025,
+      45.515242
+    ],
+    "lines": [
+      "1",
+      "2",
+      "4"
+    ]
+  },
+  {
+    "id": "STATION_M252",
+    "name": "Bonaventure",
+    "coordinates": [
+      -73.567293,
+      45.49813
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M164",
+    "name": "Cadillac",
+    "coordinates": [
+      -73.54671,
+      45.576843
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M282",
+    "name": "Cartier",
+    "coordinates": [
+      -73.682229,
+      45.560043
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M258",
+    "name": "Champ-de-Mars",
+    "coordinates": [
+      -73.556445,
+      45.510064
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M130",
+    "name": "Charlevoix",
+    "coordinates": [
+      -73.569336,
+      45.478465
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M276",
+    "name": "Crémazie",
+    "coordinates": [
+      -73.638842,
+      45.545999
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M234",
+    "name": "Côte-Sainte-Catherine",
+    "coordinates": [
+      -73.633104,
+      45.492344
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M222",
+    "name": "Côte-Vertu",
+    "coordinates": [
+      -73.682752,
+      45.514254
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M534",
+    "name": "Côte-des-Neiges",
+    "coordinates": [
+      -73.623389,
+      45.496778
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M554",
+    "name": "D'Iberville",
+    "coordinates": [
+      -73.601986,
+      45.553578
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M546",
+    "name": "De Castelnau",
+    "coordinates": [
+      -73.619874,
+      45.535469
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M126",
+    "name": "De l'Église",
+    "coordinates": [
+      -73.567074,
+      45.461894
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M286",
+    "name": "De la Concorde",
+    "coordinates": [
+      -73.709391,
+      45.560686
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M228",
+    "name": "De la Savane",
+    "coordinates": [
+      -73.66158,
+      45.500087
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M224",
+    "name": "Du Collège",
+    "coordinates": [
+      -73.674705,
+      45.509168
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M552",
+    "name": "Fabre",
+    "coordinates": [
+      -73.608152,
+      45.546738
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M152",
+    "name": "Frontenac",
+    "coordinates": [
+      -73.552216,
+      45.533526
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M248",
+    "name": "Georges-Vanier",
+    "coordinates": [
+      -73.576457,
+      45.488941
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M136",
+    "name": "Guy-Concordia",
+    "coordinates": [
+      -73.57931,
+      45.49557
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M280",
+    "name": "Henri-Bourassa",
+    "coordinates": [
+      -73.668474,
+      45.554441
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M170",
+    "name": "Honoré-Beaugrand",
+    "coordinates": [
+      -73.535357,
+      45.596572
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M274",
+    "name": "Jarry",
+    "coordinates": [
+      -73.628721,
+      45.543156
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M452",
+    "name": "Jean-Drapeau",
+    "coordinates": [
+      -73.533128,
+      45.512454
+    ],
+    "lines": [
+      "4"
+    ]
+  },
+  {
+    "id": "STATION_M272",
+    "name": "Jean-Talon",
+    "coordinates": [
+      -73.615064,
+      45.539201
+    ],
+    "lines": [
+      "2",
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M122",
+    "name": "Jolicoeur",
+    "coordinates": [
+      -73.581946,
+      45.45703
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M156",
+    "name": "Joliette",
+    "coordinates": [
+      -73.551418,
+      45.54684
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M128",
+    "name": "LaSalle",
+    "coordinates": [
+      -73.566267,
+      45.471063
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M166",
+    "name": "Langelier",
+    "coordinates": [
+      -73.543148,
+      45.582745
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M266",
+    "name": "Laurier",
+    "coordinates": [
+      -73.587002,
+      45.527436
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M132",
+    "name": "Lionel-Groulx",
+    "coordinates": [
+      -73.58018,
+      45.482509
+    ],
+    "lines": [
+      "1",
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M454",
+    "name": "Longueuil-Université de Sherbrooke",
+    "coordinates": [
+      -73.521976,
+      45.52463
+    ],
+    "lines": [
+      "4"
+    ]
+  },
+  {
+    "id": "STATION_M250",
+    "name": "Lucien-L'Allier",
+    "coordinates": [
+      -73.571103,
+      45.494765
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M140",
+    "name": "McGill",
+    "coordinates": [
+      -73.571657,
+      45.504096
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M120",
+    "name": "Monk",
+    "coordinates": [
+      -73.593242,
+      45.451158
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M264",
+    "name": "Mont-Royal",
+    "coordinates": [
+      -73.581707,
+      45.524815
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M288",
+    "name": "Montmorency",
+    "coordinates": [
+      -73.722422,
+      45.558459
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M230",
+    "name": "Namur",
+    "coordinates": [
+      -73.652778,
+      45.494688
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M540",
+    "name": "Outremont",
+    "coordinates": [
+      -73.614856,
+      45.520281
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M150",
+    "name": "Papineau",
+    "coordinates": [
+      -73.552964,
+      45.524115
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M544",
+    "name": "Parc",
+    "coordinates": [
+      -73.624559,
+      45.530177
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M138",
+    "name": "Peel",
+    "coordinates": [
+      -73.574715,
+      45.500879
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M158",
+    "name": "Pie-IX",
+    "coordinates": [
+      -73.551701,
+      45.55371
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M244",
+    "name": "Place-Saint-Henri",
+    "coordinates": [
+      -73.586629,
+      45.47732
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M256",
+    "name": "Place-d'Armes",
+    "coordinates": [
+      -73.559548,
+      45.506348
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M142",
+    "name": "Place-des-Arts",
+    "coordinates": [
+      -73.568433,
+      45.50822
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M232",
+    "name": "Plamondon",
+    "coordinates": [
+      -73.638269,
+      45.494656
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M154",
+    "name": "Préfontaine",
+    "coordinates": [
+      -73.554192,
+      45.541717
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M168",
+    "name": "Radisson",
+    "coordinates": [
+      -73.539224,
+      45.589414
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M268",
+    "name": "Rosemont",
+    "coordinates": [
+      -73.597696,
+      45.531736
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M144",
+    "name": "Saint-Laurent",
+    "coordinates": [
+      -73.564963,
+      45.511081
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M556",
+    "name": "Saint-Michel",
+    "coordinates": [
+      -73.600023,
+      45.559573
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M278",
+    "name": "Sauvé",
+    "coordinates": [
+      -73.656102,
+      45.550895
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M262",
+    "name": "Sherbrooke",
+    "coordinates": [
+      -73.569217,
+      45.51906
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M236",
+    "name": "Snowdon",
+    "coordinates": [
+      -73.628104,
+      45.485632
+    ],
+    "lines": [
+      "2",
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M254",
+    "name": "Square-Victoria–OACI",
+    "coordinates": [
+      -73.5631,
+      45.50191
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M536",
+    "name": "Université-de-Montréal",
+    "coordinates": [
+      -73.617641,
+      45.503318
+    ],
+    "lines": [
+      "5"
+    ]
+  },
+  {
+    "id": "STATION_M242",
+    "name": "Vendôme",
+    "coordinates": [
+      -73.603762,
+      45.473908
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M124",
+    "name": "Verdun",
+    "coordinates": [
+      -73.572272,
+      45.459417
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M160",
+    "name": "Viau",
+    "coordinates": [
+      -73.547427,
+      45.560878
+    ],
+    "lines": [
+      "1"
+    ]
+  },
+  {
+    "id": "STATION_M238",
+    "name": "Villa-Maria",
+    "coordinates": [
+      -73.619761,
+      45.47975
+    ],
+    "lines": [
+      "2"
+    ]
+  },
+  {
+    "id": "STATION_M538",
+    "name": "Édouard-Montpetit",
+    "coordinates": [
+      -73.61281,
+      45.509908
+    ],
+    "lines": [
+      "5"
+    ]
+  }
+]

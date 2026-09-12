@@ -5,6 +5,8 @@ import { SubwaySearchBar } from '@core/ui/components/search_bar';
 import { BrowserSubwayEngine } from '@core/sim/browser_engine';
 import { SubwayRouter } from '@core/ui/router';
 import { CITIES, getCityConfig } from '@cities/index';
+import type { CityConfig } from '@core/config';
+import { parisConfig } from '@cities/paris/city.config';
 import { coordAtDistance, loadShapes } from '@core/sim/shapes_loader';
 import { loadRollingStock } from '@core/sim/rolling_stock';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
@@ -131,11 +133,14 @@ function openMethodologyModal() {
   document.body.appendChild(modal);
 }
 
-function openAboutModal() {
+function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
   document.getElementById('about-modal')?.remove();
   const modal = document.createElement('div');
   modal.id = 'about-modal';
   modal.className = 'records-modal about-modal';
+  const isParis = activeCityConfig.id === 'paris';
+  const attrib = activeCityConfig.attribution;
+
   const ticketSvg = `
     <svg class="ticket-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 280" role="img" aria-label="Ticket de transport parisien">
       <defs>
@@ -177,24 +182,52 @@ function openAboutModal() {
       <text x="40" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">02070341 A 1111 A16</text>
       <text x="440" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">EUR 1,90 CB</text>
     </svg>`;
+
+  const montrealEmblem = `
+    <div class="about-card-emblem" style="background:var(--eleve-hi);border:1px solid var(--bordure);border-radius:8px;padding:20px 14px;text-align:center;">
+      <span style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.6;display:block;margin-bottom:6px;">Réseau Métropolitain</span>
+      <span style="font-size:18px;font-weight:700;color:var(--texte-hi);letter-spacing:0.5px;display:block;">${activeCityConfig.networkName}</span>
+      <span style="display:inline-block;margin-top:10px;font-size:11px;padding:3px 10px;border-radius:12px;background:rgba(0,179,0,0.15);border:1px solid rgba(0,179,0,0.4);color:#00B300;font-weight:600;">100% Souterrain</span>
+    </div>`;
+
+  const cardGraphic = isParis ? ticketSvg : montrealEmblem;
+  const rtHtml = isParis
+    ? '<p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p>'
+    : '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (sans GPS en tunnel)</p>';
+
   modal.innerHTML = `
     <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
       <header class="about-sheet__header">
-        <h2 id="about-title">À propos</h2>
+        <h2 id="about-title">À propos — ${activeCityConfig.displayName.toUpperCase()}</h2>
         <button type="button" class="about-sheet__close" aria-label="Fermer">×</button>
       </header>
       <div class="about-sheet__body">
         <section class="about-item">
-          <div class="about-item__ticket">${ticketSvg}</div>
-          <div class="about-item__content"><h3 class="about-item__title">Données</h3><p class="about-item__text">Données théoriques : <strong>GTFS Île-de-France Mobilités</strong></p><p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p></div>
+          <div class="about-item__ticket">${cardGraphic}</div>
+          <div class="about-item__content">
+            <h3 class="about-item__title">Données</h3>
+            <p class="about-item__text">Données d'offre : <strong>${attrib.datasetName}</strong></p>
+            <p class="about-item__text">Exploitant : <strong>${attrib.operatorName}</strong></p>
+            ${rtHtml}
+          </div>
         </section>
         <section class="about-item">
-          <div class="about-item__ticket">${ticketSvg}</div>
-          <div class="about-item__content"><h3 class="about-item__title">Licences</h3><p class="about-item__text">Fond cartographique : <strong>OpenMapTiles · OpenStreetMap</strong> (ODbL)</p><p class="about-item__text">Hébergement tuiles : <strong>OpenFreeMap</strong></p><p class="about-item__text">Typographie : <strong>Switzer</strong> (Fontshare)</p></div>
+          <div class="about-item__ticket">${cardGraphic}</div>
+          <div class="about-item__content">
+            <h3 class="about-item__title">Licences</h3>
+            <p class="about-item__text">Données de transport : <a href="${attrib.licenseUrl}" target="_blank" rel="noopener"><strong>${attrib.licenseText}</strong></a></p>
+            <p class="about-item__text">Fond cartographique : <strong>OpenMapTiles · OpenStreetMap</strong> (ODbL)</p>
+            <p class="about-item__text">Hébergement tuiles : <strong>OpenFreeMap</strong></p>
+            <p class="about-item__text">Typographie : <strong>Switzer</strong> (Fontshare)</p>
+          </div>
         </section>
         <section class="about-item">
-          <div class="about-item__ticket">${ticketSvg}</div>
-          <div class="about-item__content"><h3 class="about-item__title">Mentions</h3><p class="about-item__text">Projet indépendant, non affilié à la <strong>RATP</strong> ni à <strong>Île-de-France Mobilités</strong>.</p><a href="/methode" target="_blank" rel="noopener" class="about-item__link">Consulter la méthode complète <span aria-hidden="true">→</span></a></div>
+          <div class="about-item__ticket">${cardGraphic}</div>
+          <div class="about-item__content">
+            <h3 class="about-item__title">Mentions</h3>
+            <p class="about-item__text">${attrib.disclaimer}</p>
+            <a href="/methode" target="_blank" rel="noopener" class="about-item__link">Consulter la méthode complète <span aria-hidden="true">→</span></a>
+          </div>
         </section>
       </div>
     </div>
@@ -752,6 +785,9 @@ async function bootstrap() {
     activeCityId: cityConfig.id,
     timezone: cityConfig.timezone,
     displayName: cityConfig.displayName,
+    realtimeProvider: cityConfig.realtime.provider,
+    attribution: cityConfig.attribution,
+    scheduleModel: cityConfig.gtfs.scheduleModel,
     onCitySelect: (cityId: string) => {
       router.setCity(cityId);
       window.location.href = `/${cityId}`;
@@ -762,7 +798,7 @@ async function bootstrap() {
     },
     onAbout: () => {
       hideTooltip();
-      openAboutModal();
+      openAboutModal(cityConfig);
     },
     onRecords: () => {
       hideTooltip();

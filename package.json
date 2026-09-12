@@ -11,7 +11,9 @@
     "build:web": "python3 scripts/publish_train_models.py && python3 scripts/build_train_asset_manifest.py --output cities/paris/data/model-assets-manifest.json --output web/public/data/model-assets-manifest.json && npm --workspace=web run build",
     "dev:web": "npm --workspace=web run dev",
     "test:snapshot": "vitest run tests/paris-snapshot.test.ts",
-    "test:footprint": "node tests/verify_build_footprint.mjs"
+    "test:montreal-snapshot": "vitest run tests/montreal-snapshot.test.ts",
+    "test:footprint": "node tests/verify_build_footprint.mjs",
+    "test": "npm run test:snapshot && npm run test:montreal-snapshot && npm run test:footprint"
   },
   "dependencies": {
     "luxon": "^3.7.2"

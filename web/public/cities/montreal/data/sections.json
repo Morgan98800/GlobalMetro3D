@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "Société de transport de Montréal",
+    "classification": {
+      "souterrain": "100% réseau métro Montréal (souterrain intégral)",
+      "aerien": "néant"
+    }
+  },
+  "summary": {
+    "aerial_sections": 0,
+    "aerial_km": 0.0,
+    "network_type": "100% souterrain"
+  }
+}

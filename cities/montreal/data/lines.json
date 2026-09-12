@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "short_name": "1",
+    "long_name": "Verte",
+    "color": "#00B300",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Honoré-Beaugrand",
+      "1": "Angrignon"
+    },
+    "measured_length_km": 20.07,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "2",
+    "short_name": "2",
+    "long_name": "Orange",
+    "color": "#D95700",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "1": "Côte-Vertu",
+      "0": "Montmorency"
+    },
+    "measured_length_km": 28.27,
+    "elevation_offset": 4.5
+  },
+  {
+    "id": "4",
+    "short_name": "4",
+    "long_name": "Jaune",
+    "color": "#FFD900",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "1": "Longueuil-Université de Sherbrooke",
+      "0": "Berri-UQAM"
+    },
+    "measured_length_km": 3.83,
+    "elevation_offset": 9.0
+  },
+  {
+    "id": "5",
+    "short_name": "5",
+    "long_name": "Bleue",
+    "color": "#0095E6",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Saint-Michel",
+      "1": "Snowdon"
+    },
+    "measured_length_km": 9.5,
+    "elevation_offset": 13.5
+  }
+]

@@ -1,0 +1,278 @@
+{
+  "weekday": [
+    {
+      "name": "Berri-UQAM",
+      "count": 1268
+    },
+    {
+      "name": "Lionel-Groulx",
+      "count": 954
+    },
+    {
+      "name": "Jean-Talon",
+      "count": 864
+    },
+    {
+      "name": "Snowdon",
+      "count": 864
+    },
+    {
+      "name": "Henri-Bourassa",
+      "count": 478
+    },
+    {
+      "name": "Sauvé",
+      "count": 478
+    },
+    {
+      "name": "Crémazie",
+      "count": 478
+    },
+    {
+      "name": "Jarry",
+      "count": 478
+    },
+    {
+      "name": "Beaubien",
+      "count": 478
+    },
+    {
+      "name": "Rosemont",
+      "count": 478
+    },
+    {
+      "name": "Laurier",
+      "count": 478
+    },
+    {
+      "name": "Mont-Royal",
+      "count": 478
+    },
+    {
+      "name": "Sherbrooke",
+      "count": 478
+    },
+    {
+      "name": "Champ-de-Mars",
+      "count": 478
+    },
+    {
+      "name": "Place-d'Armes",
+      "count": 478
+    },
+    {
+      "name": "Square-Victoria–OACI",
+      "count": 478
+    },
+    {
+      "name": "Bonaventure",
+      "count": 478
+    },
+    {
+      "name": "Lucien-L'Allier",
+      "count": 478
+    },
+    {
+      "name": "Georges-Vanier",
+      "count": 478
+    },
+    {
+      "name": "Place-Saint-Henri",
+      "count": 478
+    },
+    {
+      "name": "Vendôme",
+      "count": 478
+    },
+    {
+      "name": "Villa-Maria",
+      "count": 478
+    },
+    {
+      "name": "Côte-Sainte-Catherine",
+      "count": 478
+    },
+    {
+      "name": "Plamondon",
+      "count": 478
+    },
+    {
+      "name": "Namur",
+      "count": 478
+    },
+    {
+      "name": "De la Savane",
+      "count": 478
+    },
+    {
+      "name": "Du Collège",
+      "count": 478
+    },
+    {
+      "name": "Côte-Vertu",
+      "count": 478
+    },
+    {
+      "name": "Angrignon",
+      "count": 476
+    },
+    {
+      "name": "Monk",
+      "count": 476
+    },
+    {
+      "name": "Jolicoeur",
+      "count": 476
+    },
+    {
+      "name": "Verdun",
+      "count": 476
+    },
+    {
+      "name": "De l'Église",
+      "count": 476
+    },
+    {
+      "name": "LaSalle",
+      "count": 476
+    },
+    {
+      "name": "Charlevoix",
+      "count": 476
+    },
+    {
+      "name": "Atwater",
+      "count": 476
+    },
+    {
+      "name": "Guy-Concordia",
+      "count": 476
+    },
+    {
+      "name": "Peel",
+      "count": 476
+    },
+    {
+      "name": "McGill",
+      "count": 476
+    },
+    {
+      "name": "Place-des-Arts",
+      "count": 476
+    },
+    {
+      "name": "Saint-Laurent",
+      "count": 476
+    },
+    {
+      "name": "Beaudry",
+      "count": 476
+    },
+    {
+      "name": "Papineau",
+      "count": 476
+    },
+    {
+      "name": "Frontenac",
+      "count": 476
+    },
+    {
+      "name": "Préfontaine",
+      "count": 476
+    },
+    {
+      "name": "Joliette",
+      "count": 476
+    },
+    {
+      "name": "Pie-IX",
+      "count": 476
+    },
+    {
+      "name": "Viau",
+      "count": 476
+    },
+    {
+      "name": "Assomption",
+      "count": 476
+    },
+    {
+      "name": "Cadillac",
+      "count": 476
+    },
+    {
+      "name": "Langelier",
+      "count": 476
+    },
+    {
+      "name": "Radisson",
+      "count": 476
+    },
+    {
+      "name": "Honoré-Beaugrand",
+      "count": 476
+    },
+    {
+      "name": "Montmorency",
+      "count": 468
+    },
+    {
+      "name": "De la Concorde",
+      "count": 468
+    },
+    {
+      "name": "Cartier",
+      "count": 468
+    },
+    {
+      "name": "Côte-des-Neiges",
+      "count": 386
+    },
+    {
+      "name": "Université-de-Montréal",
+      "count": 386
+    },
+    {
+      "name": "Édouard-Montpetit",
+      "count": 386
+    },
+    {
+      "name": "Outremont",
+      "count": 386
+    },
+    {
+      "name": "Acadie",
+      "count": 386
+    },
+    {
+      "name": "Parc",
+      "count": 386
+    },
+    {
+      "name": "De Castelnau",
+      "count": 386
+    },
+    {
+      "name": "Fabre",
+      "count": 386
+    },
+    {
+      "name": "D'Iberville",
+      "count": 386
+    },
+    {
+      "name": "Saint-Michel",
+      "count": 386
+    },
+    {
+      "name": "Jean-Drapeau",
+      "count": 314
+    },
+    {
+      "name": "Longueuil-Université de Sherbrooke",
+      "count": 314
+    }
+  ],
+  "saturday": [],
+  "sunday": []
+}

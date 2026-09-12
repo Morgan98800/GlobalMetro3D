@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import type { CityAttribution, RealtimeProvider, ScheduleModel } from '@core/config';
 
 export interface CityItem {
   id: string;
@@ -13,6 +14,9 @@ export interface TopBarOptions {
   activeCityId?: string;
   timezone?: string;
   displayName?: string;
+  realtimeProvider?: RealtimeProvider;
+  attribution?: CityAttribution;
+  scheduleModel?: ScheduleModel;
   onCitySelect?: (cityId: string) => void;
   onSearch?: () => void;
   onToggleRealtime?: () => void;
@@ -420,6 +424,14 @@ export class TopBar {
   }
 
   public setRealtimeState(status: any) {
+    if (this.options.realtimeProvider === 'none') {
+      this.rtStatusEl.dataset.state = 'standby';
+      this.rtLabelEl.textContent = 'cadence théorique';
+      const op = this.options.attribution?.operatorName ? ` (${this.options.attribution.operatorName})` : '';
+      this.rtStatusEl.title = `Cadence théorique · intervalle nominal calculé sur la grille officielle GTFS${op}.`;
+      return;
+    }
+
     if (typeof status === 'string') {
       this.rtStatusEl.dataset.state = status;
       if (status === 'live') {

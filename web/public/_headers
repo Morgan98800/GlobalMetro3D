@@ -7,3 +7,7 @@
   # Les artefacts GTFS gardent leur nom entre deux publications. Ils doivent
   # donc être revalidés pour ne jamais conserver un ancien réseau en cache.
   Cache-Control: public, max-age=0, must-revalidate
+
+/cities/*/data/*
+  Cache-Control: public, max-age=0, must-revalidate
+

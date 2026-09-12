@@ -1,0 +1,125 @@
+{
+  "asset_families": {
+    "pneumatic_generic": {
+      "family_id": "pneumatic_generic",
+      "reference_dimensions_m": {
+        "car_length_m": 16.94,
+        "car_height_m": 3.65,
+        "width_m": 2.51
+      }
+    }
+  },
+  "models": {
+    "MPM-10": {
+      "model_id": "MPM-10",
+      "name": "MPM-10 (AZUR - 9 voitures)",
+      "manufacturer": "Consortium Bombardier Transport / Alstom Transport",
+      "cars_count": 9,
+      "total_length_m": 152.44,
+      "car_length_m": 16.94,
+      "bogie_centres_m": 11.0,
+      "width_m": 2.51,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Fiche technique officielle STM & Consortium Bombardier-Alstom — Rames MPM-10 (152,437 m x 2,514 m)",
+      "verified": true
+    },
+    "MR-73_9V": {
+      "model_id": "MR-73_9V",
+      "name": "MR-73 (9 voitures)",
+      "manufacturer": "Bombardier Transport (1976), rénové par STM (2005-2008)",
+      "cars_count": 9,
+      "total_length_m": 149.0,
+      "car_length_m": 16.0,
+      "bogie_centres_m": 10.5,
+      "width_m": 2.5,
+      "inter_car_gap_m": 0.5,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Fiche technique STM & Bombardier — 3 éléments de 3 caisses (M-R-M)",
+      "verified": true
+    },
+    "MR-73_6V": {
+      "model_id": "MR-73_6V",
+      "name": "MR-73 (6 voitures)",
+      "manufacturer": "Bombardier Transport (1976), rénové par STM (2005-2008)",
+      "cars_count": 6,
+      "total_length_m": 99.5,
+      "car_length_m": 16.0,
+      "bogie_centres_m": 10.5,
+      "width_m": 2.5,
+      "inter_car_gap_m": 0.5,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Exploitation STM Ligne 5 Bleue en formation réduite à 2 éléments",
+      "verified": true
+    }
+  },
+  "lines": {
+    "1": {
+      "line_id": "1",
+      "short_name": "1",
+      "model_id": "MPM-10",
+      "name": "AZUR (MPM-10) / MR-73 (9 voitures)",
+      "cars_count": 9,
+      "total_length_m": 152.44,
+      "car_length_m": 16.94,
+      "bogie_centres_m": 11.0,
+      "width_m": 2.51,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Parc mixte MPM-10 / MR-73 Ligne 1 Verte (9 caisses)",
+      "verified": true
+    },
+    "2": {
+      "line_id": "2",
+      "short_name": "2",
+      "model_id": "MPM-10",
+      "name": "AZUR (MPM-10 - 9 voitures)",
+      "cars_count": 9,
+      "total_length_m": 152.44,
+      "car_length_m": 16.94,
+      "bogie_centres_m": 11.0,
+      "width_m": 2.51,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Parc 100% MPM-10 Ligne 2 Orange",
+      "verified": true
+    },
+    "4": {
+      "line_id": "4",
+      "short_name": "4",
+      "model_id": "MR-73_9V",
+      "name": "MR-73 (9 voitures)",
+      "cars_count": 9,
+      "total_length_m": 149.0,
+      "car_length_m": 16.0,
+      "bogie_centres_m": 10.5,
+      "width_m": 2.5,
+      "inter_car_gap_m": 0.5,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Parc MR-73 Ligne 4 Jaune (3 éléments)",
+      "verified": true
+    },
+    "5": {
+      "line_id": "5",
+      "short_name": "5",
+      "model_id": "MR-73_6V",
+      "name": "MR-73 (6 voitures)",
+      "cars_count": 6,
+      "total_length_m": 99.5,
+      "car_length_m": 16.0,
+      "bogie_centres_m": 10.5,
+      "width_m": 2.5,
+      "inter_car_gap_m": 0.5,
+      "drive_type": "tire",
+      "driverless": false,
+      "source": "Parc MR-73 Ligne 5 Bleue (formation courte 2 éléments)",
+      "verified": true
+    }
+  }
+}

@@ -25,6 +25,9 @@ data/raw/
 cities/*/data/raw/
 *.zip
 *.tar.gz
+*.sqlite
+*.sqlite3
+*.db
 web/public/models/*.glb
 web/public/models/.DS_Store
 web/public/models/train/

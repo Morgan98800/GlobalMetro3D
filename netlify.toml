@@ -12,6 +12,9 @@
 [functions."stm_relay"]
   schedule = "*/2 * * * *"
 
+[functions."tfl_relay"]
+  schedule = "* * * * *"
+
 [[redirects]]
   from = "/api/prim"
   to = "/.netlify/functions/prim_relay"
@@ -25,6 +28,16 @@
 [[redirects]]
   from = "/api/stm"
   to = "/.netlify/functions/stm_relay"
+  status = 200
+
+[[redirects]]
+  from = "/api/tfl"
+  to = "/.netlify/functions/tfl_relay"
+  status = 200
+
+[[redirects]]
+  from = "/api/tfl_arrivals"
+  to = "/.netlify/functions/tfl_relay"
   status = 200
 
 [[redirects]]

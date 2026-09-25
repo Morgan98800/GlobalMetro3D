@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "Transport for London",
+    "classification": {
+      "deep_tube": "Lignes profondes en tunnel foré circulaire (Bakerloo, Central, Jubilee, Northern, Piccadilly, Victoria, Waterloo & City)",
+      "sub_surface": "Lignes sub-surface à gabarit ferroviaire large (Circle, District, Hammersmith & City, Metropolitan)",
+      "light_rail": "Réseau de métro léger automatique sur viaduc et surface (Docklands Light Railway)",
+      "crossrail": "Ligne ferroviaire régionale à grande capacité est-ouest (Elizabeth line / Crossrail)",
+      "overground": "Réseau ferroviaire suburbain de surface London Overground (Liberty, Lioness, Mildmay, Suffragette, Weaver, Windrush)"
+    }
+  },
+  "summary": {
+    "deep_level_lines": 7,
+    "sub_surface_lines": 4,
+    "light_rail_lines": 1,
+    "crossrail_lines": 1,
+    "overground_lines": 6,
+    "total_lines": 19,
+    "network_type": "Tube, Sub-surface, Light Rail (DLR), Elizabeth line & London Overground"
+  }
+}

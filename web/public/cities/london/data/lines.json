@@ -1,0 +1,268 @@
+[
+  {
+    "id": "bakerloo",
+    "short_name": "Bakerloo",
+    "long_name": "Bakerloo Line",
+    "color": "#B36305",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Elephant & Castle",
+      "0": "Harrow & Wealdstone"
+    },
+    "measured_length_km": 23.64,
+    "elevation_offset": -18.0
+  },
+  {
+    "id": "central",
+    "short_name": "Central",
+    "long_name": "Central Line",
+    "color": "#E32017",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "West Ruislip",
+      "0": "Epping"
+    },
+    "measured_length_km": 55.7,
+    "elevation_offset": -20.0
+  },
+  {
+    "id": "circle",
+    "short_name": "Circle",
+    "long_name": "Circle Line",
+    "color": "#FFD300",
+    "text_color": "#113B92",
+    "mode": "tube",
+    "destinations": {
+      "1": "Aldgate",
+      "0": "Edgware Road"
+    },
+    "measured_length_km": 31.79,
+    "elevation_offset": -6.0
+  },
+  {
+    "id": "district",
+    "short_name": "District",
+    "long_name": "District Line",
+    "color": "#00782A",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Ealing Broadway",
+      "0": "Upminster"
+    },
+    "measured_length_km": 44.05,
+    "elevation_offset": -6.0
+  },
+  {
+    "id": "hammersmith-city",
+    "short_name": "Hammersmith & City",
+    "long_name": "Hammersmith & City Line",
+    "color": "#F3A9BB",
+    "text_color": "#113B92",
+    "mode": "tube",
+    "destinations": {
+      "1": "Hammersmith",
+      "0": "Upminster"
+    },
+    "measured_length_km": 38.27,
+    "elevation_offset": -6.0
+  },
+  {
+    "id": "jubilee",
+    "short_name": "Jubilee",
+    "long_name": "Jubilee Line",
+    "color": "#A0A5A9",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Stanmore",
+      "0": "Stratford"
+    },
+    "measured_length_km": 40.15,
+    "elevation_offset": -24.0
+  },
+  {
+    "id": "metropolitan",
+    "short_name": "Metropolitan",
+    "long_name": "Metropolitan Line",
+    "color": "#9B0056",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Amersham",
+      "0": "Aldgate"
+    },
+    "measured_length_km": 53.39,
+    "elevation_offset": -6.0
+  },
+  {
+    "id": "northern",
+    "short_name": "Northern",
+    "long_name": "Northern Line",
+    "color": "#000000",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Morden",
+      "0": "High Barnet"
+    },
+    "measured_length_km": 38.27,
+    "elevation_offset": -22.0
+  },
+  {
+    "id": "piccadilly",
+    "short_name": "Piccadilly",
+    "long_name": "Piccadilly Line",
+    "color": "#003688",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Uxbridge",
+      "0": "Cockfosters"
+    },
+    "measured_length_km": 50.83,
+    "elevation_offset": -26.0
+  },
+  {
+    "id": "victoria",
+    "short_name": "Victoria",
+    "long_name": "Victoria Line",
+    "color": "#0098D4",
+    "text_color": "#FFFFFF",
+    "mode": "tube",
+    "destinations": {
+      "1": "Brixton",
+      "0": "Walthamstow Central"
+    },
+    "measured_length_km": 21.72,
+    "elevation_offset": -20.0
+  },
+  {
+    "id": "waterloo-city",
+    "short_name": "Waterloo & City",
+    "long_name": "Waterloo & City Line",
+    "color": "#95CDBA",
+    "text_color": "#113B92",
+    "mode": "tube",
+    "destinations": {
+      "1": "Waterloo",
+      "0": "Bank"
+    },
+    "measured_length_km": 2.35,
+    "elevation_offset": -16.0
+  },
+  {
+    "id": "dlr",
+    "short_name": "DLR",
+    "long_name": "Docklands Light Railway",
+    "color": "#00A4A7",
+    "text_color": "#FFFFFF",
+    "mode": "dlr",
+    "destinations": {
+      "1": "Bank (DLR)",
+      "0": "Beckton"
+    },
+    "measured_length_km": 15.19,
+    "elevation_offset": 3.0
+  },
+  {
+    "id": "elizabeth",
+    "short_name": "Elizabeth",
+    "long_name": "Elizabeth line",
+    "color": "#6950A1",
+    "text_color": "#FFFFFF",
+    "mode": "elizabeth-line",
+    "destinations": {
+      "0": "Abbey Wood / Shenfield",
+      "1": "Reading / Heathrow"
+    },
+    "measured_length_km": 80.5,
+    "elevation_offset": -15.0
+  },
+  {
+    "id": "liberty",
+    "short_name": "Liberty",
+    "long_name": "Liberty Line",
+    "color": "#606667",
+    "text_color": "#FFFFFF",
+    "mode": "overground",
+    "destinations": {
+      "0": "Upminster",
+      "1": "Romford"
+    },
+    "measured_length_km": 5.51,
+    "elevation_offset": 2.0
+  },
+  {
+    "id": "lioness",
+    "short_name": "Lioness",
+    "long_name": "Lioness Line",
+    "color": "#EF9600",
+    "text_color": "#FFFFFF",
+    "mode": "overground",
+    "destinations": {
+      "0": "Watford Junction",
+      "1": "London Euston"
+    },
+    "measured_length_km": 28.26,
+    "elevation_offset": 2.0
+  },
+  {
+    "id": "mildmay",
+    "short_name": "Mildmay",
+    "long_name": "Mildmay Line",
+    "color": "#2774AE",
+    "text_color": "#FFFFFF",
+    "mode": "overground",
+    "destinations": {
+      "0": "Stratford",
+      "1": "Richmond / Clapham Junction"
+    },
+    "measured_length_km": 28.7,
+    "elevation_offset": 2.0
+  },
+  {
+    "id": "suffragette",
+    "short_name": "Suffragette",
+    "long_name": "Suffragette Line",
+    "color": "#5BA763",
+    "text_color": "#FFFFFF",
+    "mode": "overground",
+    "destinations": {
+      "0": "Barking Riverside",
+      "1": "Gospel Oak"
+    },
+    "measured_length_km": 23.5,
+    "elevation_offset": 2.0
+  },
+  {
+    "id": "weaver",
+    "short_name": "Weaver",
+    "long_name": "Weaver Line",
+    "color": "#893B67",
+    "text_color": "#FFFFFF",
+    "mode": "overground",
+    "destinations": {
+      "0": "Enfield Town / Cheshunt / Chingford",
+      "1": "Liverpool Street"
+    },
+    "measured_length_km": 23.28,
+    "elevation_offset": 2.0
+  },
+  {
+    "id": "windrush",
+    "short_name": "Windrush",
+    "long_name": "Windrush Line",
+    "color": "#D22730",
+    "text_color": "#FFFFFF",
+    "mode": "overground",
+    "destinations": {
+      "0": "West Croydon / Crystal Palace / Clapham Jct",
+      "1": "Highbury & Islington"
+    },
+    "measured_length_km": 21.66,
+    "elevation_offset": 2.0
+  }
+]

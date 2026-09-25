@@ -1,0 +1,5168 @@
+{
+  "weekday": [
+    {
+      "name": "King's Cross St. Pancras",
+      "count": 3550
+    },
+    {
+      "name": "Liverpool Street",
+      "count": 2935
+    },
+    {
+      "name": "Waterloo",
+      "count": 2758
+    },
+    {
+      "name": "Green Park",
+      "count": 2714
+    },
+    {
+      "name": "Baker Street",
+      "count": 2664
+    },
+    {
+      "name": "Euston",
+      "count": 2599
+    },
+    {
+      "name": "Oxford Circus",
+      "count": 2594
+    },
+    {
+      "name": "Bond Street",
+      "count": 2564
+    },
+    {
+      "name": "Tottenham Court Road",
+      "count": 2452
+    },
+    {
+      "name": "Paddington",
+      "count": 2419
+    },
+    {
+      "name": "Stratford",
+      "count": 2329
+    },
+    {
+      "name": "Embankment",
+      "count": 2310
+    },
+    {
+      "name": "Whitechapel",
+      "count": 2212
+    },
+    {
+      "name": "Bank",
+      "count": 2179
+    },
+    {
+      "name": "Canary Wharf",
+      "count": 2156
+    },
+    {
+      "name": "Victoria",
+      "count": 2038
+    },
+    {
+      "name": "Stockwell",
+      "count": 1933
+    },
+    {
+      "name": "Finsbury Park",
+      "count": 1850
+    },
+    {
+      "name": "Warren Street",
+      "count": 1843
+    },
+    {
+      "name": "Westminster",
+      "count": 1811
+    },
+    {
+      "name": "Earl's Court",
+      "count": 1758
+    },
+    {
+      "name": "Hammersmith",
+      "count": 1733
+    },
+    {
+      "name": "Mile End",
+      "count": 1716
+    },
+    {
+      "name": "Gloucester Road",
+      "count": 1709
+    },
+    {
+      "name": "South Kensington",
+      "count": 1707
+    },
+    {
+      "name": "Kennington",
+      "count": 1701
+    },
+    {
+      "name": "Moorgate",
+      "count": 1696
+    },
+    {
+      "name": "Holborn",
+      "count": 1651
+    },
+    {
+      "name": "West Ham",
+      "count": 1632
+    },
+    {
+      "name": "London Bridge",
+      "count": 1620
+    },
+    {
+      "name": "Finchley Road",
+      "count": 1579
+    },
+    {
+      "name": "Edgware Road",
+      "count": 1543
+    },
+    {
+      "name": "Shadwell",
+      "count": 1524
+    },
+    {
+      "name": "Leicester Square",
+      "count": 1511
+    },
+    {
+      "name": "Camden Town",
+      "count": 1508
+    },
+    {
+      "name": "Wembley Park",
+      "count": 1411
+    },
+    {
+      "name": "Piccadilly Circus",
+      "count": 1370
+    },
+    {
+      "name": "Charing Cross",
+      "count": 1363
+    },
+    {
+      "name": "Elephant & Castle",
+      "count": 1356
+    },
+    {
+      "name": "Notting Hill Gate",
+      "count": 1351
+    },
+    {
+      "name": "Turnham Green",
+      "count": 1265
+    },
+    {
+      "name": "Barons Court",
+      "count": 1255
+    },
+    {
+      "name": "Seven Sisters",
+      "count": 1247
+    },
+    {
+      "name": "Bethnal Green",
+      "count": 1188
+    },
+    {
+      "name": "West Hampstead",
+      "count": 1154
+    },
+    {
+      "name": "Walthamstow Central",
+      "count": 1152
+    },
+    {
+      "name": "Highbury & Islington",
+      "count": 1091
+    },
+    {
+      "name": "Pimlico",
+      "count": 1089
+    },
+    {
+      "name": "Vauxhall",
+      "count": 1089
+    },
+    {
+      "name": "Brixton",
+      "count": 1089
+    },
+    {
+      "name": "Acton Town",
+      "count": 1046
+    },
+    {
+      "name": "Blackhorse Road",
+      "count": 1004
+    },
+    {
+      "name": "Tottenham Hale",
+      "count": 1004
+    },
+    {
+      "name": "Sloane Square",
+      "count": 947
+    },
+    {
+      "name": "St. James's Park",
+      "count": 947
+    },
+    {
+      "name": "Temple",
+      "count": 947
+    },
+    {
+      "name": "Blackfriars",
+      "count": 947
+    },
+    {
+      "name": "Mansion House",
+      "count": 947
+    },
+    {
+      "name": "Cannon Street",
+      "count": 947
+    },
+    {
+      "name": "Monument",
+      "count": 947
+    },
+    {
+      "name": "Tower Hill",
+      "count": 947
+    },
+    {
+      "name": "Euston Square",
+      "count": 944
+    },
+    {
+      "name": "Great Portland Street",
+      "count": 944
+    },
+    {
+      "name": "Westferry",
+      "count": 944
+    },
+    {
+      "name": "Limehouse",
+      "count": 944
+    },
+    {
+      "name": "Barbican",
+      "count": 940
+    },
+    {
+      "name": "Farringdon",
+      "count": 940
+    },
+    {
+      "name": "White City",
+      "count": 907
+    },
+    {
+      "name": "Leytonstone",
+      "count": 900
+    },
+    {
+      "name": "Leyton",
+      "count": 892
+    },
+    {
+      "name": "St. Paul's",
+      "count": 892
+    },
+    {
+      "name": "Chancery Lane",
+      "count": 892
+    },
+    {
+      "name": "Marble Arch",
+      "count": 892
+    },
+    {
+      "name": "Lancaster Gate",
+      "count": 892
+    },
+    {
+      "name": "Queensway",
+      "count": 892
+    },
+    {
+      "name": "Holland Park",
+      "count": 892
+    },
+    {
+      "name": "Shepherd's Bush",
+      "count": 892
+    },
+    {
+      "name": "Poplar",
+      "count": 874
+    },
+    {
+      "name": "North Greenwich",
+      "count": 866
+    },
+    {
+      "name": "Canada Water",
+      "count": 864
+    },
+    {
+      "name": "Bermondsey",
+      "count": 864
+    },
+    {
+      "name": "Southwark",
+      "count": 864
+    },
+    {
+      "name": "St. John's Wood",
+      "count": 864
+    },
+    {
+      "name": "Swiss Cottage",
+      "count": 864
+    },
+    {
+      "name": "Oval",
+      "count": 844
+    },
+    {
+      "name": "Clapham North",
+      "count": 844
+    },
+    {
+      "name": "Clapham Common",
+      "count": 844
+    },
+    {
+      "name": "Clapham South",
+      "count": 844
+    },
+    {
+      "name": "Balham",
+      "count": 844
+    },
+    {
+      "name": "Tooting Bec",
+      "count": 844
+    },
+    {
+      "name": "Tooting Broadway",
+      "count": 844
+    },
+    {
+      "name": "Colliers Wood",
+      "count": 844
+    },
+    {
+      "name": "South Wimbledon",
+      "count": 844
+    },
+    {
+      "name": "Morden",
+      "count": 844
+    },
+    {
+      "name": "Barking",
+      "count": 824
+    },
+    {
+      "name": "Plaistow",
+      "count": 824
+    },
+    {
+      "name": "Bromley-by-Bow",
+      "count": 824
+    },
+    {
+      "name": "Bow Road",
+      "count": 824
+    },
+    {
+      "name": "Stepney Green",
+      "count": 824
+    },
+    {
+      "name": "Aldgate East",
+      "count": 824
+    },
+    {
+      "name": "East Ham",
+      "count": 822
+    },
+    {
+      "name": "Upton Park",
+      "count": 822
+    },
+    {
+      "name": "Willesden Green",
+      "count": 810
+    },
+    {
+      "name": "Canning Town",
+      "count": 808
+    },
+    {
+      "name": "Farringdon (Rail)",
+      "count": 808
+    },
+    {
+      "name": "Finchley Central",
+      "count": 797
+    },
+    {
+      "name": "East Finchley",
+      "count": 789
+    },
+    {
+      "name": "Kilburn",
+      "count": 774
+    },
+    {
+      "name": "Queen's Park",
+      "count": 762
+    },
+    {
+      "name": "Wood Green",
+      "count": 759
+    },
+    {
+      "name": "Turnpike Lane",
+      "count": 759
+    },
+    {
+      "name": "Manor House",
+      "count": 759
+    },
+    {
+      "name": "Arsenal",
+      "count": 759
+    },
+    {
+      "name": "Holloway Road",
+      "count": 759
+    },
+    {
+      "name": "Caledonian Road",
+      "count": 759
+    },
+    {
+      "name": "Russell Square",
+      "count": 759
+    },
+    {
+      "name": "Covent Garden",
+      "count": 759
+    },
+    {
+      "name": "Hampstead",
+      "count": 758
+    },
+    {
+      "name": "Belsize Park",
+      "count": 758
+    },
+    {
+      "name": "Chalk Farm",
+      "count": 758
+    },
+    {
+      "name": "Hyde Park Corner",
+      "count": 758
+    },
+    {
+      "name": "Knightsbridge",
+      "count": 758
+    },
+    {
+      "name": "Golders Green",
+      "count": 757
+    },
+    {
+      "name": "Arnos Grove",
+      "count": 757
+    },
+    {
+      "name": "Bounds Green",
+      "count": 757
+    },
+    {
+      "name": "Willesden Junction",
+      "count": 756
+    },
+    {
+      "name": "Angel",
+      "count": 756
+    },
+    {
+      "name": "Old Street",
+      "count": 756
+    },
+    {
+      "name": "Borough",
+      "count": 756
+    },
+    {
+      "name": "Mornington Crescent",
+      "count": 752
+    },
+    {
+      "name": "Goodge Street",
+      "count": 752
+    },
+    {
+      "name": "Highgate",
+      "count": 750
+    },
+    {
+      "name": "Archway",
+      "count": 750
+    },
+    {
+      "name": "Tufnell Park",
+      "count": 750
+    },
+    {
+      "name": "Kentish Town",
+      "count": 750
+    },
+    {
+      "name": "Heathrow Terminals 2 & 3",
+      "count": 739
+    },
+    {
+      "name": "Canning Town (DLR)",
+      "count": 733
+    },
+    {
+      "name": "Highbury & Islington (Rail)",
+      "count": 728
+    },
+    {
+      "name": "Canonbury",
+      "count": 728
+    },
+    {
+      "name": "Edgware",
+      "count": 718
+    },
+    {
+      "name": "Burnt Oak",
+      "count": 718
+    },
+    {
+      "name": "Colindale",
+      "count": 718
+    },
+    {
+      "name": "Hendon Central",
+      "count": 718
+    },
+    {
+      "name": "Brent Cross",
+      "count": 718
+    },
+    {
+      "name": "East Acton",
+      "count": 717
+    },
+    {
+      "name": "North Acton",
+      "count": 717
+    },
+    {
+      "name": "Harrow-on-the-Hill",
+      "count": 714
+    },
+    {
+      "name": "Aldgate",
+      "count": 706
+    },
+    {
+      "name": "Bank (DLR)",
+      "count": 700
+    },
+    {
+      "name": "Dollis Hill",
+      "count": 696
+    },
+    {
+      "name": "Neasden",
+      "count": 696
+    },
+    {
+      "name": "Preston Road",
+      "count": 687
+    },
+    {
+      "name": "Northwick Park",
+      "count": 687
+    },
+    {
+      "name": "Custom House",
+      "count": 684
+    },
+    {
+      "name": "Hayes & Harlington",
+      "count": 660
+    },
+    {
+      "name": "Southall",
+      "count": 660
+    },
+    {
+      "name": "Hanwell",
+      "count": 660
+    },
+    {
+      "name": "West Ealing",
+      "count": 660
+    },
+    {
+      "name": "Ealing Broadway (Rail)",
+      "count": 660
+    },
+    {
+      "name": "Acton Main Line",
+      "count": 660
+    },
+    {
+      "name": "West Brompton",
+      "count": 642
+    },
+    {
+      "name": "Stratford (DLR 1)",
+      "count": 628
+    },
+    {
+      "name": "West India Quay",
+      "count": 614
+    },
+    {
+      "name": "Kilburn Park",
+      "count": 611
+    },
+    {
+      "name": "Maida Vale",
+      "count": 611
+    },
+    {
+      "name": "Warwick Avenue",
+      "count": 611
+    },
+    {
+      "name": "Marylebone",
+      "count": 611
+    },
+    {
+      "name": "Regent's Park",
+      "count": 611
+    },
+    {
+      "name": "High Barnet",
+      "count": 608
+    },
+    {
+      "name": "Totteridge & Whetstone",
+      "count": 608
+    },
+    {
+      "name": "Woodside Park",
+      "count": 608
+    },
+    {
+      "name": "West Finchley",
+      "count": 608
+    },
+    {
+      "name": "Lambeth North",
+      "count": 600
+    },
+    {
+      "name": "Oakwood",
+      "count": 585
+    },
+    {
+      "name": "Southgate",
+      "count": 585
+    },
+    {
+      "name": "Northfields",
+      "count": 583
+    },
+    {
+      "name": "Dalston Junction",
+      "count": 580
+    },
+    {
+      "name": "Haggerston",
+      "count": 580
+    },
+    {
+      "name": "Hoxton",
+      "count": 580
+    },
+    {
+      "name": "Shoreditch High Street",
+      "count": 580
+    },
+    {
+      "name": "Wapping",
+      "count": 580
+    },
+    {
+      "name": "Rotherhithe",
+      "count": 580
+    },
+    {
+      "name": "Canada Water (Rail)",
+      "count": 580
+    },
+    {
+      "name": "Surrey Quays",
+      "count": 580
+    },
+    {
+      "name": "South Ealing",
+      "count": 579
+    },
+    {
+      "name": "Woodford",
+      "count": 567
+    },
+    {
+      "name": "Cockfosters",
+      "count": 564
+    },
+    {
+      "name": "Kingsbury",
+      "count": 562
+    },
+    {
+      "name": "Queensbury",
+      "count": 562
+    },
+    {
+      "name": "Canons Park",
+      "count": 562
+    },
+    {
+      "name": "Stanmore",
+      "count": 559
+    },
+    {
+      "name": "Upminster",
+      "count": 547
+    },
+    {
+      "name": "Rayners Lane",
+      "count": 529
+    },
+    {
+      "name": "High Street Kensington",
+      "count": 509
+    },
+    {
+      "name": "Ravenscourt Park",
+      "count": 501
+    },
+    {
+      "name": "Stamford Brook",
+      "count": 501
+    },
+    {
+      "name": "Parsons Green",
+      "count": 501
+    },
+    {
+      "name": "Putney Bridge",
+      "count": 500
+    },
+    {
+      "name": "East Putney",
+      "count": 500
+    },
+    {
+      "name": "Southfields",
+      "count": 500
+    },
+    {
+      "name": "Wimbledon Park",
+      "count": 500
+    },
+    {
+      "name": "Wimbledon",
+      "count": 500
+    },
+    {
+      "name": "Dagenham East",
+      "count": 499
+    },
+    {
+      "name": "Dagenham Heathway",
+      "count": 499
+    },
+    {
+      "name": "Becontree",
+      "count": 499
+    },
+    {
+      "name": "Upney",
+      "count": 499
+    },
+    {
+      "name": "Fulham Broadway",
+      "count": 498
+    },
+    {
+      "name": "Heathrow Terminal 5",
+      "count": 497
+    },
+    {
+      "name": "Ealing Broadway",
+      "count": 494
+    },
+    {
+      "name": "West Kensington",
+      "count": 492
+    },
+    {
+      "name": "East India",
+      "count": 487
+    },
+    {
+      "name": "Blackwall",
+      "count": 487
+    },
+    {
+      "name": "Woolwich Arsenal",
+      "count": 483
+    },
+    {
+      "name": "King George V",
+      "count": 483
+    },
+    {
+      "name": "London City Airport",
+      "count": 483
+    },
+    {
+      "name": "Pontoon Dock",
+      "count": 483
+    },
+    {
+      "name": "West Silvertown",
+      "count": 483
+    },
+    {
+      "name": "Hainault",
+      "count": 476
+    },
+    {
+      "name": "Upminster Bridge",
+      "count": 475
+    },
+    {
+      "name": "Hornchurch",
+      "count": 475
+    },
+    {
+      "name": "Elm Park",
+      "count": 475
+    },
+    {
+      "name": "Royal Oak",
+      "count": 469
+    },
+    {
+      "name": "Westbourne Park",
+      "count": 469
+    },
+    {
+      "name": "Ladbroke Grove",
+      "count": 469
+    },
+    {
+      "name": "Latimer Road",
+      "count": 469
+    },
+    {
+      "name": "Wood Lane",
+      "count": 469
+    },
+    {
+      "name": "Shepherd's Bush Market",
+      "count": 469
+    },
+    {
+      "name": "Goldhawk Road",
+      "count": 469
+    },
+    {
+      "name": "Stonebridge Park",
+      "count": 467
+    },
+    {
+      "name": "Loughton",
+      "count": 467
+    },
+    {
+      "name": "Harlesden",
+      "count": 466
+    },
+    {
+      "name": "Kensal Green",
+      "count": 466
+    },
+    {
+      "name": "Mudchute",
+      "count": 464
+    },
+    {
+      "name": "Crossharbour",
+      "count": 464
+    },
+    {
+      "name": "South Quay",
+      "count": 464
+    },
+    {
+      "name": "Heron Quays",
+      "count": 464
+    },
+    {
+      "name": "Lewisham",
+      "count": 463
+    },
+    {
+      "name": "Elverson Road",
+      "count": 463
+    },
+    {
+      "name": "Deptford Bridge",
+      "count": 463
+    },
+    {
+      "name": "Greenwich",
+      "count": 463
+    },
+    {
+      "name": "Cutty Sark",
+      "count": 463
+    },
+    {
+      "name": "Island Gardens",
+      "count": 463
+    },
+    {
+      "name": "Bayswater",
+      "count": 459
+    },
+    {
+      "name": "Ealing Common",
+      "count": 456
+    },
+    {
+      "name": "Buckhurst Hill",
+      "count": 452
+    },
+    {
+      "name": "South Woodford",
+      "count": 451
+    },
+    {
+      "name": "Snaresbrook",
+      "count": 451
+    },
+    {
+      "name": "Newbury Park",
+      "count": 449
+    },
+    {
+      "name": "Gants Hill",
+      "count": 449
+    },
+    {
+      "name": "Redbridge",
+      "count": 449
+    },
+    {
+      "name": "Wanstead",
+      "count": 449
+    },
+    {
+      "name": "Woolwich",
+      "count": 442
+    },
+    {
+      "name": "Abbey Wood",
+      "count": 442
+    },
+    {
+      "name": "Romford",
+      "count": 438
+    },
+    {
+      "name": "Gospel Oak",
+      "count": 434
+    },
+    {
+      "name": "Eastcote",
+      "count": 424
+    },
+    {
+      "name": "Ruislip Manor",
+      "count": 424
+    },
+    {
+      "name": "Ruislip",
+      "count": 424
+    },
+    {
+      "name": "Ickenham",
+      "count": 424
+    },
+    {
+      "name": "Hillingdon",
+      "count": 424
+    },
+    {
+      "name": "Uxbridge",
+      "count": 423
+    },
+    {
+      "name": "Osterley",
+      "count": 394
+    },
+    {
+      "name": "Hounslow East",
+      "count": 394
+    },
+    {
+      "name": "Hounslow Central",
+      "count": 394
+    },
+    {
+      "name": "Hounslow West",
+      "count": 394
+    },
+    {
+      "name": "Hatton Cross",
+      "count": 394
+    },
+    {
+      "name": "Nine Elms",
+      "count": 387
+    },
+    {
+      "name": "Battersea Power Station",
+      "count": 387
+    },
+    {
+      "name": "Boston Manor",
+      "count": 387
+    },
+    {
+      "name": "All Saints",
+      "count": 386
+    },
+    {
+      "name": "Langdon Park",
+      "count": 386
+    },
+    {
+      "name": "Devons Road",
+      "count": 386
+    },
+    {
+      "name": "Bow Church",
+      "count": 386
+    },
+    {
+      "name": "Pudding Mill Lane",
+      "count": 386
+    },
+    {
+      "name": "Gunnersbury",
+      "count": 382
+    },
+    {
+      "name": "Kew Gardens",
+      "count": 382
+    },
+    {
+      "name": "Richmond",
+      "count": 382
+    },
+    {
+      "name": "North Harrow",
+      "count": 381
+    },
+    {
+      "name": "Pinner",
+      "count": 381
+    },
+    {
+      "name": "Northwood Hills",
+      "count": 381
+    },
+    {
+      "name": "Northwood",
+      "count": 381
+    },
+    {
+      "name": "Moor Park",
+      "count": 381
+    },
+    {
+      "name": "Fairlop",
+      "count": 367
+    },
+    {
+      "name": "Barkingside",
+      "count": 367
+    },
+    {
+      "name": "Maryland",
+      "count": 366
+    },
+    {
+      "name": "Forest Gate",
+      "count": 366
+    },
+    {
+      "name": "Manor Park",
+      "count": 366
+    },
+    {
+      "name": "Ilford",
+      "count": 366
+    },
+    {
+      "name": "Seven Kings",
+      "count": 366
+    },
+    {
+      "name": "Goodmayes",
+      "count": 366
+    },
+    {
+      "name": "Chadwell Heath",
+      "count": 366
+    },
+    {
+      "name": "Gidea Park",
+      "count": 366
+    },
+    {
+      "name": "Harold Wood",
+      "count": 366
+    },
+    {
+      "name": "Brentwood",
+      "count": 366
+    },
+    {
+      "name": "Shenfield",
+      "count": 366
+    },
+    {
+      "name": "Debden",
+      "count": 343
+    },
+    {
+      "name": "Epping",
+      "count": 342
+    },
+    {
+      "name": "Theydon Bois",
+      "count": 342
+    },
+    {
+      "name": "Heathrow Terminal 4",
+      "count": 336
+    },
+    {
+      "name": "Hanger Lane",
+      "count": 326
+    },
+    {
+      "name": "Perivale",
+      "count": 326
+    },
+    {
+      "name": "Greenford",
+      "count": 326
+    },
+    {
+      "name": "Northolt",
+      "count": 326
+    },
+    {
+      "name": "West Harrow",
+      "count": 322
+    },
+    {
+      "name": "Harrow & Wealdstone",
+      "count": 313
+    },
+    {
+      "name": "Kenton",
+      "count": 313
+    },
+    {
+      "name": "South Kenton",
+      "count": 313
+    },
+    {
+      "name": "North Wembley",
+      "count": 313
+    },
+    {
+      "name": "Wembley Central",
+      "count": 313
+    },
+    {
+      "name": "South Ruislip",
+      "count": 302
+    },
+    {
+      "name": "Ruislip Gardens",
+      "count": 302
+    },
+    {
+      "name": "Cambridge Heath",
+      "count": 296
+    },
+    {
+      "name": "London Fields",
+      "count": 296
+    },
+    {
+      "name": "Hackney Downs",
+      "count": 296
+    },
+    {
+      "name": "New Cross Gate",
+      "count": 292
+    },
+    {
+      "name": "Brockley",
+      "count": 292
+    },
+    {
+      "name": "Honor Oak Park",
+      "count": 292
+    },
+    {
+      "name": "Forest Hill",
+      "count": 292
+    },
+    {
+      "name": "Sydenham",
+      "count": 292
+    },
+    {
+      "name": "Kensal Rise",
+      "count": 290
+    },
+    {
+      "name": "Brondesbury Park",
+      "count": 290
+    },
+    {
+      "name": "Brondesbury",
+      "count": 290
+    },
+    {
+      "name": "Finchley Road & Frognal",
+      "count": 290
+    },
+    {
+      "name": "Hampstead Heath",
+      "count": 290
+    },
+    {
+      "name": "Kentish Town West",
+      "count": 290
+    },
+    {
+      "name": "Camden Road",
+      "count": 290
+    },
+    {
+      "name": "Caledonian Road & Barnsbury",
+      "count": 290
+    },
+    {
+      "name": "Dalston Kingsland",
+      "count": 290
+    },
+    {
+      "name": "Hackney Central",
+      "count": 290
+    },
+    {
+      "name": "Homerton",
+      "count": 290
+    },
+    {
+      "name": "Hackney Wick",
+      "count": 290
+    },
+    {
+      "name": "Clapham Junction",
+      "count": 290
+    },
+    {
+      "name": "West Ruislip",
+      "count": 285
+    },
+    {
+      "name": "Chiswick Park",
+      "count": 265
+    },
+    {
+      "name": "Tower Gateway",
+      "count": 244
+    },
+    {
+      "name": "Star Lane",
+      "count": 242
+    },
+    {
+      "name": "West Ham (DLR)",
+      "count": 242
+    },
+    {
+      "name": "Abbey Road",
+      "count": 242
+    },
+    {
+      "name": "Stratford High Street",
+      "count": 242
+    },
+    {
+      "name": "Stratford International",
+      "count": 242
+    },
+    {
+      "name": "Beckton",
+      "count": 242
+    },
+    {
+      "name": "Gallions Reach",
+      "count": 242
+    },
+    {
+      "name": "Cyprus",
+      "count": 242
+    },
+    {
+      "name": "Beckton Park",
+      "count": 242
+    },
+    {
+      "name": "Royal Albert",
+      "count": 242
+    },
+    {
+      "name": "Prince Regent",
+      "count": 242
+    },
+    {
+      "name": "Royal Victoria",
+      "count": 242
+    },
+    {
+      "name": "West Acton",
+      "count": 240
+    },
+    {
+      "name": "Reading",
+      "count": 220
+    },
+    {
+      "name": "Twyford",
+      "count": 220
+    },
+    {
+      "name": "Maidenhead",
+      "count": 220
+    },
+    {
+      "name": "Taplow",
+      "count": 220
+    },
+    {
+      "name": "Burnham",
+      "count": 220
+    },
+    {
+      "name": "Slough",
+      "count": 220
+    },
+    {
+      "name": "Langley",
+      "count": 220
+    },
+    {
+      "name": "Iver",
+      "count": 220
+    },
+    {
+      "name": "West Drayton",
+      "count": 220
+    },
+    {
+      "name": "South Harrow",
+      "count": 213
+    },
+    {
+      "name": "Watford",
+      "count": 208
+    },
+    {
+      "name": "Croxley",
+      "count": 208
+    },
+    {
+      "name": "North Ealing",
+      "count": 202
+    },
+    {
+      "name": "Park Royal",
+      "count": 202
+    },
+    {
+      "name": "Alperton",
+      "count": 202
+    },
+    {
+      "name": "Sudbury Town",
+      "count": 202
+    },
+    {
+      "name": "Sudbury Hill",
+      "count": 202
+    },
+    {
+      "name": "Rickmansworth",
+      "count": 188
+    },
+    {
+      "name": "Chorleywood",
+      "count": 184
+    },
+    {
+      "name": "Chalfont & Latimer",
+      "count": 184
+    },
+    {
+      "name": "Mill Hill East",
+      "count": 172
+    },
+    {
+      "name": "Kensington (Olympia)",
+      "count": 153
+    },
+    {
+      "name": "Rectory Road",
+      "count": 148
+    },
+    {
+      "name": "Stoke Newington",
+      "count": 148
+    },
+    {
+      "name": "Stamford Hill",
+      "count": 148
+    },
+    {
+      "name": "Bruce Grove",
+      "count": 148
+    },
+    {
+      "name": "White Hart Lane",
+      "count": 148
+    },
+    {
+      "name": "Silver Street",
+      "count": 148
+    },
+    {
+      "name": "Edmonton Green",
+      "count": 148
+    },
+    {
+      "name": "Clapton",
+      "count": 148
+    },
+    {
+      "name": "St James Street",
+      "count": 148
+    },
+    {
+      "name": "Wood Street",
+      "count": 148
+    },
+    {
+      "name": "Highams Park",
+      "count": 148
+    },
+    {
+      "name": "Chingford",
+      "count": 148
+    },
+    {
+      "name": "Euston (Rail)",
+      "count": 146
+    },
+    {
+      "name": "South Hampstead",
+      "count": 146
+    },
+    {
+      "name": "Kilburn High Road",
+      "count": 146
+    },
+    {
+      "name": "Headstone Lane",
+      "count": 146
+    },
+    {
+      "name": "Hatch End",
+      "count": 146
+    },
+    {
+      "name": "Carpenders Park",
+      "count": 146
+    },
+    {
+      "name": "Bushey",
+      "count": 146
+    },
+    {
+      "name": "Watford High Street",
+      "count": 146
+    },
+    {
+      "name": "Watford Junction",
+      "count": 146
+    },
+    {
+      "name": "South Acton",
+      "count": 146
+    },
+    {
+      "name": "Acton Central",
+      "count": 146
+    },
+    {
+      "name": "Penge West",
+      "count": 146
+    },
+    {
+      "name": "Anerley",
+      "count": 146
+    },
+    {
+      "name": "Norwood Junction",
+      "count": 146
+    },
+    {
+      "name": "West Croydon",
+      "count": 146
+    },
+    {
+      "name": "Crystal Palace",
+      "count": 146
+    },
+    {
+      "name": "Queens Road Peckham",
+      "count": 146
+    },
+    {
+      "name": "Peckham Rye",
+      "count": 146
+    },
+    {
+      "name": "Denmark Hill",
+      "count": 146
+    },
+    {
+      "name": "Clapham High Street",
+      "count": 146
+    },
+    {
+      "name": "Wandsworth Road",
+      "count": 146
+    },
+    {
+      "name": "Imperial Wharf",
+      "count": 144
+    },
+    {
+      "name": "Shepherd's Bush (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Upper Holloway",
+      "count": 144
+    },
+    {
+      "name": "Crouch Hill",
+      "count": 144
+    },
+    {
+      "name": "Harringay Green Lanes",
+      "count": 144
+    },
+    {
+      "name": "South Tottenham",
+      "count": 144
+    },
+    {
+      "name": "Blackhorse Road (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Walthamstow Queens Road",
+      "count": 144
+    },
+    {
+      "name": "Leyton Midland Road",
+      "count": 144
+    },
+    {
+      "name": "Leytonstone High Road",
+      "count": 144
+    },
+    {
+      "name": "Wanstead Park",
+      "count": 144
+    },
+    {
+      "name": "Woodgrange Park",
+      "count": 144
+    },
+    {
+      "name": "Barking (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Barking Riverside",
+      "count": 144
+    },
+    {
+      "name": "New Cross",
+      "count": 142
+    },
+    {
+      "name": "Grange Hill",
+      "count": 115
+    },
+    {
+      "name": "Chigwell",
+      "count": 115
+    },
+    {
+      "name": "Roding Valley",
+      "count": 115
+    },
+    {
+      "name": "Amersham",
+      "count": 104
+    },
+    {
+      "name": "Chesham",
+      "count": 80
+    },
+    {
+      "name": "Bush Hill Park",
+      "count": 74
+    },
+    {
+      "name": "Enfield Town",
+      "count": 74
+    },
+    {
+      "name": "Southbury",
+      "count": 74
+    },
+    {
+      "name": "Turkey Street",
+      "count": 74
+    },
+    {
+      "name": "Theobalds Grove",
+      "count": 74
+    },
+    {
+      "name": "Cheshunt",
+      "count": 74
+    },
+    {
+      "name": "Emerson Park",
+      "count": 72
+    }
+  ],
+  "saturday": [
+    {
+      "name": "King's Cross St. Pancras",
+      "count": 3444
+    },
+    {
+      "name": "Liverpool Street",
+      "count": 2882
+    },
+    {
+      "name": "Green Park",
+      "count": 2745
+    },
+    {
+      "name": "Bond Street",
+      "count": 2616
+    },
+    {
+      "name": "Euston",
+      "count": 2597
+    },
+    {
+      "name": "Baker Street",
+      "count": 2572
+    },
+    {
+      "name": "Tottenham Court Road",
+      "count": 2516
+    },
+    {
+      "name": "Oxford Circus",
+      "count": 2513
+    },
+    {
+      "name": "Stratford",
+      "count": 2451
+    },
+    {
+      "name": "Paddington",
+      "count": 2378
+    },
+    {
+      "name": "Waterloo",
+      "count": 2307
+    },
+    {
+      "name": "Embankment",
+      "count": 2275
+    },
+    {
+      "name": "Whitechapel",
+      "count": 2160
+    },
+    {
+      "name": "Canary Wharf",
+      "count": 2090
+    },
+    {
+      "name": "Victoria",
+      "count": 1941
+    },
+    {
+      "name": "Warren Street",
+      "count": 1873
+    },
+    {
+      "name": "Stockwell",
+      "count": 1871
+    },
+    {
+      "name": "Finsbury Park",
+      "count": 1824
+    },
+    {
+      "name": "Westminster",
+      "count": 1806
+    },
+    {
+      "name": "Earl's Court",
+      "count": 1798
+    },
+    {
+      "name": "Kennington",
+      "count": 1723
+    },
+    {
+      "name": "Hammersmith",
+      "count": 1719
+    },
+    {
+      "name": "West Ham",
+      "count": 1691
+    },
+    {
+      "name": "Gloucester Road",
+      "count": 1663
+    },
+    {
+      "name": "Mile End",
+      "count": 1661
+    },
+    {
+      "name": "Holborn",
+      "count": 1661
+    },
+    {
+      "name": "South Kensington",
+      "count": 1661
+    },
+    {
+      "name": "London Bridge",
+      "count": 1643
+    },
+    {
+      "name": "Moorgate",
+      "count": 1614
+    },
+    {
+      "name": "Bank",
+      "count": 1613
+    },
+    {
+      "name": "Leicester Square",
+      "count": 1591
+    },
+    {
+      "name": "Camden Town",
+      "count": 1543
+    },
+    {
+      "name": "Finchley Road",
+      "count": 1528
+    },
+    {
+      "name": "Edgware Road",
+      "count": 1501
+    },
+    {
+      "name": "Shadwell",
+      "count": 1444
+    },
+    {
+      "name": "Wembley Park",
+      "count": 1436
+    },
+    {
+      "name": "Charing Cross",
+      "count": 1388
+    },
+    {
+      "name": "Notting Hill Gate",
+      "count": 1348
+    },
+    {
+      "name": "Piccadilly Circus",
+      "count": 1341
+    },
+    {
+      "name": "Elephant & Castle",
+      "count": 1282
+    },
+    {
+      "name": "Turnham Green",
+      "count": 1251
+    },
+    {
+      "name": "Barons Court",
+      "count": 1247
+    },
+    {
+      "name": "West Hampstead",
+      "count": 1209
+    },
+    {
+      "name": "Seven Sisters",
+      "count": 1204
+    },
+    {
+      "name": "Bethnal Green",
+      "count": 1185
+    },
+    {
+      "name": "Walthamstow Central",
+      "count": 1138
+    },
+    {
+      "name": "Highbury & Islington",
+      "count": 1052
+    },
+    {
+      "name": "Pimlico",
+      "count": 1052
+    },
+    {
+      "name": "Vauxhall",
+      "count": 1052
+    },
+    {
+      "name": "Brixton",
+      "count": 1052
+    },
+    {
+      "name": "Acton Town",
+      "count": 1038
+    },
+    {
+      "name": "Blackhorse Road",
+      "count": 990
+    },
+    {
+      "name": "Tottenham Hale",
+      "count": 990
+    },
+    {
+      "name": "Canning Town",
+      "count": 919
+    },
+    {
+      "name": "North Greenwich",
+      "count": 919
+    },
+    {
+      "name": "Canada Water",
+      "count": 919
+    },
+    {
+      "name": "Bermondsey",
+      "count": 919
+    },
+    {
+      "name": "Southwark",
+      "count": 919
+    },
+    {
+      "name": "St. John's Wood",
+      "count": 919
+    },
+    {
+      "name": "Swiss Cottage",
+      "count": 919
+    },
+    {
+      "name": "Willesden Green",
+      "count": 915
+    },
+    {
+      "name": "White City",
+      "count": 894
+    },
+    {
+      "name": "Euston Square",
+      "count": 894
+    },
+    {
+      "name": "Great Portland Street",
+      "count": 894
+    },
+    {
+      "name": "Barbican",
+      "count": 890
+    },
+    {
+      "name": "Farringdon",
+      "count": 890
+    },
+    {
+      "name": "Leytonstone",
+      "count": 889
+    },
+    {
+      "name": "Leyton",
+      "count": 889
+    },
+    {
+      "name": "St. Paul's",
+      "count": 889
+    },
+    {
+      "name": "Chancery Lane",
+      "count": 889
+    },
+    {
+      "name": "Marble Arch",
+      "count": 889
+    },
+    {
+      "name": "Lancaster Gate",
+      "count": 889
+    },
+    {
+      "name": "Queensway",
+      "count": 889
+    },
+    {
+      "name": "Holland Park",
+      "count": 889
+    },
+    {
+      "name": "Shepherd's Bush",
+      "count": 889
+    },
+    {
+      "name": "Sloane Square",
+      "count": 887
+    },
+    {
+      "name": "St. James's Park",
+      "count": 887
+    },
+    {
+      "name": "Temple",
+      "count": 887
+    },
+    {
+      "name": "Blackfriars",
+      "count": 887
+    },
+    {
+      "name": "Mansion House",
+      "count": 887
+    },
+    {
+      "name": "Cannon Street",
+      "count": 887
+    },
+    {
+      "name": "Monument",
+      "count": 887
+    },
+    {
+      "name": "Tower Hill",
+      "count": 887
+    },
+    {
+      "name": "Kilburn",
+      "count": 877
+    },
+    {
+      "name": "Westferry",
+      "count": 864
+    },
+    {
+      "name": "Limehouse",
+      "count": 864
+    },
+    {
+      "name": "Dollis Hill",
+      "count": 821
+    },
+    {
+      "name": "Neasden",
+      "count": 821
+    },
+    {
+      "name": "Mornington Crescent",
+      "count": 819
+    },
+    {
+      "name": "Goodge Street",
+      "count": 819
+    },
+    {
+      "name": "Oval",
+      "count": 819
+    },
+    {
+      "name": "Clapham North",
+      "count": 819
+    },
+    {
+      "name": "Clapham Common",
+      "count": 819
+    },
+    {
+      "name": "Clapham South",
+      "count": 819
+    },
+    {
+      "name": "Balham",
+      "count": 819
+    },
+    {
+      "name": "Tooting Bec",
+      "count": 819
+    },
+    {
+      "name": "Tooting Broadway",
+      "count": 819
+    },
+    {
+      "name": "Colliers Wood",
+      "count": 819
+    },
+    {
+      "name": "South Wimbledon",
+      "count": 819
+    },
+    {
+      "name": "Morden",
+      "count": 819
+    },
+    {
+      "name": "Farringdon (Rail)",
+      "count": 808
+    },
+    {
+      "name": "Finchley Central",
+      "count": 801
+    },
+    {
+      "name": "East Finchley",
+      "count": 793
+    },
+    {
+      "name": "Poplar",
+      "count": 793
+    },
+    {
+      "name": "Heathrow Terminals 2 & 3",
+      "count": 790
+    },
+    {
+      "name": "Golders Green",
+      "count": 777
+    },
+    {
+      "name": "Hampstead",
+      "count": 774
+    },
+    {
+      "name": "Belsize Park",
+      "count": 774
+    },
+    {
+      "name": "Chalk Farm",
+      "count": 774
+    },
+    {
+      "name": "Plaistow",
+      "count": 772
+    },
+    {
+      "name": "Bromley-by-Bow",
+      "count": 772
+    },
+    {
+      "name": "Bow Road",
+      "count": 772
+    },
+    {
+      "name": "Stepney Green",
+      "count": 772
+    },
+    {
+      "name": "Aldgate East",
+      "count": 772
+    },
+    {
+      "name": "Arnos Grove",
+      "count": 772
+    },
+    {
+      "name": "Bounds Green",
+      "count": 772
+    },
+    {
+      "name": "Wood Green",
+      "count": 772
+    },
+    {
+      "name": "Turnpike Lane",
+      "count": 772
+    },
+    {
+      "name": "Manor House",
+      "count": 772
+    },
+    {
+      "name": "Arsenal",
+      "count": 772
+    },
+    {
+      "name": "Holloway Road",
+      "count": 772
+    },
+    {
+      "name": "Caledonian Road",
+      "count": 772
+    },
+    {
+      "name": "Russell Square",
+      "count": 772
+    },
+    {
+      "name": "Covent Garden",
+      "count": 772
+    },
+    {
+      "name": "Hyde Park Corner",
+      "count": 772
+    },
+    {
+      "name": "Knightsbridge",
+      "count": 772
+    },
+    {
+      "name": "Barking",
+      "count": 771
+    },
+    {
+      "name": "East Ham",
+      "count": 770
+    },
+    {
+      "name": "Upton Park",
+      "count": 770
+    },
+    {
+      "name": "Edgware",
+      "count": 770
+    },
+    {
+      "name": "Burnt Oak",
+      "count": 770
+    },
+    {
+      "name": "Colindale",
+      "count": 770
+    },
+    {
+      "name": "Hendon Central",
+      "count": 770
+    },
+    {
+      "name": "Brent Cross",
+      "count": 770
+    },
+    {
+      "name": "Highgate",
+      "count": 769
+    },
+    {
+      "name": "Archway",
+      "count": 769
+    },
+    {
+      "name": "Tufnell Park",
+      "count": 769
+    },
+    {
+      "name": "Kentish Town",
+      "count": 769
+    },
+    {
+      "name": "Highbury & Islington (Rail)",
+      "count": 728
+    },
+    {
+      "name": "Canonbury",
+      "count": 728
+    },
+    {
+      "name": "Willesden Junction",
+      "count": 725
+    },
+    {
+      "name": "Angel",
+      "count": 724
+    },
+    {
+      "name": "Old Street",
+      "count": 724
+    },
+    {
+      "name": "Borough",
+      "count": 724
+    },
+    {
+      "name": "Queen's Park",
+      "count": 721
+    },
+    {
+      "name": "Canning Town (DLR)",
+      "count": 704
+    },
+    {
+      "name": "East Acton",
+      "count": 679
+    },
+    {
+      "name": "North Acton",
+      "count": 679
+    },
+    {
+      "name": "Custom House",
+      "count": 675
+    },
+    {
+      "name": "Hayes & Harlington",
+      "count": 660
+    },
+    {
+      "name": "Southall",
+      "count": 660
+    },
+    {
+      "name": "Hanwell",
+      "count": 660
+    },
+    {
+      "name": "West Ealing",
+      "count": 660
+    },
+    {
+      "name": "Ealing Broadway (Rail)",
+      "count": 660
+    },
+    {
+      "name": "Acton Main Line",
+      "count": 660
+    },
+    {
+      "name": "Aldgate",
+      "count": 656
+    },
+    {
+      "name": "Kingsbury",
+      "count": 642
+    },
+    {
+      "name": "Queensbury",
+      "count": 642
+    },
+    {
+      "name": "Canons Park",
+      "count": 642
+    },
+    {
+      "name": "Stanmore",
+      "count": 639
+    },
+    {
+      "name": "High Barnet",
+      "count": 639
+    },
+    {
+      "name": "Totteridge & Whetstone",
+      "count": 639
+    },
+    {
+      "name": "Woodside Park",
+      "count": 639
+    },
+    {
+      "name": "West Finchley",
+      "count": 639
+    },
+    {
+      "name": "Bank (DLR)",
+      "count": 630
+    },
+    {
+      "name": "Harrow-on-the-Hill",
+      "count": 614
+    },
+    {
+      "name": "Northfields",
+      "count": 610
+    },
+    {
+      "name": "Preston Road",
+      "count": 606
+    },
+    {
+      "name": "Northwick Park",
+      "count": 606
+    },
+    {
+      "name": "South Ealing",
+      "count": 602
+    },
+    {
+      "name": "High Street Kensington",
+      "count": 595
+    },
+    {
+      "name": "West Brompton",
+      "count": 590
+    },
+    {
+      "name": "Dalston Junction",
+      "count": 580
+    },
+    {
+      "name": "Haggerston",
+      "count": 580
+    },
+    {
+      "name": "Hoxton",
+      "count": 580
+    },
+    {
+      "name": "Shoreditch High Street",
+      "count": 580
+    },
+    {
+      "name": "Wapping",
+      "count": 580
+    },
+    {
+      "name": "Rotherhithe",
+      "count": 580
+    },
+    {
+      "name": "Canada Water (Rail)",
+      "count": 580
+    },
+    {
+      "name": "Surrey Quays",
+      "count": 580
+    },
+    {
+      "name": "Oakwood",
+      "count": 574
+    },
+    {
+      "name": "Southgate",
+      "count": 574
+    },
+    {
+      "name": "Kilburn Park",
+      "count": 570
+    },
+    {
+      "name": "Maida Vale",
+      "count": 570
+    },
+    {
+      "name": "Warwick Avenue",
+      "count": 570
+    },
+    {
+      "name": "Marylebone",
+      "count": 570
+    },
+    {
+      "name": "Regent's Park",
+      "count": 570
+    },
+    {
+      "name": "Cockfosters",
+      "count": 570
+    },
+    {
+      "name": "Woodford",
+      "count": 561
+    },
+    {
+      "name": "Lambeth North",
+      "count": 558
+    },
+    {
+      "name": "Stratford (DLR 1)",
+      "count": 558
+    },
+    {
+      "name": "Heathrow Terminal 5",
+      "count": 549
+    },
+    {
+      "name": "West India Quay",
+      "count": 524
+    },
+    {
+      "name": "Upminster",
+      "count": 514
+    },
+    {
+      "name": "Ealing Broadway",
+      "count": 512
+    },
+    {
+      "name": "Rayners Lane",
+      "count": 497
+    },
+    {
+      "name": "Ravenscourt Park",
+      "count": 479
+    },
+    {
+      "name": "Stamford Brook",
+      "count": 479
+    },
+    {
+      "name": "Hainault",
+      "count": 473
+    },
+    {
+      "name": "West Kensington",
+      "count": 472
+    },
+    {
+      "name": "Royal Oak",
+      "count": 469
+    },
+    {
+      "name": "Westbourne Park",
+      "count": 469
+    },
+    {
+      "name": "Ladbroke Grove",
+      "count": 469
+    },
+    {
+      "name": "Latimer Road",
+      "count": 469
+    },
+    {
+      "name": "Wood Lane",
+      "count": 469
+    },
+    {
+      "name": "Shepherd's Bush Market",
+      "count": 469
+    },
+    {
+      "name": "Goldhawk Road",
+      "count": 469
+    },
+    {
+      "name": "East India",
+      "count": 468
+    },
+    {
+      "name": "Blackwall",
+      "count": 468
+    },
+    {
+      "name": "Woolwich Arsenal",
+      "count": 463
+    },
+    {
+      "name": "King George V",
+      "count": 463
+    },
+    {
+      "name": "London City Airport",
+      "count": 463
+    },
+    {
+      "name": "Pontoon Dock",
+      "count": 463
+    },
+    {
+      "name": "West Silvertown",
+      "count": 463
+    },
+    {
+      "name": "Bayswater",
+      "count": 459
+    },
+    {
+      "name": "Loughton",
+      "count": 454
+    },
+    {
+      "name": "Parsons Green",
+      "count": 449
+    },
+    {
+      "name": "Buckhurst Hill",
+      "count": 448
+    },
+    {
+      "name": "Putney Bridge",
+      "count": 448
+    },
+    {
+      "name": "East Putney",
+      "count": 448
+    },
+    {
+      "name": "Southfields",
+      "count": 448
+    },
+    {
+      "name": "Wimbledon Park",
+      "count": 448
+    },
+    {
+      "name": "Wimbledon",
+      "count": 448
+    },
+    {
+      "name": "Newbury Park",
+      "count": 446
+    },
+    {
+      "name": "Gants Hill",
+      "count": 446
+    },
+    {
+      "name": "Redbridge",
+      "count": 446
+    },
+    {
+      "name": "Wanstead",
+      "count": 446
+    },
+    {
+      "name": "Fulham Broadway",
+      "count": 446
+    },
+    {
+      "name": "Osterley",
+      "count": 445
+    },
+    {
+      "name": "Hounslow East",
+      "count": 445
+    },
+    {
+      "name": "Hounslow Central",
+      "count": 445
+    },
+    {
+      "name": "Hounslow West",
+      "count": 445
+    },
+    {
+      "name": "Hatton Cross",
+      "count": 445
+    },
+    {
+      "name": "South Woodford",
+      "count": 443
+    },
+    {
+      "name": "Snaresbrook",
+      "count": 443
+    },
+    {
+      "name": "Upminster Bridge",
+      "count": 442
+    },
+    {
+      "name": "Hornchurch",
+      "count": 442
+    },
+    {
+      "name": "Elm Park",
+      "count": 442
+    },
+    {
+      "name": "Dagenham East",
+      "count": 442
+    },
+    {
+      "name": "Dagenham Heathway",
+      "count": 442
+    },
+    {
+      "name": "Becontree",
+      "count": 442
+    },
+    {
+      "name": "Upney",
+      "count": 442
+    },
+    {
+      "name": "Woolwich",
+      "count": 442
+    },
+    {
+      "name": "Abbey Wood",
+      "count": 442
+    },
+    {
+      "name": "Boston Manor",
+      "count": 439
+    },
+    {
+      "name": "Romford",
+      "count": 438
+    },
+    {
+      "name": "Stonebridge Park",
+      "count": 436
+    },
+    {
+      "name": "Harlesden",
+      "count": 435
+    },
+    {
+      "name": "Kensal Green",
+      "count": 435
+    },
+    {
+      "name": "Ealing Common",
+      "count": 435
+    },
+    {
+      "name": "Gospel Oak",
+      "count": 434
+    },
+    {
+      "name": "Mudchute",
+      "count": 404
+    },
+    {
+      "name": "Crossharbour",
+      "count": 404
+    },
+    {
+      "name": "South Quay",
+      "count": 404
+    },
+    {
+      "name": "Heron Quays",
+      "count": 404
+    },
+    {
+      "name": "Lewisham",
+      "count": 403
+    },
+    {
+      "name": "Elverson Road",
+      "count": 403
+    },
+    {
+      "name": "Deptford Bridge",
+      "count": 403
+    },
+    {
+      "name": "Greenwich",
+      "count": 403
+    },
+    {
+      "name": "Cutty Sark",
+      "count": 403
+    },
+    {
+      "name": "Island Gardens",
+      "count": 403
+    },
+    {
+      "name": "Eastcote",
+      "count": 384
+    },
+    {
+      "name": "Ruislip Manor",
+      "count": 384
+    },
+    {
+      "name": "Ruislip",
+      "count": 384
+    },
+    {
+      "name": "Ickenham",
+      "count": 384
+    },
+    {
+      "name": "Hillingdon",
+      "count": 384
+    },
+    {
+      "name": "Uxbridge",
+      "count": 382
+    },
+    {
+      "name": "Gunnersbury",
+      "count": 378
+    },
+    {
+      "name": "Kew Gardens",
+      "count": 378
+    },
+    {
+      "name": "Richmond",
+      "count": 378
+    },
+    {
+      "name": "Nine Elms",
+      "count": 374
+    },
+    {
+      "name": "Battersea Power Station",
+      "count": 374
+    },
+    {
+      "name": "Maryland",
+      "count": 366
+    },
+    {
+      "name": "Forest Gate",
+      "count": 366
+    },
+    {
+      "name": "Manor Park",
+      "count": 366
+    },
+    {
+      "name": "Ilford",
+      "count": 366
+    },
+    {
+      "name": "Seven Kings",
+      "count": 366
+    },
+    {
+      "name": "Goodmayes",
+      "count": 366
+    },
+    {
+      "name": "Chadwell Heath",
+      "count": 366
+    },
+    {
+      "name": "Gidea Park",
+      "count": 366
+    },
+    {
+      "name": "Harold Wood",
+      "count": 366
+    },
+    {
+      "name": "Brentwood",
+      "count": 366
+    },
+    {
+      "name": "Shenfield",
+      "count": 366
+    },
+    {
+      "name": "Fairlop",
+      "count": 364
+    },
+    {
+      "name": "Barkingside",
+      "count": 364
+    },
+    {
+      "name": "Epping",
+      "count": 340
+    },
+    {
+      "name": "Theydon Bois",
+      "count": 340
+    },
+    {
+      "name": "Debden",
+      "count": 340
+    },
+    {
+      "name": "Heathrow Terminal 4",
+      "count": 336
+    },
+    {
+      "name": "All Saints",
+      "count": 325
+    },
+    {
+      "name": "Langdon Park",
+      "count": 325
+    },
+    {
+      "name": "Devons Road",
+      "count": 325
+    },
+    {
+      "name": "Bow Church",
+      "count": 325
+    },
+    {
+      "name": "Pudding Mill Lane",
+      "count": 325
+    },
+    {
+      "name": "North Harrow",
+      "count": 308
+    },
+    {
+      "name": "Pinner",
+      "count": 308
+    },
+    {
+      "name": "Northwood Hills",
+      "count": 308
+    },
+    {
+      "name": "Northwood",
+      "count": 308
+    },
+    {
+      "name": "Moor Park",
+      "count": 308
+    },
+    {
+      "name": "West Harrow",
+      "count": 304
+    },
+    {
+      "name": "Harrow & Wealdstone",
+      "count": 299
+    },
+    {
+      "name": "Kenton",
+      "count": 299
+    },
+    {
+      "name": "South Kenton",
+      "count": 299
+    },
+    {
+      "name": "North Wembley",
+      "count": 299
+    },
+    {
+      "name": "Wembley Central",
+      "count": 299
+    },
+    {
+      "name": "Cambridge Heath",
+      "count": 296
+    },
+    {
+      "name": "London Fields",
+      "count": 296
+    },
+    {
+      "name": "Hackney Downs",
+      "count": 296
+    },
+    {
+      "name": "Hanger Lane",
+      "count": 292
+    },
+    {
+      "name": "Perivale",
+      "count": 292
+    },
+    {
+      "name": "Greenford",
+      "count": 292
+    },
+    {
+      "name": "Northolt",
+      "count": 292
+    },
+    {
+      "name": "South Ruislip",
+      "count": 292
+    },
+    {
+      "name": "Ruislip Gardens",
+      "count": 292
+    },
+    {
+      "name": "New Cross Gate",
+      "count": 292
+    },
+    {
+      "name": "Brockley",
+      "count": 292
+    },
+    {
+      "name": "Honor Oak Park",
+      "count": 292
+    },
+    {
+      "name": "Forest Hill",
+      "count": 292
+    },
+    {
+      "name": "Sydenham",
+      "count": 292
+    },
+    {
+      "name": "Kensal Rise",
+      "count": 290
+    },
+    {
+      "name": "Brondesbury Park",
+      "count": 290
+    },
+    {
+      "name": "Brondesbury",
+      "count": 290
+    },
+    {
+      "name": "Finchley Road & Frognal",
+      "count": 290
+    },
+    {
+      "name": "Hampstead Heath",
+      "count": 290
+    },
+    {
+      "name": "Kentish Town West",
+      "count": 290
+    },
+    {
+      "name": "Camden Road",
+      "count": 290
+    },
+    {
+      "name": "Caledonian Road & Barnsbury",
+      "count": 290
+    },
+    {
+      "name": "Dalston Kingsland",
+      "count": 290
+    },
+    {
+      "name": "Hackney Central",
+      "count": 290
+    },
+    {
+      "name": "Homerton",
+      "count": 290
+    },
+    {
+      "name": "Hackney Wick",
+      "count": 290
+    },
+    {
+      "name": "Clapham Junction",
+      "count": 290
+    },
+    {
+      "name": "West Ruislip",
+      "count": 285
+    },
+    {
+      "name": "West Acton",
+      "count": 266
+    },
+    {
+      "name": "Kensington (Olympia)",
+      "count": 251
+    },
+    {
+      "name": "Chiswick Park",
+      "count": 247
+    },
+    {
+      "name": "Tower Gateway",
+      "count": 234
+    },
+    {
+      "name": "Star Lane",
+      "count": 233
+    },
+    {
+      "name": "West Ham (DLR)",
+      "count": 233
+    },
+    {
+      "name": "Abbey Road",
+      "count": 233
+    },
+    {
+      "name": "Stratford High Street",
+      "count": 233
+    },
+    {
+      "name": "Stratford International",
+      "count": 233
+    },
+    {
+      "name": "Beckton",
+      "count": 233
+    },
+    {
+      "name": "Gallions Reach",
+      "count": 233
+    },
+    {
+      "name": "Cyprus",
+      "count": 233
+    },
+    {
+      "name": "Beckton Park",
+      "count": 233
+    },
+    {
+      "name": "Royal Albert",
+      "count": 233
+    },
+    {
+      "name": "Prince Regent",
+      "count": 233
+    },
+    {
+      "name": "Royal Victoria",
+      "count": 233
+    },
+    {
+      "name": "Reading",
+      "count": 220
+    },
+    {
+      "name": "Twyford",
+      "count": 220
+    },
+    {
+      "name": "Maidenhead",
+      "count": 220
+    },
+    {
+      "name": "Taplow",
+      "count": 220
+    },
+    {
+      "name": "Burnham",
+      "count": 220
+    },
+    {
+      "name": "Slough",
+      "count": 220
+    },
+    {
+      "name": "Langley",
+      "count": 220
+    },
+    {
+      "name": "Iver",
+      "count": 220
+    },
+    {
+      "name": "West Drayton",
+      "count": 220
+    },
+    {
+      "name": "South Harrow",
+      "count": 196
+    },
+    {
+      "name": "North Ealing",
+      "count": 189
+    },
+    {
+      "name": "Park Royal",
+      "count": 189
+    },
+    {
+      "name": "Alperton",
+      "count": 189
+    },
+    {
+      "name": "Sudbury Town",
+      "count": 189
+    },
+    {
+      "name": "Sudbury Hill",
+      "count": 189
+    },
+    {
+      "name": "Rickmansworth",
+      "count": 161
+    },
+    {
+      "name": "Chorleywood",
+      "count": 160
+    },
+    {
+      "name": "Chalfont & Latimer",
+      "count": 160
+    },
+    {
+      "name": "Mill Hill East",
+      "count": 160
+    },
+    {
+      "name": "Croxley",
+      "count": 156
+    },
+    {
+      "name": "Watford",
+      "count": 155
+    },
+    {
+      "name": "Rectory Road",
+      "count": 148
+    },
+    {
+      "name": "Stoke Newington",
+      "count": 148
+    },
+    {
+      "name": "Stamford Hill",
+      "count": 148
+    },
+    {
+      "name": "Bruce Grove",
+      "count": 148
+    },
+    {
+      "name": "White Hart Lane",
+      "count": 148
+    },
+    {
+      "name": "Silver Street",
+      "count": 148
+    },
+    {
+      "name": "Edmonton Green",
+      "count": 148
+    },
+    {
+      "name": "Clapton",
+      "count": 148
+    },
+    {
+      "name": "St James Street",
+      "count": 148
+    },
+    {
+      "name": "Wood Street",
+      "count": 148
+    },
+    {
+      "name": "Highams Park",
+      "count": 148
+    },
+    {
+      "name": "Chingford",
+      "count": 148
+    },
+    {
+      "name": "Euston (Rail)",
+      "count": 146
+    },
+    {
+      "name": "South Hampstead",
+      "count": 146
+    },
+    {
+      "name": "Kilburn High Road",
+      "count": 146
+    },
+    {
+      "name": "Headstone Lane",
+      "count": 146
+    },
+    {
+      "name": "Hatch End",
+      "count": 146
+    },
+    {
+      "name": "Carpenders Park",
+      "count": 146
+    },
+    {
+      "name": "Bushey",
+      "count": 146
+    },
+    {
+      "name": "Watford High Street",
+      "count": 146
+    },
+    {
+      "name": "Watford Junction",
+      "count": 146
+    },
+    {
+      "name": "South Acton",
+      "count": 146
+    },
+    {
+      "name": "Acton Central",
+      "count": 146
+    },
+    {
+      "name": "Penge West",
+      "count": 146
+    },
+    {
+      "name": "Anerley",
+      "count": 146
+    },
+    {
+      "name": "Norwood Junction",
+      "count": 146
+    },
+    {
+      "name": "West Croydon",
+      "count": 146
+    },
+    {
+      "name": "Crystal Palace",
+      "count": 146
+    },
+    {
+      "name": "Queens Road Peckham",
+      "count": 146
+    },
+    {
+      "name": "Peckham Rye",
+      "count": 146
+    },
+    {
+      "name": "Denmark Hill",
+      "count": 146
+    },
+    {
+      "name": "Clapham High Street",
+      "count": 146
+    },
+    {
+      "name": "Wandsworth Road",
+      "count": 146
+    },
+    {
+      "name": "Imperial Wharf",
+      "count": 144
+    },
+    {
+      "name": "Shepherd's Bush (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Upper Holloway",
+      "count": 144
+    },
+    {
+      "name": "Crouch Hill",
+      "count": 144
+    },
+    {
+      "name": "Harringay Green Lanes",
+      "count": 144
+    },
+    {
+      "name": "South Tottenham",
+      "count": 144
+    },
+    {
+      "name": "Blackhorse Road (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Walthamstow Queens Road",
+      "count": 144
+    },
+    {
+      "name": "Leyton Midland Road",
+      "count": 144
+    },
+    {
+      "name": "Leytonstone High Road",
+      "count": 144
+    },
+    {
+      "name": "Wanstead Park",
+      "count": 144
+    },
+    {
+      "name": "Woodgrange Park",
+      "count": 144
+    },
+    {
+      "name": "Barking (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Barking Riverside",
+      "count": 144
+    },
+    {
+      "name": "New Cross",
+      "count": 142
+    },
+    {
+      "name": "Grange Hill",
+      "count": 113
+    },
+    {
+      "name": "Chigwell",
+      "count": 113
+    },
+    {
+      "name": "Roding Valley",
+      "count": 113
+    },
+    {
+      "name": "Chesham",
+      "count": 80
+    },
+    {
+      "name": "Amersham",
+      "count": 80
+    },
+    {
+      "name": "Bush Hill Park",
+      "count": 74
+    },
+    {
+      "name": "Enfield Town",
+      "count": 74
+    },
+    {
+      "name": "Southbury",
+      "count": 74
+    },
+    {
+      "name": "Turkey Street",
+      "count": 74
+    },
+    {
+      "name": "Theobalds Grove",
+      "count": 74
+    },
+    {
+      "name": "Cheshunt",
+      "count": 74
+    },
+    {
+      "name": "Emerson Park",
+      "count": 72
+    }
+  ],
+  "sunday": [
+    {
+      "name": "King's Cross St. Pancras",
+      "count": 2923
+    },
+    {
+      "name": "Liverpool Street",
+      "count": 2627
+    },
+    {
+      "name": "Bond Street",
+      "count": 2300
+    },
+    {
+      "name": "Green Park",
+      "count": 2268
+    },
+    {
+      "name": "Baker Street",
+      "count": 2250
+    },
+    {
+      "name": "Tottenham Court Road",
+      "count": 2216
+    },
+    {
+      "name": "Paddington",
+      "count": 2200
+    },
+    {
+      "name": "Euston",
+      "count": 2179
+    },
+    {
+      "name": "Stratford",
+      "count": 2133
+    },
+    {
+      "name": "Oxford Circus",
+      "count": 2071
+    },
+    {
+      "name": "Whitechapel",
+      "count": 2062
+    },
+    {
+      "name": "Embankment",
+      "count": 1986
+    },
+    {
+      "name": "Waterloo",
+      "count": 1963
+    },
+    {
+      "name": "Canary Wharf",
+      "count": 1805
+    },
+    {
+      "name": "Victoria",
+      "count": 1667
+    },
+    {
+      "name": "Westminster",
+      "count": 1579
+    },
+    {
+      "name": "Warren Street",
+      "count": 1560
+    },
+    {
+      "name": "Stockwell",
+      "count": 1559
+    },
+    {
+      "name": "Earl's Court",
+      "count": 1552
+    },
+    {
+      "name": "Finsbury Park",
+      "count": 1486
+    },
+    {
+      "name": "Hammersmith",
+      "count": 1473
+    },
+    {
+      "name": "Kennington",
+      "count": 1469
+    },
+    {
+      "name": "West Ham",
+      "count": 1454
+    },
+    {
+      "name": "Moorgate",
+      "count": 1433
+    },
+    {
+      "name": "Gloucester Road",
+      "count": 1428
+    },
+    {
+      "name": "South Kensington",
+      "count": 1428
+    },
+    {
+      "name": "London Bridge",
+      "count": 1397
+    },
+    {
+      "name": "Mile End",
+      "count": 1387
+    },
+    {
+      "name": "Holborn",
+      "count": 1338
+    },
+    {
+      "name": "Bank",
+      "count": 1333
+    },
+    {
+      "name": "Finchley Road",
+      "count": 1327
+    },
+    {
+      "name": "Edgware Road",
+      "count": 1324
+    },
+    {
+      "name": "Leicester Square",
+      "count": 1318
+    },
+    {
+      "name": "Camden Town",
+      "count": 1313
+    },
+    {
+      "name": "Shadwell",
+      "count": 1300
+    },
+    {
+      "name": "Wembley Park",
+      "count": 1266
+    },
+    {
+      "name": "Charing Cross",
+      "count": 1185
+    },
+    {
+      "name": "Notting Hill Gate",
+      "count": 1124
+    },
+    {
+      "name": "Piccadilly Circus",
+      "count": 1115
+    },
+    {
+      "name": "Elephant & Castle",
+      "count": 1098
+    },
+    {
+      "name": "West Hampstead",
+      "count": 1068
+    },
+    {
+      "name": "Turnham Green",
+      "count": 1057
+    },
+    {
+      "name": "Barons Court",
+      "count": 1055
+    },
+    {
+      "name": "Seven Sisters",
+      "count": 1019
+    },
+    {
+      "name": "Bethnal Green",
+      "count": 1009
+    },
+    {
+      "name": "Walthamstow Central",
+      "count": 959
+    },
+    {
+      "name": "Acton Town",
+      "count": 880
+    },
+    {
+      "name": "Highbury & Islington",
+      "count": 864
+    },
+    {
+      "name": "Pimlico",
+      "count": 864
+    },
+    {
+      "name": "Vauxhall",
+      "count": 864
+    },
+    {
+      "name": "Brixton",
+      "count": 864
+    },
+    {
+      "name": "Barbican",
+      "count": 814
+    },
+    {
+      "name": "Farringdon",
+      "count": 814
+    },
+    {
+      "name": "Euston Square",
+      "count": 814
+    },
+    {
+      "name": "Great Portland Street",
+      "count": 814
+    },
+    {
+      "name": "Blackhorse Road",
+      "count": 811
+    },
+    {
+      "name": "Tottenham Hale",
+      "count": 811
+    },
+    {
+      "name": "Farringdon (Rail)",
+      "count": 808
+    },
+    {
+      "name": "Tower Hill",
+      "count": 803
+    },
+    {
+      "name": "Sloane Square",
+      "count": 801
+    },
+    {
+      "name": "St. James's Park",
+      "count": 801
+    },
+    {
+      "name": "Temple",
+      "count": 801
+    },
+    {
+      "name": "Blackfriars",
+      "count": 801
+    },
+    {
+      "name": "Mansion House",
+      "count": 801
+    },
+    {
+      "name": "Cannon Street",
+      "count": 801
+    },
+    {
+      "name": "Monument",
+      "count": 801
+    },
+    {
+      "name": "Willesden Green",
+      "count": 787
+    },
+    {
+      "name": "Canning Town",
+      "count": 778
+    },
+    {
+      "name": "North Greenwich",
+      "count": 778
+    },
+    {
+      "name": "Canada Water",
+      "count": 778
+    },
+    {
+      "name": "Bermondsey",
+      "count": 778
+    },
+    {
+      "name": "Southwark",
+      "count": 778
+    },
+    {
+      "name": "St. John's Wood",
+      "count": 778
+    },
+    {
+      "name": "Swiss Cottage",
+      "count": 778
+    },
+    {
+      "name": "Kilburn",
+      "count": 754
+    },
+    {
+      "name": "Heathrow Terminals 2 & 3",
+      "count": 743
+    },
+    {
+      "name": "Highbury & Islington (Rail)",
+      "count": 728
+    },
+    {
+      "name": "Canonbury",
+      "count": 728
+    },
+    {
+      "name": "White City",
+      "count": 724
+    },
+    {
+      "name": "Westferry",
+      "count": 720
+    },
+    {
+      "name": "Limehouse",
+      "count": 720
+    },
+    {
+      "name": "Neasden",
+      "count": 715
+    },
+    {
+      "name": "St. Paul's",
+      "count": 714
+    },
+    {
+      "name": "Chancery Lane",
+      "count": 714
+    },
+    {
+      "name": "Marble Arch",
+      "count": 714
+    },
+    {
+      "name": "Lancaster Gate",
+      "count": 713
+    },
+    {
+      "name": "Queensway",
+      "count": 713
+    },
+    {
+      "name": "Holland Park",
+      "count": 713
+    },
+    {
+      "name": "Shepherd's Bush",
+      "count": 713
+    },
+    {
+      "name": "Leytonstone",
+      "count": 713
+    },
+    {
+      "name": "Leyton",
+      "count": 713
+    },
+    {
+      "name": "Dollis Hill",
+      "count": 710
+    },
+    {
+      "name": "Willesden Junction",
+      "count": 704
+    },
+    {
+      "name": "Oval",
+      "count": 695
+    },
+    {
+      "name": "Clapham North",
+      "count": 695
+    },
+    {
+      "name": "Clapham Common",
+      "count": 695
+    },
+    {
+      "name": "Clapham South",
+      "count": 695
+    },
+    {
+      "name": "Balham",
+      "count": 695
+    },
+    {
+      "name": "Tooting Bec",
+      "count": 695
+    },
+    {
+      "name": "Tooting Broadway",
+      "count": 695
+    },
+    {
+      "name": "Mornington Crescent",
+      "count": 694
+    },
+    {
+      "name": "Goodge Street",
+      "count": 694
+    },
+    {
+      "name": "Colliers Wood",
+      "count": 694
+    },
+    {
+      "name": "South Wimbledon",
+      "count": 694
+    },
+    {
+      "name": "Morden",
+      "count": 694
+    },
+    {
+      "name": "Finchley Central",
+      "count": 686
+    },
+    {
+      "name": "East Finchley",
+      "count": 684
+    },
+    {
+      "name": "Plaistow",
+      "count": 676
+    },
+    {
+      "name": "Bromley-by-Bow",
+      "count": 674
+    },
+    {
+      "name": "Bow Road",
+      "count": 674
+    },
+    {
+      "name": "Stepney Green",
+      "count": 674
+    },
+    {
+      "name": "Poplar",
+      "count": 673
+    },
+    {
+      "name": "Barking",
+      "count": 672
+    },
+    {
+      "name": "East Ham",
+      "count": 672
+    },
+    {
+      "name": "Upton Park",
+      "count": 672
+    },
+    {
+      "name": "Aldgate East",
+      "count": 670
+    },
+    {
+      "name": "Golders Green",
+      "count": 661
+    },
+    {
+      "name": "Hayes & Harlington",
+      "count": 660
+    },
+    {
+      "name": "Southall",
+      "count": 660
+    },
+    {
+      "name": "Hanwell",
+      "count": 660
+    },
+    {
+      "name": "West Ealing",
+      "count": 660
+    },
+    {
+      "name": "Ealing Broadway (Rail)",
+      "count": 660
+    },
+    {
+      "name": "Acton Main Line",
+      "count": 660
+    },
+    {
+      "name": "Hampstead",
+      "count": 658
+    },
+    {
+      "name": "Belsize Park",
+      "count": 658
+    },
+    {
+      "name": "Chalk Farm",
+      "count": 658
+    },
+    {
+      "name": "Highgate",
+      "count": 655
+    },
+    {
+      "name": "Archway",
+      "count": 655
+    },
+    {
+      "name": "Tufnell Park",
+      "count": 655
+    },
+    {
+      "name": "Kentish Town",
+      "count": 655
+    },
+    {
+      "name": "Colindale",
+      "count": 654
+    },
+    {
+      "name": "Hendon Central",
+      "count": 654
+    },
+    {
+      "name": "Brent Cross",
+      "count": 654
+    },
+    {
+      "name": "Edgware",
+      "count": 653
+    },
+    {
+      "name": "Burnt Oak",
+      "count": 653
+    },
+    {
+      "name": "Custom House",
+      "count": 645
+    },
+    {
+      "name": "Queen's Park",
+      "count": 643
+    },
+    {
+      "name": "Hyde Park Corner",
+      "count": 625
+    },
+    {
+      "name": "Knightsbridge",
+      "count": 625
+    },
+    {
+      "name": "Russell Square",
+      "count": 624
+    },
+    {
+      "name": "Covent Garden",
+      "count": 624
+    },
+    {
+      "name": "Arnos Grove",
+      "count": 622
+    },
+    {
+      "name": "Bounds Green",
+      "count": 622
+    },
+    {
+      "name": "Wood Green",
+      "count": 622
+    },
+    {
+      "name": "Turnpike Lane",
+      "count": 622
+    },
+    {
+      "name": "Manor House",
+      "count": 622
+    },
+    {
+      "name": "Arsenal",
+      "count": 622
+    },
+    {
+      "name": "Holloway Road",
+      "count": 622
+    },
+    {
+      "name": "Caledonian Road",
+      "count": 622
+    },
+    {
+      "name": "Angel",
+      "count": 619
+    },
+    {
+      "name": "Old Street",
+      "count": 619
+    },
+    {
+      "name": "Borough",
+      "count": 619
+    },
+    {
+      "name": "Canning Town (DLR)",
+      "count": 614
+    },
+    {
+      "name": "Aldgate",
+      "count": 596
+    },
+    {
+      "name": "Dalston Junction",
+      "count": 580
+    },
+    {
+      "name": "Haggerston",
+      "count": 580
+    },
+    {
+      "name": "Hoxton",
+      "count": 580
+    },
+    {
+      "name": "Shoreditch High Street",
+      "count": 580
+    },
+    {
+      "name": "Wapping",
+      "count": 580
+    },
+    {
+      "name": "Rotherhithe",
+      "count": 580
+    },
+    {
+      "name": "Canada Water (Rail)",
+      "count": 580
+    },
+    {
+      "name": "Surrey Quays",
+      "count": 580
+    },
+    {
+      "name": "North Acton",
+      "count": 559
+    },
+    {
+      "name": "Kingsbury",
+      "count": 559
+    },
+    {
+      "name": "Queensbury",
+      "count": 559
+    },
+    {
+      "name": "Canons Park",
+      "count": 559
+    },
+    {
+      "name": "Stanmore",
+      "count": 559
+    },
+    {
+      "name": "East Acton",
+      "count": 557
+    },
+    {
+      "name": "Harrow-on-the-Hill",
+      "count": 553
+    },
+    {
+      "name": "Preston Road",
+      "count": 546
+    },
+    {
+      "name": "Northwick Park",
+      "count": 546
+    },
+    {
+      "name": "High Barnet",
+      "count": 545
+    },
+    {
+      "name": "Totteridge & Whetstone",
+      "count": 545
+    },
+    {
+      "name": "Woodside Park",
+      "count": 545
+    },
+    {
+      "name": "West Finchley",
+      "count": 545
+    },
+    {
+      "name": "West Brompton",
+      "count": 541
+    },
+    {
+      "name": "High Street Kensington",
+      "count": 524
+    },
+    {
+      "name": "Bank (DLR)",
+      "count": 516
+    },
+    {
+      "name": "Heathrow Terminal 5",
+      "count": 508
+    },
+    {
+      "name": "Northfields",
+      "count": 493
+    },
+    {
+      "name": "Kilburn Park",
+      "count": 492
+    },
+    {
+      "name": "Maida Vale",
+      "count": 492
+    },
+    {
+      "name": "Warwick Avenue",
+      "count": 492
+    },
+    {
+      "name": "Marylebone",
+      "count": 491
+    },
+    {
+      "name": "Regent's Park",
+      "count": 491
+    },
+    {
+      "name": "Oakwood",
+      "count": 483
+    },
+    {
+      "name": "Southgate",
+      "count": 483
+    },
+    {
+      "name": "South Ealing",
+      "count": 480
+    },
+    {
+      "name": "Lambeth North",
+      "count": 479
+    },
+    {
+      "name": "Cockfosters",
+      "count": 479
+    },
+    {
+      "name": "Stratford (DLR 1)",
+      "count": 468
+    },
+    {
+      "name": "Ealing Broadway",
+      "count": 459
+    },
+    {
+      "name": "Woodford",
+      "count": 452
+    },
+    {
+      "name": "Rayners Lane",
+      "count": 449
+    },
+    {
+      "name": "Woolwich",
+      "count": 442
+    },
+    {
+      "name": "Abbey Wood",
+      "count": 442
+    },
+    {
+      "name": "Romford",
+      "count": 438
+    },
+    {
+      "name": "Gospel Oak",
+      "count": 434
+    },
+    {
+      "name": "Ravenscourt Park",
+      "count": 432
+    },
+    {
+      "name": "Stamford Brook",
+      "count": 432
+    },
+    {
+      "name": "West Kensington",
+      "count": 427
+    },
+    {
+      "name": "West India Quay",
+      "count": 422
+    },
+    {
+      "name": "Royal Oak",
+      "count": 416
+    },
+    {
+      "name": "Westbourne Park",
+      "count": 416
+    },
+    {
+      "name": "Ladbroke Grove",
+      "count": 416
+    },
+    {
+      "name": "Latimer Road",
+      "count": 416
+    },
+    {
+      "name": "Wood Lane",
+      "count": 416
+    },
+    {
+      "name": "Shepherd's Bush Market",
+      "count": 416
+    },
+    {
+      "name": "Goldhawk Road",
+      "count": 416
+    },
+    {
+      "name": "Stonebridge Park",
+      "count": 415
+    },
+    {
+      "name": "Harlesden",
+      "count": 414
+    },
+    {
+      "name": "Kensal Green",
+      "count": 414
+    },
+    {
+      "name": "Bayswater",
+      "count": 411
+    },
+    {
+      "name": "Upminster",
+      "count": 408
+    },
+    {
+      "name": "East India",
+      "count": 408
+    },
+    {
+      "name": "Blackwall",
+      "count": 408
+    },
+    {
+      "name": "Woolwich Arsenal",
+      "count": 403
+    },
+    {
+      "name": "King George V",
+      "count": 403
+    },
+    {
+      "name": "London City Airport",
+      "count": 403
+    },
+    {
+      "name": "Pontoon Dock",
+      "count": 403
+    },
+    {
+      "name": "West Silvertown",
+      "count": 403
+    },
+    {
+      "name": "Parsons Green",
+      "count": 401
+    },
+    {
+      "name": "Putney Bridge",
+      "count": 398
+    },
+    {
+      "name": "East Putney",
+      "count": 398
+    },
+    {
+      "name": "Southfields",
+      "count": 398
+    },
+    {
+      "name": "Wimbledon Park",
+      "count": 398
+    },
+    {
+      "name": "Wimbledon",
+      "count": 398
+    },
+    {
+      "name": "Ealing Common",
+      "count": 397
+    },
+    {
+      "name": "Fulham Broadway",
+      "count": 397
+    },
+    {
+      "name": "Hainault",
+      "count": 394
+    },
+    {
+      "name": "Osterley",
+      "count": 389
+    },
+    {
+      "name": "Hounslow East",
+      "count": 389
+    },
+    {
+      "name": "Hounslow Central",
+      "count": 389
+    },
+    {
+      "name": "Hounslow West",
+      "count": 389
+    },
+    {
+      "name": "Hatton Cross",
+      "count": 389
+    },
+    {
+      "name": "Boston Manor",
+      "count": 382
+    },
+    {
+      "name": "Loughton",
+      "count": 369
+    },
+    {
+      "name": "Maryland",
+      "count": 366
+    },
+    {
+      "name": "Forest Gate",
+      "count": 366
+    },
+    {
+      "name": "Manor Park",
+      "count": 366
+    },
+    {
+      "name": "Ilford",
+      "count": 366
+    },
+    {
+      "name": "Seven Kings",
+      "count": 366
+    },
+    {
+      "name": "Goodmayes",
+      "count": 366
+    },
+    {
+      "name": "Chadwell Heath",
+      "count": 366
+    },
+    {
+      "name": "Gidea Park",
+      "count": 366
+    },
+    {
+      "name": "Harold Wood",
+      "count": 366
+    },
+    {
+      "name": "Brentwood",
+      "count": 366
+    },
+    {
+      "name": "Shenfield",
+      "count": 366
+    },
+    {
+      "name": "South Woodford",
+      "count": 360
+    },
+    {
+      "name": "Snaresbrook",
+      "count": 360
+    },
+    {
+      "name": "Buckhurst Hill",
+      "count": 356
+    },
+    {
+      "name": "Eastcote",
+      "count": 354
+    },
+    {
+      "name": "Ruislip Manor",
+      "count": 354
+    },
+    {
+      "name": "Ruislip",
+      "count": 354
+    },
+    {
+      "name": "Ickenham",
+      "count": 354
+    },
+    {
+      "name": "Hillingdon",
+      "count": 354
+    },
+    {
+      "name": "Newbury Park",
+      "count": 353
+    },
+    {
+      "name": "Gants Hill",
+      "count": 353
+    },
+    {
+      "name": "Redbridge",
+      "count": 353
+    },
+    {
+      "name": "Wanstead",
+      "count": 353
+    },
+    {
+      "name": "Uxbridge",
+      "count": 352
+    },
+    {
+      "name": "Gunnersbury",
+      "count": 344
+    },
+    {
+      "name": "Kew Gardens",
+      "count": 344
+    },
+    {
+      "name": "Richmond",
+      "count": 344
+    },
+    {
+      "name": "Dagenham East",
+      "count": 337
+    },
+    {
+      "name": "Dagenham Heathway",
+      "count": 337
+    },
+    {
+      "name": "Becontree",
+      "count": 337
+    },
+    {
+      "name": "Upney",
+      "count": 337
+    },
+    {
+      "name": "Upminster Bridge",
+      "count": 336
+    },
+    {
+      "name": "Hornchurch",
+      "count": 336
+    },
+    {
+      "name": "Elm Park",
+      "count": 336
+    },
+    {
+      "name": "Heathrow Terminal 4",
+      "count": 322
+    },
+    {
+      "name": "Mudchute",
+      "count": 320
+    },
+    {
+      "name": "Crossharbour",
+      "count": 320
+    },
+    {
+      "name": "South Quay",
+      "count": 320
+    },
+    {
+      "name": "Heron Quays",
+      "count": 320
+    },
+    {
+      "name": "Nine Elms",
+      "count": 319
+    },
+    {
+      "name": "Battersea Power Station",
+      "count": 319
+    },
+    {
+      "name": "Lewisham",
+      "count": 319
+    },
+    {
+      "name": "Elverson Road",
+      "count": 319
+    },
+    {
+      "name": "Deptford Bridge",
+      "count": 319
+    },
+    {
+      "name": "Greenwich",
+      "count": 319
+    },
+    {
+      "name": "Cutty Sark",
+      "count": 319
+    },
+    {
+      "name": "Island Gardens",
+      "count": 319
+    },
+    {
+      "name": "Fairlop",
+      "count": 301
+    },
+    {
+      "name": "Barkingside",
+      "count": 301
+    },
+    {
+      "name": "Cambridge Heath",
+      "count": 296
+    },
+    {
+      "name": "London Fields",
+      "count": 296
+    },
+    {
+      "name": "Hackney Downs",
+      "count": 296
+    },
+    {
+      "name": "New Cross Gate",
+      "count": 292
+    },
+    {
+      "name": "Brockley",
+      "count": 292
+    },
+    {
+      "name": "Honor Oak Park",
+      "count": 292
+    },
+    {
+      "name": "Forest Hill",
+      "count": 292
+    },
+    {
+      "name": "Sydenham",
+      "count": 292
+    },
+    {
+      "name": "Kensal Rise",
+      "count": 290
+    },
+    {
+      "name": "Brondesbury Park",
+      "count": 290
+    },
+    {
+      "name": "Brondesbury",
+      "count": 290
+    },
+    {
+      "name": "Finchley Road & Frognal",
+      "count": 290
+    },
+    {
+      "name": "Hampstead Heath",
+      "count": 290
+    },
+    {
+      "name": "Kentish Town West",
+      "count": 290
+    },
+    {
+      "name": "Camden Road",
+      "count": 290
+    },
+    {
+      "name": "Caledonian Road & Barnsbury",
+      "count": 290
+    },
+    {
+      "name": "Dalston Kingsland",
+      "count": 290
+    },
+    {
+      "name": "Hackney Central",
+      "count": 290
+    },
+    {
+      "name": "Homerton",
+      "count": 290
+    },
+    {
+      "name": "Hackney Wick",
+      "count": 290
+    },
+    {
+      "name": "Clapham Junction",
+      "count": 290
+    },
+    {
+      "name": "Harrow & Wealdstone",
+      "count": 281
+    },
+    {
+      "name": "Kenton",
+      "count": 281
+    },
+    {
+      "name": "South Kenton",
+      "count": 281
+    },
+    {
+      "name": "North Wembley",
+      "count": 281
+    },
+    {
+      "name": "Wembley Central",
+      "count": 281
+    },
+    {
+      "name": "North Harrow",
+      "count": 278
+    },
+    {
+      "name": "Pinner",
+      "count": 278
+    },
+    {
+      "name": "Northwood Hills",
+      "count": 278
+    },
+    {
+      "name": "Northwood",
+      "count": 278
+    },
+    {
+      "name": "Moor Park",
+      "count": 278
+    },
+    {
+      "name": "Debden",
+      "count": 277
+    },
+    {
+      "name": "Epping",
+      "count": 276
+    },
+    {
+      "name": "Theydon Bois",
+      "count": 276
+    },
+    {
+      "name": "West Harrow",
+      "count": 274
+    },
+    {
+      "name": "All Saints",
+      "count": 265
+    },
+    {
+      "name": "Langdon Park",
+      "count": 265
+    },
+    {
+      "name": "Devons Road",
+      "count": 265
+    },
+    {
+      "name": "Bow Church",
+      "count": 265
+    },
+    {
+      "name": "Pudding Mill Lane",
+      "count": 265
+    },
+    {
+      "name": "Hanger Lane",
+      "count": 252
+    },
+    {
+      "name": "Perivale",
+      "count": 252
+    },
+    {
+      "name": "Greenford",
+      "count": 252
+    },
+    {
+      "name": "Northolt",
+      "count": 252
+    },
+    {
+      "name": "South Ruislip",
+      "count": 252
+    },
+    {
+      "name": "Ruislip Gardens",
+      "count": 252
+    },
+    {
+      "name": "West Ruislip",
+      "count": 248
+    },
+    {
+      "name": "Kensington (Olympia)",
+      "count": 243
+    },
+    {
+      "name": "Chiswick Park",
+      "count": 234
+    },
+    {
+      "name": "West Acton",
+      "count": 228
+    },
+    {
+      "name": "Reading",
+      "count": 220
+    },
+    {
+      "name": "Twyford",
+      "count": 220
+    },
+    {
+      "name": "Maidenhead",
+      "count": 220
+    },
+    {
+      "name": "Taplow",
+      "count": 220
+    },
+    {
+      "name": "Burnham",
+      "count": 220
+    },
+    {
+      "name": "Slough",
+      "count": 220
+    },
+    {
+      "name": "Langley",
+      "count": 220
+    },
+    {
+      "name": "Iver",
+      "count": 220
+    },
+    {
+      "name": "West Drayton",
+      "count": 220
+    },
+    {
+      "name": "Tower Gateway",
+      "count": 204
+    },
+    {
+      "name": "Star Lane",
+      "count": 203
+    },
+    {
+      "name": "West Ham (DLR)",
+      "count": 203
+    },
+    {
+      "name": "Abbey Road",
+      "count": 203
+    },
+    {
+      "name": "Stratford High Street",
+      "count": 203
+    },
+    {
+      "name": "Stratford International",
+      "count": 203
+    },
+    {
+      "name": "Beckton",
+      "count": 203
+    },
+    {
+      "name": "Gallions Reach",
+      "count": 203
+    },
+    {
+      "name": "Cyprus",
+      "count": 203
+    },
+    {
+      "name": "Beckton Park",
+      "count": 203
+    },
+    {
+      "name": "Royal Albert",
+      "count": 203
+    },
+    {
+      "name": "Prince Regent",
+      "count": 203
+    },
+    {
+      "name": "Royal Victoria",
+      "count": 203
+    },
+    {
+      "name": "South Harrow",
+      "count": 178
+    },
+    {
+      "name": "North Ealing",
+      "count": 166
+    },
+    {
+      "name": "Park Royal",
+      "count": 166
+    },
+    {
+      "name": "Alperton",
+      "count": 166
+    },
+    {
+      "name": "Sudbury Town",
+      "count": 166
+    },
+    {
+      "name": "Sudbury Hill",
+      "count": 166
+    },
+    {
+      "name": "Rectory Road",
+      "count": 148
+    },
+    {
+      "name": "Stoke Newington",
+      "count": 148
+    },
+    {
+      "name": "Stamford Hill",
+      "count": 148
+    },
+    {
+      "name": "Bruce Grove",
+      "count": 148
+    },
+    {
+      "name": "White Hart Lane",
+      "count": 148
+    },
+    {
+      "name": "Silver Street",
+      "count": 148
+    },
+    {
+      "name": "Edmonton Green",
+      "count": 148
+    },
+    {
+      "name": "Clapton",
+      "count": 148
+    },
+    {
+      "name": "St James Street",
+      "count": 148
+    },
+    {
+      "name": "Wood Street",
+      "count": 148
+    },
+    {
+      "name": "Highams Park",
+      "count": 148
+    },
+    {
+      "name": "Chingford",
+      "count": 148
+    },
+    {
+      "name": "Euston (Rail)",
+      "count": 146
+    },
+    {
+      "name": "South Hampstead",
+      "count": 146
+    },
+    {
+      "name": "Kilburn High Road",
+      "count": 146
+    },
+    {
+      "name": "Headstone Lane",
+      "count": 146
+    },
+    {
+      "name": "Hatch End",
+      "count": 146
+    },
+    {
+      "name": "Carpenders Park",
+      "count": 146
+    },
+    {
+      "name": "Bushey",
+      "count": 146
+    },
+    {
+      "name": "Watford High Street",
+      "count": 146
+    },
+    {
+      "name": "Watford Junction",
+      "count": 146
+    },
+    {
+      "name": "South Acton",
+      "count": 146
+    },
+    {
+      "name": "Acton Central",
+      "count": 146
+    },
+    {
+      "name": "Penge West",
+      "count": 146
+    },
+    {
+      "name": "Anerley",
+      "count": 146
+    },
+    {
+      "name": "Norwood Junction",
+      "count": 146
+    },
+    {
+      "name": "West Croydon",
+      "count": 146
+    },
+    {
+      "name": "Crystal Palace",
+      "count": 146
+    },
+    {
+      "name": "Queens Road Peckham",
+      "count": 146
+    },
+    {
+      "name": "Peckham Rye",
+      "count": 146
+    },
+    {
+      "name": "Denmark Hill",
+      "count": 146
+    },
+    {
+      "name": "Clapham High Street",
+      "count": 146
+    },
+    {
+      "name": "Wandsworth Road",
+      "count": 146
+    },
+    {
+      "name": "Imperial Wharf",
+      "count": 144
+    },
+    {
+      "name": "Shepherd's Bush (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Upper Holloway",
+      "count": 144
+    },
+    {
+      "name": "Crouch Hill",
+      "count": 144
+    },
+    {
+      "name": "Harringay Green Lanes",
+      "count": 144
+    },
+    {
+      "name": "South Tottenham",
+      "count": 144
+    },
+    {
+      "name": "Blackhorse Road (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Walthamstow Queens Road",
+      "count": 144
+    },
+    {
+      "name": "Leyton Midland Road",
+      "count": 144
+    },
+    {
+      "name": "Leytonstone High Road",
+      "count": 144
+    },
+    {
+      "name": "Wanstead Park",
+      "count": 144
+    },
+    {
+      "name": "Woodgrange Park",
+      "count": 144
+    },
+    {
+      "name": "Barking (Rail)",
+      "count": 144
+    },
+    {
+      "name": "Barking Riverside",
+      "count": 144
+    },
+    {
+      "name": "Rickmansworth",
+      "count": 142
+    },
+    {
+      "name": "New Cross",
+      "count": 142
+    },
+    {
+      "name": "Watford",
+      "count": 140
+    },
+    {
+      "name": "Croxley",
+      "count": 140
+    },
+    {
+      "name": "Mill Hill East",
+      "count": 140
+    },
+    {
+      "name": "Chalfont & Latimer",
+      "count": 138
+    },
+    {
+      "name": "Chorleywood",
+      "count": 137
+    },
+    {
+      "name": "Grange Hill",
+      "count": 94
+    },
+    {
+      "name": "Chigwell",
+      "count": 94
+    },
+    {
+      "name": "Roding Valley",
+      "count": 94
+    },
+    {
+      "name": "Bush Hill Park",
+      "count": 74
+    },
+    {
+      "name": "Enfield Town",
+      "count": 74
+    },
+    {
+      "name": "Southbury",
+      "count": 74
+    },
+    {
+      "name": "Turkey Street",
+      "count": 74
+    },
+    {
+      "name": "Theobalds Grove",
+      "count": 74
+    },
+    {
+      "name": "Cheshunt",
+      "count": 74
+    },
+    {
+      "name": "Emerson Park",
+      "count": 72
+    },
+    {
+      "name": "Amersham",
+      "count": 70
+    },
+    {
+      "name": "Chesham",
+      "count": 68
+    }
+  ]
+}

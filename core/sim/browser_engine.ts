@@ -5,6 +5,7 @@ const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
 import { TripData, getCoordAtDistance, getSmoothedBearing } from './kinematics';
 import { PrimRealtimeClient, PrimStatus, normalizeStopName } from '@city/rt/prim_client';
 import { StmRealtimeClient, type StmStatus } from '@cities/montreal/rt/stm_client';
+import { TflRealtimeClient, type TflStatus } from '@cities/london/rt/tfl_client';
 import {
   matchJourneys,
   buildTimeline,
@@ -72,7 +73,7 @@ export class BrowserSubwayEngine {
   private schedTripsMap = new Map<string, SchedTrip>();
   private stationNames: string[] = [];
   private linesMap = new Map<string, LineMetadata>();
-  private primClient: PrimRealtimeClient | StmRealtimeClient;
+  private primClient: PrimRealtimeClient | StmRealtimeClient | TflRealtimeClient;
   private isRunning = false;
   private timerId: any = null;
   private rafId: number | null = null;
@@ -101,6 +102,8 @@ export class BrowserSubwayEngine {
     this.config = config;
     if (this.config.realtime.provider === 'stm-i3') {
       this.primClient = new StmRealtimeClient(this.config.realtime.pollIntervalMs);
+    } else if (this.config.realtime.provider === 'tfl-unified') {
+      this.primClient = new TflRealtimeClient(this.config.realtime.pollIntervalMs);
     } else {
       this.primClient = new PrimRealtimeClient(apiKey);
     }
@@ -506,6 +509,27 @@ export class BrowserSubwayEngine {
           this.suppressedTripIds
         );
         prim.setMatchingStats(matchStats);
+      } else if (isRtActive && this.config.realtime.capability?.kind === 'arrival-predictions' && 'matchTrips' in this.primClient) {
+        const tfl = this.primClient as TflRealtimeClient;
+        const currentCivilSeconds = cityClock(now, this.config.timezone).secondsSinceMidnight;
+        const outcome = tfl.matchTrips(activeSchedTrips, currentCivilSeconds);
+
+        for (const [tripId, m] of outcome.matchesByTripId.entries()) {
+          const schedTrip = this.schedTripsMap.get(tripId);
+          if (!schedTrip) continue;
+
+          if (m.confidence === 'measured' && m.nextStationId && m.timeToNextStationS !== undefined) {
+            const stop = schedTrip.stops.find(s => s.stopId === m.nextStationId);
+            const calls = stop ? [{
+              stopId: m.nextStationId,
+              aimed: stop.arr,
+              expected: currentCivilSeconds + m.timeToNextStationS
+            }] : [];
+            this.timelines.set(tripId, buildTimeline(schedTrip, calls));
+          } else {
+            this.timelines.set(tripId, buildTimeline(schedTrip, []));
+          }
+        }
       }
 
       const tickTimestamp = performance.now();

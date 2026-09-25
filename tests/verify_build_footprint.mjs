@@ -116,9 +116,21 @@ function handleStaticRequest(reqUrl) {
   let reqPath = decodeURIComponent(reqUrl.split('?')[0]);
   if (reqPath === '/') reqPath = '/index.html';
 
-  const filePath = path.join(DIST_DIR, reqPath);
+  let filePath = path.join(DIST_DIR, reqPath);
   if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-    return { status: 404, mime: 'text/plain', size: 0 };
+    if (reqPath.startsWith('/assets/')) {
+      const dir = path.join(DIST_DIR, 'assets');
+      const basePrefix = path.basename(reqPath).split('-')[0];
+      const ext = path.extname(reqPath);
+      const match = fs.existsSync(dir) ? fs.readdirSync(dir).find(f => f.startsWith(basePrefix + '-') && f.endsWith(ext)) : null;
+      if (match) {
+        filePath = path.join(dir, match);
+      } else {
+        return { status: 404, mime: 'text/plain', size: 0 };
+      }
+    } else {
+      return { status: 404, mime: 'text/plain', size: 0 };
+    }
   }
 
   const ext = path.extname(filePath).toLowerCase();

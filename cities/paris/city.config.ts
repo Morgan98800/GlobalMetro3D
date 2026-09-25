@@ -7,6 +7,39 @@ export const parisConfig: CityConfig = {
   networkName: 'Métro de Paris',
   timezone: 'Europe/Paris',
   locale: 'fr-FR',
+  modes: [
+    {
+      id: 'metro',
+      displayName: 'Métro',
+      enabled: true,
+      schedule: {
+        format: 'gtfs',
+        sourceUrl: 'https://data.iledefrance-mobilites.fr/explore/dataset/offre-horaires-tc-gtfs-idfm/download/?format=csv&timezone=Europe/Berlin&lang=fr',
+        scheduleModel: 'trip-based',
+        stalenessToleranceDays: 30
+      },
+      geometry: { source: 'idfm-osm' },
+      kinematics: {
+        maxSpeedKmh: 90,
+        accelMs2: 1.0,
+        decelMs2: 1.2,
+        dwellSec: 20,
+        vMaxMs: 25,
+        k: 0.25,
+        windowM: 90,
+        minDwellSec: 20,
+        matchWindowSec: 120,
+        maxDelaySec: 900,
+        alpha: 0.4,
+        decayDistanceM: 4000,
+        staleAfterSec: 360,
+        reconcileDurationMs: 300,
+        reconcileThresholdM: 20
+      },
+      realtime: { kind: 'per-trip-offsets' }
+    }
+  ],
+  rollingStock: '/data/rolling-stock.json',
   gtfs: {
     sourceUrl: 'https://data.iledefrance-mobilites.fr/explore/dataset/offre-horaires-tc-gtfs-idfm/download/?format=csv&timezone=Europe/Berlin&lang=fr',
     agencyFilter: ['IDFM:Operator_100', 'IDFM:Operator_71'],
@@ -40,6 +73,7 @@ export const parisConfig: CityConfig = {
   attribution: {
     operatorName: 'RATP / Île-de-France Mobilités',
     datasetName: 'GTFS & PRIM SIRI-Lite',
+    text: 'Powered by IDFM / RATP Open Data',
     licenseText: 'IDFM ODbL',
     licenseUrl: 'https://data.iledefrance-mobilites.fr',
     disclaimer: 'Projet indépendant, non affilié à la RATP ni à Île-de-France Mobilités.'

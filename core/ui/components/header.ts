@@ -104,7 +104,8 @@ export class TopBar {
 
     const cities = this.options.cities || [
       { id: 'paris', slug: 'paris', displayName: 'paris' },
-      { id: 'montreal', slug: 'montreal', displayName: 'montréal' }
+      { id: 'montreal', slug: 'montreal', displayName: 'montréal' },
+      { id: 'london', slug: 'londres', displayName: 'londres' }
     ];
 
     cities.forEach(city => {

@@ -366,7 +366,11 @@ async function bootstrap() {
 
   // 3. Initialize MapLibre
   const map = createMap('map', {
-    initialBounds: metroBounds || networkBounds || cityConfig.map.bounds,
+    initialBounds: metroBounds || networkBounds || (cityConfig.map.bounds ? (
+      Array.isArray(cityConfig.map.bounds[0])
+        ? (cityConfig.map.bounds as [[number, number], [number, number]])
+        : [[cityConfig.map.bounds[0], cityConfig.map.bounds[1]], [cityConfig.map.bounds[2], cityConfig.map.bounds[3]]] as [[number, number], [number, number]]
+    ) : undefined),
     maxBounds: mapMaxBounds,
     center: cityConfig.map.center,
     zoom: cityConfig.map.zoom,
@@ -788,7 +792,7 @@ async function bootstrap() {
     realtimeProvider: cityConfig.realtime.provider,
     realtimeCapability: cityConfig.realtime.capability,
     attribution: cityConfig.attribution,
-    scheduleModel: cityConfig.gtfs.scheduleModel,
+    scheduleModel: cityConfig.modes[0]?.schedule.scheduleModel || cityConfig.gtfs?.scheduleModel || 'trip-based',
     onCitySelect: (cityId: string) => {
       router.setCity(cityId);
       window.location.href = `/${cityId}`;

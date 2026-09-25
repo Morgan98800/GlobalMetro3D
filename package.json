@@ -12,10 +12,12 @@
     "dev:web": "npm --workspace=web run dev",
     "test:snapshot": "vitest run tests/paris-snapshot.test.ts",
     "test:montreal-snapshot": "vitest run tests/montreal-snapshot.test.ts",
+    "test:london-snapshot": "vitest run tests/london-snapshot.test.ts",
     "test:stm-status": "vitest run tests/stm_relay.test.ts tests/montreal-interruption.test.ts",
     "test:prim-status": "vitest run tests/prim_relay.test.ts tests/paris-interruption.test.ts",
+    "test:tfl-status": "vitest run tests/tfl_relay.test.ts tests/tfl_matching.test.ts",
     "test:footprint": "node tests/verify_build_footprint.mjs",
-    "test": "npm run test:snapshot && npm run test:montreal-snapshot && npm run test:stm-status && npm run test:prim-status && npm run test:footprint"
+    "test": "npm run test:snapshot && npm run test:montreal-snapshot && npm run test:london-snapshot && npm run test:stm-status && npm run test:prim-status && npm run test:tfl-status && npm run test:footprint"
   },
   "dependencies": {
     "luxon": "^3.7.2"

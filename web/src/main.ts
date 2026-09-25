@@ -5,6 +5,7 @@ import { SubwaySearchBar } from '@core/ui/components/search_bar';
 import { BrowserSubwayEngine } from '@core/sim/browser_engine';
 import { SubwayRouter } from '@core/ui/router';
 import { CITIES, getCityConfig } from '@cities/index';
+import { createRealtimeAdapter } from '@cities/realtime';
 import type { CityConfig } from '@core/config';
 import { parisConfig } from '@cities/paris/city.config';
 import { coordAtDistance, loadShapes } from '@core/sim/shapes_loader';
@@ -325,7 +326,7 @@ async function bootstrap() {
   const mapEl = document.getElementById('map')!;
   const tooltipEl = document.getElementById('tooltip')!;
   // 2. Initialize Simulation Engine (pure theoretical by default, or reading server relay snapshot)
-  engine = new BrowserSubwayEngine(undefined, cityConfig);
+  engine = new BrowserSubwayEngine(cityConfig, createRealtimeAdapter(cityConfig));
   await engine.initialize(lines, shapesMap);
   const demoRer = new URLSearchParams(window.location.search).get('demo-rer');
   const demoRerColors: Record<string, { colorHex: string; textColorHex: string }> = {

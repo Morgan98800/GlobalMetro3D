@@ -1,0 +1,2520 @@
+{
+  "trains": [
+    {
+      "tripId": "EL_PD_SH_0_480",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_365",
+      "direction": 0,
+      "currentDistM": 27709.57,
+      "speedKmh": 32,
+      "speedMps": 8.93,
+      "pos": [
+        0.1838266,
+        51.575029
+      ],
+      "bearing": 65,
+      "nextStation": "Gidea Park",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_PD_SH_0_490",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_365",
+      "direction": 0,
+      "currentDistM": 18047.34,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        0.0495408,
+        51.5533127
+      ],
+      "bearing": 67,
+      "nextStation": "Ilford",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_PD_SH_0_500",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_365",
+      "direction": 0,
+      "currentDistM": 8601.6,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0612805,
+        51.5204992
+      ],
+      "bearing": 85.2,
+      "nextStation": "Stratford",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_PD_SH_0_510",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_365",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1777,
+        51.5162
+      ],
+      "bearing": 136.9,
+      "nextStation": "Bond Street",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_PD_SH_1_480",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_366",
+      "direction": 1,
+      "currentDistM": 31651.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0612805,
+        51.5204992
+      ],
+      "bearing": 265.2,
+      "nextStation": "Liverpool Street",
+      "destStation": "Paddington"
+    },
+    {
+      "tripId": "EL_PD_SH_1_490",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_366",
+      "direction": 1,
+      "currentDistM": 22341.74,
+      "speedKmh": 68,
+      "speedMps": 18.89,
+      "pos": [
+        0.0477276,
+        51.5528424
+      ],
+      "bearing": 249.9,
+      "nextStation": "Manor Park",
+      "destStation": "Paddington"
+    },
+    {
+      "tripId": "EL_PD_SH_1_500",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_366",
+      "direction": 1,
+      "currentDistM": 12574.16,
+      "speedKmh": 5,
+      "speedMps": 1.28,
+      "pos": [
+        0.1834254,
+        51.5749127
+      ],
+      "bearing": 245.1,
+      "nextStation": "Romford",
+      "destStation": "Paddington"
+    },
+    {
+      "tripId": "EL_PD_SH_1_510",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_366",
+      "direction": 1,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.3305912,
+        51.631128
+      ],
+      "bearing": 211.3,
+      "nextStation": "Brentwood",
+      "destStation": "Paddington"
+    },
+    {
+      "tripId": "EL_RD_AB_0_450",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_359",
+      "direction": 0,
+      "currentDistM": 72915.98,
+      "speedKmh": 51,
+      "speedMps": 14.1,
+      "pos": [
+        0.0252776,
+        51.5098287
+      ],
+      "bearing": 85,
+      "nextStation": "Custom House",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_RD_AB_0_465",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_359",
+      "direction": 0,
+      "currentDistM": 57797.25,
+      "speedKmh": 75,
+      "speedMps": 20.7,
+      "pos": [
+        -0.1754767,
+        51.5146914
+      ],
+      "bearing": 138.1,
+      "nextStation": "Bond Street",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_RD_AB_0_480",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_359",
+      "direction": 0,
+      "currentDistM": 40487.14,
+      "speedKmh": 88,
+      "speedMps": 24.39,
+      "pos": [
+        -0.415581,
+        51.5028118
+      ],
+      "bearing": 92.8,
+      "nextStation": "Southall",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_RD_AB_0_495",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_359",
+      "direction": 0,
+      "currentDistM": 23105.38,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.661587,
+        51.5241513
+      ],
+      "bearing": 91.5,
+      "nextStation": "Burnham",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_RD_AB_0_510",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_359",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.9729138,
+        51.4592409
+      ],
+      "bearing": 98.9,
+      "nextStation": "Twyford",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_RD_AB_1_450",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_360",
+      "direction": 1,
+      "currentDistM": 71662.71,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.8520464,
+        51.47901
+      ],
+      "bearing": 242.5,
+      "nextStation": "Twyford",
+      "destStation": "Reading"
+    },
+    {
+      "tripId": "EL_RD_AB_1_465",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_360",
+      "direction": 1,
+      "currentDistM": 49436.67,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.5501724,
+        51.5083674
+      ],
+      "bearing": 276.5,
+      "nextStation": "Slough",
+      "destStation": "Reading"
+    },
+    {
+      "tripId": "EL_RD_AB_1_480",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_360",
+      "direction": 1,
+      "currentDistM": 33306.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.3204742,
+        51.5135123
+      ],
+      "bearing": 262.5,
+      "nextStation": "Hanwell",
+      "destStation": "Reading"
+    },
+    {
+      "tripId": "EL_RD_AB_1_495",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_360",
+      "direction": 1,
+      "currentDistM": 17342.74,
+      "speedKmh": 20,
+      "speedMps": 5.62,
+      "pos": [
+        -0.1031068,
+        51.5192368
+      ],
+      "bearing": 258.8,
+      "nextStation": "Farringdon",
+      "destStation": "Reading"
+    },
+    {
+      "tripId": "EL_RD_AB_1_510",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_360",
+      "direction": 1,
+      "currentDistM": 0.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.120404,
+        51.4910934
+      ],
+      "bearing": 267,
+      "nextStation": "Woolwich",
+      "destStation": "Reading"
+    },
+    {
+      "tripId": "EL_RD_PD_0_485",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_369",
+      "direction": 0,
+      "currentDistM": 34720.2,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.4975585,
+        51.5094523
+      ],
+      "bearing": 83.1,
+      "nextStation": "West Drayton",
+      "destStation": "Paddington"
+    },
+    {
+      "tripId": "EL_RD_PD_1_485",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_370",
+      "direction": 1,
+      "currentDistM": 29078.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.5923867,
+        51.5123672
+      ],
+      "bearing": 283.8,
+      "nextStation": "Burnham",
+      "destStation": "Reading"
+    },
+    {
+      "tripId": "EL_T4_AB_0_480",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_363",
+      "direction": 0,
+      "currentDistM": 33538.74,
+      "speedKmh": 13,
+      "speedMps": 3.49,
+      "pos": [
+        -0.0807249,
+        51.517525
+      ],
+      "bearing": 93.2,
+      "nextStation": "Whitechapel",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_T4_AB_0_495",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_363",
+      "direction": 0,
+      "currentDistM": 17306.87,
+      "speedKmh": 4,
+      "speedMps": 1.14,
+      "pos": [
+        -0.3015343,
+        51.5147847
+      ],
+      "bearing": 84.6,
+      "nextStation": "Acton Main Line",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_T4_AB_0_510",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_363",
+      "direction": 0,
+      "currentDistM": 0.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.4454337,
+        51.4586581
+      ],
+      "bearing": 238.1,
+      "nextStation": "Heathrow Terminals 2 & 3",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_T4_AB_1_480",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_364",
+      "direction": 1,
+      "currentDistM": 33306.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.3204728,
+        51.5135124
+      ],
+      "bearing": 262.5,
+      "nextStation": "Hanwell",
+      "destStation": "Heathrow Terminal 4"
+    },
+    {
+      "tripId": "EL_T4_AB_1_495",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_364",
+      "direction": 1,
+      "currentDistM": 17342.64,
+      "speedKmh": 20,
+      "speedMps": 5.62,
+      "pos": [
+        -0.1031054,
+        51.519237
+      ],
+      "bearing": 258.8,
+      "nextStation": "Farringdon",
+      "destStation": "Heathrow Terminal 4"
+    },
+    {
+      "tripId": "EL_T4_AB_1_510",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_364",
+      "direction": 1,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.1204054,
+        51.4910934
+      ],
+      "bearing": 267,
+      "nextStation": "Woolwich",
+      "destStation": "Heathrow Terminal 4"
+    },
+    {
+      "tripId": "EL_T5_AB_0_472",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_361",
+      "direction": 0,
+      "currentDistM": 41772.69,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        0.0318192,
+        51.5098243
+      ],
+      "bearing": 96.4,
+      "nextStation": "Woolwich",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_T5_AB_0_487",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_361",
+      "direction": 0,
+      "currentDistM": 28077.26,
+      "speedKmh": 68,
+      "speedMps": 18.81,
+      "pos": [
+        -0.1506812,
+        51.5131287
+      ],
+      "bearing": 77.9,
+      "nextStation": "Bond Street",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_T5_AB_0_502",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_361",
+      "direction": 0,
+      "currentDistM": 11182.55,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.3828362,
+        51.5053117
+      ],
+      "bearing": 76.6,
+      "nextStation": "Southall",
+      "destStation": "Abbey Wood"
+    },
+    {
+      "tripId": "EL_T5_AB_1_472",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_362",
+      "direction": 1,
+      "currentDistM": 41619.41,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.4384758,
+        51.5049422
+      ],
+      "bearing": 286.2,
+      "nextStation": "Heathrow Terminals 2 & 3",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "EL_T5_AB_1_487",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_362",
+      "direction": 1,
+      "currentDistM": 24219.69,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.1944649,
+        51.5198341
+      ],
+      "bearing": 282.9,
+      "nextStation": "Acton Main Line",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "EL_T5_AB_1_502",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_362",
+      "direction": 1,
+      "currentDistM": 10725.39,
+      "speedKmh": 7,
+      "speedMps": 2.01,
+      "pos": [
+        -0.0174401,
+        51.5062695
+      ],
+      "bearing": 279.9,
+      "nextStation": "Canary Wharf",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "EL_T5_SH_0_462",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_367",
+      "direction": 0,
+      "currentDistM": 49791,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.1290594,
+        51.5679389
+      ],
+      "bearing": 79,
+      "nextStation": "Romford",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_T5_SH_0_477",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_367",
+      "direction": 0,
+      "currentDistM": 36250.61,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.0383816,
+        51.5170199
+      ],
+      "bearing": 85.1,
+      "nextStation": "Stratford",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_T5_SH_0_492",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_367",
+      "direction": 0,
+      "currentDistM": 20386.56,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.2536338,
+        51.5215162
+      ],
+      "bearing": 58.8,
+      "nextStation": "Paddington",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_T5_SH_0_507",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_0_367",
+      "direction": 0,
+      "currentDistM": 3132.81,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.4490706,
+        51.4749838
+      ],
+      "bearing": 34.6,
+      "nextStation": "Hayes & Harlington",
+      "destStation": "Shenfield"
+    },
+    {
+      "tripId": "EL_T5_SH_1_462",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_368",
+      "direction": 1,
+      "currentDistM": 50459.36,
+      "speedKmh": 76,
+      "speedMps": 21.11,
+      "pos": [
+        -0.3180474,
+        51.513669
+      ],
+      "bearing": 264.6,
+      "nextStation": "West Ealing",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "EL_T5_SH_1_477",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_368",
+      "direction": 1,
+      "currentDistM": 34162.08,
+      "speedKmh": 88,
+      "speedMps": 24.46,
+      "pos": [
+        -0.0959747,
+        51.5197308
+      ],
+      "bearing": 279.1,
+      "nextStation": "Farringdon",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "EL_T5_SH_1_492",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_368",
+      "direction": 1,
+      "currentDistM": 20476.5,
+      "speedKmh": 76,
+      "speedMps": 21.01,
+      "pos": [
+        0.0723394,
+        51.5596009
+      ],
+      "bearing": 251.1,
+      "nextStation": "Ilford",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "EL_T5_SH_1_507",
+      "line": "elizabeth",
+      "lineName": "Elizabeth",
+      "shapeId": "elizabeth_1_368",
+      "direction": 1,
+      "currentDistM": 3443.57,
+      "speedKmh": 44,
+      "speedMps": 12.31,
+      "pos": [
+        0.2984202,
+        51.6136377
+      ],
+      "bearing": 274.5,
+      "nextStation": "Harold Wood",
+      "destStation": "Heathrow Terminal 5"
+    },
+    {
+      "tripId": "LO_LIB_0_510",
+      "line": "liberty",
+      "lineName": "Liberty",
+      "shapeId": "liberty_0_371",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.1834364,
+        51.5749154
+      ],
+      "bearing": 67.1,
+      "nextStation": "Emerson Park",
+      "destStation": "Upminster"
+    },
+    {
+      "tripId": "LO_LIB_1_510",
+      "line": "liberty",
+      "lineName": "Liberty",
+      "shapeId": "liberty_1_372",
+      "direction": 1,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.253,
+        51.5595
+      ],
+      "bearing": 262.5,
+      "nextStation": "Emerson Park",
+      "destStation": "Romford"
+    },
+    {
+      "tripId": "LO_LIO_0_480",
+      "line": "lioness",
+      "lineName": "Lioness",
+      "shapeId": "lioness_0_373",
+      "direction": 0,
+      "currentDistM": 23991.12,
+      "speedKmh": 74,
+      "speedMps": 20.67,
+      "pos": [
+        -0.3865192,
+        51.6305553
+      ],
+      "bearing": 348.7,
+      "nextStation": "Bushey",
+      "destStation": "Watford Junction"
+    },
+    {
+      "tripId": "LO_LIO_0_495",
+      "line": "lioness",
+      "lineName": "Lioness",
+      "shapeId": "lioness_0_373",
+      "direction": 0,
+      "currentDistM": 12423.66,
+      "speedKmh": 83,
+      "speedMps": 23.05,
+      "pos": [
+        -0.2923075,
+        51.5479771
+      ],
+      "bearing": 314.1,
+      "nextStation": "Wembley Central",
+      "destStation": "Watford Junction"
+    },
+    {
+      "tripId": "LO_LIO_0_510",
+      "line": "lioness",
+      "lineName": "Lioness",
+      "shapeId": "lioness_0_373",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1348,
+        51.529
+      ],
+      "bearing": 324.8,
+      "nextStation": "South Hampstead",
+      "destStation": "Watford Junction"
+    },
+    {
+      "tripId": "LO_LIO_1_480",
+      "line": "lioness",
+      "lineName": "Lioness",
+      "shapeId": "lioness_1_374",
+      "direction": 1,
+      "currentDistM": 23498.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1914784,
+        51.5376737
+      ],
+      "bearing": 60.6,
+      "nextStation": "South Hampstead",
+      "destStation": "Euston"
+    },
+    {
+      "tripId": "LO_LIO_1_495",
+      "line": "lioness",
+      "lineName": "Lioness",
+      "shapeId": "lioness_1_374",
+      "direction": 1,
+      "currentDistM": 12438.1,
+      "speedKmh": 79,
+      "speedMps": 21.95,
+      "pos": [
+        -0.3117382,
+        51.575886
+      ],
+      "bearing": 159.5,
+      "nextStation": "South Kenton",
+      "destStation": "Euston"
+    },
+    {
+      "tripId": "LO_LIO_1_510",
+      "line": "lioness",
+      "lineName": "Lioness",
+      "shapeId": "lioness_1_374",
+      "direction": 1,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.3959496,
+        51.6634469
+      ],
+      "bearing": 139.3,
+      "nextStation": "Watford High Street",
+      "destStation": "Euston"
+    },
+    {
+      "tripId": "LO_MIL_CS_0_477",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_0_377",
+      "direction": 0,
+      "currentDistM": 24591.54,
+      "speedKmh": 58,
+      "speedMps": 16.09,
+      "pos": [
+        -0.0590766,
+        51.5471282
+      ],
+      "bearing": 94.3,
+      "nextStation": "Hackney Central",
+      "destStation": "Stratford"
+    },
+    {
+      "tripId": "LO_MIL_CS_0_492",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_0_377",
+      "direction": 0,
+      "currentDistM": 14098.89,
+      "speedKmh": 60,
+      "speedMps": 16.58,
+      "pos": [
+        -0.1892383,
+        51.5480247
+      ],
+      "bearing": 63.7,
+      "nextStation": "Finchley Road & Frognal",
+      "destStation": "Stratford"
+    },
+    {
+      "tripId": "LO_MIL_CS_0_507",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_0_377",
+      "direction": 0,
+      "currentDistM": 2607.43,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.1877131,
+        51.4811456
+      ],
+      "bearing": 317.7,
+      "nextStation": "West Brompton",
+      "destStation": "Stratford"
+    },
+    {
+      "tripId": "LO_MIL_CS_1_477",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_1_378",
+      "direction": 1,
+      "currentDistM": 24697.97,
+      "speedKmh": 6,
+      "speedMps": 1.73,
+      "pos": [
+        -0.2008467,
+        51.4905384
+      ],
+      "bearing": 145.6,
+      "nextStation": "Kensington (Olympia)",
+      "destStation": "Clapham Junction"
+    },
+    {
+      "tripId": "LO_MIL_CS_1_492",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_1_378",
+      "direction": 1,
+      "currentDistM": 12761.6,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.165355,
+        51.5552412
+      ],
+      "bearing": 249.7,
+      "nextStation": "Finchley Road & Frognal",
+      "destStation": "Clapham Junction"
+    },
+    {
+      "tripId": "LO_MIL_CS_1_507",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_1_378",
+      "direction": 1,
+      "currentDistM": 2704.95,
+      "speedKmh": 78,
+      "speedMps": 21.76,
+      "pos": [
+        -0.0388362,
+        51.5469451
+      ],
+      "bearing": 273.8,
+      "nextStation": "Homerton",
+      "destStation": "Clapham Junction"
+    },
+    {
+      "tripId": "LO_MIL_RS_0_485",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_0_375",
+      "direction": 0,
+      "currentDistM": 18106.52,
+      "speedKmh": 20,
+      "speedMps": 5.51,
+      "pos": [
+        -0.1392496,
+        51.5419242
+      ],
+      "bearing": 99.9,
+      "nextStation": "Caledonian Road & Barnsbury",
+      "destStation": "Stratford"
+    },
+    {
+      "tripId": "LO_MIL_RS_0_500",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_0_375",
+      "direction": 0,
+      "currentDistM": 8560.18,
+      "speedKmh": 87,
+      "speedMps": 24.29,
+      "pos": [
+        -0.2461763,
+        51.5287161
+      ],
+      "bearing": 27.4,
+      "nextStation": "Willesden Junction",
+      "destStation": "Stratford"
+    },
+    {
+      "tripId": "LO_MIL_RS_1_485",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_1_376",
+      "direction": 1,
+      "currentDistM": 17271.85,
+      "speedKmh": 30,
+      "speedMps": 8.27,
+      "pos": [
+        -0.2198845,
+        51.5345346
+      ],
+      "bearing": 239.5,
+      "nextStation": "Kensal Rise",
+      "destStation": "Richmond"
+    },
+    {
+      "tripId": "LO_MIL_RS_1_500",
+      "line": "mildmay",
+      "lineName": "Mildmay",
+      "shapeId": "mildmay_1_376",
+      "direction": 1,
+      "currentDistM": 7347.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1049999,
+        51.5459691
+      ],
+      "bearing": 250,
+      "nextStation": "Caledonian Road & Barnsbury",
+      "destStation": "Richmond"
+    },
+    {
+      "tripId": "LO_SUF_0_495",
+      "line": "suffragette",
+      "lineName": "Suffragette",
+      "shapeId": "suffragette_0_379",
+      "direction": 0,
+      "currentDistM": 12394.19,
+      "speedKmh": 76,
+      "speedMps": 20.99,
+      "pos": [
+        -0.0008262,
+        51.5673012
+      ],
+      "bearing": 119.4,
+      "nextStation": "Leytonstone High Road",
+      "destStation": "Barking Riverside"
+    },
+    {
+      "tripId": "LO_SUF_0_510",
+      "line": "suffragette",
+      "lineName": "Suffragette",
+      "shapeId": "suffragette_0_379",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1521331,
+        51.5556759
+      ],
+      "bearing": 101.1,
+      "nextStation": "Upper Holloway",
+      "destStation": "Barking Riverside"
+    },
+    {
+      "tripId": "LO_SUF_1_495",
+      "line": "suffragette",
+      "lineName": "Suffragette",
+      "shapeId": "suffragette_1_380",
+      "direction": 1,
+      "currentDistM": 13491.77,
+      "speedKmh": 52,
+      "speedMps": 14.34,
+      "pos": [
+        -0.0247934,
+        51.5821257
+      ],
+      "bearing": 311.4,
+      "nextStation": "Blackhorse Road",
+      "destStation": "Gospel Oak"
+    },
+    {
+      "tripId": "LO_SUF_1_510",
+      "line": "suffragette",
+      "lineName": "Suffragette",
+      "shapeId": "suffragette_1_380",
+      "direction": 1,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.11599,
+        51.51955
+      ],
+      "bearing": 11.7,
+      "nextStation": "Barking",
+      "destStation": "Gospel Oak"
+    },
+    {
+      "tripId": "LO_WEA_CF_0_500",
+      "line": "weaver",
+      "lineName": "Weaver",
+      "shapeId": "weaver_0_385",
+      "direction": 0,
+      "currentDistM": 7840.47,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.0458676,
+        51.5739529
+      ],
+      "bearing": 40.6,
+      "nextStation": "St James Street",
+      "destStation": "Chingford"
+    },
+    {
+      "tripId": "LO_WEA_CF_1_500",
+      "line": "weaver",
+      "lineName": "Weaver",
+      "shapeId": "weaver_1_386",
+      "direction": 1,
+      "currentDistM": 8876.33,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.0460998,
+        51.5737798
+      ],
+      "bearing": 219.6,
+      "nextStation": "Clapton",
+      "destStation": "Liverpool Street"
+    },
+    {
+      "tripId": "LO_WEA_CH_0_495",
+      "line": "weaver",
+      "lineName": "Weaver",
+      "shapeId": "weaver_0_383",
+      "direction": 0,
+      "currentDistM": 10225.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0700895,
+        51.5936928
+      ],
+      "bearing": 16.3,
+      "nextStation": "White Hart Lane",
+      "destStation": "Cheshunt"
+    },
+    {
+      "tripId": "LO_WEA_CH_1_495",
+      "line": "weaver",
+      "lineName": "Weaver",
+      "shapeId": "weaver_1_384",
+      "direction": 1,
+      "currentDistM": 13054.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0700896,
+        51.5936925
+      ],
+      "bearing": 196.3,
+      "nextStation": "Seven Sisters",
+      "destStation": "Liverpool Street"
+    },
+    {
+      "tripId": "LO_WEA_ET_0_510",
+      "line": "weaver",
+      "lineName": "Weaver",
+      "shapeId": "weaver_0_381",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0807,
+        51.5181
+      ],
+      "bearing": 15.7,
+      "nextStation": "Bethnal Green",
+      "destStation": "Enfield Town"
+    },
+    {
+      "tripId": "LO_WEA_ET_1_510",
+      "line": "weaver",
+      "lineName": "Weaver",
+      "shapeId": "weaver_1_382",
+      "direction": 1,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0793694,
+        51.6519598
+      ],
+      "bearing": 136.1,
+      "nextStation": "Bush Hill Park",
+      "destStation": "Liverpool Street"
+    },
+    {
+      "tripId": "LO_WIN_CJ_0_490",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_0_391",
+      "direction": 0,
+      "currentDistM": 12855.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0703675,
+        51.4694557
+      ],
+      "bearing": 247.2,
+      "nextStation": "Denmark Hill",
+      "destStation": "Clapham Junction"
+    },
+    {
+      "tripId": "LO_WIN_CJ_0_505",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_0_391",
+      "direction": 0,
+      "currentDistM": 3308.34,
+      "speedKmh": 66,
+      "speedMps": 18.44,
+      "pos": [
+        -0.0757156,
+        51.5367126
+      ],
+      "bearing": 181.8,
+      "nextStation": "Hoxton",
+      "destStation": "Clapham Junction"
+    },
+    {
+      "tripId": "LO_WIN_CJ_1_490",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_1_392",
+      "direction": 1,
+      "currentDistM": 14477.77,
+      "speedKmh": 49,
+      "speedMps": 13.71,
+      "pos": [
+        -0.0620172,
+        51.52108
+      ],
+      "bearing": 318.8,
+      "nextStation": "Shoreditch High Street",
+      "destStation": "Highbury & Islington"
+    },
+    {
+      "tripId": "LO_WIN_CJ_1_505",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_1_392",
+      "direction": 1,
+      "currentDistM": 4266.51,
+      "speedKmh": 90,
+      "speedMps": 25,
+      "pos": [
+        -0.1161392,
+        51.4633269
+      ],
+      "bearing": 114.9,
+      "nextStation": "Denmark Hill",
+      "destStation": "Highbury & Islington"
+    },
+    {
+      "tripId": "LO_WIN_CP_0_497",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_0_389",
+      "direction": 0,
+      "currentDistM": 8413.82,
+      "speedKmh": 21,
+      "speedMps": 5.76,
+      "pos": [
+        -0.0522755,
+        51.5011717
+      ],
+      "bearing": 147.5,
+      "nextStation": "Rotherhithe",
+      "destStation": "Crystal Palace"
+    },
+    {
+      "tripId": "LO_WIN_CP_1_497",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_1_390",
+      "direction": 1,
+      "currentDistM": 10191.81,
+      "speedKmh": 4,
+      "speedMps": 1.19,
+      "pos": [
+        -0.0502129,
+        51.4980148
+      ],
+      "bearing": 343.4,
+      "nextStation": "Canada Water",
+      "destStation": "Highbury & Islington"
+    },
+    {
+      "tripId": "LO_WIN_NX_0_497",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_0_393",
+      "direction": 0,
+      "currentDistM": 7176.92,
+      "speedKmh": 42,
+      "speedMps": 11.58,
+      "pos": [
+        -0.0472878,
+        51.4925471
+      ],
+      "bearing": 163.7,
+      "nextStation": "New Cross",
+      "destStation": "New Cross"
+    },
+    {
+      "tripId": "LO_WIN_NX_1_497",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_1_394",
+      "direction": 1,
+      "currentDistM": 8210.28,
+      "speedKmh": 66,
+      "speedMps": 18.44,
+      "pos": [
+        -0.0757319,
+        51.5355527
+      ],
+      "bearing": 360,
+      "nextStation": "Haggerston",
+      "destStation": "Dalston Junction"
+    },
+    {
+      "tripId": "LO_WIN_WC_0_490",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_0_387",
+      "direction": 0,
+      "currentDistM": 12625.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0374675,
+        51.464658
+      ],
+      "bearing": 184.3,
+      "nextStation": "Honor Oak Park",
+      "destStation": "West Croydon"
+    },
+    {
+      "tripId": "LO_WIN_WC_0_505",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_0_387",
+      "direction": 0,
+      "currentDistM": 3308.34,
+      "speedKmh": 66,
+      "speedMps": 18.44,
+      "pos": [
+        -0.0757156,
+        51.5367126
+      ],
+      "bearing": 181.8,
+      "nextStation": "Hoxton",
+      "destStation": "West Croydon"
+    },
+    {
+      "tripId": "LO_WIN_WC_1_490",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_1_388",
+      "direction": 1,
+      "currentDistM": 13676.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0559058,
+        51.5043402
+      ],
+      "bearing": 332,
+      "nextStation": "Shadwell",
+      "destStation": "Highbury & Islington"
+    },
+    {
+      "tripId": "LO_WIN_WC_1_505",
+      "line": "windrush",
+      "lineName": "Windrush",
+      "shapeId": "windrush_1_388",
+      "direction": 1,
+      "currentDistM": 3462.54,
+      "speedKmh": 8,
+      "speedMps": 2.24,
+      "pos": [
+        -0.0606061,
+        51.4175089
+      ],
+      "bearing": 31.8,
+      "nextStation": "Sydenham",
+      "destStation": "Highbury & Islington"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1006-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_355",
+      "direction": 0,
+      "currentDistM": 13560.07,
+      "speedKmh": 23,
+      "speedMps": 6.27,
+      "pos": [
+        0.0626299,
+        51.5019398
+      ],
+      "bearing": 271.4,
+      "nextStation": "Woolwich Arsenal",
+      "destStation": "Woolwich Arsenal"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1007-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_355",
+      "direction": 0,
+      "currentDistM": 6879.66,
+      "speedKmh": 5,
+      "speedMps": 1.39,
+      "pos": [
+        0.0221506,
+        51.5029208
+      ],
+      "bearing": 115.6,
+      "nextStation": "Pontoon Dock",
+      "destStation": "Woolwich Arsenal"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1008-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_355",
+      "direction": 0,
+      "currentDistM": 3093.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.0035168,
+        51.5324089
+      ],
+      "bearing": 155,
+      "nextStation": "West Ham (DLR)",
+      "destStation": "Woolwich Arsenal"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1126-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_356",
+      "direction": 0,
+      "currentDistM": 9267.59,
+      "speedKmh": 23,
+      "speedMps": 6.31,
+      "pos": [
+        0.0333657,
+        51.502244
+      ],
+      "bearing": 85.1,
+      "nextStation": "London City Airport",
+      "destStation": "Woolwich Arsenal"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1127-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_356",
+      "direction": 0,
+      "currentDistM": 5347.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0072458,
+        51.5079424
+      ],
+      "bearing": 76,
+      "nextStation": "East India",
+      "destStation": "Woolwich Arsenal"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1128-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_356",
+      "direction": 0,
+      "currentDistM": 1317.47,
+      "speedKmh": 82,
+      "speedMps": 22.83,
+      "pos": [
+        -0.062704,
+        51.5112988
+      ],
+      "bearing": 83.8,
+      "nextStation": "Limehouse",
+      "destStation": "Woolwich Arsenal"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1247-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 9678.45,
+      "speedKmh": 29,
+      "speedMps": 8.03,
+      "pos": [
+        -0.0207132,
+        51.4711344
+      ],
+      "bearing": 139.6,
+      "nextStation": "Elverson Road",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1248-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 6357.46,
+      "speedKmh": 18,
+      "speedMps": 5.13,
+      "pos": [
+        -0.0147158,
+        51.4935546
+      ],
+      "bearing": 183.9,
+      "nextStation": "Mudchute",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1249-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 3883.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0267538,
+        51.5094598
+      ],
+      "bearing": 122.1,
+      "nextStation": "Canary Wharf",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1303-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 10039.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0168025,
+        51.4691072
+      ],
+      "bearing": 134,
+      "nextStation": "Lewisham",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1304-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 6962.16,
+      "speedKmh": 44,
+      "speedMps": 12.29,
+      "pos": [
+        -0.0119334,
+        51.4888684
+      ],
+      "bearing": 131.8,
+      "nextStation": "Island Gardens",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1305-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 4636.2,
+      "speedKmh": 7,
+      "speedMps": 1.89,
+      "pos": [
+        -0.0208552,
+        51.5053164
+      ],
+      "bearing": 190.6,
+      "nextStation": "Canary Wharf",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1306-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_357",
+      "direction": 0,
+      "currentDistM": 717.33,
+      "speedKmh": 17,
+      "speedMps": 4.78,
+      "pos": [
+        -0.0672212,
+        51.5110674
+      ],
+      "bearing": 261.3,
+      "nextStation": "Shadwell",
+      "destStation": "Lewisham"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1545-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_358",
+      "direction": 0,
+      "currentDistM": 10369.35,
+      "speedKmh": 25,
+      "speedMps": 6.93,
+      "pos": [
+        0.0594551,
+        51.5085949
+      ],
+      "bearing": 93,
+      "nextStation": "Cyprus",
+      "destStation": "Beckton"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1546-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_358",
+      "direction": 0,
+      "currentDistM": 6490.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        0.0071964,
+        51.5146277
+      ],
+      "bearing": 50.7,
+      "nextStation": "Custom House",
+      "destStation": "Beckton"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-1547-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_358",
+      "direction": 0,
+      "currentDistM": 4096.62,
+      "speedKmh": 15,
+      "speedMps": 4.16,
+      "pos": [
+        -0.0179477,
+        51.5078292
+      ],
+      "bearing": 86.4,
+      "nextStation": "Poplar",
+      "destStation": "Beckton"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-291-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_346",
+      "direction": 1,
+      "currentDistM": 11765.87,
+      "speedKmh": 60,
+      "speedMps": 16.61,
+      "pos": [
+        -0.0056342,
+        51.5424582
+      ],
+      "bearing": 325.2,
+      "nextStation": "Stratford International",
+      "destStation": "Stratford International"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-292-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_346",
+      "direction": 1,
+      "currentDistM": 8484.83,
+      "speedKmh": 47,
+      "speedMps": 13.03,
+      "pos": [
+        0.0068507,
+        51.5149701
+      ],
+      "bearing": 335.6,
+      "nextStation": "Star Lane",
+      "destStation": "Stratford International"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-293-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_346",
+      "direction": 1,
+      "currentDistM": 4822.22,
+      "speedKmh": 15,
+      "speedMps": 4.2,
+      "pos": [
+        0.047766,
+        51.5037622
+      ],
+      "bearing": 295.3,
+      "nextStation": "Pontoon Dock",
+      "destStation": "Stratford International"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-405-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_347",
+      "direction": 1,
+      "currentDistM": 14562.93,
+      "speedKmh": 34,
+      "speedMps": 9.57,
+      "pos": [
+        -0.0658574,
+        51.5111667
+      ],
+      "bearing": 83.7,
+      "nextStation": "Bank (DLR)",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-406-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_347",
+      "direction": 1,
+      "currentDistM": 10356.58,
+      "speedKmh": 23,
+      "speedMps": 6.5,
+      "pos": [
+        -0.0150448,
+        51.5076434
+      ],
+      "bearing": 275.1,
+      "nextStation": "Westferry",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-407-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_347",
+      "direction": 1,
+      "currentDistM": 6726.51,
+      "speedKmh": 15,
+      "speedMps": 4.21,
+      "pos": [
+        0.0215942,
+        51.5030837
+      ],
+      "bearing": 297.1,
+      "nextStation": "Canning Town (DLR)",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-408-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_347",
+      "direction": 1,
+      "currentDistM": 1746.98,
+      "speedKmh": 65,
+      "speedMps": 17.92,
+      "pos": [
+        0.0766806,
+        51.4921874
+      ],
+      "bearing": 190.3,
+      "nextStation": "King George V",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-527-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_348",
+      "direction": 1,
+      "currentDistM": 10412.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0396674,
+        51.5123709
+      ],
+      "bearing": 268.6,
+      "nextStation": "Shadwell",
+      "destStation": "Tower Gateway"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-528-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_348",
+      "direction": 1,
+      "currentDistM": 6665.22,
+      "speedKmh": 50,
+      "speedMps": 13.92,
+      "pos": [
+        0.0061803,
+        51.5147883
+      ],
+      "bearing": 259.6,
+      "nextStation": "East India",
+      "destStation": "Tower Gateway"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-529-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_348",
+      "direction": 1,
+      "currentDistM": 3224.44,
+      "speedKmh": 13,
+      "speedMps": 3.68,
+      "pos": [
+        0.046024,
+        51.5084706
+      ],
+      "bearing": 241.2,
+      "nextStation": "Royal Albert",
+      "destStation": "Tower Gateway"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-696-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_349",
+      "direction": 1,
+      "currentDistM": 7670,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0396675,
+        51.5123714
+      ],
+      "bearing": 268.6,
+      "nextStation": "Shadwell",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-697-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_349",
+      "direction": 1,
+      "currentDistM": 5680.81,
+      "speedKmh": 17,
+      "speedMps": 4.76,
+      "pos": [
+        -0.0215585,
+        51.5028206
+      ],
+      "bearing": 9.6,
+      "nextStation": "Heron Quays",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-698-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_349",
+      "direction": 1,
+      "currentDistM": 2663.78,
+      "speedKmh": 13,
+      "speedMps": 3.51,
+      "pos": [
+        -0.0106776,
+        51.4814864
+      ],
+      "bearing": 359.7,
+      "nextStation": "Cutty Sark",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-755-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_349",
+      "direction": 1,
+      "currentDistM": 7670,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0396675,
+        51.5123714
+      ],
+      "bearing": 268.6,
+      "nextStation": "Shadwell",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-756-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_349",
+      "direction": 1,
+      "currentDistM": 5085.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0161734,
+        51.5000077
+      ],
+      "bearing": 280.5,
+      "nextStation": "Heron Quays",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-757-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_349",
+      "direction": 1,
+      "currentDistM": 1335.35,
+      "speedKmh": 42,
+      "speedMps": 11.57,
+      "pos": [
+        -0.022618,
+        51.4745919
+      ],
+      "bearing": 346.5,
+      "nextStation": "Greenwich",
+      "destStation": "Bank (DLR)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-80-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_343",
+      "direction": 1,
+      "currentDistM": 3285.57,
+      "speedKmh": 40,
+      "speedMps": 11.19,
+      "pos": [
+        -0.0219835,
+        51.5290631
+      ],
+      "bearing": 343.8,
+      "nextStation": "Pudding Mill Lane",
+      "destStation": "Stratford (DLR 1)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-81-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_343",
+      "direction": 1,
+      "currentDistM": 783.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0127414,
+        51.5075344
+      ],
+      "bearing": 41.9,
+      "nextStation": "Langdon Park",
+      "destStation": "Stratford (DLR 1)"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-817-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_352",
+      "direction": 0,
+      "currentDistM": 4633.05,
+      "speedKmh": 17,
+      "speedMps": 4.83,
+      "pos": [
+        -0.0190104,
+        51.5077319
+      ],
+      "bearing": 254.4,
+      "nextStation": "West India Quay",
+      "destStation": "Canary Wharf"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-818-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_352",
+      "direction": 0,
+      "currentDistM": 2860.4,
+      "speedKmh": 34,
+      "speedMps": 9.46,
+      "pos": [
+        -0.0159846,
+        51.520122
+      ],
+      "bearing": 159.5,
+      "nextStation": "Langdon Park",
+      "destStation": "Canary Wharf"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-819-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_0_352",
+      "direction": 0,
+      "currentDistM": 940,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0134984,
+        51.533854
+      ],
+      "bearing": 229.5,
+      "nextStation": "Bow Church",
+      "destStation": "Canary Wharf"
+    },
+    {
+      "tripId": "VJ_25-DLR-_-y05-266-82-T0",
+      "line": "dlr",
+      "lineName": "DLR",
+      "shapeId": "dlr_1_343",
+      "direction": 1,
+      "currentDistM": 191.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.020409,
+        51.5068853
+      ],
+      "bearing": 18.6,
+      "nextStation": "Poplar",
+      "destStation": "Stratford (DLR 1)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-105-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_397",
+      "direction": 1,
+      "currentDistM": 18069.02,
+      "speedKmh": 33,
+      "speedMps": 9.05,
+      "pos": [
+        -0.0386529,
+        51.4108302
+      ],
+      "bearing": 73,
+      "nextStation": "Beckenham Junction",
+      "destStation": "Beckenham Junction"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-106-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_397",
+      "direction": 1,
+      "currentDistM": 14873.96,
+      "speedKmh": 19,
+      "speedMps": 5.41,
+      "pos": [
+        -0.0587801,
+        51.391246
+      ],
+      "bearing": 42.5,
+      "nextStation": "Arena",
+      "destStation": "Beckenham Junction"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-107-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_397",
+      "direction": 1,
+      "currentDistM": 11893.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0845002,
+        51.375148
+      ],
+      "bearing": 96.6,
+      "nextStation": "Sandilands",
+      "destStation": "Beckenham Junction"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-108-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_397",
+      "direction": 1,
+      "currentDistM": 9651.51,
+      "speedKmh": 17,
+      "speedMps": 4.68,
+      "pos": [
+        -0.1051635,
+        51.374425
+      ],
+      "bearing": 30.9,
+      "nextStation": "West Croydon (Tram)",
+      "destStation": "Beckenham Junction"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-109-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_397",
+      "direction": 1,
+      "currentDistM": 7155.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1290917,
+        51.3856969
+      ],
+      "bearing": 120.4,
+      "nextStation": "Ampere Way",
+      "destStation": "Beckenham Junction"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-110-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_397",
+      "direction": 1,
+      "currentDistM": 3321.97,
+      "speedKmh": 17,
+      "speedMps": 4.76,
+      "pos": [
+        -0.1778802,
+        51.4006681
+      ],
+      "bearing": 136.8,
+      "nextStation": "Mitcham",
+      "destStation": "Beckenham Junction"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-250-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_402",
+      "direction": 1,
+      "currentDistM": 9775.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0173389,
+        51.3424957
+      ],
+      "bearing": 137.8,
+      "nextStation": "New Addington",
+      "destStation": "New Addington"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-251-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_402",
+      "direction": 1,
+      "currentDistM": 7021.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0428611,
+        51.3545293
+      ],
+      "bearing": 80.9,
+      "nextStation": "Addington Village",
+      "destStation": "New Addington"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-252-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_402",
+      "direction": 1,
+      "currentDistM": 2867.37,
+      "speedKmh": 2,
+      "speedMps": 0.65,
+      "pos": [
+        -0.0764234,
+        51.3746019
+      ],
+      "bearing": 143.5,
+      "nextStation": "Lloyd Park",
+      "destStation": "New Addington"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-253-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_402",
+      "direction": 1,
+      "currentDistM": 1459.9,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0962363,
+        51.374273
+      ],
+      "bearing": 104.7,
+      "nextStation": "Lebanon Road",
+      "destStation": "New Addington"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-254-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_402",
+      "direction": 1,
+      "currentDistM": 243.33,
+      "speedKmh": 22,
+      "speedMps": 6.11,
+      "pos": [
+        -0.1037972,
+        51.3758569
+      ],
+      "bearing": 33,
+      "nextStation": "West Croydon (Tram)",
+      "destStation": "New Addington"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-31-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_398",
+      "direction": 1,
+      "currentDistM": 13118.57,
+      "speedKmh": 9,
+      "speedMps": 2.56,
+      "pos": [
+        -0.0733172,
+        51.3792713
+      ],
+      "bearing": 2.7,
+      "nextStation": "Addiscombe",
+      "destStation": "Elmers End"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-32-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_398",
+      "direction": 1,
+      "currentDistM": 10866.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0976165,
+        51.3756245
+      ],
+      "bearing": 151.9,
+      "nextStation": "East Croydon",
+      "destStation": "Elmers End"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-33-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_398",
+      "direction": 1,
+      "currentDistM": 8908.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1133596,
+        51.3734936
+      ],
+      "bearing": 100,
+      "nextStation": "Reeves Corner",
+      "destStation": "Elmers End"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-34-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_398",
+      "direction": 1,
+      "currentDistM": 5038.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1572979,
+        51.3926418
+      ],
+      "bearing": 113.5,
+      "nextStation": "Beddington Lane",
+      "destStation": "Elmers End"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-35-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_1_398",
+      "direction": 1,
+      "currentDistM": 1353.75,
+      "speedKmh": 64,
+      "speedMps": 17.9,
+      "pos": [
+        -0.1994824,
+        51.412137
+      ],
+      "bearing": 136.2,
+      "nextStation": "Morden Road",
+      "destStation": "Elmers End"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-384-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_404",
+      "direction": 0,
+      "currentDistM": 17615.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.2076165,
+        51.4175078
+      ],
+      "bearing": 334.7,
+      "nextStation": "Wimbledon (Tram)",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-385-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_404",
+      "direction": 0,
+      "currentDistM": 14266.67,
+      "speedKmh": 17,
+      "speedMps": 4.76,
+      "pos": [
+        -0.1718102,
+        51.3976434
+      ],
+      "bearing": 285.8,
+      "nextStation": "Belgrave Walk",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-386-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_404",
+      "direction": 0,
+      "currentDistM": 10597.87,
+      "speedKmh": 21,
+      "speedMps": 5.89,
+      "pos": [
+        -0.1251153,
+        51.3833393
+      ],
+      "bearing": 317.9,
+      "nextStation": "Therapia Lane",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-387-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_404",
+      "direction": 0,
+      "currentDistM": 7942.68,
+      "speedKmh": 17,
+      "speedMps": 4.74,
+      "pos": [
+        -0.0970446,
+        51.3741755
+      ],
+      "bearing": 257.1,
+      "nextStation": "George Street",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-388-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_404",
+      "direction": 0,
+      "currentDistM": 5319.88,
+      "speedKmh": 24,
+      "speedMps": 6.6,
+      "pos": [
+        -0.0719303,
+        51.3836576
+      ],
+      "bearing": 210,
+      "nextStation": "Addiscombe",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-389-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_404",
+      "direction": 0,
+      "currentDistM": 2532.44,
+      "speedKmh": 21,
+      "speedMps": 5.78,
+      "pos": [
+        -0.0582768,
+        51.4025552
+      ],
+      "bearing": 235.6,
+      "nextStation": "Harrington Road",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-495-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_406",
+      "direction": 0,
+      "currentDistM": 10033.5,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1572971,
+        51.3926415
+      ],
+      "bearing": 293.5,
+      "nextStation": "Mitcham",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-496-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_406",
+      "direction": 0,
+      "currentDistM": 5662.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.1063456,
+        51.3748975
+      ],
+      "bearing": 280.7,
+      "nextStation": "Waddon Marsh",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-497-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_406",
+      "direction": 0,
+      "currentDistM": 3984.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -0.0844999,
+        51.375148
+      ],
+      "bearing": 276.6,
+      "nextStation": "East Croydon",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-498-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_406",
+      "direction": 0,
+      "currentDistM": 1107.03,
+      "speedKmh": 32,
+      "speedMps": 8.83,
+      "pos": [
+        -0.0597822,
+        51.3905659
+      ],
+      "bearing": 223,
+      "nextStation": "Woodside",
+      "destStation": "Wimbledon (Tram)"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-616-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_410",
+      "direction": 0,
+      "currentDistM": 8861.26,
+      "speedKmh": 10,
+      "speedMps": 2.84,
+      "pos": [
+        -0.1036709,
+        51.3734661
+      ],
+      "bearing": 279,
+      "nextStation": "Church Street",
+      "destStation": "Church Street"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-617-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_410",
+      "direction": 0,
+      "currentDistM": 7151.79,
+      "speedKmh": 19,
+      "speedMps": 5.25,
+      "pos": [
+        -0.0795964,
+        51.3750492
+      ],
+      "bearing": 271.1,
+      "nextStation": "Lebanon Road",
+      "destStation": "Church Street"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-618-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_410",
+      "direction": 0,
+      "currentDistM": 4818.39,
+      "speedKmh": 42,
+      "speedMps": 11.7,
+      "pos": [
+        -0.0677902,
+        51.362997
+      ],
+      "bearing": 280.3,
+      "nextStation": "Lloyd Park",
+      "destStation": "Church Street"
+    },
+    {
+      "tripId": "VJ_63-TR-_-y05-132-619-MF",
+      "line": "tram",
+      "lineName": "Tram",
+      "shapeId": "tram_0_410",
+      "direction": 0,
+      "currentDistM": 1669.74,
+      "speedKmh": 33,
+      "speedMps": 9.3,
+      "pos": [
+        -0.0298239,
+        51.3550242
+      ],
+      "bearing": 312.2,
+      "nextStation": "Addington Village",
+      "destStation": "Church Street"
+    }
+  ]
+}

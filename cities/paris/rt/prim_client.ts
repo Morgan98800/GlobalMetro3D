@@ -1,15 +1,10 @@
 import type { RtJourney, RtCall, MatchStats } from '@core/rt/rt_matching';
 import { parisClock } from '@core/sim/paris_time';
 
-export interface LineTrafficReport {
-  lineId: string;
-  status: 'normal' | 'disrupted' | 'interrupted';
-  severity: 'normal' | 'info' | 'warning' | 'alert';
-  title: string;
-  message: string;
-  updatedAt: string;
-  closedStations?: string[];
-}
+import type { LineTrafficReport } from '@core/types';
+// Type désormais défini une seule fois, dans core/types ; ré-exporté pour les
+// consommateurs existants.
+export type { LineTrafficReport };
 
 export interface PrimStatus {
   active: boolean;
@@ -24,16 +19,9 @@ export interface PrimStatus {
   trafficByLine?: Record<string, LineTrafficReport>;
 }
 
-export function normalizeStopName(name: string): string {
-  if (!name) return '';
-  return name
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+// Normalisation commune à toutes les villes, déplacée dans core/rt/stop_names.
+import { normalizeStopName } from '@core/rt/stop_names';
+export { normalizeStopName };
 
 export function isoToServiceSeconds(isoStr: string, currentServiceDate: string): number {
   const d = new Date(isoStr);

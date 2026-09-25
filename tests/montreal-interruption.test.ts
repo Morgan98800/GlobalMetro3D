@@ -4,7 +4,7 @@ import path from 'node:path';
 import { decodeShapes } from '../core/sim/shapes_loader';
 import { TripData, computeTripKinematics } from '../core/sim/kinematics';
 import { selectActiveTrips } from '../core/sim/paris_time';
-import { normalizeStopName } from '../cities/paris/rt/prim_client';
+import { normalizeStopName } from '../core/rt/stop_names';
 import type { LineTrafficReport } from '../core/types';
 
 const MONTREAL_DIR = path.resolve(process.cwd(), 'cities/montreal/data');

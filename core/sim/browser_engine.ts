@@ -3,17 +3,12 @@ import { loadShapes, Shape } from './shapes_loader';
 const DATA_REVISION = '20260910-09';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
 import { TripData, getCoordAtDistance, getSmoothedBearing } from './kinematics';
-import { PrimRealtimeClient, PrimStatus, normalizeStopName } from '@city/rt/prim_client';
-import { StmRealtimeClient, type StmStatus } from '@cities/montreal/rt/stm_client';
-import { TflRealtimeClient, type TflStatus } from '@cities/london/rt/tfl_client';
+import { normalizeStopName } from '@core/rt/stop_names';
+import type { RealtimeAdapter, RealtimeStatusBase } from '@core/rt/adapter';
 import {
-  matchJourneys,
   buildTimeline,
   positionAt,
   clampSpeed,
-  createGhostTracker,
-  updateGhosts,
-  stats,
   isRerLine,
   getKinematicProfile,
   type SchedTrip,
@@ -24,12 +19,12 @@ import { cityClock, selectActiveTrips, serviceCandidates } from './paris_time';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
 import type { LineMetadata } from '@core/types';
 import type { CityConfig } from '@core/config';
-import { parisConfig } from '@cities/paris/city.config';
 
 export interface EngineEvents {
   onTick: (trains: TrainMarker[], activeCount: number) => void;
   onRender?: (trains: TrainMarker[], activeCount: number) => void;
-  onPrimStatus?: (status: PrimStatus) => void;
+  /** Conservé pour compatibilité ; équivalent à onRealtimeStatus. */
+  onPrimStatus?: (status: any) => void;
   onRealtimeStatus?: (status: any) => void;
 }
 
@@ -73,7 +68,7 @@ export class BrowserSubwayEngine {
   private schedTripsMap = new Map<string, SchedTrip>();
   private stationNames: string[] = [];
   private linesMap = new Map<string, LineMetadata>();
-  private primClient: PrimRealtimeClient | StmRealtimeClient | TflRealtimeClient;
+  private readonly realtime: RealtimeAdapter;
   private isRunning = false;
   private timerId: any = null;
   private rafId: number | null = null;
@@ -84,9 +79,8 @@ export class BrowserSubwayEngine {
   private lineIds: string[] = [];
   private virtualTimeOffsetS = 0; // for time scrubbing
 
-  // RT Matching state (Levels 2 & 3)
-  private ghostTracker = createGhostTracker();
-  private everMatchedTrips = new Set<string>();
+  // RT state owned by the engine (Levels 2 & 3). Matching state specific to a
+  // city lives in its adapter.
   private timelines = new Map<string, Timeline>();
   private suppressedTripIds = new Set<string>();
   private loggedDistanceClamps = new Set<string>();
@@ -98,23 +92,17 @@ export class BrowserSubwayEngine {
   private externalShapesMap?: Map<string, Shape>;
   private config: CityConfig;
 
-  constructor(apiKey?: string, config: CityConfig = parisConfig) {
+  /**
+   * Le moteur reçoit un adaptateur temps réel déjà construit. Il ignore de quelle
+   * ville il s'agit : voir `cities/realtime.ts` pour le choix de l'adaptateur.
+   */
+  constructor(config: CityConfig, realtime: RealtimeAdapter) {
     this.config = config;
-    if (this.config.realtime.provider === 'stm-i3') {
-      this.primClient = new StmRealtimeClient(this.config.realtime.pollIntervalMs);
-    } else if (this.config.realtime.provider === 'tfl-unified') {
-      this.primClient = new TflRealtimeClient(this.config.realtime.pollIntervalMs);
-    } else {
-      this.primClient = new PrimRealtimeClient(apiKey);
-    }
+    this.realtime = realtime;
   }
 
-  public getPrimClient(): any {
-    return this.primClient;
-  }
-
-  public getRealtimeClient(): any {
-    return this.primClient;
+  public getRealtimeAdapter(): RealtimeAdapter {
+    return this.realtime;
   }
 
   public getShapes(): Map<string, Shape> {
@@ -274,20 +262,20 @@ export class BrowserSubwayEngine {
 
   public startRealtime() {
     if (this.lineIds.length > 0) {
-      this.primClient.startPolling(this.lineIds, () => this.focusedLineId);
+      this.realtime.startPolling(this.lineIds, () => this.focusedLineId);
     }
   }
 
   public stopRealtime() {
-    this.primClient.stopPolling();
+    this.realtime.stopPolling();
     this.timelines.clear();
-    this.everMatchedTrips.clear();
+    this.realtime.reset?.();
     this.suppressedTripIds.clear();
     this.fadingOutGhosts.clear();
   }
 
   public isRealtimeActive(): boolean {
-    return this.primClient.getStatus().active;
+    return this.realtime.getStatus().active;
   }
 
   public setVirtualTimeSeconds(secondsSinceMidnight: number) {
@@ -432,10 +420,10 @@ export class BrowserSubwayEngine {
     }
 
     if (events.onPrimStatus) {
-      this.primClient.onUpdate(events.onPrimStatus as any);
+      this.realtime.onUpdate(events.onPrimStatus);
     }
     if (events.onRealtimeStatus) {
-      this.primClient.onUpdate(events.onRealtimeStatus);
+      this.realtime.onUpdate(events.onRealtimeStatus);
     }
 
     const onTick = () => {
@@ -447,88 +435,34 @@ export class BrowserSubwayEngine {
 
       const activeTrips = selectActiveTrips(this.trips, now, undefined, 0, this.config.timezone);
       const activeSchedTrips = activeTrips.map(a => this.schedTripsMap.get(a.trip.id)!).filter(Boolean);
-      const trafficByLine = this.primClient.getTrafficByLine();
+      const trafficByLine = this.realtime.getTrafficByLine();
 
-      // Level 2 & 3: Real-Time Matching and Timeline Updates (only for per-trip-offsets capability)
-      const isRtActive = this.primClient.getStatus().active;
-      if (isRtActive && this.config.realtime.capability?.kind === 'per-trip-offsets' && 'getJourneys' in this.primClient) {
-        const prim = this.primClient as PrimRealtimeClient;
-        const journeys = prim.getJourneys();
-        const { matches } = matchJourneys(journeys, activeSchedTrips);
-
-        // Track ever-matched courses
-        for (const m of matches) {
-          this.everMatchedTrips.add(m.trip.tripId);
-        }
-
-        // Ghost trains suppression (Guards 1 & 2 included)
-        const matchedTripIds = new Set(matches.map(m => m.trip.tripId));
-        const newSuppressed = updateGhosts(
-          this.ghostTracker,
+      // Levels 2 & 3: the city's adapter recalibrates timelines, if it can.
+      if (this.realtime.applyTick && this.realtime.getStatus().active) {
+        const result = this.realtime.applyTick({
+          now,
+          civilSeconds: cityClock(now, this.config.timezone).secondsSinceMidnight,
           activeSchedTrips,
-          matchedTripIds,
-          this.everMatchedTrips,
-          prim.isFeedHealthy()
-        );
+          schedTripsById: this.schedTripsMap,
+          timelines: this.timelines
+        });
 
-        // Initiate smooth 240ms fade out for newly suppressed ghosts
-        const tickTimestamp = performance.now();
-        for (const ghostId of newSuppressed) {
-          if (!this.suppressedTripIds.has(ghostId)) {
-            const existing = this.trackedTrains.get(ghostId);
-            if (existing) {
-              this.fadingOutGhosts.set(ghostId, {
-                train: existing.train,
-                shape: existing.shape,
-                fadeStartTime: tickTimestamp
-              });
+        if (result?.suppressedTripIds) {
+          // Initiate smooth 240ms fade out for newly suppressed ghosts
+          const fadeTimestamp = performance.now();
+          for (const ghostId of result.suppressedTripIds) {
+            if (!this.suppressedTripIds.has(ghostId)) {
+              const existing = this.trackedTrains.get(ghostId);
+              if (existing) {
+                this.fadingOutGhosts.set(ghostId, {
+                  train: existing.train,
+                  shape: existing.shape,
+                  fadeStartTime: fadeTimestamp
+                });
+              }
             }
           }
-        }
-        this.suppressedTripIds = newSuppressed;
-
-        // Build / update Level 3 timelines for matched trips
-        for (const { journey, trip } of matches) {
-          const prev = this.timelines.get(trip.tripId);
-          this.timelines.set(trip.tripId, buildTimeline(trip, journey.calls, prev));
-        }
-
-        // For unmatched active trips: ensure a theoretical timeline exists
-        for (const schedTrip of activeSchedTrips) {
-          if (!this.timelines.has(schedTrip.tripId)) {
-            this.timelines.set(schedTrip.tripId, buildTimeline(schedTrip, []));
-          }
-        }
-
-        // Calculate and publish Level 2 & 3 match statistics
-        const matchStats = stats(
-          journeys,
-          matches,
-          activeSchedTrips,
-          Array.from(this.timelines.values()),
-          this.suppressedTripIds
-        );
-        prim.setMatchingStats(matchStats);
-      } else if (isRtActive && this.config.realtime.capability?.kind === 'arrival-predictions' && 'matchTrips' in this.primClient) {
-        const tfl = this.primClient as TflRealtimeClient;
-        const currentCivilSeconds = cityClock(now, this.config.timezone).secondsSinceMidnight;
-        const outcome = tfl.matchTrips(activeSchedTrips, currentCivilSeconds);
-
-        for (const [tripId, m] of outcome.matchesByTripId.entries()) {
-          const schedTrip = this.schedTripsMap.get(tripId);
-          if (!schedTrip) continue;
-
-          if (m.confidence === 'measured' && m.nextStationId && m.timeToNextStationS !== undefined) {
-            const stop = schedTrip.stops.find(s => s.stopId === m.nextStationId);
-            const calls = stop ? [{
-              stopId: m.nextStationId,
-              aimed: stop.arr,
-              expected: currentCivilSeconds + m.timeToNextStationS
-            }] : [];
-            this.timelines.set(tripId, buildTimeline(schedTrip, calls));
-          } else {
-            this.timelines.set(tripId, buildTimeline(schedTrip, []));
-          }
+          this.suppressedTripIds = result.suppressedTripIds;
         }
       }
 
@@ -748,8 +682,8 @@ export class BrowserSubwayEngine {
     this.trackedTrains.clear();
     this.fadingOutGhosts.clear();
     this.timelines.clear();
-    this.everMatchedTrips.clear();
+    this.realtime.reset?.();
     this.suppressedTripIds.clear();
-    this.primClient.stopPolling();
+    this.realtime.stopPolling();
   }
 }

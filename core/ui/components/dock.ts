@@ -4,7 +4,7 @@ import type { TrainMarker } from '@core/ui/map/trains_layer';
 import { lineBadgeGrid, LineLike } from './line_badge';
 import type { RollingStockDatabase } from '@core/sim/rolling_stock';
 import { getRollingStockForLine } from '@core/sim/rolling_stock';
-import type { LineTrafficReport } from '@city/rt/prim_client';
+import type { LineTrafficReport } from '@core/types';
 
 export interface DockServiceStatus {
   state: 'loading' | 'before_first' | 'active' | 'ended';

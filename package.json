@@ -17,7 +17,9 @@
     "test:prim-status": "vitest run tests/prim_relay.test.ts tests/paris-interruption.test.ts",
     "test:tfl-status": "vitest run tests/tfl_relay.test.ts tests/tfl_matching.test.ts",
     "test:footprint": "node tests/verify_build_footprint.mjs",
-    "test": "npm run test:snapshot && npm run test:montreal-snapshot && npm run test:london-snapshot && npm run test:stm-status && npm run test:prim-status && npm run test:tfl-status && npm run test:footprint"
+    "test": "npm run test:snapshot && npm run test:montreal-snapshot && npm run test:london-snapshot && npm run test:london-other-modes-snapshot && npm run test:engine-realtime && npm run test:stm-status && npm run test:prim-status && npm run test:tfl-status && npm run test:footprint",
+    "test:london-other-modes-snapshot": "vitest run tests/london-other-modes-snapshot.test.ts",
+    "test:engine-realtime": "vitest run tests/engine-realtime-adapter.test.ts"
   },
   "dependencies": {
     "luxon": "^3.7.2"

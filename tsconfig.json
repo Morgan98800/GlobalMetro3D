@@ -8,7 +8,6 @@
     "types": ["vite/client", "node"],
     "paths": {
       "@core/*": ["core/*"],
-      "@city/*": ["cities/paris/*"],
       "@cities/*": ["cities/*"],
       "@cities": ["cities/index.ts"],
       "@paris-subway/shared": ["core/index.ts"]

@@ -264,5 +264,19 @@
     },
     "measured_length_km": 21.66,
     "elevation_offset": 2.0
+  },
+  {
+    "id": "tram",
+    "short_name": "Tram",
+    "long_name": "London Trams",
+    "color": "#00BD19",
+    "text_color": "#FFFFFF",
+    "mode": "tram",
+    "destinations": {
+      "1": "Beckenham Jct / Elmers End / New Addington",
+      "0": "Wimbledon"
+    },
+    "measured_length_km": 18.95,
+    "elevation_offset": 1.5
   }
 ]

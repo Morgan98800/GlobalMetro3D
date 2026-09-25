@@ -67,7 +67,8 @@ export const TFL_TUBE_LINE_IDS = [
   'mildmay',
   'suffragette',
   'weaver',
-  'windrush'
+  'windrush',
+  'tram'
 ];
 
 export const NIGHT_TUBE_LINES = new Set([
@@ -297,7 +298,7 @@ export async function fetchTflData(): Promise<TflSnapshot> {
   const linesParam = TFL_TUBE_LINE_IDS.join(',');
 
   const arrivalsUrl = `https://api.tfl.gov.uk/Line/${linesParam}/Arrivals${queryParam}`;
-  const statusUrl = `https://api.tfl.gov.uk/Line/Mode/tube,dlr,elizabeth-line,overground/Status${queryParam}`;
+  const statusUrl = `https://api.tfl.gov.uk/Line/Mode/tube,dlr,elizabeth-line,overground,tram/Status${queryParam}`;
 
   let rawArrivals: any = null;
   let rawStatus: any = null;

@@ -57,6 +57,28 @@
     ]
   },
   {
+    "id": "940GZZCRADV",
+    "name": "Addington Village",
+    "coordinates": [
+      -0.032495,
+      51.356207
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
+    "id": "940GZZCRADD",
+    "name": "Addiscombe",
+    "coordinates": [
+      -0.073267,
+      51.379936
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUALD",
     "name": "Aldgate",
     "coordinates": [
@@ -115,6 +137,17 @@
     ]
   },
   {
+    "id": "940GZZCRAMP",
+    "name": "Ampere Way",
+    "coordinates": [
+      -0.123687,
+      51.382359
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "910GANERLEY",
     "name": "Anerley",
     "coordinates": [
@@ -148,6 +181,17 @@
     ]
   },
   {
+    "id": "940GZZCRARA",
+    "name": "Arena",
+    "coordinates": [
+      -0.058253,
+      51.391605
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUASG",
     "name": "Arnos Grove",
     "coordinates": [
@@ -167,6 +211,17 @@
     ],
     "lines": [
       "piccadilly"
+    ]
+  },
+  {
+    "id": "940GZZCRAVE",
+    "name": "Avenue Road",
+    "coordinates": [
+      -0.049,
+      51.407045
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -319,6 +374,28 @@
     ]
   },
   {
+    "id": "940GZZCRBEK",
+    "name": "Beckenham Junction",
+    "coordinates": [
+      -0.026159,
+      51.410718
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
+    "id": "940GZZCRBRD",
+    "name": "Beckenham Road",
+    "coordinates": [
+      -0.043157,
+      51.409637
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZDLBEC",
     "name": "Beckton",
     "coordinates": [
@@ -350,6 +427,28 @@
     "lines": [
       "district",
       "hammersmith-city"
+    ]
+  },
+  {
+    "id": "940GZZCRBED",
+    "name": "Beddington Lane",
+    "coordinates": [
+      -0.142846,
+      51.389452
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
+    "id": "940GZZCRBGV",
+    "name": "Belgrave Walk",
+    "coordinates": [
+      -0.178357,
+      51.400976
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -397,6 +496,17 @@
     ]
   },
   {
+    "id": "940GZZCRBIR",
+    "name": "Birkbeck",
+    "coordinates": [
+      -0.055802,
+      51.403748
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUBKF",
     "name": "Blackfriars",
     "coordinates": [
@@ -406,6 +516,17 @@
     "lines": [
       "circle",
       "district"
+    ]
+  },
+  {
+    "id": "940GZZCRBLA",
+    "name": "Blackhorse Lane",
+    "coordinates": [
+      -0.070462,
+      51.38482
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -849,6 +970,17 @@
     ]
   },
   {
+    "id": "940GZZCRCTR",
+    "name": "Centrale",
+    "coordinates": [
+      -0.103774,
+      51.375876
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "910GCHDWLHT",
     "name": "Chadwell Heath",
     "coordinates": [
@@ -972,6 +1104,17 @@
     ]
   },
   {
+    "id": "940GZZCRCHR",
+    "name": "Church Street",
+    "coordinates": [
+      -0.104029,
+      51.373591
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUCPC",
     "name": "Clapham Common",
     "coordinates": [
@@ -1069,6 +1212,17 @@
     ],
     "lines": [
       "northern"
+    ]
+  },
+  {
+    "id": "940GZZCRCOO",
+    "name": "Coombe Lane",
+    "coordinates": [
+      -0.060086,
+      51.359783
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -1272,6 +1426,17 @@
     ]
   },
   {
+    "id": "940GZZCRDDR",
+    "name": "Dundonald Road",
+    "coordinates": [
+      -0.207617,
+      51.417507
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "910GEALINGB",
     "name": "Ealing Broadway",
     "coordinates": [
@@ -1330,6 +1495,17 @@
     ],
     "lines": [
       "central"
+    ]
+  },
+  {
+    "id": "940GZZCRECR",
+    "name": "East Croydon",
+    "coordinates": [
+      -0.092713,
+      51.374808
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -1458,6 +1634,17 @@
     "lines": [
       "district",
       "hammersmith-city"
+    ]
+  },
+  {
+    "id": "940GZZCRELM",
+    "name": "Elmers End",
+    "coordinates": [
+      -0.049693,
+      51.398249
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -1593,6 +1780,17 @@
     ]
   },
   {
+    "id": "940GZZCRFLD",
+    "name": "Fieldway",
+    "coordinates": [
+      -0.024215,
+      51.35097
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUFYC",
     "name": "Finchley Central",
     "coordinates": [
@@ -1694,6 +1892,17 @@
     ]
   },
   {
+    "id": "940GZZCRCEN",
+    "name": "George Street",
+    "coordinates": [
+      -0.09871,
+      51.373931
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "910GGIDEAPK",
     "name": "Gidea Park",
     "coordinates": [
@@ -1783,6 +1992,17 @@
     ],
     "lines": [
       "central"
+    ]
+  },
+  {
+    "id": "940GZZCRGRA",
+    "name": "Gravel Hill",
+    "coordinates": [
+      -0.042861,
+      51.354529
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -2001,6 +2221,17 @@
     ],
     "lines": [
       "suffragette"
+    ]
+  },
+  {
+    "id": "940GZZCRHAR",
+    "name": "Harrington Road",
+    "coordinates": [
+      -0.060481,
+      51.399663
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -2527,6 +2758,17 @@
     ]
   },
   {
+    "id": "940GZZCRKGH",
+    "name": "King Henry's Drive",
+    "coordinates": [
+      -0.020393,
+      51.345507
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUKSX",
     "name": "King's Cross St. Pancras",
     "coordinates": [
@@ -2633,6 +2875,17 @@
     ]
   },
   {
+    "id": "940GZZCRLEB",
+    "name": "Lebanon Road",
+    "coordinates": [
+      -0.0845,
+      51.375149
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLULSQ",
     "name": "Leicester Square",
     "coordinates": [
@@ -2734,6 +2987,17 @@
       "circle",
       "hammersmith-city",
       "metropolitan"
+    ]
+  },
+  {
+    "id": "940GZZCRLOY",
+    "name": "Lloyd Park",
+    "coordinates": [
+      -0.080695,
+      51.364166
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -2871,6 +3135,17 @@
     ]
   },
   {
+    "id": "940GZZCRMTP",
+    "name": "Merton Park",
+    "coordinates": [
+      -0.201386,
+      51.413757
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUMED",
     "name": "Mile End",
     "coordinates": [
@@ -2893,6 +3168,28 @@
     ],
     "lines": [
       "northern"
+    ]
+  },
+  {
+    "id": "940GZZCRMCH",
+    "name": "Mitcham",
+    "coordinates": [
+      -0.171138,
+      51.397556
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
+    "id": "940GZZCRMJT",
+    "name": "Mitcham Junction",
+    "coordinates": [
+      -0.157297,
+      51.392642
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -2944,6 +3241,17 @@
     ]
   },
   {
+    "id": "940GZZCRMDN",
+    "name": "Morden Road",
+    "coordinates": [
+      -0.192912,
+      51.40888
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUMTC",
     "name": "Mornington Crescent",
     "coordinates": [
@@ -2974,6 +3282,17 @@
     ],
     "lines": [
       "jubilee"
+    ]
+  },
+  {
+    "id": "940GZZCRNWA",
+    "name": "New Addington",
+    "coordinates": [
+      -0.017339,
+      51.342496
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -3304,6 +3623,17 @@
     ]
   },
   {
+    "id": "940GZZCRPHI",
+    "name": "Phipps Bridge",
+    "coordinates": [
+      -0.182106,
+      51.403331
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUPCC",
     "name": "Piccadilly Circus",
     "coordinates": [
@@ -3519,6 +3849,17 @@
     ]
   },
   {
+    "id": "940GZZCRRVC",
+    "name": "Reeves Corner",
+    "coordinates": [
+      -0.106321,
+      51.374887
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLURGP",
     "name": "Regent's Park",
     "coordinates": [
@@ -3664,6 +4005,17 @@
     ],
     "lines": [
       "piccadilly"
+    ]
+  },
+  {
+    "id": "940GZZCRSAN",
+    "name": "Sandilands",
+    "coordinates": [
+      -0.077727,
+      51.374931
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -4286,6 +4638,17 @@
     ]
   },
   {
+    "id": "940GZZCRTPA",
+    "name": "Therapia Lane",
+    "coordinates": [
+      -0.129091,
+      51.385697
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUTHB",
     "name": "Theydon Bois",
     "coordinates": [
@@ -4541,6 +4904,17 @@
     ]
   },
   {
+    "id": "940GZZCRWAD",
+    "name": "Waddon Marsh",
+    "coordinates": [
+      -0.117827,
+      51.377003
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "910GWLTWCEN",
     "name": "Walthamstow Central",
     "coordinates": [
@@ -4571,6 +4945,17 @@
     ],
     "lines": [
       "suffragette"
+    ]
+  },
+  {
+    "id": "940GZZCRWAN",
+    "name": "Wandle Park",
+    "coordinates": [
+      -0.113362,
+      51.373481
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {
@@ -4688,6 +5073,17 @@
     ]
   },
   {
+    "id": "940GZZCRWEL",
+    "name": "Wellesley Road",
+    "coordinates": [
+      -0.097617,
+      51.375624
+    ],
+    "lines": [
+      "tram"
+    ]
+  },
+  {
     "id": "940GZZLUWYC",
     "name": "Wembley Central",
     "coordinates": [
@@ -4742,6 +5138,19 @@
       51.378424
     ],
     "lines": [
+      "tram",
+      "windrush"
+    ]
+  },
+  {
+    "id": "940GZZCRWCR",
+    "name": "West Croydon (Tram)",
+    "coordinates": [
+      -0.101638,
+      51.379045
+    ],
+    "lines": [
+      "tram",
       "windrush"
     ]
   },
@@ -4997,7 +5406,20 @@
       51.421636
     ],
     "lines": [
-      "district"
+      "district",
+      "tram"
+    ]
+  },
+  {
+    "id": "940GZZCRWMB",
+    "name": "Wimbledon (Tram)",
+    "coordinates": [
+      -0.205171,
+      51.421506
+    ],
+    "lines": [
+      "district",
+      "tram"
     ]
   },
   {
@@ -5065,6 +5487,17 @@
     ],
     "lines": [
       "suffragette"
+    ]
+  },
+  {
+    "id": "940GZZCRWOD",
+    "name": "Woodside",
+    "coordinates": [
+      -0.06566,
+      51.386934
+    ],
+    "lines": [
+      "tram"
     ]
   },
   {

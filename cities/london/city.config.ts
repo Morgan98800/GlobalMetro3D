@@ -127,13 +127,43 @@ export const londonConfig: CityConfig = {
         reconcileThresholdM: 20
       },
       realtime: { kind: 'arrival-predictions' }
+    },
+    {
+      id: 'tram',
+      displayName: 'Tram',
+      enabled: true,
+      schedule: {
+        format: 'gtfs',
+        sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
+        scheduleModel: 'trip-based',
+        stalenessToleranceDays: 14
+      },
+      geometry: { source: 'osm-oobrien' },
+      kinematics: {
+        maxSpeedKmh: 70,
+        accelMs2: 1.1,
+        decelMs2: 1.1,
+        dwellSec: 20,
+        vMaxMs: 19.4,
+        k: 0.25,
+        windowM: 60,
+        minDwellSec: 15,
+        matchWindowSec: 120,
+        maxDelaySec: 900,
+        alpha: 0.4,
+        decayDistanceM: 2000,
+        staleAfterSec: 360,
+        reconcileDurationMs: 300,
+        reconcileThresholdM: 20
+      },
+      realtime: { kind: 'arrival-predictions' }
     }
   ],
   rollingStock: '/cities/london/data/rolling-stock.json',
   gtfs: {
     sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
-    agencyFilter: ['Transport for London', 'London Underground', 'Docklands Light Railway', 'Elizabeth line', 'London Overground'],
-    routeTypes: [1],
+    agencyFilter: ['Transport for London', 'London Underground', 'Docklands Light Railway', 'Elizabeth line', 'London Overground', 'London Trams'],
+    routeTypes: [0, 1],
     scheduleModel: 'trip-based',
     validityCheck: 'calendar'
   },

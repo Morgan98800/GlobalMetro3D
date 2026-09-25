@@ -1186,6 +1186,61 @@ Le pipeline lit directement les données sources officielles :
   6. `test:tfl-status` : 18/18 tests passed
   7. `test:footprint` : 43 fichiers dist vérifiés, 3 fonctions Netlify, 20 URLs premier rendu HTTP 200.
 
+---
+
+## 21. Phase 8 — London Trams (Tramlink - Croydon) (Livraison Complète)
+
+### 21.1 Ingestion & Modélisation Topologique du Réseau de Tramway
+- **Structure du réseau London Trams** :
+  - Opéré par FirstGroup sous la marque London Trams / Tramlink pour TfL (couleur officielle vert tramway `#00BD19`).
+  - **39 stations physiques** desservant le sud londonien : Wimbledon $\leftrightarrow$ Croydon loop $\leftrightarrow$ Beckenham Junction / Elmers End / New Addington.
+  - **Boucle centrale de Croydon (Croydon Town Centre Loop)** : Modélisation fidèle de la boucle en voirie unidirectionnelle (Reeves Corner $\to$ Centrale $\to$ West Croydon $\to$ Wellesley Road $\to$ East Croydon $\to$ George Street $\to$ Church Street).
+  - Raccordements intermodaux : Wimbledon Tram (`940GZZCRWMB`) relié à Wimbledon Tube (`940GZZLUWIM`), West Croydon Tram (`940GZZCRWCR`) relié à West Croydon Overground (`910GWCROYDN`).
+- **Graphe ferroviaire dédié & Ingestion TransXChange** :
+  - Construction d'un graphe indépendant `tram_graph` et calcul des plus courts chemins `get_tram_track_between` isolant à 100 % le tramway du métro lourd et de l'Overground.
+  - Source horaire officielle TfL TransXChange : fichier `tfl_63-TR-_-y05-132.xml` couvrant l'ensemble des branches.
+  - **707 courses du mardi** injectées dans `schedule.json` (total Londres : **13 509 courses**).
+  - **17 nouvelles formes géométriques rééchantillonnées** (shapes 395 à 411 dans `shapes.bin`, total réseau : **411 formes**).
+  - Monotonie absolue des projections de gares (0 cas de non-monotonie sur l'ensemble des 17 parcours).
+  - **47 segments physiques de voies** ajoutés dans `tracks.json` (total Londres : **574 tronçons**, 486 gares uniques, 20 lignes).
+
+### 21.2 Matériel Roulant & Paramètres Cinématiques
+- **Matériels consignés dans `rolling-stock.json`** :
+  - **Bombardier CR4000** (et Stadler Variobahn) :
+    - Formation articulée à plancher bas (longueur 30.1 m, largeur 2.65 m, hauteur 3.35 m, roulement fer 750 V DC).
+- **Régime Cinématique Tramway** :
+  - Mode `tram` déclaré dans `cities/london/city.config.ts` : $v_{\max} = 70\text{ km/h}$ (19.4 m/s), $a = 1.1\text{ m/s}^2$, $d = 1.1\text{ m/s}^2$, dwell stationnaire de 20 s, élévation visuelle $+1.5\text{ m}$ (roulement en voirie / site propre urbain).
+
+### 21.3 Intégration Temps Réel TfL Unifié
+- Extension de `TFL_TUBE_LINE_IDS` dans `netlify/functions/tfl_relay.ts` à `'tram'`.
+- URL de statut unifiée : `/Line/Mode/tube,dlr,elizabeth-line,overground,tram/Status`, couvrant les 20 lignes ferrées et de tramway TfL en une seule requête HTTP.
+- Parsing des télémesures `/Line/tram/Arrivals` opérationnel avec bascule à `'measured'`.
+
+### 21.4 Cas Vicieux & Filet de Sécurité (`tests/london-vicious-cases.test.ts`)
+- Ajout du **Cas 6 : Boucle Unidirectionnelle Centrale de Croydon & Multi-Antennes** :
+  - Progression monotone sans rebroussement ni téléportation inverse lors de la traversée de la boucle centrale de Croydon.
+  - Ségrégation fluide des antennes est (Sandilands vers New Addington vs branches Beckenham / Elmers End).
+
+### 21.5 Validation & Non-Régression Strictes
+- **Règle d'or respectée** : « chaque mode ajouté ensuite ne doit pas déplacer les rames des modes déjà livrés ».
+  - **Paris Snapshot** : **$\Delta = 0.0000\text{ m}$** sur les 764 rames actives.
+  - **Montréal Snapshot** : **$\Delta = 0.0000\text{ m}$** sur les 72 rames actives.
+  - **Tube Snapshot** : **$\Delta = 0.0000\text{ m}$** et **$\Delta v = 0.0000\text{ m/s}$** sur l'intégralité des **540 rames du Tube** (stabilité absolue).
+  - **DLR Snapshot** : **38 rames DLR actives** stables à $\Delta = 0.0000\text{ m}$.
+  - **Elizabeth line Snapshot** : **40 rames Elizabeth line actives** stables à $\Delta = 0.0000\text{ m}$.
+  - **London Overground Snapshot** : **40 rames Overground actives** stables à $\Delta = 0.0000\text{ m}$.
+  - **Flotte London Trams active à 08h30 BST** : **30 rames actives** dans le sud londonien ($\text{lon} \in [-0.25, 0.06]$, $\text{lat} \in [51.32, 51.44]$).
+  - **Total rames actives simulation Londres** : **688 rames** (540 Tube + 38 DLR + 40 Elizabeth line + 40 Overground + 30 London Trams).
+- **Suites de tests globales (`npm test`)** : **100 % des 7 suites de tests validées avec succès** :
+  1. `test:snapshot` (Paris) : 1/1 test passed ($\Delta = 0.0000\text{ m}$)
+  2. `test:montreal-snapshot` (Montréal) : 1/1 test passed ($\Delta = 0.0000\text{ m}$)
+  3. `test:london-snapshot` (Londres) : 1/1 test passed (540 Tube $\Delta = 0.0000\text{ m}$ + 38 DLR + 40 Elizabeth + 40 Overground + 30 Trams)
+  4. `test:stm-status` : 11/11 tests passed
+  5. `test:prim-status` : 13/13 tests passed
+  6. `test:tfl-status` : 18/18 tests passed
+  7. `test:footprint` : 43 fichiers dist vérifiés, 3 fonctions Netlify, 20 URLs premier rendu HTTP 200.
+
+
 
 
 

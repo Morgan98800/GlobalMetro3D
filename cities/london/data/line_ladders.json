@@ -15704,8 +15704,15 @@
               -0.1023,
               51.378424
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "tram",
+                "short_name": "Tram",
+                "color": "#00BD19",
+                "text_color": "#FFFFFF"
+              }
+            ]
           }
         ]
       },
@@ -15721,8 +15728,15 @@
               -0.1023,
               51.378424
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "tram",
+                "short_name": "Tram",
+                "color": "#00BD19",
+                "text_color": "#FFFFFF"
+              }
+            ]
           },
           {
             "id": "910GNORWDJ",
@@ -15977,6 +15991,663 @@
                 "text_color": "#FFFFFF"
               }
             ]
+          }
+        ]
+      }
+    }
+  },
+  "tram": {
+    "id": "tram",
+    "short_name": "Tram",
+    "color": "#00BD19",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Beckenham Junction",
+        "terminus": "Wimbledon (Tram)",
+        "stations": [
+          {
+            "id": "940GZZCRBEK",
+            "name": "Beckenham Junction",
+            "distance_m": 0.0,
+            "coordinates": [
+              -0.026159,
+              51.410718
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBRD",
+            "name": "Beckenham Road",
+            "distance_m": 1222.0,
+            "coordinates": [
+              -0.043157,
+              51.409637
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRAVE",
+            "name": "Avenue Road",
+            "distance_m": 1719.1,
+            "coordinates": [
+              -0.049,
+              51.407045
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBIR",
+            "name": "Birkbeck",
+            "distance_m": 2315.8,
+            "coordinates": [
+              -0.055802,
+              51.403748
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRHAR",
+            "name": "Harrington Road",
+            "distance_m": 3095.7,
+            "coordinates": [
+              -0.060481,
+              51.399663
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRARA",
+            "name": "Arena",
+            "distance_m": 4013.7,
+            "coordinates": [
+              -0.058253,
+              51.391605
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWOD",
+            "name": "Woodside",
+            "distance_m": 4744.6,
+            "coordinates": [
+              -0.06566,
+              51.386934
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBLA",
+            "name": "Blackhorse Lane",
+            "distance_m": 5154.8,
+            "coordinates": [
+              -0.070462,
+              51.38482
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRADD",
+            "name": "Addiscombe",
+            "distance_m": 5749.1,
+            "coordinates": [
+              -0.073267,
+              51.379936
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRSAN",
+            "name": "Sandilands",
+            "distance_m": 6459.3,
+            "coordinates": [
+              -0.077727,
+              51.374931
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRLEB",
+            "name": "Lebanon Road",
+            "distance_m": 7048.2,
+            "coordinates": [
+              -0.0845,
+              51.375149
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRECR",
+            "name": "East Croydon",
+            "distance_m": 7634.8,
+            "coordinates": [
+              -0.092713,
+              51.374808
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRCEN",
+            "name": "George Street",
+            "distance_m": 8061.1,
+            "coordinates": [
+              -0.09871,
+              51.373931
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRCHR",
+            "name": "Church Street",
+            "distance_m": 8445.0,
+            "coordinates": [
+              -0.104029,
+              51.373591
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWAN",
+            "name": "Wandle Park",
+            "distance_m": 8725.5,
+            "coordinates": [
+              -0.113362,
+              51.373481
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWAD",
+            "name": "Waddon Marsh",
+            "distance_m": 9729.4,
+            "coordinates": [
+              -0.117827,
+              51.377003
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRAMP",
+            "name": "Ampere Way",
+            "distance_m": 10450.7,
+            "coordinates": [
+              -0.123687,
+              51.382359
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRTPA",
+            "name": "Therapia Lane",
+            "distance_m": 10980.5,
+            "coordinates": [
+              -0.129091,
+              51.385697
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBED",
+            "name": "Beddington Lane",
+            "distance_m": 12032.3,
+            "coordinates": [
+              -0.142846,
+              51.389452
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMJT",
+            "name": "Mitcham Junction",
+            "distance_m": 13096.9,
+            "coordinates": [
+              -0.157297,
+              51.392642
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMCH",
+            "name": "Mitcham",
+            "distance_m": 14219.1,
+            "coordinates": [
+              -0.171138,
+              51.397556
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBGV",
+            "name": "Belgrave Walk",
+            "distance_m": 14861.3,
+            "coordinates": [
+              -0.178357,
+              51.400976
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRPHI",
+            "name": "Phipps Bridge",
+            "distance_m": 15230.0,
+            "coordinates": [
+              -0.182106,
+              51.403331
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMDN",
+            "name": "Morden Road",
+            "distance_m": 16200.2,
+            "coordinates": [
+              -0.192912,
+              51.40888
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMTP",
+            "name": "Merton Park",
+            "distance_m": 17005.7,
+            "coordinates": [
+              -0.201386,
+              51.413757
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRDDR",
+            "name": "Dundonald Road",
+            "distance_m": 17615.4,
+            "coordinates": [
+              -0.207617,
+              51.417507
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWMB",
+            "name": "Wimbledon (Tram)",
+            "distance_m": 18135.7,
+            "coordinates": [
+              -0.205171,
+              51.421506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "district",
+                "short_name": "District",
+                "color": "#00782A",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Wimbledon (Tram)",
+        "terminus": "Beckenham Junction",
+        "stations": [
+          {
+            "id": "940GZZCRWMB",
+            "name": "Wimbledon (Tram)",
+            "distance_m": 0.0,
+            "coordinates": [
+              -0.205171,
+              51.421506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "district",
+                "short_name": "District",
+                "color": "#00782A",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "940GZZCRDDR",
+            "name": "Dundonald Road",
+            "distance_m": 520.3,
+            "coordinates": [
+              -0.207617,
+              51.417507
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMTP",
+            "name": "Merton Park",
+            "distance_m": 1130.0,
+            "coordinates": [
+              -0.201386,
+              51.413757
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMDN",
+            "name": "Morden Road",
+            "distance_m": 1935.5,
+            "coordinates": [
+              -0.192912,
+              51.40888
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRPHI",
+            "name": "Phipps Bridge",
+            "distance_m": 2905.7,
+            "coordinates": [
+              -0.182106,
+              51.403331
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBGV",
+            "name": "Belgrave Walk",
+            "distance_m": 3274.4,
+            "coordinates": [
+              -0.178357,
+              51.400976
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMCH",
+            "name": "Mitcham",
+            "distance_m": 3916.6,
+            "coordinates": [
+              -0.171138,
+              51.397556
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRMJT",
+            "name": "Mitcham Junction",
+            "distance_m": 5038.8,
+            "coordinates": [
+              -0.157297,
+              51.392642
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBED",
+            "name": "Beddington Lane",
+            "distance_m": 6103.5,
+            "coordinates": [
+              -0.142846,
+              51.389452
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRTPA",
+            "name": "Therapia Lane",
+            "distance_m": 7155.2,
+            "coordinates": [
+              -0.129091,
+              51.385697
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRAMP",
+            "name": "Ampere Way",
+            "distance_m": 7685.0,
+            "coordinates": [
+              -0.123687,
+              51.382359
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWAD",
+            "name": "Waddon Marsh",
+            "distance_m": 8406.3,
+            "coordinates": [
+              -0.117827,
+              51.377003
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWAN",
+            "name": "Wandle Park",
+            "distance_m": 8908.1,
+            "coordinates": [
+              -0.113362,
+              51.373481
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRRVC",
+            "name": "Reeves Corner",
+            "distance_m": 9439.3,
+            "coordinates": [
+              -0.106321,
+              51.374887
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRCTR",
+            "name": "Centrale",
+            "distance_m": 9604.7,
+            "coordinates": [
+              -0.103774,
+              51.375876
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWCR",
+            "name": "West Croydon (Tram)",
+            "distance_m": 10236.7,
+            "coordinates": [
+              -0.101638,
+              51.379045
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "windrush",
+                "short_name": "Windrush",
+                "color": "#D22730",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "940GZZCRWEL",
+            "name": "Wellesley Road",
+            "distance_m": 10866.4,
+            "coordinates": [
+              -0.097617,
+              51.375624
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRECR",
+            "name": "East Croydon",
+            "distance_m": 11055.9,
+            "coordinates": [
+              -0.092713,
+              51.374808
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRLEB",
+            "name": "Lebanon Road",
+            "distance_m": 11893.5,
+            "coordinates": [
+              -0.0845,
+              51.375149
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRSAN",
+            "name": "Sandilands",
+            "distance_m": 12365.7,
+            "coordinates": [
+              -0.077727,
+              51.374931
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRADD",
+            "name": "Addiscombe",
+            "distance_m": 13144.2,
+            "coordinates": [
+              -0.073267,
+              51.379936
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBLA",
+            "name": "Blackhorse Lane",
+            "distance_m": 13786.9,
+            "coordinates": [
+              -0.070462,
+              51.38482
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRWOD",
+            "name": "Woodside",
+            "distance_m": 14197.2,
+            "coordinates": [
+              -0.06566,
+              51.386934
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRARA",
+            "name": "Arena",
+            "distance_m": 14928.1,
+            "coordinates": [
+              -0.058253,
+              51.391605
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRHAR",
+            "name": "Harrington Road",
+            "distance_m": 14992.2,
+            "coordinates": [
+              -0.060481,
+              51.399663
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBIR",
+            "name": "Birkbeck",
+            "distance_m": 16635.7,
+            "coordinates": [
+              -0.055802,
+              51.403748
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRAVE",
+            "name": "Avenue Road",
+            "distance_m": 17232.4,
+            "coordinates": [
+              -0.049,
+              51.407045
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBRD",
+            "name": "Beckenham Road",
+            "distance_m": 17729.6,
+            "coordinates": [
+              -0.043157,
+              51.409637
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "940GZZCRBEK",
+            "name": "Beckenham Junction",
+            "distance_m": 18951.5,
+            "coordinates": [
+              -0.026159,
+              51.410718
+            ],
+            "is_hub": false,
+            "transfers": []
           }
         ]
       }

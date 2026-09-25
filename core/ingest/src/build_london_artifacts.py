@@ -335,6 +335,17 @@ LINE_CONFIGS = [
         "rep_file": None,
         "elevation_offset": 2.0,
         "is_sub_surface": False
+    },
+    {
+        "id": "tram",
+        "short_name": "Tram",
+        "long_name": "London Trams",
+        "color": "#00BD19",
+        "text_color": "#FFFFFF",
+        "mode": "tram",
+        "rep_file": "tfl_63-TR-_-y05-132.xml",
+        "elevation_offset": 1.5,
+        "is_sub_surface": False
     }
 ]
 
@@ -608,6 +619,87 @@ def build_london_artifacts(
             best_coords = [c1, c2]
 
         lo_shortest_path_cache[cache_key] = best_coords
+        return best_coords
+
+    # Segments exclusifs London Trams pour tracks.json
+    for feat in lines_geojson["features"]:
+        coords = feat["geometry"]["coordinates"]
+        props = feat["properties"]
+        feat_lines = props.get("lines", [])
+        feat_id = props.get("id", "")
+
+        has_tram = any(l.get("name") == "Tramlink" for l in feat_lines)
+        if has_tram:
+            physical_segments_for_tracks.append({
+                "feature_id": feat_id,
+                "primary_line": "Tram",
+                "coordinates": [[round(c[0], 5), round(c[1], 5)] for c in coords]
+            })
+
+    # Construction du graphe spécifique London Trams (Tramlink)
+    tram_graph: Dict[str, List[Tuple[str, List[Tuple[float, float]], float]]] = defaultdict(list)
+    for feat in lines_geojson["features"]:
+        coords = feat["geometry"]["coordinates"]
+        props = feat["properties"]
+        feat_lines = props.get("lines", [])
+        for l in feat_lines:
+            if l.get("name") != "Tramlink":
+                continue
+            u = l.get("start_sid")
+            v = l.get("end_sid")
+            if not u or not v:
+                continue
+            if u not in stations_by_id or v not in stations_by_id:
+                continue
+
+            seg_coords = coords
+            u_c = stations_by_id[u]["coordinates"]
+            d0 = equirect_dist_m(coords[0][0], coords[0][1], u_c[0], u_c[1])
+            d1 = equirect_dist_m(coords[-1][0], coords[-1][1], u_c[0], u_c[1])
+            if d0 > d1:
+                seg_coords = coords[::-1]
+
+            l_m = sum(equirect_dist_m(seg_coords[i-1][0], seg_coords[i-1][1], seg_coords[i][0], seg_coords[i][1]) for i in range(1, len(seg_coords)))
+            tram_graph[u].append((v, seg_coords, l_m))
+            tram_graph[v].append((u, seg_coords[::-1], l_m))
+
+    tram_shortest_path_cache: Dict[Tuple[str, str], List[Tuple[float, float]]] = {}
+
+    def get_tram_track_between(src: str, dst: str) -> List[Tuple[float, float]]:
+        if src == dst:
+            return []
+        cache_key = (src, dst)
+        if cache_key in tram_shortest_path_cache:
+            return tram_shortest_path_cache[cache_key]
+
+        pq = [(0.0, src, [])]
+        visited = set()
+        best_coords = None
+
+        while pq:
+            d, curr, segs = heapq.heappop(pq)
+            if curr == dst:
+                combined = []
+                for s in segs:
+                    if not combined:
+                        combined.extend(s)
+                    else:
+                        combined.extend(s[1:])
+                best_coords = combined
+                break
+            if curr in visited:
+                continue
+            visited.add(curr)
+            for nxt, seg_coords, seg_l in tram_graph.get(curr, []):
+                if nxt not in visited:
+                    heapq.heappush(pq, (d + seg_l, nxt, segs + [seg_coords]))
+
+        if best_coords is None:
+            c1 = stations_by_id[src]["coordinates"]
+            c2 = stations_by_id[dst]["coordinates"]
+            best_coords = [c1, c2]
+
+        tram_shortest_path_cache[cache_key] = best_coords
         return best_coords
 
     # 3. Lecture et conversion des fichiers TransXChange
@@ -1202,7 +1294,10 @@ def build_london_artifacts(
                 for i in range(len(st_seq) - 1):
                     u_id = st_seq[i]
                     v_id = st_seq[i+1]
-                    leg_coords = get_track_between(u_id, v_id)
+                    if lid == "tram":
+                        leg_coords = get_tram_track_between(u_id, v_id)
+                    else:
+                        leg_coords = get_track_between(u_id, v_id)
                     if not full_coords:
                         full_coords.extend(leg_coords)
                     else:
@@ -1227,8 +1322,8 @@ def build_london_artifacts(
             for i, lnk in enumerate(links):
                 rt = lnk["runtime"]
                 t_arr = t_curr + rt
-                # Dwell intermédiaire : 25 secondes si arrêt régulier
-                dwell = 25 if i < len(links) - 1 else 0
+                # Dwell intermédiaire : 20s pour tram, 25s pour tube/dlr si arrêt régulier
+                dwell = (20 if lid == "tram" else 25) if i < len(links) - 1 else 0
                 t_dep = t_arr + dwell
                 stops_compact.append([t_arr, t_dep, stop_cum_dists[i + 1], st_seq[i + 1]])
                 t_curr = t_dep
@@ -1255,6 +1350,10 @@ def build_london_artifacts(
             if d_key not in model_trips_for_ladder[lid] or len(stops_compact) > len(model_trips_for_ladder[lid][d_key]["stops"]):
                 model_trips_for_ladder[lid][d_key] = trip_record
 
+        if lid == 'tram':
+            termini_by_line_dir[lid]["0"] = "Wimbledon"
+            termini_by_line_dir[lid]["1"] = "Beckenham Jct / Elmers End / New Addington"
+
         print(f"  [{lid:<16}] {line_tuesday_trips} courses le mardi, {len(unique_shape_dict)} formes cumulées")
 
     print(f"[london-ingest] Total stations utilisées : {len(used_station_ids)}")
@@ -1264,7 +1363,7 @@ def build_london_artifacts(
     # =========================================================================
     # Étape A : Génération de stations.json
     # =========================================================================
-    # Relier les correspondances entre stations jumelles rail / métro
+    # Relier les correspondances entre stations jumelles rail / métro / tram
     HUB_TWIN_STATIONS = [
         ('910GHGHI', '940GZZLUHAI'),
         ('910GEUSTON', '940GZZLUEUS'),
@@ -1272,6 +1371,8 @@ def build_london_artifacts(
         ('910GBLCHSRD', '940GZZLUBLR'),
         ('910GBARKING', '940GZZLUBKG'),
         ('910GSHPDSB', '940GZZLUSBH'),
+        ('940GZZCRWMB', '940GZZLUWIM'),
+        ('940GZZCRWCR', '910GWCROYDN'),
     ]
     for r_sid, t_sid in HUB_TWIN_STATIONS:
         if r_sid in stations_by_id and t_sid in stations_by_id:
@@ -1526,7 +1627,8 @@ def build_london_artifacts(
                 "sub_surface": "Lignes sub-surface à gabarit ferroviaire large (Circle, District, Hammersmith & City, Metropolitan)",
                 "light_rail": "Réseau de métro léger automatique sur viaduc et surface (Docklands Light Railway)",
                 "crossrail": "Ligne ferroviaire régionale à grande capacité est-ouest (Elizabeth line / Crossrail)",
-                "overground": "Réseau ferroviaire suburbain de surface London Overground (Liberty, Lioness, Mildmay, Suffragette, Weaver, Windrush)"
+                "overground": "Réseau ferroviaire suburbain de surface London Overground (Liberty, Lioness, Mildmay, Suffragette, Weaver, Windrush)",
+                "tram": "Réseau de tramway urbain en voirie et site propre (London Trams / Tramlink)"
             }
         },
         "summary": {
@@ -1535,8 +1637,9 @@ def build_london_artifacts(
             "light_rail_lines": 1,
             "crossrail_lines": 1,
             "overground_lines": 6,
-            "total_lines": 19,
-            "network_type": "Tube, Sub-surface, Light Rail (DLR), Elizabeth line & London Overground"
+            "tram_lines": 1,
+            "total_lines": 20,
+            "network_type": "Tube, Sub-surface, Light Rail (DLR), Elizabeth line, London Overground & London Trams"
         }
     }
     with open(output_dir / "sections.json", "w", encoding="utf-8") as f:

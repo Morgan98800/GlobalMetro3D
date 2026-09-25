@@ -353,5 +353,63 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
     });
   });
 
+  describe('Case 6: London Trams Central Croydon One-Way Loop & Multi-Branching', () => {
+    it('maintains continuous monotonic progression around the Croydon one-way loop without reverse snapping', () => {
+      // Tram journey from Wimbledon through the central Croydon loop to New Addington
+      const shapeLoop = createSyntheticShape(19000, 190);
+
+      const tramTrip: TripData = {
+        id: 'TRAM_WIM_NWA_01',
+        line: 'tram',
+        dir: 0, // outbound
+        shapeId: shapeLoop.id,
+        t0: 30600, // 08:30:00
+        t1: 32700, // 09:05:00
+        destName: 'New Addington',
+        stops: [
+          [30600, 30620, 0, 'Wimbledon (Tram)'],
+          [31200, 31220, 8500, 'Wandle Park'],
+          [31320, 31340, 9200, 'Reeves Corner'],
+          [31420, 31440, 9700, 'Centrale'],
+          [31540, 31560, 10400, 'West Croydon (Tram)'],
+          [31660, 31680, 11000, 'Wellesley Road'],
+          [31780, 31800, 11600, 'East Croydon'],
+          [32000, 32020, 13000, 'Sandilands'],
+          [32700, 32720, 18500, 'New Addington']
+        ]
+      };
+
+      // 1. Tram entering the loop at Centrale (9700m)
+      const tAtCentrale = computeTripKinematics(tramTrip, shapeLoop, 31430, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      expect(tAtCentrale).not.toBeNull();
+      expect(tAtCentrale?.currentDistM).toBe(9700);
+      expect(tAtCentrale?.spd).toBe(0);
+      expect(tAtCentrale?.next).toBe('West Croydon (Tram)');
+      expect(tAtCentrale?.dest).toBe('New Addington');
+
+      // 2. Tram progressing along the loop between West Croydon and Wellesley Road
+      const tInLoop = computeTripKinematics(tramTrip, shapeLoop, 31600, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      expect(tInLoop).not.toBeNull();
+      expect(tInLoop!.currentDistM).toBeGreaterThan(10400);
+      expect(tInLoop!.currentDistM).toBeLessThan(11000);
+      expect(tInLoop!.spd).toBeGreaterThan(0);
+      expect(tInLoop?.next).toBe('Wellesley Road');
+
+      // 3. Tram exiting the loop at East Croydon (11600m) towards New Addington
+      const tAtEastCroydon = computeTripKinematics(tramTrip, shapeLoop, 31790, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      expect(tAtEastCroydon).not.toBeNull();
+      expect(tAtEastCroydon?.currentDistM).toBe(11600);
+      expect(tAtEastCroydon?.spd).toBe(0);
+      expect(tAtEastCroydon?.next).toBe('Sandilands');
+
+      // 4. Tram arrived at New Addington terminus (18500m)
+      const tAtTerminus = computeTripKinematics(tramTrip, shapeLoop, 32710, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      expect(tAtTerminus).not.toBeNull();
+      expect(tAtTerminus?.currentDistM).toBe(18500);
+      expect(tAtTerminus?.spd).toBe(0);
+      expect(tAtTerminus?.next).toBe('New Addington');
+    });
+  });
+
 });
 

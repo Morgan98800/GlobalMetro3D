@@ -238,6 +238,23 @@
       "driverless": false,
       "source": "TfL London Overground Class 710 Aventra (4-car walk-through AC/DC, air conditioned)",
       "verified": true
+    },
+    "CR4000_Stock": {
+      "model_id": "CR4000_Stock",
+      "name": "Bombardier CR4000 (Rame articulée 3 caisses)",
+      "manufacturer": "Bombardier Transportation (Cologne)",
+      "cars_count": 1,
+      "total_length_m": 30.1,
+      "car_length_m": 30.1,
+      "bogie_centres_m": 9.5,
+      "width_m": 2.65,
+      "height_m": 3.35,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "steel",
+      "gauge_type": "tram",
+      "driverless": false,
+      "source": "TfL London Trams Fleet Specifications (Bombardier CR4000 3-section articulated low-floor tram, 30.1m)",
+      "verified": true
     }
   },
   "lines": {
@@ -505,6 +522,20 @@
       "height_m": 3.77,
       "drive_type": "steel",
       "source": "Parc Class 378 Capitalstar Windrush line (East & South London lines)",
+      "verified": true
+    },
+    "tram": {
+      "line_id": "tram",
+      "short_name": "Tram",
+      "model_id": "CR4000_Stock",
+      "name": "Bombardier CR4000 (Rame articulée)",
+      "cars_count": 1,
+      "total_length_m": 30.1,
+      "car_length_m": 30.1,
+      "width_m": 2.65,
+      "height_m": 3.35,
+      "drive_type": "steel",
+      "source": "Parc London Trams (Bombardier CR4000 & Stadler Variobahn)",
       "verified": true
     }
   }

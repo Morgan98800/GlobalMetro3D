@@ -22,8 +22,8 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
     const computedSnapshot = computeLondonSnapshot();
 
     // 4. Validate metadata and fleet counts
-    expect(computedSnapshot.trains.length).toBe(658);
-    expect(computedSnapshot.meta.totalTrains).toBe(658);
+    expect(computedSnapshot.trains.length).toBe(688);
+    expect(computedSnapshot.meta.totalTrains).toBe(688);
     expect(computedSnapshot.meta.trainsByLine['bakerloo']).toBe(29);
     expect(computedSnapshot.meta.trainsByLine['central']).toBe(79);
     expect(computedSnapshot.meta.trainsByLine['circle']).toBe(17);
@@ -43,12 +43,14 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
     expect(computedSnapshot.meta.trainsByLine['suffragette']).toBe(4);
     expect(computedSnapshot.meta.trainsByLine['weaver']).toBe(6);
     expect(computedSnapshot.meta.trainsByLine['windrush']).toBe(12);
+    expect(computedSnapshot.meta.trainsByLine['tram']).toBe(30);
 
-    // Validate all 19 lines are active
+    // Validate all 20 lines are active
     const lineIds = [
       'bakerloo', 'central', 'circle', 'district', 'hammersmith-city',
       'jubilee', 'metropolitan', 'northern', 'piccadilly', 'victoria', 'waterloo-city',
-      'dlr', 'elizabeth', 'liberty', 'lioness', 'mildmay', 'suffragette', 'weaver', 'windrush'
+      'dlr', 'elizabeth', 'liberty', 'lioness', 'mildmay', 'suffragette', 'weaver', 'windrush',
+      'tram'
     ];
     for (const lid of lineIds) {
       expect(computedSnapshot.meta.trainsByLine[lid], `Line ${lid} must have active trains`).toBeGreaterThan(0);
@@ -57,7 +59,7 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
     // 5. Compare train by train for Tube (strict non-regression: 540 trains must match reference fixture exactly)
     const expectedMap = new Map(expectedFixture.trains.map(t => [t.tripId, t]));
     const OVERGROUND_LINES = new Set(['liberty', 'lioness', 'mildmay', 'suffragette', 'weaver', 'windrush']);
-    const tubeTrains = computedSnapshot.trains.filter(t => t.line !== 'dlr' && t.line !== 'elizabeth' && !OVERGROUND_LINES.has(t.line));
+    const tubeTrains = computedSnapshot.trains.filter(t => t.line !== 'dlr' && t.line !== 'elizabeth' && t.line !== 'tram' && !OVERGROUND_LINES.has(t.line));
     expect(tubeTrains.length).toBe(540);
 
     let maxDistDeltaM = 0;
@@ -131,6 +133,20 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
       expect(t.shapeId).toMatch(/^(liberty|lioness|mildmay|suffragette|weaver|windrush)_\d+_\d+$/);
     }
 
-    console.log(`✅ London snapshot passed: 540 Tube trains matched with Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s, plus 38 active DLR, 40 active Elizabeth line, and 40 active London Overground trains.`);
+    // 9. Verify London Trams fleet (30 active trams across Wimbledon, Croydon, Beckenham, Elmers End, New Addington)
+    const tramTrains = computedSnapshot.trains.filter(t => t.line === 'tram');
+    expect(tramTrains.length).toBe(30);
+    for (const t of tramTrains) {
+      const [lon, lat] = t.pos;
+      expect(lon).toBeGreaterThanOrEqual(-0.25); // Wimbledon is ~ -0.21
+      expect(lon).toBeLessThanOrEqual(0.06);   // Beckenham / New Addington is ~ +0.03
+      expect(lat).toBeGreaterThanOrEqual(51.32); // New Addington is ~ 51.34
+      expect(lat).toBeLessThanOrEqual(51.44); // Wimbledon / Beckenham is ~ 51.42
+      expect(t.speedMps).toBeGreaterThanOrEqual(0);
+      expect(t.speedMps).toBeLessThanOrEqual(20); // max ~70 km/h (19.4 m/s)
+      expect(t.shapeId).toMatch(/^tram_\d+_\d+$/);
+    }
+
+    console.log(`✅ London snapshot passed: 540 Tube trains matched with Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s, plus 38 active DLR, 40 active Elizabeth line, 40 active London Overground, and 30 active London Trams.`);
   });
 });

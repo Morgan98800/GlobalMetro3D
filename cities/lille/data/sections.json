@@ -3,13 +3,13 @@
   "source": {
     "provider": "Ilévia / MEL",
     "classification": {
-      "souterrain": "100% réseau métro Lignes 1 & 2 Lille (tunnel foré, tranchée couverte et section protégée)",
-      "aerien": "néant"
+      "souterrain": "Réseau métro Lignes 1 & 2 Lille (tunnel foré, tranchée couverte et section protégée)",
+      "surface_voirie": "Tramway Lignes R & T (circulation en voirie / site propre sur les Grands Boulevards)"
     }
   },
   "summary": {
     "aerial_sections": 0,
     "aerial_km": 0.0,
-    "network_type": "100% souterrain / site propre intégral"
+    "network_type": "Métro souterrain intégral (L1 & L2) + Tramway en site propre de surface (R & T)"
   }
 }

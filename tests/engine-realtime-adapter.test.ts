@@ -135,15 +135,19 @@ describe('Moteur ↔ adaptateur temps réel', () => {
       expect(count).toBe(688);
     });
 
-    it('Lille : 100 rames (L1: 32, L2: 68) à l’heure du snapshot, L1 strictement inchangée', async () => {
+    it('Lille : 117 rames (ME1: 32, ME2: 68, Tram R: 8, Tram T: 9) à l’heure du snapshot, métro strictement inchangé', async () => {
       const { count, lines } = await runFirstTick(
         lilleConfig, createRealtimeAdapter(lilleConfig), SNAPSHOT_TIMESTAMP_ISO_LILLE
       );
       const l1Count = lines.filter(l => l === 'ME1').length;
       const l2Count = lines.filter(l => l === 'ME2').length;
-      expect(count).toBe(100);
+      const tramRCount = lines.filter(l => l === 'TRAM_R').length;
+      const tramTCount = lines.filter(l => l === 'TRAM_T').length;
+      expect(count).toBe(117);
       expect(l1Count).toBe(32);
       expect(l2Count).toBe(68);
+      expect(tramRCount).toBe(8);
+      expect(tramTCount).toBe(9);
     });
 
     it('Paris (métro) : un adaptateur inactif ne change rien', async () => {

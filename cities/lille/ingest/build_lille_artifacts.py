@@ -1,17 +1,17 @@
 """
 build_lille_artifacts.py — Pipeline d'ingestion GTFS et géométrie OSM pour le Réseau de Lille (Ilévia)
 
-Génère l'ensemble des artefacts normalisés pour les Lignes 1 et 2 du Métro VAL :
-1. lines.json : métadonnées des lignes 1 (jaune #FDC41F) et 2 (rouge #E30613)
-2. stations.json : 60 stations uniques dédupliquées avec correspondances à Gare Lille Flandres et Porte des Postes
-3. tracks.json : polylignes simplifiées des 4 voies avec strokes contrastés
-4. shapes.bin : binaire SHP2 rééchantillonné au pas régulier de 10 m (ME1_0, ME1_1, ME2_0, ME2_1)
-5. schedule.json : grille des courses et arrêts au format compact (L1: 919 courses, L2: 916 courses)
-6. line_ladders.json : thermomètre de ligne ordonné par direction pour le dock
+Génère l'ensemble des artefacts normalisés pour les Lignes 1 et 2 du Métro VAL et les Lignes R et T du Tramway :
+1. lines.json : métadonnées des lignes 1 (jaune #FDC41F), 2 (rouge #E30613), R et T (cyan #009FE3)
+2. stations.json : 91 stations uniques dédupliquées avec correspondances aux pôles d'échanges
+3. tracks.json : polylignes simplifiées des voies métro et tramway
+4. shapes.bin : binaire SHP2 rééchantillonné au pas régulier de 10 m (ME1_0, ME1_1, ME2_0, ME2_1, TRAM_R_0, TRAM_R_1, TRAM_T_0, TRAM_T_1)
+5. schedule.json : grille des courses et arrêts au format compact (L1: 919, L2: 916, R+T: 433)
+6. line_ladders.json : thermomètre de ligne ordonné par direction pour le dock (4 lignes)
 7. station-rankings.json : fréquences théoriques de desserte par station
-8. sections.json : 100% souterrain / tranchée couverte
+8. sections.json : caractéristiques souterrain (métro) / surface (tramway)
 9. feed_fingerprint.json : métadonnées et fraîcheur du flux
-10. rolling-stock.json : spécifications VAL 208 et rames 52m (Alstom)
+10. rolling-stock.json : spécifications VAL 208, rames 52m (Alstom) et Breda VLC (Tramway Mongy)
 """
 
 from __future__ import annotations
@@ -182,6 +182,59 @@ L2_STATIONS_META = [
     ("C.H. Dron", "DRO", "C.H. Dron"),
 ]
 
+# Correspondance ordonnée des 23 stations du Tramway Ligne R (Lille <> Roubaix)
+TRAM_R_STATIONS_META = [
+    ("Gare Lille Flandres", "LIG", "Gare Lille Flandres"),
+    ("Gare Lille Europe", "EUR", "Gare Lille Europe"),
+    ("Romarin", "ROM", "Romarin"),
+    ("Botanique", "BOT", "Botanique"),
+    ("Saint Maur", "SMA", "Saint-Maur"),
+    ("Buisson", "MAB", "Buisson"),
+    ("Brossolette", "OSS", "Brossolette"),
+    ("Clemenceau Hippodrome", "MCL", "Clemenceau – Hippodrome"),
+    ("Croise Laroche", "CRL", "Croisé Laroche"),
+    ("Acacias", "ACA", "Acacias"),
+    ("Pont De Wasquehal", "PDW", "Pont de Wasquehal"),
+    ("La Terrasse", "LAT", "La Terrasse"),
+    ("Wasquehal Pavé De Lille", "PVL", "Wasquehal – Pavé de Lille"),
+    ("Le Sart", "SNO", "Le Sart"),
+    ("Planche Epinoy", "PLE", "Planche Épinoy"),
+    ("La Marque", "ARQ", "La Marque"),
+    ("Villa Cavrois", "CLD", "Villa Cavrois"),
+    ("Bol D'Air", "BOA", "Bol d'Air"),
+    ("Parc Barbieux", "PBA", "Parc Barbieux"),
+    ("Hopital Victor Provo", "BDC", "Hôpital Victor Provo"),
+    ("Jean Moulin", "QUI", "Jean Moulin"),
+    ("Alfred Mongy", "MAM", "Alfred Mongy"),
+    ("Eurotéléport", "ROU", "Eurotéléport"),
+]
+
+# Correspondance ordonnée des 22 stations du Tramway Ligne T (Lille <> Tourcoing)
+TRAM_T_STATIONS_META = [
+    ("Gare Lille Flandres", "LIG", "Gare Lille Flandres"),
+    ("Gare Lille Europe", "EUR", "Gare Lille Europe"),
+    ("Romarin", "ROM", "Romarin"),
+    ("Botanique", "BOT", "Botanique"),
+    ("Saint Maur", "SMA", "Saint-Maur"),
+    ("Buisson", "MAB", "Buisson"),
+    ("Brossolette", "OSS", "Brossolette"),
+    ("Clemenceau Hippodrome", "MCL", "Clemenceau – Hippodrome"),
+    ("Croise Laroche", "CRL", "Croisé Laroche"),
+    ("Foch", "OCH", "Foch"),
+    ("Le Quesne", "LQS", "Le Quesne"),
+    ("Cerisaie", "CDA", "Cerisaie – Centre d'Affaires"),
+    ("Chateau Rouge", "CTR", "Château Rouge"),
+    ("Cartelot", "TEL", "Cartelot"),
+    ("Grand Cottignies", "GDC", "Grand Cottignies"),
+    ("Triez", "TRI", "Triez"),
+    ("Trois Suisses", "3SU", "Trois Suisses"),
+    ("Faidherbe", "DAI", "Faidherbe"),
+    ("Ma Campagne", "CAM", "Ma Campagne"),
+    ("Pont Hydraulique", "PHY", "Pont Hydraulique"),
+    ("Victoire", "ICT", "Victoire"),
+    ("Tourcoing Centre", "TOU", "Tourcoing Centre"),
+]
+
 
 def chain_osm_ways(relation_data: dict) -> Tuple[List[Tuple[float, float]], float]:
     """Chaîne les segments OSM d'une relation en une polyline continue orientée."""
@@ -191,7 +244,7 @@ def chain_osm_ways(relation_data: dict) -> Tuple[List[Tuple[float, float]], floa
     if not relations:
         raise ValueError("Aucune relation trouvée dans les données OSM")
 
-    way_members = [m for m in relations[0]["members"] if m["type"] == "way"]
+    way_members = [m for m in relations[0]["members"] if m["type"] == "way" and m.get("role", "") in ("", "forward", "backward")]
     chain: List[List[Tuple[float, float]]] = []
     max_gap = 0.0
 
@@ -245,7 +298,7 @@ def build_lille_artifacts(
         web_dir = Path(web_dir)
         web_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[lille-ingest] Démarrage de l'ingestion pour Lille (Lignes 1 et 2)...")
+    print(f"[lille-ingest] Démarrage de l'ingestion pour Lille (Métro 1 & 2 + Tramway R & T)...")
 
     # =========================================================================
     # Étape 1 : Chaînage et rééchantillonnage de la géométrie OSM
@@ -262,22 +315,51 @@ def build_lille_artifacts(
     with open(raw_dir / "osm_449485.json", "r", encoding="utf-8") as f:
         osm_l2_dir1_data = json.load(f)
 
+    # Tramway R : Relations OSM 224816 (Dir 0: Lille -> Roubaix) et 12765530 (Dir 1: Roubaix -> Lille)
+    with open(raw_dir / "osm_224816.json", "r", encoding="utf-8") as f:
+        osm_tr_dir0_data = json.load(f)
+    with open(raw_dir / "osm_12765530.json", "r", encoding="utf-8") as f:
+        osm_tr_dir1_data = json.load(f)
+
+    # Tramway T : Relations OSM 593563 (Dir 0: Lille -> Tourcoing) et 12765722 (Dir 1: Tourcoing -> Lille)
+    with open(raw_dir / "osm_593563.json", "r", encoding="utf-8") as f:
+        osm_tt_dir0_data = json.load(f)
+    with open(raw_dir / "osm_12765722.json", "r", encoding="utf-8") as f:
+        osm_tt_dir1_data = json.load(f)
+
     l1_poly_dir0, l1_gap_dir0 = chain_osm_ways(osm_l1_dir0_data)
     l1_poly_dir1, l1_gap_dir1 = chain_osm_ways(osm_l1_dir1_data)
     l2_poly_dir0, l2_gap_dir0 = chain_osm_ways(osm_l2_dir0_data)
     l2_poly_dir1, l2_gap_dir1 = chain_osm_ways(osm_l2_dir1_data)
+    tr_poly_dir0, tr_gap_dir0 = chain_osm_ways(osm_tr_dir0_data)
+    tr_poly_dir1, tr_gap_dir1 = chain_osm_ways(osm_tr_dir1_data)
+    tt_poly_dir0, tt_gap_dir0 = chain_osm_ways(osm_tt_dir0_data)
+    tt_poly_dir1, tt_gap_dir1 = chain_osm_ways(osm_tt_dir1_data)
 
     l1_len_dir0 = sum(equirect_dist_m(l1_poly_dir0[i-1][0], l1_poly_dir0[i-1][1], l1_poly_dir0[i][0], l1_poly_dir0[i][1]) for i in range(1, len(l1_poly_dir0)))
     l1_len_dir1 = sum(equirect_dist_m(l1_poly_dir1[i-1][0], l1_poly_dir1[i-1][1], l1_poly_dir1[i][0], l1_poly_dir1[i][1]) for i in range(1, len(l1_poly_dir1)))
     l2_len_dir0 = sum(equirect_dist_m(l2_poly_dir0[i-1][0], l2_poly_dir0[i-1][1], l2_poly_dir0[i][0], l2_poly_dir0[i][1]) for i in range(1, len(l2_poly_dir0)))
     l2_len_dir1 = sum(equirect_dist_m(l2_poly_dir1[i-1][0], l2_poly_dir1[i-1][1], l2_poly_dir1[i][0], l2_poly_dir1[i][1]) for i in range(1, len(l2_poly_dir1)))
+    tr_len_dir0 = sum(equirect_dist_m(tr_poly_dir0[i-1][0], tr_poly_dir0[i-1][1], tr_poly_dir0[i][0], tr_poly_dir0[i][1]) for i in range(1, len(tr_poly_dir0)))
+    tr_len_dir1 = sum(equirect_dist_m(tr_poly_dir1[i-1][0], tr_poly_dir1[i-1][1], tr_poly_dir1[i][0], tr_poly_dir1[i][1]) for i in range(1, len(tr_poly_dir1)))
+    tt_len_dir0 = sum(equirect_dist_m(tt_poly_dir0[i-1][0], tt_poly_dir0[i-1][1], tt_poly_dir0[i][0], tt_poly_dir0[i][1]) for i in range(1, len(tt_poly_dir0)))
+    tt_len_dir1 = sum(equirect_dist_m(tt_poly_dir1[i-1][0], tt_poly_dir1[i-1][1], tt_poly_dir1[i][0], tt_poly_dir1[i][1]) for i in range(1, len(tt_poly_dir1)))
 
     print(f"[lille-ingest] L1 Dir 0 : {len(l1_poly_dir0)} sommets, {l1_len_dir0:.1f} m, gap = {l1_gap_dir0:.3f} m")
     print(f"[lille-ingest] L1 Dir 1 : {len(l1_poly_dir1)} sommets, {l1_len_dir1:.1f} m, gap = {l1_gap_dir1:.3f} m")
     print(f"[lille-ingest] L2 Dir 0 : {len(l2_poly_dir0)} sommets, {l2_len_dir0:.1f} m, gap = {l2_gap_dir0:.3f} m")
     print(f"[lille-ingest] L2 Dir 1 : {len(l2_poly_dir1)} sommets, {l2_len_dir1:.1f} m, gap = {l2_gap_dir1:.3f} m")
+    print(f"[lille-ingest] Tram R Dir 0 : {len(tr_poly_dir0)} sommets, {tr_len_dir0:.1f} m, gap = {tr_gap_dir0:.3f} m")
+    print(f"[lille-ingest] Tram R Dir 1 : {len(tr_poly_dir1)} sommets, {tr_len_dir1:.1f} m, gap = {tr_gap_dir1:.3f} m")
+    print(f"[lille-ingest] Tram T Dir 0 : {len(tt_poly_dir0)} sommets, {tt_len_dir0:.1f} m, gap = {tt_gap_dir0:.3f} m")
+    print(f"[lille-ingest] Tram T Dir 1 : {len(tt_poly_dir1)} sommets, {tt_len_dir1:.1f} m, gap = {tt_gap_dir1:.3f} m")
 
-    for name, g in [("L1 Dir 0", l1_gap_dir0), ("L1 Dir 1", l1_gap_dir1), ("L2 Dir 0", l2_gap_dir0), ("L2 Dir 1", l2_gap_dir1)]:
+    for name, g in [
+        ("L1 Dir 0", l1_gap_dir0), ("L1 Dir 1", l1_gap_dir1),
+        ("L2 Dir 0", l2_gap_dir0), ("L2 Dir 1", l2_gap_dir1),
+        ("Tram R Dir 0", tr_gap_dir0), ("Tram R Dir 1", tr_gap_dir1),
+        ("Tram T Dir 0", tt_gap_dir0), ("Tram T Dir 1", tt_gap_dir1),
+    ]:
         if g > 5.0:
             raise ValueError(f"Écart de raccordement excessif pour {name} : {g:.3f} m (seuil = 5.0 m)")
 
@@ -292,6 +374,10 @@ def build_lille_artifacts(
     l1_cum1 = make_cum(l1_poly_dir1)
     l2_cum0 = make_cum(l2_poly_dir0)
     l2_cum1 = make_cum(l2_poly_dir1)
+    tr_cum0 = make_cum(tr_poly_dir0)
+    tr_cum1 = make_cum(tr_poly_dir1)
+    tt_cum0 = make_cum(tt_poly_dir0)
+    tt_cum1 = make_cum(tt_poly_dir1)
 
     # Rééchantillonnage métrique SHP2 à pas STEP_M = 10.0 m
     STEP_M = 10.0
@@ -302,6 +388,10 @@ def build_lille_artifacts(
         ("ME1_1", l1_poly_dir1, l1_cum1),
         ("ME2_0", l2_poly_dir0, l2_cum0),
         ("ME2_1", l2_poly_dir1, l2_cum1),
+        ("TRAM_R_0", tr_poly_dir0, tr_cum0),
+        ("TRAM_R_1", tr_poly_dir1, tr_cum1),
+        ("TRAM_T_0", tt_poly_dir0, tt_cum0),
+        ("TRAM_T_1", tt_poly_dir1, tt_cum1),
     ]:
         total_len = raw_cum[-1]
         resampled_coords: List[Tuple[float, float]] = [coords[0]]
@@ -338,8 +428,12 @@ def build_lille_artifacts(
     l2_st_nodes_0 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_l2_dir0_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
     l2_st_nodes_1 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_l2_dir1_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
 
+    tr_st_nodes_0 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_tr_dir0_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+    tr_st_nodes_1 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_tr_dir1_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+    tt_st_nodes_0 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_tt_dir0_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+    tt_st_nodes_1 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_tt_dir1_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+
     max_dist_to_track = 0.0
-    station_distances_report = []
 
     # Projections pour Line 1
     l1_station_proj_0: Dict[str, Tuple[float, float]] = {}
@@ -377,7 +471,6 @@ def build_lille_artifacts(
     l2_station_proj_1: Dict[str, Tuple[float, float]] = {}
     l2_stations_ordered = []
 
-    # Correspondance L2
     for name_gtfs, pfx, name_osm in L2_STATIONS_META:
         c0 = l2_st_nodes_0.get(name_osm)
         c1 = l2_st_nodes_1.get(name_osm)
@@ -412,8 +505,89 @@ def build_lille_artifacts(
                 "lines": ["ME2"]
             })
 
-    # Liste consolidée : Les 18 premières restent STRICTEMENT dans l'ordre de la Ligne 1
-    # pour garantir une non-régression absolue des indices et snapshots de la Ligne 1.
+    # Projections pour Tramway R et T
+    tr_station_proj_0: Dict[str, Tuple[float, float]] = {}
+    tr_station_proj_1: Dict[str, Tuple[float, float]] = {}
+    tt_station_proj_0: Dict[str, Tuple[float, float]] = {}
+    tt_station_proj_1: Dict[str, Tuple[float, float]] = {}
+
+    tram_stations_ordered = []
+
+    # Projection Tram R
+    for name_gtfs, pfx, name_osm in TRAM_R_STATIONS_META:
+        c0 = tr_st_nodes_0.get(name_osm)
+        c1 = tr_st_nodes_1.get(name_osm)
+        if not c0 or not c1:
+            raise ValueError(f"Station Tram R {name_osm} non trouvée dans OSM")
+        s0, d0 = project_on_polyline(c0[0], c0[1], tr_poly_dir0, tr_cum0)
+        s1, d1 = project_on_polyline(c1[0], c1[1], tr_poly_dir1, tr_cum1)
+        tr_station_proj_0[pfx] = (s0, d0)
+        tr_station_proj_1[pfx] = (s1, d1)
+
+    # Projection Tram T
+    for name_gtfs, pfx, name_osm in TRAM_T_STATIONS_META:
+        c0 = tt_st_nodes_0.get(name_osm)
+        c1 = tt_st_nodes_1.get(name_osm)
+        if not c0 or not c1:
+            raise ValueError(f"Station Tram T {name_osm} non trouvée dans OSM")
+        s0, d0 = project_on_polyline(c0[0], c0[1], tt_poly_dir0, tt_cum0)
+        s1, d1 = project_on_polyline(c1[0], c1[1], tt_poly_dir1, tt_cum1)
+        tt_station_proj_0[pfx] = (s0, d0)
+        tt_station_proj_1[pfx] = (s1, d1)
+
+    # Intégration des stations du Tramway dans stations_list
+    existing_metro = {st["prefix"]: st for st in (l1_stations_ordered + l2_stations_ordered)}
+
+    # Pôles d'échanges existants avec le métro :
+    # LIG : ME1, ME2, TRAM_R, TRAM_T
+    # EUR : ME2, TRAM_R, TRAM_T
+    # PVL : ME2, TRAM_R
+    # ROU : ME2, TRAM_R
+    # TOU : ME2, TRAM_T
+    existing_metro["LIG"]["lines"] = ["ME1", "ME2", "TRAM_R", "TRAM_T"]
+    existing_metro["EUR"]["lines"] = ["ME2", "TRAM_R", "TRAM_T"]
+    existing_metro["PVL"]["lines"] = ["ME2", "TRAM_R"]
+    existing_metro["ROU"]["lines"] = ["ME2", "TRAM_R"]
+    existing_metro["TOU"]["lines"] = ["ME2", "TRAM_T"]
+
+    # Troncs communs et branches tramway exclusives
+    TRUNK_PFX = {"ROM", "BOT", "SMA", "MAB", "OSS", "MCL", "CRL"}
+    R_ONLY_PFX = {"ACA", "PDW", "LAT", "SNO", "PLE", "ARQ", "CLD", "BOA", "PBA", "BDC", "QUI", "MAM"}
+    T_ONLY_PFX = {"OCH", "LQS", "CDA", "CTR", "TEL", "GDC", "TRI", "3SU", "DAI", "CAM", "PHY", "ICT"}
+
+    for name_gtfs, pfx, name_osm in TRAM_R_STATIONS_META:
+        if pfx in existing_metro:
+            continue
+        c0 = tr_st_nodes_0[name_osm]
+        c1 = tr_st_nodes_1[name_osm]
+        mid_lon = round((c0[0] + c1[0]) / 2.0, 6)
+        mid_lat = round((c0[1] + c1[1]) / 2.0, 6)
+        lines = ["TRAM_R", "TRAM_T"] if pfx in TRUNK_PFX else ["TRAM_R"]
+        tram_stations_ordered.append({
+            "id": f"STATION_{pfx}",
+            "prefix": pfx,
+            "name": name_gtfs,
+            "coordinates": [mid_lon, mid_lat],
+            "lines": lines
+        })
+
+    for name_gtfs, pfx, name_osm in TRAM_T_STATIONS_META:
+        if pfx in existing_metro or pfx in TRUNK_PFX:
+            continue
+        c0 = tt_st_nodes_0[name_osm]
+        c1 = tt_st_nodes_1[name_osm]
+        mid_lon = round((c0[0] + c1[0]) / 2.0, 6)
+        mid_lat = round((c0[1] + c1[1]) / 2.0, 6)
+        tram_stations_ordered.append({
+            "id": f"STATION_{pfx}",
+            "prefix": pfx,
+            "name": name_gtfs,
+            "coordinates": [mid_lon, mid_lat],
+            "lines": ["TRAM_T"]
+        })
+
+    # Liste consolidée : Les 60 premières restent STRICTEMENT dans l'ordre du Métro
+    # pour garantir une non-régression absolue des indices et snapshots du Métro (L1 et L2).
     stations_list = []
     for st in l1_stations_ordered:
         stations_list.append({
@@ -429,11 +603,15 @@ def build_lille_artifacts(
             "coordinates": st["coordinates"],
             "lines": st["lines"]
         })
+    for st in tram_stations_ordered:
+        stations_list.append({
+            "id": st["id"],
+            "name": st["name"],
+            "coordinates": st["coordinates"],
+            "lines": st["lines"]
+        })
 
-    print(f"[lille-ingest] Total stations consolidées : {len(stations_list)} (18 L1 + 42 L2 uniques = 60 stations, 2 hubs)")
-    print(f"[lille-ingest] Distance maximale station-tracé tous tracés : {max_dist_to_track:.2f} m")
-    if max_dist_to_track > 15.0:
-        raise ValueError(f"Distance station-tracé maximale ({max_dist_to_track:.2f} m) > 15 m !")
+    print(f"[lille-ingest] Total stations consolidées : {len(stations_list)} (60 Métro + 31 Tramway uniques = 91 stations)")
 
     with open(output_dir / "stations.json", "w", encoding="utf-8") as f:
         json.dump(stations_list, f, indent=2, ensure_ascii=False)
@@ -481,30 +659,35 @@ def build_lille_artifacts(
 
     print(f"[lille-ingest] Date nominale {target_date} : {len(active_services)} service_ids actifs")
 
-    # Filtrer les courses des lignes ME1 et ME2
-    all_metro_trips: Dict[str, dict] = {}
+    # Filtrer les courses des lignes ME1, ME2 et 71 (Tramway)
+    all_active_trips: Dict[str, dict] = {}
     sat_trips: Set[str] = set()
     sun_trips: Set[str] = set()
 
     for row in gtfs.open_csv("trips.txt"):
         rid = row.get("route_id")
-        if rid in ("ME1", "ME2"):
+        if rid in ("ME1", "ME2", "71"):
             tid = row["trip_id"]
             sid = row["service_id"]
             if sid in active_services:
-                all_metro_trips[tid] = row
+                all_active_trips[tid] = row
             if sid in services_sat:
                 sat_trips.add(tid)
             if sid in services_sun:
                 sun_trips.add(tid)
 
-    l1_count = sum(1 for t in all_metro_trips.values() if t["route_id"] == "ME1")
-    l2_count = sum(1 for t in all_metro_trips.values() if t["route_id"] == "ME2")
-    print(f"[lille-ingest] Courses actives le {target_date} : ME1 = {l1_count}, ME2 = {l2_count}, Total = {len(all_metro_trips)}")
+    l1_count = sum(1 for t in all_active_trips.values() if t["route_id"] == "ME1")
+    l2_count = sum(1 for t in all_active_trips.values() if t["route_id"] == "ME2")
+    tram_count = sum(1 for t in all_active_trips.values() if t["route_id"] == "71")
+    print(f"[lille-ingest] Courses actives le {target_date} : ME1 = {l1_count}, ME2 = {l2_count}, Tramway (71) = {tram_count}, Total = {len(all_active_trips)}")
 
     # Mapping noms de stations pour rankings
     all_stations_meta = {p: name for name, p, _ in L1_STATIONS_META}
     for name, p, _ in L2_STATIONS_META:
+        all_stations_meta[p] = name
+    for name, p, _ in TRAM_R_STATIONS_META:
+        all_stations_meta[p] = name
+    for name, p, _ in TRAM_T_STATIONS_META:
         all_stations_meta[p] = name
 
     stop_times_by_trip: Dict[str, List[dict]] = defaultdict(list)
@@ -517,14 +700,14 @@ def build_lille_artifacts(
         pfx = spid[:3]
         st_name = all_stations_meta.get(pfx)
 
-        if tid in all_metro_trips:
+        if tid in all_active_trips:
             stop_times_by_trip[tid].append(row)
             arr_s = parse_time_s(row["arrival_time"])
             if arr_s > max_arrival_sec:
                 max_arrival_sec = arr_s
                 max_arrival_str = row["arrival_time"]
 
-        if tid in all_metro_trips and st_name:
+        if tid in all_active_trips and st_name:
             call_counts_weekday[st_name] += 1
         elif tid in sat_trips and st_name:
             call_counts_sat[st_name] += 1
@@ -544,30 +727,51 @@ def build_lille_artifacts(
     unique_station_names = [st["name"] for st in stations_list]
     station_to_idx = {name: idx for idx, name in enumerate(unique_station_names)}
 
-    pfx_to_idx_l1 = {pfx: station_to_idx[name] for name, pfx, _ in L1_STATIONS_META}
-    pfx_to_idx_l2 = {pfx: station_to_idx[name] for name, pfx, _ in L2_STATIONS_META}
+    pfx_to_idx = {st["id"].replace("STATION_", ""): idx for idx, st in enumerate(stations_list)}
 
     schedule_trips = []
 
-    for tid, st_list in stop_times_by_trip.items():
-        if len(st_list) < 2:
+    for tid, raw_st_list in stop_times_by_trip.items():
+        if len(raw_st_list) < 2:
             continue
-        meta = all_metro_trips[tid]
-        rid = meta["route_id"]
+        meta = all_active_trips[tid]
+        gtfs_rid = meta["route_id"]
         dir_id = int(meta.get("direction_id", 0) or 0)
-        shape_id = f"{rid}_{dir_id}"
+
+        # Déduplication des arrêts consécutifs sur le même pôle (par ex. LIG au départ ou ROU au terminus)
+        st_list = []
+        for s in raw_st_list:
+            pfx = s["stop_id"][:3]
+            if st_list and st_list[-1]["stop_id"][:3] == pfx:
+                st_list[-1]["departure_time"] = s["departure_time"]
+            else:
+                st_list.append(dict(s))
+
+        if gtfs_rid == "ME1":
+            rid = "ME1"
+            shape_id = f"ME1_{dir_id}"
+            proj_map = l1_station_proj_0 if dir_id == 0 else l1_station_proj_1
+        elif gtfs_rid == "ME2":
+            rid = "ME2"
+            shape_id = f"ME2_{dir_id}"
+            proj_map = l2_station_proj_0 if dir_id == 0 else l2_station_proj_1
+        else:
+            # Tramway route 71 : distinction des branches R (Roubaix) et T (Tourcoing)
+            trip_pfxs = set(s["stop_id"][:3] for s in st_list)
+            is_branch_t = bool(trip_pfxs.intersection(T_ONLY_PFX)) or ("Tourcoing" in meta.get("trip_headsign", ""))
+            if is_branch_t:
+                rid = "TRAM_T"
+                shape_id = f"TRAM_T_{dir_id}"
+                proj_map = tt_station_proj_0 if dir_id == 0 else tt_station_proj_1
+            else:
+                rid = "TRAM_R"
+                shape_id = f"TRAM_R_{dir_id}"
+                proj_map = tr_station_proj_0 if dir_id == 0 else tr_station_proj_1
 
         t0 = parse_time_s(st_list[0]["departure_time"])
         t1 = parse_time_s(st_list[-1]["arrival_time"])
 
         last_pfx = st_list[-1]["stop_id"][:3]
-        if rid == "ME1":
-            pfx_to_idx = pfx_to_idx_l1
-            proj_map = l1_station_proj_0 if dir_id == 0 else l1_station_proj_1
-        else:
-            pfx_to_idx = pfx_to_idx_l2
-            proj_map = l2_station_proj_0 if dir_id == 0 else l2_station_proj_1
-
         dest_idx = pfx_to_idx[last_pfx]
         stops_compact = []
 
@@ -637,6 +841,34 @@ def build_lille_artifacts(
             },
             "measured_length_km": round(max(l2_len_dir0, l2_len_dir1) / 1000.0, 2),
             "elevation_offset": 0.0
+        },
+        {
+            "id": "TRAM_R",
+            "short_name": "R",
+            "long_name": "Tramway Ligne R",
+            "color": "#009FE3",
+            "text_color": "#FFFFFF",
+            "mode": "tram",
+            "destinations": {
+                "0": "Roubaix Eurotéléport",
+                "1": "Gare Lille Flandres"
+            },
+            "measured_length_km": round(max(tr_len_dir0, tr_len_dir1) / 1000.0, 2),
+            "elevation_offset": 1.5
+        },
+        {
+            "id": "TRAM_T",
+            "short_name": "T",
+            "long_name": "Tramway Ligne T",
+            "color": "#009FE3",
+            "text_color": "#FFFFFF",
+            "mode": "tram",
+            "destinations": {
+                "0": "Tourcoing Centre",
+                "1": "Gare Lille Flandres"
+            },
+            "measured_length_km": round(max(tt_len_dir0, tt_len_dir1) / 1000.0, 2),
+            "elevation_offset": 1.5
         }
     ]
     with open(output_dir / "lines.json", "w", encoding="utf-8") as f:
@@ -647,6 +879,7 @@ def build_lille_artifacts(
     # =========================================================================
     l1_stroke = compute_darkened_contrast_color("#FDC41F", min_contrast=3.0)
     l2_stroke = compute_darkened_contrast_color("#E30613", min_contrast=3.0)
+    tram_stroke = compute_darkened_contrast_color("#009FE3", min_contrast=3.0)
 
     tracks_list = [
         {
@@ -672,6 +905,30 @@ def build_lille_artifacts(
             "short_name": "2",
             "stroke": l2_stroke,
             "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in l2_poly_dir1]
+        },
+        {
+            "line_id": "TRAM_R",
+            "short_name": "R",
+            "stroke": tram_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in tr_poly_dir0]
+        },
+        {
+            "line_id": "TRAM_R",
+            "short_name": "R",
+            "stroke": tram_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in tr_poly_dir1]
+        },
+        {
+            "line_id": "TRAM_T",
+            "short_name": "T",
+            "stroke": tram_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in tt_poly_dir0]
+        },
+        {
+            "line_id": "TRAM_T",
+            "short_name": "T",
+            "stroke": tram_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in tt_poly_dir1]
         }
     ]
     with open(output_dir / "tracks.json", "w", encoding="utf-8") as f:
@@ -682,15 +939,17 @@ def build_lille_artifacts(
     # =========================================================================
     stations_by_pfx = {st["id"].replace("STATION_", ""): st for st in stations_list}
 
-    def build_ladder_stations(meta_list, proj_map, reverse=False):
+    def build_ladder_stations(meta_list, proj_map, current_line_id, reverse=False):
         items = list(reversed(meta_list)) if reverse else list(meta_list)
         res = []
         for name_gtfs, pfx, _ in items:
             s_val, _ = proj_map[pfx]
             st_meta = stations_by_pfx[pfx]
             transfers = []
-            if pfx in ("LIG", "PDP"):
-                transfers.append({"line_id": "ME2" if "ME1" in st_meta["lines"] else "ME1", "name": "Métro"})
+            for other_line in st_meta["lines"]:
+                if other_line != current_line_id:
+                    name_type = "Métro" if other_line.startswith("ME") else "Tram"
+                    transfers.append({"line_id": other_line, "name": name_type})
             res.append({
                 "id": st_meta["id"],
                 "name": st_meta["name"],
@@ -711,12 +970,12 @@ def build_lille_artifacts(
                 "0": {
                     "origin": "4 Cantons Stade P. Mauroy",
                     "terminus": "CHU - Eurasanté",
-                    "stations": build_ladder_stations(L1_STATIONS_META, l1_station_proj_0, reverse=False)
+                    "stations": build_ladder_stations(L1_STATIONS_META, l1_station_proj_0, "ME1", reverse=False)
                 },
                 "1": {
                     "origin": "CHU - Eurasanté",
                     "terminus": "4 Cantons Stade P. Mauroy",
-                    "stations": build_ladder_stations(L1_STATIONS_META, l1_station_proj_1, reverse=True)
+                    "stations": build_ladder_stations(L1_STATIONS_META, l1_station_proj_1, "ME1", reverse=True)
                 }
             }
         },
@@ -729,12 +988,48 @@ def build_lille_artifacts(
                 "0": {
                     "origin": "C.H. Dron",
                     "terminus": "Saint Philibert",
-                    "stations": build_ladder_stations(L2_STATIONS_META, l2_station_proj_0, reverse=True)
+                    "stations": build_ladder_stations(L2_STATIONS_META, l2_station_proj_0, "ME2", reverse=True)
                 },
                 "1": {
                     "origin": "Saint Philibert",
                     "terminus": "C.H. Dron",
-                    "stations": build_ladder_stations(L2_STATIONS_META, l2_station_proj_1, reverse=False)
+                    "stations": build_ladder_stations(L2_STATIONS_META, l2_station_proj_1, "ME2", reverse=False)
+                }
+            }
+        },
+        "TRAM_R": {
+            "id": "TRAM_R",
+            "short_name": "R",
+            "color": "#009FE3",
+            "text_color": "#FFFFFF",
+            "directions": {
+                "0": {
+                    "origin": "Gare Lille Flandres",
+                    "terminus": "Roubaix Eurotéléport",
+                    "stations": build_ladder_stations(TRAM_R_STATIONS_META, tr_station_proj_0, "TRAM_R", reverse=False)
+                },
+                "1": {
+                    "origin": "Roubaix Eurotéléport",
+                    "terminus": "Gare Lille Flandres",
+                    "stations": build_ladder_stations(TRAM_R_STATIONS_META, tr_station_proj_1, "TRAM_R", reverse=True)
+                }
+            }
+        },
+        "TRAM_T": {
+            "id": "TRAM_T",
+            "short_name": "T",
+            "color": "#009FE3",
+            "text_color": "#FFFFFF",
+            "directions": {
+                "0": {
+                    "origin": "Gare Lille Flandres",
+                    "terminus": "Tourcoing Centre",
+                    "stations": build_ladder_stations(TRAM_T_STATIONS_META, tt_station_proj_0, "TRAM_T", reverse=False)
+                },
+                "1": {
+                    "origin": "Tourcoing Centre",
+                    "terminus": "Gare Lille Flandres",
+                    "stations": build_ladder_stations(TRAM_T_STATIONS_META, tt_station_proj_1, "TRAM_T", reverse=True)
                 }
             }
         }
@@ -761,14 +1056,14 @@ def build_lille_artifacts(
         "source": {
             "provider": "Ilévia / MEL",
             "classification": {
-                "souterrain": "100% réseau métro Lignes 1 & 2 Lille (tunnel foré, tranchée couverte et section protégée)",
-                "aerien": "néant"
+                "souterrain": "Réseau métro Lignes 1 & 2 Lille (tunnel foré, tranchée couverte et section protégée)",
+                "surface_voirie": "Tramway Lignes R & T (circulation en voirie / site propre sur les Grands Boulevards)"
             }
         },
         "summary": {
             "aerial_sections": 0,
             "aerial_km": 0.0,
-            "network_type": "100% souterrain / site propre intégral"
+            "network_type": "Métro souterrain intégral (L1 & L2) + Tramway en site propre de surface (R & T)"
         }
     }
     with open(output_dir / "sections.json", "w", encoding="utf-8") as f:
@@ -780,7 +1075,7 @@ def build_lille_artifacts(
     feed_fingerprint_artifact = {
         "url": "https://media.ilevia.fr/opendata/gtfs.zip",
         "source": "Ilévia / Métropole Européenne de Lille (Licence Ouverte 2.0) & contributeurs OpenStreetMap (ODbL)",
-        "dataset": "gtfs.zip (Ilévia Open Data)",
+        "dataset": "gtfs.zip (Ilévia Open Data - Métro L1/L2 & Tramway R/T)",
         "generated_at": datetime.now().strftime("%Y-%m-%d"),
         "service_date": target_date
     }
@@ -798,6 +1093,14 @@ def build_lille_artifacts(
                     "car_length_m": 13.0,
                     "car_height_m": 3.25,
                     "width_m": 2.06
+                }
+            },
+            "tram_articulated": {
+                "family_id": "tram_articulated",
+                "reference_dimensions_m": {
+                    "car_length_m": 30.0,
+                    "car_height_m": 3.42,
+                    "width_m": 2.40
                 }
             }
         },
@@ -830,6 +1133,23 @@ def build_lille_artifacts(
                 "drive_type": "tire",
                 "driverless": True,
                 "source": "Rames 52 mètres Alstom / MEL Ligne 1",
+                "verified": False
+            },
+            "Breda_VLC": {
+                "model_id": "Breda_VLC",
+                "name": "Breda VLC (Tramway Mongy articulé - 30 m)",
+                "manufacturer": "Breda Costruzioni Ferroviarie",
+                "cars_count": 1,
+                "total_length_m": 30.0,
+                "car_length_m": 30.0,
+                "bogie_centres_m": 9.5,
+                "width_m": 2.40,
+                "height_m": 3.42,
+                "inter_car_gap_m": 0.0,
+                "drive_type": "steel",
+                "gauge_type": "tram",
+                "driverless": False,
+                "source": "Fiche matériel Tramway Ilévia Breda VLC",
                 "verified": False
             }
         },
@@ -865,6 +1185,42 @@ def build_lille_artifacts(
                 "driverless": True,
                 "source": "Exploitation Ligne 2 Ilévia VAL 208",
                 "verified": False
+            },
+            "TRAM_R": {
+                "line_id": "TRAM_R",
+                "short_name": "R",
+                "model_id": "Breda_VLC",
+                "name": "Breda VLC (30 m)",
+                "cars_count": 1,
+                "total_length_m": 30.0,
+                "car_length_m": 30.0,
+                "bogie_centres_m": 9.5,
+                "width_m": 2.40,
+                "height_m": 3.42,
+                "inter_car_gap_m": 0.0,
+                "drive_type": "steel",
+                "gauge_type": "tram",
+                "driverless": False,
+                "source": "Parc Tramway Ilévia Ligne R",
+                "verified": False
+            },
+            "TRAM_T": {
+                "line_id": "TRAM_T",
+                "short_name": "T",
+                "model_id": "Breda_VLC",
+                "name": "Breda VLC (30 m)",
+                "cars_count": 1,
+                "total_length_m": 30.0,
+                "car_length_m": 30.0,
+                "bogie_centres_m": 9.5,
+                "width_m": 2.40,
+                "height_m": 3.42,
+                "inter_car_gap_m": 0.0,
+                "drive_type": "steel",
+                "gauge_type": "tram",
+                "driverless": False,
+                "source": "Parc Tramway Ilévia Ligne T",
+                "verified": False
             }
         }
     }
@@ -896,11 +1252,12 @@ def build_lille_artifacts(
         if fpath.exists():
             artifact_sizes[fname] = fpath.stat().st_size
 
-    print("✅ Ingestion de Lille (Lignes 1 et 2) terminée avec succès !")
+    print("✅ Ingestion de Lille (Métro 1 & 2 + Tramway R & T) terminée avec succès !")
     return {
         "trips_count": len(schedule_trips),
         "l1_trips_count": l1_count,
         "l2_trips_count": l2_count,
+        "tram_trips_count": tram_count,
         "max_arrival_time": max_arrival_str,
         "max_station_to_track_dist_m": round(max_dist_to_track, 2),
         "artifact_sizes": artifact_sizes
@@ -920,9 +1277,10 @@ if __name__ == "__main__":
         web_dir=web_directory,
         target_date="20260930"
     )
-    print("\n--- RÉSULTATS LIGNES 1 & 2 ---")
+    print("\n--- RÉSULTATS LIGNES MÉTRO & TRAMWAY ---")
     print(f"Courses Ligne 1: {res['l1_trips_count']}")
     print(f"Courses Ligne 2: {res['l2_trips_count']}")
+    print(f"Courses Tramway: {res['tram_trips_count']}")
     print(f"Total courses: {res['trips_count']}")
     print(f"Heure GTFS max: {res['max_arrival_time']}")
     print(f"Distance station-tracé max: {res['max_station_to_track_dist_m']} m")

@@ -1,4 +1,5 @@
 import type { SchedTrip, Confidence } from '@core/rt/rt_matching';
+import { normalizeStopName } from '@core/rt/stop_names';
 import type { IleviaTripUpdate, IleviaStopTimeUpdate } from './types';
 
 export interface IleviaMatchConfig {
@@ -47,6 +48,124 @@ export function isTripUpdateMonotonic(tu: IleviaTripUpdate): boolean {
   return true;
 }
 
+const PREFIX_TO_STATION_NAME: Record<string, string> = {
+  // Ligne 1
+  '4CA': '4 Cantons Stade P. Mauroy',
+  'CSC': 'Cité Scientifique',
+  'TIO': 'Triolo',
+  'HDV': "V. D'Ascq Hotel De Ville",
+  'PDB': 'Pont De Bois',
+  'LZN': 'Square Flandres',
+  'MHE': "Mairie D'Hellemmes",
+  'MRB': 'Marbrerie',
+  'DFI': 'Fives',
+  'CIE': 'Madeleine Caulier',
+  'LIG': 'Gare Lille Flandres',
+  'RIH': 'Rihour',
+  'REP': 'République Beaux-Arts',
+  'CGA': 'Gambetta',
+  'WAZ': 'Wazemmes',
+  'PDP': 'Porte Des Postes',
+  'CHR': 'Chu - Centre O. Lambret',
+  'CAL': 'Chu - Eurasanté',
+  // Ligne 2
+  'HSP': 'Saint Philibert',
+  'BRG': 'Bourg',
+  'MDE': 'Maison Des Enfants',
+  'MIT': 'Mitterie',
+  'PSU': 'Pont Supérieur',
+  'LLO': 'Lomme-Lambersart',
+  'CAN': 'Canteleu Euratechnologies',
+  'LPC': 'Bois Blancs',
+  'PTL': 'Port De Lille',
+  'COR': 'Cormontaigne',
+  'MNT': 'Montebello',
+  'PRR': "Porte D'Arras",
+  'PDO': 'Porte De Douai',
+  'PDV': 'Porte De Valenciennes',
+  'LGP': 'Lille Grand Palais',
+  'MDL': 'Mairie De Lille',
+  'EUR': 'Gare Lille Europe',
+  'SMP': 'Saint Maurice Pellevoisin',
+  'MSA': 'Mons Sarts',
+  'MDM': 'Mairie De Mons',
+  'FOR': 'Fort De Mons',
+  'PRS': 'Les Prés Edgard Pisani',
+  'JRS': 'Jean Jaurès',
+  'PVL': 'Wasquehal Pavé De Lille',
+  'WMI': 'Wasquehal Hôtel De Ville',
+  'CPL': 'Croix Centre',
+  'CXM': 'Mairie De Croix',
+  'EPL': 'Epeule Montesquieu',
+  'CDG': 'Roubaix Charles De Gaulle',
+  'ROU': 'Eurotéléport',
+  'RXP': 'Roubaix Grand Place',
+  'MGR': 'Gare Jean Lebas Roubaix',
+  'ALS': 'Alsace Plaine Images',
+  'MER': 'Mercure',
+  'CTL': 'Carliers',
+  'SEB': 'Gare De Tourcoing',
+  'TOU': 'Tourcoing Centre',
+  'COB': 'Colbert',
+  'TPH': 'Phalempins',
+  'PTN': 'Pont De Neuville',
+  'TBO': 'Bourgogne',
+  'DRO': 'C.H. Dron',
+  // Tramway R & T
+  'ROM': 'Romarin',
+  'BOT': 'Botanique',
+  'SMA': 'Saint Maur',
+  'MAB': 'Buisson',
+  'OSS': 'Brossolette',
+  'MCL': 'Clemenceau Hippodrome',
+  'CRL': 'Croise Laroche',
+  'ACA': 'Acacias',
+  'PDW': 'Pont De Wasquehal',
+  'LAT': 'La Terrasse',
+  'SNO': 'Le Sart',
+  'PLE': 'Planche Epinoy',
+  'ARQ': 'La Marque',
+  'CLD': 'Villa Cavrois',
+  'BOA': "Bol D'Air",
+  'PBA': 'Parc Barbieux',
+  'BDC': 'Hopital Victor Provo',
+  'QUI': 'Jean Moulin',
+  'MAM': 'Alfred Mongy',
+  'OCH': 'Foch',
+  'LQS': 'Le Quesne',
+  'CDA': 'Cerisaie',
+  'CTR': 'Chateau Rouge',
+  'TEL': 'Cartelot',
+  'GDC': 'Grand Cottignies',
+  'TRI': 'Triez',
+  '3SU': 'Trois Suisses',
+  'DAI': 'Faidherbe',
+  'CAM': 'Ma Campagne',
+  'PHY': 'Pont Hydraulique',
+  'ICT': 'Victoire'
+};
+
+export function stopIdToNormalizedStationId(stopId: string): string {
+  const pfx = stopId.substring(0, 3).toUpperCase();
+  const name = PREFIX_TO_STATION_NAME[pfx];
+  return name ? normalizeStopName(name) : normalizeStopName(stopId);
+}
+
+export function epochToParisCivilSeconds(epochSec: number): number {
+  const d = new Date(epochSec * 1000);
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Paris',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).formatToParts(d);
+  const h = parseInt(parts.find((p) => p.type === 'hour')?.value ?? '0', 10) % 24;
+  const m = parseInt(parts.find((p) => p.type === 'minute')?.value ?? '0', 10);
+  const s = parseInt(parts.find((p) => p.type === 'second')?.value ?? '0', 10);
+  return h * 3600 + m * 60 + s;
+}
+
 export class IleviaMatcher {
   private readonly config: IleviaMatchConfig;
 
@@ -61,7 +180,10 @@ export class IleviaMatcher {
     filterRouteId?: string
   ): IleviaMatchOutcome {
     const relevantUpdates = filterRouteId
-      ? updates.filter((u) => u.trip.routeId === filterRouteId)
+      ? updates.filter((u) => {
+          const r = u.trip.routeId;
+          return r === filterRouteId || (r === '71' && (filterRouteId === 'TRAM_R' || filterRouteId === 'TRAM_T'));
+        })
       : updates;
 
     let discardedNonMonotonicCount = 0;
@@ -101,14 +223,14 @@ export class IleviaMatcher {
         if (!stu.stopId) continue;
         const predTime = stu.arrival?.time ?? stu.departure?.time;
         if (predTime !== undefined) {
-          // Si predTime est un timestamp epoch unix, le convertir en secondes de service locales
+          // Si predTime est un timestamp epoch unix, le convertir en secondes civiles locales à Paris
           const predLocalSec = predTime > 86400 * 10
-            ? Math.floor(predTime % 86400) // approximation relative
+            ? epochToParisCivilSeconds(predTime)
             : predTime;
 
           const diffS = predLocalSec - currentCivilSeconds;
           if (diffS >= -30) {
-            nextStopId = stu.stopId;
+            nextStopId = stopIdToNormalizedStationId(stu.stopId);
             timeToNextS = Math.max(0, diffS);
             break;
           }

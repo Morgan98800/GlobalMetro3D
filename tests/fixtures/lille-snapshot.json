@@ -1,0 +1,2006 @@
+{
+  "meta": {
+    "description": "Lille Métro & Tramway 3D Reference Kinematic Simulation Snapshot",
+    "timestampIso": "2026-09-30T06:30:00Z",
+    "serviceDate": "2026-09-30",
+    "civilSeconds": 30600,
+    "totalTrains": 117,
+    "trainsByLine": {
+      "ME1": 32,
+      "ME2": 68,
+      "TRAM_R": 8,
+      "TRAM_T": 9
+    }
+  },
+  "trains": [
+    {
+      "tripId": "5538705",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 8889.03,
+      "speedKmh": 45,
+      "speedMps": 12.5,
+      "pos": [
+        3.1183207,
+        50.6244699
+      ],
+      "bearing": 99.5,
+      "nextStation": "Pont De Bois",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538726",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 8753.17,
+      "speedKmh": 11,
+      "speedMps": 2.99,
+      "pos": [
+        3.0608315,
+        50.6315721
+      ],
+      "bearing": 201.4,
+      "nextStation": "Gambetta",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538747",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 5904.9,
+      "speedKmh": 54,
+      "speedMps": 15.13,
+      "pos": [
+        3.0832477,
+        50.6373862
+      ],
+      "bearing": 98.4,
+      "nextStation": "Madeleine Caulier",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538756",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 5840.77,
+      "speedKmh": 30,
+      "speedMps": 8.2,
+      "pos": [
+        3.0911618,
+        50.6328047
+      ],
+      "bearing": 297.7,
+      "nextStation": "Fives",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538765",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 2549.05,
+      "speedKmh": 39,
+      "speedMps": 10.8,
+      "pos": [
+        3.1298381,
+        50.6211041
+      ],
+      "bearing": 5.9,
+      "nextStation": "Pont De Bois",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538799",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 2704.36,
+      "speedKmh": 31,
+      "speedMps": 8.59,
+      "pos": [
+        3.0512548,
+        50.6242443
+      ],
+      "bearing": 347.6,
+      "nextStation": "Gambetta",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538832",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 11111.04,
+      "speedKmh": 57,
+      "speedMps": 15.77,
+      "pos": [
+        3.0439119,
+        50.6165508
+      ],
+      "bearing": 269.4,
+      "nextStation": "Chu - Centre O. Lambret",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538867",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 11334.36,
+      "speedKmh": 37,
+      "speedMps": 10.38,
+      "pos": [
+        3.140777,
+        50.6152993
+      ],
+      "bearing": 170.3,
+      "nextStation": "Cité Scientifique",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538901",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 2016.86,
+      "speedKmh": 8,
+      "speedMps": 2.28,
+      "pos": [
+        3.0502438,
+        50.6184724
+      ],
+      "bearing": 28.2,
+      "nextStation": "Wazemmes",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538910",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 1755.78,
+      "speedKmh": 44,
+      "speedMps": 12.26,
+      "pos": [
+        3.138129,
+        50.6189799
+      ],
+      "bearing": 279,
+      "nextStation": "V. D'Ascq Hotel De Ville",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538919",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 143.49,
+      "speedKmh": 39,
+      "speedMps": 10.86,
+      "pos": [
+        3.0389181,
+        50.6091147
+      ],
+      "bearing": 348.3,
+      "nextStation": "Chu - Centre O. Lambret",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538938",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 143.39,
+      "speedKmh": 40,
+      "speedMps": 11.09,
+      "pos": [
+        3.1390933,
+        50.6064072
+      ],
+      "bearing": 357.3,
+      "nextStation": "Cité Scientifique",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538956",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 9721.36,
+      "speedKmh": 40,
+      "speedMps": 11.09,
+      "pos": [
+        3.1298061,
+        50.6237806
+      ],
+      "bearing": 143.5,
+      "nextStation": "V. D'Ascq Hotel De Ville",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5538963",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 9569.94,
+      "speedKmh": 22,
+      "speedMps": 6.04,
+      "pos": [
+        3.0523472,
+        50.6267545
+      ],
+      "bearing": 227.3,
+      "nextStation": "Wazemmes",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5538970",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 7478.68,
+      "speedKmh": 37,
+      "speedMps": 10.35,
+      "pos": [
+        3.072467,
+        50.6381009
+      ],
+      "bearing": 235.7,
+      "nextStation": "Gare Lille Flandres",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539005",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 7305.02,
+      "speedKmh": 13,
+      "speedMps": 3.57,
+      "pos": [
+        3.0980012,
+        50.6300799
+      ],
+      "bearing": 121.8,
+      "nextStation": "Mairie D'Hellemmes",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539049",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 4213.43,
+      "speedKmh": 32,
+      "speedMps": 8.91,
+      "pos": [
+        3.0625485,
+        50.6348303
+      ],
+      "bearing": 21.2,
+      "nextStation": "Rihour",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539087",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 4171.13,
+      "speedKmh": 35,
+      "speedMps": 9.64,
+      "pos": [
+        3.1120604,
+        50.6260084
+      ],
+      "bearing": 294.8,
+      "nextStation": "Mairie D'Hellemmes",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539129",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 963.48,
+      "speedKmh": 40,
+      "speedMps": 11.08,
+      "pos": [
+        3.1425178,
+        50.6130445
+      ],
+      "bearing": 351.8,
+      "nextStation": "Triolo",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539134",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 946.3,
+      "speedKmh": 54,
+      "speedMps": 15.09,
+      "pos": [
+        3.0368404,
+        50.615844
+      ],
+      "bearing": 41.7,
+      "nextStation": "Porte Des Postes",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539138",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 12083.48,
+      "speedKmh": 37,
+      "speedMps": 10.28,
+      "pos": [
+        3.0370272,
+        50.6121128
+      ],
+      "bearing": 158.1,
+      "nextStation": "Chu - Eurasanté",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539143",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 12083.92,
+      "speedKmh": 42,
+      "speedMps": 11.66,
+      "pos": [
+        3.1404449,
+        50.6093159
+      ],
+      "bearing": 225.5,
+      "nextStation": "4 Cantons Stade P. Mauroy",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539148",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 10245.52,
+      "speedKmh": 37,
+      "speedMps": 10.37,
+      "pos": [
+        3.0522138,
+        50.6210706
+      ],
+      "bearing": 193.8,
+      "nextStation": "Porte Des Postes",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539155",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 10505.01,
+      "speedKmh": 46,
+      "speedMps": 12.71,
+      "pos": [
+        3.1336054,
+        50.6184533
+      ],
+      "bearing": 79.6,
+      "nextStation": "Triolo",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539162",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 8177.31,
+      "speedKmh": 16,
+      "speedMps": 4.53,
+      "pos": [
+        3.1092174,
+        50.6269741
+      ],
+      "bearing": 123.5,
+      "nextStation": "Square Flandres",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539169",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 8182.5,
+      "speedKmh": 34,
+      "speedMps": 9.38,
+      "pos": [
+        3.0635311,
+        50.6363949
+      ],
+      "bearing": 216.9,
+      "nextStation": "Rihour",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539176",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 6633.3,
+      "speedKmh": 24,
+      "speedMps": 6.71,
+      "pos": [
+        3.0898411,
+        50.6331768
+      ],
+      "bearing": 132.9,
+      "nextStation": "Fives",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539205",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 6413,
+      "speedKmh": 12,
+      "speedMps": 3.45,
+      "pos": [
+        3.0866764,
+        50.636797
+      ],
+      "bearing": 308,
+      "nextStation": "Gare Lille Flandres",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539234",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 5009.54,
+      "speedKmh": 48,
+      "speedMps": 13.39,
+      "pos": [
+        3.1014824,
+        50.6293991
+      ],
+      "bearing": 284.8,
+      "nextStation": "Marbrerie",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539241",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 4921.76,
+      "speedKmh": 28,
+      "speedMps": 7.74,
+      "pos": [
+        3.0704168,
+        50.6369653
+      ],
+      "bearing": 62.6,
+      "nextStation": "Gare Lille Flandres",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5539248",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_0",
+      "direction": 0,
+      "currentDistM": 3358.19,
+      "speedKmh": 48,
+      "speedMps": 13.36,
+      "pos": [
+        3.1229355,
+        50.624095
+      ],
+      "bearing": 280.6,
+      "nextStation": "Square Flandres",
+      "destStation": "Chu - Eurasanté"
+    },
+    {
+      "tripId": "5539252",
+      "line": "ME1",
+      "lineName": "1",
+      "shapeId": "ME1_1",
+      "direction": 1,
+      "currentDistM": 3460.89,
+      "speedKmh": 47,
+      "speedMps": 13.06,
+      "pos": [
+        3.057348,
+        50.6292517
+      ],
+      "bearing": 58.5,
+      "nextStation": "République Beaux-Arts",
+      "destStation": "4 Cantons Stade P. Mauroy"
+    },
+    {
+      "tripId": "5552480",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 21946.93,
+      "speedKmh": 39,
+      "speedMps": 10.7,
+      "pos": [
+        3.1643473,
+        50.6847366
+      ],
+      "bearing": 46.1,
+      "nextStation": "Roubaix Charles De Gaulle",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552497",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 21829.13,
+      "speedKmh": 46,
+      "speedMps": 12.74,
+      "pos": [
+        3.0791106,
+        50.6221898
+      ],
+      "bearing": 176.1,
+      "nextStation": "Porte De Valenciennes",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552519",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 3714.97,
+      "speedKmh": 39,
+      "speedMps": 10.95,
+      "pos": [
+        3.0178577,
+        50.6416221
+      ],
+      "bearing": 144.2,
+      "nextStation": "Lomme-Lambersart",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552537",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 20330.34,
+      "speedKmh": 47,
+      "speedMps": 12.96,
+      "pos": [
+        3.1478879,
+        50.6749344
+      ],
+      "bearing": 82.4,
+      "nextStation": "Mairie De Croix",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552546",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 20365.13,
+      "speedKmh": 32,
+      "speedMps": 8.97,
+      "pos": [
+        3.0701427,
+        50.6335887
+      ],
+      "bearing": 149.3,
+      "nextStation": "Mairie De Lille",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552556",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 297.41,
+      "speedKmh": 35,
+      "speedMps": 9.71,
+      "pos": [
+        3.1805026,
+        50.7409181
+      ],
+      "bearing": 169,
+      "nextStation": "Bourgogne",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552565",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 27459.33,
+      "speedKmh": 40,
+      "speedMps": 11.12,
+      "pos": [
+        3.0191515,
+        50.6400619
+      ],
+      "bearing": 328.7,
+      "nextStation": "Lomme-Lambersart",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552576",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 481.59,
+      "speedKmh": 57,
+      "speedMps": 15.96,
+      "pos": [
+        2.9771208,
+        50.6485871
+      ],
+      "bearing": 128.6,
+      "nextStation": "Bourg",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552591",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 17528.09,
+      "speedKmh": 38,
+      "speedMps": 10.69,
+      "pos": [
+        3.100204,
+        50.6421422
+      ],
+      "bearing": 268.9,
+      "nextStation": "Mons Sarts",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552596",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 16916.25,
+      "speedKmh": 57,
+      "speedMps": 15.73,
+      "pos": [
+        3.1329076,
+        50.6539257
+      ],
+      "bearing": 37.9,
+      "nextStation": "Jean Jaurès",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552601",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 27700,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        3.1601193,
+        50.7209443
+      ],
+      "bearing": 331.4,
+      "nextStation": "Colbert",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552622",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 24665.54,
+      "speedKmh": 2,
+      "speedMps": 0.68,
+      "pos": [
+        3.0454822,
+        50.6220382
+      ],
+      "bearing": 321.8,
+      "nextStation": "Cormontaigne",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552627",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 14071.75,
+      "speedKmh": 44,
+      "speedMps": 12.19,
+      "pos": [
+        3.1345494,
+        50.6572882
+      ],
+      "bearing": 191.1,
+      "nextStation": "Les Prés Edgard Pisani",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552647",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 13640.72,
+      "speedKmh": 46,
+      "speedMps": 12.64,
+      "pos": [
+        3.0972941,
+        50.6420313
+      ],
+      "bearing": 88.9,
+      "nextStation": "Mons Sarts",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552665",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 24919.47,
+      "speedKmh": 44,
+      "speedMps": 12.18,
+      "pos": [
+        3.1616348,
+        50.6972505
+      ],
+      "bearing": 345,
+      "nextStation": "Alsace Plaine Images",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552682",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 9169.88,
+      "speedKmh": 39,
+      "speedMps": 10.74,
+      "pos": [
+        3.1671241,
+        50.6863039
+      ],
+      "bearing": 241.7,
+      "nextStation": "Epeule Montesquieu",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552699",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 9338.34,
+      "speedKmh": 35,
+      "speedMps": 9.83,
+      "pos": [
+        3.0785563,
+        50.6203409
+      ],
+      "bearing": 23.8,
+      "nextStation": "Porte De Valenciennes",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552708",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 6448.43,
+      "speedKmh": 39,
+      "speedMps": 10.82,
+      "pos": [
+        3.0431891,
+        50.6238477
+      ],
+      "bearing": 142,
+      "nextStation": "Montebello",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552717",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 6152.37,
+      "speedKmh": 38,
+      "speedMps": 10.48,
+      "pos": [
+        3.1610912,
+        50.7000253
+      ],
+      "bearing": 174.1,
+      "nextStation": "Gare Jean Lebas Roubaix",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552726",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 3509.93,
+      "speedKmh": 44,
+      "speedMps": 12.33,
+      "pos": [
+        3.158783,
+        50.7222552
+      ],
+      "bearing": 132.9,
+      "nextStation": "Tourcoing Centre",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552745",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 18525.93,
+      "speedKmh": 49,
+      "speedMps": 13.57,
+      "pos": [
+        3.1283356,
+        50.6666778
+      ],
+      "bearing": 3.8,
+      "nextStation": "Wasquehal Hôtel De Ville",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552760",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 19189.63,
+      "speedKmh": 52,
+      "speedMps": 14.51,
+      "pos": [
+        3.078432,
+        50.6396935
+      ],
+      "bearing": 257.9,
+      "nextStation": "Gare Lille Europe",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552780",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 15964.08,
+      "speedKmh": 49,
+      "speedMps": 13.64,
+      "pos": [
+        3.12169,
+        50.6430348
+      ],
+      "bearing": 218.1,
+      "nextStation": "Fort De Mons",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552791",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 15182.13,
+      "speedKmh": 20,
+      "speedMps": 5.62,
+      "pos": [
+        3.1191029,
+        50.6420106
+      ],
+      "bearing": 88.6,
+      "nextStation": "Fort De Mons",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552799",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 12026.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        3.0762448,
+        50.6393636
+      ],
+      "bearing": 72.5,
+      "nextStation": "Saint Maurice Pellevoisin",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552814",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 12543.48,
+      "speedKmh": 45,
+      "speedMps": 12.54,
+      "pos": [
+        3.1302554,
+        50.6691376
+      ],
+      "bearing": 222.7,
+      "nextStation": "Wasquehal Pavé De Lille",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552831",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 10911.79,
+      "speedKmh": 13,
+      "speedMps": 3.61,
+      "pos": [
+        3.0706946,
+        50.6327302
+      ],
+      "bearing": 339.4,
+      "nextStation": "Mairie De Lille",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552835",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 10743.82,
+      "speedKmh": 50,
+      "speedMps": 13.92,
+      "pos": [
+        3.1514488,
+        50.6763087
+      ],
+      "bearing": 228.8,
+      "nextStation": "Croix Centre",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552839",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 7749.11,
+      "speedKmh": 32,
+      "speedMps": 8.94,
+      "pos": [
+        3.1762312,
+        50.6921061
+      ],
+      "bearing": 79.6,
+      "nextStation": "Eurotéléport",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552854",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 7891.68,
+      "speedKmh": 45,
+      "speedMps": 12.48,
+      "pos": [
+        3.0593927,
+        50.6177256
+      ],
+      "bearing": 96.5,
+      "nextStation": "Porte D'Arras",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552869",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 5003.07,
+      "speedKmh": 28,
+      "speedMps": 7.89,
+      "pos": [
+        3.030733,
+        50.6340255
+      ],
+      "bearing": 155.1,
+      "nextStation": "Port De Lille",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552873",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 4895.13,
+      "speedKmh": 10,
+      "speedMps": 2.79,
+      "pos": [
+        3.1602051,
+        50.7110732
+      ],
+      "bearing": 205.9,
+      "nextStation": "Carliers",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552877",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 1896.51,
+      "speedKmh": 56,
+      "speedMps": 15.43,
+      "pos": [
+        3.1618772,
+        50.7341631
+      ],
+      "bearing": 267.7,
+      "nextStation": "Phalempins",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552896",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 2185.06,
+      "speedKmh": 56,
+      "speedMps": 15.46,
+      "pos": [
+        2.9992705,
+        50.6466675
+      ],
+      "bearing": 80.2,
+      "nextStation": "Mitterie",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552910",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 30299.62,
+      "speedKmh": 44,
+      "speedMps": 12.18,
+      "pos": [
+        2.983655,
+        50.6454458
+      ],
+      "bearing": 274.1,
+      "nextStation": "Saint Philibert",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552913",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 30891.38,
+      "speedKmh": 2,
+      "speedMps": 0.64,
+      "pos": [
+        3.1796683,
+        50.7394733
+      ],
+      "bearing": 51.4,
+      "nextStation": "Bourgogne",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552916",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 28660.59,
+      "speedKmh": 35,
+      "speedMps": 9.81,
+      "pos": [
+        3.0066444,
+        50.6468635
+      ],
+      "bearing": 282.7,
+      "nextStation": "Maison Des Enfants",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552935",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 29130.07,
+      "speedKmh": 19,
+      "speedMps": 5.42,
+      "pos": [
+        3.1580545,
+        50.7325851
+      ],
+      "bearing": 29.2,
+      "nextStation": "Pont De Neuville",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552950",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 26017.01,
+      "speedKmh": 43,
+      "speedMps": 12.08,
+      "pos": [
+        3.0334828,
+        50.6315016
+      ],
+      "bearing": 309.1,
+      "nextStation": "Bois Blancs",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5552969",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 26348.06,
+      "speedKmh": 43,
+      "speedMps": 11.9,
+      "pos": [
+        3.1596471,
+        50.7098926
+      ],
+      "bearing": 4.8,
+      "nextStation": "Carliers",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5552985",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 23261.63,
+      "speedKmh": 16,
+      "speedMps": 4.39,
+      "pos": [
+        3.0625151,
+        50.6176192
+      ],
+      "bearing": 269.1,
+      "nextStation": "Porte D'Arras",
+      "destStation": "Saint Philibert"
+    },
+    {
+      "tripId": "5553000",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 23457.07,
+      "speedKmh": 30,
+      "speedMps": 8.22,
+      "pos": [
+        3.1785541,
+        50.6917265
+      ],
+      "bearing": 316.6,
+      "nextStation": "Roubaix Grand Place",
+      "destStation": "C.H. Dron"
+    },
+    {
+      "tripId": "5553187",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 12880.31,
+      "speedKmh": 37,
+      "speedMps": 10.2,
+      "pos": [
+        3.0871909,
+        50.6422993
+      ],
+      "bearing": 82.8,
+      "nextStation": "Saint Maurice Pellevoisin",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553195",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 16731.2,
+      "speedKmh": 47,
+      "speedMps": 13.01,
+      "pos": [
+        3.1114773,
+        50.6423206
+      ],
+      "bearing": 274.6,
+      "nextStation": "Mairie De Mons",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553203",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 11593.49,
+      "speedKmh": 4,
+      "speedMps": 1.21,
+      "pos": [
+        3.0710657,
+        50.63736
+      ],
+      "bearing": 56,
+      "nextStation": "Gare Lille Flandres",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553211",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 15100.27,
+      "speedKmh": 8,
+      "speedMps": 2.22,
+      "pos": [
+        3.1264409,
+        50.6501476
+      ],
+      "bearing": 199,
+      "nextStation": "Les Prés Edgard Pisani",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553219",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 10219.39,
+      "speedKmh": 55,
+      "speedMps": 15.34,
+      "pos": [
+        3.0762197,
+        50.627894
+      ],
+      "bearing": 334.3,
+      "nextStation": "Lille Grand Palais",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553227",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 13351.77,
+      "speedKmh": 44,
+      "speedMps": 12.24,
+      "pos": [
+        3.131114,
+        50.6626905
+      ],
+      "bearing": 142.3,
+      "nextStation": "Jean Jaurès",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553235",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 8644.21,
+      "speedKmh": 46,
+      "speedMps": 12.75,
+      "pos": [
+        3.0700361,
+        50.6177991
+      ],
+      "bearing": 82.1,
+      "nextStation": "Porte De Douai",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553243",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 11600.18,
+      "speedKmh": 60,
+      "speedMps": 16.61,
+      "pos": [
+        3.1404103,
+        50.6739883
+      ],
+      "bearing": 264.2,
+      "nextStation": "Wasquehal Hôtel De Ville",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553251",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 7145.41,
+      "speedKmh": 40,
+      "speedMps": 11.21,
+      "pos": [
+        3.04921,
+        50.6188819
+      ],
+      "bearing": 135,
+      "nextStation": "Porte Des Postes",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553259",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 9920.33,
+      "speedKmh": 49,
+      "speedMps": 13.55,
+      "pos": [
+        3.1593418,
+        50.6817186
+      ],
+      "bearing": 226.1,
+      "nextStation": "Mairie De Croix",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553267",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 5770.83,
+      "speedKmh": 39,
+      "speedMps": 10.78,
+      "pos": [
+        3.0372721,
+        50.6286477
+      ],
+      "bearing": 142.7,
+      "nextStation": "Cormontaigne",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553275",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 8418.7,
+      "speedKmh": 48,
+      "speedMps": 13.35,
+      "pos": [
+        3.1772943,
+        50.6882424
+      ],
+      "bearing": 251.8,
+      "nextStation": "Roubaix Charles De Gaulle",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553283",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 4425.33,
+      "speedKmh": 6,
+      "speedMps": 1.57,
+      "pos": [
+        3.02464,
+        50.6371321
+      ],
+      "bearing": 135.4,
+      "nextStation": "Canteleu Euratechnologies",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553298",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 26735.78,
+      "speedKmh": 39,
+      "speedMps": 10.7,
+      "pos": [
+        3.0271202,
+        50.6361249
+      ],
+      "bearing": 289.1,
+      "nextStation": "Canteleu Euratechnologies",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553306",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 22677.27,
+      "speedKmh": 51,
+      "speedMps": 14.19,
+      "pos": [
+        3.1733905,
+        50.6876865
+      ],
+      "bearing": 76.7,
+      "nextStation": "Eurotéléport",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553313",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 25313.45,
+      "speedKmh": 31,
+      "speedMps": 8.62,
+      "pos": [
+        3.0398153,
+        50.6266239
+      ],
+      "bearing": 321.7,
+      "nextStation": "Port De Lille",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553320",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 21165.04,
+      "speedKmh": 34,
+      "speedMps": 9.35,
+      "pos": [
+        3.1565223,
+        50.679767
+      ],
+      "bearing": 36.5,
+      "nextStation": "Epeule Montesquieu",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553327",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 24114.43,
+      "speedKmh": 20,
+      "speedMps": 5.59,
+      "pos": [
+        3.0505575,
+        50.618342
+      ],
+      "bearing": 296.2,
+      "nextStation": "Porte Des Postes",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553334",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 19404.35,
+      "speedKmh": 60,
+      "speedMps": 16.77,
+      "pos": [
+        3.1363498,
+        50.6720348
+      ],
+      "bearing": 45.4,
+      "nextStation": "Croix Centre",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553341",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 22545.78,
+      "speedKmh": 24,
+      "speedMps": 6.78,
+      "pos": [
+        3.0726095,
+        50.6181236
+      ],
+      "bearing": 258.5,
+      "nextStation": "Porte De Douai",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553348",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 17743.06,
+      "speedKmh": 45,
+      "speedMps": 12.42,
+      "pos": [
+        3.134256,
+        50.6611408
+      ],
+      "bearing": 334.5,
+      "nextStation": "Wasquehal Pavé De Lille",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553355",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 20927.3,
+      "speedKmh": 17,
+      "speedMps": 4.62,
+      "pos": [
+        3.074824,
+        50.6297981
+      ],
+      "bearing": 155.3,
+      "nextStation": "Lille Grand Palais",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553362",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 16066.01,
+      "speedKmh": 52,
+      "speedMps": 14.45,
+      "pos": [
+        3.1255426,
+        50.6482953
+      ],
+      "bearing": 18.2,
+      "nextStation": "Les Prés Edgard Pisani",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553369",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 19760.7,
+      "speedKmh": 17,
+      "speedMps": 4.62,
+      "pos": [
+        3.0712975,
+        50.6374944
+      ],
+      "bearing": 235.4,
+      "nextStation": "Gare Lille Flandres",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5553376",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_1",
+      "direction": 1,
+      "currentDistM": 14434.44,
+      "speedKmh": 39,
+      "speedMps": 10.96,
+      "pos": [
+        3.1085302,
+        50.6422256
+      ],
+      "bearing": 85.6,
+      "nextStation": "Mairie De Mons",
+      "destStation": "Roubaix Grand Place"
+    },
+    {
+      "tripId": "5553383",
+      "line": "ME2",
+      "lineName": "2",
+      "shapeId": "ME2_0",
+      "direction": 0,
+      "currentDistM": 18324.95,
+      "speedKmh": 34,
+      "speedMps": 9.55,
+      "pos": [
+        3.0895848,
+        50.6423299
+      ],
+      "bearing": 281.3,
+      "nextStation": "Saint Maurice Pellevoisin",
+      "destStation": "Lomme-Lambersart"
+    },
+    {
+      "tripId": "5573846",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_1",
+      "direction": 1,
+      "currentDistM": 11352.19,
+      "speedKmh": 13,
+      "speedMps": 3.52,
+      "pos": [
+        3.0737387,
+        50.6388509
+      ],
+      "bearing": 216.3,
+      "nextStation": "Gare Lille Flandres",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5573902",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_1",
+      "direction": 1,
+      "currentDistM": 5785.76,
+      "speedKmh": 25,
+      "speedMps": 6.96,
+      "pos": [
+        3.1137987,
+        50.6791766
+      ],
+      "bearing": 218.7,
+      "nextStation": "Cerisaie",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5573925",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_0",
+      "direction": 0,
+      "currentDistM": 7589.08,
+      "speedKmh": 26,
+      "speedMps": 7.12,
+      "pos": [
+        3.1511264,
+        50.6672857
+      ],
+      "bearing": 48.5,
+      "nextStation": "Villa Cavrois",
+      "destStation": "Eurotéléport"
+    },
+    {
+      "tripId": "5573950",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_0",
+      "direction": 0,
+      "currentDistM": 9766.95,
+      "speedKmh": 42,
+      "speedMps": 11.65,
+      "pos": [
+        3.1483969,
+        50.7070211
+      ],
+      "bearing": 46.7,
+      "nextStation": "Ma Campagne",
+      "destStation": "Tourcoing Centre"
+    },
+    {
+      "tripId": "5573975",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_0",
+      "direction": 0,
+      "currentDistM": 1918.27,
+      "speedKmh": 5,
+      "speedMps": 1.47,
+      "pos": [
+        3.0819713,
+        50.6518694
+      ],
+      "bearing": 38.7,
+      "nextStation": "Buisson",
+      "destStation": "Eurotéléport"
+    },
+    {
+      "tripId": "5573983",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_1",
+      "direction": 1,
+      "currentDistM": 2416.8,
+      "speedKmh": 1,
+      "speedMps": 0.4,
+      "pos": [
+        3.1422351,
+        50.703282
+      ],
+      "bearing": 225.5,
+      "nextStation": "Faidherbe",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5574014",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_1",
+      "direction": 1,
+      "currentDistM": 6694.6,
+      "speedKmh": 22,
+      "speedMps": 6.18,
+      "pos": [
+        3.1073188,
+        50.6650568
+      ],
+      "bearing": 275.1,
+      "nextStation": "Croise Laroche",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5574038",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_0",
+      "direction": 0,
+      "currentDistM": 794.42,
+      "speedKmh": 29,
+      "speedMps": 8.02,
+      "pos": [
+        3.0735874,
+        50.6433174
+      ],
+      "bearing": 28.2,
+      "nextStation": "Romarin",
+      "destStation": "Tourcoing Centre"
+    },
+    {
+      "tripId": "5574045",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_0",
+      "direction": 0,
+      "currentDistM": 10151.27,
+      "speedKmh": 5,
+      "speedMps": 1.32,
+      "pos": [
+        3.1723361,
+        50.6850864
+      ],
+      "bearing": 35.8,
+      "nextStation": "Alfred Mongy",
+      "destStation": "Eurotéléport"
+    },
+    {
+      "tripId": "5574077",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_1",
+      "direction": 1,
+      "currentDistM": 8451.92,
+      "speedKmh": 15,
+      "speedMps": 4.18,
+      "pos": [
+        3.0935174,
+        50.6599382
+      ],
+      "bearing": 222.5,
+      "nextStation": "Buisson",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5574106",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_1",
+      "direction": 1,
+      "currentDistM": 901.86,
+      "speedKmh": 9,
+      "speedMps": 2.41,
+      "pos": [
+        3.1720001,
+        50.6848821
+      ],
+      "bearing": 215.9,
+      "nextStation": "Hopital Victor Provo",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5574137",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_0",
+      "direction": 0,
+      "currentDistM": 11535.63,
+      "speedKmh": 6,
+      "speedMps": 1.55,
+      "pos": [
+        3.1589749,
+        50.7204675
+      ],
+      "bearing": 13,
+      "nextStation": "Tourcoing Centre",
+      "destStation": "Tourcoing Centre"
+    },
+    {
+      "tripId": "5574145",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_1",
+      "direction": 1,
+      "currentDistM": 9524.14,
+      "speedKmh": 3,
+      "speedMps": 0.96,
+      "pos": [
+        3.0785825,
+        50.6487513
+      ],
+      "bearing": 213.7,
+      "nextStation": "Romarin",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5574159",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_0",
+      "direction": 0,
+      "currentDistM": 4607.22,
+      "speedKmh": 17,
+      "speedMps": 4.86,
+      "pos": [
+        3.1113328,
+        50.664813
+      ],
+      "bearing": 95.1,
+      "nextStation": "Pont De Wasquehal",
+      "destStation": "Eurotéléport"
+    },
+    {
+      "tripId": "5574183",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_0",
+      "direction": 0,
+      "currentDistM": 3365.13,
+      "speedKmh": 23,
+      "speedMps": 6.28,
+      "pos": [
+        3.0958,
+        50.6614788
+      ],
+      "bearing": 43.8,
+      "nextStation": "Clemenceau Hippodrome",
+      "destStation": "Tourcoing Centre"
+    },
+    {
+      "tripId": "5574204",
+      "line": "TRAM_R",
+      "lineName": "R",
+      "shapeId": "TRAM_R_1",
+      "direction": 1,
+      "currentDistM": 3744.14,
+      "speedKmh": 23,
+      "speedMps": 6.32,
+      "pos": [
+        3.147783,
+        50.6654318
+      ],
+      "bearing": 228.6,
+      "nextStation": "Planche Epinoy",
+      "destStation": "Gare Lille Flandres"
+    },
+    {
+      "tripId": "5574227",
+      "line": "TRAM_T",
+      "lineName": "T",
+      "shapeId": "TRAM_T_0",
+      "direction": 0,
+      "currentDistM": 6230.04,
+      "speedKmh": 35,
+      "speedMps": 9.6,
+      "pos": [
+        3.1176924,
+        50.6821903
+      ],
+      "bearing": 39.5,
+      "nextStation": "Cartelot",
+      "destStation": "Tourcoing Centre"
+    }
+  ]
+}

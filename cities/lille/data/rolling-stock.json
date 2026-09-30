@@ -7,6 +7,14 @@
         "car_height_m": 3.25,
         "width_m": 2.06
       }
+    },
+    "tram_articulated": {
+      "family_id": "tram_articulated",
+      "reference_dimensions_m": {
+        "car_length_m": 30.0,
+        "car_height_m": 3.42,
+        "width_m": 2.4
+      }
     }
   },
   "models": {
@@ -38,6 +46,23 @@
       "drive_type": "tire",
       "driverless": true,
       "source": "Rames 52 mètres Alstom / MEL Ligne 1",
+      "verified": false
+    },
+    "Breda_VLC": {
+      "model_id": "Breda_VLC",
+      "name": "Breda VLC (Tramway Mongy articulé - 30 m)",
+      "manufacturer": "Breda Costruzioni Ferroviarie",
+      "cars_count": 1,
+      "total_length_m": 30.0,
+      "car_length_m": 30.0,
+      "bogie_centres_m": 9.5,
+      "width_m": 2.4,
+      "height_m": 3.42,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "steel",
+      "gauge_type": "tram",
+      "driverless": false,
+      "source": "Fiche matériel Tramway Ilévia Breda VLC",
       "verified": false
     }
   },
@@ -72,6 +97,42 @@
       "drive_type": "tire",
       "driverless": true,
       "source": "Exploitation Ligne 2 Ilévia VAL 208",
+      "verified": false
+    },
+    "TRAM_R": {
+      "line_id": "TRAM_R",
+      "short_name": "R",
+      "model_id": "Breda_VLC",
+      "name": "Breda VLC (30 m)",
+      "cars_count": 1,
+      "total_length_m": 30.0,
+      "car_length_m": 30.0,
+      "bogie_centres_m": 9.5,
+      "width_m": 2.4,
+      "height_m": 3.42,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "steel",
+      "gauge_type": "tram",
+      "driverless": false,
+      "source": "Parc Tramway Ilévia Ligne R",
+      "verified": false
+    },
+    "TRAM_T": {
+      "line_id": "TRAM_T",
+      "short_name": "T",
+      "model_id": "Breda_VLC",
+      "name": "Breda VLC (30 m)",
+      "cars_count": 1,
+      "total_length_m": 30.0,
+      "car_length_m": 30.0,
+      "bogie_centres_m": 9.5,
+      "width_m": 2.4,
+      "height_m": 3.42,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "steel",
+      "gauge_type": "tram",
+      "driverless": false,
+      "source": "Parc Tramway Ilévia Ligne T",
       "verified": false
     }
   }

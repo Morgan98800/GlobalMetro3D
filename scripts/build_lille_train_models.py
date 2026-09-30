@@ -256,6 +256,53 @@ def create_cleanroom_atlas(is_52m: bool = False) -> bytes:
     return buf.getvalue()
 
 
+def create_cleanroom_tram_atlas() -> bytes:
+    """Génère un atlas de texture 256x256 épuré pour le Tramway Ilévia (Breda VLC 30m)."""
+    img = Image.new("RGBA", (256, 256), (235, 238, 242, 255))
+    draw = ImageDraw.Draw(img)
+
+    # Toit gris technique et climatisation / pantographe (y=0..50)
+    draw.rectangle([0, 0, 256, 50], fill=(150, 155, 160, 255))
+    draw.rectangle([0, 8, 256, 38], fill=(105, 110, 118, 255))
+    # Embase du pantographe
+    draw.rectangle([110, 12, 146, 34], fill=(70, 75, 82, 255))
+
+    # Bandeau de vitres et portes tramway (y=90..160)
+    draw.rectangle([0, 95, 256, 145], fill=(30, 36, 44, 255))
+
+    # Portes doubles tramway (4 doubles portes réparties le long des 30 m)
+    door_color = (210, 215, 220, 255)
+    for dx in [25, 85, 145, 205]:
+        draw.rectangle([dx, 90, dx + 30, 165], fill=door_color)
+        draw.rectangle([dx + 4, 98, dx + 26, 138], fill=(25, 30, 38, 255))
+
+    # Soufflets d'articulation (3 articulations visibles)
+    for bx in [65, 125, 185]:
+        draw.rectangle([bx - 3, 85, bx + 3, 170], fill=(45, 48, 52, 255))
+
+    # Bas de caisse / carénages bas (y=165..180)
+    draw.rectangle([0, 165, 256, 180], fill=(60, 65, 70, 255))
+
+    # Liseré Ilévia bleu cyan (#009FE3)
+    draw.rectangle([0, 88, 256, 94], fill=(0, 159, 227, 255))
+    # Liseré rouge subtil
+    draw.rectangle([0, 84, 256, 87], fill=(227, 6, 19, 255))
+
+    # Face avant / cabine (y=180..255)
+    draw.rectangle([0, 180, 150, 255], fill=(230, 233, 238, 255))
+    # Pare-brise profilé tramway
+    draw.rectangle([10, 188, 75, 228], fill=(20, 26, 34, 255))
+    # Bande frontale cyan
+    draw.rectangle([10, 230, 75, 235], fill=(0, 159, 227, 255))
+    # Phares avant
+    draw.rectangle([15, 238, 28, 243], fill=(255, 255, 240, 255))
+    draw.rectangle([57, 238, 70, 243], fill=(255, 255, 240, 255))
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG", optimize=True)
+    return buf.getvalue()
+
+
 def write_glb(path: Path, P: np.ndarray, N: np.ndarray, UV: np.ndarray, I: np.ndarray, png: bytes, name: str) -> int:
     """Écrit le fichier GLB binaire sans extensions propriétaires ni dépendance externe."""
     def pad4(b: bytes, fill=b"\x00") -> bytes:
@@ -352,11 +399,13 @@ def write_glb(path: Path, P: np.ndarray, N: np.ndarray, UV: np.ndarray, I: np.nd
 
 
 def build_models() -> dict[str, int]:
-    """Génère les deux modèles VAL 208 et VAL 52m."""
-    P, N, UV, I = build_car_mesh(length_m=13.0, width_m=2.06, height_m=3.25)
+    """Génère les modèles VAL 208, VAL 52m et Tramway Breda VLC."""
+    P_val, N_val, UV_val, I_val = build_car_mesh(length_m=13.0, width_m=2.06, height_m=3.25)
+    P_tram, N_tram, UV_tram, I_tram = build_car_mesh(length_m=30.0, width_m=2.40, height_m=3.42)
 
     png_val208 = create_cleanroom_atlas(is_52m=False)
     png_val52m = create_cleanroom_atlas(is_52m=True)
+    png_tram = create_cleanroom_tram_atlas()
 
     destinations = [
         ROOT / "cities" / "lille" / "assets" / "models" / "train",
@@ -367,10 +416,12 @@ def build_models() -> dict[str, int]:
     sizes = {}
     for dest_dir in destinations:
         dest_dir.mkdir(parents=True, exist_ok=True)
-        size_208 = write_glb(dest_dir / "val_208__neutral.glb", P, N, UV, I, png_val208, "val_208")
-        size_52m = write_glb(dest_dir / "val_52m__neutral.glb", P, N, UV, I, png_val52m, "val_52m")
+        size_208 = write_glb(dest_dir / "val_208__neutral.glb", P_val, N_val, UV_val, I_val, png_val208, "val_208")
+        size_52m = write_glb(dest_dir / "val_52m__neutral.glb", P_val, N_val, UV_val, I_val, png_val52m, "val_52m")
+        size_tram = write_glb(dest_dir / "breda_vlc__neutral.glb", P_tram, N_tram, UV_tram, I_tram, png_tram, "breda_vlc")
         sizes["val_208__neutral.glb"] = size_208
         sizes["val_52m__neutral.glb"] = size_52m
+        sizes["breda_vlc__neutral.glb"] = size_tram
 
     return sizes
 

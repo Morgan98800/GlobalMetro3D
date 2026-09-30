@@ -2,11 +2,27 @@
   "weekday": [
     {
       "name": "Gare Lille Flandres",
-      "count": 1833
+      "count": 2660
     },
     {
       "name": "Porte Des Postes",
       "count": 1831
+    },
+    {
+      "name": "Gare Lille Europe",
+      "count": 1333
+    },
+    {
+      "name": "Eurotéléport",
+      "count": 1226
+    },
+    {
+      "name": "Wasquehal Pavé De Lille",
+      "count": 1124
+    },
+    {
+      "name": "Tourcoing Centre",
+      "count": 1016
     },
     {
       "name": "Chu - Eurasanté",
@@ -89,15 +105,7 @@
       "count": 914
     },
     {
-      "name": "Gare Lille Europe",
-      "count": 914
-    },
-    {
       "name": "Roubaix Grand Place",
-      "count": 913
-    },
-    {
-      "name": "Eurotéléport",
       "count": 913
     },
     {
@@ -118,10 +126,6 @@
     },
     {
       "name": "Wasquehal Hôtel De Ville",
-      "count": 913
-    },
-    {
-      "name": "Wasquehal Pavé De Lille",
       "count": 913
     },
     {
@@ -197,10 +201,6 @@
       "count": 705
     },
     {
-      "name": "Tourcoing Centre",
-      "count": 705
-    },
-    {
       "name": "Gare De Tourcoing",
       "count": 705
     },
@@ -239,12 +239,136 @@
     {
       "name": "Saint Philibert",
       "count": 704
+    },
+    {
+      "name": "Brossolette",
+      "count": 422
+    },
+    {
+      "name": "Clemenceau Hippodrome",
+      "count": 422
+    },
+    {
+      "name": "Croise Laroche",
+      "count": 422
+    },
+    {
+      "name": "Buisson",
+      "count": 419
+    },
+    {
+      "name": "Saint Maur",
+      "count": 419
+    },
+    {
+      "name": "Botanique",
+      "count": 419
+    },
+    {
+      "name": "Romarin",
+      "count": 419
+    },
+    {
+      "name": "Acacias",
+      "count": 211
+    },
+    {
+      "name": "Pont De Wasquehal",
+      "count": 211
+    },
+    {
+      "name": "La Terrasse",
+      "count": 211
+    },
+    {
+      "name": "Le Sart",
+      "count": 211
+    },
+    {
+      "name": "Planche Epinoy",
+      "count": 211
+    },
+    {
+      "name": "La Marque",
+      "count": 211
+    },
+    {
+      "name": "Villa Cavrois",
+      "count": 211
+    },
+    {
+      "name": "Bol D'Air",
+      "count": 211
+    },
+    {
+      "name": "Parc Barbieux",
+      "count": 211
+    },
+    {
+      "name": "Hopital Victor Provo",
+      "count": 211
+    },
+    {
+      "name": "Jean Moulin",
+      "count": 211
+    },
+    {
+      "name": "Alfred Mongy",
+      "count": 211
+    },
+    {
+      "name": "Foch",
+      "count": 210
+    },
+    {
+      "name": "Le Quesne",
+      "count": 210
+    },
+    {
+      "name": "Cerisaie",
+      "count": 210
+    },
+    {
+      "name": "Chateau Rouge",
+      "count": 210
+    },
+    {
+      "name": "Cartelot",
+      "count": 210
+    },
+    {
+      "name": "Grand Cottignies",
+      "count": 210
+    },
+    {
+      "name": "Triez",
+      "count": 210
+    },
+    {
+      "name": "Trois Suisses",
+      "count": 210
+    },
+    {
+      "name": "Faidherbe",
+      "count": 210
+    },
+    {
+      "name": "Ma Campagne",
+      "count": 210
+    },
+    {
+      "name": "Pont Hydraulique",
+      "count": 210
+    },
+    {
+      "name": "Victoire",
+      "count": 210
     }
   ],
   "saturday": [
     {
       "name": "Gare Lille Flandres",
-      "count": 1398
+      "count": 2031
     },
     {
       "name": "Porte Des Postes",
@@ -252,7 +376,19 @@
     },
     {
       "name": "Gare Lille Europe",
-      "count": 743
+      "count": 1060
+    },
+    {
+      "name": "Eurotéléport",
+      "count": 978
+    },
+    {
+      "name": "Tourcoing Centre",
+      "count": 976
+    },
+    {
+      "name": "Wasquehal Pavé De Lille",
+      "count": 901
     },
     {
       "name": "Saint Maurice Pellevoisin",
@@ -279,10 +415,6 @@
       "count": 742
     },
     {
-      "name": "Wasquehal Pavé De Lille",
-      "count": 742
-    },
-    {
       "name": "Wasquehal Hôtel De Ville",
       "count": 742
     },
@@ -300,10 +432,6 @@
     },
     {
       "name": "Roubaix Charles De Gaulle",
-      "count": 742
-    },
-    {
-      "name": "Eurotéléport",
       "count": 742
     },
     {
@@ -328,10 +456,6 @@
     },
     {
       "name": "Gare De Tourcoing",
-      "count": 742
-    },
-    {
-      "name": "Tourcoing Centre",
       "count": 742
     },
     {
@@ -481,16 +605,156 @@
     {
       "name": "Chu - Eurasanté",
       "count": 655
+    },
+    {
+      "name": "Brossolette",
+      "count": 318
+    },
+    {
+      "name": "Clemenceau Hippodrome",
+      "count": 318
+    },
+    {
+      "name": "Croise Laroche",
+      "count": 318
+    },
+    {
+      "name": "Buisson",
+      "count": 317
+    },
+    {
+      "name": "Saint Maur",
+      "count": 317
+    },
+    {
+      "name": "Botanique",
+      "count": 317
+    },
+    {
+      "name": "Romarin",
+      "count": 317
+    },
+    {
+      "name": "Acacias",
+      "count": 159
+    },
+    {
+      "name": "Pont De Wasquehal",
+      "count": 159
+    },
+    {
+      "name": "La Terrasse",
+      "count": 159
+    },
+    {
+      "name": "Le Sart",
+      "count": 159
+    },
+    {
+      "name": "Planche Epinoy",
+      "count": 159
+    },
+    {
+      "name": "La Marque",
+      "count": 159
+    },
+    {
+      "name": "Villa Cavrois",
+      "count": 159
+    },
+    {
+      "name": "Bol D'Air",
+      "count": 159
+    },
+    {
+      "name": "Parc Barbieux",
+      "count": 159
+    },
+    {
+      "name": "Hopital Victor Provo",
+      "count": 159
+    },
+    {
+      "name": "Jean Moulin",
+      "count": 159
+    },
+    {
+      "name": "Alfred Mongy",
+      "count": 159
+    },
+    {
+      "name": "Foch",
+      "count": 158
+    },
+    {
+      "name": "Le Quesne",
+      "count": 158
+    },
+    {
+      "name": "Cerisaie",
+      "count": 158
+    },
+    {
+      "name": "Chateau Rouge",
+      "count": 158
+    },
+    {
+      "name": "Cartelot",
+      "count": 158
+    },
+    {
+      "name": "Grand Cottignies",
+      "count": 158
+    },
+    {
+      "name": "Triez",
+      "count": 158
+    },
+    {
+      "name": "Trois Suisses",
+      "count": 158
+    },
+    {
+      "name": "Faidherbe",
+      "count": 158
+    },
+    {
+      "name": "Ma Campagne",
+      "count": 158
+    },
+    {
+      "name": "Pont Hydraulique",
+      "count": 158
+    },
+    {
+      "name": "Victoire",
+      "count": 158
     }
   ],
   "sunday": [
+    {
+      "name": "Gare Lille Flandres",
+      "count": 1301
+    },
     {
       "name": "Porte Des Postes",
       "count": 945
     },
     {
-      "name": "Gare Lille Flandres",
-      "count": 945
+      "name": "Gare Lille Europe",
+      "count": 665
+    },
+    {
+      "name": "Tourcoing Centre",
+      "count": 620
+    },
+    {
+      "name": "Eurotéléport",
+      "count": 619
+    },
+    {
+      "name": "Wasquehal Pavé De Lille",
+      "count": 576
     },
     {
       "name": "Saint Philibert",
@@ -557,10 +821,6 @@
       "count": 487
     },
     {
-      "name": "Gare Lille Europe",
-      "count": 487
-    },
-    {
       "name": "Saint Maurice Pellevoisin",
       "count": 487
     },
@@ -585,10 +845,6 @@
       "count": 487
     },
     {
-      "name": "Wasquehal Pavé De Lille",
-      "count": 487
-    },
-    {
       "name": "Wasquehal Hôtel De Ville",
       "count": 487
     },
@@ -606,10 +862,6 @@
     },
     {
       "name": "Roubaix Charles De Gaulle",
-      "count": 487
-    },
-    {
-      "name": "Eurotéléport",
       "count": 487
     },
     {
@@ -634,10 +886,6 @@
     },
     {
       "name": "Gare De Tourcoing",
-      "count": 487
-    },
-    {
-      "name": "Tourcoing Centre",
       "count": 487
     },
     {
@@ -723,6 +971,130 @@
     {
       "name": "4 Cantons Stade P. Mauroy",
       "count": 458
+    },
+    {
+      "name": "Brossolette",
+      "count": 179
+    },
+    {
+      "name": "Clemenceau Hippodrome",
+      "count": 179
+    },
+    {
+      "name": "Croise Laroche",
+      "count": 179
+    },
+    {
+      "name": "Buisson",
+      "count": 178
+    },
+    {
+      "name": "Saint Maur",
+      "count": 178
+    },
+    {
+      "name": "Botanique",
+      "count": 178
+    },
+    {
+      "name": "Romarin",
+      "count": 178
+    },
+    {
+      "name": "Foch",
+      "count": 90
+    },
+    {
+      "name": "Le Quesne",
+      "count": 90
+    },
+    {
+      "name": "Cerisaie",
+      "count": 90
+    },
+    {
+      "name": "Chateau Rouge",
+      "count": 90
+    },
+    {
+      "name": "Cartelot",
+      "count": 90
+    },
+    {
+      "name": "Grand Cottignies",
+      "count": 90
+    },
+    {
+      "name": "Triez",
+      "count": 90
+    },
+    {
+      "name": "Trois Suisses",
+      "count": 90
+    },
+    {
+      "name": "Faidherbe",
+      "count": 90
+    },
+    {
+      "name": "Ma Campagne",
+      "count": 90
+    },
+    {
+      "name": "Pont Hydraulique",
+      "count": 90
+    },
+    {
+      "name": "Victoire",
+      "count": 90
+    },
+    {
+      "name": "Acacias",
+      "count": 89
+    },
+    {
+      "name": "Pont De Wasquehal",
+      "count": 89
+    },
+    {
+      "name": "La Terrasse",
+      "count": 89
+    },
+    {
+      "name": "Le Sart",
+      "count": 89
+    },
+    {
+      "name": "Planche Epinoy",
+      "count": 89
+    },
+    {
+      "name": "La Marque",
+      "count": 89
+    },
+    {
+      "name": "Villa Cavrois",
+      "count": 89
+    },
+    {
+      "name": "Bol D'Air",
+      "count": 89
+    },
+    {
+      "name": "Parc Barbieux",
+      "count": 89
+    },
+    {
+      "name": "Hopital Victor Provo",
+      "count": 89
+    },
+    {
+      "name": "Jean Moulin",
+      "count": 89
+    },
+    {
+      "name": "Alfred Mongy",
+      "count": 89
     }
   ]
 }

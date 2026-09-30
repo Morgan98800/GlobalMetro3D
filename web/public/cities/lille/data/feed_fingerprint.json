@@ -1,7 +1,7 @@
 {
   "url": "https://media.ilevia.fr/opendata/gtfs.zip",
   "source": "Ilévia / Métropole Européenne de Lille (Licence Ouverte 2.0) & contributeurs OpenStreetMap (ODbL)",
-  "dataset": "gtfs.zip (Ilévia Open Data)",
+  "dataset": "gtfs.zip (Ilévia Open Data - Métro L1/L2 & Tramway R/T)",
   "generated_at": "2026-09-30",
   "service_date": "20260930"
 }

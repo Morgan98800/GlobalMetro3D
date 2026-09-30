@@ -118,7 +118,9 @@
     ],
     "lines": [
       "ME1",
-      "ME2"
+      "ME2",
+      "TRAM_R",
+      "TRAM_T"
     ]
   },
   {
@@ -383,7 +385,9 @@
       50.639376
     ],
     "lines": [
-      "ME2"
+      "ME2",
+      "TRAM_R",
+      "TRAM_T"
     ]
   },
   {
@@ -460,7 +464,8 @@
       50.663903
     ],
     "lines": [
-      "ME2"
+      "ME2",
+      "TRAM_R"
     ]
   },
   {
@@ -526,7 +531,8 @@
       50.690837
     ],
     "lines": [
-      "ME2"
+      "ME2",
+      "TRAM_R"
     ]
   },
   {
@@ -603,7 +609,8 @@
       50.720938
     ],
     "lines": [
-      "ME2"
+      "ME2",
+      "TRAM_T"
     ]
   },
   {
@@ -659,6 +666,354 @@
     ],
     "lines": [
       "ME2"
+    ]
+  },
+  {
+    "id": "STATION_ROM",
+    "name": "Romarin",
+    "coordinates": [
+      3.075345,
+      50.645688
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_BOT",
+    "name": "Botanique",
+    "coordinates": [
+      3.078899,
+      50.649039
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_SMA",
+    "name": "Saint Maur",
+    "coordinates": [
+      3.081846,
+      50.651791
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_MAB",
+    "name": "Buisson",
+    "coordinates": [
+      3.088709,
+      50.656586
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_OSS",
+    "name": "Brossolette",
+    "coordinates": [
+      3.094093,
+      50.660321
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_MCL",
+    "name": "Clemenceau Hippodrome",
+    "coordinates": [
+      3.096588,
+      50.662009
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_CRL",
+    "name": "Croise Laroche",
+    "coordinates": [
+      3.102009,
+      50.664641
+    ],
+    "lines": [
+      "TRAM_R",
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_ACA",
+    "name": "Acacias",
+    "coordinates": [
+      3.110083,
+      50.664891
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_PDW",
+    "name": "Pont De Wasquehal",
+    "coordinates": [
+      3.117345,
+      50.664484
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_LAT",
+    "name": "La Terrasse",
+    "coordinates": [
+      3.126052,
+      50.663991
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_SNO",
+    "name": "Le Sart",
+    "coordinates": [
+      3.139013,
+      50.663266
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_PLE",
+    "name": "Planche Epinoy",
+    "coordinates": [
+      3.145855,
+      50.664323
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_ARQ",
+    "name": "La Marque",
+    "coordinates": [
+      3.149425,
+      50.666342
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_CLD",
+    "name": "Villa Cavrois",
+    "coordinates": [
+      3.154319,
+      50.669116
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_BOA",
+    "name": "Bol D'Air",
+    "coordinates": [
+      3.15631,
+      50.672436
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_PBA",
+    "name": "Parc Barbieux",
+    "coordinates": [
+      3.161897,
+      50.677803
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_BDC",
+    "name": "Hopital Victor Provo",
+    "coordinates": [
+      3.1676,
+      50.681
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_QUI",
+    "name": "Jean Moulin",
+    "coordinates": [
+      3.172202,
+      50.685013
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_MAM",
+    "name": "Alfred Mongy",
+    "coordinates": [
+      3.175297,
+      50.687871
+    ],
+    "lines": [
+      "TRAM_R"
+    ]
+  },
+  {
+    "id": "STATION_OCH",
+    "name": "Foch",
+    "coordinates": [
+      3.103661,
+      50.666313
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_LQS",
+    "name": "Le Quesne",
+    "coordinates": [
+      3.106687,
+      50.673222
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_CDA",
+    "name": "Cerisaie",
+    "coordinates": [
+      3.11147,
+      50.677311
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_CTR",
+    "name": "Chateau Rouge",
+    "coordinates": [
+      3.114436,
+      50.679657
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_TEL",
+    "name": "Cartelot",
+    "coordinates": [
+      3.119505,
+      50.683603
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_GDC",
+    "name": "Grand Cottignies",
+    "coordinates": [
+      3.124028,
+      50.687064
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_TRI",
+    "name": "Triez",
+    "coordinates": [
+      3.131201,
+      50.692567
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_3SU",
+    "name": "Trois Suisses",
+    "coordinates": [
+      3.138741,
+      50.699023
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_DAI",
+    "name": "Faidherbe",
+    "coordinates": [
+      3.142715,
+      50.703561
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_CAM",
+    "name": "Ma Campagne",
+    "coordinates": [
+      3.152914,
+      50.709798
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_PHY",
+    "name": "Pont Hydraulique",
+    "coordinates": [
+      3.156151,
+      50.712619
+    ],
+    "lines": [
+      "TRAM_T"
+    ]
+  },
+  {
+    "id": "STATION_ICT",
+    "name": "Victoire",
+    "coordinates": [
+      3.157054,
+      50.717789
+    ],
+    "lines": [
+      "TRAM_T"
     ]
   }
 ]

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { IleviaMatcher, isTripUpdateMonotonic } from '../cities/lille/rt/ilevia_matching';
+import { IleviaMatcher, isTripUpdateMonotonic, stopIdToNormalizedStationId } from '../cities/lille/rt/ilevia_matching';
 import { IleviaRealtimeAdapter } from '../cities/lille/rt/ilevia_adapter';
 import { createRealtimeAdapter } from '../cities/realtime';
 import { lilleConfig } from '../cities/lille/city.config';
@@ -177,6 +177,90 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       expect(outcome.matchedCount).toBe(15);
       expect(outcome.matchRate).toBe(1.0);
       expect(outcome.discardedNonMonotonicCount).toBe(0);
+    });
+
+    it('identifie 17 rames actives pour le Tramway (R: 8, T: 9) à l’heure du snapshot', () => {
+      const schedPath = path.resolve(__dirname, '../web/public/cities/lille/data/schedule.json');
+      const schedData = JSON.parse(fs.readFileSync(schedPath, 'utf-8'));
+
+      const activeTripsR: SchedTrip[] = schedData.trips
+        .filter((t: any[]) => t[1] === 'TRAM_R' && t[4] <= 30600 && t[5] >= 30600)
+        .map((t: any[]) => ({
+          tripId: t[0],
+          lineId: t[1],
+          dir: t[2],
+          shapeId: t[3],
+          stops: t[7].map((s: any[]) => ({
+            arr: s[0],
+            dep: s[1],
+            dist: s[2],
+            stopId: schedData.stations[s[3]]
+          }))
+        }));
+
+      const activeTripsT: SchedTrip[] = schedData.trips
+        .filter((t: any[]) => t[1] === 'TRAM_T' && t[4] <= 30600 && t[5] >= 30600)
+        .map((t: any[]) => ({
+          tripId: t[0],
+          lineId: t[1],
+          dir: t[2],
+          shapeId: t[3],
+          stops: t[7].map((s: any[]) => ({
+            arr: s[0],
+            dep: s[1],
+            dist: s[2],
+            stopId: schedData.stations[s[3]]
+          }))
+        }));
+
+      expect(activeTripsR.length).toBe(8);
+      expect(activeTripsT.length).toBe(9);
+      expect(activeTripsR.length + activeTripsT.length).toBe(17);
+    });
+
+    it('apparie les prédictions GTFS-RT du Tramway (route 71) avec les rames actives', () => {
+      const schedPath = path.resolve(__dirname, '../web/public/cities/lille/data/schedule.json');
+      const schedData = JSON.parse(fs.readFileSync(schedPath, 'utf-8'));
+
+      const activeTripsTram: SchedTrip[] = schedData.trips
+        .filter((t: any[]) => (t[1] === 'TRAM_R' || t[1] === 'TRAM_T') && t[4] <= 30600 && t[5] >= 30600)
+        .map((t: any[]) => ({
+          tripId: t[0],
+          lineId: t[1],
+          dir: t[2],
+          shapeId: t[3],
+          stops: t[7].map((s: any[]) => ({
+            arr: s[0],
+            dep: s[1],
+            dist: s[2],
+            stopId: schedData.stations[s[3]]
+          }))
+        }));
+
+      // Simulation de mises à jour GTFS-RT reçues avec route_id '71'
+      const sampleUpdates: IleviaTripUpdate[] = activeTripsTram.map((t, idx) => ({
+        id: `tram_update_${idx}`,
+        trip: { tripId: t.tripId, routeId: '71' },
+        stopTimeUpdates: [
+          { stopSequence: 5, stopId: 'ICT021', arrival: { time: 30650 } }
+        ]
+      }));
+
+      const matcher = new IleviaMatcher();
+      const outcome = matcher.match(sampleUpdates, activeTripsTram, 30600, '71');
+
+      expect(outcome.receivedCount).toBe(17);
+      expect(outcome.matchedCount).toBe(17);
+      expect(outcome.matchRate).toBe(1.0);
+      expect(outcome.confidenceCounts.measured).toBe(17);
+    });
+
+    it('résout correctement les identifiants d’arrêts GTFS-RT vers les noms normalisés', () => {
+      expect(stopIdToNormalizedStationId('ICT021')).toBe('victoire');
+      expect(stopIdToNormalizedStationId('ROU122')).toBe('euroteleport');
+      expect(stopIdToNormalizedStationId('LIG011')).toBe('gare lille flandres');
+      expect(stopIdToNormalizedStationId('PVL021')).toBe('wasquehal pave de lille');
+      expect(stopIdToNormalizedStationId('CRL021')).toBe('croise laroche');
     });
   });
 });

@@ -37,20 +37,50 @@ export const lilleConfig: CityConfig = {
         reconcileThresholdM: 20
       },
       realtime: { kind: 'service-status-only' }
+    },
+    {
+      id: 'tram',
+      displayName: 'Tram',
+      enabled: true,
+      schedule: {
+        format: 'gtfs',
+        sourceUrl: 'https://media.ilevia.fr/opendata/gtfs.zip',
+        scheduleModel: 'trip-based',
+        stalenessToleranceDays: 7
+      },
+      geometry: { source: 'osm-ilevia' },
+      kinematics: {
+        maxSpeedKmh: 70, // [verified: false] Vitesse maximale nominale Breda VLC calibrée sur inter-stations GTFS
+        accelMs2: 1.1,   // [verified: false] Accélération de service tramway
+        decelMs2: 1.1,   // [verified: false] Décélération de service tramway
+        dwellSec: 15,    // [verified: false] Temps d'arrêt en station tramway
+        vMaxMs: 19.4,    // [verified: false] 70 km/h en m/s
+        k: 0.25,         // Profil trapézoïdal standard
+        windowM: 60,
+        minDwellSec: 10, // [verified: false]
+        matchWindowSec: 120,
+        maxDelaySec: 900,
+        alpha: 0.4,
+        decayDistanceM: 2000,
+        staleAfterSec: 360,
+        reconcileDurationMs: 300,
+        reconcileThresholdM: 20
+      },
+      realtime: { kind: 'arrival-predictions' }
     }
   ],
   rollingStock: '/cities/lille/data/rolling-stock.json',
   gtfs: {
     sourceUrl: 'https://media.ilevia.fr/opendata/gtfs.zip',
     agencyFilter: ['ILE'],
-    routeTypes: [1],
-    routeIdAllowlist: ['ME1', 'ME2'],
+    routeTypes: [0, 1],
+    routeIdAllowlist: ['ME1', 'ME2', '71', 'TRAM_R', 'TRAM_T'],
     scheduleModel: 'trip-based',
     validityCheck: 'calendar'
   },
   map: {
-    center: [3.0573, 50.6292],
-    zoom: 12.2,
+    center: [3.10, 50.66],
+    zoom: 11.8,
     pitch: 30,
     bearing: 0,
     minZoom: 9,

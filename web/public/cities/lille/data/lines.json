@@ -26,5 +26,33 @@
     },
     "measured_length_km": 31.38,
     "elevation_offset": 0.0
+  },
+  {
+    "id": "TRAM_R",
+    "short_name": "R",
+    "long_name": "Tramway Ligne R",
+    "color": "#009FE3",
+    "text_color": "#FFFFFF",
+    "mode": "tram",
+    "destinations": {
+      "0": "Roubaix Eurotéléport",
+      "1": "Gare Lille Flandres"
+    },
+    "measured_length_km": 11.02,
+    "elevation_offset": 1.5
+  },
+  {
+    "id": "TRAM_T",
+    "short_name": "T",
+    "long_name": "Tramway Ligne T",
+    "color": "#009FE3",
+    "text_color": "#FFFFFF",
+    "mode": "tram",
+    "destinations": {
+      "0": "Tourcoing Centre",
+      "1": "Gare Lille Flandres"
+    },
+    "measured_length_km": 11.58,
+    "elevation_offset": 1.5
   }
 ]

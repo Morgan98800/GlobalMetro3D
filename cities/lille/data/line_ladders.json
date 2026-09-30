@@ -132,6 +132,14 @@
               {
                 "line_id": "ME2",
                 "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
               }
             ]
           },
@@ -318,6 +326,14 @@
               {
                 "line_id": "ME2",
                 "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
               }
             ]
           },
@@ -508,8 +524,13 @@
               3.160101,
               50.720938
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_SEB",
@@ -585,8 +606,13 @@
               3.179314,
               50.690837
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_CDG",
@@ -651,8 +677,13 @@
               3.129958,
               50.663903
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_JRS",
@@ -728,8 +759,17 @@
               3.076238,
               50.639376
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_LIG",
@@ -742,8 +782,16 @@
             "is_hub": true,
             "transfers": [
               {
-                "line_id": "ME2",
+                "line_id": "ME1",
                 "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
               }
             ]
           },
@@ -813,7 +861,7 @@
             "is_hub": true,
             "transfers": [
               {
-                "line_id": "ME2",
+                "line_id": "ME1",
                 "name": "Métro"
               }
             ]
@@ -1077,7 +1125,7 @@
             "is_hub": true,
             "transfers": [
               {
-                "line_id": "ME2",
+                "line_id": "ME1",
                 "name": "Métro"
               }
             ]
@@ -1148,8 +1196,16 @@
             "is_hub": true,
             "transfers": [
               {
-                "line_id": "ME2",
+                "line_id": "ME1",
                 "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
               }
             ]
           },
@@ -1161,8 +1217,17 @@
               3.076238,
               50.639376
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_SMP",
@@ -1238,8 +1303,13 @@
               3.129958,
               50.663903
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_WMI",
@@ -1304,8 +1374,13 @@
               3.179314,
               50.690837
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_RXP",
@@ -1381,8 +1456,13 @@
               3.160101,
               50.720938
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
           },
           {
             "id": "STATION_COB",
@@ -1438,6 +1518,1294 @@
             ],
             "is_hub": false,
             "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "TRAM_R": {
+    "id": "TRAM_R",
+    "short_name": "R",
+    "color": "#009FE3",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Gare Lille Flandres",
+        "terminus": "Roubaix Eurotéléport",
+        "stations": [
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 22.3,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME1",
+                "name": "Métro"
+              },
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_EUR",
+            "name": "Gare Lille Europe",
+            "distance_m": 354.5,
+            "coordinates": [
+              3.076238,
+              50.639376
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_ROM",
+            "name": "Romarin",
+            "distance_m": 1130.2,
+            "coordinates": [
+              3.075345,
+              50.645688
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_BOT",
+            "name": "Botanique",
+            "distance_m": 1573.6,
+            "coordinates": [
+              3.078899,
+              50.649039
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_SMA",
+            "name": "Saint Maur",
+            "distance_m": 1914.6,
+            "coordinates": [
+              3.081846,
+              50.651791
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MAB",
+            "name": "Buisson",
+            "distance_m": 2668.0,
+            "coordinates": [
+              3.088709,
+              50.656586
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_OSS",
+            "name": "Brossolette",
+            "distance_m": 3226.9,
+            "coordinates": [
+              3.094093,
+              50.660321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MCL",
+            "name": "Clemenceau Hippodrome",
+            "distance_m": 3453.2,
+            "coordinates": [
+              3.096588,
+              50.662009
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_CRL",
+            "name": "Croise Laroche",
+            "distance_m": 3933.2,
+            "coordinates": [
+              3.102009,
+              50.664641
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_ACA",
+            "name": "Acacias",
+            "distance_m": 4570.8,
+            "coordinates": [
+              3.110083,
+              50.664891
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDW",
+            "name": "Pont De Wasquehal",
+            "distance_m": 5118.6,
+            "coordinates": [
+              3.117345,
+              50.664484
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LAT",
+            "name": "La Terrasse",
+            "distance_m": 5695.7,
+            "coordinates": [
+              3.126052,
+              50.663991
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PVL",
+            "name": "Wasquehal Pavé De Lille",
+            "distance_m": 5987.9,
+            "coordinates": [
+              3.129958,
+              50.663903
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_SNO",
+            "name": "Le Sart",
+            "distance_m": 6607.1,
+            "coordinates": [
+              3.139013,
+              50.663266
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PLE",
+            "name": "Planche Epinoy",
+            "distance_m": 7130.5,
+            "coordinates": [
+              3.145855,
+              50.664323
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ARQ",
+            "name": "La Marque",
+            "distance_m": 7469.0,
+            "coordinates": [
+              3.149425,
+              50.666342
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CLD",
+            "name": "Villa Cavrois",
+            "distance_m": 7901.3,
+            "coordinates": [
+              3.154319,
+              50.669116
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_BOA",
+            "name": "Bol D'Air",
+            "distance_m": 8283.2,
+            "coordinates": [
+              3.15631,
+              50.672436
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PBA",
+            "name": "Parc Barbieux",
+            "distance_m": 9063.6,
+            "coordinates": [
+              3.161897,
+              50.677803
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_BDC",
+            "name": "Hopital Victor Provo",
+            "distance_m": 9594.5,
+            "coordinates": [
+              3.1676,
+              50.681
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_QUI",
+            "name": "Jean Moulin",
+            "distance_m": 10146.0,
+            "coordinates": [
+              3.172202,
+              50.685013
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MAM",
+            "name": "Alfred Mongy",
+            "distance_m": 10533.1,
+            "coordinates": [
+              3.175297,
+              50.687871
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ROU",
+            "name": "Eurotéléport",
+            "distance_m": 11002.4,
+            "coordinates": [
+              3.179314,
+              50.690837
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Roubaix Eurotéléport",
+        "terminus": "Gare Lille Flandres",
+        "stations": [
+          {
+            "id": "STATION_ROU",
+            "name": "Eurotéléport",
+            "distance_m": 18.1,
+            "coordinates": [
+              3.179314,
+              50.690837
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MAM",
+            "name": "Alfred Mongy",
+            "distance_m": 499.5,
+            "coordinates": [
+              3.175297,
+              50.687871
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_QUI",
+            "name": "Jean Moulin",
+            "distance_m": 888.6,
+            "coordinates": [
+              3.172202,
+              50.685013
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_BDC",
+            "name": "Hopital Victor Provo",
+            "distance_m": 1441.6,
+            "coordinates": [
+              3.1676,
+              50.681
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PBA",
+            "name": "Parc Barbieux",
+            "distance_m": 2039.4,
+            "coordinates": [
+              3.161897,
+              50.677803
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_BOA",
+            "name": "Bol D'Air",
+            "distance_m": 2689.6,
+            "coordinates": [
+              3.15631,
+              50.672436
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CLD",
+            "name": "Villa Cavrois",
+            "distance_m": 3135.9,
+            "coordinates": [
+              3.154319,
+              50.669116
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ARQ",
+            "name": "La Marque",
+            "distance_m": 3629.6,
+            "coordinates": [
+              3.149425,
+              50.666342
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PLE",
+            "name": "Planche Epinoy",
+            "distance_m": 3966.1,
+            "coordinates": [
+              3.145855,
+              50.664323
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_SNO",
+            "name": "Le Sart",
+            "distance_m": 4489.7,
+            "coordinates": [
+              3.139013,
+              50.663266
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PVL",
+            "name": "Wasquehal Pavé De Lille",
+            "distance_m": 5115.3,
+            "coordinates": [
+              3.129958,
+              50.663903
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_LAT",
+            "name": "La Terrasse",
+            "distance_m": 5413.9,
+            "coordinates": [
+              3.126052,
+              50.663991
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDW",
+            "name": "Pont De Wasquehal",
+            "distance_m": 6070.2,
+            "coordinates": [
+              3.117345,
+              50.664484
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ACA",
+            "name": "Acacias",
+            "distance_m": 6550.9,
+            "coordinates": [
+              3.110083,
+              50.664891
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CRL",
+            "name": "Croise Laroche",
+            "distance_m": 7097.9,
+            "coordinates": [
+              3.102009,
+              50.664641
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MCL",
+            "name": "Clemenceau Hippodrome",
+            "distance_m": 7581.2,
+            "coordinates": [
+              3.096588,
+              50.662009
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_OSS",
+            "name": "Brossolette",
+            "distance_m": 7869.6,
+            "coordinates": [
+              3.094093,
+              50.660321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MAB",
+            "name": "Buisson",
+            "distance_m": 8436.5,
+            "coordinates": [
+              3.088709,
+              50.656586
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_SMA",
+            "name": "Saint Maur",
+            "distance_m": 9123.6,
+            "coordinates": [
+              3.081846,
+              50.651791
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_BOT",
+            "name": "Botanique",
+            "distance_m": 9522.7,
+            "coordinates": [
+              3.078899,
+              50.649039
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_ROM",
+            "name": "Romarin",
+            "distance_m": 9977.6,
+            "coordinates": [
+              3.075345,
+              50.645688
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_EUR",
+            "name": "Gare Lille Europe",
+            "distance_m": 10684.8,
+            "coordinates": [
+              3.076238,
+              50.639376
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 10956.6,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME1",
+                "name": "Métro"
+              },
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_T",
+                "name": "Tram"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "TRAM_T": {
+    "id": "TRAM_T",
+    "short_name": "T",
+    "color": "#009FE3",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Gare Lille Flandres",
+        "terminus": "Tourcoing Centre",
+        "stations": [
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 22.7,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME1",
+                "name": "Métro"
+              },
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_EUR",
+            "name": "Gare Lille Europe",
+            "distance_m": 354.4,
+            "coordinates": [
+              3.076238,
+              50.639376
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_ROM",
+            "name": "Romarin",
+            "distance_m": 1130.2,
+            "coordinates": [
+              3.075345,
+              50.645688
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_BOT",
+            "name": "Botanique",
+            "distance_m": 1573.5,
+            "coordinates": [
+              3.078899,
+              50.649039
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_SMA",
+            "name": "Saint Maur",
+            "distance_m": 1914.6,
+            "coordinates": [
+              3.081846,
+              50.651791
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MAB",
+            "name": "Buisson",
+            "distance_m": 2667.9,
+            "coordinates": [
+              3.088709,
+              50.656586
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_OSS",
+            "name": "Brossolette",
+            "distance_m": 3226.9,
+            "coordinates": [
+              3.094093,
+              50.660321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MCL",
+            "name": "Clemenceau Hippodrome",
+            "distance_m": 3453.1,
+            "coordinates": [
+              3.096588,
+              50.662009
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_CRL",
+            "name": "Croise Laroche",
+            "distance_m": 3933.1,
+            "coordinates": [
+              3.102009,
+              50.664641
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_OCH",
+            "name": "Foch",
+            "distance_m": 4204.2,
+            "coordinates": [
+              3.103661,
+              50.666313
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LQS",
+            "name": "Le Quesne",
+            "distance_m": 5009.8,
+            "coordinates": [
+              3.106687,
+              50.673222
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CDA",
+            "name": "Cerisaie",
+            "distance_m": 5539.2,
+            "coordinates": [
+              3.11147,
+              50.677311
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CTR",
+            "name": "Chateau Rouge",
+            "distance_m": 5873.7,
+            "coordinates": [
+              3.114436,
+              50.679657
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TEL",
+            "name": "Cartelot",
+            "distance_m": 6442.4,
+            "coordinates": [
+              3.119505,
+              50.683603
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_GDC",
+            "name": "Grand Cottignies",
+            "distance_m": 6974.3,
+            "coordinates": [
+              3.124028,
+              50.687064
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TRI",
+            "name": "Triez",
+            "distance_m": 7764.7,
+            "coordinates": [
+              3.131201,
+              50.692567
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_3SU",
+            "name": "Trois Suisses",
+            "distance_m": 8667.8,
+            "coordinates": [
+              3.138741,
+              50.699023
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_DAI",
+            "name": "Faidherbe",
+            "distance_m": 9257.2,
+            "coordinates": [
+              3.142715,
+              50.703561
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CAM",
+            "name": "Ma Campagne",
+            "distance_m": 10253.4,
+            "coordinates": [
+              3.152914,
+              50.709798
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PHY",
+            "name": "Pont Hydraulique",
+            "distance_m": 10613.2,
+            "coordinates": [
+              3.156151,
+              50.712619
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ICT",
+            "name": "Victoire",
+            "distance_m": 11214.2,
+            "coordinates": [
+              3.157054,
+              50.717789
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TOU",
+            "name": "Tourcoing Centre",
+            "distance_m": 11560.5,
+            "coordinates": [
+              3.160101,
+              50.720938
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Tourcoing Centre",
+        "terminus": "Gare Lille Flandres",
+        "stations": [
+          {
+            "id": "STATION_TOU",
+            "name": "Tourcoing Centre",
+            "distance_m": 22.8,
+            "coordinates": [
+              3.160101,
+              50.720938
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_ICT",
+            "name": "Victoire",
+            "distance_m": 384.5,
+            "coordinates": [
+              3.157054,
+              50.717789
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PHY",
+            "name": "Pont Hydraulique",
+            "distance_m": 984.1,
+            "coordinates": [
+              3.156151,
+              50.712619
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CAM",
+            "name": "Ma Campagne",
+            "distance_m": 1414.3,
+            "coordinates": [
+              3.152914,
+              50.709798
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_DAI",
+            "name": "Faidherbe",
+            "distance_m": 2417.0,
+            "coordinates": [
+              3.142715,
+              50.703561
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_3SU",
+            "name": "Trois Suisses",
+            "distance_m": 3007.3,
+            "coordinates": [
+              3.138741,
+              50.699023
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TRI",
+            "name": "Triez",
+            "distance_m": 3894.2,
+            "coordinates": [
+              3.131201,
+              50.692567
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_GDC",
+            "name": "Grand Cottignies",
+            "distance_m": 4691.8,
+            "coordinates": [
+              3.124028,
+              50.687064
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TEL",
+            "name": "Cartelot",
+            "distance_m": 5159.6,
+            "coordinates": [
+              3.119505,
+              50.683603
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CTR",
+            "name": "Chateau Rouge",
+            "distance_m": 5723.1,
+            "coordinates": [
+              3.114436,
+              50.679657
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CDA",
+            "name": "Cerisaie",
+            "distance_m": 6057.3,
+            "coordinates": [
+              3.11147,
+              50.677311
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LQS",
+            "name": "Le Quesne",
+            "distance_m": 6662.3,
+            "coordinates": [
+              3.106687,
+              50.673222
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_OCH",
+            "name": "Foch",
+            "distance_m": 7462.3,
+            "coordinates": [
+              3.103661,
+              50.666313
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CRL",
+            "name": "Croise Laroche",
+            "distance_m": 7659.2,
+            "coordinates": [
+              3.102009,
+              50.664641
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MCL",
+            "name": "Clemenceau Hippodrome",
+            "distance_m": 8142.6,
+            "coordinates": [
+              3.096588,
+              50.662009
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_OSS",
+            "name": "Brossolette",
+            "distance_m": 8431.0,
+            "coordinates": [
+              3.094093,
+              50.660321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MAB",
+            "name": "Buisson",
+            "distance_m": 8997.8,
+            "coordinates": [
+              3.088709,
+              50.656586
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_SMA",
+            "name": "Saint Maur",
+            "distance_m": 9685.0,
+            "coordinates": [
+              3.081846,
+              50.651791
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_BOT",
+            "name": "Botanique",
+            "distance_m": 10084.0,
+            "coordinates": [
+              3.078899,
+              50.649039
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_ROM",
+            "name": "Romarin",
+            "distance_m": 10539.0,
+            "coordinates": [
+              3.075345,
+              50.645688
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_EUR",
+            "name": "Gare Lille Europe",
+            "distance_m": 11246.2,
+            "coordinates": [
+              3.076238,
+              50.639376
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
+          },
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 11518.0,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME1",
+                "name": "Métro"
+              },
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              },
+              {
+                "line_id": "TRAM_R",
+                "name": "Tram"
+              }
+            ]
           }
         ]
       }

@@ -1,15 +1,15 @@
 """
 build_lille_artifacts.py — Pipeline d'ingestion GTFS et géométrie OSM pour le Réseau de Lille (Ilévia)
 
-Génère l'ensemble des artefacts normalisés dans cities/lille/data/ et web/public/cities/lille/data/ :
-1. lines.json : métadonnées de la ligne 1 (jaune #FDC41F, destinations, longueur)
-2. stations.json : 18 stations du métro ligne 1 avec coordonnées de plateforme
-3. tracks.json : polylignes simplifiées des voies avec stroke contrasté
-4. shapes.bin : binaire SHP2 rééchantillonné au pas régulier de 10 m
-5. schedule.json : grille des courses et arrêts au format compact
+Génère l'ensemble des artefacts normalisés pour les Lignes 1 et 2 du Métro VAL :
+1. lines.json : métadonnées des lignes 1 (jaune #FDC41F) et 2 (rouge #E30613)
+2. stations.json : 60 stations uniques dédupliquées avec correspondances à Gare Lille Flandres et Porte des Postes
+3. tracks.json : polylignes simplifiées des 4 voies avec strokes contrastés
+4. shapes.bin : binaire SHP2 rééchantillonné au pas régulier de 10 m (ME1_0, ME1_1, ME2_0, ME2_1)
+5. schedule.json : grille des courses et arrêts au format compact (L1: 919 courses, L2: 916 courses)
 6. line_ladders.json : thermomètre de ligne ordonné par direction pour le dock
 7. station-rankings.json : fréquences théoriques de desserte par station
-8. sections.json : confirmation 100% souterrain / tranchée couverte
+8. sections.json : 100% souterrain / tranchée couverte
 9. feed_fingerprint.json : métadonnées et fraîcheur du flux
 10. rolling-stock.json : spécifications VAL 208 et rames 52m (Alstom)
 """
@@ -113,7 +113,6 @@ def parse_time_s(t_str: str) -> int:
 
 
 # Correspondance ordonnée des 18 stations de la Ligne 1
-# (nom GTFS, code 3 lettres, nom OSM dans les relations)
 L1_STATIONS_META = [
     ("4 Cantons Stade P. Mauroy", "4CA", "Quatre Cantons – Stade Pierre Mauroy"),
     ("Cité Scientifique", "CSC", "Cité Scientifique – Professeur Gabillard"),
@@ -133,6 +132,54 @@ L1_STATIONS_META = [
     ("Porte Des Postes", "PDP", "Porte des Postes"),
     ("Chu - Centre O. Lambret", "CHR", "CHU – Centre Oscar Lambret"),
     ("Chu - Eurasanté", "CAL", "CHU – Eurasanté"),
+]
+
+# Correspondance ordonnée des 44 stations de la Ligne 2
+L2_STATIONS_META = [
+    ("Saint Philibert", "HSP", "Saint-Philibert"),
+    ("Bourg", "BRG", "Bourg"),
+    ("Maison Des Enfants", "MDE", "Maison des Enfants"),
+    ("Mitterie", "MIT", "Mitterie"),
+    ("Pont Supérieur", "PSU", "Pont Supérieur"),
+    ("Lomme-Lambersart", "LLO", "Lomme – Lambersart – Arthur Notebart"),
+    ("Canteleu Euratechnologies", "CAN", "Canteleu – Euratechnologies"),
+    ("Bois Blancs", "LPC", "Bois Blancs"),
+    ("Port De Lille", "PTL", "Port de Lille"),
+    ("Cormontaigne", "COR", "Cormontaigne"),
+    ("Montebello", "MNT", "Montebello"),
+    ("Porte Des Postes", "PDP", "Porte des Postes"),
+    ("Porte D'Arras", "PRR", "Porte d'Arras"),
+    ("Porte De Douai", "PDO", "Porte de Douai – Jardin des Plantes"),
+    ("Porte De Valenciennes", "PDV", "Porte de Valenciennes"),
+    ("Lille Grand Palais", "LGP", "Lille Grand Palais"),
+    ("Mairie De Lille", "MDL", "Mairie de Lille"),
+    ("Gare Lille Flandres", "LIG", "Gare Lille Flandres"),
+    ("Gare Lille Europe", "EUR", "Gare Lille Europe"),
+    ("Saint Maurice Pellevoisin", "SMP", "Saint-Maurice Pellevoisin"),
+    ("Mons Sarts", "MSA", "Mons Sarts"),
+    ("Mairie De Mons", "MDM", "Mairie de Mons"),
+    ("Fort De Mons", "FOR", "Fort de Mons"),
+    ("Les Prés Edgard Pisani", "PRS", "Les Prés – Edgard Pisani"),
+    ("Jean Jaurès", "JRS", "Jean Jaurès"),
+    ("Wasquehal Pavé De Lille", "PVL", "Wasquehal – Pavé de Lille"),
+    ("Wasquehal Hôtel De Ville", "WMI", "Wasquehal – Hôtel de Ville"),
+    ("Croix Centre", "CPL", "Croix Centre"),
+    ("Mairie De Croix", "CXM", "Mairie de Croix"),
+    ("Epeule Montesquieu", "EPL", "Épeule – Montesquieu"),
+    ("Roubaix Charles De Gaulle", "CDG", "Roubaix – Charles de Gaulle"),
+    ("Eurotéléport", "ROU", "Eurotéléport"),
+    ("Roubaix Grand Place", "RXP", "Roubaix – Grand Place"),
+    ("Gare Jean Lebas Roubaix", "MGR", "Gare Jean Lebas Roubaix"),
+    ("Alsace Plaine Images", "ALS", "Alsace – Plaine Images"),
+    ("Mercure", "MER", "Mercure"),
+    ("Carliers", "CTL", "Carliers"),
+    ("Gare De Tourcoing", "SEB", "Gare de Tourcoing"),
+    ("Tourcoing Centre", "TOU", "Tourcoing Centre"),
+    ("Colbert", "COB", "Colbert"),
+    ("Phalempins", "TPH", "Phalempins"),
+    ("Pont De Neuville", "PTN", "Pont de Neuville"),
+    ("Bourgogne", "TBO", "Bourgogne"),
+    ("C.H. Dron", "DRO", "C.H. Dron"),
 ]
 
 
@@ -198,45 +245,64 @@ def build_lille_artifacts(
         web_dir = Path(web_dir)
         web_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[lille-ingest] Démarrage de l'ingestion pour Lille (Ligne 1)...")
+    print(f"[lille-ingest] Démarrage de l'ingestion pour Lille (Lignes 1 et 2)...")
 
     # =========================================================================
     # Étape 1 : Chaînage et rééchantillonnage de la géométrie OSM
     # =========================================================================
-    osm_dir0_path = raw_dir / "osm_171691.json"
-    osm_dir1_path = raw_dir / "osm_7786750.json"
+    # Ligne 1 : Relations OSM 171691 (Dir 0) et 7786750 (Dir 1)
+    with open(raw_dir / "osm_171691.json", "r", encoding="utf-8") as f:
+        osm_l1_dir0_data = json.load(f)
+    with open(raw_dir / "osm_7786750.json", "r", encoding="utf-8") as f:
+        osm_l1_dir1_data = json.load(f)
 
-    with open(osm_dir0_path, "r", encoding="utf-8") as f:
-        osm_dir0_data = json.load(f)
-    with open(osm_dir1_path, "r", encoding="utf-8") as f:
-        osm_dir1_data = json.load(f)
+    # Ligne 2 : Relations OSM 7786749 (Dir 0: Dron -> St Philibert) et 449485 (Dir 1: St Philibert -> Dron)
+    with open(raw_dir / "osm_7786749.json", "r", encoding="utf-8") as f:
+        osm_l2_dir0_data = json.load(f)
+    with open(raw_dir / "osm_449485.json", "r", encoding="utf-8") as f:
+        osm_l2_dir1_data = json.load(f)
 
-    poly_dir0, gap_dir0 = chain_osm_ways(osm_dir0_data)
-    poly_dir1, gap_dir1 = chain_osm_ways(osm_dir1_data)
+    l1_poly_dir0, l1_gap_dir0 = chain_osm_ways(osm_l1_dir0_data)
+    l1_poly_dir1, l1_gap_dir1 = chain_osm_ways(osm_l1_dir1_data)
+    l2_poly_dir0, l2_gap_dir0 = chain_osm_ways(osm_l2_dir0_data)
+    l2_poly_dir1, l2_gap_dir1 = chain_osm_ways(osm_l2_dir1_data)
 
-    len_dir0 = sum(equirect_dist_m(poly_dir0[i-1][0], poly_dir0[i-1][1], poly_dir0[i][0], poly_dir0[i][1]) for i in range(1, len(poly_dir0)))
-    len_dir1 = sum(equirect_dist_m(poly_dir1[i-1][0], poly_dir1[i-1][1], poly_dir1[i][0], poly_dir1[i][1]) for i in range(1, len(poly_dir1)))
+    l1_len_dir0 = sum(equirect_dist_m(l1_poly_dir0[i-1][0], l1_poly_dir0[i-1][1], l1_poly_dir0[i][0], l1_poly_dir0[i][1]) for i in range(1, len(l1_poly_dir0)))
+    l1_len_dir1 = sum(equirect_dist_m(l1_poly_dir1[i-1][0], l1_poly_dir1[i-1][1], l1_poly_dir1[i][0], l1_poly_dir1[i][1]) for i in range(1, len(l1_poly_dir1)))
+    l2_len_dir0 = sum(equirect_dist_m(l2_poly_dir0[i-1][0], l2_poly_dir0[i-1][1], l2_poly_dir0[i][0], l2_poly_dir0[i][1]) for i in range(1, len(l2_poly_dir0)))
+    l2_len_dir1 = sum(equirect_dist_m(l2_poly_dir1[i-1][0], l2_poly_dir1[i-1][1], l2_poly_dir1[i][0], l2_poly_dir1[i][1]) for i in range(1, len(l2_poly_dir1)))
 
-    print(f"[lille-ingest] Tracé Dir 0 : {len(poly_dir0)} sommets, {len_dir0:.1f} m, raccord max = {gap_dir0:.3f} m")
-    print(f"[lille-ingest] Tracé Dir 1 : {len(poly_dir1)} sommets, {len_dir1:.1f} m, raccord max = {gap_dir1:.3f} m")
+    print(f"[lille-ingest] L1 Dir 0 : {len(l1_poly_dir0)} sommets, {l1_len_dir0:.1f} m, gap = {l1_gap_dir0:.3f} m")
+    print(f"[lille-ingest] L1 Dir 1 : {len(l1_poly_dir1)} sommets, {l1_len_dir1:.1f} m, gap = {l1_gap_dir1:.3f} m")
+    print(f"[lille-ingest] L2 Dir 0 : {len(l2_poly_dir0)} sommets, {l2_len_dir0:.1f} m, gap = {l2_gap_dir0:.3f} m")
+    print(f"[lille-ingest] L2 Dir 1 : {len(l2_poly_dir1)} sommets, {l2_len_dir1:.1f} m, gap = {l2_gap_dir1:.3f} m")
 
-    if gap_dir0 > 5.0 or gap_dir1 > 5.0:
-        raise ValueError(f"Écart de raccordement excessif : Dir 0 = {gap_dir0} m, Dir 1 = {gap_dir1} m (seuil = 5.0 m)")
+    for name, g in [("L1 Dir 0", l1_gap_dir0), ("L1 Dir 1", l1_gap_dir1), ("L2 Dir 0", l2_gap_dir0), ("L2 Dir 1", l2_gap_dir1)]:
+        if g > 5.0:
+            raise ValueError(f"Écart de raccordement excessif pour {name} : {g:.3f} m (seuil = 5.0 m)")
 
     # Calcul des distances cumulées brutes
-    cum_dists_0 = [0.0]
-    for i in range(1, len(poly_dir0)):
-        cum_dists_0.append(cum_dists_0[-1] + equirect_dist_m(poly_dir0[i-1][0], poly_dir0[i-1][1], poly_dir0[i][0], poly_dir0[i][1]))
+    def make_cum(poly):
+        c = [0.0]
+        for i in range(1, len(poly)):
+            c.append(c[-1] + equirect_dist_m(poly[i-1][0], poly[i-1][1], poly[i][0], poly[i][1]))
+        return c
 
-    cum_dists_1 = [0.0]
-    for i in range(1, len(poly_dir1)):
-        cum_dists_1.append(cum_dists_1[-1] + equirect_dist_m(poly_dir1[i-1][0], poly_dir1[i-1][1], poly_dir1[i][0], poly_dir1[i][1]))
+    l1_cum0 = make_cum(l1_poly_dir0)
+    l1_cum1 = make_cum(l1_poly_dir1)
+    l2_cum0 = make_cum(l2_poly_dir0)
+    l2_cum1 = make_cum(l2_poly_dir1)
 
     # Rééchantillonnage métrique SHP2 à pas STEP_M = 10.0 m
     STEP_M = 10.0
     resampled_shapes: List[ResampledShape] = []
 
-    for sid, coords, raw_cum in [("ME1_0", poly_dir0, cum_dists_0), ("ME1_1", poly_dir1, cum_dists_1)]:
+    for sid, coords, raw_cum in [
+        ("ME1_0", l1_poly_dir0, l1_cum0),
+        ("ME1_1", l1_poly_dir1, l1_cum1),
+        ("ME2_0", l2_poly_dir0, l2_cum0),
+        ("ME2_1", l2_poly_dir1, l2_cum1),
+    ]:
         total_len = raw_cum[-1]
         resampled_coords: List[Tuple[float, float]] = [coords[0]]
         cur_d = STEP_M
@@ -248,24 +314,17 @@ def build_lille_artifacts(
                 break
             seg_len = raw_cum[seg_idx + 1] - raw_cum[seg_idx]
             t = (cur_d - raw_cum[seg_idx]) / seg_len if seg_len > 0 else 0.0
-            lng = coords[seg_idx][0] + t * (coords[seg_idx + 1][0] - coords[seg_idx][0])
-            lat = coords[seg_idx][1] + t * (coords[seg_idx + 1][1] - coords[seg_idx][1])
-            resampled_coords.append((round(lng, 7), round(lat, 7)))
+            x = coords[seg_idx][0] + t * (coords[seg_idx + 1][0] - coords[seg_idx][0])
+            y = coords[seg_idx][1] + t * (coords[seg_idx + 1][1] - coords[seg_idx][1])
+            resampled_coords.append((x, y))
             cur_d += STEP_M
-
-        resampled_coords.append(coords[-1])
-        tail_len = total_len - (len(resampled_coords) - 2) * STEP_M if len(resampled_coords) >= 2 else 0.0
-        if tail_len < 0:
-            tail_len = 0.0
-
-        resampled_shapes.append(
-            ResampledShape(
-                shape_id=sid,
-                coords=resampled_coords,
-                step=STEP_M,
-                tail_length=round(tail_len, 3)
-            )
-        )
+        tail_len = total_len - (len(resampled_coords) - 1) * STEP_M
+        resampled_shapes.append(ResampledShape(
+            shape_id=sid,
+            coords=resampled_coords,
+            step=STEP_M,
+            tail_length=round(tail_len, 3)
+        ))
 
     shapes_bin_path = output_dir / "shapes.bin"
     shp_meta = write_shapes_v2(resampled_shapes, shapes_bin_path)
@@ -274,70 +333,107 @@ def build_lille_artifacts(
     # =========================================================================
     # Étape 2 : Extraction des stations et coordonnées précises
     # =========================================================================
-    # Extraction des nœuds de station dans OSM pour une précision optimale
-    st_nodes_0 = {}
-    for el in osm_dir0_data["elements"]:
-        if el["type"] == "node" and "name" in el.get("tags", {}):
-            st_nodes_0[el["tags"]["name"]] = (el["lon"], el["lat"])
-
-    st_nodes_1 = {}
-    for el in osm_dir1_data["elements"]:
-        if el["type"] == "node" and "name" in el.get("tags", {}):
-            st_nodes_1[el["tags"]["name"]] = (el["lon"], el["lat"])
-
-    stations_list = []
-    station_proj_dir0: Dict[str, Tuple[float, float]] = {}  # prefix -> (s, d)
-    station_proj_dir1: Dict[str, Tuple[float, float]] = {}  # prefix -> (s, d)
+    l1_st_nodes_0 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_l1_dir0_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+    l1_st_nodes_1 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_l1_dir1_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+    l2_st_nodes_0 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_l2_dir0_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
+    l2_st_nodes_1 = {el["tags"]["name"]: (el["lon"], el["lat"]) for el in osm_l2_dir1_data["elements"] if el["type"] == "node" and "name" in el.get("tags", {})}
 
     max_dist_to_track = 0.0
     station_distances_report = []
 
+    # Projections pour Line 1
+    l1_station_proj_0: Dict[str, Tuple[float, float]] = {}
+    l1_station_proj_1: Dict[str, Tuple[float, float]] = {}
+    l1_stations_ordered = []
+
     for name_gtfs, pfx, name_osm in L1_STATIONS_META:
-        c0 = st_nodes_0.get(name_osm)
-        c1 = st_nodes_1.get(name_osm)
+        c0 = l1_st_nodes_0.get(name_osm)
+        c1 = l1_st_nodes_1.get(name_osm)
         if not c0 or not c1:
-            raise ValueError(f"Station {name_osm} non trouvée dans les nœuds de station OSM")
+            raise ValueError(f"Station L1 {name_osm} non trouvée dans les nœuds de station OSM")
 
-        s0, d0 = project_on_polyline(c0[0], c0[1], poly_dir0, cum_dists_0)
-        s1, d1 = project_on_polyline(c1[0], c1[1], poly_dir1, cum_dists_1)
+        s0, d0 = project_on_polyline(c0[0], c0[1], l1_poly_dir0, l1_cum0)
+        s1, d1 = project_on_polyline(c1[0], c1[1], l1_poly_dir1, l1_cum1)
+        l1_station_proj_0[pfx] = (s0, d0)
+        l1_station_proj_1[pfx] = (s1, d1)
 
-        station_proj_dir0[pfx] = (s0, d0)
-        station_proj_dir1[pfx] = (s1, d1)
-
-        # Coordonnées du centroïde de station
         mid_lon = round((c0[0] + c1[0]) / 2.0, 6)
         mid_lat = round((c0[1] + c1[1]) / 2.0, 6)
-
-        # Distance du centroïde aux deux voies
-        _, d_mid_0 = project_on_polyline(mid_lon, mid_lat, poly_dir0, cum_dists_0)
-        _, d_mid_1 = project_on_polyline(mid_lon, mid_lat, poly_dir1, cum_dists_1)
+        _, d_mid_0 = project_on_polyline(mid_lon, mid_lat, l1_poly_dir0, l1_cum0)
+        _, d_mid_1 = project_on_polyline(mid_lon, mid_lat, l1_poly_dir1, l1_cum1)
         d_max_st = max(d_mid_0, d_mid_1)
-
         max_dist_to_track = max(max_dist_to_track, d_max_st)
-        station_distances_report.append({
-            "name": name_gtfs,
-            "prefix": pfx,
-            "dist_track0_m": round(d0, 2),
-            "dist_track1_m": round(d1, 2),
-            "dist_centroid_to_track_m": round(d_max_st, 2),
-            "s_dir0_m": round(s0, 1),
-            "s_dir1_m": round(s1, 1)
-        })
 
-        stations_list.append({
+        l1_stations_ordered.append({
             "id": f"STATION_{pfx}",
+            "prefix": pfx,
             "name": name_gtfs,
             "coordinates": [mid_lon, mid_lat],
             "lines": ["ME1"]
         })
 
-    print(f"[lille-ingest] Vérification des distances stations-tracé :")
-    for r in station_distances_report:
-        print(f"  {r['name']:32s} | d_voie0 = {r['dist_track0_m']:4.2f}m, d_voie1 = {r['dist_track1_m']:4.2f}m, d_max_centre = {r['dist_centroid_to_track_m']:4.2f}m")
+    # Projections pour Line 2
+    l2_station_proj_0: Dict[str, Tuple[float, float]] = {}
+    l2_station_proj_1: Dict[str, Tuple[float, float]] = {}
+    l2_stations_ordered = []
 
-    print(f"[lille-ingest] Distance maximale station-tracé : {max_dist_to_track:.2f} m")
+    # Correspondance L2
+    for name_gtfs, pfx, name_osm in L2_STATIONS_META:
+        c0 = l2_st_nodes_0.get(name_osm)
+        c1 = l2_st_nodes_1.get(name_osm)
+        if not c0 or not c1:
+            raise ValueError(f"Station L2 {name_osm} non trouvée dans les nœuds de station OSM")
+
+        s0, d0 = project_on_polyline(c0[0], c0[1], l2_poly_dir0, l2_cum0)
+        s1, d1 = project_on_polyline(c1[0], c1[1], l2_poly_dir1, l2_cum1)
+        l2_station_proj_0[pfx] = (s0, d0)
+        l2_station_proj_1[pfx] = (s1, d1)
+
+        # Si station de correspondance L1 (LIG ou PDP), conserver les coordonnées exactes existantes
+        existing_l1 = next((st for st in l1_stations_ordered if st["prefix"] == pfx), None)
+        if existing_l1:
+            mid_lon, mid_lat = existing_l1["coordinates"]
+            existing_l1["lines"] = ["ME1", "ME2"]
+        else:
+            mid_lon = round((c0[0] + c1[0]) / 2.0, 6)
+            mid_lat = round((c0[1] + c1[1]) / 2.0, 6)
+
+        _, d_mid_0 = project_on_polyline(mid_lon, mid_lat, l2_poly_dir0, l2_cum0)
+        _, d_mid_1 = project_on_polyline(mid_lon, mid_lat, l2_poly_dir1, l2_cum1)
+        d_max_st = max(d_mid_0, d_mid_1)
+        max_dist_to_track = max(max_dist_to_track, d_max_st)
+
+        if not existing_l1:
+            l2_stations_ordered.append({
+                "id": f"STATION_{pfx}",
+                "prefix": pfx,
+                "name": name_gtfs,
+                "coordinates": [mid_lon, mid_lat],
+                "lines": ["ME2"]
+            })
+
+    # Liste consolidée : Les 18 premières restent STRICTEMENT dans l'ordre de la Ligne 1
+    # pour garantir une non-régression absolue des indices et snapshots de la Ligne 1.
+    stations_list = []
+    for st in l1_stations_ordered:
+        stations_list.append({
+            "id": st["id"],
+            "name": st["name"],
+            "coordinates": st["coordinates"],
+            "lines": st["lines"]
+        })
+    for st in l2_stations_ordered:
+        stations_list.append({
+            "id": st["id"],
+            "name": st["name"],
+            "coordinates": st["coordinates"],
+            "lines": st["lines"]
+        })
+
+    print(f"[lille-ingest] Total stations consolidées : {len(stations_list)} (18 L1 + 42 L2 uniques = 60 stations, 2 hubs)")
+    print(f"[lille-ingest] Distance maximale station-tracé tous tracés : {max_dist_to_track:.2f} m")
     if max_dist_to_track > 15.0:
-        raise ValueError(f"Distance station-tracé maximale ({max_dist_to_track:.2f} m) supérieure au seuil strict de 15 m !")
+        raise ValueError(f"Distance station-tracé maximale ({max_dist_to_track:.2f} m) > 15 m !")
 
     with open(output_dir / "stations.json", "w", encoding="utf-8") as f:
         json.dump(stations_list, f, indent=2, ensure_ascii=False)
@@ -345,9 +441,6 @@ def build_lille_artifacts(
     # =========================================================================
     # Étape 3 : Chargement GTFS et extraction du calendrier réel
     # =========================================================================
-    print(f"[lille-ingest] Lecture de l'archive GTFS : {gtfs_path}")
-
-    # Fonction d'ouverture du GTFS (fichier ZIP ou répertoire)
     class GTFSReader:
         def __init__(self, path: Path):
             self.path = path
@@ -365,13 +458,11 @@ def build_lille_artifacts(
 
     gtfs = GTFSReader(gtfs_path)
 
-    # Identifier les services actifs à la date cible (calendrier réel)
     active_services: Set[str] = set()
     call_counts_weekday = Counter()
     call_counts_sat = Counter()
     call_counts_sun = Counter()
 
-    # Dates représentatives pour rankings
     date_sat = "20261003"
     date_sun = "20261004"
     services_sat: Set[str] = set()
@@ -390,25 +481,32 @@ def build_lille_artifacts(
 
     print(f"[lille-ingest] Date nominale {target_date} : {len(active_services)} service_ids actifs")
 
-    # Filtrer les courses de la ligne ME1
-    l1_trips: Dict[str, dict] = {}
+    # Filtrer les courses des lignes ME1 et ME2
+    all_metro_trips: Dict[str, dict] = {}
     sat_trips: Set[str] = set()
     sun_trips: Set[str] = set()
 
     for row in gtfs.open_csv("trips.txt"):
-        if row.get("route_id") == "ME1":
+        rid = row.get("route_id")
+        if rid in ("ME1", "ME2"):
             tid = row["trip_id"]
             sid = row["service_id"]
             if sid in active_services:
-                l1_trips[tid] = row
+                all_metro_trips[tid] = row
             if sid in services_sat:
                 sat_trips.add(tid)
             if sid in services_sun:
                 sun_trips.add(tid)
 
-    print(f"[lille-ingest] Ligne ME1 : {len(l1_trips)} courses actives le {target_date}")
+    l1_count = sum(1 for t in all_metro_trips.values() if t["route_id"] == "ME1")
+    l2_count = sum(1 for t in all_metro_trips.values() if t["route_id"] == "ME2")
+    print(f"[lille-ingest] Courses actives le {target_date} : ME1 = {l1_count}, ME2 = {l2_count}, Total = {len(all_metro_trips)}")
 
-    # Charger stop_times.txt pour ME1
+    # Mapping noms de stations pour rankings
+    all_stations_meta = {p: name for name, p, _ in L1_STATIONS_META}
+    for name, p, _ in L2_STATIONS_META:
+        all_stations_meta[p] = name
+
     stop_times_by_trip: Dict[str, List[dict]] = defaultdict(list)
     max_arrival_sec = 0
     max_arrival_str = ""
@@ -417,16 +515,16 @@ def build_lille_artifacts(
         tid = row["trip_id"]
         spid = row["stop_id"]
         pfx = spid[:3]
-        st_name = next((name for name, p, _ in L1_STATIONS_META if p == pfx), None)
+        st_name = all_stations_meta.get(pfx)
 
-        if tid in l1_trips:
+        if tid in all_metro_trips:
             stop_times_by_trip[tid].append(row)
             arr_s = parse_time_s(row["arrival_time"])
             if arr_s > max_arrival_sec:
                 max_arrival_sec = arr_s
                 max_arrival_str = row["arrival_time"]
 
-        if tid in l1_trips and st_name:
+        if tid in all_metro_trips and st_name:
             call_counts_weekday[st_name] += 1
         elif tid in sat_trips and st_name:
             call_counts_sat[st_name] += 1
@@ -441,32 +539,37 @@ def build_lille_artifacts(
     print(f"[lille-ingest] Heure GTFS maximale : {max_arrival_str} ({max_arrival_sec} s)")
 
     # =========================================================================
-    # Étape 4 : Génération de schedule.json (Format compact du moteur)
+    # Étape 4 : Génération de schedule.json
     # =========================================================================
     unique_station_names = [st["name"] for st in stations_list]
     station_to_idx = {name: idx for idx, name in enumerate(unique_station_names)}
-    pfx_to_idx = {pfx: station_to_idx[name] for name, pfx, _ in L1_STATIONS_META}
+
+    pfx_to_idx_l1 = {pfx: station_to_idx[name] for name, pfx, _ in L1_STATIONS_META}
+    pfx_to_idx_l2 = {pfx: station_to_idx[name] for name, pfx, _ in L2_STATIONS_META}
 
     schedule_trips = []
-    dest_counts = Counter()
 
     for tid, st_list in stop_times_by_trip.items():
         if len(st_list) < 2:
             continue
-        meta = l1_trips[tid]
+        meta = all_metro_trips[tid]
         rid = meta["route_id"]
         dir_id = int(meta.get("direction_id", 0) or 0)
-        shape_id = f"ME1_{dir_id}"
+        shape_id = f"{rid}_{dir_id}"
 
         t0 = parse_time_s(st_list[0]["departure_time"])
         t1 = parse_time_s(st_list[-1]["arrival_time"])
 
         last_pfx = st_list[-1]["stop_id"][:3]
-        dest_idx = pfx_to_idx[last_pfx]
-        dest_counts[unique_station_names[dest_idx]] += 1
+        if rid == "ME1":
+            pfx_to_idx = pfx_to_idx_l1
+            proj_map = l1_station_proj_0 if dir_id == 0 else l1_station_proj_1
+        else:
+            pfx_to_idx = pfx_to_idx_l2
+            proj_map = l2_station_proj_0 if dir_id == 0 else l2_station_proj_1
 
+        dest_idx = pfx_to_idx[last_pfx]
         stops_compact = []
-        proj_map = station_proj_dir0 if dir_id == 0 else station_proj_dir1
 
         last_s = -1.0
         for st in st_list:
@@ -477,8 +580,7 @@ def build_lille_artifacts(
 
             best_s, _ = proj_map[pfx]
             if best_s <= last_s:
-                # Contrôle de stricte monotonie
-                raise ValueError(f"Non-monotonie détectée pour trip {tid} direction {dir_id} à la station {pfx} : s={best_s} <= last={last_s}")
+                raise ValueError(f"Non-monotonie détectée pour trip {tid} ({rid}) dir {dir_id} station {pfx} : s={best_s} <= last={last_s}")
             last_s = best_s
 
             stops_compact.append([arr_s, dep_s, round(best_s, 1), s_idx])
@@ -507,39 +609,69 @@ def build_lille_artifacts(
     # =========================================================================
     # Étape 5 : Génération de lines.json
     # =========================================================================
-    line_obj = {
-        "id": "ME1",
-        "short_name": "1",
-        "long_name": "Ligne 1",
-        "color": "#FDC41F",
-        "text_color": "#000000",
-        "mode": "metro",
-        "destinations": {
-            "0": "CHU - Eurasanté",
-            "1": "4 Cantons Stade P. Mauroy"
+    lines_list = [
+        {
+            "id": "ME1",
+            "short_name": "1",
+            "long_name": "Ligne 1",
+            "color": "#FDC41F",
+            "text_color": "#000000",
+            "mode": "metro",
+            "destinations": {
+                "0": "CHU - Eurasanté",
+                "1": "4 Cantons Stade P. Mauroy"
+            },
+            "measured_length_km": round(max(l1_len_dir0, l1_len_dir1) / 1000.0, 2),
+            "elevation_offset": 0.0
         },
-        "measured_length_km": round(max(len_dir0, len_dir1) / 1000.0, 2),
-        "elevation_offset": 0.0
-    }
+        {
+            "id": "ME2",
+            "short_name": "2",
+            "long_name": "Ligne 2",
+            "color": "#E30613",
+            "text_color": "#FFFFFF",
+            "mode": "metro",
+            "destinations": {
+                "0": "Saint Philibert",
+                "1": "C.H. Dron"
+            },
+            "measured_length_km": round(max(l2_len_dir0, l2_len_dir1) / 1000.0, 2),
+            "elevation_offset": 0.0
+        }
+    ]
     with open(output_dir / "lines.json", "w", encoding="utf-8") as f:
-        json.dump([line_obj], f, indent=2, ensure_ascii=False)
+        json.dump(lines_list, f, indent=2, ensure_ascii=False)
 
     # =========================================================================
-    # Étape 6 : Génération de tracks.json (avec assombrissement de contraste)
+    # Étape 6 : Génération de tracks.json
     # =========================================================================
-    darkened_stroke = compute_darkened_contrast_color("#FDC41F", min_contrast=3.0)
+    l1_stroke = compute_darkened_contrast_color("#FDC41F", min_contrast=3.0)
+    l2_stroke = compute_darkened_contrast_color("#E30613", min_contrast=3.0)
+
     tracks_list = [
         {
             "line_id": "ME1",
             "short_name": "1",
-            "stroke": darkened_stroke,
-            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in poly_dir0]
+            "stroke": l1_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in l1_poly_dir0]
         },
         {
             "line_id": "ME1",
             "short_name": "1",
-            "stroke": darkened_stroke,
-            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in poly_dir1]
+            "stroke": l1_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in l1_poly_dir1]
+        },
+        {
+            "line_id": "ME2",
+            "short_name": "2",
+            "stroke": l2_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in l2_poly_dir0]
+        },
+        {
+            "line_id": "ME2",
+            "short_name": "2",
+            "stroke": l2_stroke,
+            "coordinates": [[round(p[0], 5), round(p[1], 5)] for p in l2_poly_dir1]
         }
     ]
     with open(output_dir / "tracks.json", "w", encoding="utf-8") as f:
@@ -548,33 +680,26 @@ def build_lille_artifacts(
     # =========================================================================
     # Étape 7 : Génération de line_ladders.json
     # =========================================================================
-    stations_by_pfx = {pfx: next(st for st in stations_list if st["id"] == f"STATION_{pfx}") for _, pfx, _ in L1_STATIONS_META}
+    stations_by_pfx = {st["id"].replace("STATION_", ""): st for st in stations_list}
 
-    ladder_dir0_stations = []
-    for name_gtfs, pfx, _ in L1_STATIONS_META:
-        s0, _ = station_proj_dir0[pfx]
-        st_meta = stations_by_pfx[pfx]
-        ladder_dir0_stations.append({
-            "id": st_meta["id"],
-            "name": st_meta["name"],
-            "distance_m": round(s0, 1),
-            "coordinates": st_meta["coordinates"],
-            "is_hub": False,
-            "transfers": []
-        })
-
-    ladder_dir1_stations = []
-    for name_gtfs, pfx, _ in reversed(L1_STATIONS_META):
-        s1, _ = station_proj_dir1[pfx]
-        st_meta = stations_by_pfx[pfx]
-        ladder_dir1_stations.append({
-            "id": st_meta["id"],
-            "name": st_meta["name"],
-            "distance_m": round(s1, 1),
-            "coordinates": st_meta["coordinates"],
-            "is_hub": False,
-            "transfers": []
-        })
+    def build_ladder_stations(meta_list, proj_map, reverse=False):
+        items = list(reversed(meta_list)) if reverse else list(meta_list)
+        res = []
+        for name_gtfs, pfx, _ in items:
+            s_val, _ = proj_map[pfx]
+            st_meta = stations_by_pfx[pfx]
+            transfers = []
+            if pfx in ("LIG", "PDP"):
+                transfers.append({"line_id": "ME2" if "ME1" in st_meta["lines"] else "ME1", "name": "Métro"})
+            res.append({
+                "id": st_meta["id"],
+                "name": st_meta["name"],
+                "distance_m": round(s_val, 1),
+                "coordinates": st_meta["coordinates"],
+                "is_hub": len(st_meta["lines"]) > 1,
+                "transfers": transfers
+            })
+        return res
 
     ladders_artifact = {
         "ME1": {
@@ -586,12 +711,30 @@ def build_lille_artifacts(
                 "0": {
                     "origin": "4 Cantons Stade P. Mauroy",
                     "terminus": "CHU - Eurasanté",
-                    "stations": ladder_dir0_stations
+                    "stations": build_ladder_stations(L1_STATIONS_META, l1_station_proj_0, reverse=False)
                 },
                 "1": {
                     "origin": "CHU - Eurasanté",
                     "terminus": "4 Cantons Stade P. Mauroy",
-                    "stations": ladder_dir1_stations
+                    "stations": build_ladder_stations(L1_STATIONS_META, l1_station_proj_1, reverse=True)
+                }
+            }
+        },
+        "ME2": {
+            "id": "ME2",
+            "short_name": "2",
+            "color": "#E30613",
+            "text_color": "#FFFFFF",
+            "directions": {
+                "0": {
+                    "origin": "C.H. Dron",
+                    "terminus": "Saint Philibert",
+                    "stations": build_ladder_stations(L2_STATIONS_META, l2_station_proj_0, reverse=True)
+                },
+                "1": {
+                    "origin": "Saint Philibert",
+                    "terminus": "C.H. Dron",
+                    "stations": build_ladder_stations(L2_STATIONS_META, l2_station_proj_1, reverse=False)
                 }
             }
         }
@@ -618,7 +761,7 @@ def build_lille_artifacts(
         "source": {
             "provider": "Ilévia / MEL",
             "classification": {
-                "souterrain": "100% réseau métro Ligne 1 Lille (tunnel foré, tranchée couverte et section protégée)",
+                "souterrain": "100% réseau métro Lignes 1 & 2 Lille (tunnel foré, tranchée couverte et section protégée)",
                 "aerien": "néant"
             }
         },
@@ -645,7 +788,7 @@ def build_lille_artifacts(
         json.dump(feed_fingerprint_artifact, f, indent=2, ensure_ascii=False)
 
     # =========================================================================
-    # Étape 11 : rolling-stock.json (VAL 208 et rame 52m, verified: false)
+    # Étape 11 : rolling-stock.json
     # =========================================================================
     rolling_stock_artifact = {
         "asset_families": {
@@ -706,6 +849,22 @@ def build_lille_artifacts(
                 "driverless": True,
                 "source": "Exploitation parc mixte Ligne 1 Ilévia",
                 "verified": False
+            },
+            "ME2": {
+                "line_id": "ME2",
+                "short_name": "2",
+                "model_id": "VAL_208",
+                "name": "VAL 208 (26 m)",
+                "cars_count": 2,
+                "total_length_m": 26.0,
+                "car_length_m": 13.0,
+                "bogie_centres_m": 8.0,
+                "width_m": 2.06,
+                "inter_car_gap_m": 0.0,
+                "drive_type": "tire",
+                "driverless": True,
+                "source": "Exploitation Ligne 2 Ilévia VAL 208",
+                "verified": False
             }
         }
     }
@@ -737,13 +896,14 @@ def build_lille_artifacts(
         if fpath.exists():
             artifact_sizes[fname] = fpath.stat().st_size
 
-    print("✅ Ingestion de Lille (Ligne 1) terminée avec succès !")
+    print("✅ Ingestion de Lille (Lignes 1 et 2) terminée avec succès !")
     return {
         "trips_count": len(schedule_trips),
+        "l1_trips_count": l1_count,
+        "l2_trips_count": l2_count,
         "max_arrival_time": max_arrival_str,
         "max_station_to_track_dist_m": round(max_dist_to_track, 2),
-        "artifact_sizes": artifact_sizes,
-        "station_distances": station_distances_report
+        "artifact_sizes": artifact_sizes
     }
 
 
@@ -760,8 +920,10 @@ if __name__ == "__main__":
         web_dir=web_directory,
         target_date="20260930"
     )
-    print("\n--- RÉSULTATS PORTE 1 ---")
-    print(f"Courses: {res['trips_count']}")
+    print("\n--- RÉSULTATS LIGNES 1 & 2 ---")
+    print(f"Courses Ligne 1: {res['l1_trips_count']}")
+    print(f"Courses Ligne 2: {res['l2_trips_count']}")
+    print(f"Total courses: {res['trips_count']}")
     print(f"Heure GTFS max: {res['max_arrival_time']}")
     print(f"Distance station-tracé max: {res['max_station_to_track_dist_m']} m")
     print(f"Poids des artefacts:")

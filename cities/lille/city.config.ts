@@ -44,7 +44,7 @@ export const lilleConfig: CityConfig = {
     sourceUrl: 'https://media.ilevia.fr/opendata/gtfs.zip',
     agencyFilter: ['ILE'],
     routeTypes: [1],
-    routeIdAllowlist: ['ME1'],
+    routeIdAllowlist: ['ME1', 'ME2'],
     scheduleModel: 'trip-based',
     validityCheck: 'calendar'
   },

@@ -12,5 +12,19 @@
     },
     "measured_length_km": 12.58,
     "elevation_offset": 0.0
+  },
+  {
+    "id": "ME2",
+    "short_name": "2",
+    "long_name": "Ligne 2",
+    "color": "#E30613",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Saint Philibert",
+      "1": "C.H. Dron"
+    },
+    "measured_length_km": 31.38,
+    "elevation_offset": 0.0
   }
 ]

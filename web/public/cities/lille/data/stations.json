@@ -117,7 +117,8 @@
       50.637369
     ],
     "lines": [
-      "ME1"
+      "ME1",
+      "ME2"
     ]
   },
   {
@@ -172,7 +173,8 @@
       50.618442
     ],
     "lines": [
-      "ME1"
+      "ME1",
+      "ME2"
     ]
   },
   {
@@ -195,6 +197,468 @@
     ],
     "lines": [
       "ME1"
+    ]
+  },
+  {
+    "id": "STATION_HSP",
+    "name": "Saint Philibert",
+    "coordinates": [
+      2.974299,
+      50.652084
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_BRG",
+    "name": "Bourg",
+    "coordinates": [
+      2.985195,
+      50.645561
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MDE",
+    "name": "Maison Des Enfants",
+    "coordinates": [
+      2.994876,
+      50.646261
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MIT",
+    "name": "Mitterie",
+    "coordinates": [
+      3.007521,
+      50.64673
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PSU",
+    "name": "Pont Supérieur",
+    "coordinates": [
+      3.013769,
+      50.644421
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_LLO",
+    "name": "Lomme-Lambersart",
+    "coordinates": [
+      3.018622,
+      50.640787
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_CAN",
+    "name": "Canteleu Euratechnologies",
+    "coordinates": [
+      3.024661,
+      50.637128
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_LPC",
+    "name": "Bois Blancs",
+    "coordinates": [
+      3.030521,
+      50.634356
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PTL",
+    "name": "Port De Lille",
+    "coordinates": [
+      3.035712,
+      50.629949
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_COR",
+    "name": "Cormontaigne",
+    "coordinates": [
+      3.040292,
+      50.626223
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MNT",
+    "name": "Montebello",
+    "coordinates": [
+      3.045471,
+      50.622029
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PRR",
+    "name": "Porte D'Arras",
+    "coordinates": [
+      3.062298,
+      50.617603
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PDO",
+    "name": "Porte De Douai",
+    "coordinates": [
+      3.072143,
+      50.618056
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PDV",
+    "name": "Porte De Valenciennes",
+    "coordinates": [
+      3.07888,
+      50.621061
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_LGP",
+    "name": "Lille Grand Palais",
+    "coordinates": [
+      3.074941,
+      50.629647
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MDL",
+    "name": "Mairie De Lille",
+    "coordinates": [
+      3.070634,
+      50.632802
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_EUR",
+    "name": "Gare Lille Europe",
+    "coordinates": [
+      3.076238,
+      50.639376
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_SMP",
+    "name": "Saint Maurice Pellevoisin",
+    "coordinates": [
+      3.088637,
+      50.642333
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MSA",
+    "name": "Mons Sarts",
+    "coordinates": [
+      3.098994,
+      50.642081
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MDM",
+    "name": "Mairie De Mons",
+    "coordinates": [
+      3.109771,
+      50.64229
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_FOR",
+    "name": "Fort De Mons",
+    "coordinates": [
+      3.119422,
+      50.642048
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PRS",
+    "name": "Les Prés Edgard Pisani",
+    "coordinates": [
+      3.126449,
+      50.650105
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_JRS",
+    "name": "Jean Jaurès",
+    "coordinates": [
+      3.134706,
+      50.658485
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PVL",
+    "name": "Wasquehal Pavé De Lille",
+    "coordinates": [
+      3.129958,
+      50.663903
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_WMI",
+    "name": "Wasquehal Hôtel De Ville",
+    "coordinates": [
+      3.131345,
+      50.669801
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_CPL",
+    "name": "Croix Centre",
+    "coordinates": [
+      3.146132,
+      50.674679
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_CXM",
+    "name": "Mairie De Croix",
+    "coordinates": [
+      3.155971,
+      50.679294
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_EPL",
+    "name": "Epeule Montesquieu",
+    "coordinates": [
+      3.163457,
+      50.684212
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_CDG",
+    "name": "Roubaix Charles De Gaulle",
+    "coordinates": [
+      3.169768,
+      50.686919
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_ROU",
+    "name": "Eurotéléport",
+    "coordinates": [
+      3.179314,
+      50.690837
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_RXP",
+    "name": "Roubaix Grand Place",
+    "coordinates": [
+      3.174718,
+      50.691813
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MGR",
+    "name": "Gare Jean Lebas Roubaix",
+    "coordinates": [
+      3.163936,
+      50.695422
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_ALS",
+    "name": "Alsace Plaine Images",
+    "coordinates": [
+      3.160999,
+      50.70073
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_MER",
+    "name": "Mercure",
+    "coordinates": [
+      3.160457,
+      50.704775
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_CTL",
+    "name": "Carliers",
+    "coordinates": [
+      3.160186,
+      50.711023
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_SEB",
+    "name": "Gare De Tourcoing",
+    "coordinates": [
+      3.162758,
+      50.717142
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_TOU",
+    "name": "Tourcoing Centre",
+    "coordinates": [
+      3.160101,
+      50.720938
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_COB",
+    "name": "Colbert",
+    "coordinates": [
+      3.15671,
+      50.725792
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_TPH",
+    "name": "Phalempins",
+    "coordinates": [
+      3.157882,
+      50.732424
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_PTN",
+    "name": "Pont De Neuville",
+    "coordinates": [
+      3.170765,
+      50.736807
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_TBO",
+    "name": "Bourgogne",
+    "coordinates": [
+      3.17966,
+      50.739486
+    ],
+    "lines": [
+      "ME2"
+    ]
+  },
+  {
+    "id": "STATION_DRO",
+    "name": "C.H. Dron",
+    "coordinates": [
+      3.180963,
+      50.743439
+    ],
+    "lines": [
+      "ME2"
     ]
   }
 ]

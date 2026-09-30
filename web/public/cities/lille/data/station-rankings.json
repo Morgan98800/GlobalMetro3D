@@ -1,6 +1,14 @@
 {
   "weekday": [
     {
+      "name": "Gare Lille Flandres",
+      "count": 1833
+    },
+    {
+      "name": "Porte Des Postes",
+      "count": 1831
+    },
+    {
       "name": "Chu - Eurasanté",
       "count": 919
     },
@@ -9,10 +17,6 @@
       "count": 919
     },
     {
-      "name": "Porte Des Postes",
-      "count": 919
-    },
-    {
       "name": "Wazemmes",
       "count": 919
     },
@@ -26,10 +30,6 @@
     },
     {
       "name": "Rihour",
-      "count": 919
-    },
-    {
-      "name": "Gare Lille Flandres",
       "count": 919
     },
     {
@@ -71,10 +71,354 @@
     {
       "name": "4 Cantons Stade P. Mauroy",
       "count": 919
+    },
+    {
+      "name": "Fort De Mons",
+      "count": 914
+    },
+    {
+      "name": "Mairie De Mons",
+      "count": 914
+    },
+    {
+      "name": "Mons Sarts",
+      "count": 914
+    },
+    {
+      "name": "Saint Maurice Pellevoisin",
+      "count": 914
+    },
+    {
+      "name": "Gare Lille Europe",
+      "count": 914
+    },
+    {
+      "name": "Roubaix Grand Place",
+      "count": 913
+    },
+    {
+      "name": "Eurotéléport",
+      "count": 913
+    },
+    {
+      "name": "Roubaix Charles De Gaulle",
+      "count": 913
+    },
+    {
+      "name": "Epeule Montesquieu",
+      "count": 913
+    },
+    {
+      "name": "Mairie De Croix",
+      "count": 913
+    },
+    {
+      "name": "Croix Centre",
+      "count": 913
+    },
+    {
+      "name": "Wasquehal Hôtel De Ville",
+      "count": 913
+    },
+    {
+      "name": "Wasquehal Pavé De Lille",
+      "count": 913
+    },
+    {
+      "name": "Jean Jaurès",
+      "count": 913
+    },
+    {
+      "name": "Les Prés Edgard Pisani",
+      "count": 913
+    },
+    {
+      "name": "Mairie De Lille",
+      "count": 912
+    },
+    {
+      "name": "Lille Grand Palais",
+      "count": 912
+    },
+    {
+      "name": "Porte De Valenciennes",
+      "count": 912
+    },
+    {
+      "name": "Porte De Douai",
+      "count": 912
+    },
+    {
+      "name": "Porte D'Arras",
+      "count": 912
+    },
+    {
+      "name": "Montebello",
+      "count": 912
+    },
+    {
+      "name": "Cormontaigne",
+      "count": 912
+    },
+    {
+      "name": "Port De Lille",
+      "count": 912
+    },
+    {
+      "name": "Bois Blancs",
+      "count": 912
+    },
+    {
+      "name": "Canteleu Euratechnologies",
+      "count": 912
+    },
+    {
+      "name": "Lomme-Lambersart",
+      "count": 912
+    },
+    {
+      "name": "C.H. Dron",
+      "count": 705
+    },
+    {
+      "name": "Bourgogne",
+      "count": 705
+    },
+    {
+      "name": "Pont De Neuville",
+      "count": 705
+    },
+    {
+      "name": "Phalempins",
+      "count": 705
+    },
+    {
+      "name": "Colbert",
+      "count": 705
+    },
+    {
+      "name": "Tourcoing Centre",
+      "count": 705
+    },
+    {
+      "name": "Gare De Tourcoing",
+      "count": 705
+    },
+    {
+      "name": "Carliers",
+      "count": 705
+    },
+    {
+      "name": "Mercure",
+      "count": 705
+    },
+    {
+      "name": "Alsace Plaine Images",
+      "count": 705
+    },
+    {
+      "name": "Gare Jean Lebas Roubaix",
+      "count": 705
+    },
+    {
+      "name": "Pont Supérieur",
+      "count": 704
+    },
+    {
+      "name": "Mitterie",
+      "count": 704
+    },
+    {
+      "name": "Maison Des Enfants",
+      "count": 704
+    },
+    {
+      "name": "Bourg",
+      "count": 704
+    },
+    {
+      "name": "Saint Philibert",
+      "count": 704
     }
   ],
   "saturday": [
     {
+      "name": "Gare Lille Flandres",
+      "count": 1398
+    },
+    {
+      "name": "Porte Des Postes",
+      "count": 1396
+    },
+    {
+      "name": "Gare Lille Europe",
+      "count": 743
+    },
+    {
+      "name": "Saint Maurice Pellevoisin",
+      "count": 743
+    },
+    {
+      "name": "Mons Sarts",
+      "count": 743
+    },
+    {
+      "name": "Mairie De Mons",
+      "count": 743
+    },
+    {
+      "name": "Fort De Mons",
+      "count": 743
+    },
+    {
+      "name": "Les Prés Edgard Pisani",
+      "count": 742
+    },
+    {
+      "name": "Jean Jaurès",
+      "count": 742
+    },
+    {
+      "name": "Wasquehal Pavé De Lille",
+      "count": 742
+    },
+    {
+      "name": "Wasquehal Hôtel De Ville",
+      "count": 742
+    },
+    {
+      "name": "Croix Centre",
+      "count": 742
+    },
+    {
+      "name": "Mairie De Croix",
+      "count": 742
+    },
+    {
+      "name": "Epeule Montesquieu",
+      "count": 742
+    },
+    {
+      "name": "Roubaix Charles De Gaulle",
+      "count": 742
+    },
+    {
+      "name": "Eurotéléport",
+      "count": 742
+    },
+    {
+      "name": "Roubaix Grand Place",
+      "count": 742
+    },
+    {
+      "name": "Gare Jean Lebas Roubaix",
+      "count": 742
+    },
+    {
+      "name": "Alsace Plaine Images",
+      "count": 742
+    },
+    {
+      "name": "Mercure",
+      "count": 742
+    },
+    {
+      "name": "Carliers",
+      "count": 742
+    },
+    {
+      "name": "Gare De Tourcoing",
+      "count": 742
+    },
+    {
+      "name": "Tourcoing Centre",
+      "count": 742
+    },
+    {
+      "name": "Colbert",
+      "count": 742
+    },
+    {
+      "name": "Phalempins",
+      "count": 742
+    },
+    {
+      "name": "Pont De Neuville",
+      "count": 742
+    },
+    {
+      "name": "Bourgogne",
+      "count": 742
+    },
+    {
+      "name": "C.H. Dron",
+      "count": 742
+    },
+    {
+      "name": "Saint Philibert",
+      "count": 741
+    },
+    {
+      "name": "Bourg",
+      "count": 741
+    },
+    {
+      "name": "Maison Des Enfants",
+      "count": 741
+    },
+    {
+      "name": "Mitterie",
+      "count": 741
+    },
+    {
+      "name": "Pont Supérieur",
+      "count": 741
+    },
+    {
+      "name": "Lomme-Lambersart",
+      "count": 741
+    },
+    {
+      "name": "Canteleu Euratechnologies",
+      "count": 741
+    },
+    {
+      "name": "Bois Blancs",
+      "count": 741
+    },
+    {
+      "name": "Port De Lille",
+      "count": 741
+    },
+    {
+      "name": "Cormontaigne",
+      "count": 741
+    },
+    {
+      "name": "Montebello",
+      "count": 741
+    },
+    {
+      "name": "Porte D'Arras",
+      "count": 741
+    },
+    {
+      "name": "Porte De Douai",
+      "count": 741
+    },
+    {
+      "name": "Porte De Valenciennes",
+      "count": 741
+    },
+    {
+      "name": "Lille Grand Palais",
+      "count": 741
+    },
+    {
+      "name": "Mairie De Lille",
+      "count": 741
+    },
+    {
       "name": "4 Cantons Stade P. Mauroy",
       "count": 655
     },
@@ -115,10 +459,6 @@
       "count": 655
     },
     {
-      "name": "Gare Lille Flandres",
-      "count": 655
-    },
-    {
       "name": "Rihour",
       "count": 655
     },
@@ -132,10 +472,6 @@
     },
     {
       "name": "Wazemmes",
-      "count": 655
-    },
-    {
-      "name": "Porte Des Postes",
       "count": 655
     },
     {
@@ -149,15 +485,187 @@
   ],
   "sunday": [
     {
+      "name": "Porte Des Postes",
+      "count": 945
+    },
+    {
+      "name": "Gare Lille Flandres",
+      "count": 945
+    },
+    {
+      "name": "Saint Philibert",
+      "count": 487
+    },
+    {
+      "name": "Bourg",
+      "count": 487
+    },
+    {
+      "name": "Maison Des Enfants",
+      "count": 487
+    },
+    {
+      "name": "Mitterie",
+      "count": 487
+    },
+    {
+      "name": "Pont Supérieur",
+      "count": 487
+    },
+    {
+      "name": "Lomme-Lambersart",
+      "count": 487
+    },
+    {
+      "name": "Canteleu Euratechnologies",
+      "count": 487
+    },
+    {
+      "name": "Bois Blancs",
+      "count": 487
+    },
+    {
+      "name": "Port De Lille",
+      "count": 487
+    },
+    {
+      "name": "Cormontaigne",
+      "count": 487
+    },
+    {
+      "name": "Montebello",
+      "count": 487
+    },
+    {
+      "name": "Porte D'Arras",
+      "count": 487
+    },
+    {
+      "name": "Porte De Douai",
+      "count": 487
+    },
+    {
+      "name": "Porte De Valenciennes",
+      "count": 487
+    },
+    {
+      "name": "Lille Grand Palais",
+      "count": 487
+    },
+    {
+      "name": "Mairie De Lille",
+      "count": 487
+    },
+    {
+      "name": "Gare Lille Europe",
+      "count": 487
+    },
+    {
+      "name": "Saint Maurice Pellevoisin",
+      "count": 487
+    },
+    {
+      "name": "Mons Sarts",
+      "count": 487
+    },
+    {
+      "name": "Mairie De Mons",
+      "count": 487
+    },
+    {
+      "name": "Fort De Mons",
+      "count": 487
+    },
+    {
+      "name": "Les Prés Edgard Pisani",
+      "count": 487
+    },
+    {
+      "name": "Jean Jaurès",
+      "count": 487
+    },
+    {
+      "name": "Wasquehal Pavé De Lille",
+      "count": 487
+    },
+    {
+      "name": "Wasquehal Hôtel De Ville",
+      "count": 487
+    },
+    {
+      "name": "Croix Centre",
+      "count": 487
+    },
+    {
+      "name": "Mairie De Croix",
+      "count": 487
+    },
+    {
+      "name": "Epeule Montesquieu",
+      "count": 487
+    },
+    {
+      "name": "Roubaix Charles De Gaulle",
+      "count": 487
+    },
+    {
+      "name": "Eurotéléport",
+      "count": 487
+    },
+    {
+      "name": "Roubaix Grand Place",
+      "count": 487
+    },
+    {
+      "name": "Gare Jean Lebas Roubaix",
+      "count": 487
+    },
+    {
+      "name": "Alsace Plaine Images",
+      "count": 487
+    },
+    {
+      "name": "Mercure",
+      "count": 487
+    },
+    {
+      "name": "Carliers",
+      "count": 487
+    },
+    {
+      "name": "Gare De Tourcoing",
+      "count": 487
+    },
+    {
+      "name": "Tourcoing Centre",
+      "count": 487
+    },
+    {
+      "name": "Colbert",
+      "count": 487
+    },
+    {
+      "name": "Phalempins",
+      "count": 487
+    },
+    {
+      "name": "Pont De Neuville",
+      "count": 487
+    },
+    {
+      "name": "Bourgogne",
+      "count": 487
+    },
+    {
+      "name": "C.H. Dron",
+      "count": 487
+    },
+    {
       "name": "Chu - Eurasanté",
       "count": 458
     },
     {
       "name": "Chu - Centre O. Lambret",
-      "count": 458
-    },
-    {
-      "name": "Porte Des Postes",
       "count": 458
     },
     {
@@ -174,10 +682,6 @@
     },
     {
       "name": "Rihour",
-      "count": 458
-    },
-    {
-      "name": "Gare Lille Flandres",
       "count": 458
     },
     {

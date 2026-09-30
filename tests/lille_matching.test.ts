@@ -107,7 +107,7 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       const schedPath = path.resolve(__dirname, '../cities/lille/data/schedule.json');
       const schedData = JSON.parse(fs.readFileSync(schedPath, 'utf8'));
       const activeTrips: SchedTrip[] = schedData.trips
-        .filter((t: any) => t[4] <= 30600 && 30600 <= t[5])
+        .filter((t: any) => t[1] === 'ME1' && t[4] <= 30600 && 30600 <= t[5])
         .map((t: any) => ({
           tripId: String(t[0]),
           lineId: t[1],
@@ -138,6 +138,44 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       expect(outcome.receivedCount).toBe(10);
       expect(outcome.matchedCount).toBe(10);
       expect(outcome.matchRate).toBe(1.0); // 100% d’appariement par trip_id stable
+      expect(outcome.discardedNonMonotonicCount).toBe(0);
+    });
+
+    it('identifie 68 rames actives pour la Ligne 2 et les apparie à 100% par trip_id', () => {
+      const schedPath = path.resolve(__dirname, '../web/public/cities/lille/data/schedule.json');
+      const schedData = JSON.parse(fs.readFileSync(schedPath, 'utf-8'));
+
+      const activeTripsL2: SchedTrip[] = schedData.trips
+        .filter((t: any[]) => t[1] === 'ME2' && t[4] <= 30600 && t[5] >= 30600)
+        .map((t: any[]) => ({
+          tripId: t[0],
+          lineId: t[1],
+          dir: t[2],
+          shapeId: t[3],
+          stops: t[7].map((s: any[]) => ({
+            arr: s[0],
+            dep: s[1],
+            dist: s[2],
+            stopId: schedData.stations[s[3]]
+          }))
+        }));
+
+      expect(activeTripsL2.length).toBe(68);
+
+      const sampleUpdates: IleviaTripUpdate[] = activeTripsL2.slice(0, 15).map((t, idx) => ({
+        id: `sample_l2_${idx}`,
+        trip: { tripId: t.tripId, routeId: 'ME2' },
+        stopTimeUpdates: [
+          { stopSequence: 1, stopId: 'TEST_STOP_L2', arrival: { time: 30650 } }
+        ]
+      }));
+
+      const matcher = new IleviaMatcher();
+      const outcome = matcher.match(sampleUpdates, activeTripsL2, 30600, 'ME2');
+
+      expect(outcome.receivedCount).toBe(15);
+      expect(outcome.matchedCount).toBe(15);
+      expect(outcome.matchRate).toBe(1.0);
       expect(outcome.discardedNonMonotonicCount).toBe(0);
     });
   });

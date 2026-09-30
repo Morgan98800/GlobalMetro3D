@@ -127,8 +127,13 @@
               3.071085,
               50.637369
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
           },
           {
             "id": "STATION_RIH",
@@ -182,8 +187,13 @@
               3.050197,
               50.618442
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
           },
           {
             "id": "STATION_CHR",
@@ -243,8 +253,13 @@
               3.050197,
               50.618442
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
           },
           {
             "id": "STATION_WAZ",
@@ -298,8 +313,13 @@
               3.071085,
               50.637369
             ],
-            "is_hub": false,
-            "transfers": []
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
           },
           {
             "id": "STATION_CIE",
@@ -407,6 +427,1014 @@
             "coordinates": [
               3.139045,
               50.605413
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "ME2": {
+    "id": "ME2",
+    "short_name": "2",
+    "color": "#E30613",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "C.H. Dron",
+        "terminus": "Saint Philibert",
+        "stations": [
+          {
+            "id": "STATION_DRO",
+            "name": "C.H. Dron",
+            "distance_m": 0.0,
+            "coordinates": [
+              3.180963,
+              50.743439
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TBO",
+            "name": "Bourgogne",
+            "distance_m": 488.0,
+            "coordinates": [
+              3.17966,
+              50.739486
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PTN",
+            "name": "Pont De Neuville",
+            "distance_m": 1196.4,
+            "coordinates": [
+              3.170765,
+              50.736807
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TPH",
+            "name": "Phalempins",
+            "distance_m": 2272.6,
+            "coordinates": [
+              3.157882,
+              50.732424
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_COB",
+            "name": "Colbert",
+            "distance_m": 3027.5,
+            "coordinates": [
+              3.15671,
+              50.725792
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TOU",
+            "name": "Tourcoing Centre",
+            "distance_m": 3684.1,
+            "coordinates": [
+              3.160101,
+              50.720938
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_SEB",
+            "name": "Gare De Tourcoing",
+            "distance_m": 4146.2,
+            "coordinates": [
+              3.162758,
+              50.717142
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CTL",
+            "name": "Carliers",
+            "distance_m": 4900.7,
+            "coordinates": [
+              3.160186,
+              50.711023
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MER",
+            "name": "Mercure",
+            "distance_m": 5607.8,
+            "coordinates": [
+              3.160457,
+              50.704775
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ALS",
+            "name": "Alsace Plaine Images",
+            "distance_m": 6073.8,
+            "coordinates": [
+              3.160999,
+              50.70073
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MGR",
+            "name": "Gare Jean Lebas Roubaix",
+            "distance_m": 6733.9,
+            "coordinates": [
+              3.163936,
+              50.695422
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_RXP",
+            "name": "Roubaix Grand Place",
+            "distance_m": 7637.3,
+            "coordinates": [
+              3.174718,
+              50.691813
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ROU",
+            "name": "Eurotéléport",
+            "distance_m": 8039.8,
+            "coordinates": [
+              3.179314,
+              50.690837
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CDG",
+            "name": "Roubaix Charles De Gaulle",
+            "distance_m": 8971.2,
+            "coordinates": [
+              3.169768,
+              50.686919
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_EPL",
+            "name": "Epeule Montesquieu",
+            "distance_m": 9518.9,
+            "coordinates": [
+              3.163457,
+              50.684212
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CXM",
+            "name": "Mairie De Croix",
+            "distance_m": 10281.1,
+            "coordinates": [
+              3.155971,
+              50.679294
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CPL",
+            "name": "Croix Centre",
+            "distance_m": 11178.7,
+            "coordinates": [
+              3.146132,
+              50.674679
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_WMI",
+            "name": "Wasquehal Hôtel De Ville",
+            "distance_m": 12436.9,
+            "coordinates": [
+              3.131345,
+              50.669801
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PVL",
+            "name": "Wasquehal Pavé De Lille",
+            "distance_m": 13194.2,
+            "coordinates": [
+              3.129958,
+              50.663903
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_JRS",
+            "name": "Jean Jaurès",
+            "distance_m": 13937.7,
+            "coordinates": [
+              3.134706,
+              50.658485
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PRS",
+            "name": "Les Prés Edgard Pisani",
+            "distance_m": 15104.7,
+            "coordinates": [
+              3.126449,
+              50.650105
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_FOR",
+            "name": "Fort De Mons",
+            "distance_m": 16168.7,
+            "coordinates": [
+              3.119422,
+              50.642048
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MDM",
+            "name": "Mairie De Mons",
+            "distance_m": 16851.5,
+            "coordinates": [
+              3.109771,
+              50.64229
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MSA",
+            "name": "Mons Sarts",
+            "distance_m": 17613.6,
+            "coordinates": [
+              3.098994,
+              50.642081
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_SMP",
+            "name": "Saint Maurice Pellevoisin",
+            "distance_m": 18391.8,
+            "coordinates": [
+              3.088637,
+              50.642333
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_EUR",
+            "name": "Gare Lille Europe",
+            "distance_m": 19349.2,
+            "coordinates": [
+              3.076238,
+              50.639376
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 19781.5,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MDL",
+            "name": "Mairie De Lille",
+            "distance_m": 20459.3,
+            "coordinates": [
+              3.070634,
+              50.632802
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LGP",
+            "name": "Lille Grand Palais",
+            "distance_m": 20945.8,
+            "coordinates": [
+              3.074941,
+              50.629647
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDV",
+            "name": "Porte De Valenciennes",
+            "distance_m": 21956.5,
+            "coordinates": [
+              3.07888,
+              50.621061
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDO",
+            "name": "Porte De Douai",
+            "distance_m": 22579.7,
+            "coordinates": [
+              3.072143,
+              50.618056
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PRR",
+            "name": "Porte D'Arras",
+            "distance_m": 23277.0,
+            "coordinates": [
+              3.062298,
+              50.617603
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDP",
+            "name": "Porte Des Postes",
+            "distance_m": 24136.8,
+            "coordinates": [
+              3.050197,
+              50.618442
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_MNT",
+            "name": "Montebello",
+            "distance_m": 24665.2,
+            "coordinates": [
+              3.045471,
+              50.622029
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_COR",
+            "name": "Cormontaigne",
+            "distance_m": 25257.4,
+            "coordinates": [
+              3.040292,
+              50.626223
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PTL",
+            "name": "Port De Lille",
+            "distance_m": 25782.9,
+            "coordinates": [
+              3.035712,
+              50.629949
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LPC",
+            "name": "Bois Blancs",
+            "distance_m": 26408.2,
+            "coordinates": [
+              3.030521,
+              50.634356
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CAN",
+            "name": "Canteleu Euratechnologies",
+            "distance_m": 26945.7,
+            "coordinates": [
+              3.024661,
+              50.637128
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LLO",
+            "name": "Lomme-Lambersart",
+            "distance_m": 27548.3,
+            "coordinates": [
+              3.018622,
+              50.640787
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PSU",
+            "name": "Pont Supérieur",
+            "distance_m": 28083.7,
+            "coordinates": [
+              3.013769,
+              50.644421
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MIT",
+            "name": "Mitterie",
+            "distance_m": 28596.8,
+            "coordinates": [
+              3.007521,
+              50.64673
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MDE",
+            "name": "Maison Des Enfants",
+            "distance_m": 29502.7,
+            "coordinates": [
+              2.994876,
+              50.646261
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_BRG",
+            "name": "Bourg",
+            "distance_m": 30190.0,
+            "coordinates": [
+              2.985195,
+              50.645561
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_HSP",
+            "name": "Saint Philibert",
+            "distance_m": 31335.0,
+            "coordinates": [
+              2.974299,
+              50.652084
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Saint Philibert",
+        "terminus": "C.H. Dron",
+        "stations": [
+          {
+            "id": "STATION_HSP",
+            "name": "Saint Philibert",
+            "distance_m": 34.6,
+            "coordinates": [
+              2.974299,
+              50.652084
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_BRG",
+            "name": "Bourg",
+            "distance_m": 1184.0,
+            "coordinates": [
+              2.985195,
+              50.645561
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MDE",
+            "name": "Maison Des Enfants",
+            "distance_m": 1872.0,
+            "coordinates": [
+              2.994876,
+              50.646261
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MIT",
+            "name": "Mitterie",
+            "distance_m": 2776.4,
+            "coordinates": [
+              3.007521,
+              50.64673
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PSU",
+            "name": "Pont Supérieur",
+            "distance_m": 3289.3,
+            "coordinates": [
+              3.013769,
+              50.644421
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LLO",
+            "name": "Lomme-Lambersart",
+            "distance_m": 3823.1,
+            "coordinates": [
+              3.018622,
+              50.640787
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CAN",
+            "name": "Canteleu Euratechnologies",
+            "distance_m": 4426.9,
+            "coordinates": [
+              3.024661,
+              50.637128
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LPC",
+            "name": "Bois Blancs",
+            "distance_m": 4963.6,
+            "coordinates": [
+              3.030521,
+              50.634356
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PTL",
+            "name": "Port De Lille",
+            "distance_m": 5589.0,
+            "coordinates": [
+              3.035712,
+              50.629949
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_COR",
+            "name": "Cormontaigne",
+            "distance_m": 6114.3,
+            "coordinates": [
+              3.040292,
+              50.626223
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MNT",
+            "name": "Montebello",
+            "distance_m": 6706.8,
+            "coordinates": [
+              3.045471,
+              50.622029
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDP",
+            "name": "Porte Des Postes",
+            "distance_m": 7236.5,
+            "coordinates": [
+              3.050197,
+              50.618442
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_PRR",
+            "name": "Porte D'Arras",
+            "distance_m": 8097.6,
+            "coordinates": [
+              3.062298,
+              50.617603
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDO",
+            "name": "Porte De Douai",
+            "distance_m": 8795.6,
+            "coordinates": [
+              3.072143,
+              50.618056
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDV",
+            "name": "Porte De Valenciennes",
+            "distance_m": 9421.9,
+            "coordinates": [
+              3.07888,
+              50.621061
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LGP",
+            "name": "Lille Grand Palais",
+            "distance_m": 10434.1,
+            "coordinates": [
+              3.074941,
+              50.629647
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MDL",
+            "name": "Mairie De Lille",
+            "distance_m": 10920.8,
+            "coordinates": [
+              3.070634,
+              50.632802
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 11594.7,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "line_id": "ME2",
+                "name": "Métro"
+              }
+            ]
+          },
+          {
+            "id": "STATION_EUR",
+            "name": "Gare Lille Europe",
+            "distance_m": 12026.1,
+            "coordinates": [
+              3.076238,
+              50.639376
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_SMP",
+            "name": "Saint Maurice Pellevoisin",
+            "distance_m": 12982.3,
+            "coordinates": [
+              3.088637,
+              50.642333
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MSA",
+            "name": "Mons Sarts",
+            "distance_m": 13760.8,
+            "coordinates": [
+              3.098994,
+              50.642081
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MDM",
+            "name": "Mairie De Mons",
+            "distance_m": 14522.1,
+            "coordinates": [
+              3.109771,
+              50.64229
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_FOR",
+            "name": "Fort De Mons",
+            "distance_m": 15204.6,
+            "coordinates": [
+              3.119422,
+              50.642048
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PRS",
+            "name": "Les Prés Edgard Pisani",
+            "distance_m": 16277.3,
+            "coordinates": [
+              3.126449,
+              50.650105
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_JRS",
+            "name": "Jean Jaurès",
+            "distance_m": 17445.1,
+            "coordinates": [
+              3.134706,
+              50.658485
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PVL",
+            "name": "Wasquehal Pavé De Lille",
+            "distance_m": 18190.0,
+            "coordinates": [
+              3.129958,
+              50.663903
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_WMI",
+            "name": "Wasquehal Hôtel De Ville",
+            "distance_m": 18943.3,
+            "coordinates": [
+              3.131345,
+              50.669801
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CPL",
+            "name": "Croix Centre",
+            "distance_m": 20200.7,
+            "coordinates": [
+              3.146132,
+              50.674679
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CXM",
+            "name": "Mairie De Croix",
+            "distance_m": 21099.6,
+            "coordinates": [
+              3.155971,
+              50.679294
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_EPL",
+            "name": "Epeule Montesquieu",
+            "distance_m": 21861.3,
+            "coordinates": [
+              3.163457,
+              50.684212
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CDG",
+            "name": "Roubaix Charles De Gaulle",
+            "distance_m": 22407.7,
+            "coordinates": [
+              3.169768,
+              50.686919
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ROU",
+            "name": "Eurotéléport",
+            "distance_m": 23344.1,
+            "coordinates": [
+              3.179314,
+              50.690837
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_RXP",
+            "name": "Roubaix Grand Place",
+            "distance_m": 23750.8,
+            "coordinates": [
+              3.174718,
+              50.691813
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MGR",
+            "name": "Gare Jean Lebas Roubaix",
+            "distance_m": 24651.6,
+            "coordinates": [
+              3.163936,
+              50.695422
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_ALS",
+            "name": "Alsace Plaine Images",
+            "distance_m": 25309.1,
+            "coordinates": [
+              3.160999,
+              50.70073
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MER",
+            "name": "Mercure",
+            "distance_m": 25775.6,
+            "coordinates": [
+              3.160457,
+              50.704775
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CTL",
+            "name": "Carliers",
+            "distance_m": 26480.4,
+            "coordinates": [
+              3.160186,
+              50.711023
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_SEB",
+            "name": "Gare De Tourcoing",
+            "distance_m": 27237.6,
+            "coordinates": [
+              3.162758,
+              50.717142
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TOU",
+            "name": "Tourcoing Centre",
+            "distance_m": 27700.0,
+            "coordinates": [
+              3.160101,
+              50.720938
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_COB",
+            "name": "Colbert",
+            "distance_m": 28354.5,
+            "coordinates": [
+              3.15671,
+              50.725792
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TPH",
+            "name": "Phalempins",
+            "distance_m": 29108.4,
+            "coordinates": [
+              3.157882,
+              50.732424
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PTN",
+            "name": "Pont De Neuville",
+            "distance_m": 30182.9,
+            "coordinates": [
+              3.170765,
+              50.736807
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TBO",
+            "name": "Bourgogne",
+            "distance_m": 30891.7,
+            "coordinates": [
+              3.17966,
+              50.739486
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_DRO",
+            "name": "C.H. Dron",
+            "distance_m": 31381.1,
+            "coordinates": [
+              3.180963,
+              50.743439
             ],
             "is_hub": false,
             "transfers": []

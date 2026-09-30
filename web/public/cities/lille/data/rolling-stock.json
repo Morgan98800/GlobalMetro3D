@@ -57,6 +57,22 @@
       "driverless": true,
       "source": "Exploitation parc mixte Ligne 1 Ilévia",
       "verified": false
+    },
+    "ME2": {
+      "line_id": "ME2",
+      "short_name": "2",
+      "model_id": "VAL_208",
+      "name": "VAL 208 (26 m)",
+      "cars_count": 2,
+      "total_length_m": 26.0,
+      "car_length_m": 13.0,
+      "bogie_centres_m": 8.0,
+      "width_m": 2.06,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": true,
+      "source": "Exploitation Ligne 2 Ilévia VAL 208",
+      "verified": false
     }
   }
 }

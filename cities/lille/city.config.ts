@@ -58,8 +58,8 @@ export const lilleConfig: CityConfig = {
     bounds: [[2.95, 50.55], [3.25, 50.75]]
   },
   realtime: {
-    provider: 'none', // Mode théorique pour la Phase 1 (l'adaptateur sera activé en Phase 3)
-    capability: { kind: 'service-status-only' },
+    provider: 'ilevia-gtfsrt' as any,
+    capability: { kind: 'arrival-predictions' },
     pollIntervalMs: 30000,
     endpoints: {
       relay: '/api/lille-rt'

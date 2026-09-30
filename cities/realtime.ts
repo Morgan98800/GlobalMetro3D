@@ -3,6 +3,7 @@ import type { CityConfig, CityRealtimeConfig, RealtimeProvider } from '@core/con
 import { PrimRealtimeAdapter } from './paris/rt/prim_adapter';
 import { StmRealtimeAdapter } from './montreal/rt/stm_adapter';
 import { TflRealtimeAdapter } from './london/rt/tfl_adapter';
+import { IleviaRealtimeAdapter } from './lille/rt/ilevia_adapter';
 
 /**
  * Registre des adaptateurs temps réel.
@@ -14,10 +15,11 @@ import { TflRealtimeAdapter } from './london/rt/tfl_adapter';
  */
 type AdapterFactory = (config: CityRealtimeConfig, apiKey?: string) => RealtimeAdapter;
 
-const FACTORIES: Partial<Record<RealtimeProvider, AdapterFactory>> = {
+const FACTORIES: Partial<Record<RealtimeProvider | 'ilevia-gtfsrt', AdapterFactory>> = {
   'prim': (config, apiKey) => new PrimRealtimeAdapter(config, apiKey),
   'stm-i3': (config) => new StmRealtimeAdapter(config),
-  'tfl-unified': (config) => new TflRealtimeAdapter(config)
+  'tfl-unified': (config) => new TflRealtimeAdapter(config),
+  'ilevia-gtfsrt': (config) => new IleviaRealtimeAdapter(config)
 };
 
 /** Adaptateur inerte : mode purement théorique, aucune requête. */

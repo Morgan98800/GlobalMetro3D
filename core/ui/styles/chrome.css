@@ -43,25 +43,12 @@
   box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
 }
 
-/* Sélecteur de ville multi-villes */
+/* Sélecteur de ville : menu déroulant */
 .topbar__cities {
+  position: relative;
   display: flex;
   align-items: center;
   flex-shrink: 0;
-}
-
-.topbar__cities-list {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-xs);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.topbar__city-item {
-  display: flex;
-  align-items: center;
 }
 
 .topbar__city-btn {
@@ -71,9 +58,9 @@
   height: 32px;
   padding: 0 10px;
   border-radius: var(--r-sm);
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--secondaire);
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  color: var(--texte);
   text-decoration: none;
   font-family: var(--font-title);
   font-size: var(--fs-md);
@@ -85,8 +72,9 @@
 }
 
 .topbar__city-btn:hover {
-  background: var(--eleve);
-  color: var(--texte);
+  background: var(--eleve-hi);
+  border-color: var(--laiton);
+  color: var(--laiton);
 }
 
 .topbar__city-btn:focus-visible {
@@ -94,23 +82,37 @@
   box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
 }
 
-/* État actif : signalée par le REMPLISSAGE (fond plein), avec filet et texte franc */
-.topbar__city-btn.is-active {
-  background: var(--eleve-hi);
-  border-color: var(--laiton);
-  color: var(--texte);
-  font-weight: 600;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
 .topbar__city-btn .topbar__mark {
   width: 16px;
   height: 16px;
+  color: var(--laiton);
 }
 
 .topbar__city-name {
   text-transform: lowercase;
   white-space: nowrap;
+}
+
+.topbar__city-chevron {
+  color: var(--secondaire);
+  transition: transform var(--t-state) var(--ease);
+}
+
+.topbar__city-btn[aria-expanded="true"] .topbar__city-chevron {
+  transform: rotate(180deg);
+}
+
+.topbar__cities-menu {
+  left: 0;
+  right: auto;
+  list-style: none;
+  margin: 0;
+}
+
+.topbar__cities-menu .topbar__menu-item.is-active {
+  background: var(--eleve-hi);
+  color: var(--laiton);
+  font-weight: 600;
 }
 
 .topbar__clock {

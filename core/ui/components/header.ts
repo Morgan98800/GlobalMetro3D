@@ -78,6 +78,9 @@ export class TopBar {
   private searchBtn: HTMLButtonElement;
   private menuBtn!: HTMLButtonElement;
   private dropdownMenu!: HTMLElement;
+  private citiesDropdownTrigger!: HTMLButtonElement;
+  private citiesDropdownNameEl!: HTMLElement;
+  private citiesDropdownMenu!: HTMLElement;
   private buildingsBtn!: HTMLButtonElement;
   private isBuildingsActive: boolean = true;
   private themeBtn!: HTMLButtonElement;
@@ -94,13 +97,38 @@ export class TopBar {
     this.timezone = this.options.timezone || 'Europe/Paris';
     this.displayName = this.options.displayName || 'Paris';
 
-    // Sélecteur de ville (liste accessible avec remplissage pour la ville active)
+    // Sélecteur de ville : menu déroulant
     const citiesNav = document.createElement('nav');
     citiesNav.className = 'topbar__cities';
     citiesNav.setAttribute('aria-label', 'Choix du réseau métropolitain');
 
-    const citiesList = document.createElement('ul');
-    citiesList.className = 'topbar__cities-list';
+    this.citiesDropdownTrigger = document.createElement('button');
+    this.citiesDropdownTrigger.type = 'button';
+    this.citiesDropdownTrigger.className = 'topbar__city-btn';
+    this.citiesDropdownTrigger.setAttribute('aria-haspopup', 'true');
+    this.citiesDropdownTrigger.setAttribute('aria-expanded', 'false');
+    this.citiesDropdownTrigger.setAttribute('aria-label', `Choisir une ville (actuellement : ${this.displayName})`);
+
+    const triggerMark = `
+      <svg class="topbar__mark" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+        <circle cx="12" cy="12" r="5" fill="currentColor"/>
+      </svg>
+    `;
+
+    const chevronSvg = `
+      <svg class="topbar__city-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    `;
+
+    this.citiesDropdownTrigger.innerHTML = `${triggerMark}<span class="topbar__city-name">${this.displayName.toLowerCase()}</span>${chevronSvg}`;
+    this.citiesDropdownNameEl = this.citiesDropdownTrigger.querySelector('.topbar__city-name') as HTMLElement;
+
+    this.citiesDropdownMenu = document.createElement('ul');
+    this.citiesDropdownMenu.className = 'topbar__dropdown-menu topbar__cities-menu';
+    this.citiesDropdownMenu.setAttribute('role', 'menu');
+    this.citiesDropdownMenu.setAttribute('aria-label', 'Réseaux métropolitains disponibles');
 
     const cities = this.options.cities || [
       { id: 'paris', slug: 'paris', displayName: 'paris' },
@@ -110,11 +138,13 @@ export class TopBar {
 
     cities.forEach(city => {
       const li = document.createElement('li');
-      li.className = 'topbar__city-item';
+      li.style.display = 'contents';
+      li.setAttribute('role', 'none');
 
       const link = document.createElement('a');
       link.href = `/${city.slug}`;
-      link.className = 'topbar__city-btn';
+      link.className = 'topbar__menu-item';
+      link.setAttribute('role', 'menuitem');
       link.dataset.cityId = city.id;
       const isActive = city.id === this.activeCityId;
       if (isActive) {
@@ -123,7 +153,7 @@ export class TopBar {
       }
 
       link.innerHTML = `
-        <svg class="topbar__mark" viewBox="0 0 24 24" aria-hidden="true">
+        <svg class="topbar__mark" viewBox="0 0 24 24" aria-hidden="true" style="width: 14px; height: 14px; flex-shrink: 0;">
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
           <circle cx="12" cy="12" r="5" fill="currentColor"/>
         </svg>
@@ -132,16 +162,35 @@ export class TopBar {
 
       link.addEventListener('click', (e) => {
         e.preventDefault();
+        this.closeCitiesMenu();
         if (city.id !== this.activeCityId) {
           this.options.onCitySelect?.(city.id);
         }
       });
 
       li.appendChild(link);
-      citiesList.appendChild(li);
+      this.citiesDropdownMenu.appendChild(li);
     });
 
-    citiesNav.appendChild(citiesList);
+    this.citiesDropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleCitiesMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!citiesNav.contains(e.target as Node)) {
+        this.closeCitiesMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeCitiesMenu();
+      }
+    });
+
+    citiesNav.appendChild(this.citiesDropdownTrigger);
+    citiesNav.appendChild(this.citiesDropdownMenu);
 
     this.clockEl = document.createElement('time');
     this.clockEl.className = 'topbar__clock';
@@ -321,11 +370,29 @@ export class TopBar {
     return this.searchBtn;
   }
 
+  private toggleCitiesMenu(): void {
+    const isOpen = this.citiesDropdownMenu.classList.toggle('is-open');
+    this.citiesDropdownTrigger.setAttribute('aria-expanded', String(isOpen));
+  }
+
+  private closeCitiesMenu(): void {
+    if (this.citiesDropdownMenu && this.citiesDropdownMenu.classList.contains('is-open')) {
+      this.citiesDropdownMenu.classList.remove('is-open');
+      this.citiesDropdownTrigger.setAttribute('aria-expanded', 'false');
+    }
+  }
+
   public setActiveCity(cityId: string, timezone: string, displayName: string): void {
     this.activeCityId = cityId;
     this.timezone = timezone;
     this.displayName = displayName;
-    this.el.querySelectorAll('.topbar__city-btn').forEach(btn => {
+    if (this.citiesDropdownNameEl) {
+      this.citiesDropdownNameEl.textContent = displayName.toLowerCase();
+    }
+    if (this.citiesDropdownTrigger) {
+      this.citiesDropdownTrigger.setAttribute('aria-label', `Choisir une ville (actuellement : ${displayName})`);
+    }
+    this.citiesDropdownMenu.querySelectorAll('.topbar__menu-item').forEach(btn => {
       const el = btn as HTMLAnchorElement;
       const isActive = el.dataset.cityId === cityId;
       el.classList.toggle('is-active', isActive);

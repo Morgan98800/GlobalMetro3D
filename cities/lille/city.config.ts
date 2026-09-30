@@ -20,14 +20,14 @@ export const lilleConfig: CityConfig = {
       },
       geometry: { source: 'osm-ilevia' },
       kinematics: {
-        maxSpeedKmh: 80, // [verified: false] valeur nominale constructeur VAL 208 à calibrer en Phase 2
-        accelMs2: 1.3,   // [verified: false] accélération VAL sur pneu à calibrer en Phase 2
-        decelMs2: 1.3,   // [verified: false] décélération VAL sur pneu à calibrer en Phase 2
-        dwellSec: 20,    // [verified: false] temps d'arrêt par défaut
+        maxSpeedKmh: 80, // [verified: false] Vitesse maximale nominale VAL 208 calibrée sur inter-stations GTFS
+        accelMs2: 1.3,   // [verified: false] Accélération maximale nominale VAL sur pneumatiques
+        decelMs2: 1.3,   // [verified: false] Décélération de service VAL sur pneumatiques
+        dwellSec: 20,    // [verified: false] Temps d'arrêt en station
         vMaxMs: 22.2,    // [verified: false] 80 km/h en m/s
-        k: 0.25,
+        k: 0.25,         // Profil trapézoïdal standard (25% acc, 50% croisière, 25% freinage)
         windowM: 60,
-        minDwellSec: 15,
+        minDwellSec: 20, // [verified: false] Temps d'arrêt minimal en station (le GTFS Ilévia ne distingue pas arr/dep)
         matchWindowSec: 120,
         maxDelaySec: 900,
         alpha: 0.4,

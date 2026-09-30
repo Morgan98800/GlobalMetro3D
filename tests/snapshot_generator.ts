@@ -260,6 +260,7 @@ export function computeMontrealSnapshot(baseDir: string = process.cwd()): Montre
 }
 
 export const SNAPSHOT_TIMESTAMP_ISO_LONDON = '2026-10-06T07:30:00Z'; // Mardi 08:30:00 BST (Europe/London)
+export const SNAPSHOT_TIMESTAMP_ISO_LILLE = '2026-09-30T06:30:00Z'; // Mercredi 08:30:00 CEST (Europe/Paris)
 
 export interface LondonSnapshotFixture {
   meta: {

@@ -9,6 +9,7 @@ import type { LineTrafficReport } from '../core/types';
 import { parisConfig } from '../cities/paris/city.config';
 import { montrealConfig } from '../cities/montreal/city.config';
 import { londonConfig } from '../cities/london/city.config';
+import { lilleConfig } from '../cities/lille/city.config';
 import { createRealtimeAdapter } from '../cities/realtime';
 import { PrimRealtimeAdapter } from '../cities/paris/rt/prim_adapter';
 import { StmRealtimeAdapter } from '../cities/montreal/rt/stm_adapter';
@@ -16,7 +17,8 @@ import { TflRealtimeAdapter } from '../cities/london/rt/tfl_adapter';
 import {
   SNAPSHOT_TIMESTAMP_ISO,
   SNAPSHOT_TIMESTAMP_ISO_MONTREAL,
-  SNAPSHOT_TIMESTAMP_ISO_LONDON
+  SNAPSHOT_TIMESTAMP_ISO_LONDON,
+  SNAPSHOT_TIMESTAMP_ISO_LILLE
 } from './snapshot_generator';
 
 /**
@@ -131,6 +133,14 @@ describe('Moteur ↔ adaptateur temps réel', () => {
         londonConfig, createRealtimeAdapter(londonConfig), SNAPSHOT_TIMESTAMP_ISO_LONDON
       );
       expect(count).toBe(688);
+    });
+
+    it('Lille : 32 rames (ligne 1) à l’heure du snapshot', async () => {
+      const { count, lines } = await runFirstTick(
+        lilleConfig, createRealtimeAdapter(lilleConfig), SNAPSHOT_TIMESTAMP_ISO_LILLE
+      );
+      expect(count).toBe(32);
+      expect(lines.every(l => l === 'ME1')).toBe(true);
     });
 
     it('Paris (métro) : un adaptateur inactif ne change rien', async () => {

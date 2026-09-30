@@ -15,8 +15,10 @@ import { IleviaRealtimeClient, type IleviaStatus } from './ilevia_client';
  */
 export class IleviaRealtimeAdapter implements RealtimeAdapter<IleviaStatus> {
   readonly client: IleviaRealtimeClient;
+  private readonly config: CityRealtimeConfig;
 
-  constructor(private readonly config: CityRealtimeConfig) {
+  constructor(config: CityRealtimeConfig) {
+    this.config = config;
     this.client = new IleviaRealtimeClient(config.pollIntervalMs);
   }
 

@@ -48,7 +48,11 @@ export function isTripUpdateMonotonic(tu: IleviaTripUpdate): boolean {
 }
 
 export class IleviaMatcher {
-  constructor(private readonly config: IleviaMatchConfig = { matchWindowSec: 120, maxDelaySec: 900 }) {}
+  private readonly config: IleviaMatchConfig;
+
+  constructor(config: IleviaMatchConfig = { matchWindowSec: 120, maxDelaySec: 900 }) {
+    this.config = config;
+  }
 
   public match(
     updates: readonly IleviaTripUpdate[],

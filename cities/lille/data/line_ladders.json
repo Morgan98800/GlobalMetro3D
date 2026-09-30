@@ -1,0 +1,418 @@
+{
+  "ME1": {
+    "id": "ME1",
+    "short_name": "1",
+    "color": "#FDC41F",
+    "text_color": "#000000",
+    "directions": {
+      "0": {
+        "origin": "4 Cantons Stade P. Mauroy",
+        "terminus": "CHU - Eurasanté",
+        "stations": [
+          {
+            "id": "STATION_4CA",
+            "name": "4 Cantons Stade P. Mauroy",
+            "distance_m": 32.5,
+            "coordinates": [
+              3.139045,
+              50.605413
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CSC",
+            "name": "Cité Scientifique",
+            "distance_m": 801.4,
+            "coordinates": [
+              3.142405,
+              50.611592
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TIO",
+            "name": "Triolo",
+            "distance_m": 1424.8,
+            "coordinates": [
+              3.140662,
+              50.616884
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_HDV",
+            "name": "V. D'Ascq Hotel De Ville",
+            "distance_m": 2307.4,
+            "coordinates": [
+              3.130795,
+              50.61915
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDB",
+            "name": "Pont De Bois",
+            "distance_m": 2995.9,
+            "coordinates": [
+              3.128033,
+              50.624229
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LZN",
+            "name": "Square Flandres",
+            "distance_m": 3867.4,
+            "coordinates": [
+              3.116064,
+              50.625172
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MHE",
+            "name": "Mairie D'Hellemmes",
+            "distance_m": 4417.0,
+            "coordinates": [
+              3.109018,
+              50.627078
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MRB",
+            "name": "Marbrerie",
+            "distance_m": 5280.7,
+            "coordinates": [
+              3.097892,
+              50.630142
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_DFI",
+            "name": "Fives",
+            "distance_m": 5894.1,
+            "coordinates": [
+              3.090462,
+              50.63304
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CIE",
+            "name": "Madeleine Caulier",
+            "distance_m": 6399.2,
+            "coordinates": [
+              3.086803,
+              50.636707
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 7602.9,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_RIH",
+            "name": "Rihour",
+            "distance_m": 8271.6,
+            "coordinates": [
+              3.063017,
+              50.63567
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_REP",
+            "name": "République Beaux-Arts",
+            "distance_m": 8745.7,
+            "coordinates": [
+              3.060892,
+              50.631628
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CGA",
+            "name": "Gambetta",
+            "distance_m": 9536.7,
+            "coordinates": [
+              3.052729,
+              50.626928
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_WAZ",
+            "name": "Wazemmes",
+            "distance_m": 9972.0,
+            "coordinates": [
+              3.051626,
+              50.62346
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDP",
+            "name": "Porte Des Postes",
+            "distance_m": 10570.9,
+            "coordinates": [
+              3.050197,
+              50.618442
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CHR",
+            "name": "Chu - Centre O. Lambret",
+            "distance_m": 11966.6,
+            "coordinates": [
+              3.036433,
+              50.613095
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CAL",
+            "name": "Chu - Eurasanté",
+            "distance_m": 12560.0,
+            "coordinates": [
+              3.038972,
+              50.608055
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "CHU - Eurasanté",
+        "terminus": "4 Cantons Stade P. Mauroy",
+        "stations": [
+          {
+            "id": "STATION_CAL",
+            "name": "Chu - Eurasanté",
+            "distance_m": 25.4,
+            "coordinates": [
+              3.038972,
+              50.608055
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CHR",
+            "name": "Chu - Centre O. Lambret",
+            "distance_m": 619.9,
+            "coordinates": [
+              3.036433,
+              50.613095
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDP",
+            "name": "Porte Des Postes",
+            "distance_m": 2012.3,
+            "coordinates": [
+              3.050197,
+              50.618442
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_WAZ",
+            "name": "Wazemmes",
+            "distance_m": 2613.1,
+            "coordinates": [
+              3.051626,
+              50.62346
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CGA",
+            "name": "Gambetta",
+            "distance_m": 3044.7,
+            "coordinates": [
+              3.052729,
+              50.626928
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_REP",
+            "name": "République Beaux-Arts",
+            "distance_m": 3837.9,
+            "coordinates": [
+              3.060892,
+              50.631628
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_RIH",
+            "name": "Rihour",
+            "distance_m": 4312.6,
+            "coordinates": [
+              3.063017,
+              50.63567
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LIG",
+            "name": "Gare Lille Flandres",
+            "distance_m": 4983.7,
+            "coordinates": [
+              3.071085,
+              50.637369
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CIE",
+            "name": "Madeleine Caulier",
+            "distance_m": 6175.4,
+            "coordinates": [
+              3.086803,
+              50.636707
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_DFI",
+            "name": "Fives",
+            "distance_m": 6676.9,
+            "coordinates": [
+              3.090462,
+              50.63304
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MRB",
+            "name": "Marbrerie",
+            "distance_m": 7294.3,
+            "coordinates": [
+              3.097892,
+              50.630142
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_MHE",
+            "name": "Mairie D'Hellemmes",
+            "distance_m": 8159.2,
+            "coordinates": [
+              3.109018,
+              50.627078
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_LZN",
+            "name": "Square Flandres",
+            "distance_m": 8709.3,
+            "coordinates": [
+              3.116064,
+              50.625172
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_PDB",
+            "name": "Pont De Bois",
+            "distance_m": 9581.4,
+            "coordinates": [
+              3.128033,
+              50.624229
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_HDV",
+            "name": "V. D'Ascq Hotel De Ville",
+            "distance_m": 10271.5,
+            "coordinates": [
+              3.130795,
+              50.61915
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_TIO",
+            "name": "Triolo",
+            "distance_m": 11157.9,
+            "coordinates": [
+              3.140662,
+              50.616884
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_CSC",
+            "name": "Cité Scientifique",
+            "distance_m": 11780.7,
+            "coordinates": [
+              3.142405,
+              50.611592
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STATION_4CA",
+            "name": "4 Cantons Stade P. Mauroy",
+            "distance_m": 12550.4,
+            "coordinates": [
+              3.139045,
+              50.605413
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  }
+}

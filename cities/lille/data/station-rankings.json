@@ -1,0 +1,224 @@
+{
+  "weekday": [
+    {
+      "name": "Chu - Eurasanté",
+      "count": 919
+    },
+    {
+      "name": "Chu - Centre O. Lambret",
+      "count": 919
+    },
+    {
+      "name": "Porte Des Postes",
+      "count": 919
+    },
+    {
+      "name": "Wazemmes",
+      "count": 919
+    },
+    {
+      "name": "Gambetta",
+      "count": 919
+    },
+    {
+      "name": "République Beaux-Arts",
+      "count": 919
+    },
+    {
+      "name": "Rihour",
+      "count": 919
+    },
+    {
+      "name": "Gare Lille Flandres",
+      "count": 919
+    },
+    {
+      "name": "Madeleine Caulier",
+      "count": 919
+    },
+    {
+      "name": "Fives",
+      "count": 919
+    },
+    {
+      "name": "Marbrerie",
+      "count": 919
+    },
+    {
+      "name": "Mairie D'Hellemmes",
+      "count": 919
+    },
+    {
+      "name": "Square Flandres",
+      "count": 919
+    },
+    {
+      "name": "Pont De Bois",
+      "count": 919
+    },
+    {
+      "name": "V. D'Ascq Hotel De Ville",
+      "count": 919
+    },
+    {
+      "name": "Triolo",
+      "count": 919
+    },
+    {
+      "name": "Cité Scientifique",
+      "count": 919
+    },
+    {
+      "name": "4 Cantons Stade P. Mauroy",
+      "count": 919
+    }
+  ],
+  "saturday": [
+    {
+      "name": "4 Cantons Stade P. Mauroy",
+      "count": 655
+    },
+    {
+      "name": "Cité Scientifique",
+      "count": 655
+    },
+    {
+      "name": "Triolo",
+      "count": 655
+    },
+    {
+      "name": "V. D'Ascq Hotel De Ville",
+      "count": 655
+    },
+    {
+      "name": "Pont De Bois",
+      "count": 655
+    },
+    {
+      "name": "Square Flandres",
+      "count": 655
+    },
+    {
+      "name": "Mairie D'Hellemmes",
+      "count": 655
+    },
+    {
+      "name": "Marbrerie",
+      "count": 655
+    },
+    {
+      "name": "Fives",
+      "count": 655
+    },
+    {
+      "name": "Madeleine Caulier",
+      "count": 655
+    },
+    {
+      "name": "Gare Lille Flandres",
+      "count": 655
+    },
+    {
+      "name": "Rihour",
+      "count": 655
+    },
+    {
+      "name": "République Beaux-Arts",
+      "count": 655
+    },
+    {
+      "name": "Gambetta",
+      "count": 655
+    },
+    {
+      "name": "Wazemmes",
+      "count": 655
+    },
+    {
+      "name": "Porte Des Postes",
+      "count": 655
+    },
+    {
+      "name": "Chu - Centre O. Lambret",
+      "count": 655
+    },
+    {
+      "name": "Chu - Eurasanté",
+      "count": 655
+    }
+  ],
+  "sunday": [
+    {
+      "name": "Chu - Eurasanté",
+      "count": 458
+    },
+    {
+      "name": "Chu - Centre O. Lambret",
+      "count": 458
+    },
+    {
+      "name": "Porte Des Postes",
+      "count": 458
+    },
+    {
+      "name": "Wazemmes",
+      "count": 458
+    },
+    {
+      "name": "Gambetta",
+      "count": 458
+    },
+    {
+      "name": "République Beaux-Arts",
+      "count": 458
+    },
+    {
+      "name": "Rihour",
+      "count": 458
+    },
+    {
+      "name": "Gare Lille Flandres",
+      "count": 458
+    },
+    {
+      "name": "Madeleine Caulier",
+      "count": 458
+    },
+    {
+      "name": "Fives",
+      "count": 458
+    },
+    {
+      "name": "Marbrerie",
+      "count": 458
+    },
+    {
+      "name": "Mairie D'Hellemmes",
+      "count": 458
+    },
+    {
+      "name": "Square Flandres",
+      "count": 458
+    },
+    {
+      "name": "Pont De Bois",
+      "count": 458
+    },
+    {
+      "name": "V. D'Ascq Hotel De Ville",
+      "count": 458
+    },
+    {
+      "name": "Triolo",
+      "count": 458
+    },
+    {
+      "name": "Cité Scientifique",
+      "count": 458
+    },
+    {
+      "name": "4 Cantons Stade P. Mauroy",
+      "count": 458
+    }
+  ]
+}

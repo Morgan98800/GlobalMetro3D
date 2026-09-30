@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ME1",
+    "short_name": "1",
+    "long_name": "Ligne 1",
+    "color": "#FDC41F",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "0": "CHU - Eurasanté",
+      "1": "4 Cantons Stade P. Mauroy"
+    },
+    "measured_length_km": 12.58,
+    "elevation_offset": 0.0
+  }
+]

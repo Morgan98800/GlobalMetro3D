@@ -1,0 +1,200 @@
+[
+  {
+    "id": "STATION_4CA",
+    "name": "4 Cantons Stade P. Mauroy",
+    "coordinates": [
+      3.139045,
+      50.605413
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_CSC",
+    "name": "Cité Scientifique",
+    "coordinates": [
+      3.142405,
+      50.611592
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_TIO",
+    "name": "Triolo",
+    "coordinates": [
+      3.140662,
+      50.616884
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_HDV",
+    "name": "V. D'Ascq Hotel De Ville",
+    "coordinates": [
+      3.130795,
+      50.61915
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_PDB",
+    "name": "Pont De Bois",
+    "coordinates": [
+      3.128033,
+      50.624229
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_LZN",
+    "name": "Square Flandres",
+    "coordinates": [
+      3.116064,
+      50.625172
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_MHE",
+    "name": "Mairie D'Hellemmes",
+    "coordinates": [
+      3.109018,
+      50.627078
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_MRB",
+    "name": "Marbrerie",
+    "coordinates": [
+      3.097892,
+      50.630142
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_DFI",
+    "name": "Fives",
+    "coordinates": [
+      3.090462,
+      50.63304
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_CIE",
+    "name": "Madeleine Caulier",
+    "coordinates": [
+      3.086803,
+      50.636707
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_LIG",
+    "name": "Gare Lille Flandres",
+    "coordinates": [
+      3.071085,
+      50.637369
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_RIH",
+    "name": "Rihour",
+    "coordinates": [
+      3.063017,
+      50.63567
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_REP",
+    "name": "République Beaux-Arts",
+    "coordinates": [
+      3.060892,
+      50.631628
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_CGA",
+    "name": "Gambetta",
+    "coordinates": [
+      3.052729,
+      50.626928
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_WAZ",
+    "name": "Wazemmes",
+    "coordinates": [
+      3.051626,
+      50.62346
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_PDP",
+    "name": "Porte Des Postes",
+    "coordinates": [
+      3.050197,
+      50.618442
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_CHR",
+    "name": "Chu - Centre O. Lambret",
+    "coordinates": [
+      3.036433,
+      50.613095
+    ],
+    "lines": [
+      "ME1"
+    ]
+  },
+  {
+    "id": "STATION_CAL",
+    "name": "Chu - Eurasanté",
+    "coordinates": [
+      3.038972,
+      50.608055
+    ],
+    "lines": [
+      "ME1"
+    ]
+  }
+]

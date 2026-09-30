@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "Ilévia / MEL",
+    "classification": {
+      "souterrain": "100% réseau métro Ligne 1 Lille (tunnel foré, tranchée couverte et section protégée)",
+      "aerien": "néant"
+    }
+  },
+  "summary": {
+    "aerial_sections": 0,
+    "aerial_km": 0.0,
+    "network_type": "100% souterrain / site propre intégral"
+  }
+}

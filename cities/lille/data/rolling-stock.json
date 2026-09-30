@@ -1,0 +1,62 @@
+{
+  "asset_families": {
+    "val_pneumatic": {
+      "family_id": "val_pneumatic",
+      "reference_dimensions_m": {
+        "car_length_m": 13.0,
+        "car_height_m": 3.25,
+        "width_m": 2.06
+      }
+    }
+  },
+  "models": {
+    "VAL_208": {
+      "model_id": "VAL_208",
+      "name": "VAL 208 (2 voitures - 26 m)",
+      "manufacturer": "Matra Transport / Siemens Mobility",
+      "cars_count": 2,
+      "total_length_m": 26.0,
+      "car_length_m": 13.0,
+      "bogie_centres_m": 8.0,
+      "width_m": 2.06,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": true,
+      "source": "Fiche technique VAL 208 Siemens Mobility",
+      "verified": false
+    },
+    "VAL_52M": {
+      "model_id": "VAL_52M",
+      "name": "Alstom Metropolis Boa (4 voitures - 52 m)",
+      "manufacturer": "Alstom Transport",
+      "cars_count": 4,
+      "total_length_m": 52.0,
+      "car_length_m": 13.0,
+      "bogie_centres_m": 8.0,
+      "width_m": 2.06,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": true,
+      "source": "Rames 52 mètres Alstom / MEL Ligne 1",
+      "verified": false
+    }
+  },
+  "lines": {
+    "ME1": {
+      "line_id": "ME1",
+      "short_name": "1",
+      "model_id": "VAL_208",
+      "name": "VAL 208 (26 m) / Rame 52 m (parc mixte)",
+      "cars_count": 2,
+      "total_length_m": 26.0,
+      "car_length_m": 13.0,
+      "bogie_centres_m": 8.0,
+      "width_m": 2.06,
+      "inter_car_gap_m": 0.0,
+      "drive_type": "tire",
+      "driverless": true,
+      "source": "Exploitation parc mixte Ligne 1 Ilévia",
+      "verified": false
+    }
+  }
+}

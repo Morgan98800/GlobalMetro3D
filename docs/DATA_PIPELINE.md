@@ -253,3 +253,32 @@ pytest tests/test_acceptance_phase_a.py -v
 | **3. Précision de projection** | Projection fidèle sans saut de brin | Écart moyen = **7,81 m**, maximum 90,76 m (`data/processed/projection_metrics.json`) | **PASS** |
 | **4. Longueur des tracés** | Écart avec la longueur commerciale officielle < 5 % | Écart maximal mesuré sur les tracés publiés : **0,38 %** (voir [cartographie](cartographie_geographie_reseau.md) §3) | **PASS** |
 | **5. Intégrité des données** | Fichiers complets, valides et importables | Validé sur tous les artefacts | **PASS** |
+
+---
+
+## 6. Pipeline Réseau de Lille (`cities/lille/ingest/`)
+
+Le script [`cities/lille/ingest/build_lille_artifacts.py`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/cities/lille/ingest/build_lille_artifacts.py) génère l'ensemble des artefacts normalisés pour le réseau Ilévia (Métro VAL et Tramway) :
+
+### Données sources
+- **GTFS Théorique Ilévia** (`gtfs.zip`, Licence Ouverte 2.0 MEL).
+- **Géométrie des voies OSM** : relations double-voie continues extraites via l'API REST OpenStreetMap (ODbL) avec écart inter-segments de 0,000 m.
+- **Stations Ilévia / MEL** : croisement des coordonnées GTFS et OSM, projection orthogonale $\le 12.04\text{ m}$.
+
+### 10 Artefacts normalisés produits (`cities/lille/data/`)
+1. **`lines.json`** : 4 lignes (`ME1`, `ME2`, `TRAM_R`, `TRAM_T`) avec identifiants, palettes officielles et modes (`metro` / `tram`).
+2. **`stations.json`** : 91 stations (60 métro, 36 tram, 5 pôles d'échange partagés).
+3. **`tracks.json`** : Polylignes 3D simplifiées pour l'affichage cartographique.
+4. **`shapes.bin`** : 8 tracés SHP2 quantifiés (sens 0 et 1 pour les 4 lignes).
+5. **`schedule.json`** : Matrice des courses du service régulier (100 rames métro et 17 rames tramway en heure de pointe).
+6. **`line_ladders.json`** : Échelles d'arrêts et arborescences de branches.
+7. **`sections.json`** : Répartition des tronçons souterrains, en tranchée et aériens.
+8. **`station-rankings.json`** : Classement de desserte théorique hebdomadaire.
+9. **`rolling-stock.json`** : Spécifications VAL 208, VAL 52m et Breda VLC articulé.
+10. **`feed_fingerprint.json`** : Empreinte de fraîcheur (tolérance 7 jours, alerte visuelle au-delà).
+
+### Modèles 3D Matériel Roulant (`scripts/build_lille_train_models.py`)
+- `val_208__neutral.glb` (3,57 Ko) : VAL 208 (26 m) sur pneumatiques.
+- `val_52m__neutral.glb` (3,56 Ko) : Rame double 52 m Alstom.
+- `breda_vlc__neutral.glb` (3,61 Ko) : Motrice articulée 30 m Breda VLC avec pantographe et articulation centrale.
+- Tous les modèles respectent la contrainte stricte de taille $(< 15\text{ Ko})$.

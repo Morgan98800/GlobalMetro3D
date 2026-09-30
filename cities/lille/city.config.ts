@@ -88,7 +88,7 @@ export const lilleConfig: CityConfig = {
     bounds: [[2.95, 50.55], [3.25, 50.75]]
   },
   realtime: {
-    provider: 'ilevia-gtfsrt' as any,
+    provider: 'gtfs-rt',
     capability: { kind: 'arrival-predictions' },
     pollIntervalMs: 30000,
     endpoints: {

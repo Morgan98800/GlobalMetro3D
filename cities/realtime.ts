@@ -19,6 +19,7 @@ const FACTORIES: Partial<Record<RealtimeProvider | 'ilevia-gtfsrt', AdapterFacto
   'prim': (config, apiKey) => new PrimRealtimeAdapter(config, apiKey),
   'stm-i3': (config) => new StmRealtimeAdapter(config),
   'tfl-unified': (config) => new TflRealtimeAdapter(config),
+  'gtfs-rt': (config) => new IleviaRealtimeAdapter(config),
   'ilevia-gtfsrt': (config) => new IleviaRealtimeAdapter(config)
 };
 

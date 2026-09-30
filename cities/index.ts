@@ -4,7 +4,7 @@ import { montrealConfig } from './montreal/city.config';
 import { londonConfig } from './london/city.config';
 import { lilleConfig } from './lille/city.config';
 
-export const CITIES: CityConfig[] = [parisConfig, montrealConfig, londonConfig];
+export const CITIES: CityConfig[] = [parisConfig, montrealConfig, londonConfig, lilleConfig];
 
 export const CITIES_BY_ID: Record<string, CityConfig> = {
   paris: parisConfig,

@@ -140,46 +140,46 @@ C'est le fichier directeur du déploiement géré par Netlify :
   node_bundler = "esbuild"
 
 [functions."prim_relay"]
-  schedule = "*/3 * * * *"   # rafraîchissement PRIM toutes les 3 minutes
+  schedule = "*/3 * * * *"   # rafraîchissement PRIM toutes les 3 minutes (Paris)
+
+[functions."stm_relay"]
+  schedule = "*/2 * * * *"   # rafraîchissement STM toutes les 2 minutes (Montréal)
+
+[functions."tfl_relay"]
+  schedule = "* * * * *"     # rafraîchissement TfL chaque minute (Londres)
+
+[functions."lille_relay"]
+  schedule = "* * * * *"     # rafraîchissement Ilévia GTFS-RT chaque minute (Lille)
 ```
 
-Trois redirections sont posées : `/api/prim` → `/.netlify/functions/prim_relay` (200), `/api/prim_delays` → la même fonction (200, alias de compatibilité), et `/*` → `/index.html` (200).
-
-> L'alias `prim_delays` est un vestige : `netlify/functions/prim_delays.ts` se contente de ré-exporter `prim_relay`.
-
-### 2. `web/public/_redirects` (repli, routage SPA)
-Garantit que les URL profondes (ex. `/ligne/1`, `/ligne/14?dir=1`) sont servies par le routeur côté client sans erreur 404, et que `/methode` sert bien la page statique dédiée :
-```
-/api/prim    /.netlify/functions/prim_relay   200
-/methode     /methode.html                   200
-/*           /index.html                     200
-```
-
-### 3. `web/public/_headers` (sécurité & caching)
-```
-/*
-  X-Frame-Options: SAMEORIGIN
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-
-/data/*
-  Cache-Control: public, max-age=0, must-revalidate
-```
-
-Le point important est la directive sur `/data/*` : les artefacts GTFS gardent **le même nom** d'une publication à l'autre (`schedule.json`, `shapes.bin`…). Sans revalidation, un client conserverait l'ancien réseau après un déploiement. Ils sont donc servis avec `max-age=0, must-revalidate`.
-
-> [!NOTE]
-> Aucune règle de cache immuable n'est posée pour `/assets/*`. Les noms de fichiers y sont pourtant hachés par Vite (`main-ClhMwBv4.js`), ce qui permettrait sans risque un `Cache-Control: public, max-age=31536000, immutable`. C'est une optimisation facile à ajouter si la bande passante devient un sujet.
-
-### 4. Compression & Performance HTTP
-`shapes.bin` est publié en SHP2 à environ **0,80 Mo brut** et une copie Brotli d'environ **0,17 Mo** (`shapes.bin.br`, 168 167 o) ; `schedule.json` reste un JSON d'environ **8,31 Mo brut**, non pré-compressé. Vérifier les en-têtes CDN après chaque déploiement plutôt que de supposer une compression automatique.
+Quatre relais serveur et leurs redirections associées sont configurés :
+- `/api/prim` → `/.netlify/functions/prim_relay` (200)
+- `/api/stm` → `/.netlify/functions/stm_relay` (200)
+- `/api/tfl` & `/api/tfl_arrivals` → `/.netlify/functions/tfl_relay` (200)
+- `/api/lille-rt` → `/.netlify/functions/lille_relay` (200)
+- `/*` → `/index.html` (200, routage SPA)
 
 ---
 
-## 5. Checklist de Publication
+## 5. Artefacts Attendus par Ville (`web/dist/cities/<ville>/`)
+
+Chaque ville dispose d'une arborescence autonome sous `cities/<ville>/data/` synchronisée dans `web/public/cities/<ville>/data/` :
+
+| Ville | Artefacts attendus (`data/`) | Modèles 3D (`models/train/`) | Relais Netlify |
+|---|---|---|---|
+| **Paris** | 17 fichiers à la racine (`data/`) | `pneumatic_generic`, `steel_classic`, `rer_generic_A..E` | `/api/prim` |
+| **Montréal** | 10 fichiers (`cities/montreal/data/`) | `mr_73__neutral.glb`, `mpm_10__neutral.glb` | `/api/stm` |
+| **Londres** | 10 fichiers (`cities/london/data/`) | 10 profils Tube, Overground, DLR, Elizabeth, Tram | `/api/tfl` |
+| **Lille** | 10 fichiers (`cities/lille/data/`) | `val_208__neutral.glb`, `val_52m__neutral.glb`, `breda_vlc__neutral.glb` | `/api/lille-rt` |
+
+---
+
+## 6. Checklist de Publication
 
 1. `npm run build:web` depuis la racine et vérification qu'aucune erreur TypeScript ne subsiste.
-2. Vérification des tailles dans `web/dist/assets/` (une dérive au-delà de ~2,2 Mo pour `main-*.js` mérite un examen).
-3. Vérification que les **17 artefacts** de `web/dist/data/` sont bien présents (`lines.json`, `stations.json`, `tracks.json`, `shapes.bin`, `shapes.bin.br`, `schedule.json`, `rer_shapes.bin`, `rer_shapes.bin.br`, `rer_schedule.json`, `line_ladders.json`, `sections.json`, `station-rankings.json`, `rer_lines.json`, `rer_lines_meta.json`, `rolling-stock.json`, `model-assets-manifest.json`, `prim_delays.json`).
-4. `python3 scripts/deploy_netlify.py` (lit `NETLIFY_AUTH_TOKEN` et `NETLIFY_SITE_ID` depuis `.env` ou l'environnement).
-5. Contrôle post-déploiement : `curl -I https://.../data/schedule.json` pour confirmer la revalidation, et `curl https://.../api/prim` pour confirmer que le relais répond avec `X-Prim-Healthy`.
+2. `npm test` pour s'assurer de la conformité de tous les tests unitaires, snapshots (Paris, Montréal, Londres, Lille) et empreinte de build.
+3. `python3 scripts/deploy_netlify.py --prod` (lit `NETLIFY_AUTH_TOKEN` et `NETLIFY_SITE_ID` depuis `.env` ou l'environnement).
+4. Contrôle post-déploiement :
+   - `curl -I https://parisian3dsubway.netlify.app/cities/lille/data/lines.json` (HTTP 200)
+   - `curl -I https://parisian3dsubway.netlify.app/cities/lille/models/train/breda_vlc__neutral.glb` (HTTP 200)
+   - `curl -I https://parisian3dsubway.netlify.app/api/lille-rt` (HTTP 200)

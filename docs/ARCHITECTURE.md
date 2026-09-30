@@ -127,13 +127,31 @@ graph TD
 - Ce service **n'est pas déployé** : le site public tourne intégralement dans le navigateur.
 
 ### 6. Façade Serverless (`netlify/`)
-- **`netlify/functions/prim_relay.ts`** : relais serveur vers l'API PRIM, avec cache de 180 s ; planifié toutes les 3 minutes (`*/3 * * * *`) pour réchauffer le cache et écrire `prim_delays.json`.
-- **`netlify/functions/prim_delays.ts`** : simple ré-export de `prim_relay`.
-- **Redirections** : `/api/prim` et `/api/prim_delays` → `/.netlify/functions/prim_relay` (200), puis `/*` → `/index.html` (200).
+- **`netlify/functions/prim_relay.ts`** : relais serveur vers l'API PRIM (Paris), avec cache de 180 s ; planifié toutes les 3 minutes (`*/3 * * * *`).
+- **`netlify/functions/stm_relay.ts`** : relais serveur vers l'API STM i3 (Montréal), planifié toutes les 2 minutes (`*/2 * * * *`).
+- **`netlify/functions/tfl_relay.ts`** : relais serveur vers l'API TfL (Londres), planifié chaque minute (`* * * * *`).
+- **`netlify/functions/lille_relay.ts`** : relais serveur vers le flux GTFS-RT Ilévia (Lille), planifié chaque minute (`* * * * *`) pour alimenter le recalage des rames de tramway et métro.
+- **Redirections** : `/api/prim`, `/api/stm`, `/api/tfl`, `/api/lille-rt` vers leurs fonctions respectives, puis `/*` → `/index.html` (200).
 
 ---
 
-## 3. Stratégie de Performance & Optimisation Réseau
+## 3. Architecture Multi-Villes & Découplage Temps Réel
+
+Le moteur partagé (`core/sim/browser_engine.ts`) est rigoureusement agnostique des spécificités territoriales :
+- **Contrat `RealtimeAdapter` (`core/rt/adapter.ts`)** : interface unifiée pour le cycle de vie du polling, le statut temps réel, les interruptions de ligne et le recalage optionnel par tick.
+- **Registre des adaptateurs (`cities/realtime.ts`)** : point d'aiguillage unique instanciant le bon adaptateur selon `cityConfig.realtime.provider` :
+  - **Paris (`prim`)** : `PrimRealtimeAdapter` (SIRI-Lite, 4 niveaux de confiance, rames fantômes).
+  - **Montréal (`stm-i3`)** : `StmRealtimeAdapter` (état de service des 4 lignes, mode théorique nominal).
+  - **Londres (`tfl-unified`)** : `TflRealtimeAdapter` (prédictions d'arrivée sur 20 lignes et 688 rames).
+  - **Lille (`gtfs-rt`)** : `IleviaRealtimeAdapter` (TripUpdates GTFS-RT Ilévia pour le métro VAL et le tramway).
+- **Réseau de Lille (`cities/lille/`)** :
+  - Métro automatique VAL (Lignes 1 et 2) : 60 stations, rames VAL 208 (26 m) et VAL 52m (52 m).
+  - Tramway Ilévia (Lignes R et T) : 36 stations (dont 5 pôles d'échange avec le métro), motrices articulées Breda VLC (30 m).
+  - Modèles 3D générés sous contrainte stricte de taille (< 15 Ko par modèle).
+
+---
+
+## 4. Stratégie de Performance & Optimisation Réseau
 
 ### 1. Suppression du GeoJSON brut (Gain : -9.3 Mo)
 Le fichier initial `control_network.geojson` pesait environ **9,45 Mo**. Le rendu cartographique utilise désormais `tracks.json` (24,6 Ko), après simplification et suppression de 92 segments redondants sur 116; L14 est ramenée à un tracé, tandis que les branches L7/L13 sont conservées.
@@ -144,11 +162,11 @@ Le rendu courant utilise MapLibre et deck.gl dans le pipeline cartographique pub
 ### 3. Extrusion Vectorielle Native GPU, Relief et glTF à la Demande (60 FPS)
 Le bâti 3D parisien est généré à la volée par le moteur de tuiles vectorielles de MapLibre en un seul passage GPU via la primitive `fill-extrusion` : seuil `minzoom: 14`, opacité 0 → 0,28 → 0,70, hauteur par défaut de 18 m. Il est complété par un MNT raster monté en `setTerrain` (exagération 1,5) et n'est révélé qu'à la demande via le bouton « Bâti 3D ».
 
-Les seuls assets glTF chargés sont les **deux caisses de matériel roulant** (`pneumatic_generic`, `steel_classic`), instanciées au-delà de `z > 16` puis répétées le long de l'abscisse curviligne par `ScenegraphLayer`. En dessous de ce seuil, le rendu retombe sur les capsules métriques deck.gl, ce qui garantit 60 FPS constants sans coût de maillage.
+Les seuls assets glTF chargés sont les caisses de matériel roulant, instanciées au-delà de `z > 16` puis répétées le long de l'abscisse curviligne par `ScenegraphLayer`. En dessous de ce seuil, le rendu retombe sur les capsules métriques deck.gl, ce qui garantit 60 FPS constants sans coût de maillage.
 
 ---
 
-## 4. Sécurité & Bonnes Pratiques
+## 5. Sécurité & Bonnes Pratiques
 
 - **Clés d'API & Secrets** : la clé d'API PRIM et les tokens de déploiement sont injectés via des variables d'environnement ou gérés dans des fichiers isolés exclus du contrôle de version git (`.gitignore`).
 - **Isolation Sandbox** : les opérations d'ingestion et de build s'exécutent dans un environnement bac à sable local sécurisé.

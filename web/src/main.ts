@@ -184,16 +184,22 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
       <text x="440" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">EUR 1,90 CB</text>
     </svg>`;
 
-  const montrealEmblem = `
+  const badgeLabel = activeCityConfig.id === 'lille' ? 'VAL & Tramway' : (activeCityConfig.id === 'london' ? 'Underground' : '100% Souterrain');
+  const cityEmblem = `
     <div class="about-card-emblem" style="background:var(--eleve-hi);border:1px solid var(--bordure);border-radius:8px;padding:20px 14px;text-align:center;">
       <span style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.6;display:block;margin-bottom:6px;">Réseau Métropolitain</span>
       <span style="font-size:18px;font-weight:700;color:var(--texte-hi);letter-spacing:0.5px;display:block;">${activeCityConfig.networkName}</span>
-      <span style="display:inline-block;margin-top:10px;font-size:11px;padding:3px 10px;border-radius:12px;background:rgba(0,179,0,0.15);border:1px solid rgba(0,179,0,0.4);color:#00B300;font-weight:600;">100% Souterrain</span>
+      <span style="display:inline-block;margin-top:10px;font-size:11px;padding:3px 10px;border-radius:12px;background:rgba(0,179,0,0.15);border:1px solid rgba(0,179,0,0.4);color:#00B300;font-weight:600;">${badgeLabel}</span>
     </div>`;
 
-  const cardGraphic = isParis ? ticketSvg : montrealEmblem;
-  const rtHtml = isParis
+  const cardGraphic = isParis ? ticketSvg : cityEmblem;
+  const rtProvider = activeCityConfig.realtime.provider;
+  const rtHtml = rtProvider === 'prim'
     ? '<p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p>'
+    : rtProvider === 'tfl-unified'
+    ? '<p class="about-item__text">Temps réel : <strong>TfL Unified API</strong></p>'
+    : rtProvider === 'gtfs-rt'
+    ? '<p class="about-item__text">Temps réel : <strong>Ilévia GTFS-RT</strong></p>'
     : '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (sans GPS en tunnel)</p>';
 
   modal.innerHTML = `
@@ -293,15 +299,16 @@ async function bootstrap() {
   const dataDir = cityConfig.paths.dataDir;
   const rerLinesPath = cityConfig.paths.rer?.linesJson;
 
-  const [linesRes, stationsRes, tracksRes, laddersRes, rerTracksRes, rankingsRes, shapesMap, rollingStockDb] = await Promise.all([
+  const [linesRes, stationsRes, tracksRes, laddersRes, rerTracksRes, rankingsRes, shapesMap, rollingStockDb, fingerprintRes] = await Promise.all([
     fetch(dataUrl(`${dataDir}/lines.json`)),
     fetch(dataUrl(`${dataDir}/stations.json`)),
     fetch(dataUrl(`${dataDir}/tracks.json`)),
     fetch(dataUrl(`${dataDir}/line_ladders.json`)),
-    rerLinesPath ? fetch(dataUrl(rerLinesPath)) : Promise.resolve({ json: async () => [] }),
+    rerLinesPath ? fetch(dataUrl(rerLinesPath)) : Promise.resolve({ json: async () => [] } as any),
     fetch(dataUrl(`${dataDir}/station-rankings.json`)),
     loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
-    loadRollingStock(dataUrl(`${dataDir}/rolling-stock.json`))
+    loadRollingStock(dataUrl(`${dataDir}/rolling-stock.json`)),
+    fetch(dataUrl(`${dataDir}/feed_fingerprint.json`)).catch(() => null)
   ]);
 
   lines = await linesRes.json();
@@ -310,6 +317,22 @@ async function bootstrap() {
   const laddersData = await laddersRes.json();
   const rerTracks = await rerTracksRes.json();
   const stationRankings = await rankingsRes.json();
+
+  // Contrôle de fraîcheur GTFS : tolérance en jours et avertissement visible
+  if (fingerprintRes && (fingerprintRes as Response).ok) {
+    (fingerprintRes as Response).json().then((fp: any) => {
+      if (!fp?.generated_at) return;
+      const d = Math.floor((Date.now() - new Date(fp.generated_at).getTime()) / 864e5);
+      const tol = cityConfig.modes[0]?.schedule.stalenessToleranceDays ?? 7;
+      if (d > tol) {
+        const w = document.createElement('div');
+        w.className = 'gtfs-staleness-banner';
+        w.setAttribute('role', 'alert');
+        w.textContent = `⚠️ Horaires GTFS (${cityConfig.displayName}) datant de plus de ${d} jours (tolérance : ${tol} j).`;
+        document.body.appendChild(w);
+      }
+    }).catch(() => {});
+  }
 
   const metroBounds = boundsFromPolylines(tracks.map(track => track.coordinates));
   const networkBounds = boundsFromPolylines([

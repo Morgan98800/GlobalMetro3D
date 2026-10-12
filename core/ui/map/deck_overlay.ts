@@ -112,6 +112,24 @@ function snapPointToPaths(point: [number, number], paths: [number, number][][]):
   return [Number(best[0].toFixed(6)), Number(best[1].toFixed(6))];
 }
 
+function deduplicateStations(stations: StationMetadata[]): StationMetadata[] {
+  const byName = new Map<string, StationMetadata>();
+  for (const st of stations) {
+    const existing = byName.get(st.name);
+    if (!existing) {
+      byName.set(st.name, { ...st, lines: [...st.lines] });
+    } else {
+      for (const lineId of st.lines) {
+        if (!existing.lines.includes(lineId)) {
+          existing.lines.push(lineId);
+        }
+      }
+      if (st.is_hub) existing.is_hub = true;
+    }
+  }
+  return Array.from(byName.values());
+}
+
 const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
 
 export class SubwayDeckOverlay {
@@ -301,11 +319,12 @@ export class SubwayDeckOverlay {
         ? this.rerTracks.filter(track => track.shortName === selectedRerShortName).map(track => track.coordinates)
         : tracks.filter(track => track.line_id === selectedLine.id).map(track => track.coordinates)
       : [];
-    const displayStations = selectedLine && selectedLinePaths.length
+    const rawDisplayStations = selectedLine && selectedLinePaths.length
       ? stations.map(station => station.lines.includes(selectedLine.id)
         ? { ...station, coordinates: snapPointToPaths(station.coordinates, selectedLinePaths) }
         : station)
       : stations;
+    const displayStations = deduplicateStations(rawDisplayStations);
 
     // 1. Gained tracks: each line is an adjacent [casing, fill] pair.
     //
@@ -423,8 +442,8 @@ export class SubwayDeckOverlay {
     // 2. ScatterplotLayer for Stations (Hiérarchisation stricte par niveau de zoom)
     const isUltraHub = (st: StationMetadata) =>
       st.lines.length >= 4 ||
-      /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau)$/i.test(st.name) ||
-      /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)/i.test(st.name);
+      /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau|King's Cross|Victoria|Waterloo|Oxford Circus|Bank|London Bridge|Paddington|Liverpool Street|Piccadilly Circus|Stratford|Westminster|Baker Street|Charing Cross|South Kensington|Holborn|Euston)$/i.test(st.name) ||
+      /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)|King's Cross St\. Pancras|Bank - Monument/i.test(st.name);
 
     const filteredStations = displayStations.filter(st => {
       // 1. Ligne sélectionnée : détail complet conservé quel que soit le zoom
@@ -536,10 +555,11 @@ export class SubwayDeckOverlay {
 
     const lineElev = selectedLine ? selectedLine.elevation_offset : 0;
     const labelsLayer = createStationLabelsLayer(displayStations, this.selectedLineId, this.zoom, this.mapCenter, lineElev);
+    const isPlatformEligible = selectedLine?.mode === 'metro' || selectedLine?.mode === 'tube';
     const platformsLayer = createPlatformsLayer(
       displayStations,
-      selectedLine?.mode === 'metro' ? selectedLine : null,
-      selectedLine?.mode === 'metro' ? selectedLinePaths : [],
+      isPlatformEligible ? selectedLine : null,
+      isPlatformEligible ? selectedLinePaths : [],
       this.zoom
     );
 

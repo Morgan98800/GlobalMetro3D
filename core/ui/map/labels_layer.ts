@@ -10,10 +10,10 @@ export const LATIN_CHARACTER_SET = [
   '–', '—', '’', '‘', '“', '”', '…', '«', '»', '•', '·'
 ].join('');
 
-const isUltraHub = (station: StationMetadata) =>
+export const isUltraHub = (station: StationMetadata) =>
   station.lines.length >= 4 ||
-  /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau)$/i.test(station.name) ||
-  /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)/i.test(station.name);
+  /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau|King's Cross|Victoria|Waterloo|Oxford Circus|Bank|London Bridge|Paddington|Liverpool Street|Piccadilly Circus|Stratford|Westminster|Baker Street|Charing Cross|South Kensington|Holborn|Euston)$/i.test(station.name) ||
+  /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)|King's Cross St\. Pancras|Bank - Monument/i.test(station.name);
 
 /**
  * Build a small, deterministic label set. deck.gl's TextLayer v9 does not

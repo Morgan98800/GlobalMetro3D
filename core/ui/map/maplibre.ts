@@ -91,7 +91,13 @@ export function createMap(
     style: createVectorDarkStyle(theme),
     ...(options.center ? { center: options.center } : {}),
     ...(options.zoom !== undefined ? { zoom: options.zoom } : {}),
-    ...(options.initialBounds ? { bounds: options.initialBounds } : {}),
+    ...(options.initialBounds ? {
+      bounds: options.initialBounds,
+      fitBoundsOptions: {
+        pitch: options.pitch ?? 0,
+        bearing: options.bearing ?? 0
+      }
+    } : {}),
     ...(options.maxBounds ? { maxBounds: options.maxBounds } : {}),
     // The initial viewport is fitted from the loaded network geometry or config center.
     pitch: options.pitch ?? 0,

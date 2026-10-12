@@ -192,7 +192,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     typeof window !== 'undefined' &&
     (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));
 
-  const minCapsuleZoom = 9.0;
+  const minCapsuleZoom = 8.0;
   const detailedZoom = isMobile ? 14.2 : 13.5;
   const labelZoom = isMobile ? 14.0 : 13.0;
 

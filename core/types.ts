@@ -4,7 +4,7 @@ export interface LineMetadata {
   long_name: string;
   color: string;
   text_color: string;
-  mode: "metro" | "tram" | "rail";
+  mode: "metro" | "tram" | "rail" | "tube" | "dlr" | "elizabeth-line" | "overground";
   destinations: {
     "0": string;
     "1": string;

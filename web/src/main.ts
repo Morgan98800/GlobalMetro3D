@@ -334,7 +334,12 @@ async function bootstrap() {
     }).catch(() => {});
   }
 
-  const metroBounds = boundsFromPolylines(tracks.map(track => track.coordinates));
+  const configBounds = cityConfig.map.bounds ? (
+    Array.isArray(cityConfig.map.bounds[0])
+      ? (cityConfig.map.bounds as [[number, number], [number, number]])
+      : [[cityConfig.map.bounds[0], cityConfig.map.bounds[1]], [cityConfig.map.bounds[2], cityConfig.map.bounds[3]]] as [[number, number], [number, number]]
+  ) : undefined;
+  const metroBounds = configBounds ?? boundsFromPolylines(tracks.map(track => track.coordinates));
   const networkBounds = boundsFromPolylines([
     ...tracks.map(track => track.coordinates),
     ...rerTracks.map((track: any) => track.coordinates as Coordinate[])
@@ -448,12 +453,20 @@ async function bootstrap() {
   let trackedTrain: TrainMarker | null = null;
   let nominalMetroCenter: [number, number] | null = null;
   let nominalMetroZoom: number = 12.5;
+  let nominalMetroPitch: number = cityConfig.map.pitch ?? 30;
+  let nominalMetroBearing: number = cityConfig.map.bearing ?? 0;
   let isRecenterVisible = false;
 
   const fitMetroNetwork = (duration = 750) => {
     const initialBounds = metroBounds || networkBounds;
     if (!initialBounds) return;
-    map.fitBounds(initialBounds, { padding: mapPadding(), duration, maxZoom: 14 });
+    map.fitBounds(initialBounds, {
+      padding: mapPadding(),
+      duration,
+      maxZoom: 14,
+      pitch: cityConfig.map.pitch ?? 30,
+      bearing: cityConfig.map.bearing ?? 0
+    });
   };
 
   const updateRecenterState = () => {
@@ -498,8 +511,8 @@ async function bootstrap() {
     const dLng = (currentCenter.lng - nominalMetroCenter[0]) * Math.cos(currentCenter.lat * Math.PI / 180);
     const distDeg = Math.hypot(dLat, dLng);
     const dZoom = Math.abs(currentZoom - nominalMetroZoom);
-    const dPitch = Math.abs(currentPitch);
-    const dBearing = Math.abs(currentBearing);
+    const dPitch = Math.abs(currentPitch - nominalMetroPitch);
+    const dBearing = Math.abs(currentBearing - nominalMetroBearing);
 
     // Hysteresis:
     // Seuil apparition (exceeds frame): dist > 0.0035° (~390m) OR dZoom > 0.35 OR pitch > 3° OR bearing > 3°
@@ -529,6 +542,8 @@ async function bootstrap() {
       setTimeout(() => {
         nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
         nominalMetroZoom = map.getZoom();
+        nominalMetroPitch = map.getPitch();
+        nominalMetroBearing = map.getBearing();
         updateRecenterState();
       }, 500);
     }, 140);
@@ -898,6 +913,8 @@ async function bootstrap() {
     setTimeout(() => {
       nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
       nominalMetroZoom = map.getZoom();
+      nominalMetroPitch = map.getPitch();
+      nominalMetroBearing = map.getBearing();
       updateRecenterState();
     }, 200);
 
@@ -969,7 +986,6 @@ async function bootstrap() {
       deckOverlay.setSelectedLine(null);
       engine.setFocusedLine(null);
       fitMetroNetwork(800);
-      map.easeTo({ pitch: 0, bearing: 0, duration: 800 });
     }
     setTimeout(updateRecenterState, 850);
   });

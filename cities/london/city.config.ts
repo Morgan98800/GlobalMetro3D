@@ -169,12 +169,12 @@ export const londonConfig: CityConfig = {
   },
   map: {
     center: [-0.1276, 51.5074],
-    zoom: 10.5,
+    zoom: 11.5,
     pitch: 30,
     bearing: 0,
     minZoom: 9,
     maxZoom: 18,
-    bounds: [[-1.05, 51.35], [0.40, 51.75]]
+    bounds: [[-0.32, 51.44], [0.06, 51.58]]
   },
   realtime: {
     provider: 'tfl-unified',

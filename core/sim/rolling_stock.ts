@@ -84,16 +84,35 @@ export function getRollingStockForLine(
   db: RollingStockDatabase,
   lineIdOrShortName: string
 ): LineRollingStock {
-  // Try direct match by short name (e.g. "1", "14", "7bis")
-  if (db.lines[lineIdOrShortName]) {
-    return db.lines[lineIdOrShortName];
+  let found: LineRollingStock | undefined = db.lines[lineIdOrShortName];
+
+  if (!found) {
+    const lower = lineIdOrShortName.toLowerCase();
+    if (db.lines[lower]) {
+      found = db.lines[lower];
+    } else {
+      for (const lineStock of Object.values(db.lines)) {
+        if (
+          lineStock.line_id === lineIdOrShortName ||
+          lineStock.line_id.toLowerCase() === lower ||
+          lineStock.short_name.toLowerCase() === lower
+        ) {
+          found = lineStock;
+          break;
+        }
+      }
+    }
   }
 
-  // Try match by line_id (e.g. "IDFM:C01371")
-  for (const lineStock of Object.values(db.lines)) {
-    if (lineStock.line_id === lineIdOrShortName) {
-      return lineStock;
-    }
+  if (found) {
+    const model = db.models?.[found.model_id];
+    return {
+      ...model,
+      ...found,
+      inter_car_gap_m: found.inter_car_gap_m ?? model?.inter_car_gap_m ?? 0.3,
+      bogie_centres_m: found.bogie_centres_m ?? model?.bogie_centres_m ?? DEFAULT_BOGIE_CENTRES_M,
+      driverless: found.driverless ?? model?.driverless ?? false
+    };
   }
 
   // Fallback generic metro

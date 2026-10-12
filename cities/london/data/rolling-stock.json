@@ -42,8 +42,8 @@
       "cars_count": 8,
       "total_length_m": 130.68,
       "car_length_m": 16.26,
-      "bogie_centres_m": 10.40,
-      "width_m": 2.60,
+      "bogie_centres_m": 10.4,
+      "width_m": 2.6,
       "height_m": 2.87,
       "inter_car_gap_m": 0.25,
       "drive_type": "steel",
@@ -59,8 +59,8 @@
       "cars_count": 4,
       "total_length_m": 65.34,
       "car_length_m": 16.26,
-      "bogie_centres_m": 10.40,
-      "width_m": 2.60,
+      "bogie_centres_m": 10.4,
+      "width_m": 2.6,
       "height_m": 2.87,
       "inter_car_gap_m": 0.25,
       "drive_type": "steel",
@@ -76,7 +76,7 @@
       "cars_count": 7,
       "total_length_m": 117.45,
       "car_length_m": 16.78,
-      "bogie_centres_m": 11.20,
+      "bogie_centres_m": 11.2,
       "width_m": 2.92,
       "height_m": 3.68,
       "inter_car_gap_m": 0.0,
@@ -93,7 +93,7 @@
       "cars_count": 8,
       "total_length_m": 133.68,
       "car_length_m": 16.71,
-      "bogie_centres_m": 11.20,
+      "bogie_centres_m": 11.2,
       "width_m": 2.92,
       "height_m": 3.68,
       "inter_car_gap_m": 0.0,
@@ -125,7 +125,7 @@
       "name": "1996 Tube Stock (7 voitures)",
       "manufacturer": "Alstom (Birmingham)",
       "cars_count": 7,
-      "total_length_m": 125.80,
+      "total_length_m": 125.8,
       "car_length_m": 17.87,
       "bogie_centres_m": 11.48,
       "width_m": 2.64,
@@ -180,7 +180,7 @@
       "car_length_m": 28.0,
       "bogie_centres_m": 12.0,
       "width_m": 2.65,
-      "height_m": 3.40,
+      "height_m": 3.4,
       "inter_car_gap_m": 0.0,
       "drive_type": "steel",
       "gauge_type": "light_rail",
@@ -195,8 +195,8 @@
       "cars_count": 9,
       "total_length_m": 204.73,
       "car_length_m": 22.75,
-      "bogie_centres_m": 15.30,
-      "width_m": 2.80,
+      "bogie_centres_m": 15.3,
+      "width_m": 2.8,
       "height_m": 3.78,
       "inter_car_gap_m": 0.0,
       "drive_type": "steel",
@@ -212,8 +212,8 @@
       "cars_count": 5,
       "total_length_m": 102.2,
       "car_length_m": 20.44,
-      "bogie_centres_m": 14.10,
-      "width_m": 2.80,
+      "bogie_centres_m": 14.1,
+      "width_m": 2.8,
       "height_m": 3.77,
       "inter_car_gap_m": 0.0,
       "drive_type": "steel",
@@ -228,9 +228,9 @@
       "manufacturer": "Bombardier / Alstom Derby",
       "cars_count": 4,
       "total_length_m": 82.0,
-      "car_length_m": 20.50,
-      "bogie_centres_m": 14.20,
-      "width_m": 2.80,
+      "car_length_m": 20.5,
+      "bogie_centres_m": 14.2,
+      "width_m": 2.8,
       "height_m": 3.78,
       "inter_car_gap_m": 0.0,
       "drive_type": "steel",
@@ -270,7 +270,10 @@
       "height_m": 2.87,
       "drive_type": "steel",
       "source": "Parc 100% 1972 Mk II Stock Bakerloo",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 10.21,
+      "inter_car_gap_m": 0.3,
+      "driverless": false
     },
     "central": {
       "line_id": "central",
@@ -280,11 +283,14 @@
       "cars_count": 8,
       "total_length_m": 130.68,
       "car_length_m": 16.26,
-      "width_m": 2.60,
+      "width_m": 2.6,
       "height_m": 2.87,
       "drive_type": "steel",
       "source": "Parc 1992 Stock Central (en cours de modernisation CLIP)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 10.4,
+      "inter_car_gap_m": 0.25,
+      "driverless": false
     },
     "circle": {
       "line_id": "circle",
@@ -298,7 +304,10 @@
       "height_m": 3.68,
       "drive_type": "steel",
       "source": "Parc mutualisé S7 Stock Sub-Surface",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "district": {
       "line_id": "district",
@@ -312,7 +321,10 @@
       "height_m": 3.68,
       "drive_type": "steel",
       "source": "Parc S7 Stock District (7 caisses)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "hammersmith-city": {
       "line_id": "hammersmith-city",
@@ -326,7 +338,10 @@
       "height_m": 3.68,
       "drive_type": "steel",
       "source": "Parc S7 Stock Hammersmith & City (7 caisses)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "jubilee": {
       "line_id": "jubilee",
@@ -334,13 +349,16 @@
       "model_id": "1996_Stock",
       "name": "1996 Tube Stock (7 voitures)",
       "cars_count": 7,
-      "total_length_m": 125.80,
+      "total_length_m": 125.8,
       "car_length_m": 17.87,
       "width_m": 2.64,
       "height_m": 2.88,
       "drive_type": "steel",
       "source": "Parc 1996 Stock Jubilee line (7 caisses depuis 2005)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.48,
+      "inter_car_gap_m": 0.3,
+      "driverless": false
     },
     "metropolitan": {
       "line_id": "metropolitan",
@@ -354,7 +372,10 @@
       "height_m": 3.68,
       "drive_type": "steel",
       "source": "Parc S8 Stock Metropolitan (8 caisses, configuration banlieue)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "northern": {
       "line_id": "northern",
@@ -368,7 +389,10 @@
       "height_m": 2.88,
       "drive_type": "steel",
       "source": "Parc 1995 Stock Northern (6 caisses)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.48,
+      "inter_car_gap_m": 0.3,
+      "driverless": false
     },
     "piccadilly": {
       "line_id": "piccadilly",
@@ -382,7 +406,10 @@
       "height_m": 2.88,
       "drive_type": "steel",
       "source": "Parc 1973 Stock Piccadilly (transition vers Inspiro 2024 Stock)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 11.48,
+      "inter_car_gap_m": 0.3,
+      "driverless": false
     },
     "victoria": {
       "line_id": "victoria",
@@ -396,7 +423,10 @@
       "height_m": 2.88,
       "drive_type": "steel",
       "source": "Parc 2009 Stock Victoria (8 caisses)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 10.97,
+      "inter_car_gap_m": 0.25,
+      "driverless": false
     },
     "waterloo-city": {
       "line_id": "waterloo-city",
@@ -406,11 +436,14 @@
       "cars_count": 4,
       "total_length_m": 65.34,
       "car_length_m": 16.26,
-      "width_m": 2.60,
+      "width_m": 2.6,
       "height_m": 2.87,
       "drive_type": "steel",
       "source": "Parc 1992 Stock Waterloo & City (formation courte 4 caisses)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 10.4,
+      "inter_car_gap_m": 0.25,
+      "driverless": false
     },
     "dlr": {
       "line_id": "dlr",
@@ -421,10 +454,13 @@
       "total_length_m": 84.0,
       "car_length_m": 28.0,
       "width_m": 2.65,
-      "height_m": 3.40,
+      "height_m": 3.4,
       "drive_type": "steel",
       "source": "Flotte DLR automatique en unités multiples 2 à 3 rames (B90/B92/B2007/B23)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 12.0,
+      "inter_car_gap_m": 0.0,
+      "driverless": true
     },
     "elizabeth": {
       "line_id": "elizabeth",
@@ -434,11 +470,14 @@
       "cars_count": 9,
       "total_length_m": 204.73,
       "car_length_m": 22.75,
-      "width_m": 2.80,
+      "width_m": 2.8,
       "height_m": 3.78,
       "drive_type": "steel",
       "source": "Parc 100% Class 345 Aventra (70 rames de 9 caisses intercommunicantes)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 15.3,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "liberty": {
       "line_id": "liberty",
@@ -447,12 +486,15 @@
       "name": "Class 710 Aventra (4 voitures)",
       "cars_count": 4,
       "total_length_m": 82.0,
-      "car_length_m": 20.50,
-      "width_m": 2.80,
+      "car_length_m": 20.5,
+      "width_m": 2.8,
       "height_m": 3.78,
       "drive_type": "steel",
       "source": "Parc Class 710 Aventra Liberty line (navette Romford - Upminster)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 14.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "lioness": {
       "line_id": "lioness",
@@ -462,11 +504,14 @@
       "cars_count": 5,
       "total_length_m": 102.2,
       "car_length_m": 20.44,
-      "width_m": 2.80,
+      "width_m": 2.8,
       "height_m": 3.77,
       "drive_type": "steel",
       "source": "Parc Class 378 Capitalstar Lioness line (Euston - Watford Junction DC)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 14.1,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "mildmay": {
       "line_id": "mildmay",
@@ -476,11 +521,14 @@
       "cars_count": 5,
       "total_length_m": 102.2,
       "car_length_m": 20.44,
-      "width_m": 2.80,
+      "width_m": 2.8,
       "height_m": 3.77,
       "drive_type": "steel",
       "source": "Parc Class 378 Capitalstar Mildmay line (North & West London orbital lines)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 14.1,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "suffragette": {
       "line_id": "suffragette",
@@ -489,12 +537,15 @@
       "name": "Class 710 Aventra (4 voitures)",
       "cars_count": 4,
       "total_length_m": 82.0,
-      "car_length_m": 20.50,
-      "width_m": 2.80,
+      "car_length_m": 20.5,
+      "width_m": 2.8,
       "height_m": 3.78,
       "drive_type": "steel",
       "source": "Parc Class 710 Aventra Suffragette line (Gospel Oak - Barking Riverside)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 14.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "weaver": {
       "line_id": "weaver",
@@ -503,12 +554,15 @@
       "name": "Class 710 Aventra (4 voitures)",
       "cars_count": 4,
       "total_length_m": 82.0,
-      "car_length_m": 20.50,
-      "width_m": 2.80,
+      "car_length_m": 20.5,
+      "width_m": 2.8,
       "height_m": 3.78,
       "drive_type": "steel",
       "source": "Parc Class 710 Aventra Weaver line (Liverpool Street - Enfield/Cheshunt/Chingford)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 14.2,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "windrush": {
       "line_id": "windrush",
@@ -518,11 +572,14 @@
       "cars_count": 5,
       "total_length_m": 102.2,
       "car_length_m": 20.44,
-      "width_m": 2.80,
+      "width_m": 2.8,
       "height_m": 3.77,
       "drive_type": "steel",
       "source": "Parc Class 378 Capitalstar Windrush line (East & South London lines)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 14.1,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     },
     "tram": {
       "line_id": "tram",
@@ -536,7 +593,10 @@
       "height_m": 3.35,
       "drive_type": "steel",
       "source": "Parc London Trams (Bombardier CR4000 & Stadler Variobahn)",
-      "verified": true
+      "verified": true,
+      "bogie_centres_m": 9.5,
+      "inter_car_gap_m": 0.0,
+      "driverless": false
     }
   }
 }

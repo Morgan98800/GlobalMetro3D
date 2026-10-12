@@ -58,8 +58,12 @@ const parsedScenegraphs = new Map<TrainModelFamily, any>();
 const assetListeners = new Set<() => void>();
 const requestedFamilies = new Set<TrainModelFamily>();
 
-function familyForStock(stock: { drive_type: string; short_name: string; model_id?: string }): TrainModelFamily {
-  if (stock.model_id?.startsWith('WMATA') || ['RED', 'ORANGE', 'SILVER', 'BLUE', 'GREEN', 'YELLOW', 'RD', 'OR', 'SV', 'BL', 'GR', 'YL'].includes(stock.short_name.toUpperCase())) {
+function familyForStock(stock: { drive_type: string; short_name: string; model_id?: string; car_length_m?: number }): TrainModelFamily {
+  if (
+    stock.model_id?.startsWith('WMATA') ||
+    (stock.car_length_m ?? 0) >= 20 ||
+    ['RED', 'ORANGE', 'SILVER', 'BLUE', 'GREEN', 'YELLOW', 'RD', 'OR', 'SV', 'BL', 'GR', 'YL'].includes(stock.short_name.toUpperCase())
+  ) {
     return 'wmata_generic';
   }
   if (stock.short_name === 'A' || stock.short_name === 'B' || stock.short_name === 'C' || stock.short_name === 'D' || stock.short_name === 'E') {

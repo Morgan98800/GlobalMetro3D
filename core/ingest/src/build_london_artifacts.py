@@ -457,8 +457,15 @@ def build_london_artifacts(
                 continue
             u, v = l.get("start_sid"), l.get("end_sid")
             if u and v:
-                graph[u].append((v, coords, l_m))
-                graph[v].append((u, coords[::-1], l_m))
+                seg_coords = coords
+                if u in stations_by_id:
+                    u_c = stations_by_id[u]["coordinates"]
+                    d0 = equirect_dist_m(coords[0][0], coords[0][1], u_c[0], u_c[1])
+                    d1 = equirect_dist_m(coords[-1][0], coords[-1][1], u_c[0], u_c[1])
+                    if d0 > d1:
+                        seg_coords = coords[::-1]
+                graph[u].append((v, seg_coords, l_m))
+                graph[v].append((u, seg_coords[::-1], l_m))
 
     # Extension Battersea : Kennington (940GZZLUKNG) -> Nine Elms (940GZZLU990) -> Battersea PS (940GZZLU991)
     for feat in lines_geojson["features"]:

@@ -287,11 +287,11 @@
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-DYktzHHx.js",
+      "originalPath": "assets/main-B6brRBYf.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2597898,
-      "minSize1Pct": 2571919,
-      "maxSize1Pct": 2623877
+      "sizeBytes": 2598249,
+      "minSize1Pct": 2572266,
+      "maxSize1Pct": 2624232
     },
     {
       "originalPath": "assets/main-qt5s65VT.css",
@@ -364,7 +364,7 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-DYktzHHx.js",
+      "url": "/assets/main-B6brRBYf.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

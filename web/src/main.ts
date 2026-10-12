@@ -297,6 +297,18 @@ async function bootstrap() {
   const cityConfig = getCityConfig(router.getCurrentCity());
   console.log(`[app] Initializing ${cityConfig.networkName} 3D (${cityConfig.displayName})...`);
 
+  const loaderTextEl = document.getElementById('app-loader-text') || document.querySelector('#app-loader p');
+  if (loaderTextEl) {
+    const cityLoaderNames: Record<string, string> = {
+      washington: 'Chargement du métro de Washington',
+      london: 'Chargement du métro de Londres',
+      montreal: 'Chargement du métro de Montréal',
+      lille: 'Chargement du métro de Lille',
+      paris: 'Chargement du métro parisien'
+    };
+    loaderTextEl.textContent = cityLoaderNames[cityConfig.id] || `Chargement du réseau (${cityConfig.displayName})`;
+  }
+
   // 1. Fetch metadata in parallel (memoized loadShapes, deferred rer_lines)
   const dataDir = cityConfig.paths.dataDir;
   const rerLinesPath = cityConfig.paths.rer?.linesJson;
@@ -910,7 +922,7 @@ async function bootstrap() {
   }
 
   // 8. Connect deck.gl to map
-  map.on('load', () => {
+  const initOverlay = () => {
     fitMetroNetwork(0);
     setTimeout(() => {
       nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
@@ -960,7 +972,13 @@ async function bootstrap() {
         dock.selectLine(line.id, initialRoute.dir || '0');
       }
     }
-  });
+  };
+
+  if (map.loaded()) {
+    initOverlay();
+  } else {
+    map.once('load', initOverlay);
+  }
 
   // 9. Contextual Recenter Action
   btnRecenter?.addEventListener('click', () => {

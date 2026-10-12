@@ -14,6 +14,7 @@ const LOAD_TIMEOUT_MS = 5000;
 const FAMILY_URLS = {
   pneumatic_generic: '/models/train/pneumatic_generic__neutral.glb',
   steel_classic: '/models/train/steel_classic__neutral.glb',
+  wmata_generic: '/models/train/wmata_generic__neutral.glb',
   rer_generic_A: '/models/train/rer_generic_A__neutral.glb',
   rer_generic_B: '/models/train/rer_generic_B__neutral.glb',
   rer_generic_C: '/models/train/rer_generic_C__neutral.glb',
@@ -23,6 +24,7 @@ const FAMILY_URLS = {
 const MODEL_RENDER_POLICY: Record<TrainModelFamily, { heightMeasured: boolean; grazingCameraApproved: boolean }> = {
   pneumatic_generic: { heightMeasured: false, grazingCameraApproved: true },
   steel_classic: { heightMeasured: false, grazingCameraApproved: true },
+  wmata_generic: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_A: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_B: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_C: { heightMeasured: false, grazingCameraApproved: true },
@@ -56,7 +58,10 @@ const parsedScenegraphs = new Map<TrainModelFamily, any>();
 const assetListeners = new Set<() => void>();
 const requestedFamilies = new Set<TrainModelFamily>();
 
-function familyForStock(stock: { drive_type: string; short_name: string }): TrainModelFamily {
+function familyForStock(stock: { drive_type: string; short_name: string; model_id?: string }): TrainModelFamily {
+  if (stock.model_id?.startsWith('WMATA') || ['RED', 'ORANGE', 'SILVER', 'BLUE', 'GREEN', 'YELLOW', 'RD', 'OR', 'SV', 'BL', 'GR', 'YL'].includes(stock.short_name.toUpperCase())) {
+    return 'wmata_generic';
+  }
   if (stock.short_name === 'A' || stock.short_name === 'B' || stock.short_name === 'C' || stock.short_name === 'D' || stock.short_name === 'E') {
     return `rer_generic_${stock.short_name}` as TrainModelFamily;
   }
@@ -229,6 +234,7 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
       sizeScale: 1,
       _lighting: 'pbr',
       pickable: true,
+      parameters: { depthTest: false, depthWriteEnabled: false } as any,
       onClick: (info: any) => {
         if (info.object?.train && params.onClick) {
           params.onClick(info.object.train);

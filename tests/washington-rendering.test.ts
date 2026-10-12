@@ -14,10 +14,9 @@ describe('Washington DC (WMATA Metrorail) — Phase 4 Rendu & Matériel Roulant'
       const rs = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'rolling-stock.json'), 'utf8'));
 
       expect(rs.models).toBeDefined();
-      expect(rs.models.WMATA_GENERIC_8V).toBeDefined();
-      expect(rs.models.WMATA_GENERIC_6V).toBeDefined();
+      expect(rs.models.WMATA_GENERIC_2V).toBeDefined();
 
-      for (const [modelId, model] of Object.entries(rs.models) as [string, any][]) {
+      for (const [, model] of Object.entries(rs.models) as [string, any][]) {
         // Règle 6.1 : verified: false obligatoire
         expect(model.verified).toBe(false);
         // Longueur unitaire de caisse 22.86 m (75 ft)
@@ -29,11 +28,11 @@ describe('Washington DC (WMATA Metrorail) — Phase 4 Rendu & Matériel Roulant'
         expect(model.name).toContain('Metrorail');
       }
 
-      // La ligne RED pointe sur le modèle 8 voitures par défaut
+      // La ligne RED pointe sur le modèle 2 voitures
       const redStock = rs.lines.RED;
       expect(redStock).toBeDefined();
       expect(redStock.verified).toBe(false);
-      expect(redStock.cars_count).toBe(8);
+      expect(redStock.cars_count).toBe(2);
       expect(redStock.car_length_m).toBeCloseTo(22.86, 2);
       expect(redStock.name).not.toMatch(/série\s+(7000|6000|3000)/i);
     });
@@ -90,11 +89,11 @@ describe('Washington DC (WMATA Metrorail) — Phase 4 Rendu & Matériel Roulant'
     });
   });
 
-  describe('6.2 Longueur des rames & répartition 6/8 voitures', () => {
-    it('applique le nombre de voitures selon license_plate ou valeur nominale (8)', () => {
+  describe('6.2 Longueur des rames & formation 2 tronçons', () => {
+    it('applique la formation nominale à 2 tronçons (45.72 m)', () => {
       const rs = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'rolling-stock.json'), 'utf8'));
       const defaultCars = rs.lines.RED.cars_count;
-      expect(defaultCars).toBe(8);
+      expect(defaultCars).toBe(2);
 
       const resolveCarsCount = (licensePlateVal?: number | string | null): number => {
         if (typeof licensePlateVal === 'number' && licensePlateVal > 0) return licensePlateVal;
@@ -105,16 +104,14 @@ describe('Washington DC (WMATA Metrorail) — Phase 4 Rendu & Matériel Roulant'
         return defaultCars;
       };
 
-      // Si license_plate = "6" -> 6 voitures
       expect(resolveCarsCount('6')).toBe(6);
       expect(resolveCarsCount(6)).toBe(6);
-      // Si license_plate = "8" -> 8 voitures
       expect(resolveCarsCount('8')).toBe(8);
-      // Si 0, vide, null ou non renseigné -> repli sur 8 voitures
-      expect(resolveCarsCount('0')).toBe(8);
-      expect(resolveCarsCount(0)).toBe(8);
-      expect(resolveCarsCount(null)).toBe(8);
-      expect(resolveCarsCount(undefined)).toBe(8);
+      // Si 0, vide, null ou non renseigné -> repli sur 2 voitures
+      expect(resolveCarsCount('0')).toBe(2);
+      expect(resolveCarsCount(0)).toBe(2);
+      expect(resolveCarsCount(null)).toBe(2);
+      expect(resolveCarsCount(undefined)).toBe(2);
     });
   });
 

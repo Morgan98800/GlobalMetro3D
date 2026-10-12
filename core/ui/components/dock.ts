@@ -179,7 +179,18 @@ export class SubwayDock {
     this.stations = stations;
     this.laddersData = ladders;
 
-    const sortMetroLines = (a: LineMetadata, b: LineMetadata) => {
+    const MODE_ORDER: Record<string, { label: string; order: number }> = {
+      metro: { label: 'Métro', order: 1 },
+      tube: { label: 'Underground', order: 1 },
+      rail: { label: 'RER', order: 2 },
+      'elizabeth-line': { label: 'Elizabeth line', order: 2 },
+      overground: { label: 'London Overground', order: 3 },
+      dlr: { label: 'DLR', order: 4 },
+      tram: { label: 'Tramway', order: 5 },
+      tramway: { label: 'Tramway', order: 5 },
+    };
+
+    const sortLines = (a: LineMetadata, b: LineMetadata) => {
       const numA = parseInt(a.short_name);
       const numB = parseInt(b.short_name);
       if (!isNaN(numA) && !isNaN(numB)) {
@@ -187,19 +198,35 @@ export class SubwayDock {
       }
       return a.short_name.localeCompare(b.short_name);
     };
-    const metroLines = this.lines.filter(line => line.mode === 'metro').sort(sortMetroLines);
-    const rerLines = this.lines.filter(line => line.mode === 'rail').sort((a, b) => a.short_name.localeCompare(b.short_name));
+
+    // Partition lines by mode group
+    const groupsMap = new Map<string, { label: string; order: number; lines: LineMetadata[] }>();
+    for (const line of this.lines) {
+      const modeKey = (line.mode || 'metro').toLowerCase();
+      const config = MODE_ORDER[modeKey] || {
+        label: line.mode ? (line.mode.charAt(0).toUpperCase() + line.mode.slice(1)) : 'Autres',
+        order: 99
+      };
+      if (!groupsMap.has(config.label)) {
+        groupsMap.set(config.label, { label: config.label, order: config.order, lines: [] });
+      }
+      groupsMap.get(config.label)!.lines.push(line);
+    }
+
+    const sortedGroups = [...groupsMap.values()].sort((a, b) => a.order - b.order);
+
     const setters: Array<(lineId: string | null) => void> = [];
     const fragment = document.createDocumentFragment();
     const appendGroup = (label: string, groupLines: LineMetadata[]) => {
       if (!groupLines.length) return;
+      const sortedGroupLines = [...groupLines].sort(sortLines);
       const group = document.createElement('section');
       group.className = 'line-group';
       const heading = document.createElement('div');
       heading.className = 'line-group-title';
       heading.textContent = label;
       group.appendChild(heading);
-      const lineLikes: LineLike[] = groupLines.map(l => ({
+      const lineLikes: LineLike[] = sortedGroupLines.map(l => ({
         line_id: l.id,
         short_name: l.short_name,
         route_color: l.color,
@@ -211,8 +238,10 @@ export class SubwayDock {
       fragment.appendChild(group);
       setters.push(setSelected);
     };
-    appendGroup('Métro', metroLines);
-    appendGroup('RER', rerLines);
+
+    for (const grp of sortedGroups) {
+      appendGroup(grp.label, grp.lines);
+    }
     this.setGridSelected = (lineId) => setters.forEach(setSelected => setSelected(lineId));
     this.linesGridEl.replaceChildren(fragment);
     this.renderContent();

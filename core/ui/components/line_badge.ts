@@ -56,8 +56,45 @@ export function textColorFor(background: string, provided?: string | null): stri
     : '#ffffff';
 }
 
-/** '3bis' → '3b', '7bis' → '7b'. Les numéros simples sont inchangés. */
+const CITY_LINE_ABBREVIATIONS: Record<string, string> = {
+  // Washington DC WMATA official bullets
+  red: 'RD',
+  orange: 'OR',
+  silver: 'SV',
+  blue: 'BL',
+  green: 'GR',
+  yellow: 'YL',
+  // London Tube & TfL recognized codes
+  bakerloo: 'BAK',
+  central: 'CEN',
+  circle: 'CIR',
+  district: 'DIS',
+  'hammersmith & city': 'H&C',
+  'hammersmith-city': 'H&C',
+  jubilee: 'JUB',
+  metropolitan: 'MET',
+  northern: 'NOR',
+  piccadilly: 'PIC',
+  victoria: 'VIC',
+  'waterloo & city': 'W&C',
+  'waterloo-city': 'W&C',
+  elizabeth: 'ELIZ',
+  liberty: 'LIB',
+  lioness: 'LIO',
+  mildmay: 'MIL',
+  suffragette: 'SUF',
+  weaver: 'WEA',
+  windrush: 'WIN',
+  tram: 'TRM'
+};
+
+/** '3bis' → '3b', '7bis' → '7b'. WMATA: 'Orange' → 'OR'. London: 'Bakerloo' → 'BAK'. */
 export function badgeLabel(shortName: string): string {
+  if (!shortName) return '';
+  const lower = shortName.trim().toLowerCase();
+  if (CITY_LINE_ABBREVIATIONS[lower]) {
+    return CITY_LINE_ABBREVIATIONS[lower];
+  }
   return shortName.replace(/bis$/i, 'b');
 }
 

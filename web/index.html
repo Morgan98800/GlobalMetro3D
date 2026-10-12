@@ -66,7 +66,8 @@
   <body>
     <div class="app-loader" id="app-loader" role="status" aria-live="polite">
       <div class="app-loader__train" aria-hidden="true"><span></span><span></span><span></span></div>
-      <p>Chargement du réseau parisien</p>
+      <p id="app-loader-text">Chargement du métro parisien</p>
+      <script>(function(){var p=location.pathname.toLowerCase(),t=document.getElementById('app-loader-text');if(t)t.textContent=p.startsWith('/washington')?'Chargement du métro de Washington':p.startsWith('/london')||p.startsWith('/londres')?'Chargement du métro de Londres':p.startsWith('/montreal')?'Chargement du métro de Montréal':p.startsWith('/lille')?'Chargement du métro de Lille':'Chargement du métro parisien';})();</script>
     </div>
     <!-- Semantic header for robots & assistive technology -->
     <h1 class="sr-only">Métro de Paris 3D — Visualiseur cartographique et simulation en temps réel</h1>

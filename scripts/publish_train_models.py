@@ -12,10 +12,18 @@ SOURCE_DIR = ROOT / "cities" / "paris" / "assets" / "models" / "train"
 DESTINATION_DIR = ROOT / "web" / "public" / "models" / "train"
 
 
-def publish_train_models(source_dir: Path = SOURCE_DIR, destination_dir: Path = DESTINATION_DIR) -> list[Path]:
-    source_files = sorted(path for path in source_dir.glob("*.glb") if path.is_file())
+def publish_train_models(destination_dir: Path = DESTINATION_DIR) -> list[Path]:
+    source_dirs = [
+        ROOT / "cities" / "paris" / "assets" / "models" / "train",
+        ROOT / "cities" / "washington" / "assets" / "models" / "train",
+    ]
+    source_files = []
+    for sdir in source_dirs:
+        if sdir.exists():
+            source_files.extend(sorted(path for path in sdir.glob("*.glb") if path.is_file()))
+
     if not source_files:
-        raise FileNotFoundError(f"no train GLBs found in {source_dir}")
+        raise FileNotFoundError(f"no train GLBs found in source dirs")
 
     destination_dir.mkdir(parents=True, exist_ok=True)
     source_names = {path.name for path in source_files}

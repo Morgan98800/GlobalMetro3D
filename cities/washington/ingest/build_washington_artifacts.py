@@ -706,17 +706,17 @@ def build_washington_artifacts(
         rolling_lines[rid] = {
             "line_id": rid,
             "short_name": rmeta["route_short_name"],
-            "model_id": "WMATA_GENERIC_8V",
-            "name": f"Rame Metrorail {rmeta['route_short_name']} (8 voitures)",
-            "cars_count": 8,
-            "total_length_m": 182.88,
+            "model_id": "WMATA_GENERIC_2V",
+            "name": f"Rame Metrorail {rmeta['route_short_name']} (2 voitures)",
+            "cars_count": 2,
+            "total_length_m": 45.72,
             "car_length_m": 22.86,
             "bogie_centres_m": 16.46,
             "width_m": 3.09,
-            "inter_car_gap_m": 0.0,
+            "inter_car_gap_m": 0.1,
             "drive_type": "steel",
             "driverless": False,
-            "source": f"Parc Metrorail {rmeta['route_short_name']} Line WMATA (formation 8 voitures par défaut)",
+            "source": f"Parc Metrorail {rmeta['route_short_name']} Line WMATA (formation 2 voitures)",
             "verified": False
         }
 
@@ -732,34 +732,19 @@ def build_washington_artifacts(
             }
         },
         "models": {
-            "WMATA_GENERIC_8V": {
-                "model_id": "WMATA_GENERIC_8V",
-                "name": "Rame Metrorail WMATA (8 voitures - 183 m)",
+            "WMATA_GENERIC_2V": {
+                "model_id": "WMATA_GENERIC_2V",
+                "name": "Rame Metrorail WMATA (2 voitures - 46 m)",
                 "manufacturer": "Constructeurs Metrorail (parc mixte)",
-                "cars_count": 8,
-                "total_length_m": 182.88,
+                "cars_count": 2,
+                "total_length_m": 45.72,
                 "car_length_m": 22.86,
                 "bogie_centres_m": 16.46,
                 "width_m": 3.09,
-                "inter_car_gap_m": 0.0,
+                "inter_car_gap_m": 0.1,
                 "drive_type": "steel",
                 "driverless": False,
-                "source": "Spécifications techniques génériques WMATA Metrorail (caisse standard 75ft / 22.86m, gabarit 3.09m, formation 8 voitures)",
-                "verified": False
-            },
-            "WMATA_GENERIC_6V": {
-                "model_id": "WMATA_GENERIC_6V",
-                "name": "Rame Metrorail WMATA (6 voitures - 137 m)",
-                "manufacturer": "Constructeurs Metrorail (parc mixte)",
-                "cars_count": 6,
-                "total_length_m": 137.16,
-                "car_length_m": 22.86,
-                "bogie_centres_m": 16.46,
-                "width_m": 3.09,
-                "inter_car_gap_m": 0.0,
-                "drive_type": "steel",
-                "driverless": False,
-                "source": "Formation 6 voitures WMATA Metrorail (3 married-pairs de 2 caisses de 75ft)",
+                "source": "Formation standard 2 tronçons (married-pair) WMATA Metrorail (2 x 22.86m = 45.72m)",
                 "verified": False
             }
         },

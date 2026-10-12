@@ -23,9 +23,9 @@
     {
       "originalPath": "index.html",
       "normalizedPath": "index.html",
-      "sizeBytes": 7693,
-      "minSize1Pct": 7616,
-      "maxSize1Pct": 7770
+      "sizeBytes": 8154,
+      "minSize1Pct": 8072,
+      "maxSize1Pct": 8236
     },
     {
       "originalPath": "methode.html",
@@ -287,18 +287,18 @@
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-B58byv-n.js",
+      "originalPath": "assets/main-DYktzHHx.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2596210,
-      "minSize1Pct": 2570247,
-      "maxSize1Pct": 2622173
+      "sizeBytes": 2597898,
+      "minSize1Pct": 2571919,
+      "maxSize1Pct": 2623877
     },
     {
-      "originalPath": "assets/main-CccQ0CnG.css",
+      "originalPath": "assets/main-qt5s65VT.css",
       "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 50720,
-      "minSize1Pct": 50212,
-      "maxSize1Pct": 51228
+      "sizeBytes": 51134,
+      "minSize1Pct": 50622,
+      "maxSize1Pct": 51646
     },
     {
       "originalPath": "assets/tokens-D3M_eBDk.css",
@@ -359,12 +359,12 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-CccQ0CnG.css",
+      "url": "/assets/main-qt5s65VT.css",
       "expectedStatus": 200,
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-B58byv-n.js",
+      "url": "/assets/main-DYktzHHx.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

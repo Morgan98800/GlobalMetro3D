@@ -149,7 +149,8 @@ describe('Washington DC (WMATA Metrorail) — Ingestion & Phase 1 Validation', (
     const stock = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'rolling-stock.json'), 'utf8'));
     for (const model of Object.values(stock.models) as any[]) {
       expect(model.verified).toBe(false);
-      expect(model.total_length_m).toBeGreaterThan(100);
+      expect(model.cars_count).toBe(2);
+      expect(model.total_length_m).toBeCloseTo(45.72, 2);
       expect(model.car_length_m).toBeCloseTo(22.86, 2);
       expect(model.width_m).toBeCloseTo(3.09, 2);
     }

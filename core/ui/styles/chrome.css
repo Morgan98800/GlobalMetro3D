@@ -706,30 +706,50 @@
 
 .line-badge {
   --badge-size: 30px;
-  width: var(--badge-size);
+  min-width: var(--badge-size);
+  width: auto;
   aspect-ratio: 1;
-  min-width: 0;
   height: var(--badge-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0 3px;
   border: 0;
   border-radius: var(--r-full);
   font-family: inherit;
   font-size: var(--fs-base);
-  font-weight: 500;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   line-height: 1;
   cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
   transition: opacity var(--t-exit) var(--ease),
     box-shadow var(--t-exit) var(--ease);
 }
 
-/* Pas de règle [data-len] : elle descendait à 10.5 px avec un interlettrage
-   négatif, sous le plancher de 0.75rem. Le plancher est absolu, la pastille
-   s'élargit d'elle-même si le numéro est long. */
+.line-badge[data-len="1"],
+.line-badge[data-len="2"] {
+  font-size: 13px;
+}
+.line-badge[data-len="3"] {
+  font-size: 11px;
+  letter-spacing: -0.3px;
+}
+.line-badge[data-len="4"] {
+  font-size: 9.5px;
+  letter-spacing: -0.5px;
+}
+.line-badge[data-len="5"],
+.line-badge[data-len="6"],
+.line-badge[data-len="7"],
+.line-badge[data-len="8"] {
+  font-size: 8.5px;
+  letter-spacing: -0.5px;
+  border-radius: 12px;
+  padding: 0 5px;
+}
 
 .line-badge:hover {
   /* Un seul anneau. Le survol est plus étroit et neutre : il ne doit jamais

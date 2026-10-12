@@ -16,9 +16,9 @@
     {
       "originalPath": "_redirects",
       "normalizedPath": "_redirects",
-      "sizeBytes": 198,
-      "minSize1Pct": 196,
-      "maxSize1Pct": 200
+      "sizeBytes": 576,
+      "minSize1Pct": 570,
+      "maxSize1Pct": 582
     },
     {
       "originalPath": "index.html",
@@ -280,25 +280,25 @@
       "maxSize1Pct": 19184
     },
     {
-      "originalPath": "assets/index-DOm9pL3i.js",
+      "originalPath": "assets/index-DNDtd9m6.js",
       "normalizedPath": "assets/index.[hash].js",
       "sizeBytes": 16706,
       "minSize1Pct": 16538,
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-827JWqYG.js",
+      "originalPath": "assets/main-B58byv-n.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2561337,
-      "minSize1Pct": 2535723,
-      "maxSize1Pct": 2586951
+      "sizeBytes": 2596210,
+      "minSize1Pct": 2570247,
+      "maxSize1Pct": 2622173
     },
     {
-      "originalPath": "assets/main-GOnbpGGR.css",
+      "originalPath": "assets/main-CccQ0CnG.css",
       "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 50641,
-      "minSize1Pct": 50134,
-      "maxSize1Pct": 51147
+      "sizeBytes": 50720,
+      "minSize1Pct": 50212,
+      "maxSize1Pct": 51228
     },
     {
       "originalPath": "assets/tokens-D3M_eBDk.css",
@@ -359,12 +359,12 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-GOnbpGGR.css",
+      "url": "/assets/main-CccQ0CnG.css",
       "expectedStatus": 200,
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-827JWqYG.js",
+      "url": "/assets/main-B58byv-n.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

@@ -43,3 +43,9 @@ fixing du 3D/captures/*.mp4
 # System
 .DS_Store
 Thumbs.db
+
+# Scratch exploration
+scratch/
+
+.netlify/
+web/.netlify/

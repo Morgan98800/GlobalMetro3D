@@ -1,0 +1,5078 @@
+{
+  "producedAt": "2026-10-06T12:30:00Z",
+  "timestamp": 1791289800,
+  "validUntil": 1791289815,
+  "feedHealthy": true,
+  "serviceActive": true,
+  "serviceStatus": "active",
+  "lastError": null,
+  "trains": [
+    {
+      "tripId": "6573089_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7100",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 38.938281,
+      "longitude": -76.9965318,
+      "bearing": 161.9,
+      "speed": 16.23,
+      "nextStationId": "STN_B05",
+      "nextStationName": "Brookland-CUA",
+      "timeToNextStationS": 60,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573090_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7104",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.981467,
+      "longitude": -77.0211715,
+      "bearing": 336.5,
+      "speed": 17.61,
+      "nextStationId": "STN_B08",
+      "nextStationName": "Silver Spring",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573093_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7108",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0440191,
+      "longitude": -77.0520535,
+      "bearing": 174.9,
+      "speed": 21.59,
+      "nextStationId": "STN_B10",
+      "nextStationName": "Wheaton",
+      "timeToNextStationS": 60,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573096_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7112",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0873358,
+      "longitude": -77.1491384,
+      "bearing": 332.9,
+      "speed": 15.49,
+      "nextStationId": "STN_A15",
+      "nextStationName": "Shady Grove",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573130_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7116",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 38.9302367,
+      "longitude": -77.0554098,
+      "bearing": 155.7,
+      "speed": 12.68,
+      "nextStationId": "STN_A04",
+      "nextStationName": "Woodley Park",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573138_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7120",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9031467,
+      "longitude": -77.0396701,
+      "bearing": 155.7,
+      "speed": 0,
+      "nextStationId": "STN_A01_C01",
+      "nextStationName": "Metro Center",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573188_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7124",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9066172,
+      "longitude": -77.0033116,
+      "bearing": 195.7,
+      "speed": 0,
+      "nextStationId": "STN_B03",
+      "nextStationName": "Union Station",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573210_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7128",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.014946,
+      "longitude": -77.0429246,
+      "bearing": 348.4,
+      "speed": 0,
+      "nextStationId": "STN_B10",
+      "nextStationName": "Wheaton",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573213_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7132",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 38.8980092,
+      "longitude": -77.0194825,
+      "bearing": 299.2,
+      "speed": 6.8,
+      "nextStationId": "STN_B01_F01",
+      "nextStationName": "Gallery Place",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573227_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7136",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0498336,
+      "longitude": -77.0517611,
+      "bearing": 7.3,
+      "speed": 16.19,
+      "nextStationId": "STN_B11",
+      "nextStationName": "Glenmont",
+      "timeToNextStationS": 120,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573236_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7140",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0485233,
+      "longitude": -77.1130837,
+      "bearing": 159.3,
+      "speed": 0,
+      "nextStationId": "STN_A11",
+      "nextStationName": "Grosvenor-Strathmore",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573247_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7144",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9832759,
+      "longitude": -77.0936506,
+      "bearing": 343.2,
+      "speed": 0,
+      "nextStationId": "STN_A10",
+      "nextStationName": "Medical Center",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573262_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7148",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 39.0144508,
+      "longitude": -77.0994693,
+      "bearing": 156.9,
+      "speed": 20.38,
+      "nextStationId": "STN_A10",
+      "nextStationName": "Medical Center",
+      "timeToNextStationS": 120,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573277_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7152",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0248721,
+      "longitude": -77.1027555,
+      "bearing": 359.3,
+      "speed": 20.38,
+      "nextStationId": "STN_A11",
+      "nextStationName": "Grosvenor-Strathmore",
+      "timeToNextStationS": 60,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573294_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7156",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.8947559,
+      "longitude": -77.0113597,
+      "bearing": 91.1,
+      "speed": 11.62,
+      "nextStationId": "STN_B03",
+      "nextStationName": "Union Station",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573296_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7160",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0842719,
+      "longitude": -77.1461938,
+      "bearing": 138.1,
+      "speed": 0,
+      "nextStationId": "STN_A13",
+      "nextStationName": "Twinbrook",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573313_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7164",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 38.9349104,
+      "longitude": -77.0581284,
+      "bearing": 335.7,
+      "speed": 0,
+      "nextStationId": "STN_A06",
+      "nextStationName": "Van Ness-UDC",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573342_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7168",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 39.0084185,
+      "longitude": -77.0408869,
+      "bearing": 166.1,
+      "speed": 19.96,
+      "nextStationId": "STN_B08",
+      "nextStationName": "Silver Spring",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573343_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7172",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9171146,
+      "longitude": -76.9979856,
+      "bearing": 19.9,
+      "speed": 13.85,
+      "nextStationId": "STN_B04",
+      "nextStationName": "Rhode Island Ave",
+      "timeToNextStationS": 60,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573353_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7176",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9463,
+      "longitude": -77.0765301,
+      "bearing": 96.2,
+      "speed": 13.94,
+      "nextStationId": "STN_A06",
+      "nextStationName": "Van Ness-UDC",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573364_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7180",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 39.0565693,
+      "longitude": -77.1147849,
+      "bearing": 339.8,
+      "speed": 20.35,
+      "nextStationId": "STN_A13",
+      "nextStationName": "Twinbrook",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573365_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7184",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9065278,
+      "longitude": -77.0416332,
+      "bearing": 335.7,
+      "speed": 9.17,
+      "nextStationId": "STN_A03",
+      "nextStationName": "Dupont Circle",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573495_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7188",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9466036,
+      "longitude": -77.0000283,
+      "bearing": 342.1,
+      "speed": 16.23,
+      "nextStationId": "STN_B06_E06",
+      "nextStationName": "Fort Totten",
+      "timeToNextStationS": 60,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573496_20121",
+      "routeId": "RED",
+      "directionId": 0,
+      "vehicleId": "7192",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9767793,
+      "longitude": -77.0905454,
+      "bearing": 161.5,
+      "speed": 20.57,
+      "nextStationId": "STN_A08",
+      "nextStationName": "Friendship Heights",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573503_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7196",
+      "carCount": 6,
+      "delay": 0,
+      "latitude": 38.9488848,
+      "longitude": -77.0796743,
+      "bearing": 338.4,
+      "speed": 0,
+      "nextStationId": "STN_A08",
+      "nextStationName": "Friendship Heights",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    },
+    {
+      "tripId": "6573504_20121",
+      "routeId": "RED",
+      "directionId": 1,
+      "vehicleId": "7200",
+      "carCount": 8,
+      "delay": 0,
+      "latitude": 38.9760216,
+      "longitude": -77.0181285,
+      "bearing": 156.4,
+      "speed": 0,
+      "nextStationId": "STN_B06_E06",
+      "nextStationName": "Fort Totten",
+      "timeToNextStationS": 10,
+      "timestamp": 1791289800
+    }
+  ],
+  "tripUpdates": [
+    {
+      "id": "TU_6573089_20121",
+      "trip": {
+        "tripId": "6573089_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791291000,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291020,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791291300,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291320,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791291600,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291620,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791291720,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291740,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791291960,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291980,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791292140,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292160,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791292260,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292280,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791292440,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292460,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791292740,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292760,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573090_20121",
+      "trip": {
+        "tripId": "6573090_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573093_20121",
+      "trip": {
+        "tripId": "6573093_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791291000,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291020,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791291540,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291560,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791291660,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291680,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791291780,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291800,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791291900,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291920,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791292020,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292040,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791292200,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292220,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791292320,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292340,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791292500,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292520,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791292620,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292640,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 22,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791292860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 23,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791293040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 24,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791293160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 25,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791293340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 26,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791293640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293660,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573096_20121",
+      "trip": {
+        "tripId": "6573096_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573130_20121",
+      "trip": {
+        "tripId": "6573130_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791291600,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291620,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791291780,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291800,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791292020,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292040,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573138_20121",
+      "trip": {
+        "tripId": "6573138_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791291300,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291320,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791291480,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291500,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791291720,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291740,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573188_20121",
+      "trip": {
+        "tripId": "6573188_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290700,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290720,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791291000,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291020,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791291300,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291320,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791291660,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291680,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791291840,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291860,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791291960,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291980,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791292140,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292160,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791292440,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292460,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573210_20121",
+      "trip": {
+        "tripId": "6573210_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573213_20121",
+      "trip": {
+        "tripId": "6573213_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290700,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290720,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791291000,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291020,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791291540,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291560,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791291660,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291680,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791291840,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291860,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791292140,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292160,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573227_20121",
+      "trip": {
+        "tripId": "6573227_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573236_20121",
+      "trip": {
+        "tripId": "6573236_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791291180,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291200,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791291300,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291320,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791291480,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291500,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791291540,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291560,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791291660,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291680,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791291780,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291800,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791291960,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291980,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791292080,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292100,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791292260,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292280,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791292440,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292460,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791292620,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292640,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 22,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791292800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 23,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791292980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 24,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791293220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293240,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573247_20121",
+      "trip": {
+        "tripId": "6573247_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573262_20121",
+      "trip": {
+        "tripId": "6573262_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791291000,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291020,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791291180,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291200,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791291480,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291500,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791291660,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291680,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791291780,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291800,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791291960,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291980,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791292140,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292160,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791292320,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292340,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791292500,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292520,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791292680,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292700,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 22,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791292920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292940,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573277_20121",
+      "trip": {
+        "tripId": "6573277_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573294_20121",
+      "trip": {
+        "tripId": "6573294_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791291000,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291020,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791291180,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291200,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573296_20121",
+      "trip": {
+        "tripId": "6573296_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791291480,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291500,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791291600,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291620,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791291720,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291740,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791291780,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291800,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791291840,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291860,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791291960,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291980,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791292080,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292100,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791292260,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292280,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791292380,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292400,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791292560,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292580,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 22,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791292740,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292760,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 23,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791292920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 24,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791293100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 25,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791293280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 26,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791293520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293540,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573313_20121",
+      "trip": {
+        "tripId": "6573313_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791291540,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291560,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573342_20121",
+      "trip": {
+        "tripId": "6573342_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791290700,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290720,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791291480,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291500,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791291600,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291620,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791291720,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291740,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791291900,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291920,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791292020,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292040,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791292200,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292220,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791292320,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292340,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791292560,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292580,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 22,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791292740,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292760,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 23,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791292860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 24,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791293040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 25,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791293340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293360,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573343_20121",
+      "trip": {
+        "tripId": "6573343_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791290700,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290720,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791291120,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291140,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573353_20121",
+      "trip": {
+        "tripId": "6573353_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791291180,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291200,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791291540,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291560,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791291720,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291740,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791291900,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291920,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791292080,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292100,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791292320,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292340,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573364_20121",
+      "trip": {
+        "tripId": "6573364_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573365_20121",
+      "trip": {
+        "tripId": "6573365_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791290700,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290720,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791291540,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291560,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791291840,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291860,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573495_20121",
+      "trip": {
+        "tripId": "6573495_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791289860,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289880,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573496_20121",
+      "trip": {
+        "tripId": "6573496_20121",
+        "routeId": "RED",
+        "directionId": 0
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791290040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290060,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791290340,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290360,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791290580,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290600,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290700,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290720,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791290880,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290900,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791291180,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291200,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791291360,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291380,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791291480,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291500,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791291660,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291680,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791291840,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291860,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_B08",
+          "arrival": {
+            "time": 1791292020,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292040,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_B09",
+          "arrival": {
+            "time": 1791292200,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292220,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_B10",
+          "arrival": {
+            "time": 1791292380,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292400,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_B11",
+          "arrival": {
+            "time": 1791292620,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292640,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573503_20121",
+      "trip": {
+        "tripId": "6573503_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791289920,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289940,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791290100,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290120,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791290220,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290240,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791290460,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290480,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791291240,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291260,
+            "delay": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "TU_6573504_20121",
+      "trip": {
+        "tripId": "6573504_20121",
+        "routeId": "RED",
+        "directionId": 1
+      },
+      "timestamp": 1791289800,
+      "delay": 0,
+      "stopTimeUpdates": [
+        {
+          "stopSequence": 1,
+          "stopId": "STN_B07",
+          "arrival": {
+            "time": 1791289800,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791289820,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 2,
+          "stopId": "STN_B06_E06",
+          "arrival": {
+            "time": 1791289980,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290000,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 3,
+          "stopId": "STN_B05",
+          "arrival": {
+            "time": 1791290160,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290180,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 4,
+          "stopId": "STN_B04",
+          "arrival": {
+            "time": 1791290280,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290300,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 5,
+          "stopId": "STN_B35",
+          "arrival": {
+            "time": 1791290400,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290420,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 6,
+          "stopId": "STN_B03",
+          "arrival": {
+            "time": 1791290520,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290540,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 7,
+          "stopId": "STN_B02",
+          "arrival": {
+            "time": 1791290640,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290660,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 8,
+          "stopId": "STN_B01_F01",
+          "arrival": {
+            "time": 1791290760,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290780,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 9,
+          "stopId": "STN_A01_C01",
+          "arrival": {
+            "time": 1791290820,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290840,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 10,
+          "stopId": "STN_A02",
+          "arrival": {
+            "time": 1791290940,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791290960,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 11,
+          "stopId": "STN_A03",
+          "arrival": {
+            "time": 1791291060,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291080,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 12,
+          "stopId": "STN_A04",
+          "arrival": {
+            "time": 1791291180,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291200,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 13,
+          "stopId": "STN_A05",
+          "arrival": {
+            "time": 1791291300,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291320,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 14,
+          "stopId": "STN_A06",
+          "arrival": {
+            "time": 1791291420,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291440,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 15,
+          "stopId": "STN_A07",
+          "arrival": {
+            "time": 1791291600,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291620,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 16,
+          "stopId": "STN_A08",
+          "arrival": {
+            "time": 1791291720,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291740,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 17,
+          "stopId": "STN_A09",
+          "arrival": {
+            "time": 1791291900,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791291920,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 18,
+          "stopId": "STN_A10",
+          "arrival": {
+            "time": 1791292020,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292040,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 19,
+          "stopId": "STN_A11",
+          "arrival": {
+            "time": 1791292260,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292280,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 20,
+          "stopId": "STN_A12",
+          "arrival": {
+            "time": 1791292440,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292460,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 21,
+          "stopId": "STN_A13",
+          "arrival": {
+            "time": 1791292560,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292580,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 22,
+          "stopId": "STN_A14",
+          "arrival": {
+            "time": 1791292740,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791292760,
+            "delay": 0
+          }
+        },
+        {
+          "stopSequence": 23,
+          "stopId": "STN_A15",
+          "arrival": {
+            "time": 1791293040,
+            "delay": 0
+          },
+          "departure": {
+            "time": 1791293060,
+            "delay": 0
+          }
+        }
+      ]
+    }
+  ],
+  "trafficByLine": {
+    "RED": {
+      "lineId": "RED",
+      "lineName": "Red Line",
+      "status": "normal",
+      "severity": "normal",
+      "title": "Red Line",
+      "message": "Normal service",
+      "updatedAt": "2026-10-06T12:30:00Z"
+    }
+  },
+  "stats": {
+    "totalEntitiesInFeed": 26,
+    "retainedEntities": 26,
+    "redCount": 26,
+    "vehiclePositionsCount": 26
+  }
+}

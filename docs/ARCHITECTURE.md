@@ -144,6 +144,12 @@ Le moteur partagé (`core/sim/browser_engine.ts`) est rigoureusement agnostique 
   - **Montréal (`stm-i3`)** : `StmRealtimeAdapter` (état de service des 4 lignes, mode théorique nominal).
   - **Londres (`tfl-unified`)** : `TflRealtimeAdapter` (prédictions d'arrivée sur 20 lignes et 688 rames).
   - **Lille (`gtfs-rt`)** : `IleviaRealtimeAdapter` (TripUpdates GTFS-RT Ilévia pour le métro VAL et le tramway).
+  - **Washington DC (`gtfs-rt`)** : `WashingtonRealtimeAdapter` (TripUpdates & VehiclePositions GTFS-RT 2.0 WMATA pour les 6 lignes Metrorail).
+- **Réseau de Washington DC (`cities/washington/`)** :
+  - Métro lourd WMATA Metrorail : 6 lignes (Red, Orange, Silver, Blue, Green, Yellow), 98 stations, 97 rames nominales à l'heure du snapshot.
+  - Troncs communs partagés : Orange / Silver / Blue (Rosslyn ↔ Stadium-Armory) et Green / Yellow (L'Enfant Plaza ↔ Mt Vernon Sq), géométrie de voies partagées cadencée par les horaires GTFS sans superposition hors station.
+  - Modèle 3D unique générique clean-room `wmata_generic__neutral.glb` (3,908 octets = 3.82 Ko < 15 Ko), dimensions exactes de caisse standard 75ft (22.86 m × 3.09 m × 3.30 m).
+  - Relais serveur Netlify `washington_relay.ts` avec cache CDN `s-maxage=15` et coalescence in-flight protégeant le quota WMATA (50 000 req/jour max, consommation plafonnée à ~5 760 req/jour quel que soit le trafic).
 - **Réseau de Lille (`cities/lille/`)** :
   - Métro automatique VAL (Lignes 1 et 2) : 60 stations, rames VAL 208 (26 m) et VAL 52m (52 m).
   - Tramway Ilévia (Lignes R et T) : 36 stations (dont 5 pôles d'échange avec le métro), motrices articulées Breda VLC (30 m).

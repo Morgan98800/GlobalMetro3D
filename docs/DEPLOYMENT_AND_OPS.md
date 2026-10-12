@@ -12,6 +12,9 @@ Les clés sensibles sont isolées dans le fichier local `.env` à la racine du p
 # Clé d'API Île-de-France Mobilités PRIM (Flux SIRI-Lite temps réel)
 PRIM_API_KEY=
 
+# Clé d'API WMATA Metrorail (Washington DC — Build statique & Relais temps réel)
+WMATA_API_KEY=
+
 # Identifiants de déploiement Netlify
 NETLIFY_SITE_ID=
 NETLIFY_AUTH_TOKEN=
@@ -150,14 +153,30 @@ C'est le fichier directeur du déploiement géré par Netlify :
 
 [functions."lille_relay"]
   schedule = "* * * * *"     # rafraîchissement Ilévia GTFS-RT chaque minute (Lille)
+
+[functions."washington_relay"]
+  schedule = "* * * * *"     # rafraîchissement WMATA GTFS-RT chaque minute (Washington DC)
 ```
 
-Quatre relais serveur et leurs redirections associées sont configurés :
+Cinq relais serveur et leurs redirections associées sont configurés :
 - `/api/prim` → `/.netlify/functions/prim_relay` (200)
 - `/api/stm` → `/.netlify/functions/stm_relay` (200)
 - `/api/tfl` & `/api/tfl_arrivals` → `/.netlify/functions/tfl_relay` (200)
 - `/api/lille-rt` → `/.netlify/functions/lille_relay` (200)
+- `/api/washington-rt` → `/.netlify/functions/washington_relay` (200)
 - `/*` → `/index.html` (200, routage SPA)
+
+### Maîtrise & Isolation du Quota WMATA (Washington DC)
+- **Contrainte opérateur** : 10 appels/seconde et 50 000 appels/jour au maximum.
+- **Stratégie d'isolation du trafic & architecture hybride** :
+  1. Le relais Netlify sert sa réponse avec l'en-tête de cache partagé CDN `Netlify-CDN-Cache-Control: public, s-maxage=15, stale-while-revalidate=30` et `Cache-Control: public, max-age=10`.
+  2. Coalescence in-flight côté serveur Node.js : toute requête entrante pendant un appel WMATA en cours réutilise la même promesse.
+  3. **Architecture hybride double-source** :
+     - **Source nominale** : GTFS-RT Protobuf (`rail-gtfsrt-tripupdates.pb` et `rail-gtfsrt-vehiclepositions.pb`).
+     - **Source de repli transparente** : WMATA *Real-Time Rail Predictions* REST JSON (`StationPrediction.svc/json/GetPrediction/All`). Si la clé WMATA n'a pas accès au GTFS-RT ou si le flux protobuf est indisponible, le relais bascule automatiquement sur cette API JSON en un appel unique pour l'ensemble des 98 stations.
+  4. **Volume sortant réel** : avec une mise à jour toutes les 15 à 30 secondes, le relais effectue au plus $5\,760\text{ requêtes/jour}$ vers WMATA pour **l'ensemble des visiteurs mondiaux**.
+  5. Cela consomme seulement **11,5 % du quota quotidien** (marge de sécurité de 88,5 %, bien en dessous du plafond de 25 000 requêtes/jour).
+  6. En cas de code 429 ou 401 de l'API WMATA, l'erreur est interceptée et renvoie un statut dégradé gracieux (repli immédiat sur les horaires théoriques).
 
 ---
 
@@ -171,6 +190,7 @@ Chaque ville dispose d'une arborescence autonome sous `cities/<ville>/data/` syn
 | **Montréal** | 10 fichiers (`cities/montreal/data/`) | `mr_73__neutral.glb`, `mpm_10__neutral.glb` | `/api/stm` |
 | **Londres** | 10 fichiers (`cities/london/data/`) | 10 profils Tube, Overground, DLR, Elizabeth, Tram | `/api/tfl` |
 | **Lille** | 10 fichiers (`cities/lille/data/`) | `val_208__neutral.glb`, `val_52m__neutral.glb`, `breda_vlc__neutral.glb` | `/api/lille-rt` |
+| **Washington DC** | 10 fichiers (`cities/washington/data/`) | `wmata_generic__neutral.glb` (3,82 Ko) | `/api/washington-rt` |
 
 ---
 

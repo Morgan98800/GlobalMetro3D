@@ -1,0 +1,1184 @@
+{
+  "weekday": [
+    {
+      "name": "L'Enfant Plaza",
+      "count": 2672
+    },
+    {
+      "name": "Gallery Place",
+      "count": 2246
+    },
+    {
+      "name": "Metro Center",
+      "count": 1942
+    },
+    {
+      "name": "Fort Totten",
+      "count": 1506
+    },
+    {
+      "name": "Archives",
+      "count": 1486
+    },
+    {
+      "name": "Mt Vernon Sq",
+      "count": 1486
+    },
+    {
+      "name": "Stadium-Armory",
+      "count": 1184
+    },
+    {
+      "name": "Potomac Ave",
+      "count": 1184
+    },
+    {
+      "name": "Eastern Market",
+      "count": 1184
+    },
+    {
+      "name": "Rosslyn",
+      "count": 1184
+    },
+    {
+      "name": "Capitol South",
+      "count": 1182
+    },
+    {
+      "name": "Federal Center SW",
+      "count": 1182
+    },
+    {
+      "name": "Smithsonian",
+      "count": 1182
+    },
+    {
+      "name": "Federal Triangle",
+      "count": 1182
+    },
+    {
+      "name": "Mcpherson Sq",
+      "count": 1182
+    },
+    {
+      "name": "Farragut West",
+      "count": 1182
+    },
+    {
+      "name": "Foggy Bottom-Gwu",
+      "count": 1182
+    },
+    {
+      "name": "Braddock Rd",
+      "count": 1142
+    },
+    {
+      "name": "King St-Old Town",
+      "count": 1142
+    },
+    {
+      "name": "Pentagon",
+      "count": 1140
+    },
+    {
+      "name": "Pentagon City",
+      "count": 1140
+    },
+    {
+      "name": "Crystal City",
+      "count": 1140
+    },
+    {
+      "name": "Ronald Reagan Washington National Airport",
+      "count": 1140
+    },
+    {
+      "name": "Potomac Yard/VT",
+      "count": 1138
+    },
+    {
+      "name": "Downtown Largo",
+      "count": 788
+    },
+    {
+      "name": "Morgan Blvd",
+      "count": 788
+    },
+    {
+      "name": "Addison Rd",
+      "count": 788
+    },
+    {
+      "name": "Capitol Heights",
+      "count": 788
+    },
+    {
+      "name": "Benning Rd",
+      "count": 788
+    },
+    {
+      "name": "East Falls Church",
+      "count": 788
+    },
+    {
+      "name": "Court House",
+      "count": 786
+    },
+    {
+      "name": "Clarendon",
+      "count": 786
+    },
+    {
+      "name": "Virginia Sq-GMU",
+      "count": 786
+    },
+    {
+      "name": "Ballston-MU",
+      "count": 786
+    },
+    {
+      "name": "Shady Grove",
+      "count": 760
+    },
+    {
+      "name": "Rockville",
+      "count": 760
+    },
+    {
+      "name": "Twinbrook",
+      "count": 760
+    },
+    {
+      "name": "North Bethesda",
+      "count": 760
+    },
+    {
+      "name": "Grosvenor-Strathmore",
+      "count": 760
+    },
+    {
+      "name": "Medical Center",
+      "count": 760
+    },
+    {
+      "name": "Bethesda",
+      "count": 760
+    },
+    {
+      "name": "Friendship Heights",
+      "count": 760
+    },
+    {
+      "name": "Tenleytown-AU",
+      "count": 760
+    },
+    {
+      "name": "Van Ness-UDC",
+      "count": 760
+    },
+    {
+      "name": "Cleveland Park",
+      "count": 760
+    },
+    {
+      "name": "Woodley Park",
+      "count": 760
+    },
+    {
+      "name": "Dupont Circle",
+      "count": 760
+    },
+    {
+      "name": "Farragut North",
+      "count": 760
+    },
+    {
+      "name": "Judiciary Sq",
+      "count": 760
+    },
+    {
+      "name": "Union Station",
+      "count": 760
+    },
+    {
+      "name": "NoMa-Gallaudet U",
+      "count": 760
+    },
+    {
+      "name": "Rhode Island Ave",
+      "count": 760
+    },
+    {
+      "name": "Brookland-CUA",
+      "count": 760
+    },
+    {
+      "name": "Takoma",
+      "count": 760
+    },
+    {
+      "name": "Silver Spring",
+      "count": 760
+    },
+    {
+      "name": "Forest Glen",
+      "count": 760
+    },
+    {
+      "name": "Wheaton",
+      "count": 760
+    },
+    {
+      "name": "Glenmont",
+      "count": 760
+    },
+    {
+      "name": "Branch Ave",
+      "count": 746
+    },
+    {
+      "name": "Suitland",
+      "count": 746
+    },
+    {
+      "name": "Naylor Rd",
+      "count": 746
+    },
+    {
+      "name": "Southern Ave",
+      "count": 746
+    },
+    {
+      "name": "Congress Heights",
+      "count": 746
+    },
+    {
+      "name": "Anacostia",
+      "count": 746
+    },
+    {
+      "name": "Navy Yard-Ballpark",
+      "count": 746
+    },
+    {
+      "name": "Waterfront",
+      "count": 746
+    },
+    {
+      "name": "Shaw-Howard U",
+      "count": 746
+    },
+    {
+      "name": "U St",
+      "count": 746
+    },
+    {
+      "name": "Columbia Heights",
+      "count": 746
+    },
+    {
+      "name": "Georgia Ave-Petworth",
+      "count": 746
+    },
+    {
+      "name": "West Hyattsville",
+      "count": 746
+    },
+    {
+      "name": "Hyattsville Crossing",
+      "count": 746
+    },
+    {
+      "name": "College Park-U Of MD",
+      "count": 746
+    },
+    {
+      "name": "Greenbelt",
+      "count": 746
+    },
+    {
+      "name": "Huntington",
+      "count": 744
+    },
+    {
+      "name": "Eisenhower Ave",
+      "count": 744
+    },
+    {
+      "name": "West Falls Church",
+      "count": 404
+    },
+    {
+      "name": "Dunn Loring",
+      "count": 402
+    },
+    {
+      "name": "Vienna",
+      "count": 402
+    },
+    {
+      "name": "Mclean",
+      "count": 400
+    },
+    {
+      "name": "Tysons",
+      "count": 400
+    },
+    {
+      "name": "Greensboro",
+      "count": 400
+    },
+    {
+      "name": "Spring Hill",
+      "count": 400
+    },
+    {
+      "name": "Wiehle-Reston East",
+      "count": 400
+    },
+    {
+      "name": "Arlington Cemetery",
+      "count": 398
+    },
+    {
+      "name": "Reston Town Center",
+      "count": 398
+    },
+    {
+      "name": "Herndon",
+      "count": 398
+    },
+    {
+      "name": "Innovation Center",
+      "count": 398
+    },
+    {
+      "name": "Washington Dulles International Airport",
+      "count": 398
+    },
+    {
+      "name": "Van Dorn St",
+      "count": 396
+    },
+    {
+      "name": "Franconia-Springfield",
+      "count": 396
+    },
+    {
+      "name": "New Carrollton",
+      "count": 396
+    },
+    {
+      "name": "Landover",
+      "count": 396
+    },
+    {
+      "name": "Cheverly",
+      "count": 396
+    },
+    {
+      "name": "Deanwood",
+      "count": 396
+    },
+    {
+      "name": "Minnesota Ave",
+      "count": 396
+    },
+    {
+      "name": "Loudoun Gateway",
+      "count": 394
+    },
+    {
+      "name": "Ashburn",
+      "count": 394
+    }
+  ],
+  "saturday": [
+    {
+      "name": "L'Enfant Plaza",
+      "count": 1814
+    },
+    {
+      "name": "Gallery Place",
+      "count": 1664
+    },
+    {
+      "name": "Metro Center",
+      "count": 1475
+    },
+    {
+      "name": "Fort Totten",
+      "count": 1134
+    },
+    {
+      "name": "Archives",
+      "count": 1058
+    },
+    {
+      "name": "Mt Vernon Sq",
+      "count": 1058
+    },
+    {
+      "name": "Rosslyn",
+      "count": 871
+    },
+    {
+      "name": "Federal Triangle",
+      "count": 869
+    },
+    {
+      "name": "Mcpherson Sq",
+      "count": 869
+    },
+    {
+      "name": "Farragut West",
+      "count": 869
+    },
+    {
+      "name": "Foggy Bottom-Gwu",
+      "count": 869
+    },
+    {
+      "name": "Braddock Rd",
+      "count": 825
+    },
+    {
+      "name": "King St-Old Town",
+      "count": 825
+    },
+    {
+      "name": "Pentagon",
+      "count": 823
+    },
+    {
+      "name": "Pentagon City",
+      "count": 823
+    },
+    {
+      "name": "Crystal City",
+      "count": 823
+    },
+    {
+      "name": "Ronald Reagan Washington National Airport",
+      "count": 823
+    },
+    {
+      "name": "Potomac Yard/VT",
+      "count": 823
+    },
+    {
+      "name": "Stadium-Armory",
+      "count": 754
+    },
+    {
+      "name": "Potomac Ave",
+      "count": 754
+    },
+    {
+      "name": "Eastern Market",
+      "count": 754
+    },
+    {
+      "name": "Capitol South",
+      "count": 752
+    },
+    {
+      "name": "Federal Center SW",
+      "count": 752
+    },
+    {
+      "name": "Smithsonian",
+      "count": 752
+    },
+    {
+      "name": "Van Ness-UDC",
+      "count": 606
+    },
+    {
+      "name": "Cleveland Park",
+      "count": 606
+    },
+    {
+      "name": "Woodley Park",
+      "count": 606
+    },
+    {
+      "name": "Dupont Circle",
+      "count": 606
+    },
+    {
+      "name": "Farragut North",
+      "count": 606
+    },
+    {
+      "name": "Judiciary Sq",
+      "count": 606
+    },
+    {
+      "name": "Union Station",
+      "count": 606
+    },
+    {
+      "name": "NoMa-Gallaudet U",
+      "count": 606
+    },
+    {
+      "name": "Rhode Island Ave",
+      "count": 606
+    },
+    {
+      "name": "Brookland-CUA",
+      "count": 606
+    },
+    {
+      "name": "Takoma",
+      "count": 606
+    },
+    {
+      "name": "Silver Spring",
+      "count": 606
+    },
+    {
+      "name": "Forest Glen",
+      "count": 606
+    },
+    {
+      "name": "Wheaton",
+      "count": 606
+    },
+    {
+      "name": "Glenmont",
+      "count": 606
+    },
+    {
+      "name": "East Falls Church",
+      "count": 582
+    },
+    {
+      "name": "Court House",
+      "count": 580
+    },
+    {
+      "name": "Clarendon",
+      "count": 580
+    },
+    {
+      "name": "Virginia Sq-GMU",
+      "count": 580
+    },
+    {
+      "name": "Ballston-MU",
+      "count": 580
+    },
+    {
+      "name": "Huntington",
+      "count": 534
+    },
+    {
+      "name": "Eisenhower Ave",
+      "count": 534
+    },
+    {
+      "name": "Branch Ave",
+      "count": 528
+    },
+    {
+      "name": "Suitland",
+      "count": 528
+    },
+    {
+      "name": "Naylor Rd",
+      "count": 528
+    },
+    {
+      "name": "Southern Ave",
+      "count": 528
+    },
+    {
+      "name": "Congress Heights",
+      "count": 528
+    },
+    {
+      "name": "Anacostia",
+      "count": 528
+    },
+    {
+      "name": "Navy Yard-Ballpark",
+      "count": 528
+    },
+    {
+      "name": "Waterfront",
+      "count": 528
+    },
+    {
+      "name": "Shaw-Howard U",
+      "count": 528
+    },
+    {
+      "name": "U St",
+      "count": 528
+    },
+    {
+      "name": "Columbia Heights",
+      "count": 528
+    },
+    {
+      "name": "Georgia Ave-Petworth",
+      "count": 528
+    },
+    {
+      "name": "West Hyattsville",
+      "count": 528
+    },
+    {
+      "name": "Hyattsville Crossing",
+      "count": 528
+    },
+    {
+      "name": "College Park-U Of MD",
+      "count": 528
+    },
+    {
+      "name": "Greenbelt",
+      "count": 528
+    },
+    {
+      "name": "Shady Grove",
+      "count": 470
+    },
+    {
+      "name": "Rockville",
+      "count": 470
+    },
+    {
+      "name": "Twinbrook",
+      "count": 470
+    },
+    {
+      "name": "North Bethesda",
+      "count": 470
+    },
+    {
+      "name": "Grosvenor-Strathmore",
+      "count": 470
+    },
+    {
+      "name": "Medical Center",
+      "count": 470
+    },
+    {
+      "name": "Bethesda",
+      "count": 470
+    },
+    {
+      "name": "Friendship Heights",
+      "count": 470
+    },
+    {
+      "name": "Tenleytown-AU",
+      "count": 470
+    },
+    {
+      "name": "Downtown Largo",
+      "count": 461
+    },
+    {
+      "name": "Morgan Blvd",
+      "count": 461
+    },
+    {
+      "name": "Addison Rd",
+      "count": 461
+    },
+    {
+      "name": "Capitol Heights",
+      "count": 461
+    },
+    {
+      "name": "Benning Rd",
+      "count": 461
+    },
+    {
+      "name": "West Falls Church",
+      "count": 298
+    },
+    {
+      "name": "Dunn Loring",
+      "count": 297
+    },
+    {
+      "name": "Vienna",
+      "count": 297
+    },
+    {
+      "name": "Mclean",
+      "count": 296
+    },
+    {
+      "name": "Tysons",
+      "count": 296
+    },
+    {
+      "name": "Greensboro",
+      "count": 296
+    },
+    {
+      "name": "Spring Hill",
+      "count": 296
+    },
+    {
+      "name": "Wiehle-Reston East",
+      "count": 296
+    },
+    {
+      "name": "Reston Town Center",
+      "count": 294
+    },
+    {
+      "name": "Herndon",
+      "count": 294
+    },
+    {
+      "name": "Innovation Center",
+      "count": 294
+    },
+    {
+      "name": "Washington Dulles International Airport",
+      "count": 294
+    },
+    {
+      "name": "New Carrollton",
+      "count": 293
+    },
+    {
+      "name": "Landover",
+      "count": 293
+    },
+    {
+      "name": "Cheverly",
+      "count": 293
+    },
+    {
+      "name": "Deanwood",
+      "count": 293
+    },
+    {
+      "name": "Minnesota Ave",
+      "count": 293
+    },
+    {
+      "name": "Loudoun Gateway",
+      "count": 293
+    },
+    {
+      "name": "Ashburn",
+      "count": 293
+    },
+    {
+      "name": "Arlington Cemetery",
+      "count": 291
+    },
+    {
+      "name": "Van Dorn St",
+      "count": 291
+    },
+    {
+      "name": "Franconia-Springfield",
+      "count": 291
+    }
+  ],
+  "sunday": [
+    {
+      "name": "L'Enfant Plaza",
+      "count": 1718
+    },
+    {
+      "name": "Gallery Place",
+      "count": 1576
+    },
+    {
+      "name": "Metro Center",
+      "count": 1405
+    },
+    {
+      "name": "Fort Totten",
+      "count": 1078
+    },
+    {
+      "name": "Archives",
+      "count": 998
+    },
+    {
+      "name": "Mt Vernon Sq",
+      "count": 998
+    },
+    {
+      "name": "Rosslyn",
+      "count": 829
+    },
+    {
+      "name": "Federal Triangle",
+      "count": 827
+    },
+    {
+      "name": "Mcpherson Sq",
+      "count": 827
+    },
+    {
+      "name": "Farragut West",
+      "count": 827
+    },
+    {
+      "name": "Foggy Bottom-Gwu",
+      "count": 827
+    },
+    {
+      "name": "Braddock Rd",
+      "count": 779
+    },
+    {
+      "name": "King St-Old Town",
+      "count": 779
+    },
+    {
+      "name": "Pentagon",
+      "count": 777
+    },
+    {
+      "name": "Pentagon City",
+      "count": 777
+    },
+    {
+      "name": "Crystal City",
+      "count": 777
+    },
+    {
+      "name": "Ronald Reagan Washington National Airport",
+      "count": 777
+    },
+    {
+      "name": "Potomac Yard/VT",
+      "count": 777
+    },
+    {
+      "name": "Stadium-Armory",
+      "count": 718
+    },
+    {
+      "name": "Potomac Ave",
+      "count": 718
+    },
+    {
+      "name": "Eastern Market",
+      "count": 718
+    },
+    {
+      "name": "Capitol South",
+      "count": 716
+    },
+    {
+      "name": "Federal Center SW",
+      "count": 716
+    },
+    {
+      "name": "Smithsonian",
+      "count": 716
+    },
+    {
+      "name": "Van Ness-UDC",
+      "count": 578
+    },
+    {
+      "name": "Cleveland Park",
+      "count": 578
+    },
+    {
+      "name": "Woodley Park",
+      "count": 578
+    },
+    {
+      "name": "Dupont Circle",
+      "count": 578
+    },
+    {
+      "name": "Farragut North",
+      "count": 578
+    },
+    {
+      "name": "Judiciary Sq",
+      "count": 578
+    },
+    {
+      "name": "Union Station",
+      "count": 578
+    },
+    {
+      "name": "NoMa-Gallaudet U",
+      "count": 578
+    },
+    {
+      "name": "Rhode Island Ave",
+      "count": 578
+    },
+    {
+      "name": "Brookland-CUA",
+      "count": 578
+    },
+    {
+      "name": "Takoma",
+      "count": 578
+    },
+    {
+      "name": "Silver Spring",
+      "count": 578
+    },
+    {
+      "name": "Forest Glen",
+      "count": 578
+    },
+    {
+      "name": "Wheaton",
+      "count": 578
+    },
+    {
+      "name": "Glenmont",
+      "count": 578
+    },
+    {
+      "name": "East Falls Church",
+      "count": 554
+    },
+    {
+      "name": "Court House",
+      "count": 552
+    },
+    {
+      "name": "Clarendon",
+      "count": 552
+    },
+    {
+      "name": "Virginia Sq-GMU",
+      "count": 552
+    },
+    {
+      "name": "Ballston-MU",
+      "count": 552
+    },
+    {
+      "name": "Huntington",
+      "count": 502
+    },
+    {
+      "name": "Eisenhower Ave",
+      "count": 502
+    },
+    {
+      "name": "Branch Ave",
+      "count": 500
+    },
+    {
+      "name": "Suitland",
+      "count": 500
+    },
+    {
+      "name": "Naylor Rd",
+      "count": 500
+    },
+    {
+      "name": "Southern Ave",
+      "count": 500
+    },
+    {
+      "name": "Congress Heights",
+      "count": 500
+    },
+    {
+      "name": "Anacostia",
+      "count": 500
+    },
+    {
+      "name": "Navy Yard-Ballpark",
+      "count": 500
+    },
+    {
+      "name": "Waterfront",
+      "count": 500
+    },
+    {
+      "name": "Shaw-Howard U",
+      "count": 500
+    },
+    {
+      "name": "U St",
+      "count": 500
+    },
+    {
+      "name": "Columbia Heights",
+      "count": 500
+    },
+    {
+      "name": "Georgia Ave-Petworth",
+      "count": 500
+    },
+    {
+      "name": "West Hyattsville",
+      "count": 500
+    },
+    {
+      "name": "Hyattsville Crossing",
+      "count": 500
+    },
+    {
+      "name": "College Park-U Of MD",
+      "count": 500
+    },
+    {
+      "name": "Greenbelt",
+      "count": 500
+    },
+    {
+      "name": "Shady Grove",
+      "count": 450
+    },
+    {
+      "name": "Rockville",
+      "count": 450
+    },
+    {
+      "name": "Twinbrook",
+      "count": 450
+    },
+    {
+      "name": "North Bethesda",
+      "count": 450
+    },
+    {
+      "name": "Grosvenor-Strathmore",
+      "count": 450
+    },
+    {
+      "name": "Medical Center",
+      "count": 450
+    },
+    {
+      "name": "Bethesda",
+      "count": 450
+    },
+    {
+      "name": "Friendship Heights",
+      "count": 450
+    },
+    {
+      "name": "Tenleytown-AU",
+      "count": 450
+    },
+    {
+      "name": "Downtown Largo",
+      "count": 439
+    },
+    {
+      "name": "Morgan Blvd",
+      "count": 439
+    },
+    {
+      "name": "Addison Rd",
+      "count": 439
+    },
+    {
+      "name": "Capitol Heights",
+      "count": 439
+    },
+    {
+      "name": "Benning Rd",
+      "count": 439
+    },
+    {
+      "name": "West Falls Church",
+      "count": 284
+    },
+    {
+      "name": "Dunn Loring",
+      "count": 283
+    },
+    {
+      "name": "Vienna",
+      "count": 283
+    },
+    {
+      "name": "Mclean",
+      "count": 282
+    },
+    {
+      "name": "Tysons",
+      "count": 282
+    },
+    {
+      "name": "Greensboro",
+      "count": 282
+    },
+    {
+      "name": "Spring Hill",
+      "count": 282
+    },
+    {
+      "name": "Wiehle-Reston East",
+      "count": 282
+    },
+    {
+      "name": "Reston Town Center",
+      "count": 280
+    },
+    {
+      "name": "Herndon",
+      "count": 280
+    },
+    {
+      "name": "Innovation Center",
+      "count": 280
+    },
+    {
+      "name": "Washington Dulles International Airport",
+      "count": 280
+    },
+    {
+      "name": "New Carrollton",
+      "count": 279
+    },
+    {
+      "name": "Landover",
+      "count": 279
+    },
+    {
+      "name": "Cheverly",
+      "count": 279
+    },
+    {
+      "name": "Deanwood",
+      "count": 279
+    },
+    {
+      "name": "Minnesota Ave",
+      "count": 279
+    },
+    {
+      "name": "Loudoun Gateway",
+      "count": 279
+    },
+    {
+      "name": "Ashburn",
+      "count": 279
+    },
+    {
+      "name": "Arlington Cemetery",
+      "count": 277
+    },
+    {
+      "name": "Van Dorn St",
+      "count": 277
+    },
+    {
+      "name": "Franconia-Springfield",
+      "count": 277
+    }
+  ]
+}

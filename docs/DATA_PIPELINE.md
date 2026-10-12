@@ -282,3 +282,35 @@ Le script [`cities/lille/ingest/build_lille_artifacts.py`](file:///Users/morganc
 - `val_52m__neutral.glb` (3,56 Ko) : Rame double 52 m Alstom.
 - `breda_vlc__neutral.glb` (3,61 Ko) : Motrice articulée 30 m Breda VLC avec pantographe et articulation centrale.
 - Tous les modèles respectent la contrainte stricte de taille $(< 15\text{ Ko})$.
+
+---
+
+## 7. Pipeline Réseau de Washington DC (`cities/washington/ingest/`)
+
+Le script [`cities/washington/ingest/build_washington_artifacts.py`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/cities/washington/ingest/build_washington_artifacts.py) génère l'ensemble des 10 artefacts normalisés pour le réseau Metrorail WMATA :
+
+### Données sources
+- **GTFS Statique Officiel WMATA Rail** (`rail-gtfs-static.zip`), requiert la clé d'API WMATA (`WMATA_API_KEY`) ou une fixture locale (`--gtfs-zip`).
+- **Fuseau horaire** : `America/New_York` lu directement depuis `agency.txt` (les horaires GTFS > 24:00 sont conservés tels quels jusqu'à 26:13:00).
+- **Emprise réseau** : 6 lignes de métro (`route_type = 1`), 98 stations agrégées depuis 125 quais de voyageurs (`parent_station`).
+- **192 tracés shapes.txt** rééchantillonnés au pas fixe régulier de 10 m dans `shapes.bin`.
+
+### Tronçons Partagés & Précision de Projection
+- **Troncs communs** : Orange / Silver / Blue (entre Rosslyn et Stadium-Armory) et Green / Yellow (entre L'Enfant Plaza et Mt Vernon Sq). Les voies physiques GTFS sont partagées et les rames sont cadencées par les horaires GTFS sans superposition hors station.
+- **Terminus physiques en fin de voie** : Vienna (`STN_K08`, Ligne Orange) et Branch Ave (`STN_F11`, Ligne Green) ont des terminus de voies situés dans l'axe de voie (décalage latéral $\le 3\text{ m}$), projetés sans distorsion.
+- **Monotonie stricte** : 0 violation sur les 1 696 courses du service nominal de semaine (`51_R`).
+
+### 10 Artefacts normalisés produits (`cities/washington/data/`)
+1. **`lines.json`** : 6 lignes (`RED`, `ORANGE`, `SILVER`, `BLUE`, `GREEN`, `YELLOW`), couleurs et contrastes WCAG validés via `textColorFor()`.
+2. **`stations.json`** : 98 stations uniques avec identifiants autoritaires `STN_*`, coordonnées WGS84 et liste des lignes desservies.
+3. **`tracks.json`** : 12 polylignes représentatives (sens 0 et 1 pour les 6 lignes).
+4. **`shapes.bin`** : 192 tracés SHP2 quantifiés (2,82 Mo).
+5. **`schedule.json`** : 1 696 courses nominales (service 51_R, 97 rames actives à l'heure du snapshot 08:30:00 EDT).
+6. **`line_ladders.json`** : Thermomètres de ligne par direction avec correspondances et indicateur `is_hub`.
+7. **`sections.json`** : Réseau modélisé à plat (relief hors périmètre).
+8. **`station-rankings.json`** : Fréquences théoriques de desserte hebdomadaires (semaine, samedi, dimanche).
+9. **`rolling-stock.json`** : Modèles génériques WMATA 8 voitures et 6 voitures (`verified: false`).
+10. **`feed_fingerprint.json`** : Métadonnées et fraîcheur du flux WMATA (tolérance 7 jours).
+
+### Modèle 3D Matériel Roulant (`scripts/build_washington_train_models.py`)
+- `wmata_generic__neutral.glb` (3 908 octets = 3,82 Ko < 15 Ko) : Modèle générique clean-room aux dimensions exactes de caisse Metrorail 75ft (longueur 22,86 m, largeur 3,09 m, hauteur 3,30 m).

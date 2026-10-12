@@ -4,6 +4,7 @@ import { PrimRealtimeAdapter } from './paris/rt/prim_adapter';
 import { StmRealtimeAdapter } from './montreal/rt/stm_adapter';
 import { TflRealtimeAdapter } from './london/rt/tfl_adapter';
 import { IleviaRealtimeAdapter } from './lille/rt/ilevia_adapter';
+import { WashingtonRealtimeAdapter } from './washington/rt/washington_adapter';
 
 /**
  * Registre des adaptateurs temps réel.
@@ -13,14 +14,18 @@ import { IleviaRealtimeAdapter } from './lille/rt/ilevia_adapter';
  * Ajouter une ville : écrire son adaptateur dans `cities/<ville>/rt/`, ajouter
  * une entrée ici. Aucune modification de `core/`.
  */
-type AdapterFactory = (config: CityRealtimeConfig, apiKey?: string) => RealtimeAdapter;
+type AdapterFactory = (config: CityRealtimeConfig, apiKey?: string, city?: CityConfig) => RealtimeAdapter;
 
-const FACTORIES: Partial<Record<RealtimeProvider | 'ilevia-gtfsrt', AdapterFactory>> = {
+const FACTORIES: Partial<Record<RealtimeProvider | 'ilevia-gtfsrt' | 'wmata-gtfsrt', AdapterFactory>> = {
   'prim': (config, apiKey) => new PrimRealtimeAdapter(config, apiKey),
   'stm-i3': (config) => new StmRealtimeAdapter(config),
   'tfl-unified': (config) => new TflRealtimeAdapter(config),
-  'gtfs-rt': (config) => new IleviaRealtimeAdapter(config),
-  'ilevia-gtfsrt': (config) => new IleviaRealtimeAdapter(config)
+  'gtfs-rt': (config, apiKey, city) => {
+    if (city?.id === 'washington') return new WashingtonRealtimeAdapter(config);
+    return new IleviaRealtimeAdapter(config);
+  },
+  'ilevia-gtfsrt': (config) => new IleviaRealtimeAdapter(config),
+  'wmata-gtfsrt': (config) => new WashingtonRealtimeAdapter(config)
 };
 
 /** Adaptateur inerte : mode purement théorique, aucune requête. */
@@ -43,5 +48,5 @@ export function createRealtimeAdapter(city: CityConfig, apiKey?: string): Realti
     }
     return new NoRealtimeAdapter();
   }
-  return factory(city.realtime, apiKey);
+  return factory(city.realtime, apiKey, city);
 }

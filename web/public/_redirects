@@ -1,5 +1,11 @@
-/api/prim    /.netlify/functions/prim_relay   200
-/api/stm     /.netlify/functions/stm_relay   200
-/methode     /methode.html                   200
-/*           /index.html                     200
+/api/prim            /.netlify/functions/prim_relay         200
+/api/prim_delays     /.netlify/functions/prim_relay         200
+/api/stm             /.netlify/functions/stm_relay          200
+/api/tfl             /.netlify/functions/tfl_relay          200
+/api/tfl_arrivals    /.netlify/functions/tfl_relay          200
+/api/lille-rt        /.netlify/functions/lille_relay        200
+/api/washington-rt   /.netlify/functions/washington_relay   200
+/methode             /methode.html                         200
+/*                   /index.html                           200
+
 

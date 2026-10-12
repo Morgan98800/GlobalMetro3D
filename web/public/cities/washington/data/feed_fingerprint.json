@@ -1,0 +1,17 @@
+{
+  "url": "https://api.wmata.com/gtfs/rail-gtfs-static.zip",
+  "source": "Washington Metropolitan Area Transit Authority (WMATA) Open Data",
+  "dataset": "rail-gtfs-static.zip (WMATA Metrorail: RED, ORANGE, SILVER, BLUE, GREEN, YELLOW)",
+  "generated_at": "2026-10-12",
+  "timezone": "America/New_York",
+  "max_gtfs_time": "26:13:00",
+  "service_id": "51_R",
+  "lines": [
+    "RED",
+    "ORANGE",
+    "SILVER",
+    "BLUE",
+    "GREEN",
+    "YELLOW"
+  ]
+}

@@ -1,0 +1,5368 @@
+{
+  "RED": {
+    "id": "RED",
+    "short_name": "Red",
+    "color": "#E31837",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Shady Grove",
+        "terminus": "Glenmont",
+        "stations": [
+          {
+            "id": "STN_A15",
+            "name": "Shady Grove",
+            "distance_m": 16.8,
+            "coordinates": [
+              -77.164669,
+              39.119927
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A14",
+            "name": "Rockville",
+            "distance_m": 4372.2,
+            "coordinates": [
+              -77.146193,
+              39.084272
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A13",
+            "name": "Twinbrook",
+            "distance_m": 7601.3,
+            "coordinates": [
+              -77.121216,
+              39.062696
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A12",
+            "name": "North Bethesda",
+            "distance_m": 9433.1,
+            "coordinates": [
+              -77.113076,
+              39.048539
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A11",
+            "name": "Grosvenor-Strathmore",
+            "distance_m": 11663.8,
+            "coordinates": [
+              -77.104117,
+              39.029732
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A10",
+            "name": "Medical Center",
+            "distance_m": 15331.7,
+            "coordinates": [
+              -77.096758,
+              38.998225
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A09",
+            "name": "Bethesda",
+            "distance_m": 17039.8,
+            "coordinates": [
+              -77.093654,
+              38.983275
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A08",
+            "name": "Friendship Heights",
+            "distance_m": 19816.4,
+            "coordinates": [
+              -77.085022,
+              38.959384
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A07",
+            "name": "Tenleytown-AU",
+            "distance_m": 21072.2,
+            "coordinates": [
+              -77.079672,
+              38.948886
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A06",
+            "name": "Van Ness-UDC",
+            "distance_m": 22954.0,
+            "coordinates": [
+              -77.062953,
+              38.943211
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A05",
+            "name": "Cleveland Park",
+            "distance_m": 23970.3,
+            "coordinates": [
+              -77.058127,
+              38.934911
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A04",
+            "name": "Woodley Park",
+            "distance_m": 25111.3,
+            "coordinates": [
+              -77.052692,
+              38.925562
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A03",
+            "name": "Dupont Circle",
+            "distance_m": 27125.5,
+            "coordinates": [
+              -77.043597,
+              38.909909
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A02",
+            "name": "Farragut North",
+            "distance_m": 27950.6,
+            "coordinates": [
+              -77.039668,
+              38.903147
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 29225.8,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_B01_F01",
+            "name": "Gallery Place",
+            "distance_m": 29691.7,
+            "coordinates": [
+              -77.022802,
+              38.89838
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_B02",
+            "name": "Judiciary Sq",
+            "distance_m": 30520.2,
+            "coordinates": [
+              -77.016804,
+              38.896218
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B03",
+            "name": "Union Station",
+            "distance_m": 31565.8,
+            "coordinates": [
+              -77.007467,
+              38.897495
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B35",
+            "name": "NoMa-Gallaudet U",
+            "distance_m": 32650.6,
+            "coordinates": [
+              -77.003311,
+              38.906617
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B04",
+            "name": "Rhode Island Ave",
+            "distance_m": 34520.7,
+            "coordinates": [
+              -76.995942,
+              38.920916
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B05",
+            "name": "Brookland-CUA",
+            "distance_m": 35909.0,
+            "coordinates": [
+              -76.994546,
+              38.933126
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B06_E06",
+            "name": "Fort Totten",
+            "distance_m": 38099.7,
+            "coordinates": [
+              -77.002296,
+              38.951786
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_B07",
+            "name": "Takoma",
+            "distance_m": 41162.3,
+            "coordinates": [
+              -77.018126,
+              38.976022
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B08",
+            "name": "Silver Spring",
+            "distance_m": 43539.6,
+            "coordinates": [
+              -77.031307,
+              38.993799
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B09",
+            "name": "Forest Glen",
+            "distance_m": 46234.3,
+            "coordinates": [
+              -77.042927,
+              39.014946
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B10",
+            "name": "Wheaton",
+            "distance_m": 48823.5,
+            "coordinates": [
+              -77.05011,
+              39.037543
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B11",
+            "name": "Glenmont",
+            "distance_m": 51738.4,
+            "coordinates": [
+              -77.053548,
+              39.061767
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Glenmont",
+        "terminus": "Shady Grove",
+        "stations": [
+          {
+            "id": "STN_B11",
+            "name": "Glenmont",
+            "distance_m": 8.4,
+            "coordinates": [
+              -77.053548,
+              39.061767
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B10",
+            "name": "Wheaton",
+            "distance_m": 2923.3,
+            "coordinates": [
+              -77.05011,
+              39.037543
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B09",
+            "name": "Forest Glen",
+            "distance_m": 5512.5,
+            "coordinates": [
+              -77.042927,
+              39.014946
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B08",
+            "name": "Silver Spring",
+            "distance_m": 8207.1,
+            "coordinates": [
+              -77.031307,
+              38.993799
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B07",
+            "name": "Takoma",
+            "distance_m": 10584.4,
+            "coordinates": [
+              -77.018126,
+              38.976022
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B06_E06",
+            "name": "Fort Totten",
+            "distance_m": 13647.1,
+            "coordinates": [
+              -77.002296,
+              38.951786
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_B05",
+            "name": "Brookland-CUA",
+            "distance_m": 15837.8,
+            "coordinates": [
+              -76.994546,
+              38.933126
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B04",
+            "name": "Rhode Island Ave",
+            "distance_m": 17226.1,
+            "coordinates": [
+              -76.995942,
+              38.920916
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B35",
+            "name": "NoMa-Gallaudet U",
+            "distance_m": 19096.2,
+            "coordinates": [
+              -77.003311,
+              38.906617
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B03",
+            "name": "Union Station",
+            "distance_m": 20181.0,
+            "coordinates": [
+              -77.007467,
+              38.897495
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B02",
+            "name": "Judiciary Sq",
+            "distance_m": 21333.2,
+            "coordinates": [
+              -77.016804,
+              38.896218
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B01_F01",
+            "name": "Gallery Place",
+            "distance_m": 21945.1,
+            "coordinates": [
+              -77.022802,
+              38.89838
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 22411.0,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_A02",
+            "name": "Farragut North",
+            "distance_m": 23696.3,
+            "coordinates": [
+              -77.039668,
+              38.903147
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A03",
+            "name": "Dupont Circle",
+            "distance_m": 24521.5,
+            "coordinates": [
+              -77.043597,
+              38.909909
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A04",
+            "name": "Woodley Park",
+            "distance_m": 26535.6,
+            "coordinates": [
+              -77.052692,
+              38.925562
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A05",
+            "name": "Cleveland Park",
+            "distance_m": 27676.6,
+            "coordinates": [
+              -77.058127,
+              38.934911
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A06",
+            "name": "Van Ness-UDC",
+            "distance_m": 28693.0,
+            "coordinates": [
+              -77.062953,
+              38.943211
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A07",
+            "name": "Tenleytown-AU",
+            "distance_m": 30574.7,
+            "coordinates": [
+              -77.079672,
+              38.948886
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A08",
+            "name": "Friendship Heights",
+            "distance_m": 31830.5,
+            "coordinates": [
+              -77.085022,
+              38.959384
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A09",
+            "name": "Bethesda",
+            "distance_m": 34607.2,
+            "coordinates": [
+              -77.093654,
+              38.983275
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A10",
+            "name": "Medical Center",
+            "distance_m": 36315.3,
+            "coordinates": [
+              -77.096758,
+              38.998225
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A11",
+            "name": "Grosvenor-Strathmore",
+            "distance_m": 39983.2,
+            "coordinates": [
+              -77.104117,
+              39.029732
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A12",
+            "name": "North Bethesda",
+            "distance_m": 42213.8,
+            "coordinates": [
+              -77.113076,
+              39.048539
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A13",
+            "name": "Twinbrook",
+            "distance_m": 44045.6,
+            "coordinates": [
+              -77.121216,
+              39.062696
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A14",
+            "name": "Rockville",
+            "distance_m": 47274.7,
+            "coordinates": [
+              -77.146193,
+              39.084272
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_A15",
+            "name": "Shady Grove",
+            "distance_m": 51630.1,
+            "coordinates": [
+              -77.164669,
+              39.119927
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "ORANGE": {
+    "id": "ORANGE",
+    "short_name": "Orange",
+    "color": "#F7941E",
+    "text_color": "#000000",
+    "directions": {
+      "0": {
+        "origin": "Vienna",
+        "terminus": "New Carrollton",
+        "stations": [
+          {
+            "id": "STN_K08",
+            "name": "Vienna",
+            "distance_m": 2.8,
+            "coordinates": [
+              -77.272459,
+              38.877578
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_K07",
+            "name": "Dunn Loring",
+            "distance_m": 3929.0,
+            "coordinates": [
+              -77.227243,
+              38.883649
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_K06",
+            "name": "West Falls Church",
+            "distance_m": 7780.8,
+            "coordinates": [
+              -77.189221,
+              38.900788
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_K05",
+            "name": "East Falls Church",
+            "distance_m": 11125.8,
+            "coordinates": [
+              -77.156944,
+              38.886026
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K04",
+            "name": "Ballston-MU",
+            "distance_m": 15162.0,
+            "coordinates": [
+              -77.11322,
+              38.88226
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K03",
+            "name": "Virginia Sq-GMU",
+            "distance_m": 16143.3,
+            "coordinates": [
+              -77.103024,
+              38.883433
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K02",
+            "name": "Clarendon",
+            "distance_m": 16895.7,
+            "coordinates": [
+              -77.095442,
+              38.886739
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K01",
+            "name": "Court House",
+            "distance_m": 17716.9,
+            "coordinates": [
+              -77.087144,
+              38.890153
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C05",
+            "name": "Rosslyn",
+            "distance_m": 19564.5,
+            "coordinates": [
+              -77.070838,
+              38.896034
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C04",
+            "name": "Foggy Bottom-Gwu",
+            "distance_m": 21707.9,
+            "coordinates": [
+              -77.050104,
+              38.9007
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C03",
+            "name": "Farragut West",
+            "distance_m": 22552.9,
+            "coordinates": [
+              -77.040464,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C02",
+            "name": "Mcpherson Sq",
+            "distance_m": 23164.2,
+            "coordinates": [
+              -77.033433,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 23911.1,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D01",
+            "name": "Federal Triangle",
+            "distance_m": 24412.5,
+            "coordinates": [
+              -77.028132,
+              38.893834
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D02",
+            "name": "Smithsonian",
+            "distance_m": 25025.5,
+            "coordinates": [
+              -77.028631,
+              38.888506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 25880.0,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D04",
+            "name": "Federal Center SW",
+            "distance_m": 26400.3,
+            "coordinates": [
+              -77.015937,
+              38.885076
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D05",
+            "name": "Capitol South",
+            "distance_m": 27345.4,
+            "coordinates": [
+              -77.005215,
+              38.885073
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D06",
+            "name": "Eastern Market",
+            "distance_m": 28178.1,
+            "coordinates": [
+              -76.996075,
+              38.884632
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D07",
+            "name": "Potomac Ave",
+            "distance_m": 29175.7,
+            "coordinates": [
+              -76.98558,
+              38.881271
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D08",
+            "name": "Stadium-Armory",
+            "distance_m": 30324.1,
+            "coordinates": [
+              -76.977074,
+              38.886927
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D09",
+            "name": "Minnesota Ave",
+            "distance_m": 33814.7,
+            "coordinates": [
+              -76.946743,
+              38.899168
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D10",
+            "name": "Deanwood",
+            "distance_m": 35235.4,
+            "coordinates": [
+              -76.935163,
+              38.908224
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D11",
+            "name": "Cheverly",
+            "distance_m": 37115.8,
+            "coordinates": [
+              -76.916662,
+              38.916641
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D12",
+            "name": "Landover",
+            "distance_m": 40175.6,
+            "coordinates": [
+              -76.891265,
+              38.933504
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D13",
+            "name": "New Carrollton",
+            "distance_m": 42501.0,
+            "coordinates": [
+              -76.87187,
+              38.948028
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "New Carrollton",
+        "terminus": "Vienna",
+        "stations": [
+          {
+            "id": "STN_D13",
+            "name": "New Carrollton",
+            "distance_m": 2.4,
+            "coordinates": [
+              -76.87187,
+              38.948028
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D12",
+            "name": "Landover",
+            "distance_m": 2328.3,
+            "coordinates": [
+              -76.891265,
+              38.933504
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D11",
+            "name": "Cheverly",
+            "distance_m": 5460.8,
+            "coordinates": [
+              -76.916662,
+              38.916641
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D10",
+            "name": "Deanwood",
+            "distance_m": 7348.7,
+            "coordinates": [
+              -76.935163,
+              38.908224
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D09",
+            "name": "Minnesota Ave",
+            "distance_m": 8769.4,
+            "coordinates": [
+              -76.946743,
+              38.899168
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D08",
+            "name": "Stadium-Armory",
+            "distance_m": 12344.7,
+            "coordinates": [
+              -76.977074,
+              38.886927
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D07",
+            "name": "Potomac Ave",
+            "distance_m": 13510.0,
+            "coordinates": [
+              -76.98558,
+              38.881271
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D06",
+            "name": "Eastern Market",
+            "distance_m": 14507.6,
+            "coordinates": [
+              -76.996075,
+              38.884632
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D05",
+            "name": "Capitol South",
+            "distance_m": 15348.6,
+            "coordinates": [
+              -77.005215,
+              38.885073
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D04",
+            "name": "Federal Center SW",
+            "distance_m": 16307.2,
+            "coordinates": [
+              -77.015937,
+              38.885076
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 16829.4,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D02",
+            "name": "Smithsonian",
+            "distance_m": 17683.8,
+            "coordinates": [
+              -77.028631,
+              38.888506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D01",
+            "name": "Federal Triangle",
+            "distance_m": 18299.6,
+            "coordinates": [
+              -77.028132,
+              38.893834
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 18803.4,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C02",
+            "name": "Mcpherson Sq",
+            "distance_m": 19595.0,
+            "coordinates": [
+              -77.033433,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C03",
+            "name": "Farragut West",
+            "distance_m": 20206.6,
+            "coordinates": [
+              -77.040464,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C04",
+            "name": "Foggy Bottom-Gwu",
+            "distance_m": 21051.6,
+            "coordinates": [
+              -77.050104,
+              38.9007
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C05",
+            "name": "Rosslyn",
+            "distance_m": 23201.7,
+            "coordinates": [
+              -77.070838,
+              38.896034
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_K01",
+            "name": "Court House",
+            "distance_m": 24963.7,
+            "coordinates": [
+              -77.087144,
+              38.890153
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K02",
+            "name": "Clarendon",
+            "distance_m": 25784.6,
+            "coordinates": [
+              -77.095442,
+              38.886739
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K03",
+            "name": "Virginia Sq-GMU",
+            "distance_m": 26536.9,
+            "coordinates": [
+              -77.103024,
+              38.883433
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K04",
+            "name": "Ballston-MU",
+            "distance_m": 27543.6,
+            "coordinates": [
+              -77.11322,
+              38.88226
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K05",
+            "name": "East Falls Church",
+            "distance_m": 31616.9,
+            "coordinates": [
+              -77.156944,
+              38.886026
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K06",
+            "name": "West Falls Church",
+            "distance_m": 34980.8,
+            "coordinates": [
+              -77.189221,
+              38.900788
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_K07",
+            "name": "Dunn Loring",
+            "distance_m": 38832.6,
+            "coordinates": [
+              -77.227243,
+              38.883649
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_K08",
+            "name": "Vienna",
+            "distance_m": 42753.2,
+            "coordinates": [
+              -77.272459,
+              38.877578
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "SILVER": {
+    "id": "SILVER",
+    "short_name": "Silver",
+    "color": "#A1A2A1",
+    "text_color": "#000000",
+    "directions": {
+      "0": {
+        "origin": "Ashburn",
+        "terminus": "Downtown Largo",
+        "stations": [
+          {
+            "id": "STN_N12",
+            "name": "Ashburn",
+            "distance_m": 16.1,
+            "coordinates": [
+              -77.491434,
+              39.005196
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N11",
+            "name": "Loudoun Gateway",
+            "distance_m": 3153.1,
+            "coordinates": [
+              -77.460685,
+              38.99204
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N10",
+            "name": "Washington Dulles International Airport",
+            "distance_m": 7775.5,
+            "coordinates": [
+              -77.448189,
+              38.955786
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N09",
+            "name": "Innovation Center",
+            "distance_m": 11101.2,
+            "coordinates": [
+              -77.415638,
+              38.960881
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N08",
+            "name": "Herndon",
+            "distance_m": 13903.9,
+            "coordinates": [
+              -77.385178,
+              38.952821
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N07",
+            "name": "Reston Town Center",
+            "distance_m": 16074.9,
+            "coordinates": [
+              -77.360183,
+              38.952765
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N06",
+            "name": "Wiehle-Reston East",
+            "distance_m": 17887.1,
+            "coordinates": [
+              -77.340316,
+              38.947832
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N04",
+            "name": "Spring Hill",
+            "distance_m": 27278.9,
+            "coordinates": [
+              -77.241891,
+              38.929212
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N03",
+            "name": "Greensboro",
+            "distance_m": 28436.5,
+            "coordinates": [
+              -77.234162,
+              38.921269
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N02",
+            "name": "Tysons",
+            "distance_m": 29724.2,
+            "coordinates": [
+              -77.221589,
+              38.920685
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N01",
+            "name": "Mclean",
+            "distance_m": 30773.2,
+            "coordinates": [
+              -77.21053,
+              38.924339
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_K05",
+            "name": "East Falls Church",
+            "distance_m": 38353.4,
+            "coordinates": [
+              -77.156944,
+              38.886026
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K04",
+            "name": "Ballston-MU",
+            "distance_m": 42389.6,
+            "coordinates": [
+              -77.11322,
+              38.88226
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K03",
+            "name": "Virginia Sq-GMU",
+            "distance_m": 43370.9,
+            "coordinates": [
+              -77.103024,
+              38.883433
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K02",
+            "name": "Clarendon",
+            "distance_m": 44123.3,
+            "coordinates": [
+              -77.095442,
+              38.886739
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K01",
+            "name": "Court House",
+            "distance_m": 44944.5,
+            "coordinates": [
+              -77.087144,
+              38.890153
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C05",
+            "name": "Rosslyn",
+            "distance_m": 46792.1,
+            "coordinates": [
+              -77.070838,
+              38.896034
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C04",
+            "name": "Foggy Bottom-Gwu",
+            "distance_m": 48935.5,
+            "coordinates": [
+              -77.050104,
+              38.9007
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C03",
+            "name": "Farragut West",
+            "distance_m": 49780.5,
+            "coordinates": [
+              -77.040464,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C02",
+            "name": "Mcpherson Sq",
+            "distance_m": 50391.8,
+            "coordinates": [
+              -77.033433,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 51138.8,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D01",
+            "name": "Federal Triangle",
+            "distance_m": 51640.2,
+            "coordinates": [
+              -77.028132,
+              38.893834
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D02",
+            "name": "Smithsonian",
+            "distance_m": 52253.2,
+            "coordinates": [
+              -77.028631,
+              38.888506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 53107.6,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D04",
+            "name": "Federal Center SW",
+            "distance_m": 53628.0,
+            "coordinates": [
+              -77.015937,
+              38.885076
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D05",
+            "name": "Capitol South",
+            "distance_m": 54573.1,
+            "coordinates": [
+              -77.005215,
+              38.885073
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D06",
+            "name": "Eastern Market",
+            "distance_m": 55405.8,
+            "coordinates": [
+              -76.996075,
+              38.884632
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D07",
+            "name": "Potomac Ave",
+            "distance_m": 56403.4,
+            "coordinates": [
+              -76.98558,
+              38.881271
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D08",
+            "name": "Stadium-Armory",
+            "distance_m": 57551.8,
+            "coordinates": [
+              -76.977074,
+              38.886927
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G01",
+            "name": "Benning Rd",
+            "distance_m": 61670.9,
+            "coordinates": [
+              -76.938619,
+              38.891069
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G02",
+            "name": "Capitol Heights",
+            "distance_m": 64124.8,
+            "coordinates": [
+              -76.911833,
+              38.889429
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G03",
+            "name": "Addison Rd",
+            "distance_m": 65745.4,
+            "coordinates": [
+              -76.894135,
+              38.886731
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G04",
+            "name": "Morgan Blvd",
+            "distance_m": 68209.7,
+            "coordinates": [
+              -76.867707,
+              38.894001
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G05",
+            "name": "Downtown Largo",
+            "distance_m": 70487.1,
+            "coordinates": [
+              -76.844654,
+              38.900511
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Downtown Largo",
+        "terminus": "Ashburn",
+        "stations": [
+          {
+            "id": "STN_G05",
+            "name": "Downtown Largo",
+            "distance_m": 0.8,
+            "coordinates": [
+              -76.844654,
+              38.900511
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G04",
+            "name": "Morgan Blvd",
+            "distance_m": 2278.2,
+            "coordinates": [
+              -76.867707,
+              38.894001
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G03",
+            "name": "Addison Rd",
+            "distance_m": 4742.6,
+            "coordinates": [
+              -76.894135,
+              38.886731
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G02",
+            "name": "Capitol Heights",
+            "distance_m": 6399.2,
+            "coordinates": [
+              -76.911833,
+              38.889429
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_G01",
+            "name": "Benning Rd",
+            "distance_m": 8944.7,
+            "coordinates": [
+              -76.938619,
+              38.891069
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D08",
+            "name": "Stadium-Armory",
+            "distance_m": 13063.9,
+            "coordinates": [
+              -76.977074,
+              38.886927
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D07",
+            "name": "Potomac Ave",
+            "distance_m": 14229.2,
+            "coordinates": [
+              -76.98558,
+              38.881271
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D06",
+            "name": "Eastern Market",
+            "distance_m": 15226.8,
+            "coordinates": [
+              -76.996075,
+              38.884632
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D05",
+            "name": "Capitol South",
+            "distance_m": 16067.8,
+            "coordinates": [
+              -77.005215,
+              38.885073
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D04",
+            "name": "Federal Center SW",
+            "distance_m": 17026.4,
+            "coordinates": [
+              -77.015937,
+              38.885076
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 17548.5,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D02",
+            "name": "Smithsonian",
+            "distance_m": 18403.0,
+            "coordinates": [
+              -77.028631,
+              38.888506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D01",
+            "name": "Federal Triangle",
+            "distance_m": 19018.7,
+            "coordinates": [
+              -77.028132,
+              38.893834
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 19522.6,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C02",
+            "name": "Mcpherson Sq",
+            "distance_m": 20314.2,
+            "coordinates": [
+              -77.033433,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C03",
+            "name": "Farragut West",
+            "distance_m": 20925.8,
+            "coordinates": [
+              -77.040464,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C04",
+            "name": "Foggy Bottom-Gwu",
+            "distance_m": 21770.8,
+            "coordinates": [
+              -77.050104,
+              38.9007
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C05",
+            "name": "Rosslyn",
+            "distance_m": 23920.9,
+            "coordinates": [
+              -77.070838,
+              38.896034
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_K01",
+            "name": "Court House",
+            "distance_m": 25682.9,
+            "coordinates": [
+              -77.087144,
+              38.890153
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K02",
+            "name": "Clarendon",
+            "distance_m": 26503.7,
+            "coordinates": [
+              -77.095442,
+              38.886739
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K03",
+            "name": "Virginia Sq-GMU",
+            "distance_m": 27256.1,
+            "coordinates": [
+              -77.103024,
+              38.883433
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K04",
+            "name": "Ballston-MU",
+            "distance_m": 28262.7,
+            "coordinates": [
+              -77.11322,
+              38.88226
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_K05",
+            "name": "East Falls Church",
+            "distance_m": 32336.1,
+            "coordinates": [
+              -77.156944,
+              38.886026
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_N01",
+            "name": "Mclean",
+            "distance_m": 39990.8,
+            "coordinates": [
+              -77.21053,
+              38.924339
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N02",
+            "name": "Tysons",
+            "distance_m": 41039.7,
+            "coordinates": [
+              -77.221589,
+              38.920685
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N03",
+            "name": "Greensboro",
+            "distance_m": 42327.5,
+            "coordinates": [
+              -77.234162,
+              38.921269
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N04",
+            "name": "Spring Hill",
+            "distance_m": 43534.8,
+            "coordinates": [
+              -77.241891,
+              38.929212
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N06",
+            "name": "Wiehle-Reston East",
+            "distance_m": 52926.6,
+            "coordinates": [
+              -77.340316,
+              38.947832
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N07",
+            "name": "Reston Town Center",
+            "distance_m": 54738.8,
+            "coordinates": [
+              -77.360183,
+              38.952765
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N08",
+            "name": "Herndon",
+            "distance_m": 56909.6,
+            "coordinates": [
+              -77.385178,
+              38.952821
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N09",
+            "name": "Innovation Center",
+            "distance_m": 59713.1,
+            "coordinates": [
+              -77.415638,
+              38.960881
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N10",
+            "name": "Washington Dulles International Airport",
+            "distance_m": 63042.0,
+            "coordinates": [
+              -77.448189,
+              38.955786
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N11",
+            "name": "Loudoun Gateway",
+            "distance_m": 67665.1,
+            "coordinates": [
+              -77.460685,
+              38.99204
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_N12",
+            "name": "Ashburn",
+            "distance_m": 70802.0,
+            "coordinates": [
+              -77.491434,
+              39.005196
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "BLUE": {
+    "id": "BLUE",
+    "short_name": "Blue",
+    "color": "#0076C0",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Franconia-Springfield",
+        "terminus": "Downtown Largo",
+        "stations": [
+          {
+            "id": "STN_J03",
+            "name": "Franconia-Springfield",
+            "distance_m": 35.8,
+            "coordinates": [
+              -77.167991,
+              38.766505
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_J02",
+            "name": "Van Dorn St",
+            "distance_m": 5728.0,
+            "coordinates": [
+              -77.12927,
+              38.799292
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_C13",
+            "name": "King St-Old Town",
+            "distance_m": 11967.7,
+            "coordinates": [
+              -77.060974,
+              38.806609
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C12",
+            "name": "Braddock Rd",
+            "distance_m": 13080.0,
+            "coordinates": [
+              -77.053722,
+              38.814087
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C11",
+            "name": "Potomac Yard/VT",
+            "distance_m": 15368.9,
+            "coordinates": [
+              -77.04642,
+              38.833192
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C10",
+            "name": "Ronald Reagan Washington National Airport",
+            "distance_m": 18049.1,
+            "coordinates": [
+              -77.044048,
+              38.853505
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C09",
+            "name": "Crystal City",
+            "distance_m": 18939.2,
+            "coordinates": [
+              -77.050572,
+              38.857846
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C08",
+            "name": "Pentagon City",
+            "distance_m": 20129.2,
+            "coordinates": [
+              -77.059516,
+              38.861852
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C07",
+            "name": "Pentagon",
+            "distance_m": 21130.8,
+            "coordinates": [
+              -77.054113,
+              38.869195
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C06",
+            "name": "Arlington Cemetery",
+            "distance_m": 23335.2,
+            "coordinates": [
+              -77.0631,
+              38.884588
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_C05",
+            "name": "Rosslyn",
+            "distance_m": 24842.3,
+            "coordinates": [
+              -77.070838,
+              38.896034
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C04",
+            "name": "Foggy Bottom-Gwu",
+            "distance_m": 26986.0,
+            "coordinates": [
+              -77.050104,
+              38.9007
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C03",
+            "name": "Farragut West",
+            "distance_m": 27831.0,
+            "coordinates": [
+              -77.040464,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C02",
+            "name": "Mcpherson Sq",
+            "distance_m": 28442.3,
+            "coordinates": [
+              -77.033433,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 29189.2,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D01",
+            "name": "Federal Triangle",
+            "distance_m": 29690.6,
+            "coordinates": [
+              -77.028132,
+              38.893834
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D02",
+            "name": "Smithsonian",
+            "distance_m": 30303.6,
+            "coordinates": [
+              -77.028631,
+              38.888506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 31158.1,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D04",
+            "name": "Federal Center SW",
+            "distance_m": 31678.4,
+            "coordinates": [
+              -77.015937,
+              38.885076
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D05",
+            "name": "Capitol South",
+            "distance_m": 32623.5,
+            "coordinates": [
+              -77.005215,
+              38.885073
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D06",
+            "name": "Eastern Market",
+            "distance_m": 33456.2,
+            "coordinates": [
+              -76.996075,
+              38.884632
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D07",
+            "name": "Potomac Ave",
+            "distance_m": 34453.8,
+            "coordinates": [
+              -76.98558,
+              38.881271
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D08",
+            "name": "Stadium-Armory",
+            "distance_m": 35602.2,
+            "coordinates": [
+              -76.977074,
+              38.886927
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G01",
+            "name": "Benning Rd",
+            "distance_m": 39721.4,
+            "coordinates": [
+              -76.938619,
+              38.891069
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G02",
+            "name": "Capitol Heights",
+            "distance_m": 42175.3,
+            "coordinates": [
+              -76.911833,
+              38.889429
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G03",
+            "name": "Addison Rd",
+            "distance_m": 43795.8,
+            "coordinates": [
+              -76.894135,
+              38.886731
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G04",
+            "name": "Morgan Blvd",
+            "distance_m": 46260.2,
+            "coordinates": [
+              -76.867707,
+              38.894001
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G05",
+            "name": "Downtown Largo",
+            "distance_m": 48537.6,
+            "coordinates": [
+              -76.844654,
+              38.900511
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Downtown Largo",
+        "terminus": "Franconia-Springfield",
+        "stations": [
+          {
+            "id": "STN_G05",
+            "name": "Downtown Largo",
+            "distance_m": 0.8,
+            "coordinates": [
+              -76.844654,
+              38.900511
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G04",
+            "name": "Morgan Blvd",
+            "distance_m": 2278.2,
+            "coordinates": [
+              -76.867707,
+              38.894001
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G03",
+            "name": "Addison Rd",
+            "distance_m": 4742.6,
+            "coordinates": [
+              -76.894135,
+              38.886731
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G02",
+            "name": "Capitol Heights",
+            "distance_m": 6399.2,
+            "coordinates": [
+              -76.911833,
+              38.889429
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_G01",
+            "name": "Benning Rd",
+            "distance_m": 8944.7,
+            "coordinates": [
+              -76.938619,
+              38.891069
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D08",
+            "name": "Stadium-Armory",
+            "distance_m": 13063.9,
+            "coordinates": [
+              -76.977074,
+              38.886927
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D07",
+            "name": "Potomac Ave",
+            "distance_m": 14229.2,
+            "coordinates": [
+              -76.98558,
+              38.881271
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D06",
+            "name": "Eastern Market",
+            "distance_m": 15226.8,
+            "coordinates": [
+              -76.996075,
+              38.884632
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D05",
+            "name": "Capitol South",
+            "distance_m": 16067.8,
+            "coordinates": [
+              -77.005215,
+              38.885073
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D04",
+            "name": "Federal Center SW",
+            "distance_m": 17026.4,
+            "coordinates": [
+              -77.015937,
+              38.885076
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 17548.5,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D02",
+            "name": "Smithsonian",
+            "distance_m": 18403.0,
+            "coordinates": [
+              -77.028631,
+              38.888506
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D01",
+            "name": "Federal Triangle",
+            "distance_m": 19018.7,
+            "coordinates": [
+              -77.028132,
+              38.893834
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_A01_C01",
+            "name": "Metro Center",
+            "distance_m": 19522.6,
+            "coordinates": [
+              -77.028088,
+              38.898321
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C02",
+            "name": "Mcpherson Sq",
+            "distance_m": 20314.2,
+            "coordinates": [
+              -77.033433,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C03",
+            "name": "Farragut West",
+            "distance_m": 20925.8,
+            "coordinates": [
+              -77.040464,
+              38.901342
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C04",
+            "name": "Foggy Bottom-Gwu",
+            "distance_m": 21770.8,
+            "coordinates": [
+              -77.050104,
+              38.9007
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C05",
+            "name": "Rosslyn",
+            "distance_m": 23920.6,
+            "coordinates": [
+              -77.070838,
+              38.896034
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C06",
+            "name": "Arlington Cemetery",
+            "distance_m": 25427.8,
+            "coordinates": [
+              -77.0631,
+              38.884588
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_C07",
+            "name": "Pentagon",
+            "distance_m": 27657.3,
+            "coordinates": [
+              -77.054113,
+              38.869195
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C08",
+            "name": "Pentagon City",
+            "distance_m": 28676.6,
+            "coordinates": [
+              -77.059516,
+              38.861852
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C09",
+            "name": "Crystal City",
+            "distance_m": 29888.8,
+            "coordinates": [
+              -77.050572,
+              38.857846
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C10",
+            "name": "Ronald Reagan Washington National Airport",
+            "distance_m": 30779.0,
+            "coordinates": [
+              -77.044048,
+              38.853505
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C11",
+            "name": "Potomac Yard/VT",
+            "distance_m": 33506.3,
+            "coordinates": [
+              -77.04642,
+              38.833192
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C12",
+            "name": "Braddock Rd",
+            "distance_m": 35795.1,
+            "coordinates": [
+              -77.053722,
+              38.814087
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_C13",
+            "name": "King St-Old Town",
+            "distance_m": 36970.5,
+            "coordinates": [
+              -77.060974,
+              38.806609
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_J02",
+            "name": "Van Dorn St",
+            "distance_m": 43298.9,
+            "coordinates": [
+              -77.12927,
+              38.799292
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_J03",
+            "name": "Franconia-Springfield",
+            "distance_m": 48991.1,
+            "coordinates": [
+              -77.167991,
+              38.766505
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "GREEN": {
+    "id": "GREEN",
+    "short_name": "Green",
+    "color": "#00A94F",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Branch Ave",
+        "terminus": "Greenbelt",
+        "stations": [
+          {
+            "id": "STN_F11",
+            "name": "Branch Ave",
+            "distance_m": 2.4,
+            "coordinates": [
+              -76.911817,
+              38.826718
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F10",
+            "name": "Suitland",
+            "distance_m": 2792.1,
+            "coordinates": [
+              -76.932869,
+              38.844668
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F09",
+            "name": "Naylor Rd",
+            "distance_m": 5116.9,
+            "coordinates": [
+              -76.956605,
+              38.851121
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F08",
+            "name": "Southern Ave",
+            "distance_m": 7198.1,
+            "coordinates": [
+              -76.975211,
+              38.840954
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F07",
+            "name": "Congress Heights",
+            "distance_m": 8954.4,
+            "coordinates": [
+              -76.988439,
+              38.845695
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F06",
+            "name": "Anacostia",
+            "distance_m": 11079.9,
+            "coordinates": [
+              -76.995559,
+              38.863287
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F05",
+            "name": "Navy Yard-Ballpark",
+            "distance_m": 12976.1,
+            "coordinates": [
+              -77.005877,
+              38.876473
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F04",
+            "name": "Waterfront",
+            "distance_m": 13987.5,
+            "coordinates": [
+              -77.017559,
+              38.876456
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 15239.5,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_F02",
+            "name": "Archives",
+            "distance_m": 16165.9,
+            "coordinates": [
+              -77.021909,
+              38.893224
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_B01_F01",
+            "name": "Gallery Place",
+            "distance_m": 16752.4,
+            "coordinates": [
+              -77.022802,
+              38.89838
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_E01",
+            "name": "Mt Vernon Sq",
+            "distance_m": 17666.6,
+            "coordinates": [
+              -77.02192,
+              38.90658
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_E02",
+            "name": "Shaw-Howard U",
+            "distance_m": 18438.0,
+            "coordinates": [
+              -77.021923,
+              38.913518
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E03",
+            "name": "U St",
+            "distance_m": 19212.8,
+            "coordinates": [
+              -77.02752,
+              38.917009
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E04",
+            "name": "Columbia Heights",
+            "distance_m": 20661.5,
+            "coordinates": [
+              -77.032521,
+              38.927502
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E05",
+            "name": "Georgia Ave-Petworth",
+            "distance_m": 22136.5,
+            "coordinates": [
+              -77.023537,
+              38.937367
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B06_E06",
+            "name": "Fort Totten",
+            "distance_m": 24762.2,
+            "coordinates": [
+              -77.002296,
+              38.951786
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_E07",
+            "name": "West Hyattsville",
+            "distance_m": 27971.4,
+            "coordinates": [
+              -76.9695,
+              38.955276
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E08",
+            "name": "Hyattsville Crossing",
+            "distance_m": 30066.0,
+            "coordinates": [
+              -76.956422,
+              38.965292
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E09",
+            "name": "College Park-U Of MD",
+            "distance_m": 33251.0,
+            "coordinates": [
+              -76.92834,
+              38.978303
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E10",
+            "name": "Greenbelt",
+            "distance_m": 37213.4,
+            "coordinates": [
+              -76.911197,
+              39.011093
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Greenbelt",
+        "terminus": "Branch Ave",
+        "stations": [
+          {
+            "id": "STN_E10",
+            "name": "Greenbelt",
+            "distance_m": 13.8,
+            "coordinates": [
+              -76.911197,
+              39.011093
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E09",
+            "name": "College Park-U Of MD",
+            "distance_m": 3976.3,
+            "coordinates": [
+              -76.92834,
+              38.978303
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E08",
+            "name": "Hyattsville Crossing",
+            "distance_m": 7189.7,
+            "coordinates": [
+              -76.956422,
+              38.965292
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E07",
+            "name": "West Hyattsville",
+            "distance_m": 9283.8,
+            "coordinates": [
+              -76.9695,
+              38.955276
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_B06_E06",
+            "name": "Fort Totten",
+            "distance_m": 12493.0,
+            "coordinates": [
+              -77.002296,
+              38.951786
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_E05",
+            "name": "Georgia Ave-Petworth",
+            "distance_m": 15118.7,
+            "coordinates": [
+              -77.023537,
+              38.937367
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E04",
+            "name": "Columbia Heights",
+            "distance_m": 16593.7,
+            "coordinates": [
+              -77.032521,
+              38.927502
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E03",
+            "name": "U St",
+            "distance_m": 18042.4,
+            "coordinates": [
+              -77.02752,
+              38.917009
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E02",
+            "name": "Shaw-Howard U",
+            "distance_m": 18817.2,
+            "coordinates": [
+              -77.021923,
+              38.913518
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_E01",
+            "name": "Mt Vernon Sq",
+            "distance_m": 19588.7,
+            "coordinates": [
+              -77.02192,
+              38.90658
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_B01_F01",
+            "name": "Gallery Place",
+            "distance_m": 20502.9,
+            "coordinates": [
+              -77.022802,
+              38.89838
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_F02",
+            "name": "Archives",
+            "distance_m": 21094.5,
+            "coordinates": [
+              -77.021909,
+              38.893224
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 22020.8,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "YELLOW",
+                "short_name": "Yellow",
+                "color": "#FFD200",
+                "text_color": "#000000"
+              }
+            ]
+          },
+          {
+            "id": "STN_F04",
+            "name": "Waterfront",
+            "distance_m": 23273.0,
+            "coordinates": [
+              -77.017559,
+              38.876456
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F05",
+            "name": "Navy Yard-Ballpark",
+            "distance_m": 24284.5,
+            "coordinates": [
+              -77.005877,
+              38.876473
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F06",
+            "name": "Anacostia",
+            "distance_m": 26180.7,
+            "coordinates": [
+              -76.995559,
+              38.863287
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F07",
+            "name": "Congress Heights",
+            "distance_m": 28306.2,
+            "coordinates": [
+              -76.988439,
+              38.845695
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F08",
+            "name": "Southern Ave",
+            "distance_m": 30062.5,
+            "coordinates": [
+              -76.975211,
+              38.840954
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F09",
+            "name": "Naylor Rd",
+            "distance_m": 32143.6,
+            "coordinates": [
+              -76.956605,
+              38.851121
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F10",
+            "name": "Suitland",
+            "distance_m": 34468.5,
+            "coordinates": [
+              -76.932869,
+              38.844668
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_F11",
+            "name": "Branch Ave",
+            "distance_m": 37253.2,
+            "coordinates": [
+              -76.911817,
+              38.826718
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "YELLOW": {
+    "id": "YELLOW",
+    "short_name": "Yellow",
+    "color": "#FFD200",
+    "text_color": "#000000",
+    "directions": {
+      "0": {
+        "origin": "Huntington",
+        "terminus": "Mt Vernon Sq",
+        "stations": [
+          {
+            "id": "STN_C15",
+            "name": "Huntington",
+            "distance_m": 1.0,
+            "coordinates": [
+              -77.0753,
+              38.79383
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_C14",
+            "name": "Eisenhower Ave",
+            "distance_m": 845.3,
+            "coordinates": [
+              -77.071156,
+              38.800354
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_C13",
+            "name": "King St-Old Town",
+            "distance_m": 2042.8,
+            "coordinates": [
+              -77.060974,
+              38.806609
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C12",
+            "name": "Braddock Rd",
+            "distance_m": 3155.1,
+            "coordinates": [
+              -77.053722,
+              38.814087
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C11",
+            "name": "Potomac Yard/VT",
+            "distance_m": 5444.0,
+            "coordinates": [
+              -77.04642,
+              38.833192
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C10",
+            "name": "Ronald Reagan Washington National Airport",
+            "distance_m": 8124.1,
+            "coordinates": [
+              -77.044048,
+              38.853505
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C09",
+            "name": "Crystal City",
+            "distance_m": 9014.3,
+            "coordinates": [
+              -77.050572,
+              38.857846
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C08",
+            "name": "Pentagon City",
+            "distance_m": 10204.3,
+            "coordinates": [
+              -77.059516,
+              38.861852
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C07",
+            "name": "Pentagon",
+            "distance_m": 11205.9,
+            "coordinates": [
+              -77.054113,
+              38.869195
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 14957.1,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_F02",
+            "name": "Archives",
+            "distance_m": 15883.4,
+            "coordinates": [
+              -77.021909,
+              38.893224
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_B01_F01",
+            "name": "Gallery Place",
+            "distance_m": 16469.9,
+            "coordinates": [
+              -77.022802,
+              38.89838
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_E01",
+            "name": "Mt Vernon Sq",
+            "distance_m": 17275.2,
+            "coordinates": [
+              -77.02192,
+              38.90658
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Mt Vernon Sq",
+        "terminus": "Huntington",
+        "stations": [
+          {
+            "id": "STN_E01",
+            "name": "Mt Vernon Sq",
+            "distance_m": 1.3,
+            "coordinates": [
+              -77.02192,
+              38.90658
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_B01_F01",
+            "name": "Gallery Place",
+            "distance_m": 806.9,
+            "coordinates": [
+              -77.022802,
+              38.89838
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "RED",
+                "short_name": "Red",
+                "color": "#E31837",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_F02",
+            "name": "Archives",
+            "distance_m": 1398.5,
+            "coordinates": [
+              -77.021909,
+              38.893224
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_D03_F03",
+            "name": "L'Enfant Plaza",
+            "distance_m": 2324.8,
+            "coordinates": [
+              -77.021913,
+              38.884893
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "ORANGE",
+                "short_name": "Orange",
+                "color": "#F7941E",
+                "text_color": "#000000"
+              },
+              {
+                "id": "SILVER",
+                "short_name": "Silver",
+                "color": "#A1A2A1",
+                "text_color": "#000000"
+              },
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "GREEN",
+                "short_name": "Green",
+                "color": "#00A94F",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C07",
+            "name": "Pentagon",
+            "distance_m": 6075.9,
+            "coordinates": [
+              -77.054113,
+              38.869195
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C08",
+            "name": "Pentagon City",
+            "distance_m": 7095.2,
+            "coordinates": [
+              -77.059516,
+              38.861852
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C09",
+            "name": "Crystal City",
+            "distance_m": 8307.4,
+            "coordinates": [
+              -77.050572,
+              38.857846
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C10",
+            "name": "Ronald Reagan Washington National Airport",
+            "distance_m": 9197.6,
+            "coordinates": [
+              -77.044048,
+              38.853505
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C11",
+            "name": "Potomac Yard/VT",
+            "distance_m": 11924.8,
+            "coordinates": [
+              -77.04642,
+              38.833192
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C12",
+            "name": "Braddock Rd",
+            "distance_m": 14213.7,
+            "coordinates": [
+              -77.053722,
+              38.814087
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C13",
+            "name": "King St-Old Town",
+            "distance_m": 15389.0,
+            "coordinates": [
+              -77.060974,
+              38.806609
+            ],
+            "is_hub": true,
+            "transfers": [
+              {
+                "id": "BLUE",
+                "short_name": "Blue",
+                "color": "#0076C0",
+                "text_color": "#FFFFFF"
+              }
+            ]
+          },
+          {
+            "id": "STN_C14",
+            "name": "Eisenhower Ave",
+            "distance_m": 16644.8,
+            "coordinates": [
+              -77.071156,
+              38.800354
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "STN_C15",
+            "name": "Huntington",
+            "distance_m": 17489.1,
+            "coordinates": [
+              -77.0753,
+              38.79383
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  }
+}

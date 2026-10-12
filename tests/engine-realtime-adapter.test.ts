@@ -10,6 +10,7 @@ import { parisConfig } from '../cities/paris/city.config';
 import { montrealConfig } from '../cities/montreal/city.config';
 import { londonConfig } from '../cities/london/city.config';
 import { lilleConfig } from '../cities/lille/city.config';
+import { washingtonConfig } from '../cities/washington/city.config';
 import { createRealtimeAdapter } from '../cities/realtime';
 import { PrimRealtimeAdapter } from '../cities/paris/rt/prim_adapter';
 import { StmRealtimeAdapter } from '../cities/montreal/rt/stm_adapter';
@@ -18,7 +19,9 @@ import {
   SNAPSHOT_TIMESTAMP_ISO,
   SNAPSHOT_TIMESTAMP_ISO_MONTREAL,
   SNAPSHOT_TIMESTAMP_ISO_LONDON,
-  SNAPSHOT_TIMESTAMP_ISO_LILLE
+  SNAPSHOT_TIMESTAMP_ISO_LILLE,
+  SNAPSHOT_TIMESTAMP_ISO_WASHINGTON,
+  SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER
 } from './snapshot_generator';
 
 /**
@@ -148,6 +151,37 @@ describe('Moteur ↔ adaptateur temps réel', () => {
       expect(l2Count).toBe(68);
       expect(tramRCount).toBe(8);
       expect(tramTCount).toBe(9);
+    });
+
+    it('Washington : 97 rames (6 lignes Metrorail) à l’heure du snapshot, Red strictement inchangée (26)', async () => {
+      const { count, lines } = await runFirstTick(
+        washingtonConfig, createRealtimeAdapter(washingtonConfig), SNAPSHOT_TIMESTAMP_ISO_WASHINGTON
+      );
+      const redCount = lines.filter(l => l === 'RED').length;
+      const orangeCount = lines.filter(l => l === 'ORANGE').length;
+      const silverCount = lines.filter(l => l === 'SILVER').length;
+      const blueCount = lines.filter(l => l === 'BLUE').length;
+      const greenCount = lines.filter(l => l === 'GREEN').length;
+      const yellowCount = lines.filter(l => l === 'YELLOW').length;
+      expect(count).toBe(97);
+      expect(redCount).toBe(26);
+      expect(orangeCount).toBe(12);
+      expect(silverCount).toBe(19);
+      expect(blueCount).toBe(13);
+      expect(greenCount).toBe(18);
+      expect(yellowCount).toBe(9);
+    });
+
+    it('Washington : aucune rame décalée d’une heure au lendemain du passage à l’heure d’hiver américain (2 nov 2026)', async () => {
+      const summerRun = await runFirstTick(
+        washingtonConfig, createRealtimeAdapter(washingtonConfig), SNAPSHOT_TIMESTAMP_ISO_WASHINGTON
+      );
+      resetShapesCache();
+      const winterRun = await runFirstTick(
+        washingtonConfig, createRealtimeAdapter(washingtonConfig), SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER
+      );
+      expect(winterRun.count).toBe(97);
+      expect(winterRun.trainIds).toEqual(summerRun.trainIds);
     });
 
     it('Paris (métro) : un adaptateur inactif ne change rien', async () => {

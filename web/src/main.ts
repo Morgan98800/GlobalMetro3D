@@ -184,7 +184,7 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
       <text x="440" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">EUR 1,90 CB</text>
     </svg>`;
 
-  const badgeLabel = activeCityConfig.id === 'lille' ? 'VAL & Tramway' : (activeCityConfig.id === 'london' ? 'Underground' : '100% Souterrain');
+  const badgeLabel = activeCityConfig.id === 'lille' ? 'VAL & Tramway' : (activeCityConfig.id === 'london' ? 'Underground' : (activeCityConfig.id === 'washington' ? 'Metrorail' : '100% Souterrain'));
   const cityEmblem = `
     <div class="about-card-emblem" style="background:var(--eleve-hi);border:1px solid var(--bordure);border-radius:8px;padding:20px 14px;text-align:center;">
       <span style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.6;display:block;margin-bottom:6px;">Réseau Métropolitain</span>
@@ -198,6 +198,8 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
     ? '<p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p>'
     : rtProvider === 'tfl-unified'
     ? '<p class="about-item__text">Temps réel : <strong>TfL Unified API</strong></p>'
+    : activeCityConfig.id === 'washington'
+    ? '<p class="about-item__text">Temps réel : <strong>WMATA GTFS-RT</strong></p>'
     : rtProvider === 'gtfs-rt'
     ? '<p class="about-item__text">Temps réel : <strong>Ilévia GTFS-RT</strong></p>'
     : '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (sans GPS en tunnel)</p>';

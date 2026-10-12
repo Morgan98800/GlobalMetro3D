@@ -1,0 +1,456 @@
+{
+  "meta": {
+    "description": "Washington DC Metrorail 3D Reference Kinematic Simulation Snapshot",
+    "timestampIso": "2026-10-06T12:30:00Z",
+    "serviceDate": "2026-10-06",
+    "civilSeconds": 30600,
+    "totalTrains": 26,
+    "trainsByLine": {
+      "RED": 26
+    }
+  },
+  "trains": [
+    {
+      "tripId": "6573089_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 15229.27,
+      "speedKmh": 58,
+      "speedMps": 16.23,
+      "pos": [
+        -76.9965318,
+        38.938281
+      ],
+      "bearing": 161.9,
+      "nextStation": "Brookland-CUA",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573090_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 41822.66,
+      "speedKmh": 63,
+      "speedMps": 17.61,
+      "pos": [
+        -77.0211715,
+        38.981467
+      ],
+      "bearing": 336.5,
+      "nextStation": "Silver Spring",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573093_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 2113.61,
+      "speedKmh": 78,
+      "speedMps": 21.59,
+      "pos": [
+        -77.0520535,
+        39.0440191
+      ],
+      "bearing": 174.9,
+      "nextStation": "Wheaton",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573096_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 47739.28,
+      "speedKmh": 56,
+      "speedMps": 15.49,
+      "pos": [
+        -77.1491384,
+        39.0873358
+      ],
+      "bearing": 332.9,
+      "nextStation": "Shady Grove",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573130_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 24540.8,
+      "speedKmh": 46,
+      "speedMps": 12.68,
+      "pos": [
+        -77.0554098,
+        38.9302367
+      ],
+      "bearing": 155.7,
+      "nextStation": "Woodley Park",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573138_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 27950.6,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0396701,
+        38.9031467
+      ],
+      "bearing": 155.7,
+      "nextStation": "Metro Center",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573188_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 19096.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0033116,
+        38.9066172
+      ],
+      "bearing": 195.7,
+      "nextStation": "Union Station",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573210_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 46234.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0429246,
+        39.014946
+      ],
+      "bearing": 348.4,
+      "nextStation": "Wheaton",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573213_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 21639.15,
+      "speedKmh": 24,
+      "speedMps": 6.8,
+      "pos": [
+        -77.0194825,
+        38.8980092
+      ],
+      "bearing": 299.2,
+      "nextStation": "Gallery Place",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573227_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 50280.95,
+      "speedKmh": 58,
+      "speedMps": 16.19,
+      "pos": [
+        -77.0517611,
+        39.0498336
+      ],
+      "bearing": 7.3,
+      "nextStation": "Glenmont",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573236_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 9433.1,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.1130837,
+        39.0485233
+      ],
+      "bearing": 159.3,
+      "nextStation": "Grosvenor-Strathmore",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573247_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 34607.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0936506,
+        38.9832759
+      ],
+      "bearing": 343.2,
+      "nextStation": "Medical Center",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573262_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 13497.75,
+      "speedKmh": 73,
+      "speedMps": 20.38,
+      "pos": [
+        -77.0994693,
+        39.0144508
+      ],
+      "bearing": 156.9,
+      "nextStation": "Medical Center",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573277_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 39371.88,
+      "speedKmh": 73,
+      "speedMps": 20.38,
+      "pos": [
+        -77.1027555,
+        39.0248721
+      ],
+      "bearing": 359.3,
+      "nextStation": "Grosvenor-Strathmore",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573294_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 31043,
+      "speedKmh": 42,
+      "speedMps": 11.62,
+      "pos": [
+        -77.0113597,
+        38.8947559
+      ],
+      "bearing": 91.1,
+      "nextStation": "Union Station",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573296_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 4372.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.1461938,
+        39.0842719
+      ],
+      "bearing": 138.1,
+      "nextStation": "Twinbrook",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573313_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 27676.6,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0581284,
+        38.9349104
+      ],
+      "bearing": 335.7,
+      "nextStation": "Van Ness-UDC",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573342_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 6261,
+      "speedKmh": 72,
+      "speedMps": 19.96,
+      "pos": [
+        -77.0408869,
+        39.0084185
+      ],
+      "bearing": 166.1,
+      "nextStation": "Silver Spring",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573343_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 34001.23,
+      "speedKmh": 50,
+      "speedMps": 13.85,
+      "pos": [
+        -76.9979856,
+        38.9171146
+      ],
+      "bearing": 19.9,
+      "nextStation": "Rhode Island Ave",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573353_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 21594.92,
+      "speedKmh": 50,
+      "speedMps": 13.94,
+      "pos": [
+        -77.0765301,
+        38.9463
+      ],
+      "bearing": 96.2,
+      "nextStation": "Van Ness-UDC",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573364_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 43129.7,
+      "speedKmh": 73,
+      "speedMps": 20.35,
+      "pos": [
+        -77.1147849,
+        39.0565693
+      ],
+      "bearing": 339.8,
+      "nextStation": "Twinbrook",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573365_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 24108.9,
+      "speedKmh": 33,
+      "speedMps": 9.17,
+      "pos": [
+        -77.0416332,
+        38.9065278
+      ],
+      "bearing": 335.7,
+      "nextStation": "Dupont Circle",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573495_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 37491.17,
+      "speedKmh": 58,
+      "speedMps": 16.23,
+      "pos": [
+        -77.0000283,
+        38.9466036
+      ],
+      "bearing": 342.1,
+      "nextStation": "Fort Totten",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573496_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_8",
+      "direction": 0,
+      "currentDistM": 17811.08,
+      "speedKmh": 74,
+      "speedMps": 20.57,
+      "pos": [
+        -77.0905454,
+        38.9767793
+      ],
+      "bearing": 161.5,
+      "nextStation": "Friendship Heights",
+      "destStation": "Glenmont"
+    },
+    {
+      "tripId": "6573503_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 30574.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0796743,
+        38.9488848
+      ],
+      "bearing": 338.4,
+      "nextStation": "Friendship Heights",
+      "destStation": "Shady Grove"
+    },
+    {
+      "tripId": "6573504_20121",
+      "line": "RED",
+      "lineName": "Red",
+      "shapeId": "RRED_16",
+      "direction": 1,
+      "currentDistM": 10584.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -77.0181285,
+        38.9760216
+      ],
+      "bearing": 156.4,
+      "nextStation": "Fort Totten",
+      "destStation": "Shady Grove"
+    }
+  ]
+}

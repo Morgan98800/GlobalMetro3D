@@ -1,0 +1,86 @@
+[
+  {
+    "id": "RED",
+    "short_name": "Red",
+    "long_name": "Metrorail Red Line",
+    "color": "#E31837",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Glenmont",
+      "1": "Shady Grove"
+    },
+    "measured_length_km": 51.74,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "ORANGE",
+    "short_name": "Orange",
+    "long_name": "Metrorail Orange Line",
+    "color": "#F7941E",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "0": "New Carrollton",
+      "1": "Vienna"
+    },
+    "measured_length_km": 42.76,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "SILVER",
+    "short_name": "Silver",
+    "long_name": "Metrorail Silver Line",
+    "color": "#A1A2A1",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "0": "Downtown Largo",
+      "1": "Ashburn"
+    },
+    "measured_length_km": 70.82,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "BLUE",
+    "short_name": "Blue",
+    "long_name": "Metrorail Blue Line",
+    "color": "#0076C0",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Downtown Largo",
+      "1": "Franconia-Springfield"
+    },
+    "measured_length_km": 49.03,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "GREEN",
+    "short_name": "Green",
+    "long_name": "Metrorail Green Line",
+    "color": "#00A94F",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Greenbelt",
+      "1": "Branch Ave"
+    },
+    "measured_length_km": 37.26,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "YELLOW",
+    "short_name": "Yellow",
+    "long_name": "Metrorail Yellow Line",
+    "color": "#FFD200",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "0": "Mt Vernon Sq",
+      "1": "Huntington"
+    },
+    "measured_length_km": 17.49,
+    "elevation_offset": 0.0
+  }
+]

@@ -18,6 +18,9 @@
 [functions."lille_relay"]
   schedule = "* * * * *"
 
+[functions."washington_relay"]
+  schedule = "* * * * *"
+
 [[redirects]]
   from = "/api/prim"
   to = "/.netlify/functions/prim_relay"
@@ -46,6 +49,11 @@
 [[redirects]]
   from = "/api/lille-rt"
   to = "/.netlify/functions/lille_relay"
+  status = 200
+
+[[redirects]]
+  from = "/api/washington-rt"
+  to = "/.netlify/functions/washington_relay"
   status = 200
 
 [[redirects]]

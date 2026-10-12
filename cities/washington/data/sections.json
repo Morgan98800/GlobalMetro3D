@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "Washington Metropolitan Area Transit Authority (WMATA)",
+    "classification": {
+      "flat": "Réseau modélisé à plat (tracé 2D sans élévation)"
+    }
+  },
+  "summary": {
+    "aerial_sections": 0,
+    "aerial_km": 0.0,
+    "network_type": "Tracé à plat (relief hors périmètre)"
+  }
+}

@@ -11,17 +11,20 @@ import { montrealConfig } from '../cities/montreal/city.config';
 import { londonConfig } from '../cities/london/city.config';
 import { lilleConfig } from '../cities/lille/city.config';
 import { washingtonConfig } from '../cities/washington/city.config';
+import { berlinConfig } from '../cities/berlin/city.config';
 import { createRealtimeAdapter } from '../cities/realtime';
 import { PrimRealtimeAdapter } from '../cities/paris/rt/prim_adapter';
 import { StmRealtimeAdapter } from '../cities/montreal/rt/stm_adapter';
 import { TflRealtimeAdapter } from '../cities/london/rt/tfl_adapter';
+import { VbbRealtimeAdapter } from '../cities/berlin/rt/vbb_adapter';
 import {
   SNAPSHOT_TIMESTAMP_ISO,
   SNAPSHOT_TIMESTAMP_ISO_MONTREAL,
   SNAPSHOT_TIMESTAMP_ISO_LONDON,
   SNAPSHOT_TIMESTAMP_ISO_LILLE,
   SNAPSHOT_TIMESTAMP_ISO_WASHINGTON,
-  SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER
+  SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER,
+  SNAPSHOT_TIMESTAMP_ISO_BERLIN
 } from './snapshot_generator';
 
 /**
@@ -109,6 +112,7 @@ describe('Moteur ↔ adaptateur temps réel', () => {
       expect(createRealtimeAdapter(parisConfig)).toBeInstanceOf(PrimRealtimeAdapter);
       expect(createRealtimeAdapter(montrealConfig)).toBeInstanceOf(StmRealtimeAdapter);
       expect(createRealtimeAdapter(londonConfig)).toBeInstanceOf(TflRealtimeAdapter);
+      expect(createRealtimeAdapter(berlinConfig)).toBeInstanceOf(VbbRealtimeAdapter);
 
       const none = createRealtimeAdapter({
         ...parisConfig,
@@ -182,6 +186,15 @@ describe('Moteur ↔ adaptateur temps réel', () => {
       );
       expect(winterRun.count).toBe(97);
       expect(winterRun.trainIds).toEqual(summerRun.trainIds);
+    });
+
+    it('Berlin : 118 rames (U8: 14) à l’heure du snapshot, validité Europe/Berlin', async () => {
+      const { count, lines } = await runFirstTick(
+        berlinConfig, createRealtimeAdapter(berlinConfig), SNAPSHOT_TIMESTAMP_ISO_BERLIN
+      );
+      const u8Count = lines.filter(l => l === 'U8').length;
+      expect(count).toBe(118);
+      expect(u8Count).toBe(14);
     });
 
     it('Paris (métro) : un adaptateur inactif ne change rien', async () => {

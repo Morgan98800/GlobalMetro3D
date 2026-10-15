@@ -156,15 +156,29 @@ C'est le fichier directeur du déploiement géré par Netlify :
 
 [functions."washington_relay"]
   schedule = "* * * * *"     # rafraîchissement WMATA GTFS-RT chaque minute (Washington DC)
+
+[functions."berlin_relay"]
+  schedule = "* * * * *"     # rafraîchissement VBB GTFS-RT chaque minute (Berlin U-Bahn)
 ```
 
-Cinq relais serveur et leurs redirections associées sont configurés :
+Six relais serveur et leurs redirections associées sont configurés :
 - `/api/prim` → `/.netlify/functions/prim_relay` (200)
 - `/api/stm` → `/.netlify/functions/stm_relay` (200)
 - `/api/tfl` & `/api/tfl_arrivals` → `/.netlify/functions/tfl_relay` (200)
 - `/api/lille-rt` → `/.netlify/functions/lille_relay` (200)
 - `/api/washington-rt` → `/.netlify/functions/washington_relay` (200)
+- `/api/berlin-rt` → `/.netlify/functions/berlin_relay` (200)
 - `/*` → `/index.html` (200, routage SPA)
+
+### Relais Serveur & Politique de Cache VBB (Berlin U-Bahn)
+- **Accès & Licence** : Le flux GTFS-RT du VBB ne nécessite aucun jeton d'authentification et est distribué sous licence CC BY 4.0. Le quota autorisé est de 60 requêtes par minute.
+- **En-tête User-Agent obligatoire** : Le VBB applique un blocage d'accès systématique aux requêtes sans User-Agent ou utilisant des agents par défaut de librairies (ex. `node-fetch`, `python-requests`). Le relais envoie obligatoirement :
+  `User-Agent: ParisSubway3D/1.0 (+https://github.com/morgancanteri/paris-subway-3d; morgan.canteri@gmail.com)`.
+- **Politique de cache CDN & Coalescence** :
+  1. `Netlify-CDN-Cache-Control: public, s-maxage=15, stale-while-revalidate=30` et `Cache-Control: public, max-age=10`.
+  2. Coalescence in-flight évitant toute requête amont concurrente lors des pointes de trafic.
+  3. Gestion du tag ETag et de l'en-tête `If-None-Match` : si le flux n'a pas varié, le VBB renvoie `304 Not Modified` et le relais restitue son cache mémoire immédiat.
+- **Résilience** : En cas de défaillance amont (429, 403, 5xx), le relais intercepte l'erreur et retourne un statut HTTP 200 gracieux avec un instantané vide (`trains: []`) et les métadonnées de secours, évitant tout plantage client et laissant la simulation poursuivre sa cinématique sur les horaires théoriques.
 
 ### Maîtrise & Isolation du Quota WMATA (Washington DC)
 - **Contrainte opérateur** : 10 appels/seconde et 50 000 appels/jour au maximum.
@@ -191,6 +205,7 @@ Chaque ville dispose d'une arborescence autonome sous `cities/<ville>/data/` syn
 | **Londres** | 10 fichiers (`cities/london/data/`) | 10 profils Tube, Overground, DLR, Elizabeth, Tram | `/api/tfl` |
 | **Lille** | 10 fichiers (`cities/lille/data/`) | `val_208__neutral.glb`, `val_52m__neutral.glb`, `breda_vlc__neutral.glb` | `/api/lille-rt` |
 | **Washington DC** | 10 fichiers (`cities/washington/data/`) | `wmata_generic__neutral.glb` (3,82 Ko) | `/api/washington-rt` |
+| **Berlin** | 10 fichiers (`cities/berlin/data/`) | `bvg_kleinprofil__neutral.glb` (3,13 Ko), `bvg_grossprofil__neutral.glb` (3,11 Ko) | `/api/berlin-rt` |
 
 ---
 

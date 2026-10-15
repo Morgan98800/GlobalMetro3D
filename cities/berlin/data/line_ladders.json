@@ -1,0 +1,4105 @@
+{
+  "U1": {
+    "id": "U1",
+    "short_name": "U1",
+    "color": "#7DAD4C",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Uhlandstr.",
+        "terminus": "Warschauer Str.",
+        "stations": [
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 5.8,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2",
+              "U3",
+              "U4"
+            ]
+          },
+          {
+            "id": "de:11000:900056101",
+            "name": "Wittenbergplatz",
+            "distance_m": 838.0,
+            "coordinates": [
+              13.342967,
+              52.501792
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900023203",
+            "name": "Kurfürstendamm",
+            "distance_m": 1629.8,
+            "coordinates": [
+              13.332587,
+              52.504021
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900023301",
+            "name": "Uhlandstr.",
+            "distance_m": 2031.6,
+            "coordinates": [
+              13.327015,
+              52.502907
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Warschauer Str.",
+        "terminus": "Uhlandstr.",
+        "stations": [
+          {
+            "id": "de:11000:900023301",
+            "name": "Uhlandstr.",
+            "distance_m": 0.2,
+            "coordinates": [
+              13.327015,
+              52.502907
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900023203",
+            "name": "Kurfürstendamm",
+            "distance_m": 401.7,
+            "coordinates": [
+              13.332587,
+              52.504021
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900056101",
+            "name": "Wittenbergplatz",
+            "distance_m": 1192.0,
+            "coordinates": [
+              13.342967,
+              52.501792
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 2018.7,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2",
+              "U3",
+              "U4"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "U2": {
+    "id": "U2",
+    "short_name": "U2",
+    "color": "#DA421E",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Ruhleben",
+        "terminus": "Pankow",
+        "stations": [
+          {
+            "id": "de:11000:900130002",
+            "name": "Pankow",
+            "distance_m": 5.5,
+            "coordinates": [
+              13.411811,
+              52.566775
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900130011",
+            "name": "Vinetastr.",
+            "distance_m": 856.2,
+            "coordinates": [
+              13.413343,
+              52.559185
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900110001",
+            "name": "Schönhauser Allee",
+            "distance_m": 1980.6,
+            "coordinates": [
+              13.413741,
+              52.549226
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900110006",
+            "name": "Eberswalder Str.",
+            "distance_m": 2792.3,
+            "coordinates": [
+              13.41228,
+              52.541988
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900110005",
+            "name": "Senefelderplatz",
+            "distance_m": 3856.8,
+            "coordinates": [
+              13.412596,
+              52.532443
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100016",
+            "name": "Rosa-Luxemburg-Platz",
+            "distance_m": 4449.0,
+            "coordinates": [
+              13.410522,
+              52.527725
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100003",
+            "name": "Alexanderplatz",
+            "distance_m": 5265.2,
+            "coordinates": [
+              13.413646,
+              52.521488
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U5",
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900100015",
+            "name": "Klosterstr.",
+            "distance_m": 5893.9,
+            "coordinates": [
+              13.412525,
+              52.517208
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100014",
+            "name": "Märkisches Museum",
+            "distance_m": 6486.3,
+            "coordinates": [
+              13.410213,
+              52.512387
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100013",
+            "name": "Spittelmarkt",
+            "distance_m": 6949.5,
+            "coordinates": [
+              13.403697,
+              52.511348
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100012",
+            "name": "Hausvogteiplatz",
+            "distance_m": 7561.0,
+            "coordinates": [
+              13.395562,
+              52.513393
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100011",
+            "name": "Stadtmitte",
+            "distance_m": 7952.3,
+            "coordinates": [
+              13.390543,
+              52.512114
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900100010",
+            "name": "Anton-Wilhelm-Amo-Str.",
+            "distance_m": 8322.4,
+            "coordinates": [
+              13.385135,
+              52.511816
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100020",
+            "name": "Potsdamer Platz",
+            "distance_m": 8927.4,
+            "coordinates": [
+              13.378047,
+              52.509072
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900005252",
+            "name": "Mendelssohn-Bartholdy-Park",
+            "distance_m": 9550.9,
+            "coordinates": [
+              13.374904,
+              52.503806
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900017103",
+            "name": "Gleisdreieck",
+            "distance_m": 10035.0,
+            "coordinates": [
+              13.374084,
+              52.499504
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900056104",
+            "name": "Bülowstr.",
+            "distance_m": 10982.2,
+            "coordinates": [
+              13.36317,
+              52.49762
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 11597.1,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3",
+              "U4"
+            ]
+          },
+          {
+            "id": "de:11000:900056101",
+            "name": "Wittenbergplatz",
+            "distance_m": 12425.5,
+            "coordinates": [
+              13.342967,
+              52.501792
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900023201",
+            "name": "Zoologischer Garten",
+            "distance_m": 13258.6,
+            "coordinates": [
+              13.333009,
+              52.506776
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900023101",
+            "name": "Ernst-Reuter-Platz",
+            "distance_m": 14246.8,
+            "coordinates": [
+              13.322175,
+              52.511784
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900022201",
+            "name": "Deutsche Oper",
+            "distance_m": 15079.7,
+            "coordinates": [
+              13.310534,
+              52.511815
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900024201",
+            "name": "Bismarckstr.",
+            "distance_m": 15447.0,
+            "coordinates": [
+              13.305142,
+              52.511515
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900022101",
+            "name": "Sophie-Charlotte-Platz",
+            "distance_m": 16080.5,
+            "coordinates": [
+              13.295832,
+              52.510895
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900026202",
+            "name": "Kaiserdamm",
+            "distance_m": 16945.3,
+            "coordinates": [
+              13.283103,
+              52.510113
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900026201",
+            "name": "Theodor-Heuss-Platz",
+            "distance_m": 17661.3,
+            "coordinates": [
+              13.272617,
+              52.50992
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900026101",
+            "name": "Neu-Westend",
+            "distance_m": 18835.5,
+            "coordinates": [
+              13.259258,
+              52.516281
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900025203",
+            "name": "Olympia-Stadion",
+            "distance_m": 19446.9,
+            "coordinates": [
+              13.250543,
+              52.516862
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900025202",
+            "name": "Ruhleben",
+            "distance_m": 20644.6,
+            "coordinates": [
+              13.24127,
+              52.525594
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Pankow",
+        "terminus": "Ruhleben",
+        "stations": [
+          {
+            "id": "de:11000:900025202",
+            "name": "Ruhleben",
+            "distance_m": 0.9,
+            "coordinates": [
+              13.24127,
+              52.525594
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900025203",
+            "name": "Olympia-Stadion",
+            "distance_m": 1202.8,
+            "coordinates": [
+              13.250543,
+              52.516862
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900026101",
+            "name": "Neu-Westend",
+            "distance_m": 1823.6,
+            "coordinates": [
+              13.259258,
+              52.516281
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900026201",
+            "name": "Theodor-Heuss-Platz",
+            "distance_m": 2995.9,
+            "coordinates": [
+              13.272617,
+              52.50992
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900026202",
+            "name": "Kaiserdamm",
+            "distance_m": 3713.9,
+            "coordinates": [
+              13.283103,
+              52.510113
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900022101",
+            "name": "Sophie-Charlotte-Platz",
+            "distance_m": 4579.6,
+            "coordinates": [
+              13.295832,
+              52.510895
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900024201",
+            "name": "Bismarckstr.",
+            "distance_m": 5213.3,
+            "coordinates": [
+              13.305142,
+              52.511515
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900022201",
+            "name": "Deutsche Oper",
+            "distance_m": 5580.2,
+            "coordinates": [
+              13.310534,
+              52.511815
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900023101",
+            "name": "Ernst-Reuter-Platz",
+            "distance_m": 6406.1,
+            "coordinates": [
+              13.322175,
+              52.511784
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900023201",
+            "name": "Zoologischer Garten",
+            "distance_m": 7396.2,
+            "coordinates": [
+              13.333009,
+              52.506776
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900056101",
+            "name": "Wittenbergplatz",
+            "distance_m": 8231.0,
+            "coordinates": [
+              13.342967,
+              52.501792
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 9059.6,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3",
+              "U4"
+            ]
+          },
+          {
+            "id": "de:11000:900056104",
+            "name": "Bülowstr.",
+            "distance_m": 9675.2,
+            "coordinates": [
+              13.36317,
+              52.49762
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900017103",
+            "name": "Gleisdreieck",
+            "distance_m": 10631.5,
+            "coordinates": [
+              13.374084,
+              52.499504
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900005252",
+            "name": "Mendelssohn-Bartholdy-Park",
+            "distance_m": 11116.2,
+            "coordinates": [
+              13.374904,
+              52.503806
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100020",
+            "name": "Potsdamer Platz",
+            "distance_m": 11736.9,
+            "coordinates": [
+              13.378047,
+              52.509072
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100010",
+            "name": "Anton-Wilhelm-Amo-Str.",
+            "distance_m": 12336.1,
+            "coordinates": [
+              13.385135,
+              52.511816
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100011",
+            "name": "Stadtmitte",
+            "distance_m": 12705.8,
+            "coordinates": [
+              13.390543,
+              52.512114
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900100012",
+            "name": "Hausvogteiplatz",
+            "distance_m": 13094.8,
+            "coordinates": [
+              13.395562,
+              52.513393
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100013",
+            "name": "Spittelmarkt",
+            "distance_m": 13707.2,
+            "coordinates": [
+              13.403697,
+              52.511348
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100014",
+            "name": "Märkisches Museum",
+            "distance_m": 14173.7,
+            "coordinates": [
+              13.410213,
+              52.512387
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100015",
+            "name": "Klosterstr.",
+            "distance_m": 14777.4,
+            "coordinates": [
+              13.412525,
+              52.517208
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100003",
+            "name": "Alexanderplatz",
+            "distance_m": 15413.2,
+            "coordinates": [
+              13.413646,
+              52.521488
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U5",
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900100016",
+            "name": "Rosa-Luxemburg-Platz",
+            "distance_m": 16228.5,
+            "coordinates": [
+              13.410522,
+              52.527725
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900110006",
+            "name": "Eberswalder Str.",
+            "distance_m": 17882.0,
+            "coordinates": [
+              13.41228,
+              52.541988
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900110001",
+            "name": "Schönhauser Allee",
+            "distance_m": 18693.7,
+            "coordinates": [
+              13.413741,
+              52.549226
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900130011",
+            "name": "Vinetastr.",
+            "distance_m": 19817.8,
+            "coordinates": [
+              13.413343,
+              52.559185
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900130002",
+            "name": "Pankow",
+            "distance_m": 20672.2,
+            "coordinates": [
+              13.411811,
+              52.566775
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "U3": {
+    "id": "U3",
+    "short_name": "U3",
+    "color": "#16683D",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Krumme Lanke",
+        "terminus": "Warschauer Str.",
+        "stations": [
+          {
+            "id": "de:11000:900041101",
+            "name": "Fehrbelliner Platz",
+            "distance_m": 10.5,
+            "coordinates": [
+              13.315228,
+              52.490597
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900045102",
+            "name": "Heidelberger Platz",
+            "distance_m": 1195.6,
+            "coordinates": [
+              13.313224,
+              52.48025
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900045101",
+            "name": "Rüdesheimer Platz",
+            "distance_m": 1988.3,
+            "coordinates": [
+              13.3145,
+              52.473373
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900051202",
+            "name": "Breitenbachplatz",
+            "distance_m": 2814.0,
+            "coordinates": [
+              13.308834,
+              52.467012
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900051303",
+            "name": "Dahlem-Dorf",
+            "distance_m": 4691.2,
+            "coordinates": [
+              13.289535,
+              52.457164
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900051201",
+            "name": "Freie Universität (Thielplatz)",
+            "distance_m": 5572.3,
+            "coordinates": [
+              13.281692,
+              52.451041
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900051301",
+            "name": "Oskar-Helene-Heim",
+            "distance_m": 6462.1,
+            "coordinates": [
+              13.268979,
+              52.450412
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900050282",
+            "name": "Onkel Toms Hütte",
+            "distance_m": 7560.7,
+            "coordinates": [
+              13.25311,
+              52.449928
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900050201",
+            "name": "Krumme Lanke",
+            "distance_m": 8618.5,
+            "coordinates": [
+              13.241477,
+              52.443589
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Warschauer Str.",
+        "terminus": "Krumme Lanke",
+        "stations": [
+          {
+            "id": "de:11000:900051202",
+            "name": "Breitenbachplatz",
+            "distance_m": 0.7,
+            "coordinates": [
+              13.308834,
+              52.467012
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900045101",
+            "name": "Rüdesheimer Platz",
+            "distance_m": 831.7,
+            "coordinates": [
+              13.3145,
+              52.473373
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900045102",
+            "name": "Heidelberger Platz",
+            "distance_m": 1622.1,
+            "coordinates": [
+              13.313224,
+              52.48025
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900041101",
+            "name": "Fehrbelliner Platz",
+            "distance_m": 2804.7,
+            "coordinates": [
+              13.315228,
+              52.490597
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900043101",
+            "name": "Hohenzollernplatz",
+            "distance_m": 3560.9,
+            "coordinates": [
+              13.32495,
+              52.494188
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900042101",
+            "name": "Spichernstr.",
+            "distance_m": 4166.7,
+            "coordinates": [
+              13.331995,
+              52.497354
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900023202",
+            "name": "Augsburger Str.",
+            "distance_m": 4657.6,
+            "coordinates": [
+              13.336425,
+              52.500386
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900056101",
+            "name": "Wittenbergplatz",
+            "distance_m": 5265.2,
+            "coordinates": [
+              13.342967,
+              52.501792
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 6093.9,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U2",
+              "U4"
+            ]
+          },
+          {
+            "id": "de:11000:900005201",
+            "name": "Kurfürstenstr.",
+            "distance_m": 6610.5,
+            "coordinates": [
+              13.361504,
+              52.500152
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          },
+          {
+            "id": "de:11000:900017103",
+            "name": "Gleisdreieck",
+            "distance_m": 7486.0,
+            "coordinates": [
+              13.374084,
+              52.499504
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900017104",
+            "name": "Möckernbrücke",
+            "distance_m": 8076.3,
+            "coordinates": [
+              13.383015,
+              52.499087
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900012103",
+            "name": "Hallesches Tor",
+            "distance_m": 8619.9,
+            "coordinates": [
+              13.391628,
+              52.498999
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900013103",
+            "name": "Prinzenstr.",
+            "distance_m": 9646.2,
+            "coordinates": [
+              13.405403,
+              52.498406
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          },
+          {
+            "id": "de:11000:900013102",
+            "name": "Kottbusser Tor",
+            "distance_m": 10532.6,
+            "coordinates": [
+              13.418395,
+              52.498959
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U1",
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900014101",
+            "name": "Görlitzer Bahnhof",
+            "distance_m": 11201.8,
+            "coordinates": [
+              13.428283,
+              52.499292
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          },
+          {
+            "id": "de:11000:900014102",
+            "name": "Schlesisches Tor",
+            "distance_m": 12085.8,
+            "coordinates": [
+              13.441059,
+              52.500747
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          },
+          {
+            "id": "de:11000:900120004",
+            "name": "Warschauer Str.",
+            "distance_m": 12866.0,
+            "coordinates": [
+              13.449123,
+              52.504886
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "U4": {
+    "id": "U4",
+    "short_name": "U4",
+    "color": "#F0D722",
+    "text_color": "#000000",
+    "directions": {
+      "0": {
+        "origin": "Innsbrucker Platz",
+        "terminus": "Nollendorfplatz",
+        "stations": [
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 0.0,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U2",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900055101",
+            "name": "Viktoria-Luise-Platz",
+            "distance_m": 854.6,
+            "coordinates": [
+              13.343461,
+              52.496288
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900055102",
+            "name": "Bayerischer Platz",
+            "distance_m": 1732.5,
+            "coordinates": [
+              13.341488,
+              52.489135
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900054101",
+            "name": "Rathaus Schöneberg",
+            "distance_m": 2425.4,
+            "coordinates": [
+              13.342094,
+              52.483055
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900054105",
+            "name": "Innsbrucker Platz",
+            "distance_m": 2860.5,
+            "coordinates": [
+              13.343623,
+              52.479262
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Nollendorfplatz",
+        "terminus": "Innsbrucker Platz",
+        "stations": [
+          {
+            "id": "de:11000:900054105",
+            "name": "Innsbrucker Platz",
+            "distance_m": 0.0,
+            "coordinates": [
+              13.343623,
+              52.479262
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900054101",
+            "name": "Rathaus Schöneberg",
+            "distance_m": 434.3,
+            "coordinates": [
+              13.342094,
+              52.483055
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900055102",
+            "name": "Bayerischer Platz",
+            "distance_m": 1124.2,
+            "coordinates": [
+              13.341488,
+              52.489135
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900055101",
+            "name": "Viktoria-Luise-Platz",
+            "distance_m": 1996.1,
+            "coordinates": [
+              13.343461,
+              52.496288
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900056102",
+            "name": "Nollendorfplatz",
+            "distance_m": 2850.1,
+            "coordinates": [
+              13.354616,
+              52.499849
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U2",
+              "U3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "U5": {
+    "id": "U5",
+    "short_name": "U5",
+    "color": "#7E5330",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Hauptbahnhof",
+        "terminus": "Hönow",
+        "stations": [
+          {
+            "id": "de:11000:900175010",
+            "name": "Hönow",
+            "distance_m": 2.5,
+            "coordinates": [
+              13.633125,
+              52.538373
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175015",
+            "name": "Louis-Lewin-Str.",
+            "distance_m": 1022.3,
+            "coordinates": [
+              13.618353,
+              52.539037
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175007",
+            "name": "Hellersdorf",
+            "distance_m": 1857.7,
+            "coordinates": [
+              13.606671,
+              52.536737
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175006",
+            "name": "Cottbusser Platz",
+            "distance_m": 2609.9,
+            "coordinates": [
+              13.59653,
+              52.533918
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175005",
+            "name": "Kienberg (Gärten der Welt)",
+            "distance_m": 3367.3,
+            "coordinates": [
+              13.590653,
+              52.528538
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175004",
+            "name": "Kaulsdorf-Nord",
+            "distance_m": 4230.9,
+            "coordinates": [
+              13.589057,
+              52.520912
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175001",
+            "name": "Wuhletal",
+            "distance_m": 5687.6,
+            "coordinates": [
+              13.575194,
+              52.512626
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900171006",
+            "name": "Elsterwerdaer Platz",
+            "distance_m": 7067.6,
+            "coordinates": [
+              13.560446,
+              52.504979
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900171005",
+            "name": "Biesdorf-Süd",
+            "distance_m": 8195.5,
+            "coordinates": [
+              13.546389,
+              52.499625
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900161002",
+            "name": "Tierpark",
+            "distance_m": 10041.3,
+            "coordinates": [
+              13.523072,
+              52.49776
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900161512",
+            "name": "Friedrichsfelde",
+            "distance_m": 11230.7,
+            "coordinates": [
+              13.512845,
+              52.506252
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900160004",
+            "name": "Lichtenberg",
+            "distance_m": 12369.4,
+            "coordinates": [
+              13.498342,
+              52.511218
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900160005",
+            "name": "Magdalenenstr.",
+            "distance_m": 13152.9,
+            "coordinates": [
+              13.486997,
+              52.512532
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120001",
+            "name": "Frankfurter Allee",
+            "distance_m": 13961.6,
+            "coordinates": [
+              13.475215,
+              52.513761
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120009",
+            "name": "Samariterstr.",
+            "distance_m": 14693.0,
+            "coordinates": [
+              13.464537,
+              52.514787
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120008",
+            "name": "Frankfurter Tor",
+            "distance_m": 15422.6,
+            "coordinates": [
+              13.453903,
+              52.515872
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120025",
+            "name": "Weberwiese",
+            "distance_m": 16054.9,
+            "coordinates": [
+              13.444683,
+              52.516804
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120006",
+            "name": "Strausberger Platz",
+            "distance_m": 16955.6,
+            "coordinates": [
+              13.431554,
+              52.518144
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100017",
+            "name": "Schillingstr.",
+            "distance_m": 17747.8,
+            "coordinates": [
+              13.420841,
+              52.520931
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100003",
+            "name": "Alexanderplatz",
+            "distance_m": 18299.6,
+            "coordinates": [
+              13.413646,
+              52.521488
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U2",
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900100045",
+            "name": "Rotes Rathaus",
+            "distance_m": 18788.6,
+            "coordinates": [
+              13.407935,
+              52.518802
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100537",
+            "name": "Museumsinsel",
+            "distance_m": 19458.9,
+            "coordinates": [
+              13.39825,
+              52.517402
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100513",
+            "name": "Unter den Linden",
+            "distance_m": 20081.5,
+            "coordinates": [
+              13.389059,
+              52.51692
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900100025",
+            "name": "Brandenburger Tor",
+            "distance_m": 20630.0,
+            "coordinates": [
+              13.381004,
+              52.516644
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900003254",
+            "name": "Bundestag",
+            "distance_m": 21371.5,
+            "coordinates": [
+              13.373086,
+              52.520156
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900003201",
+            "name": "Berlin Hauptbahnhof",
+            "distance_m": 21971.8,
+            "coordinates": [
+              13.37026,
+              52.52529
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Hönow",
+        "terminus": "Hauptbahnhof",
+        "stations": [
+          {
+            "id": "de:11000:900100003",
+            "name": "Alexanderplatz",
+            "distance_m": 7.9,
+            "coordinates": [
+              13.413646,
+              52.521488
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U2",
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900100017",
+            "name": "Schillingstr.",
+            "distance_m": 551.6,
+            "coordinates": [
+              13.420841,
+              52.520931
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120006",
+            "name": "Strausberger Platz",
+            "distance_m": 1346.6,
+            "coordinates": [
+              13.431554,
+              52.518144
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120025",
+            "name": "Weberwiese",
+            "distance_m": 2247.6,
+            "coordinates": [
+              13.444683,
+              52.516804
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120008",
+            "name": "Frankfurter Tor",
+            "distance_m": 2879.6,
+            "coordinates": [
+              13.453903,
+              52.515872
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120009",
+            "name": "Samariterstr.",
+            "distance_m": 3609.1,
+            "coordinates": [
+              13.464537,
+              52.514787
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900120001",
+            "name": "Frankfurter Allee",
+            "distance_m": 4340.9,
+            "coordinates": [
+              13.475215,
+              52.513761
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900160005",
+            "name": "Magdalenenstr.",
+            "distance_m": 5150.0,
+            "coordinates": [
+              13.486997,
+              52.512532
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900160004",
+            "name": "Lichtenberg",
+            "distance_m": 5932.0,
+            "coordinates": [
+              13.498342,
+              52.511218
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900161512",
+            "name": "Friedrichsfelde",
+            "distance_m": 7065.6,
+            "coordinates": [
+              13.512845,
+              52.506252
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900161002",
+            "name": "Tierpark",
+            "distance_m": 8253.9,
+            "coordinates": [
+              13.523072,
+              52.49776
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900171005",
+            "name": "Biesdorf-Süd",
+            "distance_m": 10110.3,
+            "coordinates": [
+              13.546389,
+              52.499625
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900171006",
+            "name": "Elsterwerdaer Platz",
+            "distance_m": 11240.7,
+            "coordinates": [
+              13.560446,
+              52.504979
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175001",
+            "name": "Wuhletal",
+            "distance_m": 12616.5,
+            "coordinates": [
+              13.575194,
+              52.512626
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175004",
+            "name": "Kaulsdorf-Nord",
+            "distance_m": 14081.1,
+            "coordinates": [
+              13.589057,
+              52.520912
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175005",
+            "name": "Kienberg (Gärten der Welt)",
+            "distance_m": 14940.1,
+            "coordinates": [
+              13.590653,
+              52.528538
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175006",
+            "name": "Cottbusser Platz",
+            "distance_m": 15691.9,
+            "coordinates": [
+              13.59653,
+              52.533918
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175007",
+            "name": "Hellersdorf",
+            "distance_m": 16445.0,
+            "coordinates": [
+              13.606671,
+              52.536737
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175015",
+            "name": "Louis-Lewin-Str.",
+            "distance_m": 17278.5,
+            "coordinates": [
+              13.618353,
+              52.539037
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900175010",
+            "name": "Hönow",
+            "distance_m": 18295.7,
+            "coordinates": [
+              13.633125,
+              52.538373
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "U6": {
+    "id": "U6",
+    "short_name": "U6",
+    "color": "#8C6DAB",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Alt-Mariendorf",
+        "terminus": "Kurt-Schumacher-Platz",
+        "stations": [
+          {
+            "id": "de:11000:900086102",
+            "name": "Kurt-Schumacher-Platz",
+            "distance_m": 3.7,
+            "coordinates": [
+              13.327087,
+              52.563292
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900011102",
+            "name": "Afrikanische Str.",
+            "distance_m": 620.5,
+            "coordinates": [
+              13.334667,
+              52.560271
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900011101",
+            "name": "Rehberge",
+            "distance_m": 1212.3,
+            "coordinates": [
+              13.34106,
+              52.556638
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009102",
+            "name": "Leopoldplatz",
+            "distance_m": 2883.8,
+            "coordinates": [
+              13.359163,
+              52.546419
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900009104",
+            "name": "Wedding",
+            "distance_m": 3428.9,
+            "coordinates": [
+              13.36509,
+              52.543092
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900008102",
+            "name": "Reinickendorfer Str.",
+            "distance_m": 3911.9,
+            "coordinates": [
+              13.370265,
+              52.540096
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100501",
+            "name": "Schwartzkopffstr.",
+            "distance_m": 4595.4,
+            "coordinates": [
+              13.376986,
+              52.5355
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100009",
+            "name": "Naturkundemuseum",
+            "distance_m": 5179.9,
+            "coordinates": [
+              13.382214,
+              52.531322
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100019",
+            "name": "Oranienburger Tor",
+            "distance_m": 5927.9,
+            "coordinates": [
+              13.387428,
+              52.525551
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100001",
+            "name": "Friedrichstr.",
+            "distance_m": 6518.0,
+            "coordinates": [
+              13.388335,
+              52.520269
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100513",
+            "name": "Unter den Linden",
+            "distance_m": 6921.0,
+            "coordinates": [
+              13.389059,
+              52.51692
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U5"
+            ]
+          },
+          {
+            "id": "de:11000:900100011",
+            "name": "Stadtmitte",
+            "distance_m": 7638.8,
+            "coordinates": [
+              13.390543,
+              52.512114
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900012102",
+            "name": "Kochstr. (Checkpoint Charlie)",
+            "distance_m": 8108.6,
+            "coordinates": [
+              13.390689,
+              52.506044
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900012103",
+            "name": "Hallesches Tor",
+            "distance_m": 8894.2,
+            "coordinates": [
+              13.391628,
+              52.498999
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900017101",
+            "name": "Mehringdamm",
+            "distance_m": 9431.1,
+            "coordinates": [
+              13.389014,
+              52.494594
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900017102",
+            "name": "Platz der Luftbrücke",
+            "distance_m": 10429.3,
+            "coordinates": [
+              13.38597,
+              52.485948
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068101",
+            "name": "Paradestr.",
+            "distance_m": 11295.2,
+            "coordinates": [
+              13.386375,
+              52.478191
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068201",
+            "name": "Tempelhof",
+            "distance_m": 12230.3,
+            "coordinates": [
+              13.385692,
+              52.469819
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068202",
+            "name": "Alt-Tempelhof",
+            "distance_m": 12723.3,
+            "coordinates": [
+              13.385719,
+              52.465382
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068302",
+            "name": "Kaiserin-Augusta-Str.",
+            "distance_m": 13328.9,
+            "coordinates": [
+              13.384701,
+              52.459982
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900069271",
+            "name": "Ullsteinstr.",
+            "distance_m": 14027.8,
+            "coordinates": [
+              13.384546,
+              52.453757
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900070101",
+            "name": "Westphalweg",
+            "distance_m": 14863.0,
+            "coordinates": [
+              13.385757,
+              52.446275
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900070301",
+            "name": "Alt-Mariendorf",
+            "distance_m": 15582.0,
+            "coordinates": [
+              13.387543,
+              52.439884
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Kurt-Schumacher-Platz",
+        "terminus": "Alt-Mariendorf",
+        "stations": [
+          {
+            "id": "de:11000:900070301",
+            "name": "Alt-Mariendorf",
+            "distance_m": 0.0,
+            "coordinates": [
+              13.387543,
+              52.439884
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900070101",
+            "name": "Westphalweg",
+            "distance_m": 717.2,
+            "coordinates": [
+              13.385757,
+              52.446275
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900069271",
+            "name": "Ullsteinstr.",
+            "distance_m": 1553.8,
+            "coordinates": [
+              13.384546,
+              52.453757
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068302",
+            "name": "Kaiserin-Augusta-Str.",
+            "distance_m": 2250.4,
+            "coordinates": [
+              13.384701,
+              52.459982
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068202",
+            "name": "Alt-Tempelhof",
+            "distance_m": 2857.1,
+            "coordinates": [
+              13.385719,
+              52.465382
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068201",
+            "name": "Tempelhof",
+            "distance_m": 3350.7,
+            "coordinates": [
+              13.385692,
+              52.469819
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900068101",
+            "name": "Paradestr.",
+            "distance_m": 4285.9,
+            "coordinates": [
+              13.386375,
+              52.478191
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900017102",
+            "name": "Platz der Luftbrücke",
+            "distance_m": 5150.5,
+            "coordinates": [
+              13.38597,
+              52.485948
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900017101",
+            "name": "Mehringdamm",
+            "distance_m": 6144.2,
+            "coordinates": [
+              13.389014,
+              52.494594
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900012103",
+            "name": "Hallesches Tor",
+            "distance_m": 6684.7,
+            "coordinates": [
+              13.391628,
+              52.498999
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900012102",
+            "name": "Kochstr. (Checkpoint Charlie)",
+            "distance_m": 7470.9,
+            "coordinates": [
+              13.390689,
+              52.506044
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100011",
+            "name": "Stadtmitte",
+            "distance_m": 7940.6,
+            "coordinates": [
+              13.390543,
+              52.512114
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900100513",
+            "name": "Unter den Linden",
+            "distance_m": 8658.2,
+            "coordinates": [
+              13.389059,
+              52.51692
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U5"
+            ]
+          },
+          {
+            "id": "de:11000:900100001",
+            "name": "Friedrichstr.",
+            "distance_m": 9060.6,
+            "coordinates": [
+              13.388335,
+              52.520269
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100019",
+            "name": "Oranienburger Tor",
+            "distance_m": 9651.2,
+            "coordinates": [
+              13.387428,
+              52.525551
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100009",
+            "name": "Naturkundemuseum",
+            "distance_m": 10402.0,
+            "coordinates": [
+              13.382214,
+              52.531322
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100501",
+            "name": "Schwartzkopffstr.",
+            "distance_m": 10985.9,
+            "coordinates": [
+              13.376986,
+              52.5355
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900008102",
+            "name": "Reinickendorfer Str.",
+            "distance_m": 11670.4,
+            "coordinates": [
+              13.370265,
+              52.540096
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009104",
+            "name": "Wedding",
+            "distance_m": 12153.7,
+            "coordinates": [
+              13.36509,
+              52.543092
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009102",
+            "name": "Leopoldplatz",
+            "distance_m": 12699.3,
+            "coordinates": [
+              13.359163,
+              52.546419
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900009103",
+            "name": "Seestr.",
+            "distance_m": 13254.7,
+            "coordinates": [
+              13.353142,
+              52.549813
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900011101",
+            "name": "Rehberge",
+            "distance_m": 14370.1,
+            "coordinates": [
+              13.34106,
+              52.556638
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900011102",
+            "name": "Afrikanische Str.",
+            "distance_m": 14961.9,
+            "coordinates": [
+              13.334667,
+              52.560271
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900086102",
+            "name": "Kurt-Schumacher-Platz",
+            "distance_m": 15581.3,
+            "coordinates": [
+              13.327087,
+              52.563292
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "U7": {
+    "id": "U7",
+    "short_name": "U7",
+    "color": "#009BD5",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Rathaus Spandau",
+        "terminus": "Rudow",
+        "stations": [
+          {
+            "id": "de:11000:900041101",
+            "name": "Fehrbelliner Platz",
+            "distance_m": 0.1,
+            "coordinates": [
+              13.315228,
+              52.490597
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900041102",
+            "name": "Blissestr.",
+            "distance_m": 707.0,
+            "coordinates": [
+              13.321942,
+              52.486454
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900044201",
+            "name": "Berliner Str.",
+            "distance_m": 1333.4,
+            "coordinates": [
+              13.330998,
+              52.487326
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900055102",
+            "name": "Bayerischer Platz",
+            "distance_m": 2062.1,
+            "coordinates": [
+              13.341488,
+              52.489135
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U4"
+            ]
+          },
+          {
+            "id": "de:11000:900054103",
+            "name": "Eisenacher Str.",
+            "distance_m": 2668.9,
+            "coordinates": [
+              13.350362,
+              52.48962
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900054102",
+            "name": "Kleistpark",
+            "distance_m": 3347.7,
+            "coordinates": [
+              13.360284,
+              52.490431
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900058103",
+            "name": "Yorckstr.",
+            "distance_m": 4156.5,
+            "coordinates": [
+              13.370841,
+              52.493057
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900017104",
+            "name": "Möckernbrücke",
+            "distance_m": 5311.1,
+            "coordinates": [
+              13.383015,
+              52.499087
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900017101",
+            "name": "Mehringdamm",
+            "distance_m": 6057.5,
+            "coordinates": [
+              13.389014,
+              52.494594
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900016101",
+            "name": "Gneisenaustr.",
+            "distance_m": 6811.6,
+            "coordinates": [
+              13.395745,
+              52.491355
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900016202",
+            "name": "Südstern",
+            "distance_m": 7659.7,
+            "coordinates": [
+              13.407737,
+              52.489298
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078101",
+            "name": "Hermannplatz",
+            "distance_m": 8824.3,
+            "coordinates": [
+              13.424303,
+              52.486446
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900078102",
+            "name": "Rathaus Neukölln",
+            "distance_m": 9661.8,
+            "coordinates": [
+              13.434038,
+              52.481805
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078103",
+            "name": "Karl-Marx-Str.",
+            "distance_m": 10352.9,
+            "coordinates": [
+              13.439269,
+              52.47653
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078201",
+            "name": "Neukölln",
+            "distance_m": 11252.7,
+            "coordinates": [
+              13.441938,
+              52.468637
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080202",
+            "name": "Grenzallee",
+            "distance_m": 11935.3,
+            "coordinates": [
+              13.444839,
+              52.462894
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080201",
+            "name": "Blaschkoallee",
+            "distance_m": 13196.5,
+            "coordinates": [
+              13.449251,
+              52.452086
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080401",
+            "name": "Parchimer Allee",
+            "distance_m": 14014.8,
+            "coordinates": [
+              13.449646,
+              52.444778
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080402",
+            "name": "Britz-Süd",
+            "distance_m": 14838.4,
+            "coordinates": [
+              13.448281,
+              52.437805
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900082202",
+            "name": "Johannisthaler Chaussee",
+            "distance_m": 15854.3,
+            "coordinates": [
+              13.453482,
+              52.429378
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900082201",
+            "name": "Lipschitzallee",
+            "distance_m": 16683.1,
+            "coordinates": [
+              13.462725,
+              52.424671
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900083102",
+            "name": "Wutzkyallee",
+            "distance_m": 17514.2,
+            "coordinates": [
+              13.474655,
+              52.423383
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900083101",
+            "name": "Zwickauer Damm",
+            "distance_m": 18133.3,
+            "coordinates": [
+              13.483774,
+              52.423333
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900083201",
+            "name": "Rudow",
+            "distance_m": 19232.4,
+            "coordinates": [
+              13.495157,
+              52.416332
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Rudow",
+        "terminus": "Rathaus Spandau",
+        "stations": [
+          {
+            "id": "de:11000:900080402",
+            "name": "Britz-Süd",
+            "distance_m": 0.0,
+            "coordinates": [
+              13.448281,
+              52.437805
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080401",
+            "name": "Parchimer Allee",
+            "distance_m": 815.4,
+            "coordinates": [
+              13.449646,
+              52.444778
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080201",
+            "name": "Blaschkoallee",
+            "distance_m": 1636.7,
+            "coordinates": [
+              13.449251,
+              52.452086
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900080202",
+            "name": "Grenzallee",
+            "distance_m": 2898.8,
+            "coordinates": [
+              13.444839,
+              52.462894
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078201",
+            "name": "Neukölln",
+            "distance_m": 3580.3,
+            "coordinates": [
+              13.441938,
+              52.468637
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078103",
+            "name": "Karl-Marx-Str.",
+            "distance_m": 4480.6,
+            "coordinates": [
+              13.439269,
+              52.47653
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078102",
+            "name": "Rathaus Neukölln",
+            "distance_m": 5174.9,
+            "coordinates": [
+              13.434038,
+              52.481805
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078101",
+            "name": "Hermannplatz",
+            "distance_m": 6016.3,
+            "coordinates": [
+              13.424303,
+              52.486446
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900016202",
+            "name": "Südstern",
+            "distance_m": 7182.0,
+            "coordinates": [
+              13.407737,
+              52.489298
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900016101",
+            "name": "Gneisenaustr.",
+            "distance_m": 8032.4,
+            "coordinates": [
+              13.395745,
+              52.491355
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900017101",
+            "name": "Mehringdamm",
+            "distance_m": 8776.7,
+            "coordinates": [
+              13.389014,
+              52.494594
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900017104",
+            "name": "Möckernbrücke",
+            "distance_m": 9539.5,
+            "coordinates": [
+              13.383015,
+              52.499087
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900058103",
+            "name": "Yorckstr.",
+            "distance_m": 10693.8,
+            "coordinates": [
+              13.370841,
+              52.493057
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900054102",
+            "name": "Kleistpark",
+            "distance_m": 11501.5,
+            "coordinates": [
+              13.360284,
+              52.490431
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900054103",
+            "name": "Eisenacher Str.",
+            "distance_m": 12182.4,
+            "coordinates": [
+              13.350362,
+              52.48962
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900055102",
+            "name": "Bayerischer Platz",
+            "distance_m": 12788.8,
+            "coordinates": [
+              13.341488,
+              52.489135
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U4"
+            ]
+          },
+          {
+            "id": "de:11000:900044201",
+            "name": "Berliner Str.",
+            "distance_m": 13517.8,
+            "coordinates": [
+              13.330998,
+              52.487326
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900041102",
+            "name": "Blissestr.",
+            "distance_m": 14142.2,
+            "coordinates": [
+              13.321942,
+              52.486454
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900041101",
+            "name": "Fehrbelliner Platz",
+            "distance_m": 14844.1,
+            "coordinates": [
+              13.315228,
+              52.490597
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900041201",
+            "name": "Konstanzer Str.",
+            "distance_m": 15422.1,
+            "coordinates": [
+              13.309153,
+              52.49458
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900023302",
+            "name": "Adenauerplatz",
+            "distance_m": 16038.8,
+            "coordinates": [
+              13.307401,
+              52.499998
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900024202",
+            "name": "Wilmersdorfer Str.",
+            "distance_m": 16757.6,
+            "coordinates": [
+              13.306833,
+              52.506367
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900024201",
+            "name": "Bismarckstr.",
+            "distance_m": 17339.9,
+            "coordinates": [
+              13.305142,
+              52.511515
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900022202",
+            "name": "Richard-Wagner-Platz",
+            "distance_m": 17929.0,
+            "coordinates": [
+              13.306699,
+              52.51665
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900019204",
+            "name": "Mierendorffplatz",
+            "distance_m": 19023.4,
+            "coordinates": [
+              13.304975,
+              52.526297
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900020201",
+            "name": "Jungfernheide",
+            "distance_m": 19609.6,
+            "coordinates": [
+              13.300635,
+              52.53079
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900018101",
+            "name": "Jakob-Kaiser-Platz",
+            "distance_m": 20515.9,
+            "coordinates": [
+              13.293668,
+              52.536296
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900018102",
+            "name": "Halemweg",
+            "distance_m": 21020.0,
+            "coordinates": [
+              13.286271,
+              52.536684
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900035101",
+            "name": "Siemensdamm",
+            "distance_m": 21940.0,
+            "coordinates": [
+              13.27271,
+              52.536811
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900036101",
+            "name": "Rohrdamm",
+            "distance_m": 22640.5,
+            "coordinates": [
+              13.262367,
+              52.53705
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900034101",
+            "name": "Paulsternstr.",
+            "distance_m": 23648.6,
+            "coordinates": [
+              13.247559,
+              52.538058
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900034102",
+            "name": "Haselhorst",
+            "distance_m": 24641.0,
+            "coordinates": [
+              13.233127,
+              52.538793
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900033101",
+            "name": "Zitadelle",
+            "distance_m": 25733.6,
+            "coordinates": [
+              13.217555,
+              52.537676
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900029301",
+            "name": "Altstadt Spandau",
+            "distance_m": 26524.1,
+            "coordinates": [
+              13.206436,
+              52.53889
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900029302",
+            "name": "Rathaus Spandau",
+            "distance_m": 27291.2,
+            "coordinates": [
+              13.199857,
+              52.535188
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "U8": {
+    "id": "U8",
+    "short_name": "U8",
+    "color": "#224F86",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Wittenau",
+        "terminus": "Hermannstr.",
+        "stations": [
+          {
+            "id": "de:11000:900096101",
+            "name": "Wittenau",
+            "distance_m": 0.5,
+            "coordinates": [
+              13.334374,
+              52.595694
+            ],
+            "is_hub": true,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900096410",
+            "name": "Rathaus Reinickendorf",
+            "distance_m": 1109.9,
+            "coordinates": [
+              13.325862,
+              52.588417
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900096458",
+            "name": "Karl-Bonhoeffer-Nervenklinik",
+            "distance_m": 2306.4,
+            "coordinates": [
+              13.333493,
+              52.578907
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900086160",
+            "name": "Lindauer Allee",
+            "distance_m": 2909.4,
+            "coordinates": [
+              13.339115,
+              52.575384
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900085104",
+            "name": "Paracelsus-Bad",
+            "distance_m": 3594.6,
+            "coordinates": [
+              13.349052,
+              52.574198
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900085203",
+            "name": "Residenzstr.",
+            "distance_m": 4502.2,
+            "coordinates": [
+              13.360599,
+              52.571139
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900085202",
+            "name": "Franz-Neumann-Platz",
+            "distance_m": 5260.4,
+            "coordinates": [
+              13.363965,
+              52.564629
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009202",
+            "name": "Osloer Str.",
+            "distance_m": 6311.6,
+            "coordinates": [
+              13.373341,
+              52.557175
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900009203",
+            "name": "Pankstr.",
+            "distance_m": 7106.1,
+            "coordinates": [
+              13.381482,
+              52.552294
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900007102",
+            "name": "Gesundbrunnen",
+            "distance_m": 7714.7,
+            "coordinates": [
+              13.388396,
+              52.548802
+            ],
+            "is_hub": true,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900007103",
+            "name": "Voltastr.",
+            "distance_m": 8537.9,
+            "coordinates": [
+              13.393114,
+              52.54215
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900007110",
+            "name": "Bernauer Str.",
+            "distance_m": 9130.8,
+            "coordinates": [
+              13.396828,
+              52.537319
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100023",
+            "name": "Rosenthaler Platz",
+            "distance_m": 9948.3,
+            "coordinates": [
+              13.400769,
+              52.530428
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100051",
+            "name": "Weinmeisterstr.",
+            "distance_m": 10585.2,
+            "coordinates": [
+              13.40507,
+              52.525501
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100003",
+            "name": "Alexanderplatz",
+            "distance_m": 11335.8,
+            "coordinates": [
+              13.413646,
+              52.521488
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U2",
+              "U5"
+            ]
+          },
+          {
+            "id": "de:11000:900100004",
+            "name": "Jannowitzbrücke",
+            "distance_m": 12067.7,
+            "coordinates": [
+              13.418239,
+              52.515585
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100008",
+            "name": "Heinrich-Heine-Str.",
+            "distance_m": 12701.4,
+            "coordinates": [
+              13.415832,
+              52.51012
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900013101",
+            "name": "Moritzplatz",
+            "distance_m": 13496.4,
+            "coordinates": [
+              13.410788,
+              52.503676
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900013102",
+            "name": "Kottbusser Tor",
+            "distance_m": 14369.8,
+            "coordinates": [
+              13.418395,
+              52.498959
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900016201",
+            "name": "Schönleinstr.",
+            "distance_m": 15032.5,
+            "coordinates": [
+              13.421844,
+              52.49348
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078101",
+            "name": "Hermannplatz",
+            "distance_m": 15857.2,
+            "coordinates": [
+              13.424303,
+              52.486446
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900079202",
+            "name": "Boddinstr.",
+            "distance_m": 16565.2,
+            "coordinates": [
+              13.425341,
+              52.480178
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900079201",
+            "name": "Leinestr.",
+            "distance_m": 17339.2,
+            "coordinates": [
+              13.428184,
+              52.473448
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900079221",
+            "name": "Hermannstr.",
+            "distance_m": 18010.0,
+            "coordinates": [
+              13.431289,
+              52.467647
+            ],
+            "is_hub": true,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Hermannstr.",
+        "terminus": "Wittenau",
+        "stations": [
+          {
+            "id": "de:11000:900079221",
+            "name": "Hermannstr.",
+            "distance_m": 0.0,
+            "coordinates": [
+              13.431289,
+              52.467647
+            ],
+            "is_hub": true,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900079201",
+            "name": "Leinestr.",
+            "distance_m": 670.2,
+            "coordinates": [
+              13.428184,
+              52.473448
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900079202",
+            "name": "Boddinstr.",
+            "distance_m": 1443.7,
+            "coordinates": [
+              13.425341,
+              52.480178
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900078101",
+            "name": "Hermannplatz",
+            "distance_m": 2147.4,
+            "coordinates": [
+              13.424303,
+              52.486446
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900016201",
+            "name": "Schönleinstr.",
+            "distance_m": 2983.3,
+            "coordinates": [
+              13.421844,
+              52.49348
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900013102",
+            "name": "Kottbusser Tor",
+            "distance_m": 3651.4,
+            "coordinates": [
+              13.418395,
+              52.498959
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900013101",
+            "name": "Moritzplatz",
+            "distance_m": 4517.1,
+            "coordinates": [
+              13.410788,
+              52.503676
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100008",
+            "name": "Heinrich-Heine-Str.",
+            "distance_m": 5312.3,
+            "coordinates": [
+              13.415832,
+              52.51012
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100004",
+            "name": "Jannowitzbrücke",
+            "distance_m": 5948.8,
+            "coordinates": [
+              13.418239,
+              52.515585
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100003",
+            "name": "Alexanderplatz",
+            "distance_m": 6686.4,
+            "coordinates": [
+              13.413646,
+              52.521488
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U2",
+              "U5"
+            ]
+          },
+          {
+            "id": "de:11000:900100051",
+            "name": "Weinmeisterstr.",
+            "distance_m": 7439.1,
+            "coordinates": [
+              13.40507,
+              52.525501
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900100023",
+            "name": "Rosenthaler Platz",
+            "distance_m": 8073.5,
+            "coordinates": [
+              13.400769,
+              52.530428
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900007110",
+            "name": "Bernauer Str.",
+            "distance_m": 8890.2,
+            "coordinates": [
+              13.396828,
+              52.537319
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900007103",
+            "name": "Voltastr.",
+            "distance_m": 9483.3,
+            "coordinates": [
+              13.393114,
+              52.54215
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900007102",
+            "name": "Gesundbrunnen",
+            "distance_m": 10308.3,
+            "coordinates": [
+              13.388396,
+              52.548802
+            ],
+            "is_hub": true,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009203",
+            "name": "Pankstr.",
+            "distance_m": 10918.5,
+            "coordinates": [
+              13.381482,
+              52.552294
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009202",
+            "name": "Osloer Str.",
+            "distance_m": 11711.0,
+            "coordinates": [
+              13.373341,
+              52.557175
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U9"
+            ]
+          },
+          {
+            "id": "de:11000:900085202",
+            "name": "Franz-Neumann-Platz",
+            "distance_m": 12759.2,
+            "coordinates": [
+              13.363965,
+              52.564629
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900085203",
+            "name": "Residenzstr.",
+            "distance_m": 13518.2,
+            "coordinates": [
+              13.360599,
+              52.571139
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900085104",
+            "name": "Paracelsus-Bad",
+            "distance_m": 14434.4,
+            "coordinates": [
+              13.349052,
+              52.574198
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900086160",
+            "name": "Lindauer Allee",
+            "distance_m": 15120.5,
+            "coordinates": [
+              13.339115,
+              52.575384
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900096458",
+            "name": "Karl-Bonhoeffer-Nervenklinik",
+            "distance_m": 15715.5,
+            "coordinates": [
+              13.333493,
+              52.578907
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900096410",
+            "name": "Rathaus Reinickendorf",
+            "distance_m": 16911.6,
+            "coordinates": [
+              13.325862,
+              52.588417
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900096101",
+            "name": "Wittenau",
+            "distance_m": 18009.1,
+            "coordinates": [
+              13.334374,
+              52.595694
+            ],
+            "is_hub": true,
+            "transfers": []
+          }
+        ]
+      }
+    }
+  },
+  "U9": {
+    "id": "U9",
+    "short_name": "U9",
+    "color": "#F3791D",
+    "text_color": "#000000",
+    "directions": {
+      "0": {
+        "origin": "Rathaus Steglitz",
+        "terminus": "Osloer Str.",
+        "stations": [
+          {
+            "id": "de:11000:900009202",
+            "name": "Osloer Str.",
+            "distance_m": 0.3,
+            "coordinates": [
+              13.373341,
+              52.557175
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U8"
+            ]
+          },
+          {
+            "id": "de:11000:900009201",
+            "name": "Nauener Platz",
+            "distance_m": 741.4,
+            "coordinates": [
+              13.367543,
+              52.551666
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009102",
+            "name": "Leopoldplatz",
+            "distance_m": 1550.0,
+            "coordinates": [
+              13.359163,
+              52.546419
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900009101",
+            "name": "Amrumer Str.",
+            "distance_m": 2312.6,
+            "coordinates": [
+              13.350191,
+              52.54237
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900001201",
+            "name": "Westhafen",
+            "distance_m": 3138.3,
+            "coordinates": [
+              13.342635,
+              52.536766
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900002201",
+            "name": "Birkenstr.",
+            "distance_m": 3658.9,
+            "coordinates": [
+              13.34141,
+              52.532192
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900003104",
+            "name": "Turmstr.",
+            "distance_m": 4332.9,
+            "coordinates": [
+              13.341406,
+              52.526136
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900003101",
+            "name": "Hansaplatz",
+            "distance_m": 5256.5,
+            "coordinates": [
+              13.342161,
+              52.517882
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900023201",
+            "name": "Zoologischer Garten",
+            "distance_m": 6693.9,
+            "coordinates": [
+              13.333009,
+              52.506776
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900023203",
+            "name": "Kurfürstendamm",
+            "distance_m": 7124.0,
+            "coordinates": [
+              13.332587,
+              52.504021
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          },
+          {
+            "id": "de:11000:900042101",
+            "name": "Spichernstr.",
+            "distance_m": 7766.8,
+            "coordinates": [
+              13.331995,
+              52.497354
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900043201",
+            "name": "Güntzelstr.",
+            "distance_m": 8357.2,
+            "coordinates": [
+              13.331101,
+              52.492049
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900044201",
+            "name": "Berliner Str.",
+            "distance_m": 8885.9,
+            "coordinates": [
+              13.330998,
+              52.487326
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900044202",
+            "name": "Bundesplatz",
+            "distance_m": 9963.2,
+            "coordinates": [
+              13.328613,
+              52.477908
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900061102",
+            "name": "Friedrich-Wilhelm-Platz",
+            "distance_m": 10606.9,
+            "coordinates": [
+              13.328848,
+              52.472131
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900061101",
+            "name": "Walther-Schreiber-Platz",
+            "distance_m": 11279.2,
+            "coordinates": [
+              13.328345,
+              52.466103
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900062203",
+            "name": "Schloßstr.",
+            "distance_m": 11948.9,
+            "coordinates": [
+              13.324477,
+              52.460629
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900062202",
+            "name": "Rathaus Steglitz",
+            "distance_m": 12515.2,
+            "coordinates": [
+              13.320682,
+              52.456165
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Osloer Str.",
+        "terminus": "Rathaus Steglitz",
+        "stations": [
+          {
+            "id": "de:11000:900062202",
+            "name": "Rathaus Steglitz",
+            "distance_m": 0.0,
+            "coordinates": [
+              13.320682,
+              52.456165
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900062203",
+            "name": "Schloßstr.",
+            "distance_m": 561.2,
+            "coordinates": [
+              13.324477,
+              52.460629
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900061101",
+            "name": "Walther-Schreiber-Platz",
+            "distance_m": 1237.1,
+            "coordinates": [
+              13.328345,
+              52.466103
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900061102",
+            "name": "Friedrich-Wilhelm-Platz",
+            "distance_m": 1908.0,
+            "coordinates": [
+              13.328848,
+              52.472131
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900044202",
+            "name": "Bundesplatz",
+            "distance_m": 2554.3,
+            "coordinates": [
+              13.328613,
+              52.477908
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900044201",
+            "name": "Berliner Str.",
+            "distance_m": 3633.4,
+            "coordinates": [
+              13.330998,
+              52.487326
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U7"
+            ]
+          },
+          {
+            "id": "de:11000:900043201",
+            "name": "Güntzelstr.",
+            "distance_m": 4158.5,
+            "coordinates": [
+              13.331101,
+              52.492049
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900042101",
+            "name": "Spichernstr.",
+            "distance_m": 4748.9,
+            "coordinates": [
+              13.331995,
+              52.497354
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U3"
+            ]
+          },
+          {
+            "id": "de:11000:900023203",
+            "name": "Kurfürstendamm",
+            "distance_m": 5391.2,
+            "coordinates": [
+              13.332587,
+              52.504021
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U1"
+            ]
+          },
+          {
+            "id": "de:11000:900023201",
+            "name": "Zoologischer Garten",
+            "distance_m": 5819.0,
+            "coordinates": [
+              13.333009,
+              52.506776
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U2"
+            ]
+          },
+          {
+            "id": "de:11000:900003101",
+            "name": "Hansaplatz",
+            "distance_m": 7259.6,
+            "coordinates": [
+              13.342161,
+              52.517882
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900003104",
+            "name": "Turmstr.",
+            "distance_m": 8182.7,
+            "coordinates": [
+              13.341406,
+              52.526136
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900002201",
+            "name": "Birkenstr.",
+            "distance_m": 8856.8,
+            "coordinates": [
+              13.34141,
+              52.532192
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900001201",
+            "name": "Westhafen",
+            "distance_m": 9375.6,
+            "coordinates": [
+              13.342635,
+              52.536766
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009101",
+            "name": "Amrumer Str.",
+            "distance_m": 10196.4,
+            "coordinates": [
+              13.350191,
+              52.54237
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009102",
+            "name": "Leopoldplatz",
+            "distance_m": 10960.0,
+            "coordinates": [
+              13.359163,
+              52.546419
+            ],
+            "is_hub": false,
+            "transfers": [
+              "U6"
+            ]
+          },
+          {
+            "id": "de:11000:900009201",
+            "name": "Nauener Platz",
+            "distance_m": 11769.6,
+            "coordinates": [
+              13.367543,
+              52.551666
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "de:11000:900009202",
+            "name": "Osloer Str.",
+            "distance_m": 12511.3,
+            "coordinates": [
+              13.373341,
+              52.557175
+            ],
+            "is_hub": true,
+            "transfers": [
+              "U8"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "asset_families": {
+    "bvg_kleinprofil": {
+      "family_id": "bvg_kleinprofil",
+      "reference_dimensions_m": {
+        "car_length_m": 12.8,
+        "car_height_m": 3.18,
+        "width_m": 2.3
+      }
+    },
+    "bvg_grossprofil": {
+      "family_id": "bvg_grossprofil",
+      "reference_dimensions_m": {
+        "car_length_m": 15.5,
+        "car_height_m": 3.45,
+        "width_m": 2.65
+      }
+    }
+  },
+  "models": {
+    "BVG_KLEINPROFIL_GENERIC": {
+      "model_id": "BVG_KLEINPROFIL_GENERIC",
+      "name": "Rame Kleinprofil BVG générique (U1-U4)",
+      "manufacturer": "Parc Kleinprofil (A3, HK, IK, JK)",
+      "cars_count": 4,
+      "total_length_m": 51.2,
+      "car_length_m": 12.8,
+      "bogie_centres_m": 8.5,
+      "width_m": 2.3,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Spécification générique BVG Kleinprofil (largeur 2.30m)",
+      "verified": false
+    },
+    "BVG_GROSSPROFIL_GENERIC": {
+      "model_id": "BVG_GROSSPROFIL_GENERIC",
+      "name": "Rame Großprofil BVG générique (U5-U9)",
+      "manufacturer": "Parc Großprofil (F, H, J)",
+      "cars_count": 4,
+      "total_length_m": 62.0,
+      "car_length_m": 15.5,
+      "bogie_centres_m": 10.0,
+      "width_m": 2.65,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Spécification générique BVG Großprofil (largeur 2.65m)",
+      "verified": false
+    }
+  },
+  "lines": {
+    "U1": {
+      "line_id": "U1",
+      "short_name": "U1",
+      "model_id": "BVG_KLEINPROFIL_GENERIC",
+      "name": "Rame Kleinprofil U1 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 51.2,
+      "car_length_m": 12.8,
+      "bogie_centres_m": 8.5,
+      "width_m": 2.3,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Kleinprofil U1 BVG (largeur 2.3m)",
+      "verified": false
+    },
+    "U2": {
+      "line_id": "U2",
+      "short_name": "U2",
+      "model_id": "BVG_KLEINPROFIL_GENERIC",
+      "name": "Rame Kleinprofil U2 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 51.2,
+      "car_length_m": 12.8,
+      "bogie_centres_m": 8.5,
+      "width_m": 2.3,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Kleinprofil U2 BVG (largeur 2.3m)",
+      "verified": false
+    },
+    "U3": {
+      "line_id": "U3",
+      "short_name": "U3",
+      "model_id": "BVG_KLEINPROFIL_GENERIC",
+      "name": "Rame Kleinprofil U3 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 51.2,
+      "car_length_m": 12.8,
+      "bogie_centres_m": 8.5,
+      "width_m": 2.3,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Kleinprofil U3 BVG (largeur 2.3m)",
+      "verified": false
+    },
+    "U4": {
+      "line_id": "U4",
+      "short_name": "U4",
+      "model_id": "BVG_KLEINPROFIL_GENERIC",
+      "name": "Rame Kleinprofil U4 (2 voitures)",
+      "cars_count": 2,
+      "total_length_m": 25.6,
+      "car_length_m": 12.8,
+      "bogie_centres_m": 8.5,
+      "width_m": 2.3,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Kleinprofil U4 BVG (largeur 2.3m)",
+      "verified": false
+    },
+    "U5": {
+      "line_id": "U5",
+      "short_name": "U5",
+      "model_id": "BVG_GROSSPROFIL_GENERIC",
+      "name": "Rame Großprofil U5 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 62.0,
+      "car_length_m": 15.5,
+      "bogie_centres_m": 10.0,
+      "width_m": 2.65,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Großprofil U5 BVG (largeur 2.65m)",
+      "verified": false
+    },
+    "U6": {
+      "line_id": "U6",
+      "short_name": "U6",
+      "model_id": "BVG_GROSSPROFIL_GENERIC",
+      "name": "Rame Großprofil U6 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 62.0,
+      "car_length_m": 15.5,
+      "bogie_centres_m": 10.0,
+      "width_m": 2.65,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Großprofil U6 BVG (largeur 2.65m)",
+      "verified": false
+    },
+    "U7": {
+      "line_id": "U7",
+      "short_name": "U7",
+      "model_id": "BVG_GROSSPROFIL_GENERIC",
+      "name": "Rame Großprofil U7 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 62.0,
+      "car_length_m": 15.5,
+      "bogie_centres_m": 10.0,
+      "width_m": 2.65,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Großprofil U7 BVG (largeur 2.65m)",
+      "verified": false
+    },
+    "U8": {
+      "line_id": "U8",
+      "short_name": "U8",
+      "model_id": "BVG_GROSSPROFIL_GENERIC",
+      "name": "Rame Großprofil U8 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 62.0,
+      "car_length_m": 15.5,
+      "bogie_centres_m": 10.0,
+      "width_m": 2.65,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Großprofil U8 BVG (largeur 2.65m)",
+      "verified": false
+    },
+    "U9": {
+      "line_id": "U9",
+      "short_name": "U9",
+      "model_id": "BVG_GROSSPROFIL_GENERIC",
+      "name": "Rame Großprofil U9 (4 voitures)",
+      "cars_count": 4,
+      "total_length_m": 62.0,
+      "car_length_m": 15.5,
+      "bogie_centres_m": 10.0,
+      "width_m": 2.65,
+      "inter_car_gap_m": 0.2,
+      "drive_type": "steel",
+      "driverless": false,
+      "source": "Gabarit Großprofil U9 BVG (largeur 2.65m)",
+      "verified": false
+    }
+  }
+}

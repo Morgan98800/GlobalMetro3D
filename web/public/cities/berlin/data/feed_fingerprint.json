@@ -1,0 +1,20 @@
+{
+  "url": "https://www.vbb.de/gtfs",
+  "source": "Verkehrsverbund Berlin-Brandenburg (VBB) Open Data (CC BY 4.0)",
+  "dataset": "vbb-gtfs.zip (BVG U-Bahn)",
+  "generated_at": "2026-10-14",
+  "timezone": "Europe/Berlin",
+  "max_gtfs_time": "27:58:30",
+  "service_date": "20261016",
+  "lines": [
+    "U1",
+    "U2",
+    "U3",
+    "U4",
+    "U5",
+    "U6",
+    "U7",
+    "U8",
+    "U9"
+  ]
+}

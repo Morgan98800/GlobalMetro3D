@@ -1,0 +1,1905 @@
+[
+  {
+    "id": "de:11000:900023302",
+    "name": "Adenauerplatz",
+    "coordinates": [
+      13.307401,
+      52.499998
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900011102",
+    "name": "Afrikanische Str.",
+    "coordinates": [
+      13.334667,
+      52.560271
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900100003",
+    "name": "Alexanderplatz",
+    "coordinates": [
+      13.413646,
+      52.521488
+    ],
+    "lines": [
+      "U2",
+      "U5",
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900070301",
+    "name": "Alt-Mariendorf",
+    "coordinates": [
+      13.387543,
+      52.439884
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900068202",
+    "name": "Alt-Tempelhof",
+    "coordinates": [
+      13.385719,
+      52.465382
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900029301",
+    "name": "Altstadt Spandau",
+    "coordinates": [
+      13.206436,
+      52.53889
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900009101",
+    "name": "Amrumer Str.",
+    "coordinates": [
+      13.350191,
+      52.54237
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900100010",
+    "name": "Anton-Wilhelm-Amo-Str.",
+    "coordinates": [
+      13.385135,
+      52.511816
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900023202",
+    "name": "Augsburger Str.",
+    "coordinates": [
+      13.336425,
+      52.500386
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900055102",
+    "name": "Bayerischer Platz",
+    "coordinates": [
+      13.341488,
+      52.489135
+    ],
+    "lines": [
+      "U4",
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900003201",
+    "name": "Berlin Hauptbahnhof",
+    "coordinates": [
+      13.37026,
+      52.52529
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900044201",
+    "name": "Berliner Str.",
+    "coordinates": [
+      13.330998,
+      52.487326
+    ],
+    "lines": [
+      "U7",
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900007110",
+    "name": "Bernauer Str.",
+    "coordinates": [
+      13.396828,
+      52.537319
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900171005",
+    "name": "Biesdorf-Süd",
+    "coordinates": [
+      13.546389,
+      52.499625
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900002201",
+    "name": "Birkenstr.",
+    "coordinates": [
+      13.34141,
+      52.532192
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900024201",
+    "name": "Bismarckstr.",
+    "coordinates": [
+      13.305142,
+      52.511515
+    ],
+    "lines": [
+      "U2",
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900080201",
+    "name": "Blaschkoallee",
+    "coordinates": [
+      13.449251,
+      52.452086
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900041102",
+    "name": "Blissestr.",
+    "coordinates": [
+      13.321942,
+      52.486454
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900079202",
+    "name": "Boddinstr.",
+    "coordinates": [
+      13.425341,
+      52.480178
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900100025",
+    "name": "Brandenburger Tor",
+    "coordinates": [
+      13.381004,
+      52.516644
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900051202",
+    "name": "Breitenbachplatz",
+    "coordinates": [
+      13.308834,
+      52.467012
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900080402",
+    "name": "Britz-Süd",
+    "coordinates": [
+      13.448281,
+      52.437805
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900044202",
+    "name": "Bundesplatz",
+    "coordinates": [
+      13.328613,
+      52.477908
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900003254",
+    "name": "Bundestag",
+    "coordinates": [
+      13.373086,
+      52.520156
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900056104",
+    "name": "Bülowstr.",
+    "coordinates": [
+      13.36317,
+      52.49762
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900175006",
+    "name": "Cottbusser Platz",
+    "coordinates": [
+      13.59653,
+      52.533918
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900051303",
+    "name": "Dahlem-Dorf",
+    "coordinates": [
+      13.289535,
+      52.457164
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900022201",
+    "name": "Deutsche Oper",
+    "coordinates": [
+      13.310534,
+      52.511815
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900110006",
+    "name": "Eberswalder Str.",
+    "coordinates": [
+      13.41228,
+      52.541988
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900054103",
+    "name": "Eisenacher Str.",
+    "coordinates": [
+      13.350362,
+      52.48962
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900171006",
+    "name": "Elsterwerdaer Platz",
+    "coordinates": [
+      13.560446,
+      52.504979
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900023101",
+    "name": "Ernst-Reuter-Platz",
+    "coordinates": [
+      13.322175,
+      52.511784
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900041101",
+    "name": "Fehrbelliner Platz",
+    "coordinates": [
+      13.315228,
+      52.490597
+    ],
+    "lines": [
+      "U3",
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900120001",
+    "name": "Frankfurter Allee",
+    "coordinates": [
+      13.475215,
+      52.513761
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900120008",
+    "name": "Frankfurter Tor",
+    "coordinates": [
+      13.453903,
+      52.515872
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900085202",
+    "name": "Franz-Neumann-Platz",
+    "coordinates": [
+      13.363965,
+      52.564629
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900051201",
+    "name": "Freie Universität (Thielplatz)",
+    "coordinates": [
+      13.281692,
+      52.451041
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900061102",
+    "name": "Friedrich-Wilhelm-Platz",
+    "coordinates": [
+      13.328848,
+      52.472131
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900161512",
+    "name": "Friedrichsfelde",
+    "coordinates": [
+      13.512845,
+      52.506252
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900100001",
+    "name": "Friedrichstr.",
+    "coordinates": [
+      13.388335,
+      52.520269
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900007102",
+    "name": "Gesundbrunnen",
+    "coordinates": [
+      13.388396,
+      52.548802
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900017103",
+    "name": "Gleisdreieck",
+    "coordinates": [
+      13.374084,
+      52.499504
+    ],
+    "lines": [
+      "U1",
+      "U2",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900016101",
+    "name": "Gneisenaustr.",
+    "coordinates": [
+      13.395745,
+      52.491355
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900080202",
+    "name": "Grenzallee",
+    "coordinates": [
+      13.444839,
+      52.462894
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900014101",
+    "name": "Görlitzer Bahnhof",
+    "coordinates": [
+      13.428283,
+      52.499292
+    ],
+    "lines": [
+      "U1",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900043201",
+    "name": "Güntzelstr.",
+    "coordinates": [
+      13.331101,
+      52.492049
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900018102",
+    "name": "Halemweg",
+    "coordinates": [
+      13.286271,
+      52.536684
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900012103",
+    "name": "Hallesches Tor",
+    "coordinates": [
+      13.391628,
+      52.498999
+    ],
+    "lines": [
+      "U1",
+      "U3",
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900003101",
+    "name": "Hansaplatz",
+    "coordinates": [
+      13.342161,
+      52.517882
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900034102",
+    "name": "Haselhorst",
+    "coordinates": [
+      13.233127,
+      52.538793
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900100012",
+    "name": "Hausvogteiplatz",
+    "coordinates": [
+      13.395562,
+      52.513393
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900045102",
+    "name": "Heidelberger Platz",
+    "coordinates": [
+      13.313224,
+      52.48025
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900100008",
+    "name": "Heinrich-Heine-Str.",
+    "coordinates": [
+      13.415832,
+      52.51012
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900175007",
+    "name": "Hellersdorf",
+    "coordinates": [
+      13.606671,
+      52.536737
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900078101",
+    "name": "Hermannplatz",
+    "coordinates": [
+      13.424303,
+      52.486446
+    ],
+    "lines": [
+      "U7",
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900079221",
+    "name": "Hermannstr.",
+    "coordinates": [
+      13.431289,
+      52.467647
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900043101",
+    "name": "Hohenzollernplatz",
+    "coordinates": [
+      13.32495,
+      52.494188
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900175010",
+    "name": "Hönow",
+    "coordinates": [
+      13.633125,
+      52.538373
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900054105",
+    "name": "Innsbrucker Platz",
+    "coordinates": [
+      13.343623,
+      52.479262
+    ],
+    "lines": [
+      "U4"
+    ]
+  },
+  {
+    "id": "de:11000:900018101",
+    "name": "Jakob-Kaiser-Platz",
+    "coordinates": [
+      13.293668,
+      52.536296
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900100004",
+    "name": "Jannowitzbrücke",
+    "coordinates": [
+      13.418239,
+      52.515585
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900082202",
+    "name": "Johannisthaler Chaussee",
+    "coordinates": [
+      13.453482,
+      52.429378
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900020201",
+    "name": "Jungfernheide",
+    "coordinates": [
+      13.300635,
+      52.53079
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900026202",
+    "name": "Kaiserdamm",
+    "coordinates": [
+      13.283103,
+      52.510113
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900068302",
+    "name": "Kaiserin-Augusta-Str.",
+    "coordinates": [
+      13.384701,
+      52.459982
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900096458",
+    "name": "Karl-Bonhoeffer-Nervenklinik",
+    "coordinates": [
+      13.333493,
+      52.578907
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900078103",
+    "name": "Karl-Marx-Str.",
+    "coordinates": [
+      13.439269,
+      52.47653
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900175004",
+    "name": "Kaulsdorf-Nord",
+    "coordinates": [
+      13.589057,
+      52.520912
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900175005",
+    "name": "Kienberg (Gärten der Welt)",
+    "coordinates": [
+      13.590653,
+      52.528538
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900054102",
+    "name": "Kleistpark",
+    "coordinates": [
+      13.360284,
+      52.490431
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900100015",
+    "name": "Klosterstr.",
+    "coordinates": [
+      13.412525,
+      52.517208
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900012102",
+    "name": "Kochstr. (Checkpoint Charlie)",
+    "coordinates": [
+      13.390689,
+      52.506044
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900041201",
+    "name": "Konstanzer Str.",
+    "coordinates": [
+      13.309153,
+      52.49458
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900013102",
+    "name": "Kottbusser Tor",
+    "coordinates": [
+      13.418395,
+      52.498959
+    ],
+    "lines": [
+      "U1",
+      "U3",
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900050201",
+    "name": "Krumme Lanke",
+    "coordinates": [
+      13.241477,
+      52.443589
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900023203",
+    "name": "Kurfürstendamm",
+    "coordinates": [
+      13.332587,
+      52.504021
+    ],
+    "lines": [
+      "U1",
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900005201",
+    "name": "Kurfürstenstr.",
+    "coordinates": [
+      13.361504,
+      52.500152
+    ],
+    "lines": [
+      "U1",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900086102",
+    "name": "Kurt-Schumacher-Platz",
+    "coordinates": [
+      13.327087,
+      52.563292
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900079201",
+    "name": "Leinestr.",
+    "coordinates": [
+      13.428184,
+      52.473448
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900009102",
+    "name": "Leopoldplatz",
+    "coordinates": [
+      13.359163,
+      52.546419
+    ],
+    "lines": [
+      "U6",
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900160004",
+    "name": "Lichtenberg",
+    "coordinates": [
+      13.498342,
+      52.511218
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900086160",
+    "name": "Lindauer Allee",
+    "coordinates": [
+      13.339115,
+      52.575384
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900082201",
+    "name": "Lipschitzallee",
+    "coordinates": [
+      13.462725,
+      52.424671
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900175015",
+    "name": "Louis-Lewin-Str.",
+    "coordinates": [
+      13.618353,
+      52.539037
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900160005",
+    "name": "Magdalenenstr.",
+    "coordinates": [
+      13.486997,
+      52.512532
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900017101",
+    "name": "Mehringdamm",
+    "coordinates": [
+      13.389014,
+      52.494594
+    ],
+    "lines": [
+      "U6",
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900005252",
+    "name": "Mendelssohn-Bartholdy-Park",
+    "coordinates": [
+      13.374904,
+      52.503806
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900019204",
+    "name": "Mierendorffplatz",
+    "coordinates": [
+      13.304975,
+      52.526297
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900013101",
+    "name": "Moritzplatz",
+    "coordinates": [
+      13.410788,
+      52.503676
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900100537",
+    "name": "Museumsinsel",
+    "coordinates": [
+      13.39825,
+      52.517402
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900100014",
+    "name": "Märkisches Museum",
+    "coordinates": [
+      13.410213,
+      52.512387
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900017104",
+    "name": "Möckernbrücke",
+    "coordinates": [
+      13.383015,
+      52.499087
+    ],
+    "lines": [
+      "U1",
+      "U3",
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900100009",
+    "name": "Naturkundemuseum",
+    "coordinates": [
+      13.382214,
+      52.531322
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900009201",
+    "name": "Nauener Platz",
+    "coordinates": [
+      13.367543,
+      52.551666
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900026101",
+    "name": "Neu-Westend",
+    "coordinates": [
+      13.259258,
+      52.516281
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900078201",
+    "name": "Neukölln",
+    "coordinates": [
+      13.441938,
+      52.468637
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900056102",
+    "name": "Nollendorfplatz",
+    "coordinates": [
+      13.354616,
+      52.499849
+    ],
+    "lines": [
+      "U1",
+      "U2",
+      "U3",
+      "U4"
+    ]
+  },
+  {
+    "id": "de:11000:900025203",
+    "name": "Olympia-Stadion",
+    "coordinates": [
+      13.250543,
+      52.516862
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900050282",
+    "name": "Onkel Toms Hütte",
+    "coordinates": [
+      13.25311,
+      52.449928
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900100019",
+    "name": "Oranienburger Tor",
+    "coordinates": [
+      13.387428,
+      52.525551
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900051301",
+    "name": "Oskar-Helene-Heim",
+    "coordinates": [
+      13.268979,
+      52.450412
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900009202",
+    "name": "Osloer Str.",
+    "coordinates": [
+      13.373341,
+      52.557175
+    ],
+    "lines": [
+      "U8",
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900130002",
+    "name": "Pankow",
+    "coordinates": [
+      13.411811,
+      52.566775
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900009203",
+    "name": "Pankstr.",
+    "coordinates": [
+      13.381482,
+      52.552294
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900085104",
+    "name": "Paracelsus-Bad",
+    "coordinates": [
+      13.349052,
+      52.574198
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900068101",
+    "name": "Paradestr.",
+    "coordinates": [
+      13.386375,
+      52.478191
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900080401",
+    "name": "Parchimer Allee",
+    "coordinates": [
+      13.449646,
+      52.444778
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900034101",
+    "name": "Paulsternstr.",
+    "coordinates": [
+      13.247559,
+      52.538058
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900017102",
+    "name": "Platz der Luftbrücke",
+    "coordinates": [
+      13.38597,
+      52.485948
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900051302",
+    "name": "Podbielskiallee",
+    "coordinates": [
+      13.295567,
+      52.463981
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900100020",
+    "name": "Potsdamer Platz",
+    "coordinates": [
+      13.378047,
+      52.509072
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900013103",
+    "name": "Prinzenstr.",
+    "coordinates": [
+      13.405403,
+      52.498406
+    ],
+    "lines": [
+      "U1",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900078102",
+    "name": "Rathaus Neukölln",
+    "coordinates": [
+      13.434038,
+      52.481805
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900096410",
+    "name": "Rathaus Reinickendorf",
+    "coordinates": [
+      13.325862,
+      52.588417
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900054101",
+    "name": "Rathaus Schöneberg",
+    "coordinates": [
+      13.342094,
+      52.483055
+    ],
+    "lines": [
+      "U4"
+    ]
+  },
+  {
+    "id": "de:11000:900029302",
+    "name": "Rathaus Spandau",
+    "coordinates": [
+      13.199857,
+      52.535188
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900062202",
+    "name": "Rathaus Steglitz",
+    "coordinates": [
+      13.320682,
+      52.456165
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900011101",
+    "name": "Rehberge",
+    "coordinates": [
+      13.34106,
+      52.556638
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900008102",
+    "name": "Reinickendorfer Str.",
+    "coordinates": [
+      13.370265,
+      52.540096
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900085203",
+    "name": "Residenzstr.",
+    "coordinates": [
+      13.360599,
+      52.571139
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900022202",
+    "name": "Richard-Wagner-Platz",
+    "coordinates": [
+      13.306699,
+      52.51665
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900036101",
+    "name": "Rohrdamm",
+    "coordinates": [
+      13.262367,
+      52.53705
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900100016",
+    "name": "Rosa-Luxemburg-Platz",
+    "coordinates": [
+      13.410522,
+      52.527725
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900100023",
+    "name": "Rosenthaler Platz",
+    "coordinates": [
+      13.400769,
+      52.530428
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900100045",
+    "name": "Rotes Rathaus",
+    "coordinates": [
+      13.407935,
+      52.518802
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900083201",
+    "name": "Rudow",
+    "coordinates": [
+      13.495157,
+      52.416332
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900025202",
+    "name": "Ruhleben",
+    "coordinates": [
+      13.24127,
+      52.525594
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900045101",
+    "name": "Rüdesheimer Platz",
+    "coordinates": [
+      13.3145,
+      52.473373
+    ],
+    "lines": [
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900120009",
+    "name": "Samariterstr.",
+    "coordinates": [
+      13.464537,
+      52.514787
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900100017",
+    "name": "Schillingstr.",
+    "coordinates": [
+      13.420841,
+      52.520931
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900014102",
+    "name": "Schlesisches Tor",
+    "coordinates": [
+      13.441059,
+      52.500747
+    ],
+    "lines": [
+      "U1",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900062203",
+    "name": "Schloßstr.",
+    "coordinates": [
+      13.324477,
+      52.460629
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900100501",
+    "name": "Schwartzkopffstr.",
+    "coordinates": [
+      13.376986,
+      52.5355
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900110001",
+    "name": "Schönhauser Allee",
+    "coordinates": [
+      13.413741,
+      52.549226
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900016201",
+    "name": "Schönleinstr.",
+    "coordinates": [
+      13.421844,
+      52.49348
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900009103",
+    "name": "Seestr.",
+    "coordinates": [
+      13.353142,
+      52.549813
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900110005",
+    "name": "Senefelderplatz",
+    "coordinates": [
+      13.412596,
+      52.532443
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900035101",
+    "name": "Siemensdamm",
+    "coordinates": [
+      13.27271,
+      52.536811
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900022101",
+    "name": "Sophie-Charlotte-Platz",
+    "coordinates": [
+      13.295832,
+      52.510895
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900042101",
+    "name": "Spichernstr.",
+    "coordinates": [
+      13.331995,
+      52.497354
+    ],
+    "lines": [
+      "U3",
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900100013",
+    "name": "Spittelmarkt",
+    "coordinates": [
+      13.403697,
+      52.511348
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900100011",
+    "name": "Stadtmitte",
+    "coordinates": [
+      13.390543,
+      52.512114
+    ],
+    "lines": [
+      "U2",
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900120006",
+    "name": "Strausberger Platz",
+    "coordinates": [
+      13.431554,
+      52.518144
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900016202",
+    "name": "Südstern",
+    "coordinates": [
+      13.407737,
+      52.489298
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900068201",
+    "name": "Tempelhof",
+    "coordinates": [
+      13.385692,
+      52.469819
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900026201",
+    "name": "Theodor-Heuss-Platz",
+    "coordinates": [
+      13.272617,
+      52.50992
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900161002",
+    "name": "Tierpark",
+    "coordinates": [
+      13.523072,
+      52.49776
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900003104",
+    "name": "Turmstr.",
+    "coordinates": [
+      13.341406,
+      52.526136
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900023301",
+    "name": "Uhlandstr.",
+    "coordinates": [
+      13.327015,
+      52.502907
+    ],
+    "lines": [
+      "U1"
+    ]
+  },
+  {
+    "id": "de:11000:900069271",
+    "name": "Ullsteinstr.",
+    "coordinates": [
+      13.384546,
+      52.453757
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900100513",
+    "name": "Unter den Linden",
+    "coordinates": [
+      13.389059,
+      52.51692
+    ],
+    "lines": [
+      "U5",
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900055101",
+    "name": "Viktoria-Luise-Platz",
+    "coordinates": [
+      13.343461,
+      52.496288
+    ],
+    "lines": [
+      "U4"
+    ]
+  },
+  {
+    "id": "de:11000:900130011",
+    "name": "Vinetastr.",
+    "coordinates": [
+      13.413343,
+      52.559185
+    ],
+    "lines": [
+      "U2"
+    ]
+  },
+  {
+    "id": "de:11000:900007103",
+    "name": "Voltastr.",
+    "coordinates": [
+      13.393114,
+      52.54215
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900061101",
+    "name": "Walther-Schreiber-Platz",
+    "coordinates": [
+      13.328345,
+      52.466103
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900120004",
+    "name": "Warschauer Str.",
+    "coordinates": [
+      13.449123,
+      52.504886
+    ],
+    "lines": [
+      "U1",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900120025",
+    "name": "Weberwiese",
+    "coordinates": [
+      13.444683,
+      52.516804
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900009104",
+    "name": "Wedding",
+    "coordinates": [
+      13.36509,
+      52.543092
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900100051",
+    "name": "Weinmeisterstr.",
+    "coordinates": [
+      13.40507,
+      52.525501
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900001201",
+    "name": "Westhafen",
+    "coordinates": [
+      13.342635,
+      52.536766
+    ],
+    "lines": [
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900070101",
+    "name": "Westphalweg",
+    "coordinates": [
+      13.385757,
+      52.446275
+    ],
+    "lines": [
+      "U6"
+    ]
+  },
+  {
+    "id": "de:11000:900024202",
+    "name": "Wilmersdorfer Str.",
+    "coordinates": [
+      13.306833,
+      52.506367
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900096101",
+    "name": "Wittenau",
+    "coordinates": [
+      13.334374,
+      52.595694
+    ],
+    "lines": [
+      "U8"
+    ]
+  },
+  {
+    "id": "de:11000:900056101",
+    "name": "Wittenbergplatz",
+    "coordinates": [
+      13.342967,
+      52.501792
+    ],
+    "lines": [
+      "U1",
+      "U2",
+      "U3"
+    ]
+  },
+  {
+    "id": "de:11000:900175001",
+    "name": "Wuhletal",
+    "coordinates": [
+      13.575194,
+      52.512626
+    ],
+    "lines": [
+      "U5"
+    ]
+  },
+  {
+    "id": "de:11000:900083102",
+    "name": "Wutzkyallee",
+    "coordinates": [
+      13.474655,
+      52.423383
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900058103",
+    "name": "Yorckstr.",
+    "coordinates": [
+      13.370841,
+      52.493057
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900033101",
+    "name": "Zitadelle",
+    "coordinates": [
+      13.217555,
+      52.537676
+    ],
+    "lines": [
+      "U7"
+    ]
+  },
+  {
+    "id": "de:11000:900023201",
+    "name": "Zoologischer Garten",
+    "coordinates": [
+      13.333009,
+      52.506776
+    ],
+    "lines": [
+      "U2",
+      "U9"
+    ]
+  },
+  {
+    "id": "de:11000:900083101",
+    "name": "Zwickauer Damm",
+    "coordinates": [
+      13.483774,
+      52.423333
+    ],
+    "lines": [
+      "U7"
+    ]
+  }
+]

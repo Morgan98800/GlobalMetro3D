@@ -273,25 +273,25 @@
       "maxSize1Pct": 1200
     },
     {
-      "originalPath": "assets/index-Dl9L_49r.js",
+      "originalPath": "assets/index-BpDRp17g.js",
       "normalizedPath": "assets/index.[hash].js",
       "sizeBytes": 18994,
       "minSize1Pct": 18804,
       "maxSize1Pct": 19184
     },
     {
-      "originalPath": "assets/index-DNDtd9m6.js",
+      "originalPath": "assets/index-hGBCYR6D.js",
       "normalizedPath": "assets/index.[hash].js",
       "sizeBytes": 16706,
       "minSize1Pct": 16538,
       "maxSize1Pct": 16874
     },
     {
-      "originalPath": "assets/main-B6brRBYf.js",
+      "originalPath": "assets/main-Bf86VsYu.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2598249,
-      "minSize1Pct": 2572266,
-      "maxSize1Pct": 2624232
+      "sizeBytes": 2627803,
+      "minSize1Pct": 2601524,
+      "maxSize1Pct": 2654082
     },
     {
       "originalPath": "assets/main-qt5s65VT.css",
@@ -364,7 +364,7 @@
       "expectedMime": "text/css"
     },
     {
-      "url": "/assets/main-B6brRBYf.js",
+      "url": "/assets/main-Bf86VsYu.js",
       "expectedStatus": 200,
       "expectedMime": "javascript"
     },

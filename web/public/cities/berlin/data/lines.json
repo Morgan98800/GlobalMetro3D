@@ -1,0 +1,128 @@
+[
+  {
+    "id": "U1",
+    "short_name": "U1",
+    "long_name": "U-Bahn U1",
+    "color": "#7DAD4C",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Warschauer Str.",
+      "1": "Uhlandstr."
+    },
+    "measured_length_km": 8.8,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U2",
+    "short_name": "U2",
+    "long_name": "U-Bahn U2",
+    "color": "#DA421E",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Pankow",
+      "1": "Ruhleben"
+    },
+    "measured_length_km": 20.68,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U3",
+    "short_name": "U3",
+    "long_name": "U-Bahn U3",
+    "color": "#16683D",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Warschauer Str.",
+      "1": "Krumme Lanke"
+    },
+    "measured_length_km": 18.7,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U4",
+    "short_name": "U4",
+    "long_name": "U-Bahn U4",
+    "color": "#F0D722",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "0": "Nollendorfplatz",
+      "1": "Innsbrucker Platz"
+    },
+    "measured_length_km": 2.86,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U5",
+    "short_name": "U5",
+    "long_name": "U-Bahn U5",
+    "color": "#7E5330",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Hönow",
+      "1": "Hauptbahnhof"
+    },
+    "measured_length_km": 21.98,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U6",
+    "short_name": "U6",
+    "long_name": "U-Bahn U6",
+    "color": "#8C6DAB",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Kurt-Schumacher-Platz",
+      "1": "Alt-Mariendorf"
+    },
+    "measured_length_km": 15.58,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U7",
+    "short_name": "U7",
+    "long_name": "U-Bahn U7",
+    "color": "#009BD5",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Rudow",
+      "1": "Rathaus Spandau"
+    },
+    "measured_length_km": 31.69,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U8",
+    "short_name": "U8",
+    "long_name": "U-Bahn U8",
+    "color": "#224F86",
+    "text_color": "#FFFFFF",
+    "mode": "metro",
+    "destinations": {
+      "0": "Hermannstr.",
+      "1": "Wittenau"
+    },
+    "measured_length_km": 18.01,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "U9",
+    "short_name": "U9",
+    "long_name": "U-Bahn U9",
+    "color": "#F3791D",
+    "text_color": "#000000",
+    "mode": "metro",
+    "destinations": {
+      "0": "Osloer Str.",
+      "1": "Rathaus Steglitz"
+    },
+    "measured_length_km": 12.52,
+    "elevation_offset": 0.0
+  }
+]

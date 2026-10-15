@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "description": "Berlin U-Bahn 3D Reference Kinematic Simulation Snapshot",
+    "timestampIso": "2026-10-16T12:00:00Z",
+    "serviceDate": "2026-10-16",
+    "civilSeconds": 43200,
+    "totalTrains": 14,
+    "trainsByLine": {
+      "U8": 14
+    }
+  },
+  "trains": [
+    {
+      "tripId": "308101833",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 15418,
+      "speedKmh": 48,
+      "speedMps": 13.22,
+      "pos": [
+        13.335218,
+        52.5764891
+      ],
+      "bearing": 316.6,
+      "nextStation": "Karl-Bonhoeffer-Nervenklinik",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308101834",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 12584.5,
+      "speedKmh": 42,
+      "speedMps": 11.65,
+      "pos": [
+        13.3652058,
+        52.563268
+      ],
+      "bearing": 322.9,
+      "nextStation": "Franz-Neumann-Platz",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308101835",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 10079.13,
+      "speedKmh": 44,
+      "speedMps": 12.22,
+      "pos": [
+        13.3894865,
+        52.5468994
+      ],
+      "bearing": 356,
+      "nextStation": "Gesundbrunnen",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308101836",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 7615.32,
+      "speedKmh": 34,
+      "speedMps": 9.4,
+      "pos": [
+        13.4034883,
+        52.5266719
+      ],
+      "bearing": 340.1,
+      "nextStation": "Rosenthaler Platz",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308101837",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 5312.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        13.4158111,
+        52.5100829
+      ],
+      "bearing": 25.7,
+      "nextStation": "Jannowitzbrücke",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308101838",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 3094.65,
+      "speedKmh": 27,
+      "speedMps": 7.42,
+      "pos": [
+        13.4212798,
+        52.494421
+      ],
+      "bearing": 340.8,
+      "nextStation": "Kottbusser Tor",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308101839",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9386",
+      "direction": 1,
+      "currentDistM": 1228.84,
+      "speedKmh": 41,
+      "speedMps": 11.46,
+      "pos": [
+        13.4259326,
+        52.4782798
+      ],
+      "bearing": 347.5,
+      "nextStation": "Boddinstr.",
+      "destStation": "Wittenau"
+    },
+    {
+      "tripId": "308102229",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 16565.2,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        13.4252033,
+        52.4801618
+      ],
+      "bearing": 169.3,
+      "nextStation": "Leinestr.",
+      "destStation": "Hermannstr."
+    },
+    {
+      "tripId": "308102230",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 14369.8,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        13.4179456,
+        52.4988692
+      ],
+      "bearing": 142.5,
+      "nextStation": "Schönleinstr.",
+      "destStation": "Hermannstr."
+    },
+    {
+      "tripId": "308102231",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 12067.7,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        13.418135,
+        52.5155854
+      ],
+      "bearing": 180.4,
+      "nextStation": "Heinrich-Heine-Str.",
+      "destStation": "Hermannstr."
+    },
+    {
+      "tripId": "308102232",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 9948.3,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        13.4006557,
+        52.5303892
+      ],
+      "bearing": 152.9,
+      "nextStation": "Weinmeisterstr.",
+      "destStation": "Hermannstr."
+    },
+    {
+      "tripId": "308102233",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 7545.64,
+      "speedKmh": 32,
+      "speedMps": 9.02,
+      "pos": [
+        13.3863184,
+        52.5496621
+      ],
+      "bearing": 125.6,
+      "nextStation": "Gesundbrunnen",
+      "destStation": "Hermannstr."
+    },
+    {
+      "tripId": "308102234",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 5049.79,
+      "speedKmh": 40,
+      "speedMps": 11.23,
+      "pos": [
+        13.3628663,
+        52.5664082
+      ],
+      "bearing": 162.3,
+      "nextStation": "Franz-Neumann-Platz",
+      "destStation": "Hermannstr."
+    },
+    {
+      "tripId": "308102235",
+      "line": "U8",
+      "lineName": "U8",
+      "shapeId": "9376",
+      "direction": 0,
+      "currentDistM": 2306.4,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        13.3332714,
+        52.578876
+      ],
+      "bearing": 163.6,
+      "nextStation": "Lindauer Allee",
+      "destStation": "Hermannstr."
+    }
+  ]
+}

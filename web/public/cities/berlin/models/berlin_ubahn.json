@@ -1,0 +1,3110 @@
+{
+ "meta": {
+  "source": "VBB GTFS (CC BY 4.0) via npm vbb-lines 5.25.0 / vbb-shapes 4.13.0 (Dec 2025); U6 north geometry from vbb-shapes 3.2.1 (2021)",
+  "licence": "Données VBB sous CC BY 4.0 — attribution : « Verkehrsverbund Berlin-Brandenburg (VBB) »",
+  "repere": "X = est, Y = haut, Z = sud ; origine = Alexanderplatz au niveau du sol",
+  "echelle": "1 unité = 100 m ; profondeurs exagérées x5",
+  "profondeurs": "estimations, pas des relevés officiels"
+ },
+ "lines": {
+  "U1": {
+   "color": "#7DAD4C",
+   "length_km": 8.79,
+   "terminus": [
+    "Warschauer Str.",
+    "Uhlandstr."
+   ],
+   "stations": [
+    "Warschauer Str.",
+    "Schlesisches Tor",
+    "Görlitzer Bahnhof",
+    "Kottbusser Tor",
+    "Prinzenstr.",
+    "Hallesches Tor",
+    "Möckernbrücke",
+    "Gleisdreieck",
+    "Kurfürstenstr.",
+    "Nollendorfplatz",
+    "Wittenbergplatz",
+    "Kurfürstendamm",
+    "Uhlandstr."
+   ]
+  },
+  "U2": {
+   "color": "#DA421E",
+   "length_km": 20.62,
+   "terminus": [
+    "Ruhleben",
+    "Pankow"
+   ],
+   "stations": [
+    "Ruhleben",
+    "Olympia-Stadion",
+    "Neu-Westend",
+    "Theodor-Heuss-Platz",
+    "Kaiserdamm",
+    "Sophie-Charlotte-Platz",
+    "Bismarckstr.",
+    "Deutsche Oper",
+    "Ernst-Reuter-Platz",
+    "Zoologischer Garten",
+    "Wittenbergplatz",
+    "Nollendorfplatz",
+    "Bülowstr.",
+    "Gleisdreieck",
+    "Mendelssohn-Bartholdy-Park",
+    "Potsdamer Platz",
+    "Anton-Wilhelm-Amo-Str.",
+    "Stadtmitte",
+    "Hausvogteiplatz",
+    "Spittelmarkt",
+    "Märkisches Museum",
+    "Klosterstr.",
+    "Alexanderplatz",
+    "Rosa-Luxemburg-Platz",
+    "Senefelderplatz",
+    "Eberswalder Str.",
+    "Schönhauser Allee",
+    "Vinetastr.",
+    "Pankow"
+   ]
+  },
+  "U3": {
+   "color": "#16683D",
+   "length_km": 18.64,
+   "terminus": [
+    "Krumme Lanke",
+    "Warschauer Str."
+   ],
+   "stations": [
+    "Krumme Lanke",
+    "Onkel Toms Hütte",
+    "Oskar-Helene-Heim",
+    "Freie Universität (Thielplatz)",
+    "Dahlem-Dorf",
+    "Podbielskiallee",
+    "Breitenbachplatz",
+    "Rüdesheimer Platz",
+    "Heidelberger Platz",
+    "Fehrbelliner Platz",
+    "Hohenzollernplatz",
+    "Spichernstr.",
+    "Augsburger Str.",
+    "Wittenbergplatz",
+    "Nollendorfplatz",
+    "Kurfürstenstr.",
+    "Gleisdreieck",
+    "Möckernbrücke",
+    "Hallesches Tor",
+    "Prinzenstr.",
+    "Kottbusser Tor",
+    "Görlitzer Bahnhof",
+    "Schlesisches Tor",
+    "Warschauer Str."
+   ]
+  },
+  "U4": {
+   "color": "#F0D722",
+   "length_km": 2.84,
+   "terminus": [
+    "Innsbrucker Platz",
+    "Nollendorfplatz"
+   ],
+   "stations": [
+    "Innsbrucker Platz",
+    "Rathaus Schöneberg",
+    "Bayerischer Platz",
+    "Viktoria-Luise-Platz",
+    "Nollendorfplatz"
+   ]
+  },
+  "U5": {
+   "color": "#7E5330",
+   "length_km": 21.94,
+   "terminus": [
+    "Hönow",
+    "Hauptbahnhof"
+   ],
+   "stations": [
+    "Hönow",
+    "Louis-Lewin-Str.",
+    "Hellersdorf",
+    "Cottbusser Platz",
+    "Kienberg (Gärten der Welt)",
+    "Kaulsdorf-Nord",
+    "Wuhletal",
+    "Elsterwerdaer Platz",
+    "Biesdorf-Süd",
+    "Tierpark",
+    "Friedrichsfelde",
+    "Lichtenberg",
+    "Magdalenenstr.",
+    "Frankfurter Allee",
+    "Samariterstr.",
+    "Frankfurter Tor",
+    "Weberwiese",
+    "Strausberger Platz",
+    "Schillingstr.",
+    "Alexanderplatz",
+    "Rotes Rathaus",
+    "Museumsinsel",
+    "Unter den Linden",
+    "Brandenburger Tor",
+    "Bundestag",
+    "Hauptbahnhof"
+   ]
+  },
+  "U6": {
+   "color": "#8C6DAB",
+   "length_km": 19.79,
+   "terminus": [
+    "Alt-Mariendorf",
+    "Alt-Tegel"
+   ],
+   "stations": [
+    "Alt-Mariendorf",
+    "Westphalweg",
+    "Ullsteinstr.",
+    "Kaiserin-Augusta-Str.",
+    "Alt-Tempelhof",
+    "Tempelhof",
+    "Paradestr.",
+    "Platz der Luftbrücke",
+    "Mehringdamm",
+    "Hallesches Tor",
+    "Kochstr. (Checkpoint Charlie)",
+    "Stadtmitte",
+    "Unter den Linden",
+    "Friedrichstr.",
+    "Oranienburger Tor",
+    "Naturkundemuseum",
+    "Schwartzkopffstr.",
+    "Reinickendorfer Str.",
+    "Wedding",
+    "Leopoldplatz",
+    "Seestr.",
+    "Rehberge",
+    "Afrikanische Str.",
+    "Kurt-Schumacher-Platz",
+    "Scharnweberstr.",
+    "Otisstr.",
+    "Holzhauser Str.",
+    "Borsigwerke",
+    "Alt-Tegel"
+   ]
+  },
+  "U7": {
+   "color": "#528DBA",
+   "length_km": 31.58,
+   "terminus": [
+    "Rathaus Spandau",
+    "Rudow"
+   ],
+   "stations": [
+    "Rathaus Spandau",
+    "Altstadt Spandau",
+    "Zitadelle",
+    "Haselhorst",
+    "Paulsternstr.",
+    "Rohrdamm",
+    "Siemensdamm",
+    "Halemweg",
+    "Jakob-Kaiser-Platz",
+    "Jungfernheide",
+    "Mierendorffplatz",
+    "Richard-Wagner-Platz",
+    "Bismarckstr.",
+    "Wilmersdorfer Str.",
+    "Adenauerplatz",
+    "Konstanzer Str.",
+    "Fehrbelliner Platz",
+    "Blissestr.",
+    "Berliner Str.",
+    "Bayerischer Platz",
+    "Eisenacher Str.",
+    "Kleistpark",
+    "Yorckstr.",
+    "Möckernbrücke",
+    "Mehringdamm",
+    "Gneisenaustr.",
+    "Südstern",
+    "Hermannplatz",
+    "Rathaus Neukölln",
+    "Karl-Marx-Str.",
+    "Neukölln",
+    "Grenzallee",
+    "Blaschkoallee",
+    "Parchimer Allee",
+    "Britz-Süd",
+    "Johannisthaler Chaussee",
+    "Lipschitzallee",
+    "Wutzkyallee",
+    "Zwickauer Damm",
+    "Rudow"
+   ]
+  },
+  "U8": {
+   "color": "#224F86",
+   "length_km": 17.95,
+   "terminus": [
+    "Wittenau",
+    "Hermannstr."
+   ],
+   "stations": [
+    "Wittenau",
+    "Rathaus Reinickendorf",
+    "Karl-Bonhoeffer-Nervenklinik",
+    "Lindauer Allee",
+    "Paracelsus-Bad",
+    "Residenzstr.",
+    "Franz-Neumann-Platz",
+    "Osloer Str.",
+    "Pankstr.",
+    "Gesundbrunnen",
+    "Voltastr.",
+    "Bernauer Str.",
+    "Rosenthaler Platz",
+    "Weinmeisterstr.",
+    "Alexanderplatz",
+    "Jannowitzbrücke",
+    "Heinrich-Heine-Str.",
+    "Moritzplatz",
+    "Kottbusser Tor",
+    "Schönleinstr.",
+    "Hermannplatz",
+    "Boddinstr.",
+    "Leinestr.",
+    "Hermannstr."
+   ]
+  },
+  "U9": {
+   "color": "#F3791D",
+   "length_km": 12.45,
+   "terminus": [
+    "Rathaus Steglitz",
+    "Osloer Str."
+   ],
+   "stations": [
+    "Rathaus Steglitz",
+    "Schloßstr.",
+    "Walther-Schreiber-Platz",
+    "Friedrich-Wilhelm-Platz",
+    "Bundesplatz",
+    "Berliner Str.",
+    "Güntzelstr.",
+    "Spichernstr.",
+    "Kurfürstendamm",
+    "Zoologischer Garten",
+    "Hansaplatz",
+    "Turmstr.",
+    "Birkenstr.",
+    "Westhafen",
+    "Amrumer Str.",
+    "Leopoldplatz",
+    "Nauener Platz",
+    "Osloer Str."
+   ]
+  }
+ },
+ "stations": {
+  "Warschauer Str.": {
+   "lat": 52.504862,
+   "lon": 13.448802,
+   "lines": {
+    "U1": {
+     "position": [
+      25.069,
+      0.25,
+      18.261
+     ],
+     "depth_m_estimee": 5
+    },
+    "U3": {
+     "position": [
+      25.054,
+      0.25,
+      18.286
+     ],
+     "depth_m_estimee": 5
+    }
+   }
+  },
+  "Schlesisches Tor": {
+   "lat": 52.500747,
+   "lon": 13.441051,
+   "lines": {
+    "U1": {
+     "position": [
+      19.998,
+      0.35,
+      22.576
+     ],
+     "depth_m_estimee": 7
+    },
+    "U3": {
+     "position": [
+      20.18,
+      0.35,
+      22.588
+     ],
+     "depth_m_estimee": 7
+    }
+   }
+  },
+  "Görlitzer Bahnhof": {
+   "lat": 52.499292,
+   "lon": 13.428277,
+   "lines": {
+    "U1": {
+     "position": [
+      11.448,
+      0.35,
+      24.154
+     ],
+     "depth_m_estimee": 7
+    },
+    "U3": {
+     "position": [
+      11.493,
+      0.35,
+      24.238
+     ],
+     "depth_m_estimee": 7
+    }
+   }
+  },
+  "Kottbusser Tor": {
+   "lat": 52.499051,
+   "lon": 13.418395,
+   "lines": {
+    "U1": {
+     "position": [
+      4.62,
+      0.35,
+      24.269
+     ],
+     "depth_m_estimee": 7
+    },
+    "U3": {
+     "position": [
+      4.909,
+      0.35,
+      24.759
+     ],
+     "depth_m_estimee": 7
+    },
+    "U8": {
+     "position": [
+      4.763,
+      -0.45,
+      24.867
+     ],
+     "depth_m_estimee": -9
+    }
+   },
+   "interchange": [
+    "U1",
+    "U3",
+    "U8"
+   ]
+  },
+  "Prinzenstr.": {
+   "lat": 52.498406,
+   "lon": 13.405401,
+   "lines": {
+    "U1": {
+     "position": [
+      -4.056,
+      0.35,
+      25.146
+     ],
+     "depth_m_estimee": 7
+    },
+    "U3": {
+     "position": [
+      -3.821,
+      0.35,
+      25.208
+     ],
+     "depth_m_estimee": 7
+    }
+   }
+  },
+  "Hallesches Tor": {
+   "lat": 52.497812,
+   "lon": 13.390351,
+   "lines": {
+    "U1": {
+     "position": [
+      -14.142,
+      0.35,
+      25.75
+     ],
+     "depth_m_estimee": 7
+    },
+    "U3": {
+     "position": [
+      -14.12,
+      0.35,
+      25.976
+     ],
+     "depth_m_estimee": 7
+    },
+    "U6": {
+     "position": [
+      -13.205,
+      -0.45,
+      24.737
+     ],
+     "depth_m_estimee": -9
+    }
+   },
+   "interchange": [
+    "U1",
+    "U3",
+    "U6"
+   ]
+  },
+  "Möckernbrücke": {
+   "lat": 52.499129,
+   "lon": 13.382661,
+   "lines": {
+    "U1": {
+     "position": [
+      -19.391,
+      0.35,
+      24.332
+     ],
+     "depth_m_estimee": 7
+    },
+    "U3": {
+     "position": [
+      -19.345,
+      0.35,
+      24.407
+     ],
+     "depth_m_estimee": 7
+    },
+    "U7": {
+     "position": [
+      -19.136,
+      -0.55,
+      25.251
+     ],
+     "depth_m_estimee": -11
+    }
+   },
+   "interchange": [
+    "U1",
+    "U3",
+    "U7"
+   ]
+  },
+  "Gleisdreieck": {
+   "lat": 52.499567,
+   "lon": 13.374084,
+   "lines": {
+    "U1": {
+     "position": [
+      -25.271,
+      0.35,
+      23.697
+     ],
+     "depth_m_estimee": 7
+    },
+    "U2": {
+     "position": [
+      -25.055,
+      0.6,
+      24.208
+     ],
+     "depth_m_estimee": 12
+    },
+    "U3": {
+     "position": [
+      -25.045,
+      0.35,
+      23.894
+     ],
+     "depth_m_estimee": 7
+    }
+   },
+   "interchange": [
+    "U1",
+    "U2",
+    "U3"
+   ]
+  },
+  "Kurfürstenstr.": {
+   "lat": 52.500152,
+   "lon": 13.361504,
+   "lines": {
+    "U1": {
+     "position": [
+      -33.531,
+      -0.3,
+      23.249
+     ],
+     "depth_m_estimee": -6
+    },
+    "U3": {
+     "position": [
+      -33.483,
+      -0.3,
+      23.37
+     ],
+     "depth_m_estimee": -6
+    }
+   }
+  },
+  "Nollendorfplatz": {
+   "lat": 52.499966,
+   "lon": 13.354616,
+   "lines": {
+    "U1": {
+     "position": [
+      -38.667,
+      -0.55,
+      23.179
+     ],
+     "depth_m_estimee": -11
+    },
+    "U2": {
+     "position": [
+      -38.455,
+      -0.25,
+      24.683
+     ],
+     "depth_m_estimee": -5
+    },
+    "U3": {
+     "position": [
+      -38.479,
+      -0.55,
+      23.562
+     ],
+     "depth_m_estimee": -11
+    },
+    "U4": {
+     "position": [
+      -38.702,
+      -0.7,
+      23.073
+     ],
+     "depth_m_estimee": -14
+    }
+   },
+   "interchange": [
+    "U1",
+    "U2",
+    "U3",
+    "U4"
+   ]
+  },
+  "Wittenbergplatz": {
+   "lat": 52.501927,
+   "lon": 13.343056,
+   "lines": {
+    "U1": {
+     "position": [
+      -46.135,
+      -0.3,
+      20.953
+     ],
+     "depth_m_estimee": -6
+    },
+    "U2": {
+     "position": [
+      -46.159,
+      -0.3,
+      21.851
+     ],
+     "depth_m_estimee": -6
+    },
+    "U3": {
+     "position": [
+      -45.958,
+      -0.3,
+      21.408
+     ],
+     "depth_m_estimee": -6
+    }
+   }
+  },
+  "Kurfürstendamm": {
+   "lat": 52.504056,
+   "lon": 13.332587,
+   "lines": {
+    "U1": {
+     "position": [
+      -53.354,
+      -0.4,
+      19.213
+     ],
+     "depth_m_estimee": -8
+    },
+    "U9": {
+     "position": [
+      -54.241,
+      -0.6,
+      20.323
+     ],
+     "depth_m_estimee": -12
+    }
+   },
+   "interchange": [
+    "U1",
+    "U9"
+   ]
+  },
+  "Uhlandstr.": {
+   "lat": 52.502907,
+   "lon": 13.326947,
+   "lines": {
+    "U1": {
+     "position": [
+      -57.132,
+      -0.4,
+      20.547
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Ruhleben": {
+   "lat": 52.525594,
+   "lon": 13.24127,
+   "lines": {
+    "U2": {
+     "position": [
+      -115.067,
+      0.15,
+      -4.471
+     ],
+     "depth_m_estimee": 3
+    }
+   }
+  },
+  "Olympia-Stadion": {
+   "lat": 52.516819,
+   "lon": 13.250453,
+   "lines": {
+    "U2": {
+     "position": [
+      -108.86,
+      -0.15,
+      5.296
+     ],
+     "depth_m_estimee": -3
+    }
+   }
+  },
+  "Neu-Westend": {
+   "lat": 52.5162,
+   "lon": 13.259241,
+   "lines": {
+    "U2": {
+     "position": [
+      -102.854,
+      -0.4,
+      5.892
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Theodor-Heuss-Platz": {
+   "lat": 52.509866,
+   "lon": 13.272588,
+   "lines": {
+    "U2": {
+     "position": [
+      -93.916,
+      -0.4,
+      12.901
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Kaiserdamm": {
+   "lat": 52.510059,
+   "lon": 13.283103,
+   "lines": {
+    "U2": {
+     "position": [
+      -86.771,
+      -0.4,
+      12.669
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Sophie-Charlotte-Platz": {
+   "lat": 52.510851,
+   "lon": 13.295832,
+   "lines": {
+    "U2": {
+     "position": [
+      -78.012,
+      -0.4,
+      11.759
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Bismarckstr.": {
+   "lat": 52.511478,
+   "lon": 13.305142,
+   "lines": {
+    "U2": {
+     "position": [
+      -71.83,
+      -0.6,
+      11.232
+     ],
+     "depth_m_estimee": -12
+    },
+    "U7": {
+     "position": [
+      -71.762,
+      -0.55,
+      11.192
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Deutsche Oper": {
+   "lat": 52.511753,
+   "lon": 13.310546,
+   "lines": {
+    "U2": {
+     "position": [
+      -68.053,
+      -0.4,
+      10.778
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Ernst-Reuter-Platz": {
+   "lat": 52.511744,
+   "lon": 13.322077,
+   "lines": {
+    "U2": {
+     "position": [
+      -60.324,
+      -0.4,
+      10.894
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Zoologischer Garten": {
+   "lat": 52.505905,
+   "lon": 13.333009,
+   "lines": {
+    "U2": {
+     "position": [
+      -53.082,
+      -0.4,
+      17.436
+     ],
+     "depth_m_estimee": -8
+    },
+    "U9": {
+     "position": [
+      -53.121,
+      -0.7,
+      16.092
+     ],
+     "depth_m_estimee": -14
+    }
+   },
+   "interchange": [
+    "U2",
+    "U9"
+   ]
+  },
+  "Bülowstr.": {
+   "lat": 52.497575,
+   "lon": 13.363156,
+   "lines": {
+    "U2": {
+     "position": [
+      -32.523,
+      0.35,
+      26.513
+     ],
+     "depth_m_estimee": 7
+    }
+   }
+  },
+  "Mendelssohn-Bartholdy-Park": {
+   "lat": 52.5038,
+   "lon": 13.374904,
+   "lines": {
+    "U2": {
+     "position": [
+      -24.604,
+      -0.15,
+      19.469
+     ],
+     "depth_m_estimee": -3
+    }
+   }
+  },
+  "Potsdamer Platz": {
+   "lat": 52.508998,
+   "lon": 13.378047,
+   "lines": {
+    "U2": {
+     "position": [
+      -22.416,
+      -0.4,
+      13.726
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Anton-Wilhelm-Amo-Str.": {
+   "lat": 52.511723,
+   "lon": 13.385135,
+   "lines": {
+    "U2": {
+     "position": [
+      -17.552,
+      -0.4,
+      10.78
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Stadtmitte": {
+   "lat": 52.512114,
+   "lon": 13.390557,
+   "lines": {
+    "U2": {
+     "position": [
+      -13.963,
+      -0.4,
+      10.491
+     ],
+     "depth_m_estimee": -8
+    },
+    "U6": {
+     "position": [
+      -14.427,
+      -0.4,
+      12.393
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Hausvogteiplatz": {
+   "lat": 52.513311,
+   "lon": 13.395536,
+   "lines": {
+    "U2": {
+     "position": [
+      -10.681,
+      -0.4,
+      9.053
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Spittelmarkt": {
+   "lat": 52.511264,
+   "lon": 13.403695,
+   "lines": {
+    "U2": {
+     "position": [
+      -5.07,
+      -0.25,
+      11.305
+     ],
+     "depth_m_estimee": -5
+    }
+   }
+  },
+  "Märkisches Museum": {
+   "lat": 52.512309,
+   "lon": 13.410213,
+   "lines": {
+    "U2": {
+     "position": [
+      -0.722,
+      -0.4,
+      10.156
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Klosterstr.": {
+   "lat": 52.517208,
+   "lon": 13.412525,
+   "lines": {
+    "U2": {
+     "position": [
+      0.852,
+      -0.4,
+      4.746
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Alexanderplatz": {
+   "lat": 52.521754,
+   "lon": 13.41425,
+   "lines": {
+    "U2": {
+     "position": [
+      2.086,
+      -0.4,
+      -0.413
+     ],
+     "depth_m_estimee": -8
+    },
+    "U5": {
+     "position": [
+      1.406,
+      -0.55,
+      0.076
+     ],
+     "depth_m_estimee": -11
+    },
+    "U8": {
+     "position": [
+      1.001,
+      -0.7,
+      0.553
+     ],
+     "depth_m_estimee": -14
+    }
+   },
+   "interchange": [
+    "U2",
+    "U5",
+    "U8"
+   ]
+  },
+  "Rosa-Luxemburg-Platz": {
+   "lat": 52.527725,
+   "lon": 13.410522,
+   "lines": {
+    "U2": {
+     "position": [
+      -0.505,
+      -0.4,
+      -6.84
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Senefelderplatz": {
+   "lat": 52.532427,
+   "lon": 13.412787,
+   "lines": {
+    "U2": {
+     "position": [
+      1.031,
+      -0.4,
+      -12.192
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Eberswalder Str.": {
+   "lat": 52.541982,
+   "lon": 13.41228,
+   "lines": {
+    "U2": {
+     "position": [
+      0.68,
+      0.35,
+      -22.574
+     ],
+     "depth_m_estimee": 7
+    }
+   }
+  },
+  "Schönhauser Allee": {
+   "lat": 52.549218,
+   "lon": 13.413741,
+   "lines": {
+    "U2": {
+     "position": [
+      1.697,
+      -0.15,
+      -30.707
+     ],
+     "depth_m_estimee": -3
+    }
+   }
+  },
+  "Vinetastr.": {
+   "lat": 52.559185,
+   "lon": 13.413343,
+   "lines": {
+    "U2": {
+     "position": [
+      1.413,
+      -0.4,
+      -41.757
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Pankow": {
+   "lat": 52.566775,
+   "lon": 13.411811,
+   "lines": {
+    "U2": {
+     "position": [
+      0.41,
+      -0.4,
+      -50.061
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Krumme Lanke": {
+   "lat": 52.443589,
+   "lon": 13.241477,
+   "lines": {
+    "U3": {
+     "position": [
+      -114.918,
+      0.0,
+      86.134
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Onkel Toms Hütte": {
+   "lat": 52.44982,
+   "lon": 13.25311,
+   "lines": {
+    "U3": {
+     "position": [
+      -106.984,
+      -0.2,
+      79.202
+     ],
+     "depth_m_estimee": -4
+    }
+   }
+  },
+  "Oskar-Helene-Heim": {
+   "lat": 52.450312,
+   "lon": 13.268954,
+   "lines": {
+    "U3": {
+     "position": [
+      -96.381,
+      -0.2,
+      78.766
+     ],
+     "depth_m_estimee": -4
+    }
+   }
+  },
+  "Freie Universität (Thielplatz)": {
+   "lat": 52.45096,
+   "lon": 13.281692,
+   "lines": {
+    "U3": {
+     "position": [
+      -87.712,
+      -0.2,
+      77.992
+     ],
+     "depth_m_estimee": -4
+    }
+   }
+  },
+  "Dahlem-Dorf": {
+   "lat": 52.457115,
+   "lon": 13.289535,
+   "lines": {
+    "U3": {
+     "position": [
+      -82.404,
+      -0.2,
+      71.169
+     ],
+     "depth_m_estimee": -4
+    }
+   }
+  },
+  "Podbielskiallee": {
+   "lat": 52.463981,
+   "lon": 13.295567,
+   "lines": {
+    "U3": {
+     "position": [
+      -78.258,
+      -0.2,
+      63.55
+     ],
+     "depth_m_estimee": -4
+    }
+   }
+  },
+  "Breitenbachplatz": {
+   "lat": 52.466946,
+   "lon": 13.308834,
+   "lines": {
+    "U3": {
+     "position": [
+      -69.287,
+      -0.4,
+      60.208
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Rüdesheimer Platz": {
+   "lat": 52.473372,
+   "lon": 13.3145,
+   "lines": {
+    "U3": {
+     "position": [
+      -65.571,
+      -0.4,
+      53.135
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Heidelberger Platz": {
+   "lat": 52.480227,
+   "lon": 13.313224,
+   "lines": {
+    "U3": {
+     "position": [
+      -66.421,
+      -0.5,
+      45.605
+     ],
+     "depth_m_estimee": -10
+    }
+   }
+  },
+  "Fehrbelliner Platz": {
+   "lat": 52.490597,
+   "lon": 13.315394,
+   "lines": {
+    "U3": {
+     "position": [
+      -64.86,
+      -0.5,
+      34.161
+     ],
+     "depth_m_estimee": -10
+    },
+    "U7": {
+     "position": [
+      -65.578,
+      -0.65,
+      34.355
+     ],
+     "depth_m_estimee": -13
+    }
+   },
+   "interchange": [
+    "U3",
+    "U7"
+   ]
+  },
+  "Hohenzollernplatz": {
+   "lat": 52.494095,
+   "lon": 13.32495,
+   "lines": {
+    "U3": {
+     "position": [
+      -58.378,
+      -0.4,
+      30.22
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Spichernstr.": {
+   "lat": 52.49686,
+   "lon": 13.332072,
+   "lines": {
+    "U3": {
+     "position": [
+      -53.578,
+      -0.5,
+      27.199
+     ],
+     "depth_m_estimee": -10
+    },
+    "U9": {
+     "position": [
+      -54.504,
+      -0.7,
+      26.522
+     ],
+     "depth_m_estimee": -14
+    }
+   },
+   "interchange": [
+    "U3",
+    "U9"
+   ]
+  },
+  "Augsburger Str.": {
+   "lat": 52.500362,
+   "lon": 13.336425,
+   "lines": {
+    "U3": {
+     "position": [
+      -50.7,
+      -0.4,
+      23.383
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Innsbrucker Platz": {
+   "lat": 52.479262,
+   "lon": 13.343623,
+   "lines": {
+    "U4": {
+     "position": [
+      -45.847,
+      -0.35,
+      46.72
+     ],
+     "depth_m_estimee": -7
+    }
+   }
+  },
+  "Rathaus Schöneberg": {
+   "lat": 52.483055,
+   "lon": 13.342094,
+   "lines": {
+    "U4": {
+     "position": [
+      -46.862,
+      -0.35,
+      42.439
+     ],
+     "depth_m_estimee": -7
+    }
+   }
+  },
+  "Bayerischer Platz": {
+   "lat": 52.489135,
+   "lon": 13.340387,
+   "lines": {
+    "U4": {
+     "position": [
+      -47.911,
+      -0.35,
+      35.783
+     ],
+     "depth_m_estimee": -7
+    },
+    "U7": {
+     "position": [
+      -47.217,
+      -0.65,
+      36.226
+     ],
+     "depth_m_estimee": -13
+    }
+   },
+   "interchange": [
+    "U4",
+    "U7"
+   ]
+  },
+  "Viktoria-Luise-Platz": {
+   "lat": 52.496208,
+   "lon": 13.343461,
+   "lines": {
+    "U4": {
+     "position": [
+      -45.803,
+      -0.35,
+      27.893
+     ],
+     "depth_m_estimee": -7
+    }
+   }
+  },
+  "Hönow": {
+   "lat": 52.538482,
+   "lon": 13.633161,
+   "lines": {
+    "U5": {
+     "position": [
+      150.237,
+      0.0,
+      -18.783
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Louis-Lewin-Str.": {
+   "lat": 52.539037,
+   "lon": 13.618307,
+   "lines": {
+    "U5": {
+     "position": [
+      140.18,
+      0.0,
+      -19.371
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Hellersdorf": {
+   "lat": 52.536737,
+   "lon": 13.606564,
+   "lines": {
+    "U5": {
+     "position": [
+      132.193,
+      0.0,
+      -16.79
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Cottbusser Platz": {
+   "lat": 52.533918,
+   "lon": 13.59646,
+   "lines": {
+    "U5": {
+     "position": [
+      125.268,
+      0.0,
+      -13.646
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Kienberg (Gärten der Welt)": {
+   "lat": 52.528538,
+   "lon": 13.590471,
+   "lines": {
+    "U5": {
+     "position": [
+      121.354,
+      0.0,
+      -7.758
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Kaulsdorf-Nord": {
+   "lat": 52.520904,
+   "lon": 13.588849,
+   "lines": {
+    "U5": {
+     "position": [
+      120.269,
+      0.0,
+      0.703
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Wuhletal": {
+   "lat": 52.512626,
+   "lon": 13.575194,
+   "lines": {
+    "U5": {
+     "position": [
+      110.876,
+      0.0,
+      9.785
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Elsterwerdaer Platz": {
+   "lat": 52.504979,
+   "lon": 13.560296,
+   "lines": {
+    "U5": {
+     "position": [
+      100.847,
+      0.0,
+      18.421
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Biesdorf-Süd": {
+   "lat": 52.499662,
+   "lon": 13.546365,
+   "lines": {
+    "U5": {
+     "position": [
+      91.421,
+      0.0,
+      24.256
+     ],
+     "depth_m_estimee": 0
+    }
+   }
+  },
+  "Tierpark": {
+   "lat": 52.49776,
+   "lon": 13.523072,
+   "lines": {
+    "U5": {
+     "position": [
+      75.65,
+      -0.4,
+      26.179
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Friedrichsfelde": {
+   "lat": 52.506252,
+   "lon": 13.512845,
+   "lines": {
+    "U5": {
+     "position": [
+      68.751,
+      -0.45,
+      16.831
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Lichtenberg": {
+   "lat": 52.511218,
+   "lon": 13.498342,
+   "lines": {
+    "U5": {
+     "position": [
+      58.902,
+      -0.55,
+      11.344
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Magdalenenstr.": {
+   "lat": 52.512532,
+   "lon": 13.486997,
+   "lines": {
+    "U5": {
+     "position": [
+      51.252,
+      -0.45,
+      9.901
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Frankfurter Allee": {
+   "lat": 52.513761,
+   "lon": 13.475215,
+   "lines": {
+    "U5": {
+     "position": [
+      43.157,
+      -0.45,
+      8.55
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Samariterstr.": {
+   "lat": 52.514787,
+   "lon": 13.464537,
+   "lines": {
+    "U5": {
+     "position": [
+      36.043,
+      -0.45,
+      7.396
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Frankfurter Tor": {
+   "lat": 52.515872,
+   "lon": 13.453903,
+   "lines": {
+    "U5": {
+     "position": [
+      28.734,
+      -0.45,
+      6.198
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Weberwiese": {
+   "lat": 52.516804,
+   "lon": 13.444683,
+   "lines": {
+    "U5": {
+     "position": [
+      22.612,
+      -0.45,
+      5.183
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Strausberger Platz": {
+   "lat": 52.518144,
+   "lon": 13.431554,
+   "lines": {
+    "U5": {
+     "position": [
+      13.731,
+      -0.45,
+      3.676
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Schillingstr.": {
+   "lat": 52.520931,
+   "lon": 13.420841,
+   "lines": {
+    "U5": {
+     "position": [
+      6.393,
+      -0.45,
+      0.572
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Rotes Rathaus": {
+   "lat": 52.518802,
+   "lon": 13.407888,
+   "lines": {
+    "U5": {
+     "position": [
+      -2.394,
+      -0.65,
+      3.002
+     ],
+     "depth_m_estimee": -13
+    }
+   }
+  },
+  "Museumsinsel": {
+   "lat": 52.517402,
+   "lon": 13.39825,
+   "lines": {
+    "U5": {
+     "position": [
+      -8.837,
+      -0.8,
+      4.459
+     ],
+     "depth_m_estimee": -16
+    }
+   }
+  },
+  "Unter den Linden": {
+   "lat": 52.51704,
+   "lon": 13.389059,
+   "lines": {
+    "U5": {
+     "position": [
+      -15.037,
+      -0.75,
+      4.754
+     ],
+     "depth_m_estimee": -15
+    },
+    "U6": {
+     "position": [
+      -15.281,
+      -0.4,
+      5.239
+     ],
+     "depth_m_estimee": -8
+    }
+   },
+   "interchange": [
+    "U5",
+    "U6"
+   ]
+  },
+  "Brandenburger Tor": {
+   "lat": 52.516644,
+   "lon": 13.380981,
+   "lines": {
+    "U5": {
+     "position": [
+      -20.61,
+      -0.65,
+      5.382
+     ],
+     "depth_m_estimee": -13
+    }
+   }
+  },
+  "Bundestag": {
+   "lat": 52.520156,
+   "lon": 13.373086,
+   "lines": {
+    "U5": {
+     "position": [
+      -25.945,
+      -0.8,
+      1.405
+     ],
+     "depth_m_estimee": -16
+    }
+   }
+  },
+  "Hauptbahnhof": {
+   "lat": 52.525225,
+   "lon": 13.37003,
+   "lines": {
+    "U5": {
+     "position": [
+      -27.885,
+      -0.8,
+      -4.066
+     ],
+     "depth_m_estimee": -16
+    }
+   }
+  },
+  "Alt-Mariendorf": {
+   "lat": 52.439884,
+   "lon": 13.387543,
+   "lines": {
+    "U6": {
+     "position": [
+      -16.092,
+      -0.4,
+      90.208
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Westphalweg": {
+   "lat": 52.446275,
+   "lon": 13.385757,
+   "lines": {
+    "U6": {
+     "position": [
+      -17.313,
+      -0.4,
+      83.117
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Ullsteinstr.": {
+   "lat": 52.453757,
+   "lon": 13.384546,
+   "lines": {
+    "U6": {
+     "position": [
+      -18.14,
+      -0.4,
+      74.76
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Kaiserin-Augusta-Str.": {
+   "lat": 52.459971,
+   "lon": 13.384701,
+   "lines": {
+    "U6": {
+     "position": [
+      -18.001,
+      -0.4,
+      68.009
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Alt-Tempelhof": {
+   "lat": 52.465382,
+   "lon": 13.385719,
+   "lines": {
+    "U6": {
+     "position": [
+      -17.317,
+      -0.4,
+      62.058
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Tempelhof": {
+   "lat": 52.469819,
+   "lon": 13.385692,
+   "lines": {
+    "U6": {
+     "position": [
+      -17.333,
+      -0.4,
+      57.058
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Paradestr.": {
+   "lat": 52.478191,
+   "lon": 13.386375,
+   "lines": {
+    "U6": {
+     "position": [
+      -16.899,
+      -0.4,
+      47.896
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Platz der Luftbrücke": {
+   "lat": 52.485946,
+   "lon": 13.38597,
+   "lines": {
+    "U6": {
+     "position": [
+      -17.156,
+      -0.4,
+      39.315
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Mehringdamm": {
+   "lat": 52.494542,
+   "lon": 13.389109,
+   "lines": {
+    "U6": {
+     "position": [
+      -14.682,
+      -0.4,
+      29.867
+     ],
+     "depth_m_estimee": -8
+    },
+    "U7": {
+     "position": [
+      -14.835,
+      -0.6,
+      29.897
+     ],
+     "depth_m_estimee": -12
+    }
+   },
+   "interchange": [
+    "U6",
+    "U7"
+   ]
+  },
+  "Kochstr. (Checkpoint Charlie)": {
+   "lat": 52.506044,
+   "lon": 13.390689,
+   "lines": {
+    "U6": {
+     "position": [
+      -13.975,
+      -0.4,
+      16.972
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Friedrichstr.": {
+   "lat": 52.520269,
+   "lon": 13.388335,
+   "lines": {
+    "U6": {
+     "position": [
+      -15.532,
+      -0.4,
+      1.243
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Oranienburger Tor": {
+   "lat": 52.525551,
+   "lon": 13.387428,
+   "lines": {
+    "U6": {
+     "position": [
+      -16.156,
+      -0.4,
+      -4.526
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Naturkundemuseum": {
+   "lat": 52.531322,
+   "lon": 13.382214,
+   "lines": {
+    "U6": {
+     "position": [
+      -19.787,
+      -0.4,
+      -10.994
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Schwartzkopffstr.": {
+   "lat": 52.5355,
+   "lon": 13.376986,
+   "lines": {
+    "U6": {
+     "position": [
+      -23.319,
+      -0.4,
+      -15.598
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Reinickendorfer Str.": {
+   "lat": 52.540096,
+   "lon": 13.370265,
+   "lines": {
+    "U6": {
+     "position": [
+      -27.861,
+      -0.4,
+      -20.656
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Wedding": {
+   "lat": 52.543092,
+   "lon": 13.36509,
+   "lines": {
+    "U6": {
+     "position": [
+      -31.354,
+      -0.4,
+      -23.95
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Leopoldplatz": {
+   "lat": 52.546419,
+   "lon": 13.359163,
+   "lines": {
+    "U6": {
+     "position": [
+      -35.247,
+      -0.4,
+      -27.697
+     ],
+     "depth_m_estimee": -8
+    },
+    "U9": {
+     "position": [
+      -35.292,
+      -0.55,
+      -27.733
+     ],
+     "depth_m_estimee": -11
+    }
+   },
+   "interchange": [
+    "U6",
+    "U9"
+   ]
+  },
+  "Seestr.": {
+   "lat": 52.549813,
+   "lon": 13.353142,
+   "lines": {
+    "U6": {
+     "position": [
+      -39.437,
+      -0.4,
+      -31.417
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Rehberge": {
+   "lat": 52.556638,
+   "lon": 13.34106,
+   "lines": {
+    "U6": {
+     "position": [
+      -47.541,
+      -0.4,
+      -38.862
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Afrikanische Str.": {
+   "lat": 52.560271,
+   "lon": 13.334667,
+   "lines": {
+    "U6": {
+     "position": [
+      -51.949,
+      -0.4,
+      -42.936
+     ],
+     "depth_m_estimee": -8
+    }
+   }
+  },
+  "Kurt-Schumacher-Platz": {
+   "lat": 52.563292,
+   "lon": 13.327087,
+   "lines": {
+    "U6": {
+     "position": [
+      -57.114,
+      -0.3,
+      -46.256
+     ],
+     "depth_m_estimee": -6
+    }
+   }
+  },
+  "Scharnweberstr.": {
+   "lat": 52.568,
+   "lon": 13.3118,
+   "lines": {
+    "U6": {
+     "position": [
+      -67.693,
+      0.25,
+      -50.478
+     ],
+     "depth_m_estimee": 5,
+     "ferme": true,
+     "position_approx": true
+    }
+   }
+  },
+  "Otisstr.": {
+   "lat": 52.5697,
+   "lon": 13.3007,
+   "lines": {
+    "U6": {
+     "position": [
+      -73.267,
+      0.15,
+      -54.784
+     ],
+     "depth_m_estimee": 3,
+     "ferme": true,
+     "position_approx": true
+    }
+   }
+  },
+  "Holzhauser Str.": {
+   "lat": 52.5762,
+   "lon": 13.2946,
+   "lines": {
+    "U6": {
+     "position": [
+      -78.461,
+      0.2,
+      -60.828
+     ],
+     "depth_m_estimee": 4,
+     "ferme": true,
+     "position_approx": true
+    }
+   }
+  },
+  "Borsigwerke": {
+   "lat": 52.5826,
+   "lon": 13.2898,
+   "lines": {
+    "U6": {
+     "position": [
+      -82.206,
+      0.05,
+      -67.664
+     ],
+     "depth_m_estimee": 1,
+     "ferme": true,
+     "position_approx": true
+    }
+   }
+  },
+  "Alt-Tegel": {
+   "lat": 52.59,
+   "lon": 13.283,
+   "lines": {
+    "U6": {
+     "position": [
+      -86.156,
+      -0.3,
+      -74.834
+     ],
+     "depth_m_estimee": -6,
+     "ferme": true,
+     "position_approx": true
+    }
+   }
+  },
+  "Rathaus Spandau": {
+   "lat": 52.535176,
+   "lon": 13.199857,
+   "lines": {
+    "U7": {
+     "position": [
+      -143.195,
+      -0.7,
+      -15.178
+     ],
+     "depth_m_estimee": -14
+    }
+   }
+  },
+  "Altstadt Spandau": {
+   "lat": 52.538755,
+   "lon": 13.206326,
+   "lines": {
+    "U7": {
+     "position": [
+      -138.681,
+      -0.55,
+      -19.049
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Zitadelle": {
+   "lat": 52.537627,
+   "lon": 13.217515,
+   "lines": {
+    "U7": {
+     "position": [
+      -131.227,
+      -0.55,
+      -17.797
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Haselhorst": {
+   "lat": 52.538635,
+   "lon": 13.233127,
+   "lines": {
+    "U7": {
+     "position": [
+      -120.613,
+      -0.55,
+      -19.011
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Paulsternstr.": {
+   "lat": 52.537931,
+   "lon": 13.247534,
+   "lines": {
+    "U7": {
+     "position": [
+      -110.731,
+      -0.55,
+      -18.189
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Rohrdamm": {
+   "lat": 52.536926,
+   "lon": 13.262347,
+   "lines": {
+    "U7": {
+     "position": [
+      -100.787,
+      -0.55,
+      -17.07
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Siemensdamm": {
+   "lat": 52.536699,
+   "lon": 13.27271,
+   "lines": {
+    "U7": {
+     "position": [
+      -93.793,
+      -0.55,
+      -16.846
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Halemweg": {
+   "lat": 52.536571,
+   "lon": 13.286271,
+   "lines": {
+    "U7": {
+     "position": [
+      -84.603,
+      -0.55,
+      -16.685
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Jakob-Kaiser-Platz": {
+   "lat": 52.536186,
+   "lon": 13.293646,
+   "lines": {
+    "U7": {
+     "position": [
+      -79.634,
+      -0.55,
+      -16.259
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Jungfernheide": {
+   "lat": 52.53079,
+   "lon": 13.300631,
+   "lines": {
+    "U7": {
+     "position": [
+      -74.883,
+      -0.55,
+      -10.116
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Mierendorffplatz": {
+   "lat": 52.526226,
+   "lon": 13.30479,
+   "lines": {
+    "U7": {
+     "position": [
+      -72.068,
+      -0.55,
+      -5.188
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Richard-Wagner-Platz": {
+   "lat": 52.516645,
+   "lon": 13.306512,
+   "lines": {
+    "U7": {
+     "position": [
+      -70.921,
+      -0.55,
+      5.4
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Wilmersdorfer Str.": {
+   "lat": 52.506353,
+   "lon": 13.306655,
+   "lines": {
+    "U7": {
+     "position": [
+      -70.814,
+      -0.55,
+      16.918
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Adenauerplatz": {
+   "lat": 52.499998,
+   "lon": 13.307175,
+   "lines": {
+    "U7": {
+     "position": [
+      -70.472,
+      -0.55,
+      23.821
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Konstanzer Str.": {
+   "lat": 52.494524,
+   "lon": 13.309008,
+   "lines": {
+    "U7": {
+     "position": [
+      -69.24,
+      -0.55,
+      29.87
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Blissestr.": {
+   "lat": 52.486328,
+   "lon": 13.32192,
+   "lines": {
+    "U7": {
+     "position": [
+      -60.511,
+      -0.55,
+      38.867
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Berliner Str.": {
+   "lat": 52.487265,
+   "lon": 13.330998,
+   "lines": {
+    "U7": {
+     "position": [
+      -54.206,
+      -0.65,
+      37.937
+     ],
+     "depth_m_estimee": -13
+    },
+    "U9": {
+     "position": [
+      -54.394,
+      -0.45,
+      37.728
+     ],
+     "depth_m_estimee": -9
+    }
+   },
+   "interchange": [
+    "U7",
+    "U9"
+   ]
+  },
+  "Eisenacher Str.": {
+   "lat": 52.489521,
+   "lon": 13.350362,
+   "lines": {
+    "U7": {
+     "position": [
+      -41.277,
+      -0.55,
+      35.351
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Kleistpark": {
+   "lat": 52.490297,
+   "lon": 13.360266,
+   "lines": {
+    "U7": {
+     "position": [
+      -34.552,
+      -0.55,
+      34.471
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Yorckstr.": {
+   "lat": 52.492922,
+   "lon": 13.370841,
+   "lines": {
+    "U7": {
+     "position": [
+      -27.274,
+      -0.55,
+      31.544
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Gneisenaustr.": {
+   "lat": 52.491268,
+   "lon": 13.3957,
+   "lines": {
+    "U7": {
+     "position": [
+      -10.516,
+      -0.55,
+      33.436
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Südstern": {
+   "lat": 52.489216,
+   "lon": 13.407672,
+   "lines": {
+    "U7": {
+     "position": [
+      -2.296,
+      -0.55,
+      35.748
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Hermannplatz": {
+   "lat": 52.486364,
+   "lon": 13.424162,
+   "lines": {
+    "U7": {
+     "position": [
+      8.711,
+      -0.65,
+      39.096
+     ],
+     "depth_m_estimee": -13
+    },
+    "U8": {
+     "position": [
+      8.961,
+      -0.4,
+      38.821
+     ],
+     "depth_m_estimee": -8
+    }
+   },
+   "interchange": [
+    "U7",
+    "U8"
+   ]
+  },
+  "Rathaus Neukölln": {
+   "lat": 52.481765,
+   "lon": 13.433958,
+   "lines": {
+    "U7": {
+     "position": [
+      15.428,
+      -0.55,
+      44.099
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Karl-Marx-Str.": {
+   "lat": 52.476514,
+   "lon": 13.439167,
+   "lines": {
+    "U7": {
+     "position": [
+      18.887,
+      -0.55,
+      49.846
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Neukölln": {
+   "lat": 52.468614,
+   "lon": 13.44167,
+   "lines": {
+    "U7": {
+     "position": [
+      20.641,
+      -0.55,
+      58.632
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Grenzallee": {
+   "lat": 52.462871,
+   "lon": 13.444733,
+   "lines": {
+    "U7": {
+     "position": [
+      22.662,
+      -0.55,
+      65.004
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Blaschkoallee": {
+   "lat": 52.452075,
+   "lon": 13.44914,
+   "lines": {
+    "U7": {
+     "position": [
+      25.622,
+      -0.55,
+      76.8
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Parchimer Allee": {
+   "lat": 52.444778,
+   "lon": 13.449536,
+   "lines": {
+    "U7": {
+     "position": [
+      25.873,
+      -0.55,
+      84.933
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Britz-Süd": {
+   "lat": 52.437777,
+   "lon": 13.448097,
+   "lines": {
+    "U7": {
+     "position": [
+      24.923,
+      -0.55,
+      92.689
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Johannisthaler Chaussee": {
+   "lat": 52.42928,
+   "lon": 13.453239,
+   "lines": {
+    "U7": {
+     "position": [
+      28.457,
+      -0.55,
+      101.941
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Lipschitzallee": {
+   "lat": 52.424611,
+   "lon": 13.462666,
+   "lines": {
+    "U7": {
+     "position": [
+      34.901,
+      -0.55,
+      107.209
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Wutzkyallee": {
+   "lat": 52.423277,
+   "lon": 13.474655,
+   "lines": {
+    "U7": {
+     "position": [
+      42.924,
+      -0.55,
+      108.631
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Zwickauer Damm": {
+   "lat": 52.423252,
+   "lon": 13.483727,
+   "lines": {
+    "U7": {
+     "position": [
+      49.075,
+      -0.55,
+      108.67
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Rudow": {
+   "lat": 52.416332,
+   "lon": 13.495157,
+   "lines": {
+    "U7": {
+     "position": [
+      56.756,
+      -0.55,
+      116.271
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Wittenau": {
+   "lat": 52.595694,
+   "lon": 13.334358,
+   "lines": {
+    "U8": {
+     "position": [
+      -52.268,
+      -0.3,
+      -81.893
+     ],
+     "depth_m_estimee": -6
+    }
+   }
+  },
+  "Rathaus Reinickendorf": {
+   "lat": 52.588381,
+   "lon": 13.325626,
+   "lines": {
+    "U8": {
+     "position": [
+      -57.934,
+      -0.45,
+      -73.824
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Karl-Bonhoeffer-Nervenklinik": {
+   "lat": 52.57888,
+   "lon": 13.333294,
+   "lines": {
+    "U8": {
+     "position": [
+      -52.847,
+      -0.45,
+      -63.396
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Lindauer Allee": {
+   "lat": 52.575354,
+   "lon": 13.33911,
+   "lines": {
+    "U8": {
+     "position": [
+      -48.729,
+      -0.45,
+      -59.408
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Paracelsus-Bad": {
+   "lat": 52.574106,
+   "lon": 13.349019,
+   "lines": {
+    "U8": {
+     "position": [
+      -42.06,
+      -0.45,
+      -58.093
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Residenzstr.": {
+   "lat": 52.571106,
+   "lon": 13.360435,
+   "lines": {
+    "U8": {
+     "position": [
+      -34.45,
+      -0.45,
+      -54.739
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Franz-Neumann-Platz": {
+   "lat": 52.564603,
+   "lon": 13.363811,
+   "lines": {
+    "U8": {
+     "position": [
+      -32.11,
+      -0.45,
+      -47.504
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Osloer Str.": {
+   "lat": 52.557098,
+   "lon": 13.373196,
+   "lines": {
+    "U8": {
+     "position": [
+      -25.843,
+      -0.45,
+      -39.226
+     ],
+     "depth_m_estimee": -9
+    },
+    "U9": {
+     "position": [
+      -26.062,
+      -0.55,
+      -39.473
+     ],
+     "depth_m_estimee": -11
+    }
+   },
+   "interchange": [
+    "U8",
+    "U9"
+   ]
+  },
+  "Pankstr.": {
+   "lat": 52.55224,
+   "lon": 13.381422,
+   "lines": {
+    "U8": {
+     "position": [
+      -20.125,
+      -0.45,
+      -33.873
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Gesundbrunnen": {
+   "lat": 52.548736,
+   "lon": 13.388263,
+   "lines": {
+    "U8": {
+     "position": [
+      -15.529,
+      -0.45,
+      -30.061
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Voltastr.": {
+   "lat": 52.542101,
+   "lon": 13.392932,
+   "lines": {
+    "U8": {
+     "position": [
+      -12.358,
+      -0.45,
+      -22.701
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Bernauer Str.": {
+   "lat": 52.537276,
+   "lon": 13.396665,
+   "lines": {
+    "U8": {
+     "position": [
+      -9.795,
+      -0.45,
+      -17.273
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Rosenthaler Platz": {
+   "lat": 52.53038,
+   "lon": 13.400626,
+   "lines": {
+    "U8": {
+     "position": [
+      -7.175,
+      -0.45,
+      -9.764
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Weinmeisterstr.": {
+   "lat": 52.525435,
+   "lon": 13.404988,
+   "lines": {
+    "U8": {
+     "position": [
+      -4.194,
+      -0.45,
+      -4.254
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Jannowitzbrücke": {
+   "lat": 52.515585,
+   "lon": 13.418139,
+   "lines": {
+    "U8": {
+     "position": [
+      4.647,
+      -0.45,
+      6.701
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Heinrich-Heine-Str.": {
+   "lat": 52.51012,
+   "lon": 13.415704,
+   "lines": {
+    "U8": {
+     "position": [
+      3.016,
+      -0.45,
+      12.648
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Moritzplatz": {
+   "lat": 52.503676,
+   "lon": 13.410615,
+   "lines": {
+    "U8": {
+     "position": [
+      -0.466,
+      -0.45,
+      19.855
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Schönleinstr.": {
+   "lat": 52.493448,
+   "lon": 13.421725,
+   "lines": {
+    "U8": {
+     "position": [
+      7.087,
+      -0.45,
+      31.061
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Boddinstr.": {
+   "lat": 52.480162,
+   "lon": 13.425207,
+   "lines": {
+    "U8": {
+     "position": [
+      9.416,
+      -0.45,
+      45.719
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Leinestr.": {
+   "lat": 52.473426,
+   "lon": 13.428058,
+   "lines": {
+    "U8": {
+     "position": [
+      11.376,
+      -0.45,
+      53.268
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Hermannstr.": {
+   "lat": 52.467647,
+   "lon": 13.431289,
+   "lines": {
+    "U8": {
+     "position": [
+      13.508,
+      -0.45,
+      59.513
+     ],
+     "depth_m_estimee": -9
+    }
+   }
+  },
+  "Rathaus Steglitz": {
+   "lat": 52.456131,
+   "lon": 13.320682,
+   "lines": {
+    "U9": {
+     "position": [
+      -61.311,
+      -0.55,
+      72.307
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Schloßstr.": {
+   "lat": 52.460605,
+   "lon": 13.324455,
+   "lines": {
+    "U9": {
+     "position": [
+      -58.875,
+      -0.55,
+      67.292
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Walther-Schreiber-Platz": {
+   "lat": 52.4661,
+   "lon": 13.328345,
+   "lines": {
+    "U9": {
+     "position": [
+      -56.207,
+      -0.55,
+      61.18
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Friedrich-Wilhelm-Platz": {
+   "lat": 52.472114,
+   "lon": 13.328848,
+   "lines": {
+    "U9": {
+     "position": [
+      -55.82,
+      -0.55,
+      54.598
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Bundesplatz": {
+   "lat": 52.477908,
+   "lon": 13.328613,
+   "lines": {
+    "U9": {
+     "position": [
+      -55.953,
+      -0.55,
+      48.214
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Güntzelstr.": {
+   "lat": 52.492048,
+   "lon": 13.331101,
+   "lines": {
+    "U9": {
+     "position": [
+      -54.315,
+      -0.55,
+      32.522
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Hansaplatz": {
+   "lat": 52.517882,
+   "lon": 13.342161,
+   "lines": {
+    "U9": {
+     "position": [
+      -46.859,
+      -0.55,
+      4.004
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Turmstr.": {
+   "lat": 52.526128,
+   "lon": 13.341406,
+   "lines": {
+    "U9": {
+     "position": [
+      -47.371,
+      -0.55,
+      -5.146
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Birkenstr.": {
+   "lat": 52.532191,
+   "lon": 13.34141,
+   "lines": {
+    "U9": {
+     "position": [
+      -47.367,
+      -0.55,
+      -11.951
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Westhafen": {
+   "lat": 52.536744,
+   "lon": 13.342635,
+   "lines": {
+    "U9": {
+     "position": [
+      -46.48,
+      -0.55,
+      -17.027
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Amrumer Str.": {
+   "lat": 52.542294,
+   "lon": 13.350191,
+   "lines": {
+    "U9": {
+     "position": [
+      -41.266,
+      -0.55,
+      -23.13
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  },
+  "Nauener Platz": {
+   "lat": 52.551585,
+   "lon": 13.367543,
+   "lines": {
+    "U9": {
+     "position": [
+      -29.61,
+      -0.55,
+      -33.375
+     ],
+     "depth_m_estimee": -11
+    }
+   }
+  }
+ }
+}

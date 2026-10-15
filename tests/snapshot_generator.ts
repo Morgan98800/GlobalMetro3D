@@ -589,5 +589,119 @@ export function computeWashingtonSnapshot(
   };
 }
 
+export const SNAPSHOT_TIMESTAMP_ISO_BERLIN = '2026-10-16T12:00:00Z'; // Vendredi 14:00:00 CEST (Europe/Berlin)
+export const SNAPSHOT_TIMESTAMP_ISO_BERLIN_NIGHT = '2026-10-17T01:00:00Z'; // Samedi 03:00:00 CEST (Europe/Berlin)
+
+export interface BerlinSnapshotFixture {
+  meta: {
+    description: string;
+    timestampIso: string;
+    serviceDate: string;
+    civilSeconds: number;
+    totalTrains: number;
+    trainsByLine: Record<string, number>;
+  };
+  trains: TrainSnapshotEntry[];
+}
+
+export function computeBerlinSnapshot(
+  baseDir: string = process.cwd(),
+  isoTimestamp: string = SNAPSHOT_TIMESTAMP_ISO_BERLIN
+): BerlinSnapshotFixture {
+  const linesJsonPath = path.resolve(baseDir, 'cities/berlin/data/lines.json');
+  const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
+  const linesMap = new Map(lines.map(l => [l.id, l]));
+
+  const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/berlin/data/shapes.bin'));
+  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+
+  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/berlin/data/schedule.json'), 'utf8'));
+  const stationNames: string[] = sched.stations || [];
+
+  const trips: TripData[] = sched.trips.map((t: any): TripData => {
+    const destName = stationNames[t[6]] || 'Terminus';
+    const stops: Array<[number, number, number, string]> = t[7].map((s: any) => [
+      s[0],
+      s[1],
+      s[2],
+      stationNames[s[3]] || 'Station'
+    ]);
+    return {
+      id: t[0],
+      line: t[1],
+      dir: (t[2] === 0 ? 0 : 1) as 0 | 1,
+      shapeId: t[3],
+      t0: t[4],
+      t1: t[5],
+      destName,
+      stops
+    };
+  });
+
+  const fixedDate = new Date(isoTimestamp);
+  const activeTrips = selectActiveTrips(trips, fixedDate, undefined, 0, 'Europe/Berlin');
+
+  const trains: TrainSnapshotEntry[] = [];
+  const trainsByLine: Record<string, number> = {};
+  for (const l of lines) {
+    trainsByLine[l.id] = 0;
+  }
+
+  for (const { trip, serviceSeconds } of activeTrips) {
+    const shape = shapesMap.get(trip.shapeId);
+    if (!shape) continue;
+
+    const lineMeta = linesMap.get(trip.line);
+    const lineColor = lineMeta?.color || '#224F86';
+    const lineTextColor = lineMeta?.text_color || '#FFFFFF';
+    const lineShortName = lineMeta?.short_name || trip.line;
+    const elevationOffset = lineMeta?.elevation_offset || 0;
+
+    const train = computeTripKinematics(
+      trip,
+      shape,
+      serviceSeconds,
+      0,
+      lineColor,
+      lineTextColor,
+      lineShortName,
+      elevationOffset
+    );
+
+    if (train) {
+      trainsByLine[train.line] = (trainsByLine[train.line] || 0) + 1;
+      trains.push({
+        tripId: train.id,
+        line: train.line,
+        lineName: train.lineName,
+        shapeId: train.shapeId,
+        direction: train.direction,
+        currentDistM: Math.round(train.currentDistM * 100) / 100,
+        speedKmh: train.spd,
+        speedMps: Math.round(train.speedMps * 100) / 100,
+        pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
+        bearing: Math.round(train.brg * 10) / 10,
+        nextStation: train.next,
+        destStation: train.dest
+      });
+    }
+  }
+
+  trains.sort((a, b) => a.tripId.localeCompare(b.tripId));
+
+  return {
+    meta: {
+      description: 'Berlin U-Bahn 3D Reference Kinematic Simulation Snapshot',
+      timestampIso: isoTimestamp,
+      serviceDate: isoTimestamp.split('T')[0],
+      civilSeconds: Math.floor((fixedDate.getTime() / 1000) % 86400),
+      totalTrains: trains.length,
+      trainsByLine
+    },
+    trains
+  };
+}
+
+
 
 

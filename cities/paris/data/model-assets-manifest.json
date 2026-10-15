@@ -1,12 +1,14 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-10-12",
+  "generated_on": "2026-10-14",
   "status": "awaiting_human_asset_approval",
   "policy": {
     "external_downloads": "blocked_until_human_source_and_license_approval",
     "marketplace_models": "never_download_without_explicit_license_approval",
     "train_models_present": true,
     "train_model_files": [
+      "train/bvg_grossprofil__neutral.glb",
+      "train/bvg_kleinprofil__neutral.glb",
       "train/pneumatic_generic__neutral.glb",
       "train/rer_generic_A__cab.glb",
       "train/rer_generic_A__neutral.glb",

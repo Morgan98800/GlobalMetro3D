@@ -131,7 +131,9 @@ graph TD
 - **`netlify/functions/stm_relay.ts`** : relais serveur vers l'API STM i3 (Montréal), planifié toutes les 2 minutes (`*/2 * * * *`).
 - **`netlify/functions/tfl_relay.ts`** : relais serveur vers l'API TfL (Londres), planifié chaque minute (`* * * * *`).
 - **`netlify/functions/lille_relay.ts`** : relais serveur vers le flux GTFS-RT Ilévia (Lille), planifié chaque minute (`* * * * *`) pour alimenter le recalage des rames de tramway et métro.
-- **Redirections** : `/api/prim`, `/api/stm`, `/api/tfl`, `/api/lille-rt` vers leurs fonctions respectives, puis `/*` → `/index.html` (200).
+- **`netlify/functions/washington_relay.ts`** : relais serveur vers les flux GTFS-RT WMATA (Washington DC), planifié chaque minute (`* * * * *`).
+- **`netlify/functions/berlin_relay.ts`** : relais serveur vers le flux GTFS-RT VBB (Berlin U-Bahn), planifié chaque minute (`* * * * *`), filtrage Protobuf server-side et User-Agent explicite avec contact.
+- **Redirections** : `/api/prim`, `/api/stm`, `/api/tfl`, `/api/lille-rt`, `/api/washington-rt`, `/api/berlin-rt` vers leurs fonctions respectives, puis `/*` → `/index.html` (200).
 
 ---
 
@@ -145,6 +147,16 @@ Le moteur partagé (`core/sim/browser_engine.ts`) est rigoureusement agnostique 
   - **Londres (`tfl-unified`)** : `TflRealtimeAdapter` (prédictions d'arrivée sur 20 lignes et 688 rames).
   - **Lille (`gtfs-rt`)** : `IleviaRealtimeAdapter` (TripUpdates GTFS-RT Ilévia pour le métro VAL et le tramway).
   - **Washington DC (`gtfs-rt`)** : `WashingtonRealtimeAdapter` (TripUpdates & VehiclePositions GTFS-RT 2.0 WMATA pour les 6 lignes Metrorail).
+  - **Berlin (`gtfs-rt`)** : `VbbRealtimeAdapter` (TripUpdates GTFS-RT Protobuf VBB pour les 9 lignes U-Bahn BVG).
+- **Consolidation future des adaptateurs GTFS-RT TripUpdate (§5.2)** :
+  Lille (`IleviaRealtimeAdapter`), Washington (`WashingtonRealtimeAdapter`) et Berlin (`VbbRealtimeAdapter`) implémentent la même boucle fondamentale de traitement GTFS-RT : parsing de `TripUpdate`, résolution de station (par nom ou correspondance d'identifiants), validation de monotonie chronologique, et calcul de retard ou encadrement. Ces trois implémentations constituent un candidat de choix pour être unifiées dans un adaptateur générique `GtfsRtTripUpdateAdapter` dans `core/rt/` lors d'un futur refactoring, chaque ville ne fournissant plus qu'un `StationMapper` et des paramètres de filtrage.
+- **Réseau de Berlin U-Bahn (`cities/berlin/`)** :
+  - Métro de Berlin (BVG / VBB) : 9 lignes (U1 à U9), 170 stations actives, 118 rames actives au snapshot de jour (08:30:00 CEST).
+  - Fermeture nord U6 : le tronçon de 5 stations au nord de Kurt-Schumacher-Platz jusqu'à Alt-Tegel (en travaux jusqu'en 2027/28) est exclu des courses actives de `schedule.json`, les missions s'arrêtant strictement à Kurt-Schumacher-Platz.
+  - Deux gabarits de matériel roulant (*Kleinprofil* U1–U4 vs *Großprofil* U5–U9) modélisés par deux caisses 3D clean-room : `bvg_kleinprofil__neutral.glb` (3,13 Ko) et `bvg_grossprofil__neutral.glb` (3,11 Ko), strictement < 15 Ko.
+  - Tronçon partagé U1/U3 (Wittenbergplatz ↔ Warschauer Straße) avec séparation spatiale garantie (> 100 m) évitant tout chevauchement visuel.
+  - Interstation longue U5 (Tierpark ↔ Biesdorf-Süd, 1 856,5 m) calibrée sur profil trapézoïdal à 70 km/h sans rupture cinématique.
+  - Relais serveur Netlify `berlin_relay.ts` : décodage et filtrage Protobuf à la volée via `pbf`, cache CDN partagé `s-maxage=15`, gestion `304 Not Modified`, et User-Agent d'identification requis par le VBB.
 - **Réseau de Washington DC (`cities/washington/`)** :
   - Métro lourd WMATA Metrorail : 6 lignes (Red, Orange, Silver, Blue, Green, Yellow), 98 stations, 97 rames nominales à l'heure du snapshot.
   - Troncs communs partagés : Orange / Silver / Blue (Rosslyn ↔ Stadium-Armory) et Green / Yellow (L'Enfant Plaza ↔ Mt Vernon Sq), géométrie de voies partagées cadencée par les horaires GTFS sans superposition hors station.

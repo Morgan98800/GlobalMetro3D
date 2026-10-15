@@ -314,3 +314,34 @@ Le script [`cities/washington/ingest/build_washington_artifacts.py`](file:///Use
 
 ### Modèle 3D Matériel Roulant (`scripts/build_washington_train_models.py`)
 - `wmata_generic__neutral.glb` (3 908 octets = 3,82 Ko < 15 Ko) : Modèle générique clean-room aux dimensions exactes de caisse Metrorail 75ft (longueur 22,86 m, largeur 3,09 m, hauteur 3,30 m).
+
+---
+
+## 8. Pipeline Réseau de Berlin U-Bahn (`cities/berlin/ingest/`)
+
+Le script [`cities/berlin/ingest/build_berlin_artifacts.py`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/cities/berlin/ingest/build_berlin_artifacts.py) génère l'ensemble des 10 artefacts normalisés pour le réseau U-Bahn de Berlin (BVG / VBB) :
+
+### Données sources & Ingestion par Streaming
+- **GTFS Statique VBB Berlin-Brandenburg** : archive de 77 Mo zippée (609 Mo décompressée). Pour respecter le plafond strict de 400 Mo de RAM, le script lit `stop_times.txt` en **streaming ligne à ligne**, ne conservant en mémoire que les arrêts des courses U-Bahn actives filtrées. Pic mémoire mesuré via `tracemalloc` : **11,8 Mo** (marge de sécurité de 97 %).
+- **Filtrage autoritaire** : sélection stricte sur `route_type = 400` (métro urbain U-Bahn selon la nomenclature GTFS étendue) et `agency_id = 796` (BVG). Tout filtrage sur le nom de ligne est proscrit afin de rejeter automatiquement les lignes de bus de remplacement (*Ersatzverkehr*) nommées « U2 », « U3 », « U6 », « U7 ».
+- **Découverte dynamique des lignes** : aucune liste de lignes codée en dur. Les 9 lignes actives (U1 à U9) sont extraites dynamiquement selon les services en vigueur.
+- **Section nord fermée U6** : conformément à la fermeture pour travaux de la section Alt-Tegel ↔ Scharnweberstr. jusqu'en 2027/28, aucune course active n'emprunte ces 5 stations. Le terminus nord de toutes les courses U6 sens 1 est strictement `Kurt-Schumacher-Platz`.
+- **Variantes de service de l'U2** : 27 variantes de tracé/desserte préservées fidèlement dans `schedule.json` (missions partielles et tronçons scindés).
+- **Précision de projection quai → voie** : projection individuelle quai par quai (évitant le barycentre multi-lignes qui créerait une dérive artificielle sur les pôles complexes comme Spichernstraße). Écart moyen de projection : **3,74 m**, écart maximal : **11,2 m** (quai de Rathaus Steglitz, strictement < 13 m et < 20 m).
+
+### 10 Artefacts normalisés produits (`cities/berlin/data/`)
+1. **`lines.json`** : 9 lignes (`U1` à `U9`) avec leurs couleurs officielles BVG (U1 vert #548b28, U2 rouge #df4426, U7 cyan #3f90c7, etc.) et contrastes WCAG validés.
+2. **`stations.json`** : 170 stations uniques actives avec identifiants VBB autoritaires (`de:11000:*`), coordonnées WGS84 et correspondances.
+3. **`tracks.json`** : 18 polylignes représentatives (sens 0 et sens 1 pour chaque ligne).
+4. **`shapes.bin`** : 115 tracés SHP2 quantifiés au pas fixe de 10 m (624 Ko).
+5. **`schedule.json`** : 4 011 courses actives du service de semaine nominal (exactement 118 rames actives au snapshot de 08:30:00 CEST).
+6. **`line_ladders.json`** : Thermomètres d'arrêts ordonnés par direction avec repérage des pôles d'échange (`is_hub`).
+7. **`sections.json`** : Typologie des tronçons (souterrains, tranchées, aériens).
+8. **`station-rankings.json`** : Desserte théorique par station (Alexanderplatz en tête avec 1 672 passages/jour).
+9. **`rolling-stock.json`** : Répartition des gabarits Kleinprofil (U1–U4, caisses de 12,8 m × 2,30 m) et Großprofil (U5–U9, caisses de 13,4 m × 2,65 m) avec mention `verified: false`.
+10. **`feed_fingerprint.json`** : Empreinte de fraîcheur du flux VBB (tolérance de 7 jours).
+
+### Modèles 3D Matériel Roulant (`scripts/build_berlin_train_models.py`)
+- `bvg_kleinprofil__neutral.glb` (3 208 octets = 3,13 Ko < 15 Ko) : caisse Kleinprofil compacte jaune BVG (#F2C200) pour U1, U2, U3, U4.
+- `bvg_grossprofil__neutral.glb` (3 184 octets = 3,11 Ko < 15 Ko) : caisse Großprofil large jaune BVG (#F2C200) pour U5, U6, U7, U8, U9.
+

@@ -1,0 +1,2048 @@
+{
+  "weekday": [
+    {
+      "name": "Nollendorfplatz",
+      "count": 1563
+    },
+    {
+      "name": "Alexanderplatz",
+      "count": 1496
+    },
+    {
+      "name": "Wittenbergplatz",
+      "count": 1243
+    },
+    {
+      "name": "Zoologischer Garten",
+      "count": 1027
+    },
+    {
+      "name": "Gleisdreieck",
+      "count": 1005
+    },
+    {
+      "name": "Stadtmitte",
+      "count": 1004
+    },
+    {
+      "name": "Bismarckstr.",
+      "count": 984
+    },
+    {
+      "name": "Leopoldplatz",
+      "count": 976
+    },
+    {
+      "name": "Osloer Str.",
+      "count": 970
+    },
+    {
+      "name": "Berliner Str.",
+      "count": 964
+    },
+    {
+      "name": "Unter den Linden",
+      "count": 963
+    },
+    {
+      "name": "Kottbusser Tor",
+      "count": 956
+    },
+    {
+      "name": "Hallesches Tor",
+      "count": 955
+    },
+    {
+      "name": "Spichernstr.",
+      "count": 952
+    },
+    {
+      "name": "Hermannplatz",
+      "count": 946
+    },
+    {
+      "name": "Möckernbrücke",
+      "count": 944
+    },
+    {
+      "name": "Mehringdamm",
+      "count": 943
+    },
+    {
+      "name": "Fehrbelliner Platz",
+      "count": 924
+    },
+    {
+      "name": "Bayerischer Platz",
+      "count": 786
+    },
+    {
+      "name": "Kurfürstendamm",
+      "count": 762
+    },
+    {
+      "name": "Spittelmarkt",
+      "count": 529
+    },
+    {
+      "name": "Klosterstr.",
+      "count": 528
+    },
+    {
+      "name": "Märkisches Museum",
+      "count": 528
+    },
+    {
+      "name": "Hausvogteiplatz",
+      "count": 528
+    },
+    {
+      "name": "Anton-Wilhelm-Amo-Str.",
+      "count": 528
+    },
+    {
+      "name": "Potsdamer Platz",
+      "count": 528
+    },
+    {
+      "name": "Rosa-Luxemburg-Platz",
+      "count": 527
+    },
+    {
+      "name": "Mendelssohn-Bartholdy-Park",
+      "count": 526
+    },
+    {
+      "name": "Bülowstr.",
+      "count": 526
+    },
+    {
+      "name": "Vinetastr.",
+      "count": 525
+    },
+    {
+      "name": "Schönhauser Allee",
+      "count": 525
+    },
+    {
+      "name": "Eberswalder Str.",
+      "count": 525
+    },
+    {
+      "name": "Ernst-Reuter-Platz",
+      "count": 524
+    },
+    {
+      "name": "Deutsche Oper",
+      "count": 524
+    },
+    {
+      "name": "Pankow",
+      "count": 522
+    },
+    {
+      "name": "Theodor-Heuss-Platz",
+      "count": 521
+    },
+    {
+      "name": "Sophie-Charlotte-Platz",
+      "count": 520
+    },
+    {
+      "name": "Kaiserdamm",
+      "count": 520
+    },
+    {
+      "name": "Güntzelstr.",
+      "count": 498
+    },
+    {
+      "name": "Bundesplatz",
+      "count": 498
+    },
+    {
+      "name": "Friedrich-Wilhelm-Platz",
+      "count": 498
+    },
+    {
+      "name": "Walther-Schreiber-Platz",
+      "count": 498
+    },
+    {
+      "name": "Schloßstr.",
+      "count": 498
+    },
+    {
+      "name": "Rathaus Steglitz",
+      "count": 498
+    },
+    {
+      "name": "Amrumer Str.",
+      "count": 497
+    },
+    {
+      "name": "Westhafen",
+      "count": 497
+    },
+    {
+      "name": "Birkenstr.",
+      "count": 497
+    },
+    {
+      "name": "Turmstr.",
+      "count": 497
+    },
+    {
+      "name": "Hansaplatz",
+      "count": 497
+    },
+    {
+      "name": "Nauener Platz",
+      "count": 494
+    },
+    {
+      "name": "Friedrichsfelde",
+      "count": 487
+    },
+    {
+      "name": "Frankfurter Allee",
+      "count": 487
+    },
+    {
+      "name": "Samariterstr.",
+      "count": 487
+    },
+    {
+      "name": "Frankfurter Tor",
+      "count": 487
+    },
+    {
+      "name": "Weberwiese",
+      "count": 487
+    },
+    {
+      "name": "Strausberger Platz",
+      "count": 487
+    },
+    {
+      "name": "Schillingstr.",
+      "count": 487
+    },
+    {
+      "name": "Rotes Rathaus",
+      "count": 487
+    },
+    {
+      "name": "Museumsinsel",
+      "count": 487
+    },
+    {
+      "name": "Brandenburger Tor",
+      "count": 487
+    },
+    {
+      "name": "Bundestag",
+      "count": 487
+    },
+    {
+      "name": "Berlin Hauptbahnhof",
+      "count": 487
+    },
+    {
+      "name": "Lichtenberg",
+      "count": 484
+    },
+    {
+      "name": "Magdalenenstr.",
+      "count": 484
+    },
+    {
+      "name": "Tierpark",
+      "count": 483
+    },
+    {
+      "name": "Biesdorf-Süd",
+      "count": 481
+    },
+    {
+      "name": "Kaulsdorf-Nord",
+      "count": 480
+    },
+    {
+      "name": "Wuhletal",
+      "count": 480
+    },
+    {
+      "name": "Elsterwerdaer Platz",
+      "count": 480
+    },
+    {
+      "name": "Gesundbrunnen",
+      "count": 480
+    },
+    {
+      "name": "Boddinstr.",
+      "count": 479
+    },
+    {
+      "name": "Leinestr.",
+      "count": 479
+    },
+    {
+      "name": "Hermannstr.",
+      "count": 479
+    },
+    {
+      "name": "Kurt-Schumacher-Platz",
+      "count": 479
+    },
+    {
+      "name": "Afrikanische Str.",
+      "count": 479
+    },
+    {
+      "name": "Rehberge",
+      "count": 479
+    },
+    {
+      "name": "Wedding",
+      "count": 479
+    },
+    {
+      "name": "Platz der Luftbrücke",
+      "count": 479
+    },
+    {
+      "name": "Tempelhof",
+      "count": 479
+    },
+    {
+      "name": "Kurfürstenstr.",
+      "count": 478
+    },
+    {
+      "name": "Prinzenstr.",
+      "count": 478
+    },
+    {
+      "name": "Voltastr.",
+      "count": 478
+    },
+    {
+      "name": "Bernauer Str.",
+      "count": 478
+    },
+    {
+      "name": "Rosenthaler Platz",
+      "count": 478
+    },
+    {
+      "name": "Weinmeisterstr.",
+      "count": 478
+    },
+    {
+      "name": "Jannowitzbrücke",
+      "count": 478
+    },
+    {
+      "name": "Heinrich-Heine-Str.",
+      "count": 478
+    },
+    {
+      "name": "Moritzplatz",
+      "count": 478
+    },
+    {
+      "name": "Görlitzer Bahnhof",
+      "count": 477
+    },
+    {
+      "name": "Schlesisches Tor",
+      "count": 477
+    },
+    {
+      "name": "Warschauer Str.",
+      "count": 477
+    },
+    {
+      "name": "Schönleinstr.",
+      "count": 477
+    },
+    {
+      "name": "Paradestr.",
+      "count": 477
+    },
+    {
+      "name": "Paracelsus-Bad",
+      "count": 476
+    },
+    {
+      "name": "Residenzstr.",
+      "count": 476
+    },
+    {
+      "name": "Franz-Neumann-Platz",
+      "count": 476
+    },
+    {
+      "name": "Pankstr.",
+      "count": 476
+    },
+    {
+      "name": "Reinickendorfer Str.",
+      "count": 476
+    },
+    {
+      "name": "Schwartzkopffstr.",
+      "count": 476
+    },
+    {
+      "name": "Naturkundemuseum",
+      "count": 476
+    },
+    {
+      "name": "Oranienburger Tor",
+      "count": 476
+    },
+    {
+      "name": "Friedrichstr.",
+      "count": 476
+    },
+    {
+      "name": "Kochstr. (Checkpoint Charlie)",
+      "count": 476
+    },
+    {
+      "name": "Alt-Tempelhof",
+      "count": 475
+    },
+    {
+      "name": "Kaiserin-Augusta-Str.",
+      "count": 475
+    },
+    {
+      "name": "Ullsteinstr.",
+      "count": 475
+    },
+    {
+      "name": "Westphalweg",
+      "count": 475
+    },
+    {
+      "name": "Alt-Mariendorf",
+      "count": 475
+    },
+    {
+      "name": "Britz-Süd",
+      "count": 467
+    },
+    {
+      "name": "Parchimer Allee",
+      "count": 466
+    },
+    {
+      "name": "Blaschkoallee",
+      "count": 466
+    },
+    {
+      "name": "Grenzallee",
+      "count": 466
+    },
+    {
+      "name": "Neukölln",
+      "count": 466
+    },
+    {
+      "name": "Karl-Marx-Str.",
+      "count": 466
+    },
+    {
+      "name": "Rathaus Neukölln",
+      "count": 466
+    },
+    {
+      "name": "Südstern",
+      "count": 466
+    },
+    {
+      "name": "Gneisenaustr.",
+      "count": 466
+    },
+    {
+      "name": "Yorckstr.",
+      "count": 466
+    },
+    {
+      "name": "Kleistpark",
+      "count": 466
+    },
+    {
+      "name": "Eisenacher Str.",
+      "count": 466
+    },
+    {
+      "name": "Blissestr.",
+      "count": 466
+    },
+    {
+      "name": "Richard-Wagner-Platz",
+      "count": 465
+    },
+    {
+      "name": "Konstanzer Str.",
+      "count": 464
+    },
+    {
+      "name": "Adenauerplatz",
+      "count": 464
+    },
+    {
+      "name": "Wilmersdorfer Str.",
+      "count": 464
+    },
+    {
+      "name": "Mierendorffplatz",
+      "count": 460
+    },
+    {
+      "name": "Jungfernheide",
+      "count": 460
+    },
+    {
+      "name": "Jakob-Kaiser-Platz",
+      "count": 460
+    },
+    {
+      "name": "Halemweg",
+      "count": 460
+    },
+    {
+      "name": "Siemensdamm",
+      "count": 460
+    },
+    {
+      "name": "Rohrdamm",
+      "count": 460
+    },
+    {
+      "name": "Rudow",
+      "count": 456
+    },
+    {
+      "name": "Zwickauer Damm",
+      "count": 456
+    },
+    {
+      "name": "Wutzkyallee",
+      "count": 456
+    },
+    {
+      "name": "Lipschitzallee",
+      "count": 456
+    },
+    {
+      "name": "Johannisthaler Chaussee",
+      "count": 456
+    },
+    {
+      "name": "Breitenbachplatz",
+      "count": 455
+    },
+    {
+      "name": "Rüdesheimer Platz",
+      "count": 455
+    },
+    {
+      "name": "Heidelberger Platz",
+      "count": 455
+    },
+    {
+      "name": "Paulsternstr.",
+      "count": 455
+    },
+    {
+      "name": "Haselhorst",
+      "count": 455
+    },
+    {
+      "name": "Zitadelle",
+      "count": 455
+    },
+    {
+      "name": "Altstadt Spandau",
+      "count": 455
+    },
+    {
+      "name": "Rathaus Spandau",
+      "count": 455
+    },
+    {
+      "name": "Hohenzollernplatz",
+      "count": 454
+    },
+    {
+      "name": "Augsburger Str.",
+      "count": 453
+    },
+    {
+      "name": "Dahlem-Dorf",
+      "count": 452
+    },
+    {
+      "name": "Freie Universität (Thielplatz)",
+      "count": 452
+    },
+    {
+      "name": "Oskar-Helene-Heim",
+      "count": 452
+    },
+    {
+      "name": "Onkel Toms Hütte",
+      "count": 452
+    },
+    {
+      "name": "Krumme Lanke",
+      "count": 452
+    },
+    {
+      "name": "Wittenau",
+      "count": 398
+    },
+    {
+      "name": "Rathaus Reinickendorf",
+      "count": 398
+    },
+    {
+      "name": "Karl-Bonhoeffer-Nervenklinik",
+      "count": 398
+    },
+    {
+      "name": "Lindauer Allee",
+      "count": 398
+    },
+    {
+      "name": "Hönow",
+      "count": 362
+    },
+    {
+      "name": "Louis-Lewin-Str.",
+      "count": 362
+    },
+    {
+      "name": "Hellersdorf",
+      "count": 362
+    },
+    {
+      "name": "Cottbusser Platz",
+      "count": 362
+    },
+    {
+      "name": "Kienberg (Gärten der Welt)",
+      "count": 362
+    },
+    {
+      "name": "Viktoria-Luise-Platz",
+      "count": 320
+    },
+    {
+      "name": "Rathaus Schöneberg",
+      "count": 320
+    },
+    {
+      "name": "Innsbrucker Platz",
+      "count": 320
+    },
+    {
+      "name": "Olympia-Stadion",
+      "count": 308
+    },
+    {
+      "name": "Neu-Westend",
+      "count": 301
+    },
+    {
+      "name": "Ruhleben",
+      "count": 295
+    },
+    {
+      "name": "Uhlandstr.",
+      "count": 264
+    },
+    {
+      "name": "Senefelderplatz",
+      "count": 262
+    },
+    {
+      "name": "Seestr.",
+      "count": 240
+    },
+    {
+      "name": "Podbielskiallee",
+      "count": 224
+    }
+  ],
+  "saturday": [
+    {
+      "name": "Nollendorfplatz",
+      "count": 1281
+    },
+    {
+      "name": "Alexanderplatz",
+      "count": 1226
+    },
+    {
+      "name": "Wittenbergplatz",
+      "count": 1019
+    },
+    {
+      "name": "Zoologischer Garten",
+      "count": 842
+    },
+    {
+      "name": "Gleisdreieck",
+      "count": 824
+    },
+    {
+      "name": "Stadtmitte",
+      "count": 823
+    },
+    {
+      "name": "Bismarckstr.",
+      "count": 806
+    },
+    {
+      "name": "Leopoldplatz",
+      "count": 800
+    },
+    {
+      "name": "Osloer Str.",
+      "count": 795
+    },
+    {
+      "name": "Berliner Str.",
+      "count": 790
+    },
+    {
+      "name": "Unter den Linden",
+      "count": 789
+    },
+    {
+      "name": "Kottbusser Tor",
+      "count": 783
+    },
+    {
+      "name": "Hallesches Tor",
+      "count": 783
+    },
+    {
+      "name": "Spichernstr.",
+      "count": 780
+    },
+    {
+      "name": "Hermannplatz",
+      "count": 775
+    },
+    {
+      "name": "Möckernbrücke",
+      "count": 774
+    },
+    {
+      "name": "Mehringdamm",
+      "count": 773
+    },
+    {
+      "name": "Fehrbelliner Platz",
+      "count": 757
+    },
+    {
+      "name": "Bayerischer Platz",
+      "count": 644
+    },
+    {
+      "name": "Kurfürstendamm",
+      "count": 624
+    },
+    {
+      "name": "Spittelmarkt",
+      "count": 433
+    },
+    {
+      "name": "Klosterstr.",
+      "count": 432
+    },
+    {
+      "name": "Märkisches Museum",
+      "count": 432
+    },
+    {
+      "name": "Hausvogteiplatz",
+      "count": 432
+    },
+    {
+      "name": "Anton-Wilhelm-Amo-Str.",
+      "count": 432
+    },
+    {
+      "name": "Potsdamer Platz",
+      "count": 432
+    },
+    {
+      "name": "Rosa-Luxemburg-Platz",
+      "count": 432
+    },
+    {
+      "name": "Mendelssohn-Bartholdy-Park",
+      "count": 431
+    },
+    {
+      "name": "Bülowstr.",
+      "count": 431
+    },
+    {
+      "name": "Vinetastr.",
+      "count": 430
+    },
+    {
+      "name": "Schönhauser Allee",
+      "count": 430
+    },
+    {
+      "name": "Eberswalder Str.",
+      "count": 430
+    },
+    {
+      "name": "Ernst-Reuter-Platz",
+      "count": 429
+    },
+    {
+      "name": "Deutsche Oper",
+      "count": 429
+    },
+    {
+      "name": "Pankow",
+      "count": 428
+    },
+    {
+      "name": "Theodor-Heuss-Platz",
+      "count": 427
+    },
+    {
+      "name": "Sophie-Charlotte-Platz",
+      "count": 426
+    },
+    {
+      "name": "Kaiserdamm",
+      "count": 426
+    },
+    {
+      "name": "Güntzelstr.",
+      "count": 408
+    },
+    {
+      "name": "Bundesplatz",
+      "count": 408
+    },
+    {
+      "name": "Friedrich-Wilhelm-Platz",
+      "count": 408
+    },
+    {
+      "name": "Walther-Schreiber-Platz",
+      "count": 408
+    },
+    {
+      "name": "Schloßstr.",
+      "count": 408
+    },
+    {
+      "name": "Rathaus Steglitz",
+      "count": 408
+    },
+    {
+      "name": "Amrumer Str.",
+      "count": 407
+    },
+    {
+      "name": "Westhafen",
+      "count": 407
+    },
+    {
+      "name": "Birkenstr.",
+      "count": 407
+    },
+    {
+      "name": "Turmstr.",
+      "count": 407
+    },
+    {
+      "name": "Hansaplatz",
+      "count": 407
+    },
+    {
+      "name": "Nauener Platz",
+      "count": 405
+    },
+    {
+      "name": "Friedrichsfelde",
+      "count": 399
+    },
+    {
+      "name": "Frankfurter Allee",
+      "count": 399
+    },
+    {
+      "name": "Samariterstr.",
+      "count": 399
+    },
+    {
+      "name": "Frankfurter Tor",
+      "count": 399
+    },
+    {
+      "name": "Weberwiese",
+      "count": 399
+    },
+    {
+      "name": "Strausberger Platz",
+      "count": 399
+    },
+    {
+      "name": "Schillingstr.",
+      "count": 399
+    },
+    {
+      "name": "Rotes Rathaus",
+      "count": 399
+    },
+    {
+      "name": "Museumsinsel",
+      "count": 399
+    },
+    {
+      "name": "Brandenburger Tor",
+      "count": 399
+    },
+    {
+      "name": "Bundestag",
+      "count": 399
+    },
+    {
+      "name": "Berlin Hauptbahnhof",
+      "count": 399
+    },
+    {
+      "name": "Lichtenberg",
+      "count": 396
+    },
+    {
+      "name": "Magdalenenstr.",
+      "count": 396
+    },
+    {
+      "name": "Tierpark",
+      "count": 396
+    },
+    {
+      "name": "Biesdorf-Süd",
+      "count": 394
+    },
+    {
+      "name": "Kaulsdorf-Nord",
+      "count": 393
+    },
+    {
+      "name": "Wuhletal",
+      "count": 393
+    },
+    {
+      "name": "Elsterwerdaer Platz",
+      "count": 393
+    },
+    {
+      "name": "Gesundbrunnen",
+      "count": 393
+    },
+    {
+      "name": "Boddinstr.",
+      "count": 392
+    },
+    {
+      "name": "Leinestr.",
+      "count": 392
+    },
+    {
+      "name": "Hermannstr.",
+      "count": 392
+    },
+    {
+      "name": "Kurt-Schumacher-Platz",
+      "count": 392
+    },
+    {
+      "name": "Afrikanische Str.",
+      "count": 392
+    },
+    {
+      "name": "Rehberge",
+      "count": 392
+    },
+    {
+      "name": "Wedding",
+      "count": 392
+    },
+    {
+      "name": "Platz der Luftbrücke",
+      "count": 392
+    },
+    {
+      "name": "Tempelhof",
+      "count": 392
+    },
+    {
+      "name": "Kurfürstenstr.",
+      "count": 391
+    },
+    {
+      "name": "Prinzenstr.",
+      "count": 391
+    },
+    {
+      "name": "Voltastr.",
+      "count": 391
+    },
+    {
+      "name": "Bernauer Str.",
+      "count": 391
+    },
+    {
+      "name": "Rosenthaler Platz",
+      "count": 391
+    },
+    {
+      "name": "Weinmeisterstr.",
+      "count": 391
+    },
+    {
+      "name": "Jannowitzbrücke",
+      "count": 391
+    },
+    {
+      "name": "Heinrich-Heine-Str.",
+      "count": 391
+    },
+    {
+      "name": "Moritzplatz",
+      "count": 391
+    },
+    {
+      "name": "Görlitzer Bahnhof",
+      "count": 391
+    },
+    {
+      "name": "Schlesisches Tor",
+      "count": 391
+    },
+    {
+      "name": "Warschauer Str.",
+      "count": 391
+    },
+    {
+      "name": "Schönleinstr.",
+      "count": 391
+    },
+    {
+      "name": "Paradestr.",
+      "count": 391
+    },
+    {
+      "name": "Paracelsus-Bad",
+      "count": 390
+    },
+    {
+      "name": "Residenzstr.",
+      "count": 390
+    },
+    {
+      "name": "Franz-Neumann-Platz",
+      "count": 390
+    },
+    {
+      "name": "Pankstr.",
+      "count": 390
+    },
+    {
+      "name": "Reinickendorfer Str.",
+      "count": 390
+    },
+    {
+      "name": "Schwartzkopffstr.",
+      "count": 390
+    },
+    {
+      "name": "Naturkundemuseum",
+      "count": 390
+    },
+    {
+      "name": "Oranienburger Tor",
+      "count": 390
+    },
+    {
+      "name": "Friedrichstr.",
+      "count": 390
+    },
+    {
+      "name": "Kochstr. (Checkpoint Charlie)",
+      "count": 390
+    },
+    {
+      "name": "Alt-Tempelhof",
+      "count": 389
+    },
+    {
+      "name": "Kaiserin-Augusta-Str.",
+      "count": 389
+    },
+    {
+      "name": "Ullsteinstr.",
+      "count": 389
+    },
+    {
+      "name": "Westphalweg",
+      "count": 389
+    },
+    {
+      "name": "Alt-Mariendorf",
+      "count": 389
+    },
+    {
+      "name": "Britz-Süd",
+      "count": 382
+    },
+    {
+      "name": "Parchimer Allee",
+      "count": 382
+    },
+    {
+      "name": "Blaschkoallee",
+      "count": 382
+    },
+    {
+      "name": "Grenzallee",
+      "count": 382
+    },
+    {
+      "name": "Neukölln",
+      "count": 382
+    },
+    {
+      "name": "Karl-Marx-Str.",
+      "count": 382
+    },
+    {
+      "name": "Rathaus Neukölln",
+      "count": 382
+    },
+    {
+      "name": "Südstern",
+      "count": 382
+    },
+    {
+      "name": "Gneisenaustr.",
+      "count": 382
+    },
+    {
+      "name": "Yorckstr.",
+      "count": 382
+    },
+    {
+      "name": "Kleistpark",
+      "count": 382
+    },
+    {
+      "name": "Eisenacher Str.",
+      "count": 382
+    },
+    {
+      "name": "Blissestr.",
+      "count": 382
+    },
+    {
+      "name": "Richard-Wagner-Platz",
+      "count": 381
+    },
+    {
+      "name": "Konstanzer Str.",
+      "count": 380
+    },
+    {
+      "name": "Adenauerplatz",
+      "count": 380
+    },
+    {
+      "name": "Wilmersdorfer Str.",
+      "count": 380
+    },
+    {
+      "name": "Mierendorffplatz",
+      "count": 377
+    },
+    {
+      "name": "Jungfernheide",
+      "count": 377
+    },
+    {
+      "name": "Jakob-Kaiser-Platz",
+      "count": 377
+    },
+    {
+      "name": "Halemweg",
+      "count": 377
+    },
+    {
+      "name": "Siemensdamm",
+      "count": 377
+    },
+    {
+      "name": "Rohrdamm",
+      "count": 377
+    },
+    {
+      "name": "Rudow",
+      "count": 373
+    },
+    {
+      "name": "Zwickauer Damm",
+      "count": 373
+    },
+    {
+      "name": "Wutzkyallee",
+      "count": 373
+    },
+    {
+      "name": "Lipschitzallee",
+      "count": 373
+    },
+    {
+      "name": "Johannisthaler Chaussee",
+      "count": 373
+    },
+    {
+      "name": "Breitenbachplatz",
+      "count": 373
+    },
+    {
+      "name": "Rüdesheimer Platz",
+      "count": 373
+    },
+    {
+      "name": "Heidelberger Platz",
+      "count": 373
+    },
+    {
+      "name": "Paulsternstr.",
+      "count": 373
+    },
+    {
+      "name": "Haselhorst",
+      "count": 373
+    },
+    {
+      "name": "Zitadelle",
+      "count": 373
+    },
+    {
+      "name": "Altstadt Spandau",
+      "count": 373
+    },
+    {
+      "name": "Rathaus Spandau",
+      "count": 373
+    },
+    {
+      "name": "Hohenzollernplatz",
+      "count": 372
+    },
+    {
+      "name": "Augsburger Str.",
+      "count": 371
+    },
+    {
+      "name": "Dahlem-Dorf",
+      "count": 370
+    },
+    {
+      "name": "Freie Universität (Thielplatz)",
+      "count": 370
+    },
+    {
+      "name": "Oskar-Helene-Heim",
+      "count": 370
+    },
+    {
+      "name": "Onkel Toms Hütte",
+      "count": 370
+    },
+    {
+      "name": "Krumme Lanke",
+      "count": 370
+    },
+    {
+      "name": "Wittenau",
+      "count": 326
+    },
+    {
+      "name": "Rathaus Reinickendorf",
+      "count": 326
+    },
+    {
+      "name": "Karl-Bonhoeffer-Nervenklinik",
+      "count": 326
+    },
+    {
+      "name": "Lindauer Allee",
+      "count": 326
+    },
+    {
+      "name": "Hönow",
+      "count": 296
+    },
+    {
+      "name": "Louis-Lewin-Str.",
+      "count": 296
+    },
+    {
+      "name": "Hellersdorf",
+      "count": 296
+    },
+    {
+      "name": "Cottbusser Platz",
+      "count": 296
+    },
+    {
+      "name": "Kienberg (Gärten der Welt)",
+      "count": 296
+    },
+    {
+      "name": "Viktoria-Luise-Platz",
+      "count": 262
+    },
+    {
+      "name": "Rathaus Schöneberg",
+      "count": 262
+    },
+    {
+      "name": "Innsbrucker Platz",
+      "count": 262
+    },
+    {
+      "name": "Olympia-Stadion",
+      "count": 252
+    },
+    {
+      "name": "Neu-Westend",
+      "count": 246
+    },
+    {
+      "name": "Ruhleben",
+      "count": 241
+    },
+    {
+      "name": "Uhlandstr.",
+      "count": 216
+    },
+    {
+      "name": "Senefelderplatz",
+      "count": 214
+    },
+    {
+      "name": "Seestr.",
+      "count": 196
+    },
+    {
+      "name": "Podbielskiallee",
+      "count": 183
+    }
+  ],
+  "sunday": [
+    {
+      "name": "Nollendorfplatz",
+      "count": 1109
+    },
+    {
+      "name": "Alexanderplatz",
+      "count": 1062
+    },
+    {
+      "name": "Wittenbergplatz",
+      "count": 882
+    },
+    {
+      "name": "Zoologischer Garten",
+      "count": 729
+    },
+    {
+      "name": "Gleisdreieck",
+      "count": 713
+    },
+    {
+      "name": "Stadtmitte",
+      "count": 712
+    },
+    {
+      "name": "Bismarckstr.",
+      "count": 698
+    },
+    {
+      "name": "Leopoldplatz",
+      "count": 692
+    },
+    {
+      "name": "Osloer Str.",
+      "count": 688
+    },
+    {
+      "name": "Berliner Str.",
+      "count": 684
+    },
+    {
+      "name": "Unter den Linden",
+      "count": 683
+    },
+    {
+      "name": "Kottbusser Tor",
+      "count": 678
+    },
+    {
+      "name": "Hallesches Tor",
+      "count": 678
+    },
+    {
+      "name": "Spichernstr.",
+      "count": 675
+    },
+    {
+      "name": "Hermannplatz",
+      "count": 671
+    },
+    {
+      "name": "Möckernbrücke",
+      "count": 670
+    },
+    {
+      "name": "Mehringdamm",
+      "count": 669
+    },
+    {
+      "name": "Fehrbelliner Platz",
+      "count": 656
+    },
+    {
+      "name": "Bayerischer Platz",
+      "count": 558
+    },
+    {
+      "name": "Kurfürstendamm",
+      "count": 541
+    },
+    {
+      "name": "Spittelmarkt",
+      "count": 375
+    },
+    {
+      "name": "Klosterstr.",
+      "count": 374
+    },
+    {
+      "name": "Märkisches Museum",
+      "count": 374
+    },
+    {
+      "name": "Hausvogteiplatz",
+      "count": 374
+    },
+    {
+      "name": "Anton-Wilhelm-Amo-Str.",
+      "count": 374
+    },
+    {
+      "name": "Potsdamer Platz",
+      "count": 374
+    },
+    {
+      "name": "Rosa-Luxemburg-Platz",
+      "count": 374
+    },
+    {
+      "name": "Mendelssohn-Bartholdy-Park",
+      "count": 373
+    },
+    {
+      "name": "Bülowstr.",
+      "count": 373
+    },
+    {
+      "name": "Vinetastr.",
+      "count": 372
+    },
+    {
+      "name": "Schönhauser Allee",
+      "count": 372
+    },
+    {
+      "name": "Eberswalder Str.",
+      "count": 372
+    },
+    {
+      "name": "Ernst-Reuter-Platz",
+      "count": 372
+    },
+    {
+      "name": "Deutsche Oper",
+      "count": 372
+    },
+    {
+      "name": "Pankow",
+      "count": 370
+    },
+    {
+      "name": "Theodor-Heuss-Platz",
+      "count": 369
+    },
+    {
+      "name": "Sophie-Charlotte-Platz",
+      "count": 369
+    },
+    {
+      "name": "Kaiserdamm",
+      "count": 369
+    },
+    {
+      "name": "Güntzelstr.",
+      "count": 353
+    },
+    {
+      "name": "Bundesplatz",
+      "count": 353
+    },
+    {
+      "name": "Friedrich-Wilhelm-Platz",
+      "count": 353
+    },
+    {
+      "name": "Walther-Schreiber-Platz",
+      "count": 353
+    },
+    {
+      "name": "Schloßstr.",
+      "count": 353
+    },
+    {
+      "name": "Rathaus Steglitz",
+      "count": 353
+    },
+    {
+      "name": "Amrumer Str.",
+      "count": 352
+    },
+    {
+      "name": "Westhafen",
+      "count": 352
+    },
+    {
+      "name": "Birkenstr.",
+      "count": 352
+    },
+    {
+      "name": "Turmstr.",
+      "count": 352
+    },
+    {
+      "name": "Hansaplatz",
+      "count": 352
+    },
+    {
+      "name": "Nauener Platz",
+      "count": 350
+    },
+    {
+      "name": "Friedrichsfelde",
+      "count": 345
+    },
+    {
+      "name": "Frankfurter Allee",
+      "count": 345
+    },
+    {
+      "name": "Samariterstr.",
+      "count": 345
+    },
+    {
+      "name": "Frankfurter Tor",
+      "count": 345
+    },
+    {
+      "name": "Weberwiese",
+      "count": 345
+    },
+    {
+      "name": "Strausberger Platz",
+      "count": 345
+    },
+    {
+      "name": "Schillingstr.",
+      "count": 345
+    },
+    {
+      "name": "Rotes Rathaus",
+      "count": 345
+    },
+    {
+      "name": "Museumsinsel",
+      "count": 345
+    },
+    {
+      "name": "Brandenburger Tor",
+      "count": 345
+    },
+    {
+      "name": "Bundestag",
+      "count": 345
+    },
+    {
+      "name": "Berlin Hauptbahnhof",
+      "count": 345
+    },
+    {
+      "name": "Lichtenberg",
+      "count": 343
+    },
+    {
+      "name": "Magdalenenstr.",
+      "count": 343
+    },
+    {
+      "name": "Tierpark",
+      "count": 342
+    },
+    {
+      "name": "Biesdorf-Süd",
+      "count": 341
+    },
+    {
+      "name": "Kaulsdorf-Nord",
+      "count": 340
+    },
+    {
+      "name": "Wuhletal",
+      "count": 340
+    },
+    {
+      "name": "Elsterwerdaer Platz",
+      "count": 340
+    },
+    {
+      "name": "Gesundbrunnen",
+      "count": 340
+    },
+    {
+      "name": "Boddinstr.",
+      "count": 340
+    },
+    {
+      "name": "Leinestr.",
+      "count": 340
+    },
+    {
+      "name": "Hermannstr.",
+      "count": 340
+    },
+    {
+      "name": "Kurt-Schumacher-Platz",
+      "count": 340
+    },
+    {
+      "name": "Afrikanische Str.",
+      "count": 340
+    },
+    {
+      "name": "Rehberge",
+      "count": 340
+    },
+    {
+      "name": "Wedding",
+      "count": 340
+    },
+    {
+      "name": "Platz der Luftbrücke",
+      "count": 340
+    },
+    {
+      "name": "Tempelhof",
+      "count": 340
+    },
+    {
+      "name": "Kurfürstenstr.",
+      "count": 339
+    },
+    {
+      "name": "Prinzenstr.",
+      "count": 339
+    },
+    {
+      "name": "Voltastr.",
+      "count": 339
+    },
+    {
+      "name": "Bernauer Str.",
+      "count": 339
+    },
+    {
+      "name": "Rosenthaler Platz",
+      "count": 339
+    },
+    {
+      "name": "Weinmeisterstr.",
+      "count": 339
+    },
+    {
+      "name": "Jannowitzbrücke",
+      "count": 339
+    },
+    {
+      "name": "Heinrich-Heine-Str.",
+      "count": 339
+    },
+    {
+      "name": "Moritzplatz",
+      "count": 339
+    },
+    {
+      "name": "Görlitzer Bahnhof",
+      "count": 338
+    },
+    {
+      "name": "Schlesisches Tor",
+      "count": 338
+    },
+    {
+      "name": "Warschauer Str.",
+      "count": 338
+    },
+    {
+      "name": "Schönleinstr.",
+      "count": 338
+    },
+    {
+      "name": "Paradestr.",
+      "count": 338
+    },
+    {
+      "name": "Paracelsus-Bad",
+      "count": 337
+    },
+    {
+      "name": "Residenzstr.",
+      "count": 337
+    },
+    {
+      "name": "Franz-Neumann-Platz",
+      "count": 337
+    },
+    {
+      "name": "Pankstr.",
+      "count": 337
+    },
+    {
+      "name": "Reinickendorfer Str.",
+      "count": 337
+    },
+    {
+      "name": "Schwartzkopffstr.",
+      "count": 337
+    },
+    {
+      "name": "Naturkundemuseum",
+      "count": 337
+    },
+    {
+      "name": "Oranienburger Tor",
+      "count": 337
+    },
+    {
+      "name": "Friedrichstr.",
+      "count": 337
+    },
+    {
+      "name": "Kochstr. (Checkpoint Charlie)",
+      "count": 337
+    },
+    {
+      "name": "Alt-Tempelhof",
+      "count": 337
+    },
+    {
+      "name": "Kaiserin-Augusta-Str.",
+      "count": 337
+    },
+    {
+      "name": "Ullsteinstr.",
+      "count": 337
+    },
+    {
+      "name": "Westphalweg",
+      "count": 337
+    },
+    {
+      "name": "Alt-Mariendorf",
+      "count": 337
+    },
+    {
+      "name": "Britz-Süd",
+      "count": 331
+    },
+    {
+      "name": "Parchimer Allee",
+      "count": 330
+    },
+    {
+      "name": "Blaschkoallee",
+      "count": 330
+    },
+    {
+      "name": "Grenzallee",
+      "count": 330
+    },
+    {
+      "name": "Neukölln",
+      "count": 330
+    },
+    {
+      "name": "Karl-Marx-Str.",
+      "count": 330
+    },
+    {
+      "name": "Rathaus Neukölln",
+      "count": 330
+    },
+    {
+      "name": "Südstern",
+      "count": 330
+    },
+    {
+      "name": "Gneisenaustr.",
+      "count": 330
+    },
+    {
+      "name": "Yorckstr.",
+      "count": 330
+    },
+    {
+      "name": "Kleistpark",
+      "count": 330
+    },
+    {
+      "name": "Eisenacher Str.",
+      "count": 330
+    },
+    {
+      "name": "Blissestr.",
+      "count": 330
+    },
+    {
+      "name": "Richard-Wagner-Platz",
+      "count": 330
+    },
+    {
+      "name": "Konstanzer Str.",
+      "count": 329
+    },
+    {
+      "name": "Adenauerplatz",
+      "count": 329
+    },
+    {
+      "name": "Wilmersdorfer Str.",
+      "count": 329
+    },
+    {
+      "name": "Mierendorffplatz",
+      "count": 326
+    },
+    {
+      "name": "Jungfernheide",
+      "count": 326
+    },
+    {
+      "name": "Jakob-Kaiser-Platz",
+      "count": 326
+    },
+    {
+      "name": "Halemweg",
+      "count": 326
+    },
+    {
+      "name": "Siemensdamm",
+      "count": 326
+    },
+    {
+      "name": "Rohrdamm",
+      "count": 326
+    },
+    {
+      "name": "Rudow",
+      "count": 323
+    },
+    {
+      "name": "Zwickauer Damm",
+      "count": 323
+    },
+    {
+      "name": "Wutzkyallee",
+      "count": 323
+    },
+    {
+      "name": "Lipschitzallee",
+      "count": 323
+    },
+    {
+      "name": "Johannisthaler Chaussee",
+      "count": 323
+    },
+    {
+      "name": "Breitenbachplatz",
+      "count": 323
+    },
+    {
+      "name": "Rüdesheimer Platz",
+      "count": 323
+    },
+    {
+      "name": "Heidelberger Platz",
+      "count": 323
+    },
+    {
+      "name": "Paulsternstr.",
+      "count": 323
+    },
+    {
+      "name": "Haselhorst",
+      "count": 323
+    },
+    {
+      "name": "Zitadelle",
+      "count": 323
+    },
+    {
+      "name": "Altstadt Spandau",
+      "count": 323
+    },
+    {
+      "name": "Rathaus Spandau",
+      "count": 323
+    },
+    {
+      "name": "Hohenzollernplatz",
+      "count": 322
+    },
+    {
+      "name": "Augsburger Str.",
+      "count": 321
+    },
+    {
+      "name": "Dahlem-Dorf",
+      "count": 320
+    },
+    {
+      "name": "Freie Universität (Thielplatz)",
+      "count": 320
+    },
+    {
+      "name": "Oskar-Helene-Heim",
+      "count": 320
+    },
+    {
+      "name": "Onkel Toms Hütte",
+      "count": 320
+    },
+    {
+      "name": "Krumme Lanke",
+      "count": 320
+    },
+    {
+      "name": "Wittenau",
+      "count": 282
+    },
+    {
+      "name": "Rathaus Reinickendorf",
+      "count": 282
+    },
+    {
+      "name": "Karl-Bonhoeffer-Nervenklinik",
+      "count": 282
+    },
+    {
+      "name": "Lindauer Allee",
+      "count": 282
+    },
+    {
+      "name": "Hönow",
+      "count": 257
+    },
+    {
+      "name": "Louis-Lewin-Str.",
+      "count": 257
+    },
+    {
+      "name": "Hellersdorf",
+      "count": 257
+    },
+    {
+      "name": "Cottbusser Platz",
+      "count": 257
+    },
+    {
+      "name": "Kienberg (Gärten der Welt)",
+      "count": 257
+    },
+    {
+      "name": "Viktoria-Luise-Platz",
+      "count": 227
+    },
+    {
+      "name": "Rathaus Schöneberg",
+      "count": 227
+    },
+    {
+      "name": "Innsbrucker Platz",
+      "count": 227
+    },
+    {
+      "name": "Olympia-Stadion",
+      "count": 218
+    },
+    {
+      "name": "Neu-Westend",
+      "count": 213
+    },
+    {
+      "name": "Ruhleben",
+      "count": 209
+    },
+    {
+      "name": "Uhlandstr.",
+      "count": 187
+    },
+    {
+      "name": "Senefelderplatz",
+      "count": 186
+    },
+    {
+      "name": "Seestr.",
+      "count": 170
+    },
+    {
+      "name": "Podbielskiallee",
+      "count": 159
+    }
+  ]
+}

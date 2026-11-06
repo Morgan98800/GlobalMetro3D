@@ -302,6 +302,17 @@ async function bootstrap() {
   const cityConfig = getCityConfig(router.getCurrentCity());
   console.log(`[app] Initializing ${cityConfig.networkName} 3D (${cityConfig.displayName})...`);
 
+  // Redirect train model requests to high-fidelity Scottish Class 385 EMU in Edinburgh
+  if (cityConfig.id === 'edinburgh') {
+    const origFetch = window.fetch;
+    window.fetch = function(input: RequestInfo | URL, init?: RequestInit) {
+      if (typeof input === 'string' && (input.includes('wmata_generic__neutral.glb') || input.includes('steel_classic__neutral.glb'))) {
+        return origFetch('/models/train/scotrail_class_385__neutral.glb', init);
+      }
+      return origFetch(input, init);
+    };
+  }
+
   const loaderTextEl = document.getElementById('app-loader-text') || document.querySelector('#app-loader p');
   if (loaderTextEl) {
     const cityLoaderNames: Record<string, string> = {
@@ -598,7 +609,6 @@ async function bootstrap() {
     hideTooltip();
     trackedTrain = train;
     deckOverlay.setSelectedTrain(train.id);
-    edinburghHandle?.startFollowTrain(train.id);
     if (!followCamera?.startFollow(train)) {
       map.flyTo({
         center: train.pos,
@@ -754,8 +764,6 @@ async function bootstrap() {
   mapEl.addEventListener('pointerleave', hideTooltip);
   window.addEventListener('blur', hideTooltip);
 
-  let edinburghHandle: any = null;
-
   // 5. Initialize Dock ("Le Quai" Niveau 2 with Station Ladder)
   dock = new SubwayDock({
     rollingStockDb,
@@ -768,7 +776,6 @@ async function bootstrap() {
       deckOverlay.setSelectedTrain(null);
       deckOverlay.setSelectedLine(lineId);
       engine.setFocusedLine(lineId);
-      edinburghHandle?.selectLine(lineId);
 
       const line = lines.find(l => l.id === lineId);
       router.setRoute(line ? line.short_name : null, dir, cityConfig.slug);
@@ -796,7 +803,6 @@ async function bootstrap() {
       trackedTrain = null;
       followCamera?.stopFollow();
       deckOverlay.setSelectedTrain(null);
-      edinburghHandle?.focusStation(station.name);
       map.flyTo({
         center: station.coordinates,
         zoom: 15.5,
@@ -1079,7 +1085,6 @@ async function bootstrap() {
       latestRenderedTrains = new Map(trains.map(train => [train.id, train]));
       deckOverlay.setTrains(trains);
       followCamera?.onSimulationFrame();
-      edinburghHandle?.updateSimulationTrains(trains);
     },
     onPrimStatus: (status) => {
       dock.setRealtimeState(status);
@@ -1095,34 +1100,23 @@ async function bootstrap() {
     }
   });
 
-  // 11. Edinburgh 3D High-Precision Relief & Trains View
+  // 11. Edinburgh 3D City Model Layer (Unified inside MapLibre)
   if (cityConfig.id === 'edinburgh') {
-    const { initEdinburghThreeView } = await import('./edinburgh_three_view');
-    const threeContainer = document.createElement('div');
-    threeContainer.id = 'edinburgh-three-container';
-    threeContainer.style.position = 'absolute';
-    threeContainer.style.inset = '0';
-    threeContainer.style.zIndex = '2'; // Above map (z-index: 1), below dock & topbar
-    threeContainer.style.width = '100%';
-    threeContainer.style.height = '100%';
-    document.getElementById('app')?.appendChild(threeContainer);
-
-    edinburghHandle = initEdinburghThreeView(threeContainer, {
-      onTrainClick: (trainId, lineId) => {
-        const train = latestRenderedTrains.get(trainId);
-        if (train) {
-          focusTrain(train);
-        } else {
-          dock.selectLine(lineId);
+    const { createEdinburgh3DLayer } = await import('./edinburgh_3d_layer');
+    const addLayer = () => {
+      try {
+        if (!map.getLayer('edinburgh-3d-city-model')) {
+          map.addLayer(createEdinburgh3DLayer(map));
         }
-      },
-      onStationClick: (stationName) => {
-        const st = stations.find(s => s.name === stationName);
-        if (st && st.lines.length > 0) {
-          dock.selectLine(st.lines[0]);
-        }
+      } catch (e) {
+        console.warn('[map] Could not add edinburgh-3d-city-model layer:', e);
       }
-    });
+    };
+    if (map.isStyleLoaded()) {
+      addLayer();
+    } else {
+      map.once('style.load', addLayer);
+    }
 
     const controlsAside = document.getElementById('map-controls');
     if (controlsAside) {
@@ -1138,25 +1132,33 @@ async function bootstrap() {
         <button class="map-control-btn is-visible" id="btn-preset-castle" title="Vue Castle Rock & Princes St" aria-label="Vue Castle Rock & Princes St" style="font-size:14px;">🏰</button>
         <button class="map-control-btn is-visible" id="btn-preset-calton" title="Vue Calton Hill" aria-label="Vue Calton Hill" style="font-size:14px;">🏛️</button>
         <button class="map-control-btn is-visible" id="btn-preset-scotland" title="Vue Panorama Écosse (Forth Bridge & Régions)" aria-label="Vue Écosse" style="font-size:14px;">🏴󠁧󠁢󠁳󠁣󠁴󠁿</button>
-        <button class="map-control-btn is-visible" id="btn-preset-overview" title="Vue d'ensemble" aria-label="Vue d'ensemble" style="font-size:14px;">🔭</button>
-        <button class="map-control-btn is-visible" id="btn-follow-train" title="Suivre un train écossais (caméra embarquée)" aria-label="Suivre un train" style="font-size:14px;">🎥</button>
-        <button class="map-control-btn is-visible" id="btn-toggle-view" title="Basculer Mode 3D Relief / Mode Carte" aria-label="Basculer 3D / 2D" style="font-size:11px;font-weight:700;">3D</button>
+        <button class="map-control-btn is-visible" id="btn-follow-train" title="Suivre un train écossais (caméra 3D)" aria-label="Suivre un train" style="font-size:14px;">🎥</button>
       `;
       controlsAside.prepend(presetWrap);
 
-      document.getElementById('btn-preset-waverley')?.addEventListener('click', () => edinburghHandle.setCameraPreset('waverley'));
-      document.getElementById('btn-preset-castle')?.addEventListener('click', () => edinburghHandle.setCameraPreset('castle'));
-      document.getElementById('btn-preset-calton')?.addEventListener('click', () => edinburghHandle.setCameraPreset('calton'));
-      document.getElementById('btn-preset-scotland')?.addEventListener('click', () => edinburghHandle.setCameraPreset('scotland'));
-      document.getElementById('btn-preset-overview')?.addEventListener('click', () => edinburghHandle.setCameraPreset('overview'));
-      document.getElementById('btn-follow-train')?.addEventListener('click', () => edinburghHandle.toggleFollowTrain());
-
-      let is3dActive = true;
-      document.getElementById('btn-toggle-view')?.addEventListener('click', () => {
-        is3dActive = !is3dActive;
-        threeContainer.style.display = is3dActive ? 'block' : 'none';
-        const btn = document.getElementById('btn-toggle-view');
-        if (btn) btn.textContent = is3dActive ? '3D' : '2D';
+      document.getElementById('btn-preset-waverley')?.addEventListener('click', () => {
+        followCamera?.stopFollow();
+        map.flyTo({ center: [-3.188674, 55.95223], zoom: 16.5, pitch: 65, bearing: -60, duration: 1500 });
+      });
+      document.getElementById('btn-preset-castle')?.addEventListener('click', () => {
+        followCamera?.stopFollow();
+        map.flyTo({ center: [-3.2008, 55.9486], zoom: 16.2, pitch: 60, bearing: 80, duration: 1500 });
+      });
+      document.getElementById('btn-preset-calton')?.addEventListener('click', () => {
+        followCamera?.stopFollow();
+        map.flyTo({ center: [-3.1825, 55.9555], zoom: 16.0, pitch: 60, bearing: -120, duration: 1500 });
+      });
+      document.getElementById('btn-preset-scotland')?.addEventListener('click', () => {
+        followCamera?.stopFollow();
+        map.flyTo({ center: [-3.5, 56.05], zoom: 9.5, pitch: 40, bearing: -10, duration: 2000 });
+      });
+      document.getElementById('btn-follow-train')?.addEventListener('click', () => {
+        if (trackedTrain) {
+          focusTrain(trackedTrain);
+        } else {
+          const first = latestRenderedTrains.values().next().value;
+          if (first) focusTrain(first);
+        }
       });
     }
   }

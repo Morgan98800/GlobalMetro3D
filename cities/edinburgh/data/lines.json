@@ -11,7 +11,7 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 76.5,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   },
   {
     "id": "FIF",
@@ -25,7 +25,7 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 28.4,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   },
   {
     "id": "BOR",
@@ -39,7 +39,7 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 49.8,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   },
   {
     "id": "NCL",
@@ -53,7 +53,7 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 42.1,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   },
   {
     "id": "SHO",
@@ -67,7 +67,7 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 54.3,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   },
   {
     "id": "LNER",
@@ -81,7 +81,7 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 632.0,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   },
   {
     "id": "CS",
@@ -95,6 +95,6 @@
       "1": "Edinburgh Waverley"
     },
     "measured_length_km": 645.0,
-    "elevation_offset": 0.0
+    "elevation_offset": 53.0
   }
 ]

@@ -40,13 +40,13 @@ export const edinburghConfig: CityConfig = {
     }
   ],
   map: {
-    center: [-3.205, 55.95],
-    zoom: 13.5,
-    pitch: 55,
-    bearing: -15,
-    minZoom: 10,
-    maxZoom: 18,
-    bounds: [-3.38, 55.89, -3.15, 55.99]
+    center: [-3.205, 55.952],
+    zoom: 14.5,
+    pitch: 60,
+    bearing: -20,
+    minZoom: 8,
+    maxZoom: 19,
+    bounds: [-4.6, 55.5, -2.5, 56.6]
   },
   rollingStock: 'automotrice_ecossaise',
   attribution: {

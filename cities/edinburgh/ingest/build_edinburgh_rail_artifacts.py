@@ -110,7 +110,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 76.5,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB", "HYM"]
     },
     {
@@ -125,7 +125,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 28.4,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB", "HYM", "SGL", "EDG"]
     },
     {
@@ -140,7 +140,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 49.8,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB"]
     },
     {
@@ -155,7 +155,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 42.1,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB", "HYM", "EDP"]
     },
     {
@@ -170,7 +170,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 54.3,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB", "HYM", "SLA", "KGS", "WTH", "CUR"]
     },
     {
@@ -185,7 +185,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 632.0,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB"]
     },
     {
@@ -200,7 +200,7 @@ LINES_DATA = [
             "1": "Edinburgh Waverley"
         },
         "measured_length_km": 645.0,
-        "elevation_offset": 0.0,
+        "elevation_offset": 53.0,
         "stations_seq": ["EDB", "HYM"]
     }
 ]
@@ -587,7 +587,7 @@ def build_artifacts():
             "scotrail_class_385": {
                 "family_id": "scotrail_class_385",
                 "reference_dimensions_m": {
-                    "car_length_m": 23.4,
+                    "car_length_m": 71.0,
                     "car_height_m": 3.75,
                     "width_m": 2.8
                 }
@@ -596,17 +596,17 @@ def build_artifacts():
         "models": {
             "CLASS_385_EMU": {
                 "model_id": "CLASS_385_EMU",
-                "name": "Automotrice écossaise ScotRail Class 385 (Hitachi A-train)",
+                "name": "Automotrice écossaise ScotRail Class 385 (3 voitures - 71 m)",
                 "manufacturer": "Hitachi Rail",
-                "cars_count": 3,
+                "cars_count": 1,
                 "total_length_m": 71.0,
-                "car_length_m": 23.4,
-                "bogie_centres_m": 16.0,
+                "car_length_m": 71.0,
+                "bogie_centres_m": 50.0,
                 "width_m": 2.8,
-                "inter_car_gap_m": 0.4,
-                "drive_type": "overhead_wire",
+                "inter_car_gap_m": 0.0,
+                "drive_type": "steel",
                 "driverless": False,
-                "source": "Flotte ScotRail Express et Fife Circle (24m/voiture)",
+                "source": "Flotte ScotRail Express et Fife Circle (rame 3 caisses 71m)",
                 "verified": True
             }
         },
@@ -618,12 +618,12 @@ def build_artifacts():
             "short_name": l["short_name"],
             "model_id": "CLASS_385_EMU",
             "name": f"ScotRail Class 385 ({l['short_name']})",
-            "cars_count": 3,
+            "cars_count": 1,
             "total_length_m": 71.0,
-            "car_length_m": 23.4,
-            "bogie_centres_m": 16.0,
+            "car_length_m": 71.0,
+            "bogie_centres_m": 50.0,
             "width_m": 2.8,
-            "inter_car_gap_m": 0.4,
+            "inter_car_gap_m": 0.0,
             "asset_family": "scotrail_class_385"
         }
     with open(out_dir / "rolling-stock.json", "w") as f:

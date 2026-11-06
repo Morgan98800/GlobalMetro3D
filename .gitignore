@@ -48,4 +48,8 @@ Thumbs.db
 scratch/
 
 .netlify/
+test-results/
+playwright-report/
 web/.netlify/
+test-results/
+playwright-report/

@@ -34,6 +34,7 @@
     "format:check": "biome format",
     "test": "vitest run",
     "test:python": "pytest",
+    "test:e2e": "playwright test",
     "test:london-other-modes-snapshot": "vitest run tests/london-other-modes-snapshot.test.ts",
     "test:engine-realtime": "vitest run tests/engine-realtime-adapter.test.ts"
   },
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.6",
+    "@playwright/test": "^1.65.0",
     "@types/luxon": "^3.7.5"
   }
 }

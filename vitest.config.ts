@@ -6,10 +6,11 @@ export default defineConfig({
     alias: {
       '@core': path.resolve(__dirname, 'core'),
       '@cities': path.resolve(__dirname, 'cities'),
-      '@paris-subway/shared': path.resolve(__dirname, 'core')
-    }
+      '@paris-subway/shared': path.resolve(__dirname, 'core'),
+    },
   },
   test: {
-    environment: 'node'
-  }
+    environment: 'node',
+    exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/**'],
+  },
 });

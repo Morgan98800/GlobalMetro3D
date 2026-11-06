@@ -4,7 +4,7 @@ import {
   buildTimeline,
   createGhostTracker,
   updateGhosts,
-  stats
+  stats,
 } from '@core/rt/rt_matching';
 import type { CityRealtimeConfig } from '@core/config';
 import type { LineTrafficReport } from '@core/types';
@@ -22,7 +22,10 @@ export class PrimRealtimeAdapter implements RealtimeAdapter<PrimStatus> {
   private readonly ghostTracker = createGhostTracker();
   private readonly everMatchedTrips = new Set<string>();
 
-  constructor(private readonly config: CityRealtimeConfig, apiKey?: string) {
+  constructor(
+    private readonly config: CityRealtimeConfig,
+    apiKey?: string
+  ) {
     this.client = new PrimRealtimeClient(apiKey);
   }
 
@@ -61,7 +64,7 @@ export class PrimRealtimeAdapter implements RealtimeAdapter<PrimStatus> {
     }
 
     // Suppression des trains fantômes (garde-fous 1 et 2 inclus)
-    const matchedTripIds = new Set(matches.map(m => m.trip.tripId));
+    const matchedTripIds = new Set(matches.map((m) => m.trip.tripId));
     const suppressedTripIds = updateGhosts(
       this.ghostTracker,
       ctx.activeSchedTrips,

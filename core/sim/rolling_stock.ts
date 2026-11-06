@@ -59,7 +59,7 @@ export async function loadRollingStock(
       unverifiedLines.push({
         short_name: item.short_name,
         model: item.name,
-        source: item.source
+        source: item.source,
       });
     }
   }
@@ -111,7 +111,7 @@ export function getRollingStockForLine(
       ...found,
       inter_car_gap_m: found.inter_car_gap_m ?? model?.inter_car_gap_m ?? 0.3,
       bogie_centres_m: found.bogie_centres_m ?? model?.bogie_centres_m ?? DEFAULT_BOGIE_CENTRES_M,
-      driverless: found.driverless ?? model?.driverless ?? false
+      driverless: found.driverless ?? model?.driverless ?? false,
     };
   }
 
@@ -125,11 +125,11 @@ export function getRollingStockForLine(
     total_length_m: 75.0,
     car_length_m: 15.0,
     bogie_centres_m: DEFAULT_BOGIE_CENTRES_M,
-    width_m: 2.40,
+    width_m: 2.4,
     inter_car_gap_m: 0.95,
     drive_type: 'steel',
     driverless: false,
     source: 'Gabarit moyen estimé',
-    verified: false
+    verified: false,
   };
 }

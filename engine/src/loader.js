@@ -30,11 +30,7 @@ export class NetworkDataLoader {
       const ptLength = ptCount * 3; // 3 floats per pt
 
       // Create a Float32Array view directly from the buffer
-      const points = new Float32Array(
-        buf.buffer,
-        buf.byteOffset + ptStart,
-        ptLength
-      );
+      const points = new Float32Array(buf.buffer, buf.byteOffset + ptStart, ptLength);
 
       this.shapes.set(sid, {
         shapeId: sid,
@@ -42,7 +38,7 @@ export class NetworkDataLoader {
         directionId: dir,
         ptCount,
         totalLengthM: totalLen,
-        points
+        points,
       });
     }
 
@@ -63,7 +59,9 @@ export class NetworkDataLoader {
       ORDER BY stop_sequence ASC
     `);
 
-    console.log(`[loader] Loaded ${this.shapes.size} shapes into memory and opened SQLite database.`);
+    console.log(
+      `[loader] Loaded ${this.shapes.size} shapes into memory and opened SQLite database.`
+    );
   }
 
   /** Resolves which GTFS service_ids are active on the given date (YYYYMMDD). */
@@ -80,7 +78,7 @@ export class NetworkDataLoader {
         AND end_date >= ?
     `);
     const calRows = calQuery.all(dateStr, dateStr);
-    const activeSet = new Set(calRows.map(r => r.service_id));
+    const activeSet = new Set(calRows.map((r) => r.service_id));
 
     // Query exceptions
     const excQuery = this.db.prepare(`
@@ -114,12 +112,12 @@ export class NetworkDataLoader {
       let stops = this.tripStopsCache.get(tid);
       if (!stops) {
         const stopRows = this.stmtTripStops.all(tid);
-        stops = stopRows.map(s => ({
+        stops = stopRows.map((s) => ({
           seq: s.stop_sequence,
           stopId: s.stop_id,
           arrTime: s.arrival_time,
           depTime: s.departure_time,
-          shapeDistM: s.shape_dist_traveled
+          shapeDistM: s.shape_dist_traveled,
         }));
         this.tripStopsCache.set(tid, stops);
       }
@@ -131,7 +129,7 @@ export class NetworkDataLoader {
         shapeId: r.shape_id,
         startTime: r.start_time_s,
         endTime: r.end_time_s,
-        stops
+        stops,
       });
     }
 

@@ -7,8 +7,8 @@ export default defineConfig({
     alias: {
       '@core': path.resolve(__dirname, '../core'),
       '@cities': path.resolve(__dirname, '../cities'),
-      '@paris-subway/shared': path.resolve(__dirname, '../core')
-    }
+      '@paris-subway/shared': path.resolve(__dirname, '../core'),
+    },
   },
   server: {
     port: 3000,
@@ -21,7 +21,7 @@ export default defineConfig({
         }
         next();
       });
-    }
+    },
   },
   build: {
     target: 'esnext',
@@ -31,8 +31,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
-        methode: path.resolve(__dirname, 'methode.html')
-      }
-    }
-  }
+        methode: path.resolve(__dirname, 'methode.html'),
+      },
+    },
+  },
 });

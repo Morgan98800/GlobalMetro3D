@@ -5,7 +5,7 @@ import {
   parseShapesBuffer,
   sliceShape,
   splitIntoCars,
-  interpolatePointAtDistance
+  interpolatePointAtDistance,
 } from '@core/sim/shapes';
 import type { ShapeEntry } from '@core/sim/shapes';
 
@@ -47,7 +47,7 @@ function runTests() {
   const possiblePaths = [
     path.resolve(__dirname, '../web/public/data/shapes.bin'),
     path.resolve(__dirname, '../cities/paris/data/processed/shapes.bin'),
-    path.resolve(__dirname, '../web/dist/data/shapes.bin')
+    path.resolve(__dirname, '../web/dist/data/shapes.bin'),
   ];
 
   let binPath = '';
@@ -95,7 +95,9 @@ function runTests() {
     }
   }
 
-  console.log(`[test] Selected ${candidateShapes.length} fully verified canonical real shapes for random testing.`);
+  console.log(
+    `[test] Selected ${candidateShapes.length} fully verified canonical real shapes for random testing.`
+  );
 
   // ---------------------------------------------------------------------------
   // TEST 1: 200 Random Draws on real shapes (spec ±0.5m & no NaN)
@@ -125,22 +127,47 @@ function runTests() {
 
     // Check 2: No NaN or Infinity in coordinates
     for (const [lon, lat] of polyline) {
-      if (!Number.isFinite(lon) || !Number.isFinite(lat) || Number.isNaN(lon) || Number.isNaN(lat)) {
+      if (
+        !Number.isFinite(lon) ||
+        !Number.isFinite(lat) ||
+        Number.isNaN(lon) ||
+        Number.isNaN(lat)
+      ) {
         throw new Error(`Draw #${i + 1}: NaN or non-finite coordinate detected: [${lon}, ${lat}]`);
       }
     }
 
     // Check 3: Orientation verification
-    const expectedPStart = interpolatePointAtDistance(shape, Math.max(0, Math.min(shape.totalLengthM, dStart)));
-    const expectedPEnd = interpolatePointAtDistance(shape, Math.max(0, Math.min(shape.totalLengthM, dEnd)));
-    const distToStart = equirectDistM(polyline[0][0], polyline[0][1], expectedPStart[0], expectedPStart[1]);
-    const distToEnd = equirectDistM(polyline[polyline.length - 1][0], polyline[polyline.length - 1][1], expectedPEnd[0], expectedPEnd[1]);
+    const expectedPStart = interpolatePointAtDistance(
+      shape,
+      Math.max(0, Math.min(shape.totalLengthM, dStart))
+    );
+    const expectedPEnd = interpolatePointAtDistance(
+      shape,
+      Math.max(0, Math.min(shape.totalLengthM, dEnd))
+    );
+    const distToStart = equirectDistM(
+      polyline[0][0],
+      polyline[0][1],
+      expectedPStart[0],
+      expectedPStart[1]
+    );
+    const distToEnd = equirectDistM(
+      polyline[polyline.length - 1][0],
+      polyline[polyline.length - 1][1],
+      expectedPEnd[0],
+      expectedPEnd[1]
+    );
 
     if (distToStart > 0.05) {
-      throw new Error(`Draw #${i + 1}: First coordinate does not match dStart (diff: ${distToStart.toFixed(4)}m)`);
+      throw new Error(
+        `Draw #${i + 1}: First coordinate does not match dStart (diff: ${distToStart.toFixed(4)}m)`
+      );
     }
     if (distToEnd > 0.05) {
-      throw new Error(`Draw #${i + 1}: Last coordinate does not match dEnd (diff: ${distToEnd.toFixed(4)}m)`);
+      throw new Error(
+        `Draw #${i + 1}: Last coordinate does not match dEnd (diff: ${distToEnd.toFixed(4)}m)`
+      );
     }
 
     // Check 4: Measured length matches |dEnd - dStart| within ±0.5m
@@ -159,7 +186,9 @@ function runTests() {
     }
   }
 
-  console.log(`✅ Passed 200 random draws. Maximum error observed: ${maxErrorM.toFixed(3)}m (limit: 0.500m). No NaN detected.`);
+  console.log(
+    `✅ Passed 200 random draws. Maximum error observed: ${maxErrorM.toFixed(3)}m (limit: 0.500m). No NaN detected.`
+  );
 
   // ---------------------------------------------------------------------------
   // TEST 2: splitIntoCars verification (5-car train, 15m cars, 1m gap)
@@ -180,7 +209,9 @@ function runTests() {
   carsDir1.forEach((car, idx) => {
     const len = measurePolylineLengthM(car);
     if (Math.abs(len - carLen) > 0.5) {
-      throw new Error(`Dir 1 Car #${idx} length ${len.toFixed(3)}m deviates from ${carLen}m by more than 0.5m`);
+      throw new Error(
+        `Dir 1 Car #${idx} length ${len.toFixed(3)}m deviates from ${carLen}m by more than 0.5m`
+      );
     }
     for (const [lon, lat] of car) {
       if (!Number.isFinite(lon) || !Number.isFinite(lat)) {
@@ -199,7 +230,9 @@ function runTests() {
   carsDir0.forEach((car, idx) => {
     const len = measurePolylineLengthM(car);
     if (Math.abs(len - carLen) > 0.5) {
-      throw new Error(`Dir 0 Car #${idx} length ${len.toFixed(3)}m deviates from ${carLen}m by more than 0.5m`);
+      throw new Error(
+        `Dir 0 Car #${idx} length ${len.toFixed(3)}m deviates from ${carLen}m by more than 0.5m`
+      );
     }
   });
   console.log(`✅ Direction 0: ${carsCount} cars sliced, each measuring ${carLen}m ± 0.5m.`);
@@ -222,7 +255,9 @@ function runTests() {
   const oobSlice = sliceShape(sampleShape, -100, sampleShape.totalLengthM + 100);
   const oobLen = measurePolylineLengthM(oobSlice);
   if (Math.abs(oobLen - sampleShape.totalLengthM) > 5.0) {
-    throw new Error(`OOB slice length ${oobLen} deviates from total length ${sampleShape.totalLengthM}`);
+    throw new Error(
+      `OOB slice length ${oobLen} deviates from total length ${sampleShape.totalLengthM}`
+    );
   }
 
   console.log('✅ All edge cases passed successfully.');

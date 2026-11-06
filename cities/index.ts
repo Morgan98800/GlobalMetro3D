@@ -7,7 +7,15 @@ import { washingtonConfig } from './washington/city.config';
 import { berlinConfig } from './berlin/city.config';
 import { edinburghConfig } from './edinburgh/city.config';
 
-export const CITIES: CityConfig[] = [parisConfig, montrealConfig, londonConfig, lilleConfig, washingtonConfig, berlinConfig, edinburghConfig];
+export const CITIES: CityConfig[] = [
+  parisConfig,
+  montrealConfig,
+  londonConfig,
+  lilleConfig,
+  washingtonConfig,
+  berlinConfig,
+  edinburghConfig,
+];
 
 export const CITIES_BY_ID: Record<string, CityConfig> = {
   paris: parisConfig,
@@ -19,10 +27,10 @@ export const CITIES_BY_ID: Record<string, CityConfig> = {
   dc: washingtonConfig,
   berlin: berlinConfig,
   edinburgh: edinburghConfig,
-  edimbourg: edinburghConfig
+  edimbourg: edinburghConfig,
 };
 
 export function getCityConfig(idOrSlug: string = 'paris'): CityConfig {
   const normalized = idOrSlug.toLowerCase().trim();
-  return CITIES_BY_ID[normalized] || CITIES.find(c => c.slug === normalized) || parisConfig;
+  return CITIES_BY_ID[normalized] || CITIES.find((c) => c.slug === normalized) || parisConfig;
 }

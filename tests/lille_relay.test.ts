@@ -4,17 +4,24 @@ import {
   getOrFetchIleviaSnapshot,
   resetLilleCache,
   ALLOWED_ROUTE_IDS,
-  type IleviaTripUpdate
+  type IleviaTripUpdate,
 } from '../netlify/functions/lille_relay';
 import Pbf from 'pbf';
 
-function createDummyGtfsRtFeed(entities: Array<{ id: string; routeId: string; tripId: string; stops: Array<{ seq: number; stopId: string; time: number }> }>): Buffer {
+function createDummyGtfsRtFeed(
+  entities: Array<{
+    id: string;
+    routeId: string;
+    tripId: string;
+    stops: Array<{ seq: number; stopId: string; time: number }>;
+  }>
+): Buffer {
   const pbf = new Pbf();
 
   for (const ent of entities) {
     const innerPbf = new Pbf();
     innerPbf.writeStringField(1, ent.id);
-    
+
     // TripUpdate (field 3)
     const tuPbf = new Pbf();
     // TripDescriptor (field 1)
@@ -48,10 +55,30 @@ describe('Relais Netlify lille_relay', () => {
 
   it('ne retient que les lignes autorisées (ME1, ME2, 71) et écarte les bus', () => {
     const dummyFeed = createDummyGtfsRtFeed([
-      { id: '1', routeId: 'ME1', tripId: '5539138', stops: [{ seq: 1, stopId: '4CA099', time: 1790760000 }] },
-      { id: '2', routeId: '71', tripId: '5573855', stops: [{ seq: 1, stopId: 'ICT021', time: 1790760100 }] },
-      { id: '3', routeId: 'L1', tripId: '9999001', stops: [{ seq: 1, stopId: 'BUS001', time: 1790760200 }] },
-      { id: '4', routeId: '14', tripId: '9999002', stops: [{ seq: 1, stopId: 'BUS002', time: 1790760300 }] },
+      {
+        id: '1',
+        routeId: 'ME1',
+        tripId: '5539138',
+        stops: [{ seq: 1, stopId: '4CA099', time: 1790760000 }],
+      },
+      {
+        id: '2',
+        routeId: '71',
+        tripId: '5573855',
+        stops: [{ seq: 1, stopId: 'ICT021', time: 1790760100 }],
+      },
+      {
+        id: '3',
+        routeId: 'L1',
+        tripId: '9999001',
+        stops: [{ seq: 1, stopId: 'BUS001', time: 1790760200 }],
+      },
+      {
+        id: '4',
+        routeId: '14',
+        tripId: '9999002',
+        stops: [{ seq: 1, stopId: 'BUS002', time: 1790760300 }],
+      },
     ]);
 
     const { totalEntities, filteredUpdates } = decodeGtfsRealtimeFeed(dummyFeed);
@@ -62,13 +89,23 @@ describe('Relais Netlify lille_relay', () => {
 
   it('génère un snapshot conforme avec stats et trafic vide', async () => {
     const dummyFeed = createDummyGtfsRtFeed([
-      { id: '1', routeId: 'ME1', tripId: '5539138', stops: [{ seq: 1, stopId: '4CA099', time: 1790760000 }] },
-      { id: '2', routeId: '71', tripId: '5573855', stops: [{ seq: 1, stopId: 'ICT021', time: 1790760100 }] }
+      {
+        id: '1',
+        routeId: 'ME1',
+        tripId: '5539138',
+        stops: [{ seq: 1, stopId: '4CA099', time: 1790760000 }],
+      },
+      {
+        id: '2',
+        routeId: '71',
+        tripId: '5573855',
+        stops: [{ seq: 1, stopId: 'ICT021', time: 1790760100 }],
+      },
     ]);
 
     const mockFetcher = async () => ({
       statusCode: 200,
-      data: dummyFeed
+      data: dummyFeed,
     });
 
     const snapshot = await getOrFetchIleviaSnapshot(undefined, 1790760500000, mockFetcher);

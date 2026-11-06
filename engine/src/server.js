@@ -31,7 +31,7 @@ const rollingStockMap = new Map([
   ['IDFM:C01381', 'MP14'], // Line 11
   ['IDFM:C01382', 'MF67'], // Line 12
   ['IDFM:C01383', 'MF77'], // Line 13
-  ['IDFM:C01384', 'MP14']  // Line 14
+  ['IDFM:C01384', 'MP14'], // Line 14
 ]);
 
 // 1. Initialize Loader
@@ -43,7 +43,7 @@ const primClient = new PrimRealtimeClient(primKey);
 
 // Start polling all lines on PRIM
 const linesJson = JSON.parse(fs.readFileSync(path.join(baseDataDir, 'lines.json'), 'utf-8'));
-const lineIds = linesJson.map(l => l.id);
+const lineIds = linesJson.map((l) => l.id);
 primClient.startPolling(lineIds);
 
 // 3. HTTP Server
@@ -63,7 +63,7 @@ const server = http.createServer((req, res) => {
         activeTrains: activeTrainsCount,
         connectedClients: wss.clients.size,
         lastTickDurationMs,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
     );
     return;
@@ -90,7 +90,8 @@ function getParisCurrentTime() {
   const dateStr = `${year}${month}${day}`;
   const dayOfWeek = pDate.getDay();
 
-  const secondsSinceMidnight = pDate.getHours() * 3600 + pDate.getMinutes() * 60 + pDate.getSeconds();
+  const secondsSinceMidnight =
+    pDate.getHours() * 3600 + pDate.getMinutes() * 60 + pDate.getSeconds();
   return { dateStr, dayOfWeek, secondsSinceMidnight };
 }
 
@@ -110,7 +111,13 @@ setInterval(() => {
     if (!shape) continue;
 
     const delay = primClient.getLineDelay(trip.routeId);
-    const trainState = computeTripKinematics(trip, shape, secondsSinceMidnight, delay, rollingStockMap);
+    const trainState = computeTripKinematics(
+      trip,
+      shape,
+      secondsSinceMidnight,
+      delay,
+      rollingStockMap
+    );
     if (trainState) {
       currentTrains.push(trainState);
       currentTrainIds.add(trainState.id);
@@ -137,7 +144,7 @@ setInterval(() => {
       t: 'delta',
       ts: Math.floor(Date.now() / 1000),
       upd: currentTrains,
-      del: deletedIds
+      del: deletedIds,
     });
 
     for (const client of wss.clients) {
@@ -157,7 +164,7 @@ wss.on('connection', (ws) => {
     JSON.stringify({
       t: 'snapshot',
       ts: Math.floor(Date.now() / 1000),
-      trains: currentSnapshot
+      trains: currentSnapshot,
     })
   );
 

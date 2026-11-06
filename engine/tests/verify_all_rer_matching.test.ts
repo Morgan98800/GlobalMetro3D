@@ -11,7 +11,7 @@ import {
   RER_LINE_IDS,
   type SchedTrip,
   type RtJourney,
-  type RtCall
+  type RtCall,
 } from '@core/rt/rt_matching';
 
 function normalizeStopName(name: string): string {
@@ -55,8 +55,8 @@ describe('RER RT Matching Acceptance (Phase 5 - 5 Lines)', () => {
         stopId: normalizeStopName(stations[s[3]] || ''),
         arr: s[0],
         dep: s[1],
-        dist: s[2]
-      }))
+        dist: s[2],
+      })),
     }));
 
     const tPeak = 30600; // 08:30
@@ -65,22 +65,25 @@ describe('RER RT Matching Acceptance (Phase 5 - 5 Lines)', () => {
       .filter(({ raw }: any) => tPeak >= raw[4] && tPeak <= raw[5]);
 
     console.log(`Courses actives RER à l'heure de pointe (08:30): ${peakIndices.length}`);
-    assert(peakIndices.length >= 200, `Nombre insuffisant de rames en pointe: ${peakIndices.length}`);
+    assert(
+      peakIndices.length >= 200,
+      `Nombre insuffisant de rames en pointe: ${peakIndices.length}`
+    );
 
     const simPeakJourneys: RtJourney[] = peakIndices.map(({ idx }, i) => {
       const trip = allSchedTrips[idx];
-      const delay = Math.round((Math.sin(i * 1.5) * 60) + 60); // 0s à 120s de retard
-      const calls: RtCall[] = trip.stops.map(s => ({
+      const delay = Math.round(Math.sin(i * 1.5) * 60 + 60); // 0s à 120s de retard
+      const calls: RtCall[] = trip.stops.map((s) => ({
         stopId: s.stopId,
         aimed: s.dep,
-        expected: s.dep + delay
+        expected: s.dep + delay,
       }));
 
       return {
         lineId: trip.lineId,
         dir: trip.dir,
         destination: trip.stops[trip.stops.length - 1].stopId,
-        calls
+        calls,
       };
     });
 
@@ -89,7 +92,9 @@ describe('RER RT Matching Acceptance (Phase 5 - 5 Lines)', () => {
 
     const matchCount = res.matches.length;
     const peakRate = (matchCount / simPeakJourneys.length) * 100;
-    console.log(`Rapprochement pointe (08:30): ${matchCount} / ${simPeakJourneys.length} (${peakRate.toFixed(1)} %)`);
+    console.log(
+      `Rapprochement pointe (08:30): ${matchCount} / ${simPeakJourneys.length} (${peakRate.toFixed(1)} %)`
+    );
     assert(peakRate >= 95.0, `Taux insuffisant: ${peakRate}% < 95%`);
 
     // Positionnement cinématique
@@ -123,29 +128,31 @@ describe('RER RT Matching Acceptance (Phase 5 - 5 Lines)', () => {
         stopId: normalizeStopName(stations[s[3]] || ''),
         arr: s[0],
         dep: s[1],
-        dist: s[2]
-      }))
+        dist: s[2],
+      })),
     }));
 
     for (const lineId of RER_LINE_IDS) {
-      const lineTrips = allSchedTrips.filter(t => t.lineId === lineId);
+      const lineTrips = allSchedTrips.filter((t) => t.lineId === lineId);
       const simJourneys: RtJourney[] = lineTrips.map((trip, i) => {
         const delay = (i % 5) * 20;
         return {
           lineId: trip.lineId,
           dir: trip.dir,
           destination: trip.stops[trip.stops.length - 1].stopId,
-          calls: trip.stops.map(s => ({
+          calls: trip.stops.map((s) => ({
             stopId: s.stopId,
             aimed: s.dep,
-            expected: s.dep + delay
-          }))
+            expected: s.dep + delay,
+          })),
         };
       });
 
       const res = matchJourneys(simJourneys, lineTrips);
       const rate = (res.matches.length / simJourneys.length) * 100;
-      console.log(`Ligne ${lineId}: ${res.matches.length} / ${simJourneys.length} appariées (${rate.toFixed(1)} %)`);
+      console.log(
+        `Ligne ${lineId}: ${res.matches.length} / ${simJourneys.length} appariées (${rate.toFixed(1)} %)`
+      );
       assert(rate >= 95.0, `Ligne ${lineId}: taux ${rate}% < 95%`);
     }
   });

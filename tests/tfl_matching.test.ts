@@ -15,8 +15,8 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
     stops: [
       { stopId: '940GZZLUWRR', arr: 30000, dep: 30025, dist: 0 },
       { stopId: '940GZZLUOXC', arr: 30120, dep: 30145, dist: 1200 },
-      { stopId: '940GZZLUGPK', arr: 30240, dep: 30265, dist: 2400 }
-    ]
+      { stopId: '940GZZLUGPK', arr: 30240, dep: 30265, dist: 2400 },
+    ],
   };
 
   const mockTrip2: SchedTrip = {
@@ -27,8 +27,8 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
     stops: [
       { stopId: '940GZZLUWRR', arr: 30300, dep: 30325, dist: 0 },
       { stopId: '940GZZLUOXC', arr: 30420, dep: 30445, dist: 1200 },
-      { stopId: '940GZZLUGPK', arr: 30540, dep: 30565, dist: 2400 }
-    ]
+      { stopId: '940GZZLUGPK', arr: 30540, dep: 30565, dist: 2400 },
+    ],
   };
 
   const mockTripCentral: SchedTrip = {
@@ -38,15 +38,15 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
     shapeId: 'central_0_1',
     stops: [
       { stopId: '940GZZLUOXC', arr: 30100, dep: 30125, dist: 500 },
-      { stopId: '940GZZLUTCT', arr: 30200, dep: 30225, dist: 1500 }
-    ]
+      { stopId: '940GZZLUTCT', arr: 30200, dep: 30225, dist: 1500 },
+    ],
   };
 
   beforeEach(() => {
     matcher = new TflHybridMatcher({
       matchWindowSec: 120,
       maxDelaySec: 900,
-      alpha: 0.4
+      alpha: 0.4,
     });
   });
 
@@ -64,7 +64,7 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
       direction: 'outbound',
       timeToStation: 70,
       expectedArrival: '2026-09-25T08:22:10Z',
-      destinationStationId: '940GZZLUBXN'
+      destinationStationId: '940GZZLUBXN',
     };
 
     const outcome = matcher.match([arrival], [mockTrip1, mockTrip2], currentCivilSeconds);
@@ -100,8 +100,8 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
           direction: 'outbound',
           timeToStation: 60,
           expectedArrival: '2026-09-25T08:22:00Z',
-          destinationStationId: '940GZZLUBXN'
-        }
+          destinationStationId: '940GZZLUBXN',
+        },
       ],
       [mockTrip1, mockTrip2],
       30060
@@ -122,8 +122,8 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
           direction: 'outbound',
           timeToStation: 160,
           expectedArrival: '2026-09-25T08:24:10Z',
-          destinationStationId: '940GZZLUBXN'
-        }
+          destinationStationId: '940GZZLUBXN',
+        },
       ],
       [mockTrip1, mockTrip2],
       30090
@@ -150,7 +150,7 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
       direction: 'outbound',
       timeToStation: 50,
       expectedArrival: '2026-09-25T08:21:50Z',
-      destinationStationId: null
+      destinationStationId: null,
     };
 
     const outcome = matcher.match([arrival], [mockTrip1, mockTrip2], currentCivilSeconds);
@@ -175,7 +175,7 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
       direction: 'outbound',
       timeToStation: 600, // 30060 + 600 = 30660 vs scheduled 30120 (diff = 540s > 120s)
       expectedArrival: '2026-09-25T08:31:00Z',
-      destinationStationId: null
+      destinationStationId: null,
     };
 
     const outcome = matcher.match([arrival], [mockTrip1], currentCivilSeconds);
@@ -202,7 +202,7 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
       direction: 'outbound',
       timeToStation: 40,
       expectedArrival: '2026-09-25T08:21:40Z',
-      destinationStationId: null
+      destinationStationId: null,
     };
 
     const outcome = matcher.match([arrival], [mockTrip1, mockTripCentral], currentCivilSeconds);
@@ -225,8 +225,8 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
           direction: 'outbound',
           timeToStation: 90, // 30060 + 90 = 30150 vs 30120 (diff = +30s)
           expectedArrival: '2026-09-25T08:22:30Z',
-          destinationStationId: null
-        }
+          destinationStationId: null,
+        },
       ],
       [mockTrip1],
       30060
@@ -249,8 +249,8 @@ describe('TfL Hybrid Matching & Product Honesty (Phase 4)', () => {
           direction: 'outbound',
           timeToStation: 60, // 30060 + 60 = 30120 vs 30120 (diff = 0s)
           expectedArrival: '2026-09-25T08:22:00Z',
-          destinationStationId: null
-        }
+          destinationStationId: null,
+        },
       ],
       [mockTrip1],
       30060

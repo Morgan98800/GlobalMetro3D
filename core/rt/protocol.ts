@@ -1,6 +1,6 @@
-import { TrainState, CompactTrainDelta } from "./train";
+import { TrainState, CompactTrainDelta } from './train';
 
-export type SeverityLevel = "info" | "warning" | "interrupted";
+export type SeverityLevel = 'info' | 'warning' | 'interrupted';
 
 export interface TrafficAlert {
   id: string;
@@ -12,21 +12,21 @@ export interface TrafficAlert {
 }
 
 export interface SnapshotMessage {
-  t: "snapshot";
+  t: 'snapshot';
   ts: number;
   trains: TrainState[];
   alerts?: TrafficAlert[];
 }
 
 export interface DeltaMessage {
-  t: "delta";
+  t: 'delta';
   ts: number;
   upd: TrainState[] | CompactTrainDelta[];
   del: string[];
 }
 
 export interface AlertMessage {
-  t: "alert";
+  t: 'alert';
   ts: number;
   alert: TrafficAlert;
 }
@@ -34,7 +34,7 @@ export interface AlertMessage {
 export type ServerMessage = SnapshotMessage | DeltaMessage | AlertMessage;
 
 export interface SubscribeMessage {
-  t: "sub";
+  t: 'sub';
   bbox?: [number, number, number, number];
   zoom?: number;
   line?: string;
@@ -42,7 +42,7 @@ export interface SubscribeMessage {
 }
 
 export interface PingMessage {
-  t: "ping";
+  t: 'ping';
   ts: number;
 }
 

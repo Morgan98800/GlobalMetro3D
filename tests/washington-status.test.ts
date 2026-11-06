@@ -28,11 +28,12 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
         {
           IncidentID: 'INC-RD-01',
           LinesAffected: 'RD;',
-          Description: 'Red Line: Residual delays in both directions following an earlier signal problem outside Dupont Circle.',
+          Description:
+            'Red Line: Residual delays in both directions following an earlier signal problem outside Dupont Circle.',
           IncidentType: 'Delay',
-          DateUpdated: '2026-10-12T14:30:00'
-        }
-      ]
+          DateUpdated: '2026-10-12T14:30:00',
+        },
+      ],
     };
 
     const trafficReport = parseWmataIncidents(incidentPayload);
@@ -48,7 +49,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       trains: [],
       tripUpdates: [],
       trafficByLine: trafficReport,
-      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
     };
 
     adapter.client.injectSnapshot(snapshot);
@@ -67,11 +68,12 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
         {
           IncidentID: 'INC-RD-02',
           LinesAffected: 'RD;',
-          Description: 'Red Line: Service suspended between Fort Totten and Silver Spring due to track maintenance.',
+          Description:
+            'Red Line: Service suspended between Fort Totten and Silver Spring due to track maintenance.',
           IncidentType: 'Alert',
-          DateUpdated: '2026-10-12T15:00:00'
-        }
-      ]
+          DateUpdated: '2026-10-12T15:00:00',
+        },
+      ],
     };
 
     const trafficReport = parseWmataIncidents(incidentPayload);
@@ -87,7 +89,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       trains: [],
       tripUpdates: [],
       trafficByLine: trafficReport,
-      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
     };
 
     adapter.client.injectSnapshot(snapshot);
@@ -100,7 +102,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
     expect(traffic['RED'].message).toContain('Service suspended');
   });
 
-  it('règle §5.1 : une ligne n\'est JAMAIS déclarée interrompue par la simple absence de rames dans le flux', () => {
+  it("règle §5.1 : une ligne n'est JAMAIS déclarée interrompue par la simple absence de rames dans le flux", () => {
     // Flux complètement vide de rames (0 trip updates, 0 trains), mais aucun incident signalé
     const emptySnapshot: WashingtonSnapshot = {
       producedAt: '2026-10-12T14:00:00Z',
@@ -113,7 +115,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       trains: [],
       tripUpdates: [],
       trafficByLine: parseWmataIncidents({ Incidents: [] }),
-      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
     };
 
     adapter.client.injectSnapshot(emptySnapshot);
@@ -144,10 +146,10 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
           severity: 'normal',
           title: 'Red Line',
           message: 'Realtime unavailable - theoretical timetable active',
-          updatedAt: '2026-10-12T14:00:00Z'
-        }
+          updatedAt: '2026-10-12T14:00:00Z',
+        },
       },
-      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+      stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
     };
 
     adapter.client.injectSnapshot(unavailableSnapshot);
@@ -165,8 +167,8 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       shapeId: 'RRED_16',
       stops: [
         { stopId: 'metro-center', arr: 30600, dep: 30620, dist: 0 },
-        { stopId: 'gallery-place', arr: 30680, dep: 30700, dist: 500 }
-      ]
+        { stopId: 'gallery-place', arr: 30680, dep: 30700, dist: 500 },
+      ],
     };
 
     const timelines = new Map();
@@ -175,7 +177,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       civilSeconds: 30600,
       activeSchedTrips: [mockSchedTrip],
       schedTripsById: new Map([[mockSchedTrip.tripId, mockSchedTrip]]),
-      timelines
+      timelines,
     };
 
     // applyTick s'exécute sans erreur et n'écrase pas la timeline
@@ -183,13 +185,13 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
     expect(timelines.size).toBe(0); // Timelines restent au théorique pur
   });
 
-  it('recale la chronologie d\'une course sur prédiction d\'arrivée lorsque la confiance est mesurée', () => {
+  it("recale la chronologie d'une course sur prédiction d'arrivée lorsque la confiance est mesurée", () => {
     const tu: WashingtonTripUpdate = {
       id: 'TU_1',
       trip: {
         tripId: '6573091_20121',
         routeId: 'RED',
-        directionId: 1
+        directionId: 1,
       },
       timestamp: 1791289800,
       delay: 35,
@@ -198,9 +200,9 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
           stopSequence: 1,
           stopId: 'PF_A01_1', // Metro Center
           arrival: { time: 30645, delay: 45 },
-          departure: { time: 30665, delay: 45 }
-        }
-      ]
+          departure: { time: 30665, delay: 45 },
+        },
+      ],
     };
 
     const snapshot: WashingtonSnapshot = {
@@ -214,7 +216,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       trains: [],
       tripUpdates: [tu],
       trafficByLine: {},
-      stats: { totalEntitiesInFeed: 1, retainedEntities: 1, redCount: 1 }
+      stats: { totalEntitiesInFeed: 1, retainedEntities: 1, redCount: 1 },
     };
 
     adapter.client.injectSnapshot(snapshot);
@@ -226,8 +228,8 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       shapeId: 'RRED_16',
       stops: [
         { stopId: 'metro center', arr: 30600, dep: 30620, dist: 0 },
-        { stopId: 'gallery place', arr: 30680, dep: 30700, dist: 500 }
-      ]
+        { stopId: 'gallery place', arr: 30680, dep: 30700, dist: 500 },
+      ],
     };
 
     const timelines = new Map();
@@ -236,7 +238,7 @@ describe('Washington Realtime Adapter & Incident Status Tests (§5.3)', () => {
       civilSeconds: 30600,
       activeSchedTrips: [mockSchedTrip],
       schedTripsById: new Map([[mockSchedTrip.tripId, mockSchedTrip]]),
-      timelines
+      timelines,
     };
 
     adapter.applyTick(ctx);

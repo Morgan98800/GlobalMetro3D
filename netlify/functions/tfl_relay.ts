@@ -12,7 +12,10 @@ export function getTflApiKey(): string {
         const text = fs.readFileSync(p, 'utf8');
         for (const line of text.split('\n')) {
           if (line.trim().startsWith('TFL_APP_KEY=')) {
-            return line.split('=', 2)[1].trim().replace(/^['"]|['"]$/g, '');
+            return line
+              .split('=', 2)[1]
+              .trim()
+              .replace(/^['"]|['"]$/g, '');
           }
         }
       }
@@ -68,7 +71,7 @@ export const TFL_TUBE_LINE_IDS = [
   'suffragette',
   'weaver',
   'windrush',
-  'tram'
+  'tram',
 ];
 
 export const NIGHT_TUBE_LINES = new Set([
@@ -76,7 +79,7 @@ export const NIGHT_TUBE_LINES = new Set([
   'jubilee',
   'northern',
   'piccadilly',
-  'victoria'
+  'victoria',
 ]);
 
 const NAPTAN_ALIAS: Record<string, string> = {
@@ -117,7 +120,7 @@ export function isLondonTubeServiceHours(date: Date = new Date()): boolean {
     timeZone: 'Europe/London',
     hour12: false,
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
   const [h, m] = londonTimeStr.split(':').map(Number);
   const currentMinutes = h * 60 + m;
@@ -125,7 +128,7 @@ export function isLondonTubeServiceHours(date: Date = new Date()): boolean {
   // Récupérer le jour de la semaine à Londres
   const dayStr = date.toLocaleDateString('en-GB', {
     timeZone: 'Europe/London',
-    weekday: 'short'
+    weekday: 'short',
   }); // Mon, Tue, Wed, Thu, Fri, Sat, Sun
 
   const isWeekendNight = (dayStr === 'Sat' || dayStr === 'Sun') && currentMinutes < 5 * 60;
@@ -155,7 +158,7 @@ export function parseTflLineStatuses(data: any): Record<string, LineTrafficRepor
       severity: 'normal',
       title: 'Service normal',
       message: 'Good Service',
-      updatedAt: nowIso
+      updatedAt: nowIso,
     };
   }
 
@@ -191,7 +194,7 @@ export function parseTflLineStatuses(data: any): Record<string, LineTrafficRepor
         severity: 'alert',
         title: desc,
         message: reason || desc,
-        updatedAt: nowIso
+        updatedAt: nowIso,
       };
     } else if (minSeverity < 10) {
       reports[lineId] = {
@@ -200,7 +203,7 @@ export function parseTflLineStatuses(data: any): Record<string, LineTrafficRepor
         severity: minSeverity <= 7 ? 'alert' : 'warning',
         title: desc,
         message: reason || desc,
-        updatedAt: nowIso
+        updatedAt: nowIso,
       };
     } else {
       reports[lineId] = {
@@ -209,7 +212,7 @@ export function parseTflLineStatuses(data: any): Record<string, LineTrafficRepor
         severity: 'normal',
         title: 'Service normal',
         message: desc,
-        updatedAt: nowIso
+        updatedAt: nowIso,
       };
     }
   }
@@ -242,14 +245,21 @@ export function parseTflArrivals(data: any): TflArrivalPrediction[] {
       lineId,
       vehicleId,
       stationId,
-      stationName: item.stationName ? item.stationName.replace(' Underground Station', '').replace(' Station', '').trim() : '',
+      stationName: item.stationName
+        ? item.stationName.replace(' Underground Station', '').replace(' Station', '').trim()
+        : '',
       direction: item.direction || 'outbound',
       timeToStation,
-      expectedArrival: item.expectedArrival || new Date(Date.now() + timeToStation * 1000).toISOString(),
-      destinationStationId: item.destinationNaptanId ? normalizeStationId(item.destinationNaptanId) : null,
-      destinationName: item.destinationName ? item.destinationName.replace(' Underground Station', '').trim() : undefined,
+      expectedArrival:
+        item.expectedArrival || new Date(Date.now() + timeToStation * 1000).toISOString(),
+      destinationStationId: item.destinationNaptanId
+        ? normalizeStationId(item.destinationNaptanId)
+        : null,
+      destinationName: item.destinationName
+        ? item.destinationName.replace(' Underground Station', '').trim()
+        : undefined,
       platformName: item.platformName || undefined,
-      currentLocation: item.currentLocation || undefined
+      currentLocation: item.currentLocation || undefined,
     });
   }
 
@@ -266,7 +276,9 @@ function httpsGetJson(url: string, headers: Record<string, string> = {}): Promis
   return new Promise((resolve, reject) => {
     const req = https.get(url, { headers, timeout: 8000 }, (res) => {
       let body = '';
-      res.on('data', chunk => { body += chunk; });
+      res.on('data', (chunk) => {
+        body += chunk;
+      });
       res.on('end', () => {
         if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
           try {
@@ -305,10 +317,7 @@ export async function fetchTflData(): Promise<TflSnapshot> {
   let errorMsg: string | null = null;
 
   try {
-    const [arr, st] = await Promise.all([
-      httpsGetJson(arrivalsUrl),
-      httpsGetJson(statusUrl)
-    ]);
+    const [arr, st] = await Promise.all([httpsGetJson(arrivalsUrl), httpsGetJson(statusUrl)]);
     rawArrivals = arr;
     rawStatus = st;
   } catch (err: any) {
@@ -327,10 +336,12 @@ export async function fetchTflData(): Promise<TflSnapshot> {
     validUntil: now + CACHE_TTL_MS,
     feedHealthy,
     serviceActive: isServiceActive,
-    serviceMessage: isServiceActive ? undefined : 'Service nocturne terminé sur le réseau (hors Night Tube).',
+    serviceMessage: isServiceActive
+      ? undefined
+      : 'Service nocturne terminé sur le réseau (hors Night Tube).',
     lastError: errorMsg,
     arrivals,
-    trafficByLine
+    trafficByLine,
   };
 
   if (feedHealthy) {
@@ -350,8 +361,8 @@ export const handler = async (event: any = {}, context: any = {}) => {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'public, max-age=15, stale-while-revalidate=30',
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
     },
-    body: JSON.stringify(snapshot)
+    body: JSON.stringify(snapshot),
   };
 };

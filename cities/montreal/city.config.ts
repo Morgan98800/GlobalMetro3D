@@ -16,7 +16,7 @@ export const montrealConfig: CityConfig = {
         format: 'gtfs',
         sourceUrl: 'https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip',
         scheduleModel: 'frequency-expanded',
-        stalenessToleranceDays: 90
+        stalenessToleranceDays: 90,
       },
       geometry: { source: 'stm-gtfs' },
       kinematics: {
@@ -34,10 +34,10 @@ export const montrealConfig: CityConfig = {
         decayDistanceM: 4000,
         staleAfterSec: 360,
         reconcileDurationMs: 300,
-        reconcileThresholdM: 20
+        reconcileThresholdM: 20,
       },
-      realtime: { kind: 'service-status-only' }
-    }
+      realtime: { kind: 'service-status-only' },
+    },
   ],
   rollingStock: '/cities/montreal/data/rolling-stock.json',
   gtfs: {
@@ -47,7 +47,7 @@ export const montrealConfig: CityConfig = {
     routeIdAllowlist: ['1', '2', '4', '5'],
     scheduleModel: 'frequency-expanded',
     validityCheck: 'calendar',
-    cleanStationPrefix: 'Station '
+    cleanStationPrefix: 'Station ',
   },
   map: {
     center: [-73.5673, 45.5017],
@@ -55,15 +55,15 @@ export const montrealConfig: CityConfig = {
     pitch: 30,
     bearing: -15,
     minZoom: 9,
-    maxZoom: 18
+    maxZoom: 18,
   },
   realtime: {
     provider: 'stm-i3',
     capability: { kind: 'service-status-only' },
     pollIntervalMs: 120000,
     endpoints: {
-      relay: '/api/stm'
-    }
+      relay: '/api/stm',
+    },
   },
   attribution: {
     operatorName: 'Société de transport de Montréal (STM)',
@@ -71,10 +71,10 @@ export const montrealConfig: CityConfig = {
     text: 'Données ouvertes STM',
     licenseText: 'STM Open Data',
     licenseUrl: 'https://www.stm.info/fr/a-propos/developpeurs',
-    disclaimer: 'Projet indépendant, non affilié à la Société de transport de Montréal (STM).'
+    disclaimer: 'Projet indépendant, non affilié à la Société de transport de Montréal (STM).',
   },
   paths: {
     dataDir: '/cities/montreal/data',
-    modelsDir: '/models/train'
-  }
+    modelsDir: '/models/train',
+  },
 };

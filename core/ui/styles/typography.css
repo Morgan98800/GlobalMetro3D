@@ -19,7 +19,6 @@
    est bloqué par l'origine opaque.
    ============================================================ */
 
-
 /* ------------------------------------------------------------
    LES SIX REGISTRES
    Chaque registre est une combinaison complète poids/taille/
@@ -74,9 +73,8 @@
   line-height: 1;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum' 1;
+  font-feature-settings: "tnum" 1;
 }
-
 
 /* ------------------------------------------------------------
    LE CHIFFRE QUI NE BOUGE PAS
@@ -85,9 +83,8 @@
    ------------------------------------------------------------ */
 .tnum {
   font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum' 1;
+  font-feature-settings: "tnum" 1;
 }
-
 
 /* ------------------------------------------------------------
    NOMBRE DE LIGNE — seule tolérance de tracking

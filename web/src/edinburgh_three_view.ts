@@ -36,7 +36,7 @@ const LINE_COLORS: Record<string, number> = {
   NCL: 0x0097a7, // North Clyde Line (Turquoise)
   SHO: 0xe65100, // Shotts Line (Orange Ambre)
   LNER: 0xba0c2f, // East Coast Main Line (Rouge LNER)
-  CS: 0x1338be   // Caledonian Sleeper (Bleu nuit)
+  CS: 0x1338be, // Caledonian Sleeper (Bleu nuit)
 };
 
 // 1 unit in edinburgh_city.glb = 100 meters
@@ -46,7 +46,7 @@ const METERS_PER_DEG_LAT = 111320.0;
 const METERS_PER_DEG_LON = 111320.0 * Math.cos((WAVERLEY_LAT * Math.PI) / 180);
 
 export function lonLatToWorld(lon: number, lat: number, elevationM = 53.0): THREE.Vector3 {
-  const x = ((lon - WAVERLEY_LON) * METERS_PER_DEG_LON) * 0.01;
+  const x = (lon - WAVERLEY_LON) * METERS_PER_DEG_LON * 0.01;
   const z = -((lat - WAVERLEY_LAT) * METERS_PER_DEG_LAT) * 0.01;
   const y = Math.max(0.527, elevationM * 0.01);
   return new THREE.Vector3(x, y, z);
@@ -71,7 +71,10 @@ export function initEdinburghThreeView(
   const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
   camera.position.set(0, 3.8, 5.6); // Vue initiale sur la vallée de Waverley
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    powerPreference: 'high-performance',
+  });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
@@ -130,13 +133,13 @@ export function initEdinburghThreeView(
           mesh.material = new THREE.MeshStandardMaterial({
             vertexColors: true,
             roughness: 0.85,
-            metalness: 0.05
+            metalness: 0.05,
           });
         } else if (name.startsWith('Batiments') || name.startsWith('Buildings')) {
           mesh.material = new THREE.MeshStandardMaterial({
             vertexColors: true,
             roughness: 0.72,
-            metalness: 0.1
+            metalness: 0.1,
           });
         } else if (name.includes('Gare_Edinburgh_Waverley') || name.includes('Waverley')) {
           mesh.material = new THREE.MeshPhysicalMaterial({
@@ -145,7 +148,7 @@ export function initEdinburghThreeView(
             opacity: 0.45,
             roughness: 0.15,
             transmission: 0.65,
-            depthWrite: false
+            depthWrite: false,
           });
         } else if (mesh.material) {
           const mat = mesh.material as THREE.MeshStandardMaterial;
@@ -171,7 +174,7 @@ export function initEdinburghThreeView(
   const seaMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#142e47'),
     roughness: 0.25,
-    metalness: 0.55
+    metalness: 0.55,
   });
   const seaMesh = new THREE.Mesh(seaGeo, seaMat);
   seaMesh.rotation.x = -Math.PI / 2;
@@ -183,7 +186,7 @@ export function initEdinburghThreeView(
   const scotlandTerrainMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#223b1e'), // Vert bruyère des collines écossaises
     roughness: 0.95,
-    metalness: 0.02
+    metalness: 0.02,
   });
   const scotlandTerrain = new THREE.Mesh(scotlandTerrainGeo, scotlandTerrainMat);
   scotlandTerrain.rotation.x = -Math.PI / 2;
@@ -195,7 +198,7 @@ export function initEdinburghThreeView(
   const bridgeMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color('#ba2b23'), // Rouge iconique du Forth Bridge
     roughness: 0.45,
-    metalness: 0.5
+    metalness: 0.5,
   });
 
   for (let bi = -1; bi <= 1; bi++) {
@@ -229,7 +232,7 @@ export function initEdinburghThreeView(
           color: new THREE.Color(track.stroke || '#002D62'),
           linewidth: 2,
           transparent: true,
-          opacity: 0.85
+          opacity: 0.85,
         });
         const line = new THREE.Line(geo, mat);
         tracksGroup.add(line);
@@ -248,14 +251,14 @@ export function initEdinburghThreeView(
     Slateford: [-35.19, 0.658, 28.04],
     Kingsknowe: [-48.25, 0.805, 36.24],
     'Wester Hailes': [-60.19, 0.925, 41.07],
-    Curriehill: [-82.31, 1.105, 56.11]
+    Curriehill: [-82.31, 1.105, 56.11],
   };
 
   const regionalLandmarks: Record<string, { pos: [number, number, number]; icon: string }> = {
     'Glasgow Queen Street': { pos: [-662, 0.48, 100], icon: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
     'Forth Bridge': { pos: [-124, 0.45, -53], icon: '🌉' },
     'Tweedbank (Borders)': { pos: [263, 0.85, 390], icon: '🌄' },
-    'Dundee & Aberdeen': { pos: [-200, 0.52, -320], icon: '🚢' }
+    'Dundee & Aberdeen': { pos: [-200, 0.52, -320], icon: '🚢' },
   };
 
   const overlayContainer = document.createElement('div');
@@ -311,7 +314,7 @@ export function initEdinburghThreeView(
     allMarkers.push({
       name,
       pos: new THREE.Vector3(coords[0], coords[1], coords[2]),
-      el: badge
+      el: badge,
     });
   });
 
@@ -342,7 +345,7 @@ export function initEdinburghThreeView(
       name,
       pos: new THREE.Vector3(info.pos[0], info.pos[1], info.pos[2]),
       el: badge,
-      isRegional: true
+      isRegional: true,
     });
   });
 
@@ -524,7 +527,7 @@ export function initEdinburghThreeView(
           targetPos: initialPos.clone(),
           currentQuat: group.quaternion.clone(),
           targetQuat: group.quaternion.clone(),
-          speedKmh: t.spd || 0
+          speedKmh: t.spd || 0,
         };
         renderedTrains.set(t.id, rt);
       }
@@ -630,6 +633,6 @@ export function initEdinburghThreeView(
     startFollowTrain,
     stopFollowTrain,
     toggleFollowTrain,
-    updateSimulationTrains
+    updateSimulationTrains,
   };
 }

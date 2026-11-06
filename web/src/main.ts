@@ -42,31 +42,51 @@ function boundsFromPolylines(polylines: Coordinate[][]): MapBounds | null {
     }
   }
   if (!Number.isFinite(minLng)) return null;
-  return [[minLng, minLat], [maxLng, maxLat]];
+  return [
+    [minLng, minLat],
+    [maxLng, maxLat],
+  ];
 }
 
 function expandBounds(bounds: MapBounds, marginKm = 30): MapBounds {
   const centerLat = (bounds[0][1] + bounds[1][1]) / 2;
   const latMargin = marginKm / 111;
-  const lngMargin = marginKm / (111 * Math.max(0.25, Math.cos(centerLat * Math.PI / 180)));
-  return [[bounds[0][0] - lngMargin, bounds[0][1] - latMargin], [bounds[1][0] + lngMargin, bounds[1][1] + latMargin]];
+  const lngMargin = marginKm / (111 * Math.max(0.25, Math.cos((centerLat * Math.PI) / 180)));
+  return [
+    [bounds[0][0] - lngMargin, bounds[0][1] - latMargin],
+    [bounds[1][0] + lngMargin, bounds[1][1] + latMargin],
+  ];
 }
 
 function openNetworkRecords(rankings: any) {
   document.getElementById('records-modal')?.remove();
-  const dayLabels: Record<string, string> = { weekday: 'Semaine', saturday: 'Samedi', sunday: 'Dimanche' };
-  const sections = Object.entries(dayLabels).map(([day, label]) => {
-    const rows = rankings.by_station?.[day] || [];
-    const top = rows.slice(0, 5);
-    const bottom = rows.slice(-5).reverse();
-    const renderRows = (items: any[]) => items.map((row: any) => `<li><span>${escapeHtml(row.station_name)}</span><strong>${Number(row.counts?.[day] || 0).toLocaleString('fr-FR')}</strong></li>`).join('');
-    return `<section><h3>${label}</h3><div class="records-columns"><div><h4>Plus desservies</h4><ol>${renderRows(top)}</ol></div><div><h4>Moins desservies</h4><ol>${renderRows(bottom)}</ol></div></div></section>`;
-  }).join('');
+  const dayLabels: Record<string, string> = {
+    weekday: 'Semaine',
+    saturday: 'Samedi',
+    sunday: 'Dimanche',
+  };
+  const sections = Object.entries(dayLabels)
+    .map(([day, label]) => {
+      const rows = rankings.by_station?.[day] || [];
+      const top = rows.slice(0, 5);
+      const bottom = rows.slice(-5).reverse();
+      const renderRows = (items: any[]) =>
+        items
+          .map(
+            (row: any) =>
+              `<li><span>${escapeHtml(row.station_name)}</span><strong>${Number(row.counts?.[day] || 0).toLocaleString('fr-FR')}</strong></li>`
+          )
+          .join('');
+      return `<section><h3>${label}</h3><div class="records-columns"><div><h4>Plus desservies</h4><ol>${renderRows(top)}</ol></div><div><h4>Moins desservies</h4><ol>${renderRows(bottom)}</ol></div></div></section>`;
+    })
+    .join('');
   const modal = document.createElement('div');
   modal.id = 'records-modal';
   modal.className = 'records-modal';
   modal.innerHTML = `<div class="records-dialog" role="dialog" aria-modal="true" aria-labelledby="records-title"><button type="button" class="records-close" aria-label="Fermer">×</button><h2 id="records-title">Records du réseau</h2><p class="records-method">Desserte théorique GTFS : passages planifiés par station, tous sens et lignes confondus. Les données de fréquentation annuelle IDFM/RATP ne sont pas affichées car le jeu 2015 disponible ne fournit pas d’identifiant station fiable pour une jointure.</p>${sections}</div>`;
-  modal.addEventListener('click', event => { if (event.target === modal) modal.remove(); });
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) modal.remove();
+  });
   modal.querySelector('.records-close')?.addEventListener('click', () => modal.remove());
   document.body.appendChild(modal);
 }
@@ -129,7 +149,9 @@ function openMethodologyModal() {
       </div>
     </div>
   `;
-  modal.addEventListener('click', event => { if (event.target === modal) modal.remove(); });
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) modal.remove();
+  });
   modal.querySelector('.records-close')?.addEventListener('click', () => modal.remove());
   document.body.appendChild(modal);
 }
@@ -184,7 +206,18 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
       <text x="440" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">EUR 1,90 CB</text>
     </svg>`;
 
-  const badgeLabel = activeCityConfig.id === 'edinburgh' ? 'Train' : (activeCityConfig.id === 'lille' ? 'VAL & Tramway' : (activeCityConfig.id === 'london' ? 'Underground' : (activeCityConfig.id === 'washington' ? 'Metrorail' : (activeCityConfig.id === 'berlin' ? 'U-Bahn' : '100% Souterrain'))));
+  const badgeLabel =
+    activeCityConfig.id === 'edinburgh'
+      ? 'Train'
+      : activeCityConfig.id === 'lille'
+        ? 'VAL & Tramway'
+        : activeCityConfig.id === 'london'
+          ? 'Underground'
+          : activeCityConfig.id === 'washington'
+            ? 'Metrorail'
+            : activeCityConfig.id === 'berlin'
+              ? 'U-Bahn'
+              : '100% Souterrain';
   const cityEmblem = `
     <div class="about-card-emblem" style="background:var(--eleve-hi);border:1px solid var(--bordure);border-radius:8px;padding:20px 14px;text-align:center;">
       <span style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.6;display:block;margin-bottom:6px;">Réseau Métropolitain</span>
@@ -194,19 +227,20 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
 
   const cardGraphic = isParis ? ticketSvg : cityEmblem;
   const rtProvider = activeCityConfig.realtime.provider;
-  const rtHtml = activeCityConfig.id === 'edinburgh'
-    ? '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (BODS Scotland)</p>'
-    : rtProvider === 'prim'
-    ? '<p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p>'
-    : rtProvider === 'tfl-unified'
-    ? '<p class="about-item__text">Temps réel : <strong>TfL Unified API</strong></p>'
-    : activeCityConfig.id === 'washington'
-    ? '<p class="about-item__text">Temps réel : <strong>WMATA GTFS-RT</strong></p>'
-    : activeCityConfig.id === 'berlin'
-    ? '<p class="about-item__text">Temps réel : <strong>VBB GTFS-RT (CC BY 4.0)</strong></p>'
-    : rtProvider === 'gtfs-rt'
-    ? '<p class="about-item__text">Temps réel : <strong>Ilévia GTFS-RT</strong></p>'
-    : '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (sans GPS en tunnel)</p>';
+  const rtHtml =
+    activeCityConfig.id === 'edinburgh'
+      ? '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (BODS Scotland)</p>'
+      : rtProvider === 'prim'
+        ? '<p class="about-item__text">Temps réel : <strong>API PRIM / SIRI-Lite</strong></p>'
+        : rtProvider === 'tfl-unified'
+          ? '<p class="about-item__text">Temps réel : <strong>TfL Unified API</strong></p>'
+          : activeCityConfig.id === 'washington'
+            ? '<p class="about-item__text">Temps réel : <strong>WMATA GTFS-RT</strong></p>'
+            : activeCityConfig.id === 'berlin'
+              ? '<p class="about-item__text">Temps réel : <strong>VBB GTFS-RT (CC BY 4.0)</strong></p>'
+              : rtProvider === 'gtfs-rt'
+                ? '<p class="about-item__text">Temps réel : <strong>Ilévia GTFS-RT</strong></p>'
+                : '<p class="about-item__text">Mode théorique : <strong>Cadence nominale GTFS</strong> (sans GPS en tunnel)</p>';
 
   modal.innerHTML = `
     <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
@@ -252,15 +286,21 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
     document.body.style.overflow = '';
     document.querySelector<HTMLButtonElement>('.topbar__menu-btn')?.focus();
   };
-  modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
-  modal.addEventListener('keydown', event => {
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) closeModal();
+  });
+  modal.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       event.preventDefault();
       closeModal();
       return;
     }
     if (event.key !== 'Tab') return;
-    const focusable = Array.from(modal.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'));
+    const focusable = Array.from(
+      modal.querySelectorAll<HTMLElement>(
+        'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+    );
     if (!focusable.length) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
@@ -286,7 +326,7 @@ async function bootstrap() {
 
   const router = new SubwayRouter(({ lineShortName, dir }) => {
     if (lineShortName && lines.length > 0) {
-      const line = lines.find(l => l.short_name.toLowerCase() === lineShortName.toLowerCase());
+      const line = lines.find((l) => l.short_name.toLowerCase() === lineShortName.toLowerCase());
       if (line) {
         dock?.selectLine(line.id, dir || '0');
         deckOverlay?.setSelectedLine(line.id);
@@ -305,15 +345,20 @@ async function bootstrap() {
   // Redirect train model requests to high-fidelity Scottish Class 385 EMU in Edinburgh
   if (cityConfig.id === 'edinburgh') {
     const origFetch = window.fetch;
-    window.fetch = function(input: RequestInfo | URL, init?: RequestInit) {
-      if (typeof input === 'string' && (input.includes('wmata_generic__neutral.glb') || input.includes('steel_classic__neutral.glb'))) {
+    window.fetch = function (input: RequestInfo | URL, init?: RequestInit) {
+      if (
+        typeof input === 'string' &&
+        (input.includes('wmata_generic__neutral.glb') ||
+          input.includes('steel_classic__neutral.glb'))
+      ) {
         return origFetch('/models/train/scotrail_class_385__neutral.glb', init);
       }
       return origFetch(input, init);
     };
   }
 
-  const loaderTextEl = document.getElementById('app-loader-text') || document.querySelector('#app-loader p');
+  const loaderTextEl =
+    document.getElementById('app-loader-text') || document.querySelector('#app-loader p');
   if (loaderTextEl) {
     const cityLoaderNames: Record<string, string> = {
       edinburgh: "Chargement du réseau ferroviaire d'Édimbourg",
@@ -322,16 +367,27 @@ async function bootstrap() {
       london: 'Chargement du métro de Londres',
       montreal: 'Chargement du métro de Montréal',
       lille: 'Chargement du métro de Lille',
-      paris: 'Chargement du métro parisien'
+      paris: 'Chargement du métro parisien',
     };
-    loaderTextEl.textContent = cityLoaderNames[cityConfig.id] || `Chargement du réseau (${cityConfig.displayName})`;
+    loaderTextEl.textContent =
+      cityLoaderNames[cityConfig.id] || `Chargement du réseau (${cityConfig.displayName})`;
   }
 
   // 1. Fetch metadata in parallel (memoized loadShapes, deferred rer_lines)
   const dataDir = cityConfig.paths.dataDir;
   const rerLinesPath = cityConfig.paths.rer?.linesJson;
 
-  const [linesRes, stationsRes, tracksRes, laddersRes, rerTracksRes, rankingsRes, shapesMap, rollingStockDb, fingerprintRes] = await Promise.all([
+  const [
+    linesRes,
+    stationsRes,
+    tracksRes,
+    laddersRes,
+    rerTracksRes,
+    rankingsRes,
+    shapesMap,
+    rollingStockDb,
+    fingerprintRes,
+  ] = await Promise.all([
     fetch(dataUrl(`${dataDir}/lines.json`)),
     fetch(dataUrl(`${dataDir}/stations.json`)),
     fetch(dataUrl(`${dataDir}/tracks.json`)),
@@ -340,7 +396,7 @@ async function bootstrap() {
     fetch(dataUrl(`${dataDir}/station-rankings.json`)),
     loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
     loadRollingStock(dataUrl(`${dataDir}/rolling-stock.json`)),
-    fetch(dataUrl(`${dataDir}/feed_fingerprint.json`)).catch(() => null)
+    fetch(dataUrl(`${dataDir}/feed_fingerprint.json`)).catch(() => null),
   ]);
 
   lines = await linesRes.json();
@@ -352,29 +408,35 @@ async function bootstrap() {
 
   // Contrôle de fraîcheur GTFS : tolérance en jours et avertissement visible
   if (fingerprintRes && (fingerprintRes as Response).ok) {
-    (fingerprintRes as Response).json().then((fp: any) => {
-      if (!fp?.generated_at) return;
-      const d = Math.floor((Date.now() - new Date(fp.generated_at).getTime()) / 864e5);
-      const tol = cityConfig.modes[0]?.schedule.stalenessToleranceDays ?? 7;
-      if (d > tol) {
-        const w = document.createElement('div');
-        w.className = 'gtfs-staleness-banner';
-        w.setAttribute('role', 'alert');
-        w.textContent = `⚠️ Horaires GTFS (${cityConfig.displayName}) datant de plus de ${d} jours (tolérance : ${tol} j).`;
-        document.body.appendChild(w);
-      }
-    }).catch(() => {});
+    (fingerprintRes as Response)
+      .json()
+      .then((fp: any) => {
+        if (!fp?.generated_at) return;
+        const d = Math.floor((Date.now() - new Date(fp.generated_at).getTime()) / 864e5);
+        const tol = cityConfig.modes[0]?.schedule.stalenessToleranceDays ?? 7;
+        if (d > tol) {
+          const w = document.createElement('div');
+          w.className = 'gtfs-staleness-banner';
+          w.setAttribute('role', 'alert');
+          w.textContent = `⚠️ Horaires GTFS (${cityConfig.displayName}) datant de plus de ${d} jours (tolérance : ${tol} j).`;
+          document.body.appendChild(w);
+        }
+      })
+      .catch(() => {});
   }
 
-  const configBounds = cityConfig.map.bounds ? (
-    Array.isArray(cityConfig.map.bounds[0])
+  const configBounds = cityConfig.map.bounds
+    ? Array.isArray(cityConfig.map.bounds[0])
       ? (cityConfig.map.bounds as [[number, number], [number, number]])
-      : [[cityConfig.map.bounds[0], cityConfig.map.bounds[1]], [cityConfig.map.bounds[2], cityConfig.map.bounds[3]]] as [[number, number], [number, number]]
-  ) : undefined;
-  const metroBounds = configBounds ?? boundsFromPolylines(tracks.map(track => track.coordinates));
+      : ([
+          [cityConfig.map.bounds[0], cityConfig.map.bounds[1]],
+          [cityConfig.map.bounds[2], cityConfig.map.bounds[3]],
+        ] as [[number, number], [number, number]])
+    : undefined;
+  const metroBounds = configBounds ?? boundsFromPolylines(tracks.map((track) => track.coordinates));
   const networkBounds = boundsFromPolylines([
-    ...tracks.map(track => track.coordinates),
-    ...rerTracks.map((track: any) => track.coordinates as Coordinate[])
+    ...tracks.map((track) => track.coordinates),
+    ...rerTracks.map((track: any) => track.coordinates as Coordinate[]),
   ]);
   const mapMaxBounds = networkBounds ? expandBounds(networkBounds) : undefined;
 
@@ -394,7 +456,7 @@ async function bootstrap() {
     B: { colorHex: '#5091CB', textColorHex: '#FFFFFF' },
     C: { colorHex: '#FFCC30', textColorHex: '#000000' },
     D: { colorHex: '#008B5B', textColorHex: '#FFFFFF' },
-    E: { colorHex: '#B94E9A', textColorHex: '#FFFFFF' }
+    E: { colorHex: '#B94E9A', textColorHex: '#FFFFFF' },
   };
   const createDemoRerTrain = (line: string) => {
     const color = demoRerColors[line];
@@ -419,7 +481,7 @@ async function bootstrap() {
       shapeId,
       currentDistM: headDistance,
       direction: 0 as const,
-      atStop: false
+      atStop: false,
     };
   };
   (window as any).__engine = engine;
@@ -427,17 +489,23 @@ async function bootstrap() {
 
   // 3. Initialize MapLibre
   const map = createMap('map', {
-    initialBounds: metroBounds || networkBounds || (cityConfig.map.bounds ? (
-      Array.isArray(cityConfig.map.bounds[0])
-        ? (cityConfig.map.bounds as [[number, number], [number, number]])
-        : [[cityConfig.map.bounds[0], cityConfig.map.bounds[1]], [cityConfig.map.bounds[2], cityConfig.map.bounds[3]]] as [[number, number], [number, number]]
-    ) : undefined),
+    initialBounds:
+      metroBounds ||
+      networkBounds ||
+      (cityConfig.map.bounds
+        ? Array.isArray(cityConfig.map.bounds[0])
+          ? (cityConfig.map.bounds as [[number, number], [number, number]])
+          : ([
+              [cityConfig.map.bounds[0], cityConfig.map.bounds[1]],
+              [cityConfig.map.bounds[2], cityConfig.map.bounds[3]],
+            ] as [[number, number], [number, number]])
+        : undefined),
     maxBounds: mapMaxBounds,
     center: cityConfig.map.center,
     zoom: cityConfig.map.zoom,
     pitch: cityConfig.map.pitch,
     bearing: cityConfig.map.bearing,
-    attribution: `© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ${cityConfig.attribution.licenseText}`
+    attribution: `© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ${cityConfig.attribution.licenseText}`,
   });
   (window as any).__map = map;
   (window as any).map = map;
@@ -497,7 +565,7 @@ async function bootstrap() {
       duration,
       maxZoom: 14,
       pitch: cityConfig.map.pitch ?? 30,
-      bearing: cityConfig.map.bearing ?? 0
+      bearing: cityConfig.map.bearing ?? 0,
     });
   };
 
@@ -511,7 +579,7 @@ async function bootstrap() {
       label = `Recentrer sur la rame ${trackedTrain.lineName} vers ${trackedTrain.dest}`;
       isContextActive = true;
     } else if (activeLineId) {
-      const line = lines.find(l => l.id === activeLineId);
+      const line = lines.find((l) => l.id === activeLineId);
       label = `Recadrer sur la ligne ${line ? line.short_name : activeLineId}`;
       isContextActive = true;
     }
@@ -540,7 +608,8 @@ async function bootstrap() {
     const currentBearing = map.getBearing();
 
     const dLat = currentCenter.lat - nominalMetroCenter[1];
-    const dLng = (currentCenter.lng - nominalMetroCenter[0]) * Math.cos(currentCenter.lat * Math.PI / 180);
+    const dLng =
+      (currentCenter.lng - nominalMetroCenter[0]) * Math.cos((currentCenter.lat * Math.PI) / 180);
     const distDeg = Math.hypot(dLat, dLng);
     const dZoom = Math.abs(currentZoom - nominalMetroZoom);
     const dPitch = Math.abs(currentPitch - nominalMetroPitch);
@@ -550,7 +619,8 @@ async function bootstrap() {
     // Seuil apparition (exceeds frame): dist > 0.0035° (~390m) OR dZoom > 0.35 OR pitch > 3° OR bearing > 3°
     // Seuil disparition (within frame ~15% plus strict): dist < 0.0030° AND dZoom < 0.30 AND pitch < 2.5° AND bearing < 2.5°
     const exceedsAppearThreshold = distDeg > 0.0035 || dZoom > 0.35 || dPitch > 3 || dBearing > 3;
-    const withinDisappearThreshold = distDeg < 0.0030 && dZoom < 0.30 && dPitch < 2.5 && dBearing < 2.5;
+    const withinDisappearThreshold =
+      distDeg < 0.003 && dZoom < 0.3 && dPitch < 2.5 && dBearing < 2.5;
 
     if (!isRecenterVisible && exceedsAppearThreshold) {
       isRecenterVisible = true;
@@ -618,7 +688,7 @@ async function bootstrap() {
         zoom: 15.5,
         pitch: 0,
         bearing: train.brg,
-        duration: 900
+        duration: 900,
       });
     }
     updateRecenterState();
@@ -634,23 +704,31 @@ async function bootstrap() {
           return;
         }
         const servedLines = (st.lines || [])
-          .map(lid => lines.find(l => l.id === lid))
+          .map((lid) => lines.find((l) => l.id === lid))
           .filter((l): l is LineMetadata => !!l);
 
         const badgesHtml = servedLines
-          .map(l => lineBadge({
-            line_id: l.id,
-            short_name: l.short_name,
-            route_color: l.color,
-            route_text_color: l.text_color
-          }, { interactive: false }).outerHTML)
+          .map(
+            (l) =>
+              lineBadge(
+                {
+                  line_id: l.id,
+                  short_name: l.short_name,
+                  route_color: l.color,
+                  route_text_color: l.text_color,
+                },
+                { interactive: false }
+              ).outerHTML
+          )
           .join('');
-        const dayKey = new Date().getDay() === 0 ? 'sunday' : new Date().getDay() === 6 ? 'saturday' : 'weekday';
+        const dayKey =
+          new Date().getDay() === 0 ? 'sunday' : new Date().getDay() === 6 ? 'saturday' : 'weekday';
         const serviceCount = st.service_counts?.[dayKey] ?? 0;
         const serviceRank = st.service_rank?.[dayKey];
-        const serviceHtml = serviceCount > 0
-          ? `<div class="tooltip-service" title="Passages planifiés dans le GTFS, tous sens et toutes lignes confondus."><span>Desserte théorique</span><strong>${serviceCount.toLocaleString('fr-FR')} passages/jour · rang ${serviceRank ?? '—'}</strong></div>`
-          : '';
+        const serviceHtml =
+          serviceCount > 0
+            ? `<div class="tooltip-service" title="Passages planifiés dans le GTFS, tous sens et toutes lignes confondus."><span>Desserte théorique</span><strong>${serviceCount.toLocaleString('fr-FR')} passages/jour · rang ${serviceRank ?? '—'}</strong></div>`
+            : '';
 
         tooltipEl.innerHTML = `
           <div class="tooltip-name">${escapeHtml(st.name)}</div>
@@ -669,7 +747,7 @@ async function bootstrap() {
       map.flyTo({
         center: station.coordinates,
         zoom: Math.max(map.getZoom(), 15),
-        duration: 900
+        duration: 900,
       });
     },
     onTrainHover: (info) => {
@@ -695,21 +773,28 @@ async function bootstrap() {
 
         let confBadge = '';
         if (tr.conf === 'measured') {
-          confBadge = '<span class="badge-conf badge-conf--measured" title="Passage mesuré au quai par PRIM">Arrêt mesuré (PRIM)</span>';
+          confBadge =
+            '<span class="badge-conf badge-conf--measured" title="Passage mesuré au quai par PRIM">Arrêt mesuré (PRIM)</span>';
         } else if (tr.conf === 'bracketed') {
-          confBadge = '<span class="badge-conf badge-conf--bracketed" title="Encadré par deux passages mesurés">Encadré (2 mesures)</span>';
+          confBadge =
+            '<span class="badge-conf badge-conf--bracketed" title="Encadré par deux passages mesurés">Encadré (2 mesures)</span>';
         } else if (tr.conf === 'extrapolated') {
-          confBadge = '<span class="badge-conf badge-conf--extrapolated" title="Extrapolation au-delà de la dernière mesure">Extrapolé</span>';
+          confBadge =
+            '<span class="badge-conf badge-conf--extrapolated" title="Extrapolation au-delà de la dernière mesure">Extrapolé</span>';
         } else {
-          confBadge = '<span class="badge-conf badge-conf--scheduled" title="Horaire théorique GTFS sans mesure directe">Théorique GTFS</span>';
+          confBadge =
+            '<span class="badge-conf badge-conf--scheduled" title="Horaire théorique GTFS sans mesure directe">Théorique GTFS</span>';
         }
 
-        const trainBadge = lineBadge({
-          line_id: tr.line,
-          short_name: tr.lineName,
-          route_color: tr.colorHex,
-          route_text_color: tr.textColorHex
-        }, { interactive: false }).outerHTML;
+        const trainBadge = lineBadge(
+          {
+            line_id: tr.line,
+            short_name: tr.lineName,
+            route_color: tr.colorHex,
+            route_text_color: tr.textColorHex,
+          },
+          { interactive: false }
+        ).outerHTML;
 
         tooltipEl.innerHTML = `
           <div class="train-tooltip-header">
@@ -753,7 +838,7 @@ async function bootstrap() {
       dock?.selectLine(null);
       if (!wasFollowingTrain) fitMetroNetwork();
       updateRecenterState();
-    }
+    },
   });
 
   // Global dismiss listeners for tooltips
@@ -781,21 +866,24 @@ async function bootstrap() {
       engine.setFocusedLine(lineId);
       edinburghHandle?.selectLine(lineId);
 
-      const line = lines.find(l => l.id === lineId);
+      const line = lines.find((l) => l.id === lineId);
       router.setRoute(line ? line.short_name : null, dir, cityConfig.slug);
 
       if (lineId) {
-        const lineStations = stations.filter(s => s.lines.includes(lineId));
+        const lineStations = stations.filter((s) => s.lines.includes(lineId));
         if (lineStations.length > 0) {
-          const lngs = lineStations.map(s => s.coordinates[0]);
-          const lats = lineStations.map(s => s.coordinates[1]);
+          const lngs = lineStations.map((s) => s.coordinates[0]);
+          const lats = lineStations.map((s) => s.coordinates[1]);
           const minLng = Math.min(...lngs);
           const maxLng = Math.max(...lngs);
           const minLat = Math.min(...lats);
           const maxLat = Math.max(...lats);
 
           map.fitBounds(
-            [[minLng, minLat], [maxLng, maxLat]],
+            [
+              [minLng, minLat],
+              [maxLng, maxLat],
+            ],
             { padding: mapPadding(), maxZoom: 14.5, duration: 900 }
           );
         }
@@ -811,7 +899,7 @@ async function bootstrap() {
       map.flyTo({
         center: station.coordinates,
         zoom: 15.5,
-        duration: 900
+        duration: 900,
       });
       updateRecenterState();
     },
@@ -822,13 +910,13 @@ async function bootstrap() {
 
   followCamera = new FollowCamera({
     map,
-    getTrain: tripId => latestRenderedTrains.get(tripId),
+    getTrain: (tripId) => latestRenderedTrains.get(tripId),
     setFollowElevation: (lineId, offset) => deckOverlay.setFollowElevation(lineId, offset),
     dock: document.getElementById('dock')!,
     onStop: () => {
       deckOverlay.setSelectedTrain(null);
       updateRecenterState();
-    }
+    },
   });
 
   dock.setData(lines, stations, laddersData);
@@ -851,24 +939,25 @@ async function bootstrap() {
         center: station.coordinates,
         zoom: 16,
         pitch: 0,
-        duration: 900
+        duration: 900,
       });
       updateRecenterState();
-    }
+    },
   });
 
   // TopBar Component (header redesign)
   const topbar = new TopBar({
     lineCount: lines.length,
     stationCount: stations.length,
-    cities: CITIES.map(c => ({ id: c.id, slug: c.slug, displayName: c.displayName })),
+    cities: CITIES.map((c) => ({ id: c.id, slug: c.slug, displayName: c.displayName })),
     activeCityId: cityConfig.id,
     timezone: cityConfig.timezone,
     displayName: cityConfig.displayName,
     realtimeProvider: cityConfig.realtime.provider,
     realtimeCapability: cityConfig.realtime.capability,
     attribution: cityConfig.attribution,
-    scheduleModel: cityConfig.modes[0]?.schedule.scheduleModel || cityConfig.gtfs?.scheduleModel || 'trip-based',
+    scheduleModel:
+      cityConfig.modes[0]?.schedule.scheduleModel || cityConfig.gtfs?.scheduleModel || 'trip-based',
     onCitySelect: (cityId: string) => {
       router.setCity(cityId);
       window.location.href = `/${cityId}`;
@@ -908,7 +997,7 @@ async function bootstrap() {
         topbar.setRealtimeState('standby');
         dock?.setRealtimeState('standby');
       }
-    }
+    },
   });
   topbar.mount();
   const syncBuildingsState = () => {
@@ -924,11 +1013,11 @@ async function bootstrap() {
   else map.once('load', hideLoader);
 
   if (import.meta.env.DEV) {
-    const lineLikes: LineLike[] = lines.map(l => ({
+    const lineLikes: LineLike[] = lines.map((l) => ({
       line_id: l.id,
       short_name: l.short_name,
       route_color: l.color,
-      route_text_color: l.text_color
+      route_text_color: l.text_color,
     }));
     auditLineContrast(lineLikes);
   }
@@ -936,7 +1025,9 @@ async function bootstrap() {
   // 7. Route resolution for initial line selection
   const initialRoute = router.getInitialRoute();
   if (initialRoute.lineShortName) {
-    const line = lines.find(l => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase());
+    const line = lines.find(
+      (l) => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase()
+    );
     if (line) {
       dock?.selectLine(line.id, initialRoute.dir || '0');
       deckOverlay?.setSelectedLine(line.id);
@@ -962,7 +1053,7 @@ async function bootstrap() {
       tracks,
       lineLadders: laddersData,
       shapes: shapesMap,
-      rollingStockDb
+      rollingStockDb,
     });
     deckOverlay.setRerData(rerTracks);
     const initialDemoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
@@ -979,10 +1070,15 @@ async function bootstrap() {
       const boundsTuple: [[number, number], [number, number]] | null = b
         ? [
             [b.getWest(), b.getSouth()],
-            [b.getEast(), b.getNorth()]
+            [b.getEast(), b.getNorth()],
           ]
         : null;
-      deckOverlay.setViewState(map.getZoom(), [map.getCenter().lng, map.getCenter().lat], boundsTuple, map.getPitch());
+      deckOverlay.setViewState(
+        map.getZoom(),
+        [map.getCenter().lng, map.getCenter().lat],
+        boundsTuple,
+        map.getPitch()
+      );
     };
     map.on('move', syncOverlayView);
     syncOverlayView();
@@ -990,7 +1086,9 @@ async function bootstrap() {
     // Handle initial route
     const initialRoute = router.getInitialRoute();
     if (initialRoute.lineShortName) {
-      const line = lines.find(l => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase());
+      const line = lines.find(
+        (l) => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase()
+      );
       if (line) {
         dock.selectLine(line.id, initialRoute.dir || '0');
       }
@@ -1012,15 +1110,18 @@ async function bootstrap() {
         zoom: 15.5,
         pitch: 0,
         bearing: trackedTrain.brg,
-        duration: 800
+        duration: 800,
       });
     } else if (activeLineId) {
-      const lineStations = stations.filter(s => s.lines.includes(activeLineId!));
+      const lineStations = stations.filter((s) => s.lines.includes(activeLineId!));
       if (lineStations.length > 0) {
-        const lngs = lineStations.map(s => s.coordinates[0]);
-        const lats = lineStations.map(s => s.coordinates[1]);
+        const lngs = lineStations.map((s) => s.coordinates[0]);
+        const lats = lineStations.map((s) => s.coordinates[1]);
         map.fitBounds(
-          [[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]],
+          [
+            [Math.min(...lngs), Math.min(...lats)],
+            [Math.max(...lngs), Math.max(...lats)],
+          ],
           { padding: mapPadding(), maxZoom: 14.5, duration: 800 }
         );
       }
@@ -1087,7 +1188,7 @@ async function bootstrap() {
         trains = [demoTrain];
         activeCount = 1;
       }
-      latestRenderedTrains = new Map(trains.map(train => [train.id, train]));
+      latestRenderedTrains = new Map(trains.map((train) => [train.id, train]));
       deckOverlay.setTrains(trains);
       followCamera?.onSimulationFrame();
       edinburghHandle?.updateSimulationTrains(trains);
@@ -1103,7 +1204,7 @@ async function bootstrap() {
       if (isRealtimeEnabled) {
         topbar.setRealtimeState(status);
       }
-    }
+    },
   });
 
   // 11. Edinburgh 3D View (City 3D + Regional Scotland Landscape + Trains)
@@ -1128,11 +1229,11 @@ async function bootstrap() {
         }
       },
       onStationClick: (stationName) => {
-        const st = stations.find(s => s.name === stationName);
+        const st = stations.find((s) => s.name === stationName);
         if (st && st.lines.length > 0) {
           dock?.selectLine(st.lines[0]);
         }
-      }
+      },
     });
 
     const controlsAside = document.getElementById('map-controls');
@@ -1154,17 +1255,28 @@ async function bootstrap() {
       `;
       controlsAside.prepend(presetWrap);
 
-      document.getElementById('btn-preset-waverley')?.addEventListener('click', () => edinburghHandle?.setCameraPreset('waverley'));
-      document.getElementById('btn-preset-castle')?.addEventListener('click', () => edinburghHandle?.setCameraPreset('castle'));
-      document.getElementById('btn-preset-calton')?.addEventListener('click', () => edinburghHandle?.setCameraPreset('calton'));
-      document.getElementById('btn-preset-scotland')?.addEventListener('click', () => edinburghHandle?.setCameraPreset('scotland'));
-      document.getElementById('btn-preset-overview')?.addEventListener('click', () => edinburghHandle?.setCameraPreset('overview'));
-      document.getElementById('btn-follow-train')?.addEventListener('click', () => edinburghHandle?.toggleFollowTrain());
+      document
+        .getElementById('btn-preset-waverley')
+        ?.addEventListener('click', () => edinburghHandle?.setCameraPreset('waverley'));
+      document
+        .getElementById('btn-preset-castle')
+        ?.addEventListener('click', () => edinburghHandle?.setCameraPreset('castle'));
+      document
+        .getElementById('btn-preset-calton')
+        ?.addEventListener('click', () => edinburghHandle?.setCameraPreset('calton'));
+      document
+        .getElementById('btn-preset-scotland')
+        ?.addEventListener('click', () => edinburghHandle?.setCameraPreset('scotland'));
+      document
+        .getElementById('btn-preset-overview')
+        ?.addEventListener('click', () => edinburghHandle?.setCameraPreset('overview'));
+      document
+        .getElementById('btn-follow-train')
+        ?.addEventListener('click', () => edinburghHandle?.toggleFollowTrain());
     }
   }
-
 }
 
-bootstrap().catch(err => {
+bootstrap().catch((err) => {
   console.error('[app] Bootstrap error:', err);
 });

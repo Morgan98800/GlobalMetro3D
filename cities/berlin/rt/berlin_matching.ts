@@ -98,7 +98,7 @@ export function epochToBerlinCivilSeconds(epochSec: number): number {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false
+    hour12: false,
   }).formatToParts(d);
   const h = parseInt(parts.find((p) => p.type === 'hour')?.value ?? '0', 10) % 24;
   const m = parseInt(parts.find((p) => p.type === 'minute')?.value ?? '0', 10);
@@ -159,7 +159,7 @@ export class BerlinMatcher {
       measured: 0,
       bracketed: 0,
       extrapolated: 0,
-      scheduled: 0
+      scheduled: 0,
     };
 
     for (const u of validUpdates) {
@@ -203,7 +203,7 @@ export class BerlinMatcher {
         confidence: conf,
         nextStationId: nextStopId,
         timeToNextStationS: timeToNextS,
-        delaySeconds: u.delay
+        delaySeconds: u.delay,
       });
     }
 
@@ -217,7 +217,7 @@ export class BerlinMatcher {
       matchRate,
       discardedNonMonotonicCount,
       confidenceCounts,
-      matchesByTripId
+      matchesByTripId,
     };
   }
 }

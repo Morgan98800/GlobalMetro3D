@@ -4,7 +4,7 @@ import {
   extractClosedStations,
   isMontrealMetroServiceHours,
   MONTREAL_METRO_LINES,
-  MONTREAL_STATIONS
+  MONTREAL_STATIONS,
 } from '../netlify/functions/stm_relay';
 
 describe('STM Relay Unit Tests (Phase 5)', () => {
@@ -26,10 +26,11 @@ describe('STM Relay Unit Tests (Phase 5)', () => {
         {
           ligne: '1',
           titre: 'Ligne 1 Verte',
-          texte: 'Interruption de service sur l\'ensemble de la ligne en raison d\'un problème technique.',
-          date: '2026-09-12T14:30:00Z'
-        }
-      ]
+          texte:
+            "Interruption de service sur l'ensemble de la ligne en raison d'un problème technique.",
+          date: '2026-09-12T14:30:00Z',
+        },
+      ],
     };
 
     const reports = parseStmEtatService(raw);
@@ -50,8 +51,8 @@ describe('STM Relay Unit Tests (Phase 5)', () => {
         ligne: '2',
         titre: 'Ligne 2 Orange',
         texte: 'Interruption de service entre les stations Berri-UQAM et Henri-Bourassa.',
-        date: '2026-09-12T15:00:00Z'
-      }
+        date: '2026-09-12T15:00:00Z',
+      },
     ];
 
     const reports = parseStmEtatService(raw);
@@ -69,10 +70,10 @@ describe('STM Relay Unit Tests (Phase 5)', () => {
         {
           route_id: '4',
           title: 'Ligne 4 Jaune',
-          message: 'Ralentissement de service en raison d\'une vérification technique.',
-          updatedAt: '2026-09-12T16:00:00Z'
-        }
-      ]
+          message: "Ralentissement de service en raison d'une vérification technique.",
+          updatedAt: '2026-09-12T16:00:00Z',
+        },
+      ],
     };
 
     const reports = parseStmEtatService(raw);
@@ -88,13 +89,13 @@ describe('STM Relay Unit Tests (Phase 5)', () => {
         {
           ligne: '105',
           titre: 'Bus 105 Sherbrooke',
-          texte: 'Détour en cours via Avenue De Maisonneuve.'
+          texte: 'Détour en cours via Avenue De Maisonneuve.',
         },
         {
           titre: 'Ascenseur Jean-Talon',
-          texte: 'Ascenseur temporairement hors service.'
-        }
-      ]
+          texte: 'Ascenseur temporairement hors service.',
+        },
+      ],
     };
 
     const reports = parseStmEtatService(raw);
@@ -119,19 +120,21 @@ describe('STM Relay Unit Tests (Phase 5)', () => {
         {
           informed_entities: [{ route_short_name: '1' }],
           header_texts: [{ language: 'fr', text: 'Service normal du métro' }],
-          description_texts: [{ language: 'fr', text: 'Service normal du métro' }]
+          description_texts: [{ language: 'fr', text: 'Service normal du métro' }],
         },
         {
           informed_entities: [{ route_short_name: '2' }],
-          header_texts: [{ language: 'fr', text: 'Interruption de service entre Berri-UQAM et Henri-Bourassa' }],
-          description_texts: [{ language: 'fr', text: 'Interruption de service' }]
+          header_texts: [
+            { language: 'fr', text: 'Interruption de service entre Berri-UQAM et Henri-Bourassa' },
+          ],
+          description_texts: [{ language: 'fr', text: 'Interruption de service' }],
         },
         {
           informed_entities: [{ route_short_name: '260' }, { route_short_name: '262' }],
           header_texts: [{ language: 'fr', text: 'Navette suspendue' }],
-          description_texts: [{ language: 'fr', text: 'Navette suspendue' }]
-        }
-      ]
+          description_texts: [{ language: 'fr', text: 'Navette suspendue' }],
+        },
+      ],
     };
 
     const reports = parseStmEtatService(raw);

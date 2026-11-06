@@ -12,7 +12,9 @@ describe('Lille Métro & Tramway Simulation Snapshot Safety Net', () => {
       const freshSnapshot = computeLilleSnapshot();
       fs.mkdirSync(path.dirname(FIXTURE_PATH), { recursive: true });
       fs.writeFileSync(FIXTURE_PATH, JSON.stringify(freshSnapshot, null, 2), 'utf8');
-      console.log(`[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`);
+      console.log(
+        `[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`
+      );
     }
 
     // 2. Load frozen reference fixture
@@ -31,7 +33,7 @@ describe('Lille Métro & Tramway Simulation Snapshot Safety Net', () => {
     expect(computedSnapshot.meta.trainsByLine['TRAM_T']).toBe(9);
 
     // 5. Compare train by train
-    const expectedMap = new Map(expectedFixture.trains.map(t => [t.tripId, t]));
+    const expectedMap = new Map(expectedFixture.trains.map((t) => [t.tripId, t]));
 
     let maxDistDeltaM = 0;
     let maxSpeedDeltaMps = 0;
@@ -63,16 +65,26 @@ describe('Lille Métro & Tramway Simulation Snapshot Safety Net', () => {
       if (speedDeltaMps > maxSpeedDeltaMps) maxSpeedDeltaMps = speedDeltaMps;
 
       // Acceptance criterion: strictly reproduction within 1 meter
-      expect(distDeltaM, `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`).toBeLessThanOrEqual(1.0);
-      expect(speedDeltaMps, `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`).toBeLessThanOrEqual(0.1);
+      expect(
+        distDeltaM,
+        `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`
+      ).toBeLessThanOrEqual(1.0);
+      expect(
+        speedDeltaMps,
+        `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`
+      ).toBeLessThanOrEqual(0.1);
     }
 
     // 6. Distinct verification of Metro vs Tram fleets
-    const metroTrains = computedSnapshot.trains.filter(t => t.line === 'ME1' || t.line === 'ME2');
-    const tramTrains = computedSnapshot.trains.filter(t => t.line === 'TRAM_R' || t.line === 'TRAM_T');
+    const metroTrains = computedSnapshot.trains.filter((t) => t.line === 'ME1' || t.line === 'ME2');
+    const tramTrains = computedSnapshot.trains.filter(
+      (t) => t.line === 'TRAM_R' || t.line === 'TRAM_T'
+    );
     expect(metroTrains.length).toBe(100);
     expect(tramTrains.length).toBe(17);
 
-    console.log(`✅ Lille snapshot passed: ${computedSnapshot.trains.length} trains matched (ME1: 32, ME2: 68, Tram R: 8, Tram T: 9). Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s.`);
+    console.log(
+      `✅ Lille snapshot passed: ${computedSnapshot.trains.length} trains matched (ME1: 32, ME2: 68, Tram R: 8, Tram T: 9). Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s.`
+    );
   });
 });

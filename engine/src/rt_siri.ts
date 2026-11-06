@@ -33,9 +33,9 @@ export class PrimRealtimeClient {
         {
           headers: {
             apikey: this.apiKey,
-            accept: 'application/json'
+            accept: 'application/json',
           },
-          timeout: 5000
+          timeout: 5000,
         },
         (res) => {
           if (res.statusCode !== 200) {
@@ -49,7 +49,8 @@ export class PrimRealtimeClient {
             try {
               const json = JSON.parse(data);
               const journeys =
-                json?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame?.[0]?.EstimatedVehicleJourney || [];
+                json?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]
+                  ?.EstimatedJourneyVersionFrame?.[0]?.EstimatedVehicleJourney || [];
 
               let totalDelay = 0;
               let delayCount = 0;
@@ -63,7 +64,8 @@ export class PrimRealtimeClient {
                     const exp = new Date(expStr).getTime();
                     const aim = new Date(aimStr).getTime();
                     const delayS = Math.round((exp - aim) / 1000);
-                    if (Math.abs(delayS) < 1800) { // filter anomalies > 30 min
+                    if (Math.abs(delayS) < 1800) {
+                      // filter anomalies > 30 min
                       totalDelay += delayS;
                       delayCount++;
                     }
@@ -112,6 +114,8 @@ export class PrimRealtimeClient {
       }
     }, 3000); // 1 request every 3s = 20 requests/min (exact PRIM free tier budget!)
 
-    console.log(`[rt-siri] Realtime poller started for ${lineIds.length} lines (budget: 20 req/min).`);
+    console.log(
+      `[rt-siri] Realtime poller started for ${lineIds.length} lines (budget: 20 req/min).`
+    );
   }
 }

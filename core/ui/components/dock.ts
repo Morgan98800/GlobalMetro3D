@@ -49,9 +49,16 @@ export class SubwayDock {
   private syncCollapsedState() {
     this.dockEl.classList.toggle('dock--collapsed', this.collapsed);
     this.collapseBtnEl.setAttribute('aria-expanded', String(!this.collapsed));
-    this.collapseBtnEl.setAttribute('aria-label', this.collapsed ? 'Déployer le panneau' : 'Réduire le panneau');
-    this.collapseBtnEl.setAttribute('title', this.collapsed ? 'Déployer le panneau' : 'Réduire le panneau');
-    this.resetBtnEl.style.display = this.selectedLineId && !this.collapsed && !this.hideResetWhileClosed ? 'flex' : 'none';
+    this.collapseBtnEl.setAttribute(
+      'aria-label',
+      this.collapsed ? 'Déployer le panneau' : 'Réduire le panneau'
+    );
+    this.collapseBtnEl.setAttribute(
+      'title',
+      this.collapsed ? 'Déployer le panneau' : 'Réduire le panneau'
+    );
+    this.resetBtnEl.style.display =
+      this.selectedLineId && !this.collapsed && !this.hideResetWhileClosed ? 'flex' : 'none';
     this.collapseBtnEl.innerHTML = this.collapsed
       ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>'
       : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>';
@@ -90,7 +97,7 @@ export class SubwayDock {
     this.stationLadder = new StationLadder({
       containerId: 'dock-content',
       onStationClick: (coords, name) => {
-        const st = this.stations.find(s => s.name === name);
+        const st = this.stations.find((s) => s.name === name);
         if (st) this.onStationClick(st);
       },
       onTrainClick: (train) => {
@@ -98,7 +105,7 @@ export class SubwayDock {
       },
       onLineSwitch: (lineId) => {
         this.selectLine(lineId);
-      }
+      },
     });
     // Boucle d'animation 10 Hz : les vitesses des rames évoluent en continu
     // entre les ticks du moteur (1 Hz) pour un rendu fluide.
@@ -131,7 +138,10 @@ export class SubwayDock {
     const onPointerMove = (clientY: number) => {
       if (!this.sheetDragging) return;
       const deltaY = this.sheetDragStartY - clientY;
-      const newHeight = Math.min(window.innerHeight * 0.56, Math.max(window.innerHeight * 0.3, this.sheetDragStartHeight + deltaY));
+      const newHeight = Math.min(
+        window.innerHeight * 0.56,
+        Math.max(window.innerHeight * 0.3, this.sheetDragStartHeight + deltaY)
+      );
       this.dockEl.style.height = `${newHeight}px`;
     };
     const onPointerEnd = () => {
@@ -139,8 +149,9 @@ export class SubwayDock {
       const currentHeight = this.dockEl.getBoundingClientRect().height;
       const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
       const heights = { closed: rootFontSize * 3.5, open: window.innerHeight * 0.56 };
-      const nearest = (Object.keys(heights) as Array<'closed' | 'open'>)
-        .sort((a, b) => Math.abs(heights[a] - currentHeight) - Math.abs(heights[b] - currentHeight))[0];
+      const nearest = (Object.keys(heights) as Array<'closed' | 'open'>).sort(
+        (a, b) => Math.abs(heights[a] - currentHeight) - Math.abs(heights[b] - currentHeight)
+      )[0];
       this.suppressSheetClick = Math.abs(currentHeight - this.sheetDragStartHeight) > 8;
       this.sheetDragging = false;
       delete this.dockEl.dataset.dragging;
@@ -230,8 +241,8 @@ export class SubwayDock {
     for (const line of this.lines) {
       const modeKey = (line.mode || 'metro').toLowerCase();
       const config = MODE_ORDER[modeKey] || {
-        label: line.mode ? (line.mode.charAt(0).toUpperCase() + line.mode.slice(1)) : 'Autres',
-        order: 99
+        label: line.mode ? line.mode.charAt(0).toUpperCase() + line.mode.slice(1) : 'Autres',
+        order: 99,
       };
       if (!groupsMap.has(config.label)) {
         groupsMap.set(config.label, { label: config.label, order: config.order, lines: [] });
@@ -252,13 +263,15 @@ export class SubwayDock {
       heading.className = 'line-group-title';
       heading.textContent = label;
       group.appendChild(heading);
-      const lineLikes: LineLike[] = sortedGroupLines.map(l => ({
+      const lineLikes: LineLike[] = sortedGroupLines.map((l) => ({
         line_id: l.id,
         short_name: l.short_name,
         route_color: l.color,
-        route_text_color: l.text_color
+        route_text_color: l.text_color,
       }));
-      const { element, setSelected } = lineBadgeGrid(lineLikes, (lineId) => this.selectLine(lineId));
+      const { element, setSelected } = lineBadgeGrid(lineLikes, (lineId) =>
+        this.selectLine(lineId)
+      );
       element.setAttribute('aria-label', `Lignes ${label}`);
       group.appendChild(element);
       fragment.appendChild(group);
@@ -268,7 +281,7 @@ export class SubwayDock {
     for (const grp of sortedGroups) {
       appendGroup(grp.label, grp.lines);
     }
-    this.setGridSelected = (lineId) => setters.forEach(setSelected => setSelected(lineId));
+    this.setGridSelected = (lineId) => setters.forEach((setSelected) => setSelected(lineId));
     this.linesGridEl.replaceChildren(fragment);
     this.renderContent();
   }
@@ -293,7 +306,8 @@ export class SubwayDock {
 
   public setRealtimeState(status: any) {
     this.realtimeAvailable =
-      status === 'live' || Boolean(status && status.active && (status.minutesAgo ?? 0) <= 10 && status.feedHealthy);
+      status === 'live' ||
+      Boolean(status && status.active && (status.minutesAgo ?? 0) <= 10 && status.feedHealthy);
     if (status && status.trafficByLine) {
       this.trafficByLine = status.trafficByLine;
     }
@@ -305,7 +319,7 @@ export class SubwayDock {
   public updateTrains(trains: TrainMarker[]) {
     this.latestTrains = trains;
     if (this.selectedLineId) {
-      const lineTrains = trains.filter(t => t.line === this.selectedLineId);
+      const lineTrains = trains.filter((t) => t.line === this.selectedLineId);
       this.stationLadder.updateTrains(lineTrains);
       this.updateLineStats();
     }
@@ -313,7 +327,11 @@ export class SubwayDock {
 
   public selectLine(lineId: string | null, dir: string = '0') {
     if (this.selectedLineId === lineId && this.selectedDir === dir) {
-      if (lineId && window.matchMedia('(max-width: 768px)').matches && this.sheetState === 'closed') {
+      if (
+        lineId &&
+        window.matchMedia('(max-width: 768px)').matches &&
+        this.sheetState === 'closed'
+      ) {
         this.hideResetWhileClosed = false;
         this.setSheetState('open');
       }
@@ -339,7 +357,7 @@ export class SubwayDock {
       this.renderEmptyState();
       return;
     }
-    const line = this.lines.find(l => l.id === this.selectedLineId);
+    const line = this.lines.find((l) => l.id === this.selectedLineId);
     if (!line) {
       this.stationLadder.setLine(null);
       this.renderEmptyState();
@@ -347,8 +365,8 @@ export class SubwayDock {
     }
     const ladder = this.laddersData[this.selectedLineId];
     if (ladder) {
-      const lineStations = this.stations.filter(s => s.lines.includes(line.id));
-      const lineTrains = this.latestTrains.filter(t => t.line === line.id);
+      const lineStations = this.stations.filter((s) => s.lines.includes(line.id));
+      const lineTrains = this.latestTrains.filter((t) => t.line === line.id);
       this.renderLineDetails(line, lineStations);
       this.stationLadder.setLine(ladder, this.selectedDir);
       this.stationLadder.updateTrains(lineTrains);
@@ -359,7 +377,7 @@ export class SubwayDock {
   }
 
   private renderLineStationsList(line: LineMetadata) {
-    const lineStations = this.stations.filter(s => s.lines.includes(line.id));
+    const lineStations = this.stations.filter((s) => s.lines.includes(line.id));
     const title = document.createElement('div');
     title.className = 'dock-line-title';
     title.innerHTML = `<span class="dock-badge" style="background:${line.color}; color:${line.text_color};">${escapeHtml(line.short_name)}</span> ${escapeHtml(line.long_name || line.short_name)}`;
@@ -389,16 +407,18 @@ export class SubwayDock {
 
   private renderLineDetails(line: LineMetadata, stations: StationMetadata[]) {
     const stock = this.rollingStockDb ? getRollingStockForLine(this.rollingStockDb, line.id) : null;
-    const serviceLabel = this.serviceStatus?.state === 'ended'
-      ? 'Service terminé'
-      : this.serviceStatus?.state === 'before_first'
-        ? `Avant le premier métro (${this.serviceStatus.firstMetroLabel})`
-        : this.serviceStatus?.state === 'active'
-          ? 'Nominal'
-          : 'Horaires en cours de chargement';
-    const rerConfidence = line.short_name === 'A' || line.short_name === 'B'
-      ? '<span class="dock-line-note">RER A/B : qualité des estimations variable selon l’exploitant et le tronçon.</span>'
-      : '';
+    const serviceLabel =
+      this.serviceStatus?.state === 'ended'
+        ? 'Service terminé'
+        : this.serviceStatus?.state === 'before_first'
+          ? `Avant le premier métro (${this.serviceStatus.firstMetroLabel})`
+          : this.serviceStatus?.state === 'active'
+            ? 'Nominal'
+            : 'Horaires en cours de chargement';
+    const rerConfidence =
+      line.short_name === 'A' || line.short_name === 'B'
+        ? '<span class="dock-line-note">RER A/B : qualité des estimations variable selon l’exploitant et le tronçon.</span>'
+        : '';
 
     // Info Trafic display (Respecting --carmin for alerts)
     const traffic = this.trafficByLine[line.id];
@@ -430,11 +450,16 @@ export class SubwayDock {
       </div>
       ${trafficBlock}
       <div class="dock-line-directions" role="group" aria-label="Directions de la ligne ${escapeHtml(line.short_name)}">
-        ${(['0', '1'] as const).filter(dir => line.destinations[dir]).map(dir => `
+        ${(['0', '1'] as const)
+          .filter((dir) => line.destinations[dir])
+          .map(
+            (dir) => `
           <button type="button" class="dock-line-direction ${this.selectedDir === dir ? 'active' : ''}" data-dock-dir="${dir}">
             → ${escapeHtml(line.destinations[dir])}
           </button>
-        `).join('')}
+        `
+          )
+          .join('')}
       </div>
       <div class="dock-line-summary-grid">
         <div><span class="dock-stat-label">Rames → ${escapeHtml(line.destinations['0'] || 'sens 1')}</span><strong id="dock-line-count-0">0</strong></div>
@@ -448,11 +473,14 @@ export class SubwayDock {
       </div>
       ${rerConfidence}
     `;
-    summary.querySelector<HTMLButtonElement>('.dock-line-close')?.addEventListener('click', () => this.selectLine(null));
-    summary.querySelectorAll<HTMLButtonElement>('[data-dock-dir]').forEach(button => {
+    summary
+      .querySelector<HTMLButtonElement>('.dock-line-close')
+      ?.addEventListener('click', () => this.selectLine(null));
+    summary.querySelectorAll<HTMLButtonElement>('[data-dock-dir]').forEach((button) => {
       button.addEventListener('click', () => {
         const direction = button.dataset.dockDir;
-        if (direction && direction !== this.selectedDir) this.selectLine(this.selectedLineId, direction);
+        if (direction && direction !== this.selectedDir)
+          this.selectLine(this.selectedLineId, direction);
       });
     });
     this.dockContentEl.prepend(summary);
@@ -461,11 +489,11 @@ export class SubwayDock {
 
   private updateLineStats() {
     if (!this.selectedLineId) return;
-    const line = this.lines.find(item => item.id === this.selectedLineId);
+    const line = this.lines.find((item) => item.id === this.selectedLineId);
     if (!line) return;
-    const lineTrains = this.latestTrains.filter(train => train.line === line.id);
+    const lineTrains = this.latestTrains.filter((train) => train.line === line.id);
     const byDirection = [0, 0];
-    const speeds = lineTrains.map(train => train.spd).filter(speed => Number.isFinite(speed));
+    const speeds = lineTrains.map((train) => train.spd).filter((speed) => Number.isFinite(speed));
     for (const train of lineTrains) {
       const direction = train.direction === 1 ? 1 : 0;
       byDirection[direction] += 1;
@@ -484,18 +512,22 @@ export class SubwayDock {
     setText('dock-line-count-1', String(byDirection[1]));
     setText('dock-line-headway-0', formatHeadway(byDirection[0]));
     setText('dock-line-headway-1', formatHeadway(byDirection[1]));
-    setText('dock-line-speed', speeds.length
-      ? `${(speeds.reduce((sum, speed) => sum + speed, 0) / speeds.length).toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} km/h`
-      : '—');
+    setText(
+      'dock-line-speed',
+      speeds.length
+        ? `${(speeds.reduce((sum, speed) => sum + speed, 0) / speeds.length).toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} km/h`
+        : '—'
+    );
     const serviceElement = this.dockContentEl.querySelector<HTMLElement>('#dock-line-service');
     if (serviceElement && this.serviceStatus) {
-      serviceElement.textContent = this.serviceStatus.state === 'active'
-        ? 'Nominal'
-        : this.serviceStatus.state === 'ended'
-          ? 'Service terminé'
-          : this.serviceStatus.state === 'before_first'
-            ? `Avant le premier métro (${this.serviceStatus.firstMetroLabel})`
-            : 'Horaires en cours de chargement';
+      serviceElement.textContent =
+        this.serviceStatus.state === 'active'
+          ? 'Nominal'
+          : this.serviceStatus.state === 'ended'
+            ? 'Service terminé'
+            : this.serviceStatus.state === 'before_first'
+              ? `Avant le premier métro (${this.serviceStatus.firstMetroLabel})`
+              : 'Horaires en cours de chargement';
     }
   }
 

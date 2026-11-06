@@ -40,7 +40,9 @@
 
 .topbar__brand:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+  box-shadow:
+    0 0 0 2px var(--fond),
+    0 0 0 4px var(--laiton);
 }
 
 /* Sélecteur de ville : menu déroulant */
@@ -68,7 +70,10 @@
   letter-spacing: var(--tr-sub);
   cursor: pointer;
   user-select: none;
-  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), border-color var(--t-state) var(--ease);
+  transition:
+    background var(--t-state) var(--ease),
+    color var(--t-state) var(--ease),
+    border-color var(--t-state) var(--ease);
 }
 
 .topbar__city-btn:hover {
@@ -79,7 +84,9 @@
 
 .topbar__city-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+  box-shadow:
+    0 0 0 2px var(--fond),
+    0 0 0 4px var(--laiton);
 }
 
 .topbar__city-btn .topbar__mark {
@@ -128,16 +135,24 @@
   overflow: hidden;
   border: 0;
   border-radius: var(--r-xs);
-  background: #0A0806;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--laiton) 35%, transparent), inset 0 1px 0 rgba(0, 0, 0, 0.8);
-  color: #FFA500;
+  background: #0a0806;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--laiton) 35%, transparent),
+    inset 0 1px 0 rgba(0, 0, 0, 0.8);
+  color: #ffa500;
 }
 
 .topbar__clock::after {
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 0, 0, 0.13) 2px, rgba(0, 0, 0, 0.13) 3px);
-  content: '';
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.13) 2px,
+    rgba(0, 0, 0, 0.13) 3px
+  );
+  content: "";
   pointer-events: none;
 }
 
@@ -149,8 +164,8 @@
 }
 
 .topbar__clock-svg circle {
-  fill: #FFA500;
-  filter: drop-shadow(0 0 3px #FF8C00) drop-shadow(0 0 6px rgba(255, 140, 0, 0.6));
+  fill: #ffa500;
+  filter: drop-shadow(0 0 3px #ff8c00) drop-shadow(0 0 6px rgba(255, 140, 0, 0.6));
 }
 
 .topbar__mark {
@@ -242,7 +257,9 @@
 
 .rt-status:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+  box-shadow:
+    0 0 0 2px var(--fond),
+    0 0 0 4px var(--laiton);
 }
 
 .rt-status__dot {
@@ -284,21 +301,28 @@
 
 /* État Warning / Perturbation */
 .rt-status[data-state="warning"] .rt-status__dot {
-  background: var(--ambre, #FF9900);
+  background: var(--ambre, #ff9900);
 }
 
 .rt-status[data-state="warning"] .rt-status__label {
   display: inline;
-  color: var(--ambre, #FF9900);
+  color: var(--ambre, #ff9900);
 }
 
 @keyframes rt-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rt-status[data-state="live"] .rt-status__dot { animation: none; }
+  .rt-status[data-state="live"] .rt-status__dot {
+    animation: none;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -324,8 +348,15 @@
   font-size: var(--fs-md);
   cursor: pointer;
   border: none;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4);
-  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), transform var(--t-press) var(--ease), box-shadow var(--t-state) var(--ease);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(0, 0, 0, 0.4);
+  transition:
+    background var(--t-state) var(--ease),
+    color var(--t-state) var(--ease),
+    transform var(--t-press) var(--ease),
+    box-shadow var(--t-state) var(--ease);
   user-select: none;
 }
 
@@ -333,18 +364,28 @@
   background: var(--eleve-hi);
   color: var(--texte);
   transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.5), 0 2px 0 rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .topbar__search-trigger:active {
   transform: translateY(1px);
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .topbar__search-trigger:focus-visible {
   outline: none;
   --ring-offset: var(--fond);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4), 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 2px var(--fond),
+    0 0 0 4px var(--laiton);
 }
 
 .topbar__search-icon {
@@ -394,26 +435,43 @@
   border-radius: var(--r-sm);
   color: var(--secondaire);
   cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4);
-  transition: background var(--t-state) var(--ease), color var(--t-state) var(--ease), transform var(--t-press) var(--ease), box-shadow var(--t-state) var(--ease);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(0, 0, 0, 0.4);
+  transition:
+    background var(--t-state) var(--ease),
+    color var(--t-state) var(--ease),
+    transform var(--t-press) var(--ease),
+    box-shadow var(--t-state) var(--ease);
 }
 
 .topbar__menu-btn:hover {
   color: var(--texte);
   background: var(--eleve-hi);
   transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.5), 0 2px 0 rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .topbar__menu-btn:active {
   transform: translateY(1px);
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .topbar__menu-btn:focus-visible {
   outline: none;
   --ring-offset: var(--fond);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 0 rgba(0, 0, 0, 0.4), 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 2px var(--fond),
+    0 0 0 4px var(--laiton);
 }
 
 /* Menu flottant : ombre, donc pas de filet (§3.2). */
@@ -452,7 +510,9 @@
   font-weight: 500;
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
+  transition:
+    background-color var(--t-state) var(--ease),
+    color var(--t-state) var(--ease);
 }
 
 .topbar__menu-item:hover {
@@ -517,8 +577,14 @@
 }
 
 @keyframes cmd-fade-in {
-  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .cmd-palette-header {
@@ -567,7 +633,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color var(--t-state) var(--ease), color var(--t-state) var(--ease);
+  transition:
+    background-color var(--t-state) var(--ease),
+    color var(--t-state) var(--ease);
 }
 
 .cmd-palette-close:hover {
@@ -581,7 +649,9 @@
 
 .cmd-palette-close:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--fond), 0 0 0 4px var(--laiton);
+  box-shadow:
+    0 0 0 2px var(--fond),
+    0 0 0 4px var(--laiton);
 }
 
 .cmd-palette-results {
@@ -725,7 +795,8 @@
   cursor: pointer;
   box-sizing: border-box;
   white-space: nowrap;
-  transition: opacity var(--t-exit) var(--ease),
+  transition:
+    opacity var(--t-exit) var(--ease),
     box-shadow var(--t-exit) var(--ease);
 }
 
@@ -755,9 +826,13 @@
   /* Un seul anneau. Le survol est plus étroit et neutre : il ne doit jamais
      se confondre avec l'anneau de focus. */
   --ring-offset: var(--surface);
-  box-shadow: 0 0 0 2px var(--ring-offset), 0 0 0 3px var(--secondaire);
+  box-shadow:
+    0 0 0 2px var(--ring-offset),
+    0 0 0 3px var(--secondaire);
 }
-.line-badge:active { opacity: 0.82; }
+.line-badge:active {
+  opacity: 0.82;
+}
 
 .line-badge:focus-visible {
   outline: none;
@@ -770,7 +845,9 @@
    donc porté par le filet de laiton seul — même décision que main.css. */
 .line-badge[aria-pressed="true"] {
   --ring-offset: var(--surface);
-  box-shadow: 0 0 0 2px var(--ring-offset), 0 0 0 3px var(--laiton);
+  box-shadow:
+    0 0 0 2px var(--ring-offset),
+    0 0 0 3px var(--laiton);
 }
 
 /* --------------------------------------------------------------------------
@@ -805,14 +882,27 @@
     padding-right: max(12px, env(safe-area-inset-right, 0px));
   }
 
-  .topbar__distance { display: none; }
+  .topbar__distance {
+    display: none;
+  }
 
-  .topbar__name { font-size: 14px; }
-  .topbar__count-label { display: none; }
+  .topbar__name {
+    font-size: 14px;
+  }
+  .topbar__count-label {
+    display: none;
+  }
 
-  .line-badge { --badge-size: 30px; font-size: 14px; }
-  .line-badge[data-len="2"] { font-size: 14px; }
-  .line-badge[data-len="3"] { font-size: 12px; }
+  .line-badge {
+    --badge-size: 30px;
+    font-size: 14px;
+  }
+  .line-badge[data-len="2"] {
+    font-size: 14px;
+  }
+  .line-badge[data-len="3"] {
+    font-size: 12px;
+  }
   .line-badges {
     display: grid;
     grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -836,7 +926,7 @@
   }
   .dock-handle::before,
   .dock-handle::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 4px;
     bottom: auto;
@@ -845,10 +935,20 @@
     height: 1px;
     background: var(--secondaire);
     transform-origin: center;
-    transition: transform var(--t-state) var(--ease), border-color var(--t-state) var(--ease);
+    transition:
+      transform var(--t-state) var(--ease),
+      border-color var(--t-state) var(--ease);
   }
-  .dock-handle::before { left: 0; right: auto; transform: rotate(-30deg); }
-  .dock-handle::after { left: auto; right: 0; transform: rotate(30deg); }
+  .dock-handle::before {
+    left: 0;
+    right: auto;
+    transform: rotate(-30deg);
+  }
+  .dock-handle::after {
+    left: auto;
+    right: 0;
+    transform: rotate(30deg);
+  }
   .dock[data-sheet="open"] .dock-handle::after {
     transform: rotate(-30deg);
   }
@@ -861,10 +961,14 @@
   .dock-handle:focus-visible::before {
     background: var(--laiton);
   }
-  .line-badge:hover { transform: none; }
+  .line-badge:hover {
+    transform: none;
+  }
 
   .topbar__count,
-  .rt-status { display: none; }
+  .rt-status {
+    display: none;
+  }
 
   .topbar__clock {
     width: 135px;
@@ -877,5 +981,7 @@
 }
 
 @media (max-width: 359px) {
-  .topbar__name { display: none; }
+  .topbar__name {
+    display: none;
+  }
 }

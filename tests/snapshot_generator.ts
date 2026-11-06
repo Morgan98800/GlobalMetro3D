@@ -39,29 +39,47 @@ export function computeParisSnapshot(baseDir: string = process.cwd()): ParisSnap
   // 1. Load lines
   const linesJsonPath = path.resolve(baseDir, 'web/public/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   // 2. Load shapes (Metro + RER)
   const shapesMetroBuf = fs.readFileSync(path.resolve(baseDir, 'web/public/data/shapes.bin'));
   const shapesRerBuf = fs.readFileSync(path.resolve(baseDir, 'web/public/data/rer_shapes.bin'));
-  
-  const shapesMap = decodeShapes(shapesMetroBuf.buffer.slice(shapesMetroBuf.byteOffset, shapesMetroBuf.byteOffset + shapesMetroBuf.byteLength));
-  const shapesRerMap = decodeShapes(shapesRerBuf.buffer.slice(shapesRerBuf.byteOffset, shapesRerBuf.byteOffset + shapesRerBuf.byteLength));
+
+  const shapesMap = decodeShapes(
+    shapesMetroBuf.buffer.slice(
+      shapesMetroBuf.byteOffset,
+      shapesMetroBuf.byteOffset + shapesMetroBuf.byteLength
+    )
+  );
+  const shapesRerMap = decodeShapes(
+    shapesRerBuf.buffer.slice(
+      shapesRerBuf.byteOffset,
+      shapesRerBuf.byteOffset + shapesRerBuf.byteLength
+    )
+  );
   for (const [id, s] of shapesRerMap.entries()) {
     shapesMap.set(id, s);
   }
 
   // 3. Load schedules (Metro + RER)
-  const schedMetro = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'web/public/data/schedule.json'), 'utf8'));
-  const schedRer = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'web/public/data/rer_schedule.json'), 'utf8'));
+  const schedMetro = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'web/public/data/schedule.json'), 'utf8')
+  );
+  const schedRer = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'web/public/data/rer_schedule.json'), 'utf8')
+  );
 
   const stationNames: string[] = [];
-  schedMetro.stations.forEach((name: string, i: number) => { stationNames[i] = name; });
-  schedRer.stations.forEach((name: string, i: number) => { stationNames[i] = name; });
+  schedMetro.stations.forEach((name: string, i: number) => {
+    stationNames[i] = name;
+  });
+  schedRer.stations.forEach((name: string, i: number) => {
+    stationNames[i] = name;
+  });
 
   const rawTrips: Array<{ trip: any; isRer: boolean }> = [
     ...schedMetro.trips.map((t: any) => ({ trip: t, isRer: false })),
-    ...schedRer.trips.map((t: any) => ({ trip: t, isRer: true }))
+    ...schedRer.trips.map((t: any) => ({ trip: t, isRer: true })),
   ];
 
   const trips: TripData[] = rawTrips.map(({ trip: t }) => {
@@ -70,7 +88,7 @@ export function computeParisSnapshot(baseDir: string = process.cwd()): ParisSnap
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -80,7 +98,7 @@ export function computeParisSnapshot(baseDir: string = process.cwd()): ParisSnap
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -131,7 +149,7 @@ export function computeParisSnapshot(baseDir: string = process.cwd()): ParisSnap
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -147,9 +165,9 @@ export function computeParisSnapshot(baseDir: string = process.cwd()): ParisSnap
       civilSeconds: SNAPSHOT_SECONDS,
       totalTrains: trains.length,
       metroTrains: metroCount,
-      rerTrains: rerCount
+      rerTrains: rerCount,
     },
-    trains
+    trains,
   };
 }
 
@@ -170,12 +188,16 @@ export interface MontrealSnapshotFixture {
 export function computeMontrealSnapshot(baseDir: string = process.cwd()): MontrealSnapshotFixture {
   const linesJsonPath = path.resolve(baseDir, 'cities/montreal/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/montreal/data/shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
 
-  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/montreal/data/schedule.json'), 'utf8'));
+  const sched = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'cities/montreal/data/schedule.json'), 'utf8')
+  );
   const stationNames: string[] = sched.stations || [];
 
   const trips: TripData[] = sched.trips.map((t: any): TripData => {
@@ -184,7 +206,7 @@ export function computeMontrealSnapshot(baseDir: string = process.cwd()): Montre
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -194,7 +216,7 @@ export function computeMontrealSnapshot(baseDir: string = process.cwd()): Montre
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -239,7 +261,7 @@ export function computeMontrealSnapshot(baseDir: string = process.cwd()): Montre
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -253,9 +275,9 @@ export function computeMontrealSnapshot(baseDir: string = process.cwd()): Montre
       serviceDate: '2026-09-15',
       civilSeconds: SNAPSHOT_SECONDS,
       totalTrains: trains.length,
-      trainsByLine
+      trainsByLine,
     },
-    trains
+    trains,
   };
 }
 
@@ -277,12 +299,16 @@ export interface LondonSnapshotFixture {
 export function computeLondonSnapshot(baseDir: string = process.cwd()): LondonSnapshotFixture {
   const linesJsonPath = path.resolve(baseDir, 'cities/london/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/london/data/shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
 
-  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/london/data/schedule.json'), 'utf8'));
+  const sched = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'cities/london/data/schedule.json'), 'utf8')
+  );
   const stationNames: string[] = sched.stations || [];
 
   const trips: TripData[] = sched.trips.map((t: any): TripData => {
@@ -291,7 +317,7 @@ export function computeLondonSnapshot(baseDir: string = process.cwd()): LondonSn
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -301,7 +327,7 @@ export function computeLondonSnapshot(baseDir: string = process.cwd()): LondonSn
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -349,7 +375,7 @@ export function computeLondonSnapshot(baseDir: string = process.cwd()): LondonSn
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -363,9 +389,9 @@ export function computeLondonSnapshot(baseDir: string = process.cwd()): LondonSn
       serviceDate: '2026-10-06',
       civilSeconds: SNAPSHOT_SECONDS,
       totalTrains: trains.length,
-      trainsByLine
+      trainsByLine,
     },
-    trains
+    trains,
   };
 }
 
@@ -384,12 +410,16 @@ export interface LilleSnapshotFixture {
 export function computeLilleSnapshot(baseDir: string = process.cwd()): LilleSnapshotFixture {
   const linesJsonPath = path.resolve(baseDir, 'cities/lille/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/lille/data/shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
 
-  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/lille/data/schedule.json'), 'utf8'));
+  const sched = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'cities/lille/data/schedule.json'), 'utf8')
+  );
   const stationNames: string[] = sched.stations || [];
 
   const trips: TripData[] = sched.trips.map((t: any): TripData => {
@@ -398,7 +428,7 @@ export function computeLilleSnapshot(baseDir: string = process.cwd()): LilleSnap
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -408,7 +438,7 @@ export function computeLilleSnapshot(baseDir: string = process.cwd()): LilleSnap
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -456,7 +486,7 @@ export function computeLilleSnapshot(baseDir: string = process.cwd()): LilleSnap
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -470,9 +500,9 @@ export function computeLilleSnapshot(baseDir: string = process.cwd()): LilleSnap
       serviceDate: '2026-09-30',
       civilSeconds: SNAPSHOT_SECONDS,
       totalTrains: trains.length,
-      trainsByLine
+      trainsByLine,
     },
-    trains
+    trains,
   };
 }
 
@@ -497,12 +527,16 @@ export function computeWashingtonSnapshot(
 ): WashingtonSnapshotFixture {
   const linesJsonPath = path.resolve(baseDir, 'cities/washington/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/washington/data/shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
 
-  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/washington/data/schedule.json'), 'utf8'));
+  const sched = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'cities/washington/data/schedule.json'), 'utf8')
+  );
   const stationNames: string[] = sched.stations || [];
 
   const trips: TripData[] = sched.trips.map((t: any): TripData => {
@@ -511,7 +545,7 @@ export function computeWashingtonSnapshot(
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -521,7 +555,7 @@ export function computeWashingtonSnapshot(
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -569,7 +603,7 @@ export function computeWashingtonSnapshot(
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -583,9 +617,9 @@ export function computeWashingtonSnapshot(
       serviceDate: isoTimestamp.split('T')[0],
       civilSeconds: SNAPSHOT_SECONDS,
       totalTrains: trains.length,
-      trainsByLine
+      trainsByLine,
     },
-    trains
+    trains,
   };
 }
 
@@ -610,12 +644,16 @@ export function computeBerlinSnapshot(
 ): BerlinSnapshotFixture {
   const linesJsonPath = path.resolve(baseDir, 'cities/berlin/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/berlin/data/shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
 
-  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/berlin/data/schedule.json'), 'utf8'));
+  const sched = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'cities/berlin/data/schedule.json'), 'utf8')
+  );
   const stationNames: string[] = sched.stations || [];
 
   const trips: TripData[] = sched.trips.map((t: any): TripData => {
@@ -624,7 +662,7 @@ export function computeBerlinSnapshot(
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -634,7 +672,7 @@ export function computeBerlinSnapshot(
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -682,7 +720,7 @@ export function computeBerlinSnapshot(
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -696,9 +734,9 @@ export function computeBerlinSnapshot(
       serviceDate: isoTimestamp.split('T')[0],
       civilSeconds: Math.floor((fixedDate.getTime() / 1000) % 86400),
       totalTrains: trains.length,
-      trainsByLine
+      trainsByLine,
     },
-    trains
+    trains,
   };
 }
 
@@ -723,12 +761,16 @@ export function computeEdinburghSnapshot(
 ): EdinburghSnapshotFixture {
   const linesJsonPath = path.resolve(baseDir, 'cities/edinburgh/data/lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   const shapesBuf = fs.readFileSync(path.resolve(baseDir, 'cities/edinburgh/data/shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
 
-  const sched = JSON.parse(fs.readFileSync(path.resolve(baseDir, 'cities/edinburgh/data/schedule.json'), 'utf8'));
+  const sched = JSON.parse(
+    fs.readFileSync(path.resolve(baseDir, 'cities/edinburgh/data/schedule.json'), 'utf8')
+  );
   const stationNames: string[] = sched.stations || [];
 
   const trips: TripData[] = sched.trips.map((t: any): TripData => {
@@ -737,7 +779,7 @@ export function computeEdinburghSnapshot(
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -747,7 +789,7 @@ export function computeEdinburghSnapshot(
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -795,7 +837,7 @@ export function computeEdinburghSnapshot(
         pos: [Math.round(train.pos[0] * 1e7) / 1e7, Math.round(train.pos[1] * 1e7) / 1e7],
         bearing: Math.round(train.brg * 10) / 10,
         nextStation: train.next,
-        destStation: train.dest
+        destStation: train.dest,
       });
     }
   }
@@ -809,12 +851,8 @@ export function computeEdinburghSnapshot(
       serviceDate: isoTimestamp.split('T')[0],
       civilSeconds: Math.floor((fixedDate.getTime() / 1000) % 86400),
       totalTrains: trains.length,
-      trainsByLine
+      trainsByLine,
     },
-    trains
+    trains,
   };
 }
-
-
-
-

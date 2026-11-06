@@ -49,12 +49,16 @@ export class TflRealtimeAdapter implements RealtimeAdapter<TflStatus> {
       if (!schedTrip) continue;
 
       if (m.confidence === 'measured' && m.nextStationId && m.timeToNextStationS !== undefined) {
-        const stop = schedTrip.stops.find(s => s.stopId === m.nextStationId);
-        const calls = stop ? [{
-          stopId: m.nextStationId,
-          aimed: stop.arr,
-          expected: ctx.civilSeconds + m.timeToNextStationS
-        }] : [];
+        const stop = schedTrip.stops.find((s) => s.stopId === m.nextStationId);
+        const calls = stop
+          ? [
+              {
+                stopId: m.nextStationId,
+                aimed: stop.arr,
+                expected: ctx.civilSeconds + m.timeToNextStationS,
+              },
+            ]
+          : [];
         ctx.timelines.set(tripId, buildTimeline(schedTrip, calls));
       } else {
         ctx.timelines.set(tripId, buildTimeline(schedTrip, []));

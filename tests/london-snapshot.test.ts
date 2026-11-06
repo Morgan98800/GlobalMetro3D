@@ -12,11 +12,15 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
       const freshSnapshot = computeLondonSnapshot();
       fs.mkdirSync(path.dirname(FIXTURE_PATH), { recursive: true });
       fs.writeFileSync(FIXTURE_PATH, JSON.stringify(freshSnapshot, null, 2), 'utf8');
-      console.log(`[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`);
+      console.log(
+        `[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`
+      );
     }
 
     // 2. Load frozen reference fixture
-    const expectedFixture: LondonSnapshotFixture = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
+    const expectedFixture: LondonSnapshotFixture = JSON.parse(
+      fs.readFileSync(FIXTURE_PATH, 'utf8')
+    );
 
     // 3. Replay computation from engine and data
     const computedSnapshot = computeLondonSnapshot();
@@ -47,19 +51,51 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
 
     // Validate all 20 lines are active
     const lineIds = [
-      'bakerloo', 'central', 'circle', 'district', 'hammersmith-city',
-      'jubilee', 'metropolitan', 'northern', 'piccadilly', 'victoria', 'waterloo-city',
-      'dlr', 'elizabeth', 'liberty', 'lioness', 'mildmay', 'suffragette', 'weaver', 'windrush',
-      'tram'
+      'bakerloo',
+      'central',
+      'circle',
+      'district',
+      'hammersmith-city',
+      'jubilee',
+      'metropolitan',
+      'northern',
+      'piccadilly',
+      'victoria',
+      'waterloo-city',
+      'dlr',
+      'elizabeth',
+      'liberty',
+      'lioness',
+      'mildmay',
+      'suffragette',
+      'weaver',
+      'windrush',
+      'tram',
     ];
     for (const lid of lineIds) {
-      expect(computedSnapshot.meta.trainsByLine[lid], `Line ${lid} must have active trains`).toBeGreaterThan(0);
+      expect(
+        computedSnapshot.meta.trainsByLine[lid],
+        `Line ${lid} must have active trains`
+      ).toBeGreaterThan(0);
     }
 
     // 5. Compare train by train for Tube (strict non-regression: 540 trains must match reference fixture exactly)
-    const expectedMap = new Map(expectedFixture.trains.map(t => [t.tripId, t]));
-    const OVERGROUND_LINES = new Set(['liberty', 'lioness', 'mildmay', 'suffragette', 'weaver', 'windrush']);
-    const tubeTrains = computedSnapshot.trains.filter(t => t.line !== 'dlr' && t.line !== 'elizabeth' && t.line !== 'tram' && !OVERGROUND_LINES.has(t.line));
+    const expectedMap = new Map(expectedFixture.trains.map((t) => [t.tripId, t]));
+    const OVERGROUND_LINES = new Set([
+      'liberty',
+      'lioness',
+      'mildmay',
+      'suffragette',
+      'weaver',
+      'windrush',
+    ]);
+    const tubeTrains = computedSnapshot.trains.filter(
+      (t) =>
+        t.line !== 'dlr' &&
+        t.line !== 'elizabeth' &&
+        t.line !== 'tram' &&
+        !OVERGROUND_LINES.has(t.line)
+    );
     expect(tubeTrains.length).toBe(540);
 
     let maxDistDeltaM = 0;
@@ -88,17 +124,23 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
       if (speedDeltaMps > maxSpeedDeltaMps) maxSpeedDeltaMps = speedDeltaMps;
 
       // Acceptance criterion: strictly reproduction within 1 meter (exact non-regression)
-      expect(distDeltaM, `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`).toBeLessThanOrEqual(1.0);
-      expect(speedDeltaMps, `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`).toBeLessThanOrEqual(0.1);
+      expect(
+        distDeltaM,
+        `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`
+      ).toBeLessThanOrEqual(1.0);
+      expect(
+        speedDeltaMps,
+        `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`
+      ).toBeLessThanOrEqual(0.1);
     }
 
     // 6. Verify newly delivered DLR fleet (38 trains active in East London)
-    const dlrTrains = computedSnapshot.trains.filter(t => t.line === 'dlr');
+    const dlrTrains = computedSnapshot.trains.filter((t) => t.line === 'dlr');
     expect(dlrTrains.length).toBe(38);
     for (const t of dlrTrains) {
       const [lon, lat] = t.pos;
       expect(lon).toBeGreaterThanOrEqual(-0.15); // DLR is bounded between Bank and Beckton/Woolwich/Lewisham
-      expect(lon).toBeLessThanOrEqual(0.10);
+      expect(lon).toBeLessThanOrEqual(0.1);
       expect(lat).toBeGreaterThanOrEqual(51.45); // Lewisham is ~51.465
       expect(lat).toBeLessThanOrEqual(51.56);
       expect(t.speedMps).toBeGreaterThanOrEqual(0);
@@ -106,12 +148,12 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
     }
 
     // 7. Verify newly delivered Elizabeth line fleet (40 active trains across Reading-Heathrow-Shenfield-Abbey Wood)
-    const elizabethTrains = computedSnapshot.trains.filter(t => t.line === 'elizabeth');
+    const elizabethTrains = computedSnapshot.trains.filter((t) => t.line === 'elizabeth');
     expect(elizabethTrains.length).toBe(40);
     for (const t of elizabethTrains) {
       const [lon, lat] = t.pos;
       expect(lon).toBeGreaterThanOrEqual(-1.02); // Reading is ~ -0.973
-      expect(lon).toBeLessThanOrEqual(0.35);  // Shenfield is ~ +0.331
+      expect(lon).toBeLessThanOrEqual(0.35); // Shenfield is ~ +0.331
       expect(lat).toBeGreaterThanOrEqual(51.44); // Heathrow / Abbey Wood ~51.46 - 51.49
       expect(lat).toBeLessThanOrEqual(51.65); // Shenfield ~51.63
       expect(t.speedMps).toBeGreaterThanOrEqual(0);
@@ -120,12 +162,12 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
     }
 
     // 8. Verify London Overground fleet (40 active trains across Liberty, Lioness, Mildmay, Suffragette, Weaver, Windrush)
-    const overgroundTrains = computedSnapshot.trains.filter(t => OVERGROUND_LINES.has(t.line));
+    const overgroundTrains = computedSnapshot.trains.filter((t) => OVERGROUND_LINES.has(t.line));
     expect(overgroundTrains.length).toBe(40);
     for (const t of overgroundTrains) {
       const [lon, lat] = t.pos;
-      expect(lon).toBeGreaterThanOrEqual(-0.50); // Watford is ~ -0.40
-      expect(lon).toBeLessThanOrEqual(0.30);  // Upminster is ~ +0.25
+      expect(lon).toBeGreaterThanOrEqual(-0.5); // Watford is ~ -0.40
+      expect(lon).toBeLessThanOrEqual(0.3); // Upminster is ~ +0.25
       expect(lat).toBeGreaterThanOrEqual(51.35); // West Croydon is ~51.37
       expect(lat).toBeLessThanOrEqual(51.72); // Cheshunt / Watford is ~51.67-51.70
       expect(t.speedMps).toBeGreaterThanOrEqual(0);
@@ -134,12 +176,12 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
     }
 
     // 9. Verify London Trams fleet (30 active trams across Wimbledon, Croydon, Beckenham, Elmers End, New Addington)
-    const tramTrains = computedSnapshot.trains.filter(t => t.line === 'tram');
+    const tramTrains = computedSnapshot.trains.filter((t) => t.line === 'tram');
     expect(tramTrains.length).toBe(30);
     for (const t of tramTrains) {
       const [lon, lat] = t.pos;
       expect(lon).toBeGreaterThanOrEqual(-0.25); // Wimbledon is ~ -0.21
-      expect(lon).toBeLessThanOrEqual(0.06);   // Beckenham / New Addington is ~ +0.03
+      expect(lon).toBeLessThanOrEqual(0.06); // Beckenham / New Addington is ~ +0.03
       expect(lat).toBeGreaterThanOrEqual(51.32); // New Addington is ~ 51.34
       expect(lat).toBeLessThanOrEqual(51.44); // Wimbledon / Beckenham is ~ 51.42
       expect(t.speedMps).toBeGreaterThanOrEqual(0);
@@ -147,6 +189,8 @@ describe('London Underground Simulation Snapshot Safety Net', () => {
       expect(t.shapeId).toMatch(/^tram_\d+_\d+$/);
     }
 
-    console.log(`✅ London snapshot passed: 540 Tube trains matched with Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s, plus 38 active DLR, 40 active Elizabeth line, 40 active London Overground, and 30 active London Trams.`);
+    console.log(
+      `✅ London snapshot passed: 540 Tube trains matched with Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s, plus 38 active DLR, 40 active Elizabeth line, 40 active London Overground, and 30 active London Trams.`
+    );
   });
 });

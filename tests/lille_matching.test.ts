@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { IleviaMatcher, isTripUpdateMonotonic, stopIdToNormalizedStationId } from '../cities/lille/rt/ilevia_matching';
+import {
+  IleviaMatcher,
+  isTripUpdateMonotonic,
+  stopIdToNormalizedStationId,
+} from '../cities/lille/rt/ilevia_matching';
 import { IleviaRealtimeAdapter } from '../cities/lille/rt/ilevia_adapter';
 import { createRealtimeAdapter } from '../cities/realtime';
 import { lilleConfig } from '../cities/lille/city.config';
@@ -17,8 +21,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
         stopTimeUpdates: [
           { stopSequence: 1, stopId: '4CA099', departure: { time: 1790760000 } },
           { stopSequence: 2, stopId: 'CSC099', arrival: { time: 1790760086 } },
-          { stopSequence: 3, stopId: 'TIO099', arrival: { time: 1790760161 } }
-        ]
+          { stopSequence: 3, stopId: 'TIO099', arrival: { time: 1790760161 } },
+        ],
       };
       expect(isTripUpdateMonotonic(validUpdate)).toBe(true);
     });
@@ -29,8 +33,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
         trip: { tripId: '5538720', routeId: 'ME1' },
         stopTimeUpdates: [
           { stopSequence: 1, stopId: '4CA099', departure: { time: 1790760100 } },
-          { stopSequence: 2, stopId: 'CSC099', arrival: { time: 1790760050 } } // Recul de 50 s !
-        ]
+          { stopSequence: 2, stopId: 'CSC099', arrival: { time: 1790760050 } }, // Recul de 50 s !
+        ],
       };
       expect(isTripUpdateMonotonic(defectiveUpdate)).toBe(false);
 
@@ -49,8 +53,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       shapeId: 'ME1_0',
       stops: [
         { stopId: '4CA099', arr: 30500, dep: 30500, dist: 26.4 },
-        { stopId: 'CSC099', arr: 30586, dep: 30586, dist: 802.1 }
-      ]
+        { stopId: 'CSC099', arr: 30586, dep: 30586, dist: 802.1 },
+      ],
     };
 
     it('attribue la confiance "measured" pour une prédiction d’arrivée dans la fenêtre', () => {
@@ -58,8 +62,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
         id: '10',
         trip: { tripId: '5539138', routeId: 'ME1' },
         stopTimeUpdates: [
-          { stopSequence: 2, stopId: 'CSC099', arrival: { time: 30650 } } // +50s du temps civil
-        ]
+          { stopSequence: 2, stopId: 'CSC099', arrival: { time: 30650 } }, // +50s du temps civil
+        ],
       };
 
       const matcher = new IleviaMatcher({ matchWindowSec: 120, maxDelaySec: 900 });
@@ -77,8 +81,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
         id: '11',
         trip: { tripId: '5539138', routeId: 'ME1' },
         stopTimeUpdates: [
-          { stopSequence: 2, stopId: 'CSC099', arrival: { time: 30800 } } // +200s (> 120s)
-        ]
+          { stopSequence: 2, stopId: 'CSC099', arrival: { time: 30800 } }, // +200s (> 120s)
+        ],
       };
 
       const matcher = new IleviaMatcher({ matchWindowSec: 120, maxDelaySec: 900 });
@@ -117,8 +121,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
             arr: s[0],
             dep: s[1],
             dist: s[2],
-            stopId: schedData.stations[s[3]]
-          }))
+            stopId: schedData.stations[s[3]],
+          })),
         }));
 
       expect(activeTrips.length).toBe(32);
@@ -127,9 +131,7 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       const sampleUpdates: IleviaTripUpdate[] = activeTrips.slice(0, 10).map((t, idx) => ({
         id: `sample_${idx}`,
         trip: { tripId: t.tripId, routeId: 'ME1' },
-        stopTimeUpdates: [
-          { stopSequence: 1, stopId: 'TEST_STOP', arrival: { time: 30640 } }
-        ]
+        stopTimeUpdates: [{ stopSequence: 1, stopId: 'TEST_STOP', arrival: { time: 30640 } }],
       }));
 
       const matcher = new IleviaMatcher();
@@ -156,8 +158,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
             arr: s[0],
             dep: s[1],
             dist: s[2],
-            stopId: schedData.stations[s[3]]
-          }))
+            stopId: schedData.stations[s[3]],
+          })),
         }));
 
       expect(activeTripsL2.length).toBe(68);
@@ -165,9 +167,7 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       const sampleUpdates: IleviaTripUpdate[] = activeTripsL2.slice(0, 15).map((t, idx) => ({
         id: `sample_l2_${idx}`,
         trip: { tripId: t.tripId, routeId: 'ME2' },
-        stopTimeUpdates: [
-          { stopSequence: 1, stopId: 'TEST_STOP_L2', arrival: { time: 30650 } }
-        ]
+        stopTimeUpdates: [{ stopSequence: 1, stopId: 'TEST_STOP_L2', arrival: { time: 30650 } }],
       }));
 
       const matcher = new IleviaMatcher();
@@ -194,8 +194,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
             arr: s[0],
             dep: s[1],
             dist: s[2],
-            stopId: schedData.stations[s[3]]
-          }))
+            stopId: schedData.stations[s[3]],
+          })),
         }));
 
       const activeTripsT: SchedTrip[] = schedData.trips
@@ -209,8 +209,8 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
             arr: s[0],
             dep: s[1],
             dist: s[2],
-            stopId: schedData.stations[s[3]]
-          }))
+            stopId: schedData.stations[s[3]],
+          })),
         }));
 
       expect(activeTripsR.length).toBe(8);
@@ -223,7 +223,9 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
       const schedData = JSON.parse(fs.readFileSync(schedPath, 'utf-8'));
 
       const activeTripsTram: SchedTrip[] = schedData.trips
-        .filter((t: any[]) => (t[1] === 'TRAM_R' || t[1] === 'TRAM_T') && t[4] <= 30600 && t[5] >= 30600)
+        .filter(
+          (t: any[]) => (t[1] === 'TRAM_R' || t[1] === 'TRAM_T') && t[4] <= 30600 && t[5] >= 30600
+        )
         .map((t: any[]) => ({
           tripId: t[0],
           lineId: t[1],
@@ -233,17 +235,15 @@ describe('Appariement et validation temps réel Ilévia (Phase 3)', () => {
             arr: s[0],
             dep: s[1],
             dist: s[2],
-            stopId: schedData.stations[s[3]]
-          }))
+            stopId: schedData.stations[s[3]],
+          })),
         }));
 
       // Simulation de mises à jour GTFS-RT reçues avec route_id '71'
       const sampleUpdates: IleviaTripUpdate[] = activeTripsTram.map((t, idx) => ({
         id: `tram_update_${idx}`,
         trip: { tripId: t.tripId, routeId: '71' },
-        stopTimeUpdates: [
-          { stopSequence: 5, stopId: 'ICT021', arrival: { time: 30650 } }
-        ]
+        stopTimeUpdates: [{ stopSequence: 5, stopId: 'ICT021', arrival: { time: 30650 } }],
       }));
 
       const matcher = new IleviaMatcher();

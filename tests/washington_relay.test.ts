@@ -11,7 +11,7 @@ import {
   resetWashingtonCache,
   handler,
   CACHE_TTL_SEC,
-  type WmataFetcher
+  type WmataFetcher,
 } from '../netlify/functions/washington_relay';
 
 // Utilitaires de création de buffers Protobuf GTFS-RT pour les tests
@@ -108,10 +108,30 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
   describe('Décodage Protobuf GTFS-RT', () => {
     it('décode les TripUpdates et ne conserve que la ligne Red (RD / RED)', () => {
       const feed = createDummyTripUpdatesFeed([
-        { id: '1', routeId: 'RD', tripId: '6573091_20121', stops: [{ seq: 1, stopId: 'PF_A01_1', time: 1791289800 }] },
-        { id: '2', routeId: 'RED', tripId: '6573100_20121', stops: [{ seq: 1, stopId: 'PF_B01_2', time: 1791289860 }] },
-        { id: '3', routeId: 'BL', tripId: '9999001', stops: [{ seq: 1, stopId: 'PF_C01_1', time: 1791289900 }] },
-        { id: '4', routeId: 'OR', tripId: '9999002', stops: [{ seq: 1, stopId: 'PF_K01_1', time: 1791289950 }] },
+        {
+          id: '1',
+          routeId: 'RD',
+          tripId: '6573091_20121',
+          stops: [{ seq: 1, stopId: 'PF_A01_1', time: 1791289800 }],
+        },
+        {
+          id: '2',
+          routeId: 'RED',
+          tripId: '6573100_20121',
+          stops: [{ seq: 1, stopId: 'PF_B01_2', time: 1791289860 }],
+        },
+        {
+          id: '3',
+          routeId: 'BL',
+          tripId: '9999001',
+          stops: [{ seq: 1, stopId: 'PF_C01_1', time: 1791289900 }],
+        },
+        {
+          id: '4',
+          routeId: 'OR',
+          tripId: '9999002',
+          stops: [{ seq: 1, stopId: 'PF_K01_1', time: 1791289950 }],
+        },
       ]);
 
       const { totalEntities, filteredUpdates } = decodeGtfsRtTripUpdates(feed);
@@ -129,8 +149,8 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           vehicleId: '7042',
           carCountStr: '8',
           lat: 38.9072,
-          lng: -77.0369
-        }
+          lng: -77.0369,
+        },
       ]);
 
       const { totalEntities, filteredPositions } = decodeGtfsRtVehiclePositions(feed);
@@ -158,10 +178,11 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           {
             IncidentID: 'INC-1',
             LinesAffected: 'BL; OR;',
-            Description: 'Blue Line: Single tracking between Rosslyn and Foggy Bottom due to track work.',
-            IncidentType: 'Delay'
-          }
-        ]
+            Description:
+              'Blue Line: Single tracking between Rosslyn and Foggy Bottom due to track work.',
+            IncidentType: 'Delay',
+          },
+        ],
       };
 
       const traffic = parseWmataIncidents(payload);
@@ -175,11 +196,12 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           {
             IncidentID: 'INC-2',
             LinesAffected: 'RD;',
-            Description: 'Red Line: Expect delays in both directions due to a signal problem outside Dupont Circle.',
+            Description:
+              'Red Line: Expect delays in both directions due to a signal problem outside Dupont Circle.',
             IncidentType: 'Delay',
-            DateUpdated: '2026-10-12T10:15:00'
-          }
-        ]
+            DateUpdated: '2026-10-12T10:15:00',
+          },
+        ],
       };
 
       const traffic = parseWmataIncidents(payload);
@@ -195,11 +217,12 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           {
             IncidentID: 'INC-3',
             LinesAffected: 'RD;',
-            Description: 'Red Line: Service suspended between Metro Center and Gallery Place due to emergency personnel on tracks.',
+            Description:
+              'Red Line: Service suspended between Metro Center and Gallery Place due to emergency personnel on tracks.',
             IncidentType: 'Alert',
-            DateUpdated: '2026-10-12T11:00:00'
-          }
-        ]
+            DateUpdated: '2026-10-12T11:00:00',
+          },
+        ],
       };
 
       const traffic = parseWmataIncidents(payload);
@@ -214,10 +237,23 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
     it('coalesce 50 appels simultanés en exactement 1 appel sortant WMATA', async () => {
       let wmataCalls = 0;
       const dummyTu = createDummyTripUpdatesFeed([
-        { id: '1', routeId: 'RD', tripId: '6573091_20121', stops: [{ seq: 1, stopId: 'PF_A01_1', time: 1791289800 }] }
+        {
+          id: '1',
+          routeId: 'RD',
+          tripId: '6573091_20121',
+          stops: [{ seq: 1, stopId: 'PF_A01_1', time: 1791289800 }],
+        },
       ]);
       const dummyVp = createDummyVehiclePositionsFeed([
-        { id: '1', tripId: '6573091_20121', routeId: 'RD', vehicleId: '7042', carCountStr: '8', lat: 38.9, lng: -77.0 }
+        {
+          id: '1',
+          tripId: '6573091_20121',
+          routeId: 'RD',
+          vehicleId: '7042',
+          carCountStr: '8',
+          lat: 38.9,
+          lng: -77.0,
+        },
       ]);
 
       const mockFetcher: WmataFetcher = async (endpoint) => {
@@ -265,7 +301,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
     it('intercepte une réponse WMATA 429 (Rate Limit) et bascule en mode théorique avec statut indisponible', async () => {
       const mock429Fetcher: WmataFetcher = async () => ({
         statusCode: 429,
-        error: 'Too Many Requests'
+        error: 'Too Many Requests',
       });
 
       const res = await getOrFetchWashingtonSnapshot('test-key', Date.now(), mock429Fetcher);
@@ -280,7 +316,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
     it('intercepte une réponse WMATA 401 (Unauthorized) et bascule en mode théorique sans crash', async () => {
       const mock401Fetcher: WmataFetcher = async () => ({
         statusCode: 401,
-        error: 'Access Denied'
+        error: 'Access Denied',
       });
 
       const res = await getOrFetchWashingtonSnapshot('invalid-key', Date.now(), mock401Fetcher);
@@ -293,7 +329,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
     it('intercepte une erreur réseau 500 / Timeout et renvoie HTTP 200 indisponible au client', async () => {
       const mock500Fetcher: WmataFetcher = async () => ({
         statusCode: 500,
-        error: 'Internal Server Error'
+        error: 'Internal Server Error',
       });
 
       const res = await getOrFetchWashingtonSnapshot('test-key', Date.now(), mock500Fetcher);
@@ -303,7 +339,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
   });
 
   describe('Comportement par Défaut sans Clé API (Fixture Fallback)', () => {
-    it('renvoie la fixture réaliste avec x-wmata-fixture: true quand aucune clé n\'est configurée', async () => {
+    it("renvoie la fixture réaliste avec x-wmata-fixture: true quand aucune clé n'est configurée", async () => {
       delete process.env.WMATA_API_KEY;
       resetWashingtonCache();
 
@@ -311,7 +347,9 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
       expect(response.statusCode).toBe(200);
       expect(response.headers['x-wmata-fixture']).toBe('true');
       expect(response.headers['Cache-Control']).toContain(`s-maxage=${CACHE_TTL_SEC}`);
-      expect(response.headers['Netlify-CDN-Cache-Control']).toBe(`public, s-maxage=${CACHE_TTL_SEC}`);
+      expect(response.headers['Netlify-CDN-Cache-Control']).toBe(
+        `public, s-maxage=${CACHE_TTL_SEC}`
+      );
 
       const data = JSON.parse(response.body);
       expect(data.feedHealthy).toBe(true);
@@ -332,7 +370,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           Line: 'RD',
           LocationCode: 'A01',
           LocationName: 'Metro Center',
-          Min: '3'
+          Min: '3',
         },
         {
           Car: '8',
@@ -343,7 +381,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           Line: 'RD',
           LocationCode: 'A01',
           LocationName: 'Metro Center',
-          Min: 'ARR'
+          Min: 'ARR',
         },
         {
           Car: '6',
@@ -354,7 +392,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           Line: 'RD',
           LocationCode: 'A01',
           LocationName: 'Metro Center',
-          Min: 'BRD'
+          Min: 'BRD',
         },
         {
           Car: '8',
@@ -365,7 +403,7 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           Line: 'OR',
           LocationCode: 'C01',
           LocationName: 'Metro Center',
-          Min: '5'
+          Min: '5',
         },
         {
           Car: '6',
@@ -376,13 +414,16 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
           Line: 'RD',
           LocationCode: 'A01',
           LocationName: 'Metro Center',
-          Min: '---'
-        }
-      ]
+          Min: '---',
+        },
+      ],
     };
 
     it('analyse et normalise les prédictions JSON de GetPrediction/All', () => {
-      const { trains, tripUpdates, predictions } = parseWmataStationPredictions(samplePredictionsPayload, 1791289800);
+      const { trains, tripUpdates, predictions } = parseWmataStationPredictions(
+        samplePredictionsPayload,
+        1791289800
+      );
 
       // 4 prédictions valides (la 5e avec "---" est ignorée)
       expect(predictions).toHaveLength(4);
@@ -424,19 +465,23 @@ describe('Relais Netlify washington_relay (Porte 3)', () => {
         if (endpoint === 'stationprediction') {
           return {
             statusCode: 200,
-            data: JSON.stringify(samplePredictionsPayload)
+            data: JSON.stringify(samplePredictionsPayload),
           };
         }
         if (endpoint === 'incidents') {
           return {
             statusCode: 200,
-            data: JSON.stringify({ Incidents: [] })
+            data: JSON.stringify({ Incidents: [] }),
           };
         }
         return { statusCode: 404 };
       };
 
-      const res = await getOrFetchWashingtonSnapshot('wmata-prod-key', 1791289800 * 1000, mockHybridFetcher);
+      const res = await getOrFetchWashingtonSnapshot(
+        'wmata-prod-key',
+        1791289800 * 1000,
+        mockHybridFetcher
+      );
 
       expect(res.snapshot.feedHealthy).toBe(true);
       expect(res.snapshot.serviceActive).toBe(true);

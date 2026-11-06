@@ -24,7 +24,7 @@ export class BerlinRealtimeClient {
     this.pollIntervalMs = pollIntervalMs;
     this.matcher = new BerlinMatcher({
       matchWindowSec: 120,
-      maxDelaySec: 900
+      maxDelaySec: 900,
     });
   }
 
@@ -81,7 +81,7 @@ export class BerlinRealtimeClient {
       coveragePct: this.lastOutcome ? Math.round(this.lastOutcome.matchRate * 100) : undefined,
       matchedCount: this.lastOutcome?.matchedCount,
       totalReceivedCount: this.lastOutcome?.receivedCount,
-      discardedNonMonotonicCount: this.lastOutcome?.discardedNonMonotonicCount
+      discardedNonMonotonicCount: this.lastOutcome?.discardedNonMonotonicCount,
     };
   }
 

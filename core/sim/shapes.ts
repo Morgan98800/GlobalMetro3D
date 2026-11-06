@@ -5,13 +5,15 @@ import {
   sliceShape as sliceShapeLoader,
   splitIntoCars as splitIntoCarsLoader,
   type Shape,
-  type ShapeIndex
+  type ShapeIndex,
 } from './shapes_loader';
 
 export type ShapeData = Shape;
 export type ShapeEntry = Shape;
 
-export async function loadShapesBin(url: string = '/data/shapes.bin'): Promise<Map<string, ShapeEntry>> {
+export async function loadShapesBin(
+  url: string = '/data/shapes.bin'
+): Promise<Map<string, ShapeEntry>> {
   return loadShapes(url);
 }
 

@@ -36,9 +36,8 @@ export class StmRealtimeClient {
   }
 
   public getStatus(): StmStatus {
-    const minutesAgo = this.lastUpdate !== null
-      ? Math.floor((Date.now() - this.lastUpdate) / 60000)
-      : undefined;
+    const minutesAgo =
+      this.lastUpdate !== null ? Math.floor((Date.now() - this.lastUpdate) / 60000) : undefined;
 
     return {
       active: this.isPolling,
@@ -48,7 +47,7 @@ export class StmRealtimeClient {
       serviceActive: this.serviceActive,
       serviceMessage: this.serviceMessage,
       lastError: this.lastError,
-      trafficByLine: this.trafficByLine
+      trafficByLine: this.trafficByLine,
     };
   }
 
@@ -63,7 +62,7 @@ export class StmRealtimeClient {
     for (const url of endpoints) {
       try {
         const resp = await fetch(url, {
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         });
 
         if (!resp.ok) continue;

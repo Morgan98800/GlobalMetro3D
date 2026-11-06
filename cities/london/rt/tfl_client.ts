@@ -37,7 +37,7 @@ export class TflRealtimeClient {
     this.matcher = new TflHybridMatcher({
       matchWindowSec: 120,
       maxDelaySec: 900,
-      alpha: 0.4
+      alpha: 0.4,
     });
   }
 
@@ -57,16 +57,18 @@ export class TflRealtimeClient {
     return this.matcher;
   }
 
-  public matchTrips(activeTrips: readonly SchedTrip[], currentCivilSeconds: number): TflMatchOutcome {
+  public matchTrips(
+    activeTrips: readonly SchedTrip[],
+    currentCivilSeconds: number
+  ): TflMatchOutcome {
     const outcome = this.matcher.match(this.arrivals, activeTrips, currentCivilSeconds);
     this.lastOutcome = outcome;
     return outcome;
   }
 
   public getStatus(): TflStatus {
-    const minutesAgo = this.lastUpdate !== null
-      ? Math.floor((Date.now() - this.lastUpdate) / 60000)
-      : undefined;
+    const minutesAgo =
+      this.lastUpdate !== null ? Math.floor((Date.now() - this.lastUpdate) / 60000) : undefined;
 
     return {
       active: this.isPolling,
@@ -79,7 +81,7 @@ export class TflRealtimeClient {
       trafficByLine: this.trafficByLine,
       coveragePct: this.lastOutcome?.coveragePct,
       matchedCount: this.lastOutcome?.matchedCount,
-      totalActiveCount: this.lastOutcome?.totalActiveCount
+      totalActiveCount: this.lastOutcome?.totalActiveCount,
     };
   }
 
@@ -95,7 +97,7 @@ export class TflRealtimeClient {
       try {
         const res = await fetch(ep, {
           headers: { Accept: 'application/json' },
-          cache: 'no-store'
+          cache: 'no-store',
         });
 
         if (!res.ok) {

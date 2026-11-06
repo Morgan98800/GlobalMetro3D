@@ -12,7 +12,7 @@ import {
   getKinematicProfile,
   type SchedTrip,
   type Timeline,
-  type Confidence
+  type Confidence,
 } from '@core/rt/rt_matching';
 import { cityClock, selectActiveTrips, serviceCandidates } from './paris_time';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
@@ -91,7 +91,10 @@ export class BrowserSubwayEngine {
   private firstMetroSeconds = 0;
   private lastServiceSeconds = 0;
   private lastTrafficByLine: Record<string, LineTrafficReport> | null = null;
-  private closedStationsRules = new Map<string, { allClosed: boolean; normalizedSet: Set<string>; normalizedList: string[] }>();
+  private closedStationsRules = new Map<
+    string,
+    { allClosed: boolean; normalizedSet: Set<string>; normalizedList: string[] }
+  >();
 
   private externalShapesMap?: Map<string, Shape>;
   private config: CityConfig;
@@ -119,14 +122,14 @@ export class BrowserSubwayEngine {
 
   public async initialize(lines: LineMetadata[], externalShapesMap?: Map<string, Shape>) {
     this.externalShapesMap = externalShapesMap;
-    lines.forEach(l => this.linesMap.set(l.id, l));
+    lines.forEach((l) => this.linesMap.set(l.id, l));
 
     // 1. Fetch shapes.bin & schedule.json in parallel
     const dataDir = this.config.paths.dataDir;
     console.log('[engine] Loading shapes and schedule in browser...');
     const [shapesMap, scheduleRes] = await Promise.all([
       loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
-      fetch(dataUrl(`${dataDir}/schedule.json`))
+      fetch(dataUrl(`${dataDir}/schedule.json`)),
     ]);
 
     this.shapes = shapesMap;
@@ -141,7 +144,7 @@ export class BrowserSubwayEngine {
         s[0], // arr
         s[1], // dep
         s[2], // distM
-        this.stationNames[s[3]] || 'Station'
+        this.stationNames[s[3]] || 'Station',
       ]);
 
       const tripId = t[0];
@@ -154,12 +157,12 @@ export class BrowserSubwayEngine {
         lineId,
         dir,
         shapeId,
-        stops: stops.map(s => ({
+        stops: stops.map((s) => ({
           stopId: normalizeStopName(s[3]),
           arr: s[0],
           dep: s[1],
-          dist: s[2]
-        }))
+          dist: s[2],
+        })),
       });
 
       return {
@@ -170,19 +173,21 @@ export class BrowserSubwayEngine {
         t0: t[4],
         t1: t[5],
         destName,
-        stops
+        stops,
       };
     });
 
-    console.log(`[engine] Loaded ${this.shapes.size} shapes and ${this.trips.length} scheduled trips.`);
+    console.log(
+      `[engine] Loaded ${this.shapes.size} shapes and ${this.trips.length} scheduled trips.`
+    );
 
     this.recomputeTripTimeBounds();
-    this.lineIds = lines.map(l => l.id);
+    this.lineIds = lines.map((l) => l.id);
     this.initializeServiceDistance(new Date());
 
     // Asynchronous non-blocking loading of RER data if configured
     if (this.config.paths.rer) {
-      this.loadRerData().catch(err => {
+      this.loadRerData().catch((err) => {
         console.warn('[engine] Failed to load RER data:', err);
       });
     }
@@ -196,7 +201,7 @@ export class BrowserSubwayEngine {
       console.log('[engine] Loading RER shapes and schedule...');
       const [rerShapesMap, rerScheduleRes] = await Promise.all([
         loadShapes(dataUrl(rerConfig.shapesBin)),
-        fetch(dataUrl(rerConfig.scheduleJson))
+        fetch(dataUrl(rerConfig.scheduleJson)),
       ]);
 
       if (!rerScheduleRes.ok) {
@@ -225,7 +230,7 @@ export class BrowserSubwayEngine {
           s[0], // arr
           s[1], // dep
           s[2], // distM
-          this.stationNames[s[3]] || 'Station'
+          this.stationNames[s[3]] || 'Station',
         ]);
 
         const tripId = t[0];
@@ -238,12 +243,12 @@ export class BrowserSubwayEngine {
           lineId,
           dir,
           shapeId,
-          stops: stops.map(s => ({
+          stops: stops.map((s) => ({
             stopId: normalizeStopName(s[3]),
             arr: s[0],
             dep: s[1],
-            dist: s[2]
-          }))
+            dist: s[2],
+          })),
         });
 
         return {
@@ -254,13 +259,15 @@ export class BrowserSubwayEngine {
           t0: t[4],
           t1: t[5],
           destName,
-          stops
+          stops,
         };
       });
 
       this.trips.push(...rerTrips);
       this.recomputeTripTimeBounds();
-      console.log(`[engine] Loaded ${rerShapesMap.size} RER shapes and ${rerTrips.length} RER scheduled trips.`);
+      console.log(
+        `[engine] Loaded ${rerShapesMap.size} RER shapes and ${rerTrips.length} RER scheduled trips.`
+      );
     } catch (err) {
       console.warn('[engine] Could not load RER dataset:', err);
     }
@@ -329,8 +336,11 @@ export class BrowserSubwayEngine {
 
   private initializeServiceDistance(now: Date) {
     const serviceDate = this.serviceDateFor(now);
-    const candidate = serviceCandidates(now, this.config.timezone).find(item => item.serviceDate === serviceDate);
-    const serviceSeconds = candidate?.seconds ?? cityClock(now, this.config.timezone).secondsSinceMidnight;
+    const candidate = serviceCandidates(now, this.config.timezone).find(
+      (item) => item.serviceDate === serviceDate
+    );
+    const serviceSeconds =
+      candidate?.seconds ?? cityClock(now, this.config.timezone).secondsSinceMidnight;
     this.serviceDistanceM = this.trips.reduce(
       (sum, trip) => sum + this.distanceAtTripTime(trip, serviceSeconds),
       0
@@ -369,14 +379,15 @@ export class BrowserSubwayEngine {
         firstMetroSeconds: 0,
         firstMetroLabel: '—',
         secondsUntilFirst: 0,
-        nowCivilSeconds: secondsSinceMidnight
+        nowCivilSeconds: secondsSinceMidnight,
       };
     }
 
     const firstMetroSeconds = this.firstMetroSeconds;
     const lastServiceSeconds = this.lastServiceSeconds;
-    const active = serviceCandidates(now, this.config.timezone).some(candidate =>
-      candidate.seconds >= firstMetroSeconds && candidate.seconds <= lastServiceSeconds
+    const active = serviceCandidates(now, this.config.timezone).some(
+      (candidate) =>
+        candidate.seconds >= firstMetroSeconds && candidate.seconds <= lastServiceSeconds
     );
 
     let state: ServiceState;
@@ -388,16 +399,16 @@ export class BrowserSubwayEngine {
       state = 'ended';
     }
 
-    const firstTodayOrTomorrow = secondsSinceMidnight < firstMetroSeconds
-      ? firstMetroSeconds
-      : 86400 + firstMetroSeconds;
+    const firstTodayOrTomorrow =
+      secondsSinceMidnight < firstMetroSeconds ? firstMetroSeconds : 86400 + firstMetroSeconds;
 
     return {
       state,
       firstMetroSeconds,
       firstMetroLabel: formatClock(firstMetroSeconds),
-      secondsUntilFirst: state === 'active' ? 0 : Math.max(0, firstTodayOrTomorrow - secondsSinceMidnight),
-      nowCivilSeconds: secondsSinceMidnight
+      secondsUntilFirst:
+        state === 'active' ? 0 : Math.max(0, firstTodayOrTomorrow - secondsSinceMidnight),
+      nowCivilSeconds: secondsSinceMidnight,
     };
   }
 
@@ -426,16 +437,16 @@ export class BrowserSubwayEngine {
           this.closedStationsRules.set(lineId, {
             allClosed: true,
             normalizedSet: new Set(),
-            normalizedList: []
+            normalizedList: [],
           });
         } else {
           const normalized = report.closedStations
-            .map(cs => normalizeStopName(cs))
-            .filter(cs => cs.length >= 3);
+            .map((cs) => normalizeStopName(cs))
+            .filter((cs) => cs.length >= 3);
           this.closedStationsRules.set(lineId, {
             allClosed: false,
             normalizedSet: new Set(normalized),
-            normalizedList: normalized
+            normalizedList: normalized,
           });
         }
       }
@@ -445,7 +456,7 @@ export class BrowserSubwayEngine {
   private getLineMaxDisplaySpeed(lineId: string): number {
     const line = this.linesMap.get(lineId);
     if (line?.mode) {
-      const mode = this.config.modes.find(m => m.id === line.mode);
+      const mode = this.config.modes.find((m) => m.id === line.mode);
       if (mode?.kinematics?.maxSpeedKmh) {
         return mode.kinematics.maxSpeedKmh;
       }
@@ -495,12 +506,15 @@ export class BrowserSubwayEngine {
     const onTick = () => {
       if (!this.isRunning) return;
 
-      const now = this.virtualTimeOffsetS !== 0
-        ? new Date(Date.now() + this.virtualTimeOffsetS * 1000)
-        : new Date();
+      const now =
+        this.virtualTimeOffsetS !== 0
+          ? new Date(Date.now() + this.virtualTimeOffsetS * 1000)
+          : new Date();
 
       const activeTrips = selectActiveTrips(this.trips, now, undefined, 0, this.config.timezone);
-      const activeSchedTrips = activeTrips.map(a => this.schedTripsMap.get(a.trip.id)!).filter(Boolean);
+      const activeSchedTrips = activeTrips
+        .map((a) => this.schedTripsMap.get(a.trip.id)!)
+        .filter(Boolean);
       const trafficByLine = this.realtime.getTrafficByLine();
       if (trafficByLine !== this.lastTrafficByLine) {
         this.lastTrafficByLine = trafficByLine;
@@ -514,7 +528,7 @@ export class BrowserSubwayEngine {
           civilSeconds: cityClock(now, this.config.timezone).secondsSinceMidnight,
           activeSchedTrips,
           schedTripsById: this.schedTripsMap,
-          timelines: this.timelines
+          timelines: this.timelines,
         });
 
         if (result && result.suppressedTripIds) {
@@ -527,7 +541,7 @@ export class BrowserSubwayEngine {
                 this.fadingOutGhosts.set(ghostId, {
                   train: existing.train,
                   shape: existing.shape,
-                  fadeStartTime: fadeTimestamp
+                  fadeStartTime: fadeTimestamp,
                 });
               }
             }
@@ -548,12 +562,12 @@ export class BrowserSubwayEngine {
         const trafficRule = this.closedStationsRules.get(trip.line);
         if (trafficRule) {
           if (trafficRule.allClosed) continue;
-          const isInsideClosedSection = trip.stops.some(s => {
+          const isInsideClosedSection = trip.stops.some((s) => {
             const normStop = normalizeStopName(s[3]);
             if (normStop.length < 3) return false;
             if (trafficRule.normalizedSet.has(normStop)) return true;
-            return trafficRule.normalizedList.some(normCs =>
-              normStop.includes(normCs) || normCs.includes(normStop)
+            return trafficRule.normalizedList.some(
+              (normCs) => normStop.includes(normCs) || normCs.includes(normStop)
             );
           });
           if (isInsideClosedSection) continue;
@@ -584,13 +598,16 @@ export class BrowserSubwayEngine {
         const unclampedDistance = posResult.dist;
         const distanceClampWarningToleranceM = 0.5;
         const dTick = Math.max(0, Math.min(shape.length, unclampedDistance));
-        if (Math.abs(dTick - unclampedDistance) > distanceClampWarningToleranceM && !this.loggedDistanceClamps.has(trip.id)) {
+        if (
+          Math.abs(dTick - unclampedDistance) > distanceClampWarningToleranceM &&
+          !this.loggedDistanceClamps.has(trip.id)
+        ) {
           this.loggedDistanceClamps.add(trip.id);
           console.warn('[engine] Clamped out-of-bounds train distance', {
             tripId: trip.id,
             unclampedDistance,
             shapeLength: shape.length,
-            terminalStation: trip.stops[trip.stops.length - 1]?.[3] || trip.destName
+            terminalStation: trip.stops[trip.stops.length - 1]?.[3] || trip.destName,
           });
         }
         const vMps = clampSpeed(posResult.speed);
@@ -602,7 +619,9 @@ export class BrowserSubwayEngine {
         // Resolve next station human-readable name
         let nextStationName = trip.destName;
         if (posResult.nextStopId) {
-          const matchingStop = trip.stops.find(s => normalizeStopName(s[3]) === posResult.nextStopId);
+          const matchingStop = trip.stops.find(
+            (s) => normalizeStopName(s[3]) === posResult.nextStopId
+          );
           if (matchingStop) {
             nextStationName = matchingStop[3];
           }
@@ -629,7 +648,7 @@ export class BrowserSubwayEngine {
           shapeId: trip.shapeId,
           currentDistM: dTick,
           direction: (trip.dir === 0 ? 0 : 1) as 0 | 1,
-          atStop: posResult.atStop
+          atStop: posResult.atStop,
         };
 
         const profile = getKinematicProfile(trip.line);
@@ -654,7 +673,7 @@ export class BrowserSubwayEngine {
           tTick: tickTimestamp,
           extrapolatedD: dTick + reconcileOffset,
           reconcileOffset,
-          reconcileStartTime
+          reconcileStartTime,
         });
 
         activeTrainsList.push(train);
@@ -682,7 +701,8 @@ export class BrowserSubwayEngine {
 
         // Active tracked trains
         for (const state of this.trackedTrains.values()) {
-          const { train, shape, dTick, speedMps, tTick, reconcileOffset, reconcileStartTime } = state;
+          const { train, shape, dTick, speedMps, tTick, reconcileOffset, reconcileStartTime } =
+            state;
 
           const dt = Math.max(0, (now - tTick) / 1000);
           const profile = getKinematicProfile(train.line);

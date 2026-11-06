@@ -85,7 +85,7 @@ const CITY_LINE_ABBREVIATIONS: Record<string, string> = {
   suffragette: 'SUF',
   weaver: 'WEA',
   windrush: 'WIN',
-  tram: 'TRM'
+  tram: 'TRM',
 };
 
 /** '3bis' → '3b', '7bis' → '7b'. WMATA: 'Orange' → 'OR'. London: 'Bakerloo' → 'BAK'. */

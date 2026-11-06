@@ -60,7 +60,8 @@ export class StationLadder {
   }
 
   private renderSignal(speed: number, dest: string, atQuai: boolean): string {
-    const chevron = '<svg class="sig__arrow" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 1l3 3-3 3"/></svg>';
+    const chevron =
+      '<svg class="sig__arrow" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 1l3 3-3 3"/></svg>';
     const safeDest = escapeHtml(dest);
     const safeSpeed = this.clampSpeed(speed);
     const content = atQuai
@@ -125,12 +126,14 @@ export class StationLadder {
       { speed: 110, color: [70, 180, 220] },
     ];
     const clamped = Math.max(0, Math.min(110, speed));
-    const upperIndex = stops.findIndex(stop => stop.speed >= clamped);
+    const upperIndex = stops.findIndex((stop) => stop.speed >= clamped);
     const upper = stops[upperIndex] || stops[stops.length - 1];
     const lower = stops[Math.max(0, upperIndex - 1)];
     const range = upper.speed - lower.speed || 1;
     const ratio = (clamped - lower.speed) / range;
-    const rgb = lower.color.map((value, index) => Math.round(value + (upper.color[index] - value) * ratio));
+    const rgb = lower.color.map((value, index) =>
+      Math.round(value + (upper.color[index] - value) * ratio)
+    );
     return `rgb(${rgb.join(', ')})`;
   }
 
@@ -198,7 +201,7 @@ export class StationLadder {
             <div class="ladder-node-transfers">
               ${st.transfers
                 .map(
-                  t => `
+                  (t) => `
                 <button class="pill-mini transfer-pill" data-transfer-id="${t.id}" style="background-color: ${t.color}; color: ${t.text_color};" title="Correspondance Ligne ${escapeHtml(t.short_name)}">
                   ${escapeHtml(t.short_name)}
                 </button>
@@ -236,7 +239,7 @@ export class StationLadder {
 
     // Station nodes click
     const nodes = this.containerEl.querySelectorAll('.ladder-station-node');
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       node.addEventListener('click', (e) => {
         // If clicked on transfer pill, ignore station click
         if ((e.target as HTMLElement).classList.contains('transfer-pill')) return;
@@ -256,7 +259,7 @@ export class StationLadder {
 
     // Transfer pill click
     const pills = this.containerEl.querySelectorAll('.transfer-pill');
-    pills.forEach(pill => {
+    pills.forEach((pill) => {
       pill.addEventListener('click', (e) => {
         e.stopPropagation();
         const targetLineId = (pill as HTMLElement).dataset.transferId;
@@ -268,26 +271,31 @@ export class StationLadder {
   }
 
   private geoDistanceM(c1: [number, number], c2: [number, number]): number {
-    const dLng = (c2[0] - c1[0]) * Math.cos(((c1[1] + c2[1]) / 2) * Math.PI / 180) * 111320;
+    const dLng = (c2[0] - c1[0]) * Math.cos((((c1[1] + c2[1]) / 2) * Math.PI) / 180) * 111320;
     const dLat = (c2[1] - c1[1]) * 110574;
     return Math.sqrt(dLng * dLng + dLat * dLat);
   }
 
   private updateTrainPositions() {
     if (!this.lineData) return;
-    const dirData = this.lineData.directions[this.currentDirectionId] || this.lineData.directions['0'];
+    const dirData =
+      this.lineData.directions[this.currentDirectionId] || this.lineData.directions['0'];
     if (!dirData) return;
 
     // Filter trains on this line and direction
     const dirInt = parseInt(this.currentDirectionId, 10);
-    const activeLineTrains = this.currentTrains.filter(t => {
+    const activeLineTrains = this.currentTrains.filter((t) => {
       if (t.line !== this.lineData!.id) return false;
       const trainDir = t.direction !== undefined ? t.direction : (t as any).dir;
       return trainDir === undefined || trainDir === dirInt;
     });
 
-    const isRer = this.lineData.id.startsWith('IDFM:C0172') || this.lineData.id.startsWith('IDFM:C0174');
-    const trainsByStation = new Map<number, Array<{ train: TrainMarker; distance: number; atQuai: boolean }>>();
+    const isRer =
+      this.lineData.id.startsWith('IDFM:C0172') || this.lineData.id.startsWith('IDFM:C0174');
+    const trainsByStation = new Map<
+      number,
+      Array<{ train: TrainMarker; distance: number; atQuai: boolean }>
+    >();
     const norm = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
     for (const tr of activeLineTrains) {
@@ -299,7 +307,11 @@ export class StationLadder {
         const nextNorm = norm(tr.next);
         for (let i = 0; i < dirData.stations.length; i++) {
           const stNorm = norm(dirData.stations[i].name);
-          if (stNorm === nextNorm || (nextNorm.length > 4 && stNorm.includes(nextNorm)) || (stNorm.length > 4 && nextNorm.includes(stNorm))) {
+          if (
+            stNorm === nextNorm ||
+            (nextNorm.length > 4 && stNorm.includes(nextNorm)) ||
+            (stNorm.length > 4 && nextNorm.includes(stNorm))
+          ) {
             matchedIdx = i;
             if (tr.pos && dirData.stations[i].coordinates) {
               matchedDistance = this.geoDistanceM(tr.pos, dirData.stations[i].coordinates);
@@ -359,7 +371,9 @@ export class StationLadder {
       entries.sort((a, b) => a.distance - b.distance);
       const visibleTrains = entries.slice(0, 2);
       slot.classList.toggle('ladder-node-train-slot--double', visibleTrains.length > 1);
-      const existingCursors = Array.from(slot.querySelectorAll<HTMLElement>('.ladder-train-cursor'));
+      const existingCursors = Array.from(
+        slot.querySelectorAll<HTMLElement>('.ladder-train-cursor')
+      );
       const usedCursors = new Set<HTMLElement>();
 
       for (const [trainIndex, entry] of visibleTrains.entries()) {
@@ -382,9 +396,10 @@ export class StationLadder {
         let cursor = slot.querySelector<HTMLElement>(`[data-train-id="${tr.id}"]`);
         if (cursor && usedCursors.has(cursor)) cursor = null;
         if (!cursor) {
-          cursor = existingCursors[trainIndex] && !usedCursors.has(existingCursors[trainIndex])
-            ? existingCursors[trainIndex]
-            : existingCursors.find(candidate => !usedCursors.has(candidate)) || null;
+          cursor =
+            existingCursors[trainIndex] && !usedCursors.has(existingCursors[trainIndex])
+              ? existingCursors[trainIndex]
+              : existingCursors.find((candidate) => !usedCursors.has(candidate)) || null;
         }
         if (cursor) {
           usedCursors.add(cursor);
@@ -419,7 +434,7 @@ export class StationLadder {
           cursor.addEventListener('click', (e) => {
             e.stopPropagation();
             const currentId = (e.currentTarget as HTMLElement).dataset.trainId;
-            const currentTrain = this.currentTrains.find(train => train.id === currentId);
+            const currentTrain = this.currentTrains.find((train) => train.id === currentId);
             if (currentTrain) this.onTrainClick(currentTrain);
           });
           slot.appendChild(cursor);
@@ -427,16 +442,15 @@ export class StationLadder {
         this.trainCursorElements.set(tr.id, cursor);
       }
 
-      existingCursors.forEach(cursor => {
+      existingCursors.forEach((cursor) => {
         if (!usedCursors.has(cursor)) cursor.remove();
       });
-
     }
 
-    this.containerEl.querySelectorAll<HTMLElement>('.ladder-node-train-slot').forEach(slot => {
+    this.containerEl.querySelectorAll<HTMLElement>('.ladder-node-train-slot').forEach((slot) => {
       if (!trainsByStation.has(Number(slot.id.replace('slot-station-', '')))) {
         slot.classList.remove('ladder-node-train-slot--double');
-        slot.querySelectorAll('.ladder-train-cursor').forEach(element => element.remove());
+        slot.querySelectorAll('.ladder-train-cursor').forEach((element) => element.remove());
       }
     });
 
@@ -449,7 +463,5 @@ export class StationLadder {
         this.trainCursorElements.delete(id);
       }
     }
-
   }
 }
-

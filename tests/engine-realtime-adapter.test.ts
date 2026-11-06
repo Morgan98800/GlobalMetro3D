@@ -27,7 +27,7 @@ import {
   SNAPSHOT_TIMESTAMP_ISO_WASHINGTON,
   SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER,
   SNAPSHOT_TIMESTAMP_ISO_BERLIN,
-  SNAPSHOT_TIMESTAMP_ISO_EDINBURGH
+  SNAPSHOT_TIMESTAMP_ISO_EDINBURGH,
 } from './snapshot_generator';
 
 /**
@@ -40,18 +40,21 @@ import {
 const PUBLIC_DIR = path.resolve(__dirname, '../web/public');
 
 function stubFetchFromPublicDir() {
-  vi.stubGlobal('fetch', vi.fn(async (input: unknown) => {
-    const urlPath = String(input).split('?')[0];
-    const file = path.join(PUBLIC_DIR, urlPath);
-    if (!fs.existsSync(file)) return new Response('not found', { status: 404 });
-    return new Response(fs.readFileSync(file));
-  }));
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: unknown) => {
+      const urlPath = String(input).split('?')[0];
+      const file = path.join(PUBLIC_DIR, urlPath);
+      if (!fs.existsSync(file)) return new Response('not found', { status: 404 });
+      return new Response(fs.readFileSync(file));
+    })
+  );
 }
 
 /** Paris sans le RER : son chargement est asynchrone et non attendu par initialize(). */
 const parisMetroOnly: CityConfig = {
   ...parisConfig,
-  paths: { ...parisConfig.paths, rer: undefined }
+  paths: { ...parisConfig.paths, rer: undefined },
 };
 
 class FakeAdapter implements RealtimeAdapter {
@@ -64,10 +67,16 @@ class FakeAdapter implements RealtimeAdapter {
 
   startPolling(): void {}
   stopPolling(): void {}
-  getStatus() { return { active: this.active }; }
+  getStatus() {
+    return { active: this.active };
+  }
   onUpdate(): void {}
-  getTrafficByLine() { return this.traffic; }
-  reset() { this.resets++; }
+  getTrafficByLine() {
+    return this.traffic;
+  }
+  reset() {
+    this.resets++;
+  }
   applyTick = (ctx: RealtimeTickContext): RealtimeTickResult | void => {
     this.ticks.push(ctx);
     const suppressedTripIds = this.suppress(ctx);
@@ -89,9 +98,9 @@ async function runFirstTick(
   engine.start({
     onTick: (trains, count) => {
       if (result.count === -1) {
-        result = { count, trainIds: trains.map(t => t.id), lines: trains.map(t => t.line) };
+        result = { count, trainIds: trains.map((t) => t.id), lines: trains.map((t) => t.line) };
       }
-    }
+    },
   });
   engine.stop();
   return { ...result, engine };
@@ -120,7 +129,7 @@ describe('Moteur ↔ adaptateur temps réel', () => {
 
       const none = createRealtimeAdapter({
         ...parisConfig,
-        realtime: { ...parisConfig.realtime, provider: 'none' }
+        realtime: { ...parisConfig.realtime, provider: 'none' },
       });
       expect(none.getStatus().active).toBe(false);
       expect(none.applyTick).toBeUndefined();
@@ -134,26 +143,32 @@ describe('Moteur ↔ adaptateur temps réel', () => {
   describe('mode théorique par le vrai moteur, recoupé avec les snapshots', () => {
     it('Montréal : 72 rames à l’heure du snapshot', async () => {
       const { count } = await runFirstTick(
-        montrealConfig, createRealtimeAdapter(montrealConfig), SNAPSHOT_TIMESTAMP_ISO_MONTREAL
+        montrealConfig,
+        createRealtimeAdapter(montrealConfig),
+        SNAPSHOT_TIMESTAMP_ISO_MONTREAL
       );
       expect(count).toBe(72);
     });
 
     it('Londres : 688 rames tous modes à l’heure du snapshot', async () => {
       const { count } = await runFirstTick(
-        londonConfig, createRealtimeAdapter(londonConfig), SNAPSHOT_TIMESTAMP_ISO_LONDON
+        londonConfig,
+        createRealtimeAdapter(londonConfig),
+        SNAPSHOT_TIMESTAMP_ISO_LONDON
       );
       expect(count).toBe(688);
     });
 
     it('Lille : 117 rames (ME1: 32, ME2: 68, Tram R: 8, Tram T: 9) à l’heure du snapshot, métro strictement inchangé', async () => {
       const { count, lines } = await runFirstTick(
-        lilleConfig, createRealtimeAdapter(lilleConfig), SNAPSHOT_TIMESTAMP_ISO_LILLE
+        lilleConfig,
+        createRealtimeAdapter(lilleConfig),
+        SNAPSHOT_TIMESTAMP_ISO_LILLE
       );
-      const l1Count = lines.filter(l => l === 'ME1').length;
-      const l2Count = lines.filter(l => l === 'ME2').length;
-      const tramRCount = lines.filter(l => l === 'TRAM_R').length;
-      const tramTCount = lines.filter(l => l === 'TRAM_T').length;
+      const l1Count = lines.filter((l) => l === 'ME1').length;
+      const l2Count = lines.filter((l) => l === 'ME2').length;
+      const tramRCount = lines.filter((l) => l === 'TRAM_R').length;
+      const tramTCount = lines.filter((l) => l === 'TRAM_T').length;
       expect(count).toBe(117);
       expect(l1Count).toBe(32);
       expect(l2Count).toBe(68);
@@ -163,14 +178,16 @@ describe('Moteur ↔ adaptateur temps réel', () => {
 
     it('Washington : 97 rames (6 lignes Metrorail) à l’heure du snapshot, Red strictement inchangée (26)', async () => {
       const { count, lines } = await runFirstTick(
-        washingtonConfig, createRealtimeAdapter(washingtonConfig), SNAPSHOT_TIMESTAMP_ISO_WASHINGTON
+        washingtonConfig,
+        createRealtimeAdapter(washingtonConfig),
+        SNAPSHOT_TIMESTAMP_ISO_WASHINGTON
       );
-      const redCount = lines.filter(l => l === 'RED').length;
-      const orangeCount = lines.filter(l => l === 'ORANGE').length;
-      const silverCount = lines.filter(l => l === 'SILVER').length;
-      const blueCount = lines.filter(l => l === 'BLUE').length;
-      const greenCount = lines.filter(l => l === 'GREEN').length;
-      const yellowCount = lines.filter(l => l === 'YELLOW').length;
+      const redCount = lines.filter((l) => l === 'RED').length;
+      const orangeCount = lines.filter((l) => l === 'ORANGE').length;
+      const silverCount = lines.filter((l) => l === 'SILVER').length;
+      const blueCount = lines.filter((l) => l === 'BLUE').length;
+      const greenCount = lines.filter((l) => l === 'GREEN').length;
+      const yellowCount = lines.filter((l) => l === 'YELLOW').length;
       expect(count).toBe(97);
       expect(redCount).toBe(26);
       expect(orangeCount).toBe(12);
@@ -182,11 +199,15 @@ describe('Moteur ↔ adaptateur temps réel', () => {
 
     it('Washington : aucune rame décalée d’une heure au lendemain du passage à l’heure d’hiver américain (2 nov 2026)', async () => {
       const summerRun = await runFirstTick(
-        washingtonConfig, createRealtimeAdapter(washingtonConfig), SNAPSHOT_TIMESTAMP_ISO_WASHINGTON
+        washingtonConfig,
+        createRealtimeAdapter(washingtonConfig),
+        SNAPSHOT_TIMESTAMP_ISO_WASHINGTON
       );
       resetShapesCache();
       const winterRun = await runFirstTick(
-        washingtonConfig, createRealtimeAdapter(washingtonConfig), SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER
+        washingtonConfig,
+        createRealtimeAdapter(washingtonConfig),
+        SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER
       );
       expect(winterRun.count).toBe(97);
       expect(winterRun.trainIds).toEqual(summerRun.trainIds);
@@ -194,16 +215,20 @@ describe('Moteur ↔ adaptateur temps réel', () => {
 
     it('Berlin : 118 rames (U8: 14) à l’heure du snapshot, validité Europe/Berlin', async () => {
       const { count, lines } = await runFirstTick(
-        berlinConfig, createRealtimeAdapter(berlinConfig), SNAPSHOT_TIMESTAMP_ISO_BERLIN
+        berlinConfig,
+        createRealtimeAdapter(berlinConfig),
+        SNAPSHOT_TIMESTAMP_ISO_BERLIN
       );
-      const u8Count = lines.filter(l => l === 'U8').length;
+      const u8Count = lines.filter((l) => l === 'U8').length;
       expect(count).toBe(118);
       expect(u8Count).toBe(14);
     });
 
     it('Édimbourg : rames ScotRail & National Rail à l’heure du snapshot, validité Europe/London', async () => {
       const { count, lines } = await runFirstTick(
-        edinburghConfig, createRealtimeAdapter(edinburghConfig), SNAPSHOT_TIMESTAMP_ISO_EDINBURGH
+        edinburghConfig,
+        createRealtimeAdapter(edinburghConfig),
+        SNAPSHOT_TIMESTAMP_ISO_EDINBURGH
       );
       expect(count).toBeGreaterThan(0);
       expect(lines).toContain('GLA');
@@ -213,7 +238,9 @@ describe('Moteur ↔ adaptateur temps réel', () => {
       const inactive = new FakeAdapter();
       inactive.active = false;
       const withRealClient = await runFirstTick(
-        parisMetroOnly, createRealtimeAdapter(parisMetroOnly), SNAPSHOT_TIMESTAMP_ISO
+        parisMetroOnly,
+        createRealtimeAdapter(parisMetroOnly),
+        SNAPSHOT_TIMESTAMP_ISO
       );
       resetShapesCache();
       const withFake = await runFirstTick(parisMetroOnly, inactive, SNAPSHOT_TIMESTAMP_ISO);
@@ -237,7 +264,11 @@ describe('Moteur ↔ adaptateur temps réel', () => {
     });
 
     it("masque les courses que l'adaptateur déclare fantômes", async () => {
-      const baseline = await runFirstTick(parisMetroOnly, new FakeAdapter(), SNAPSHOT_TIMESTAMP_ISO);
+      const baseline = await runFirstTick(
+        parisMetroOnly,
+        new FakeAdapter(),
+        SNAPSHOT_TIMESTAMP_ISO
+      );
       resetShapesCache();
 
       const ghosts = new Set(baseline.trainIds.slice(0, 5));
@@ -250,11 +281,15 @@ describe('Moteur ↔ adaptateur temps réel', () => {
     });
 
     it("vide une ligne que l'adaptateur déclare interrompue", async () => {
-      const baseline = await runFirstTick(parisMetroOnly, new FakeAdapter(), SNAPSHOT_TIMESTAMP_ISO);
+      const baseline = await runFirstTick(
+        parisMetroOnly,
+        new FakeAdapter(),
+        SNAPSHOT_TIMESTAMP_ISO
+      );
       resetShapesCache();
 
       const targetLine = baseline.lines[0];
-      const onTarget = baseline.lines.filter(l => l === targetLine).length;
+      const onTarget = baseline.lines.filter((l) => l === targetLine).length;
       const fake = new FakeAdapter();
       fake.traffic = {
         [targetLine]: {
@@ -263,8 +298,8 @@ describe('Moteur ↔ adaptateur temps réel', () => {
           severity: 'alert',
           title: 'Trafic interrompu',
           message: 'test',
-          updatedAt: new Date().toISOString()
-        }
+          updatedAt: new Date().toISOString(),
+        },
       };
       const interrupted = await runFirstTick(parisMetroOnly, fake, SNAPSHOT_TIMESTAMP_ISO);
 

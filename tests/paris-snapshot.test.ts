@@ -12,7 +12,9 @@ describe('Paris Simulation Snapshot Safety Net', () => {
       const freshSnapshot = computeParisSnapshot();
       fs.mkdirSync(path.dirname(FIXTURE_PATH), { recursive: true });
       fs.writeFileSync(FIXTURE_PATH, JSON.stringify(freshSnapshot, null, 2), 'utf8');
-      console.log(`[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`);
+      console.log(
+        `[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`
+      );
     }
 
     // 2. Load frozen reference fixture
@@ -28,7 +30,7 @@ describe('Paris Simulation Snapshot Safety Net', () => {
     expect(computedSnapshot.meta.rerTrains).toBe(expectedFixture.meta.rerTrains);
 
     // 5. Compare train by train
-    const expectedMap = new Map(expectedFixture.trains.map(t => [t.tripId, t]));
+    const expectedMap = new Map(expectedFixture.trains.map((t) => [t.tripId, t]));
 
     let maxDistDeltaM = 0;
     let maxSpeedDeltaMps = 0;
@@ -49,10 +51,18 @@ describe('Paris Simulation Snapshot Safety Net', () => {
       if (speedDeltaMps > maxSpeedDeltaMps) maxSpeedDeltaMps = speedDeltaMps;
 
       // Acceptance criterion: strictly reproduction within 1 meter (au mètre près)
-      expect(distDeltaM, `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`).toBeLessThanOrEqual(1.0);
-      expect(speedDeltaMps, `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`).toBeLessThanOrEqual(0.1);
+      expect(
+        distDeltaM,
+        `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`
+      ).toBeLessThanOrEqual(1.0);
+      expect(
+        speedDeltaMps,
+        `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`
+      ).toBeLessThanOrEqual(0.1);
     }
 
-    console.log(`✅ Snapshot verification passed: ${computedSnapshot.trains.length} trains matched. Max position delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s.`);
+    console.log(
+      `✅ Snapshot verification passed: ${computedSnapshot.trains.length} trains matched. Max position delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s.`
+    );
   });
 });

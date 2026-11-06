@@ -11,7 +11,7 @@ import { PathStyleExtension } from '@deck.gl/extensions';
 import {
   createTrainModelSpikeLayer,
   createTrainModelSpikeLighting,
-  isTrainModelSpikeEnabled
+  isTrainModelSpikeEnabled,
 } from './train_model_spike';
 import type { ShapeEntry } from '@core/sim/shapes';
 import type { RollingStockDatabase } from '@core/sim/rolling_stock';
@@ -21,7 +21,7 @@ import {
   preloadTrainModels,
   subscribeTrainModelAssets,
   trainModelsEnabled,
-  TRAIN_MODEL_ZOOM_THRESHOLD
+  TRAIN_MODEL_ZOOM_THRESHOLD,
 } from './train_models_layer';
 import { resolveTrainRenderLayers } from './train_render_fallback';
 import { createPlatformsLayer } from './platforms_layer';
@@ -65,7 +65,7 @@ export function hexToRgba(hex: string, alpha: number = 255): [number, number, nu
       parseInt(c.substring(0, 2), 16),
       parseInt(c.substring(2, 4), 16),
       parseInt(c.substring(4, 6), 16),
-      alpha
+      alpha,
     ];
   }
   return [200, 200, 200, alpha];
@@ -93,11 +93,14 @@ function snapPointToPaths(point: [number, number], paths: [number, number][][]):
       const vy = b[1] - a[1];
       const lengthSquared = vx * vx + vy * vy;
       const t = lengthSquared
-        ? Math.max(0, Math.min(1, ((target[0] - a[0]) * vx + (target[1] - a[1]) * vy) / lengthSquared))
+        ? Math.max(
+            0,
+            Math.min(1, ((target[0] - a[0]) * vx + (target[1] - a[1]) * vy) / lengthSquared)
+          )
         : 0;
       const candidate: [number, number] = [
         path[index - 1][0] + (path[index][0] - path[index - 1][0]) * t,
-        path[index - 1][1] + (path[index][1] - path[index - 1][1]) * t
+        path[index - 1][1] + (path[index][1] - path[index - 1][1]) * t,
       ];
       const projected = project(candidate);
       const dx = target[0] - projected[0];
@@ -178,7 +181,8 @@ export class SubwayDeckOverlay {
     this.overlay = new MapboxOverlay({
       interleaved: false,
       layers: [],
-      effects: isTrainModelSpikeEnabled() || trainModelsEnabled() ? [createTrainModelSpikeLighting()] : []
+      effects:
+        isTrainModelSpikeEnabled() || trainModelsEnabled() ? [createTrainModelSpikeLighting()] : [],
     });
   }
 
@@ -213,7 +217,7 @@ export class SubwayDeckOverlay {
             shortName: line.short_name || line.shortName || line.name || '',
             color: line.color || '#ED1B24',
             isBanlieue: currentBanlieue,
-            coordinates: currentSeg
+            coordinates: currentSeg,
           });
           currentSeg = [coords[j]];
           currentBanlieue = banlieue;
@@ -226,7 +230,7 @@ export class SubwayDeckOverlay {
           shortName: line.short_name || line.shortName || line.name || '',
           color: line.color || '#ED1B24',
           isBanlieue: currentBanlieue,
-          coordinates: currentSeg
+          coordinates: currentSeg,
         });
       }
     }
@@ -247,7 +251,10 @@ export class SubwayDeckOverlay {
   ) {
     this.zoom = zoom;
     this.pitch = pitch;
-    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'trains') {
+    if (
+      typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('debug') === 'trains'
+    ) {
       (window as any).__deckOverlayZoom = zoom;
     }
     this.mapCenter = mapCenter;
@@ -300,10 +307,15 @@ export class SubwayDeckOverlay {
       this.renderLayers();
     } catch (error) {
       console.error('[deck] layer update failed', error);
-      const debug = document.getElementById('deck-debug') || document.body.appendChild(document.createElement('pre'));
+      const debug =
+        document.getElementById('deck-debug') ||
+        document.body.appendChild(document.createElement('pre'));
       debug.id = 'deck-debug';
       debug.textContent = `Rendu réseau indisponible: ${error instanceof Error ? error.message : String(error)}`;
-      debug.setAttribute('style', 'position:fixed;left:380px;top:80px;z-index:9999;color:#ff8f80;background:#321;padding:8px;white-space:pre-wrap;max-width:60vw');
+      debug.setAttribute(
+        'style',
+        'position:fixed;left:380px;top:80px;z-index:9999;color:#ff8f80;background:#321;padding:8px;white-space:pre-wrap;max-width:60vw'
+      );
     }
   }
 
@@ -311,19 +323,29 @@ export class SubwayDeckOverlay {
     if (!this.data) return;
 
     const { tracks, stations, lines } = this.data;
-    const lineMap = new Map(lines.map(l => [l.id, l]));
+    const lineMap = new Map(lines.map((l) => [l.id, l]));
     const selectedLine = this.selectedLineId ? lineMap.get(this.selectedLineId) : null;
     const selectedRerShortName = selectedLine?.mode === 'rail' ? selectedLine.short_name : null;
     const selectedLinePaths = selectedLine
       ? selectedLine.mode === 'rail'
-        ? this.rerTracks.filter(track => track.shortName === selectedRerShortName).map(track => track.coordinates)
-        : tracks.filter(track => track.line_id === selectedLine.id).map(track => track.coordinates)
+        ? this.rerTracks
+            .filter((track) => track.shortName === selectedRerShortName)
+            .map((track) => track.coordinates)
+        : tracks
+            .filter((track) => track.line_id === selectedLine.id)
+            .map((track) => track.coordinates)
       : [];
-    const rawDisplayStations = selectedLine && selectedLinePaths.length
-      ? stations.map(station => station.lines.includes(selectedLine.id)
-        ? { ...station, coordinates: snapPointToPaths(station.coordinates, selectedLinePaths) }
-        : station)
-      : stations;
+    const rawDisplayStations =
+      selectedLine && selectedLinePaths.length
+        ? stations.map((station) =>
+            station.lines.includes(selectedLine.id)
+              ? {
+                  ...station,
+                  coordinates: snapPointToPaths(station.coordinates, selectedLinePaths),
+                }
+              : station
+          )
+        : stations;
     const displayStations = deduplicateStations(rawDisplayStations);
 
     // 1. Gained tracks: each line is an adjacent [casing, fill] pair.
@@ -341,7 +363,7 @@ export class SubwayDeckOverlay {
     }
 
     const lineOrder = lines
-      .filter(line => tracksByLine.has(line.id))
+      .filter((line) => tracksByLine.has(line.id))
       .slice()
       .sort((a, b) => {
         const orderKey = (line: LineMetadata): number => {
@@ -382,7 +404,7 @@ export class SubwayDeckOverlay {
 
     const pathLayers: any[] = [];
     const visibleLineOrder = this.selectedLineId
-      ? lineOrder.filter(line => line.id === this.selectedLineId)
+      ? lineOrder.filter((line) => line.id === this.selectedLineId)
       : lineOrder;
     for (const line of visibleLineOrder) {
       const lineTracks = tracksByLine.get(line.id) || [];
@@ -404,8 +426,8 @@ export class SubwayDeckOverlay {
           parameters: { depthTest: false, depthWriteEnabled: false } as any,
           transitions: { opacity: { duration: 140, easing: easeOut } } as any,
           updateTriggers: {
-            getWidth: [this.zoom, this.selectedLineId]
-          }
+            getWidth: [this.zoom, this.selectedLineId],
+          },
         })
       );
 
@@ -429,12 +451,12 @@ export class SubwayDeckOverlay {
           parameters: { depthTest: false, depthWriteEnabled: false } as any,
           transitions: {
             getColor: { duration: 200, easing: easeOut },
-            opacity: { duration: 140, easing: easeOut }
+            opacity: { duration: 140, easing: easeOut },
           } as any,
           updateTriggers: {
             getWidth: [this.zoom, this.selectedLineId],
-            getColor: [this.selectedLineId]
-          }
+            getColor: [this.selectedLineId],
+          },
         })
       );
     }
@@ -442,10 +464,14 @@ export class SubwayDeckOverlay {
     // 2. ScatterplotLayer for Stations (Hiérarchisation stricte par niveau de zoom)
     const isUltraHub = (st: StationMetadata) =>
       st.lines.length >= 4 ||
-      /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau|King's Cross|Victoria|Waterloo|Oxford Circus|Bank|London Bridge|Paddington|Liverpool Street|Piccadilly Circus|Stratford|Westminster|Baker Street|Charing Cross|South Kensington|Holborn|Euston)$/i.test(st.name) ||
-      /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)|King's Cross St\. Pancras|Bank - Monument/i.test(st.name);
+      /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau|King's Cross|Victoria|Waterloo|Oxford Circus|Bank|London Bridge|Paddington|Liverpool Street|Piccadilly Circus|Stratford|Westminster|Baker Street|Charing Cross|South Kensington|Holborn|Euston)$/i.test(
+        st.name
+      ) ||
+      /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)|King's Cross St\. Pancras|Bank - Monument/i.test(
+        st.name
+      );
 
-    const filteredStations = displayStations.filter(st => {
+    const filteredStations = displayStations.filter((st) => {
       // 1. Ligne sélectionnée : détail complet conservé quel que soit le zoom
       if (this.selectedLineId) {
         return st.lines.includes(this.selectedLineId);
@@ -500,7 +526,7 @@ export class SubwayDeckOverlay {
       transitions: {
         getFillColor: { duration: 140, easing: easeOut },
         getLineColor: { duration: 140, easing: easeOut },
-        getLineWidth: { duration: 140, easing: easeOut }
+        getLineWidth: { duration: 140, easing: easeOut },
       } as any,
       onHover: this.onStationHover,
       onClick: (info: any) => {
@@ -513,13 +539,13 @@ export class SubwayDeckOverlay {
         getFillColor: [this.zoom, this.selectedLineId],
         getLineColor: [this.zoom, this.selectedLineId],
         getRadius: [this.zoom, this.selectedLineId],
-        getLineWidth: [this.zoom, this.selectedLineId]
-      }
+        getLineWidth: [this.zoom, this.selectedLineId],
+      },
     });
 
     const terminusMarkers = this.resolveTerminusMarkers(lines, displayStations);
-    const visibleTermini = terminusMarkers.filter(marker =>
-      filteredStations.some(station => station.id === marker.station.id)
+    const visibleTermini = terminusMarkers.filter((marker) =>
+      filteredStations.some((station) => station.id === marker.station.id)
     );
     const terminusLayer = new ScatterplotLayer<TerminusMarker>({
       id: 'subway-termini',
@@ -537,7 +563,7 @@ export class SubwayDeckOverlay {
       getPosition: (d: TerminusMarker) => [
         d.station.coordinates[0],
         d.station.coordinates[1],
-        d.elevation + 2.5
+        d.elevation + 2.5,
       ],
       getRadius: (d: TerminusMarker) => (this.selectedLineId ? 9 : this.zoom < 14 ? 6.5 : 9),
       getFillColor: [21, 14, 18, 255], // cercle évidé, intérieur --laque
@@ -549,12 +575,18 @@ export class SubwayDeckOverlay {
       updateTriggers: {
         getPosition: [this.zoom, this.selectedLineId],
         getRadius: [this.zoom, this.selectedLineId],
-        getLineColor: [this.selectedLineId]
-      }
+        getLineColor: [this.selectedLineId],
+      },
     });
 
     const lineElev = selectedLine ? selectedLine.elevation_offset : 0;
-    const labelsLayer = createStationLabelsLayer(displayStations, this.selectedLineId, this.zoom, this.mapCenter, lineElev);
+    const labelsLayer = createStationLabelsLayer(
+      displayStations,
+      this.selectedLineId,
+      this.zoom,
+      this.mapCenter,
+      lineElev
+    );
     const isPlatformEligible = selectedLine?.mode === 'metro' || selectedLine?.mode === 'tube';
     const platformsLayer = createPlatformsLayer(
       displayStations,
@@ -570,44 +602,52 @@ export class SubwayDeckOverlay {
       }
     }
 
-    const modelLayers = showTrainModels && this.data?.shapes && this.data?.rollingStockDb
-      ? createTrainModelLayers({
-          trains: this.trains,
-          shapes: this.data.shapes,
-          rollingStockDb: this.data.rollingStockDb,
-          grazingCamera: this.pitch >= 45,
-          bounds: this.bounds,
-          selectedTrainId: this.selectedTrainId,
-          elevationOffset: this.followElevationLineId
-            ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
-            : undefined,
-          onClick: (train) => {
-            if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
-            this.selectedTrainId = train.id;
-            this.onTrainClick(train);
-            this.updateLayers();
-          },
-          onHover: this.onTrainHover
-        })
-      : [];
-    const capsuleLayers = this.data?.shapes && this.data?.rollingStockDb
-      ? createCapsuleLayers({
-          trains: this.trains,
-          shapes: this.data.shapes,
-          tracks,
-          rollingStockDb: this.data.rollingStockDb,
-          mapCenter: this.mapCenter,
-          selectedLineId: this.selectedLineId,
-          selectedTrainId: this.selectedTrainId,
-          onHover: this.onTrainHover,
-          onClick: (train) => {
-            if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
-            this.selectedTrainId = train.id;
-            this.onTrainClick(train);
-            this.updateLayers();
-          }
-        })
-      : createTrainsLayers(this.trains, this.selectedLineId, this.onTrainHover, this.onTrainClick, this.zoom);
+    const modelLayers =
+      showTrainModels && this.data?.shapes && this.data?.rollingStockDb
+        ? createTrainModelLayers({
+            trains: this.trains,
+            shapes: this.data.shapes,
+            rollingStockDb: this.data.rollingStockDb,
+            grazingCamera: this.pitch >= 45,
+            bounds: this.bounds,
+            selectedTrainId: this.selectedTrainId,
+            elevationOffset: this.followElevationLineId
+              ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
+              : undefined,
+            onClick: (train) => {
+              if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+              this.selectedTrainId = train.id;
+              this.onTrainClick(train);
+              this.updateLayers();
+            },
+            onHover: this.onTrainHover,
+          })
+        : [];
+    const capsuleLayers =
+      this.data?.shapes && this.data?.rollingStockDb
+        ? createCapsuleLayers({
+            trains: this.trains,
+            shapes: this.data.shapes,
+            tracks,
+            rollingStockDb: this.data.rollingStockDb,
+            mapCenter: this.mapCenter,
+            selectedLineId: this.selectedLineId,
+            selectedTrainId: this.selectedTrainId,
+            onHover: this.onTrainHover,
+            onClick: (train) => {
+              if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+              this.selectedTrainId = train.id;
+              this.onTrainClick(train);
+              this.updateLayers();
+            },
+          })
+        : createTrainsLayers(
+            this.trains,
+            this.selectedLineId,
+            this.onTrainHover,
+            this.onTrainClick,
+            this.zoom
+          );
     const trainLayers = isTrainModelSpikeEnabled()
       ? []
       : resolveTrainRenderLayers(modelLayers, capsuleLayers);
@@ -617,14 +657,15 @@ export class SubwayDeckOverlay {
       rerLayer = new PathLayer<any>({
         id: 'rer-tracks',
         data: selectedRerShortName
-          ? this.rerTracks.filter(track => track.shortName === selectedRerShortName)
+          ? this.rerTracks.filter((track) => track.shortName === selectedRerShortName)
           : this.selectedLineId
-          ? []
-          : this.rerTracks,
+            ? []
+            : this.rerTracks,
         pickable: false,
         widthUnits: 'pixels',
         getWidth: 3.5, // 3.5px vs 2.5px métro
-        getPath: ((d: RerTrackSegment) => roundPathCorners(d.coordinates).map(pt => [pt[0], pt[1], -1])) as any, // Tracé sous les lignes de métro
+        getPath: ((d: RerTrackSegment) =>
+          roundPathCorners(d.coordinates).map((pt) => [pt[0], pt[1], -1])) as any, // Tracé sous les lignes de métro
         getColor: (d: RerTrackSegment) => {
           const baseAlpha = d.isBanlieue ? 130 : 230;
           return hexToRgba(d.color, baseAlpha);
@@ -634,7 +675,7 @@ export class SubwayDeckOverlay {
         dashUnits: 'pixels',
         capRounded: true,
         jointRounded: true,
-        parameters: { depthTest: false, depthWriteEnabled: false } as any
+        parameters: { depthTest: false, depthWriteEnabled: false } as any,
       } as any);
     }
 
@@ -642,22 +683,25 @@ export class SubwayDeckOverlay {
     if (rerLayer) {
       layers.push(rerLayer); // RER placé SOUS les lignes de métro
     }
-    const lineHitboxes = visibleLineOrder.map(line => new PathLayer<any>({
-      id: `subway-track-${line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-')}-hitbox`,
-      data: tracksByLine.get(line.id) || [],
-      pickable: true,
-      widthUnits: 'pixels',
-      getWidth: () => trackWidthAtZoom(false) + 14,
-      getPath: pathForTrack as any,
-      getColor: [0, 0, 0, 0],
-      opacity: revealOpacityFor(line.id),
-      capRounded: true,
-      jointRounded: true,
-      parameters: { depthTest: false, depthWriteEnabled: false } as any,
-      onClick: () => this.onLineSelect(line.id),
-      onHover: this.onStationHover,
-      updateTriggers: { getWidth: [this.zoom] }
-    }));
+    const lineHitboxes = visibleLineOrder.map(
+      (line) =>
+        new PathLayer<any>({
+          id: `subway-track-${line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-')}-hitbox`,
+          data: tracksByLine.get(line.id) || [],
+          pickable: true,
+          widthUnits: 'pixels',
+          getWidth: () => trackWidthAtZoom(false) + 14,
+          getPath: pathForTrack as any,
+          getColor: [0, 0, 0, 0],
+          opacity: revealOpacityFor(line.id),
+          capRounded: true,
+          jointRounded: true,
+          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          onClick: () => this.onLineSelect(line.id),
+          onHover: this.onStationHover,
+          updateTriggers: { getWidth: [this.zoom] },
+        })
+    );
     layers.push(
       ...lineHitboxes,
       ...pathLayers,
@@ -678,7 +722,7 @@ export class SubwayDeckOverlay {
       layers,
       onClick: (info: any) => {
         if (!info.object) this.onBackgroundClick();
-      }
+      },
     });
   }
 
@@ -687,12 +731,18 @@ export class SubwayDeckOverlay {
    * nodes use stop-point IDs while stations.json uses commercial station IDs,
    * so endpoints are joined by the nearest station on the same line.
    */
-  private resolveTerminusMarkers(lines: LineMetadata[], stations: StationMetadata[]): TerminusMarker[] {
+  private resolveTerminusMarkers(
+    lines: LineMetadata[],
+    stations: StationMetadata[]
+  ): TerminusMarker[] {
     const ladders = this.data?.lineLadders || {};
     const markers: TerminusMarker[] = [];
     const seen = new Set<string>();
 
-    const nearestStation = (lineId: string, coordinates: [number, number]): StationMetadata | null => {
+    const nearestStation = (
+      lineId: string,
+      coordinates: [number, number]
+    ): StationMetadata | null => {
       let best: StationMetadata | null = null;
       let bestDistance = Number.POSITIVE_INFINITY;
       for (const station of stations) {
@@ -714,7 +764,10 @@ export class SubwayDeckOverlay {
       const endpointNodes: any[] = [];
       for (const direction of Object.values(ladder.directions) as any[]) {
         if (direction?.stations?.length) {
-          endpointNodes.push(direction.stations[0], direction.stations[direction.stations.length - 1]);
+          endpointNodes.push(
+            direction.stations[0],
+            direction.stations[direction.stations.length - 1]
+          );
         }
         for (const branch of direction?.branches || []) {
           if (branch?.stations?.length) {
@@ -734,7 +787,7 @@ export class SubwayDeckOverlay {
           station,
           lineId: line.id,
           lineColor: line.color,
-          elevation: line.elevation_offset
+          elevation: line.elevation_offset,
         });
       }
     }

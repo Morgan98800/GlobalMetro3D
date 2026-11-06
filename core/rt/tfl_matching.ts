@@ -51,7 +51,7 @@ export class TflHybridMatcher {
     this.options = {
       matchWindowSec: options.matchWindowSec ?? 120,
       maxDelaySec: options.maxDelaySec ?? 900,
-      alpha: options.alpha ?? 0.4
+      alpha: options.alpha ?? 0.4,
     };
   }
 
@@ -76,7 +76,7 @@ export class TflHybridMatcher {
     activeTrips: readonly SchedTrip[],
     currentCivilSeconds: number
   ): TflMatchOutcome {
-    const activeTripsMap = new Map(activeTrips.map(t => [t.tripId, t]));
+    const activeTripsMap = new Map(activeTrips.map((t) => [t.tripId, t]));
     const matchedTrips = new Map<string, MatchedTripState>();
     const usedTrips = new Set<string>();
 
@@ -118,10 +118,10 @@ export class TflHybridMatcher {
       }
 
       // Vérifier que la course passe bien par la station annoncée
-      const stopIdx = trip.stops.findIndex(s => s.stopId === arr.stationId);
+      const stopIdx = trip.stops.findIndex((s) => s.stopId === arr.stationId);
       if (stopIdx !== -1) {
         const targetStop = trip.stops[stopIdx];
-        const rawDelay = (currentCivilSeconds + arr.timeToStation) - targetStop.arr;
+        const rawDelay = currentCivilSeconds + arr.timeToStation - targetStop.arr;
 
         if (Math.abs(rawDelay) <= this.options.maxDelaySec) {
           const prevDelay = this.lastDelaysByTripId.get(trip.tripId) ?? rawDelay;
@@ -137,7 +137,7 @@ export class TflHybridMatcher {
             confidence: 'measured',
             nextStationId: arr.stationId,
             timeToNextStationS: arr.timeToStation,
-            measuredAtSeconds: currentCivilSeconds
+            measuredAtSeconds: currentCivilSeconds,
           });
         }
       }
@@ -162,18 +162,18 @@ export class TflHybridMatcher {
         if (usedTrips.has(trip.tripId)) continue;
         if (trip.lineId !== arr.lineId) continue;
 
-        const stopIdx = trip.stops.findIndex(s => s.stopId === arr.stationId);
+        const stopIdx = trip.stops.findIndex((s) => s.stopId === arr.stationId);
         if (stopIdx === -1) continue;
 
         const targetStop = trip.stops[stopIdx];
-        const diff = Math.abs((currentCivilSeconds + arr.timeToStation) - targetStop.arr);
+        const diff = Math.abs(currentCivilSeconds + arr.timeToStation - targetStop.arr);
 
         if (diff <= this.options.matchWindowSec) {
           candidatePairs.push({
             vehicleId,
             arrival: arr,
             trip,
-            diffSeconds: diff
+            diffSeconds: diff,
           });
         }
       }
@@ -185,18 +185,18 @@ export class TflHybridMatcher {
         if (usedTrips.has(trip.tripId)) continue;
         if (trip.lineId !== arr.lineId) continue;
 
-        const stopIdx = trip.stops.findIndex(s => s.stopId === arr.stationId);
+        const stopIdx = trip.stops.findIndex((s) => s.stopId === arr.stationId);
         if (stopIdx === -1) continue;
 
         const targetStop = trip.stops[stopIdx];
-        const diff = Math.abs((currentCivilSeconds + arr.timeToStation) - targetStop.arr);
+        const diff = Math.abs(currentCivilSeconds + arr.timeToStation - targetStop.arr);
 
         if (diff <= this.options.matchWindowSec) {
           candidatePairs.push({
             vehicleId: null,
             arrival: arr,
             trip,
-            diffSeconds: diff
+            diffSeconds: diff,
           });
         }
       }
@@ -212,8 +212,8 @@ export class TflHybridMatcher {
       const arrivalKey = pair.arrival.id;
       if (consumedArrivalIds.has(arrivalKey)) continue;
 
-      const targetStop = pair.trip.stops.find(s => s.stopId === pair.arrival.stationId)!;
-      const rawDelay = (currentCivilSeconds + pair.arrival.timeToStation) - targetStop.arr;
+      const targetStop = pair.trip.stops.find((s) => s.stopId === pair.arrival.stationId)!;
+      const rawDelay = currentCivilSeconds + pair.arrival.timeToStation - targetStop.arr;
 
       if (Math.abs(rawDelay) <= this.options.maxDelaySec) {
         usedTrips.add(pair.trip.tripId);
@@ -236,7 +236,7 @@ export class TflHybridMatcher {
           confidence: 'measured',
           nextStationId: pair.arrival.stationId,
           timeToNextStationS: pair.arrival.timeToStation,
-          measuredAtSeconds: currentCivilSeconds
+          measuredAtSeconds: currentCivilSeconds,
         });
       }
     }
@@ -250,21 +250,24 @@ export class TflHybridMatcher {
           vehicleId: null,
           delayS: 0,
           confidence: 'scheduled',
-          measuredAtSeconds: currentCivilSeconds
+          measuredAtSeconds: currentCivilSeconds,
         });
       }
     }
 
-    const matchedCount = Array.from(matchedTrips.values()).filter(m => m.confidence === 'measured').length;
+    const matchedCount = Array.from(matchedTrips.values()).filter(
+      (m) => m.confidence === 'measured'
+    ).length;
     const totalActiveCount = activeTrips.length;
-    const coveragePct = totalActiveCount > 0 ? Math.round((matchedCount / totalActiveCount) * 100) : 0;
+    const coveragePct =
+      totalActiveCount > 0 ? Math.round((matchedCount / totalActiveCount) * 100) : 0;
 
     return {
       matchesByTripId: matchedTrips,
       matchedCount,
       totalActiveCount,
       coveragePct,
-      lockedVehiclesCount: this.vehicleToTripMap.size
+      lockedVehiclesCount: this.vehicleToTripMap.size,
     };
   }
 }

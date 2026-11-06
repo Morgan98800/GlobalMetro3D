@@ -105,7 +105,12 @@ export class PrimRealtimeClient {
     const minutesAgo = this.lastUpdate ? Math.max(0, Math.round(ageMs / 60000)) : undefined;
 
     return {
-      active: this.isPolling && !this.lastError && minutesAgo !== undefined && minutesAgo <= 10 && this.feedHealthy,
+      active:
+        this.isPolling &&
+        !this.lastError &&
+        minutesAgo !== undefined &&
+        minutesAgo <= 10 &&
+        this.feedHealthy,
       lastUpdate: this.lastUpdate,
       minutesAgo,
       delays,
@@ -114,7 +119,7 @@ export class PrimRealtimeClient {
       feedHealthy: this.feedHealthy,
       matchStats: this.matchStats,
       directionSuccessRate: this.directionSuccessRate,
-      trafficByLine: this.trafficByLine
+      trafficByLine: this.trafficByLine,
     };
   }
 
@@ -126,7 +131,12 @@ export class PrimRealtimeClient {
    * Lit le flux agrégé du relai partagé (1 seule requête toutes les 3 minutes)
    */
   public async pollRelay(): Promise<void> {
-    const urls = ['/api/prim', '/.netlify/functions/prim_relay', '/.netlify/functions/prim_delays', '/data/prim_delays.json'];
+    const urls = [
+      '/api/prim',
+      '/.netlify/functions/prim_relay',
+      '/.netlify/functions/prim_delays',
+      '/data/prim_delays.json',
+    ];
     let json: any = null;
 
     for (const url of urls) {
@@ -243,7 +253,7 @@ export class PrimRealtimeClient {
             dir,
             destination: rj.destinationName ? normalizeStopName(rj.destinationName) : null,
             calls,
-            journeyRef: rj.journeyId
+            journeyRef: rj.journeyId,
           });
         }
       }

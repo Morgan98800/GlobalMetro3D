@@ -7,7 +7,7 @@ import {
   type SchedTrip,
   type RtJourney,
   type RtCall,
-  type Timeline
+  type Timeline,
 } from '../../web/src/sim/rt_matching.ts';
 
 function normalizeStopName(name: string): string {
@@ -21,7 +21,14 @@ function normalizeStopName(name: string): string {
 }
 
 // Minimal trapezoid baseline from kinematics.ts
-function baselineTrapezoid(arr0: number, dep0: number, dist0: number, arr1: number, dist1: number, effTime: number) {
+function baselineTrapezoid(
+  arr0: number,
+  dep0: number,
+  dist0: number,
+  arr1: number,
+  dist1: number,
+  effTime: number
+) {
   const durationS = Math.max(1, arr1 - dep0);
   const elapsedS = effTime - dep0;
   const tau = Math.min(1.0, Math.max(0.0, elapsedS / durationS));
@@ -32,14 +39,14 @@ function baselineTrapezoid(arr0: number, dep0: number, dist0: number, arr1: numb
   const vCruise = distSpanM / ((1 - k) * durationS);
 
   if (tau < k) {
-    progress = 0.5 * (tau * tau) / (k * (1 - k));
+    progress = (0.5 * (tau * tau)) / (k * (1 - k));
     vMps = vCruise * (tau / k);
   } else if (tau <= 1 - k) {
     progress = (tau - 0.5 * k) / (1 - k);
     vMps = vCruise;
   } else {
     const u = 1.0 - tau;
-    progress = 1.0 - 0.5 * (u * u) / (k * (1 - k));
+    progress = 1.0 - (0.5 * (u * u)) / (k * (1 - k));
     vMps = vCruise * (u / k);
   }
   return { dist: dist0 + Math.min(1.0, Math.max(0.0, progress)) * distSpanM, speed: vMps };
@@ -52,7 +59,9 @@ async function runBenchmark() {
   const stations = scheduleData.stations;
 
   const peakSeconds = 30600; // 08:30
-  const peakTrips = scheduleData.trips.filter((t: any) => peakSeconds >= t[4] && peakSeconds <= t[5]);
+  const peakTrips = scheduleData.trips.filter(
+    (t: any) => peakSeconds >= t[4] && peakSeconds <= t[5]
+  );
   console.log(`Peak hour active trains: ${peakTrips.length}`);
 
   const schedTrips: SchedTrip[] = peakTrips.map((t: any) => ({
@@ -64,23 +73,23 @@ async function runBenchmark() {
       stopId: normalizeStopName(stations[s[3]] || ''),
       arr: s[0],
       dep: s[1],
-      dist: s[2]
-    }))
+      dist: s[2],
+    })),
   }));
 
   // Build simulated RT journeys
   const simulatedJourneys: RtJourney[] = schedTrips.map((trip, idx) => {
-    const delay = Math.round((Math.sin(idx) * 45) + 30);
-    const calls: RtCall[] = trip.stops.map(s => ({
+    const delay = Math.round(Math.sin(idx) * 45 + 30);
+    const calls: RtCall[] = trip.stops.map((s) => ({
       stopId: s.stopId,
       aimed: s.arr,
-      expected: s.arr + delay
+      expected: s.arr + delay,
     }));
     return {
       lineId: trip.lineId,
       dir: trip.dir,
       destination: trip.stops[trip.stops.length - 1].stopId,
-      calls
+      calls,
     };
   });
 
@@ -101,7 +110,14 @@ async function runBenchmark() {
       const stops = trip.stops;
       for (let i = 0; i < stops.length - 1; i++) {
         if (effTime >= stops[i].dep && effTime <= stops[i + 1].arr) {
-          baselineTrapezoid(stops[i].arr, stops[i].dep, stops[i].dist, stops[i + 1].arr, stops[i + 1].dist, effTime);
+          baselineTrapezoid(
+            stops[i].arr,
+            stops[i].dep,
+            stops[i].dist,
+            stops[i + 1].arr,
+            stops[i + 1].dist,
+            effTime
+          );
           break;
         }
       }
@@ -123,7 +139,9 @@ async function runBenchmark() {
   const durLevel3 = performance.now() - startLevel3;
   const timePerFrameLevel3 = durLevel3 / NUM_FRAMES;
 
-  console.log(`\n--- Benchmark Results (${NUM_FRAMES} frames × ${peakTrips.length} active trains) ---`);
+  console.log(
+    `\n--- Benchmark Results (${NUM_FRAMES} frames × ${peakTrips.length} active trains) ---`
+  );
   console.log(`1. Baseline (calcul par ligne / retard uniforme) :`);
   console.log(`   - Temps total (1000 frames) : ${durBaseline.toFixed(2)} ms`);
   console.log(`   - Temps par frame : ${timePerFrameBaseline.toFixed(4)} ms/frame`);
@@ -135,7 +153,9 @@ async function runBenchmark() {
   console.log(`   - Fréquence CPU théorique : ${(1000 / timePerFrameLevel3).toFixed(0)} FPS`);
 
   console.log(`\nDelta par frame : ${(timePerFrameLevel3 - timePerFrameBaseline).toFixed(4)} ms`);
-  console.log(`Poids sur le budget 60 FPS (16,67 ms) : ${(timePerFrameLevel3 / 16.667 * 100).toFixed(2)} %`);
+  console.log(
+    `Poids sur le budget 60 FPS (16,67 ms) : ${((timePerFrameLevel3 / 16.667) * 100).toFixed(2)} %`
+  );
 }
 
 runBenchmark().catch(console.error);

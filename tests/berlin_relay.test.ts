@@ -13,7 +13,7 @@ import {
   handler,
   type VbbFetcher,
   type VbbFetchOptions,
-  type VbbFetchResult
+  type VbbFetchResult,
 } from '../netlify/functions/berlin_relay';
 
 function createDummyGtfsRtFeed(
@@ -84,26 +84,26 @@ describe('Relais Netlify berlin_relay', () => {
           id: 'ent-1',
           routeId: '17525_400',
           tripId: '308102122',
-          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }]
+          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }],
         },
         {
           id: 'ent-2',
           routeId: '17524_700', // Bus de remplacement U8
           tripId: '999999991',
-          stops: [{ seq: 1, stopId: 'BUS001', time: 1790760000 }]
+          stops: [{ seq: 1, stopId: 'BUS001', time: 1790760000 }],
         },
         {
           id: 'ent-3',
           routeId: '17512_400', // U1
           tripId: '308101001',
-          stops: [{ seq: 1, stopId: 'de:11000:900012101::1', time: 1790760100 }]
+          stops: [{ seq: 1, stopId: 'de:11000:900012101::1', time: 1790760100 }],
         },
         {
           id: 'ent-4',
           routeId: 'regional_re1',
           tripId: '888888881',
-          stops: [{ seq: 1, stopId: 'RE001', time: 1790760200 }]
-        }
+          stops: [{ seq: 1, stopId: 'RE001', time: 1790760200 }],
+        },
       ]);
 
       const { totalEntities, filteredUpdates } = decodeGtfsRealtimeFeed(dummyFeed);
@@ -123,7 +123,7 @@ describe('Relais Netlify berlin_relay', () => {
         return {
           statusCode: 200,
           data: createDummyGtfsRtFeed([]),
-          etag: '"test-etag-1"'
+          etag: '"test-etag-1"',
         };
       };
 
@@ -148,8 +148,8 @@ describe('Relais Netlify berlin_relay', () => {
           id: 'ent-1',
           routeId: '17525_400',
           tripId: '308102122',
-          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }]
-        }
+          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }],
+        },
       ]);
 
       const mockFetcher: VbbFetcher = async () => {
@@ -157,7 +157,7 @@ describe('Relais Netlify berlin_relay', () => {
         return {
           statusCode: 200,
           data: dummyFeed,
-          etag: '"etag-burst-1"'
+          etag: '"etag-burst-1"',
         };
       };
 
@@ -193,8 +193,8 @@ describe('Relais Netlify berlin_relay', () => {
           id: 'ent-1',
           routeId: '17525_400',
           tripId: '308102122',
-          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }]
-        }
+          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }],
+        },
       ]);
 
       const mockFetcher: VbbFetcher = async (options) => {
@@ -206,7 +206,7 @@ describe('Relais Netlify berlin_relay', () => {
         return {
           statusCode: 200,
           data: dummyFeed,
-          etag: '"vbb-etag-abc"'
+          etag: '"vbb-etag-abc"',
         };
       };
 
@@ -231,7 +231,7 @@ describe('Relais Netlify berlin_relay', () => {
     it('renvoie un snapshot indisponible mais sain (feedHealthy: false) en cas de 429 Rate Limit', async () => {
       const mockFetcher: VbbFetcher = async () => ({
         statusCode: 429,
-        error: 'Too Many Requests'
+        error: 'Too Many Requests',
       });
 
       const { snapshot } = await getOrFetchBerlinSnapshot(1790000000000, mockFetcher);
@@ -244,7 +244,7 @@ describe('Relais Netlify berlin_relay', () => {
     it('renvoie un snapshot indisponible en cas d’erreur 500 ou réseau', async () => {
       const mockFetcher: VbbFetcher = async () => ({
         statusCode: 502,
-        error: 'Bad Gateway'
+        error: 'Bad Gateway',
       });
 
       const { snapshot } = await getOrFetchBerlinSnapshot(1790000000000, mockFetcher);
@@ -260,12 +260,12 @@ describe('Relais Netlify berlin_relay', () => {
           id: 'ent-1',
           routeId: '17525_400',
           tripId: '308102122',
-          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }]
-        }
+          stops: [{ seq: 1, stopId: 'de:11000:900100003::1', time: 1790760000 }],
+        },
       ]);
       await getOrFetchBerlinSnapshot(Date.now(), async () => ({
         statusCode: 200,
-        data: dummyFeed
+        data: dummyFeed,
       }));
 
       const response = await handler();

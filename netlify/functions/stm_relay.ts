@@ -12,7 +12,10 @@ export function getStmApiKey(): string {
         const text = fs.readFileSync(p, 'utf8');
         for (const line of text.split('\n')) {
           if (line.trim().startsWith('STM_API_KEY=')) {
-            return line.split('=', 2)[1].trim().replace(/^['"]|['"]$/g, '');
+            return line
+              .split('=', 2)[1]
+              .trim()
+              .replace(/^['"]|['"]$/g, '');
           }
         }
       }
@@ -36,22 +39,79 @@ export const MONTREAL_METRO_LINES = [
   { id: '1', name: '1', displayName: 'Verte', color: '#00B300' },
   { id: '2', name: '2', displayName: 'Orange', color: '#D95700' },
   { id: '4', name: '4', displayName: 'Jaune', color: '#FFD900' },
-  { id: '5', name: '5', displayName: 'Bleue', color: '#0095E6' }
+  { id: '5', name: '5', displayName: 'Bleue', color: '#0095E6' },
 ];
 
 export const MONTREAL_STATIONS = [
-  'Acadie', 'Angrignon', 'Assomption', 'Atwater', 'Beaubien', 'Beaudry', 'Berri-UQAM',
-  'Bonaventure', 'Cadillac', 'Cartier', 'Champ-de-Mars', 'Charlevoix', 'Chomedey',
-  'Côte-des-Neiges', 'Côte-Sainte-Catherine', 'Côte-Vertu', 'Crémazie', 'D\'Iberville',
-  'De Castelnau', 'De Church', 'De Concorde', 'De L\'Église', 'De la Savane',
-  'Du Collège', 'Fabre', 'Frontenac', 'Georges-Vanier', 'Guy-Concordia', 'Henri-Bourassa',
-  'Honoré-Beaugrand', 'Jarry', 'Jean-Drapeau', 'Jean-Talon', 'Jolicoeur', 'Joliette',
-  'Langelier', 'LaSalle', 'Laurier', 'Lionel-Groulx', 'Longueuil-Université-de-Sherbrooke',
-  'Lucien-L\'Allier', 'McGill', 'Monk', 'Mont-Royal', 'Montmorency', 'Namur', 'Outremont',
-  'Papineau', 'Parc', 'Peel', 'Pie-IX', 'Place-d\'Armes', 'Place-des-Arts', 'Place-Saint-Henri',
-  'Plamondon', 'Préfontaine', 'Radisson', 'Rosemont', 'Saint-Laurent', 'Saint-Michel',
-  'Sauvé', 'Sherbrooke', 'Snowdon', 'Square-Victoria-OACI', 'Université-de-Montréal',
-  'Vendôme', 'Verdun', 'Viau', 'Villa-Maria'
+  'Acadie',
+  'Angrignon',
+  'Assomption',
+  'Atwater',
+  'Beaubien',
+  'Beaudry',
+  'Berri-UQAM',
+  'Bonaventure',
+  'Cadillac',
+  'Cartier',
+  'Champ-de-Mars',
+  'Charlevoix',
+  'Chomedey',
+  'Côte-des-Neiges',
+  'Côte-Sainte-Catherine',
+  'Côte-Vertu',
+  'Crémazie',
+  "D'Iberville",
+  'De Castelnau',
+  'De Church',
+  'De Concorde',
+  "De L'Église",
+  'De la Savane',
+  'Du Collège',
+  'Fabre',
+  'Frontenac',
+  'Georges-Vanier',
+  'Guy-Concordia',
+  'Henri-Bourassa',
+  'Honoré-Beaugrand',
+  'Jarry',
+  'Jean-Drapeau',
+  'Jean-Talon',
+  'Jolicoeur',
+  'Joliette',
+  'Langelier',
+  'LaSalle',
+  'Laurier',
+  'Lionel-Groulx',
+  'Longueuil-Université-de-Sherbrooke',
+  "Lucien-L'Allier",
+  'McGill',
+  'Monk',
+  'Mont-Royal',
+  'Montmorency',
+  'Namur',
+  'Outremont',
+  'Papineau',
+  'Parc',
+  'Peel',
+  'Pie-IX',
+  "Place-d'Armes",
+  'Place-des-Arts',
+  'Place-Saint-Henri',
+  'Plamondon',
+  'Préfontaine',
+  'Radisson',
+  'Rosemont',
+  'Saint-Laurent',
+  'Saint-Michel',
+  'Sauvé',
+  'Sherbrooke',
+  'Snowdon',
+  'Square-Victoria-OACI',
+  'Université-de-Montréal',
+  'Vendôme',
+  'Verdun',
+  'Viau',
+  'Villa-Maria',
 ];
 
 /**
@@ -66,7 +126,7 @@ export function isMontrealMetroServiceHours(
     timeZone: 'America/Montreal',
     hour12: false,
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
   const [h, m] = mtlTimeStr.split(':').map(Number);
   const currentMinutes = h * 60 + m;
@@ -91,7 +151,10 @@ export function normalizeStationText(str: string): string {
 /**
  * Extracts closed stations from a disruption message using known stations catalog.
  */
-export function extractClosedStations(text: string, catalog: string[] = MONTREAL_STATIONS): string[] {
+export function extractClosedStations(
+  text: string,
+  catalog: string[] = MONTREAL_STATIONS
+): string[] {
   if (!text) return [];
   const normalizedText = normalizeStationText(text);
   const found: string[] = [];
@@ -123,7 +186,7 @@ export function parseStmEtatService(
       severity: 'normal',
       title: `Ligne ${line.id} - ${line.displayName}`,
       message: 'Service normal du métro',
-      updatedAt: nowIso
+      updatedAt: nowIso,
     };
   }
 
@@ -152,7 +215,9 @@ export function parseStmEtatService(
 
     // Determine target line(s)
     const entityRoutes: string[] = Array.isArray(item.informed_entities)
-      ? item.informed_entities.map((e: any) => String(e.route_short_name || e.route_id || '').trim()).filter(Boolean)
+      ? item.informed_entities
+          .map((e: any) => String(e.route_short_name || e.route_id || '').trim())
+          .filter(Boolean)
       : [];
     const lineKey = String(
       item.ligne || item.line || item.route_id || item.codeLigne || item.idLigne || ''
@@ -162,7 +227,13 @@ export function parseStmEtatService(
       item.header_texts?.[0]?.text || item.titre || item.title || item.header || ''
     ).trim();
     const message = String(
-      item.description_texts?.[0]?.text || item.message || item.texte || item.corps || item.description || item.detail || title
+      item.description_texts?.[0]?.text ||
+        item.message ||
+        item.texte ||
+        item.corps ||
+        item.description ||
+        item.detail ||
+        title
     ).trim();
     const fullText = `${title} ${message}`.toLowerCase();
 
@@ -175,16 +246,31 @@ export function parseStmEtatService(
         }
       }
     } else {
-      if (lineKey === '1' || fullText.includes('ligne 1') || fullText.includes('verte') || fullText.includes('green')) {
+      if (
+        lineKey === '1' ||
+        fullText.includes('ligne 1') ||
+        fullText.includes('verte') ||
+        fullText.includes('green')
+      ) {
         targetLineIds.push('1');
       }
       if (lineKey === '2' || fullText.includes('ligne 2') || fullText.includes('orange')) {
         targetLineIds.push('2');
       }
-      if (lineKey === '4' || fullText.includes('ligne 4') || fullText.includes('jaune') || fullText.includes('yellow')) {
+      if (
+        lineKey === '4' ||
+        fullText.includes('ligne 4') ||
+        fullText.includes('jaune') ||
+        fullText.includes('yellow')
+      ) {
         targetLineIds.push('4');
       }
-      if (lineKey === '5' || fullText.includes('ligne 5') || fullText.includes('bleue') || fullText.includes('blue')) {
+      if (
+        lineKey === '5' ||
+        fullText.includes('ligne 5') ||
+        fullText.includes('bleue') ||
+        fullText.includes('blue')
+      ) {
         targetLineIds.push('5');
       }
     }
@@ -221,9 +307,10 @@ export function parseStmEtatService(
 
       if (isInterrupted) {
         const closedStations = extractClosedStations(`${title} ${message}`, catalog);
-        const reportTitle = closedStations.length > 0
-          ? `Ligne ${lid} - ${lineName} (Interruption partielle)`
-          : `Ligne ${lid} - ${lineName} (Interruption de service)`;
+        const reportTitle =
+          closedStations.length > 0
+            ? `Ligne ${lid} - ${lineName} (Interruption partielle)`
+            : `Ligne ${lid} - ${lineName} (Interruption de service)`;
 
         result[lid] = {
           lineId: lid,
@@ -233,7 +320,7 @@ export function parseStmEtatService(
           title: reportTitle,
           message: message || 'Interruption de service sur la ligne.',
           updatedAt: item.date || item.updatedAt || nowIso,
-          closedStations: closedStations.length > 0 ? closedStations : undefined
+          closedStations: closedStations.length > 0 ? closedStations : undefined,
         };
       } else if (isDisrupted) {
         result[lid] = {
@@ -243,7 +330,7 @@ export function parseStmEtatService(
           severity: 'warning',
           title: `Ligne ${lid} - ${lineName} (Ralentissement)`,
           message: message || 'Ralentissement de service.',
-          updatedAt: item.date || item.updatedAt || nowIso
+          updatedAt: item.date || item.updatedAt || nowIso,
         };
       }
     }
@@ -273,9 +360,9 @@ export async function fetchStmEtatService(
           apikey: apiKey,
           origin: origin,
           Accept: 'application/json',
-          'User-Agent': 'ParisSubway3D-StmRelay/1.0'
+          'User-Agent': 'ParisSubway3D-StmRelay/1.0',
         },
-        timeout: 10000
+        timeout: 10000,
       },
       (res) => {
         let body = '';
@@ -291,7 +378,7 @@ export async function fetchStmEtatService(
           } else {
             resolve({
               statusCode: res.statusCode || 500,
-              error: `STM API returned HTTP ${res.statusCode}: ${body.slice(0, 200)}`
+              error: `STM API returned HTTP ${res.statusCode}: ${body.slice(0, 200)}`,
             });
           }
         });
@@ -327,7 +414,7 @@ export const handler = async (event: any, context: any) => {
       serviceActive: false,
       serviceMessage: 'Service terminé sur le réseau STM (reprise à 05h30)',
       lastError: null,
-      trafficByLine: parseStmEtatService(null)
+      trafficByLine: parseStmEtatService(null),
     };
 
     return {
@@ -336,9 +423,9 @@ export const handler = async (event: any, context: any) => {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'public, max-age=120, s-maxage=300',
         'X-STM-Healthy': 'true',
-        'X-STM-Operating': 'false'
+        'X-STM-Operating': 'false',
       },
-      body: JSON.stringify(overnightSnapshot)
+      body: JSON.stringify(overnightSnapshot),
     };
   }
 
@@ -350,9 +437,9 @@ export const handler = async (event: any, context: any) => {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'public, max-age=60, s-maxage=120',
         'X-STM-Healthy': cachedSnapshot.feedHealthy ? 'true' : 'false',
-        'X-STM-Cached': 'true'
+        'X-STM-Cached': 'true',
       },
-      body: JSON.stringify(cachedSnapshot)
+      body: JSON.stringify(cachedSnapshot),
     };
   }
 
@@ -366,7 +453,7 @@ export const handler = async (event: any, context: any) => {
       serviceActive: true,
       serviceMessage: 'STM_API_KEY non configurée (mode théorique GTFS nominal actif)',
       lastError: 'STM_API_KEY non configurée',
-      trafficByLine: parseStmEtatService(null)
+      trafficByLine: parseStmEtatService(null),
     };
     cachedSnapshot = nominalSnapshot;
 
@@ -376,9 +463,9 @@ export const handler = async (event: any, context: any) => {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'public, max-age=60, s-maxage=120',
         'X-STM-Healthy': 'false',
-        'X-STM-Reason': 'no-key'
+        'X-STM-Reason': 'no-key',
       },
-      body: JSON.stringify(nominalSnapshot)
+      body: JSON.stringify(nominalSnapshot),
     };
   }
 
@@ -395,7 +482,7 @@ export const handler = async (event: any, context: any) => {
       feedHealthy: true,
       serviceActive: true,
       lastError: null,
-      trafficByLine
+      trafficByLine,
     };
     cachedSnapshot = newSnapshot;
     lastFetchEpoch = now;
@@ -405,9 +492,9 @@ export const handler = async (event: any, context: any) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'public, max-age=60, s-maxage=120',
-        'X-STM-Healthy': 'true'
+        'X-STM-Healthy': 'true',
       },
-      body: JSON.stringify(newSnapshot)
+      body: JSON.stringify(newSnapshot),
     };
   }
 
@@ -426,9 +513,9 @@ export const handler = async (event: any, context: any) => {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'public, max-age=30, s-maxage=60',
         'X-STM-Healthy': 'false',
-        'X-STM-Degraded': 'true'
+        'X-STM-Degraded': 'true',
       },
-      body: JSON.stringify(cachedSnapshot)
+      body: JSON.stringify(cachedSnapshot),
     };
   }
 
@@ -440,7 +527,7 @@ export const handler = async (event: any, context: any) => {
     feedHealthy: false,
     serviceActive: true,
     lastError: res.error || `STM HTTP ${res.statusCode}`,
-    trafficByLine: parseStmEtatService(null)
+    trafficByLine: parseStmEtatService(null),
   };
   cachedSnapshot = fallbackSnapshot;
 
@@ -449,8 +536,8 @@ export const handler = async (event: any, context: any) => {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'public, max-age=30, s-maxage=60',
-      'X-STM-Healthy': 'false'
+      'X-STM-Healthy': 'false',
     },
-    body: JSON.stringify(fallbackSnapshot)
+    body: JSON.stringify(fallbackSnapshot),
   };
 };

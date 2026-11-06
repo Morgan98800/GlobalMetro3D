@@ -7,7 +7,7 @@ import {
   isTripUpdateMonotonic,
   stopIdToNormalizedStationId,
   epochToBerlinCivilSeconds,
-  BerlinMatcher
+  BerlinMatcher,
 } from '../cities/berlin/rt/berlin_matching';
 import { decodeGtfsRealtimeFeed } from '../netlify/functions/berlin_relay';
 import { VbbRealtimeAdapter } from '../cities/berlin/rt/vbb_adapter';
@@ -21,10 +21,22 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
         id: '1',
         trip: { tripId: 'trip_1', routeId: '17525_400' },
         stopTimeUpdates: [
-          { stopId: 'de:11000:900085104::1', arrival: { time: 1790000100 }, departure: { time: 1790000120 } },
-          { stopId: 'de:11000:900085203::1', arrival: { time: 1790000200 }, departure: { time: 1790000220 } },
-          { stopId: 'de:11000:900085202::1', arrival: { time: 1790000300 }, departure: { time: 1790000320 } }
-        ]
+          {
+            stopId: 'de:11000:900085104::1',
+            arrival: { time: 1790000100 },
+            departure: { time: 1790000120 },
+          },
+          {
+            stopId: 'de:11000:900085203::1',
+            arrival: { time: 1790000200 },
+            departure: { time: 1790000220 },
+          },
+          {
+            stopId: 'de:11000:900085202::1',
+            arrival: { time: 1790000300 },
+            departure: { time: 1790000320 },
+          },
+        ],
       };
       expect(isTripUpdateMonotonic(tu)).toBe(true);
     });
@@ -34,11 +46,23 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
         id: '2',
         trip: { tripId: 'trip_2', routeId: '17525_400' },
         stopTimeUpdates: [
-          { stopId: 'de:11000:900085104::1', arrival: { time: 1790000100 }, departure: { time: 1790000120 } },
-          { stopId: 'de:11000:900085203::1', arrival: { time: 1790000300 }, departure: { time: 1790000320 } },
+          {
+            stopId: 'de:11000:900085104::1',
+            arrival: { time: 1790000100 },
+            departure: { time: 1790000120 },
+          },
+          {
+            stopId: 'de:11000:900085203::1',
+            arrival: { time: 1790000300 },
+            departure: { time: 1790000320 },
+          },
           // Retour en arrière horaire (250 < 300) : anomalie capteur VBB
-          { stopId: 'de:11000:900085202::1', arrival: { time: 1790000250 }, departure: { time: 1790000270 } }
-        ]
+          {
+            stopId: 'de:11000:900085202::1',
+            arrival: { time: 1790000250 },
+            departure: { time: 1790000270 },
+          },
+        ],
       };
       expect(isTripUpdateMonotonic(tuNonMonotonic)).toBe(false);
 
@@ -52,17 +76,27 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
   describe('Résolution des quais GTFS en stations normalisées (§5.3)', () => {
     it('ramène un identifiant de quai ::1 à sa station parente nettoyée', () => {
       // Quai 1 de Paracelsus-Bad
-      expect(stopIdToNormalizedStationId('de:11000:900085104::1')).toBe(normalizeStopName('Paracelsus-Bad'));
+      expect(stopIdToNormalizedStationId('de:11000:900085104::1')).toBe(
+        normalizeStopName('Paracelsus-Bad')
+      );
       // Quai 1 de Wittenau
-      expect(stopIdToNormalizedStationId('de:11000:900096101::1')).toBe(normalizeStopName('Wittenau'));
+      expect(stopIdToNormalizedStationId('de:11000:900096101::1')).toBe(
+        normalizeStopName('Wittenau')
+      );
       // Quai 2 d'Alexanderplatz
-      expect(stopIdToNormalizedStationId('de:11000:900100003::2')).toBe(normalizeStopName('Alexanderplatz'));
+      expect(stopIdToNormalizedStationId('de:11000:900100003::2')).toBe(
+        normalizeStopName('Alexanderplatz')
+      );
       // Quai d'Hermannstraße
-      expect(stopIdToNormalizedStationId('de:11000:900079221::1')).toBe(normalizeStopName('Hermannstr.'));
+      expect(stopIdToNormalizedStationId('de:11000:900079221::1')).toBe(
+        normalizeStopName('Hermannstr.')
+      );
     });
 
     it('gère les stations parentes directes sans suffixe ::quai', () => {
-      expect(stopIdToNormalizedStationId('de:11000:900100003')).toBe(normalizeStopName('Alexanderplatz'));
+      expect(stopIdToNormalizedStationId('de:11000:900100003')).toBe(
+        normalizeStopName('Alexanderplatz')
+      );
     });
   });
 
@@ -86,8 +120,8 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
         stops: [
           { stopId: normalizeStopName('Wittenau'), arr: 43200, dep: 43220, dist: 0 },
           { stopId: normalizeStopName('Alexanderplatz'), arr: 44000, dep: 44020, dist: 11000 },
-          { stopId: normalizeStopName('Hermannstr.'), arr: 45000, dep: 45020, dist: 18000 }
-        ]
+          { stopId: normalizeStopName('Hermannstr.'), arr: 45000, dep: 45020, dist: 18000 },
+        ],
       },
       {
         tripId: 'sched_2',
@@ -97,9 +131,9 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
         stops: [
           { stopId: normalizeStopName('Hermannstr.'), arr: 43200, dep: 43220, dist: 0 },
           { stopId: normalizeStopName('Alexanderplatz'), arr: 44200, dep: 44220, dist: 7000 },
-          { stopId: normalizeStopName('Wittenau'), arr: 45000, dep: 45020, dist: 18000 }
-        ]
-      }
+          { stopId: normalizeStopName('Wittenau'), arr: 45000, dep: 45020, dist: 18000 },
+        ],
+      },
     ];
 
     it('attribue le niveau measured quand la prédiction est dans la fenêtre (<= 120s)', () => {
@@ -110,9 +144,9 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
           {
             stopId: 'de:11000:900100003::1', // Alexanderplatz
             arrival: { time: 43250 }, // 43250 - 43200 = 50s dans le futur (<= 120s)
-            departure: { time: 43270 }
-          }
-        ]
+            departure: { time: 43270 },
+          },
+        ],
       };
 
       const matcher = new BerlinMatcher();
@@ -138,9 +172,9 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
           {
             stopId: 'de:11000:900100003::1',
             arrival: { time: 43250 },
-            departure: { time: 43270 }
-          }
-        ]
+            departure: { time: 43270 },
+          },
+        ],
       };
 
       const matcher = new BerlinMatcher();
@@ -196,8 +230,8 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
             arr: s[0],
             dep: s[1],
             dist: s[2],
-            stopId: normalizeStopName(stationNames[s[3]] || 'Station')
-          }))
+            stopId: normalizeStopName(stationNames[s[3]] || 'Station'),
+          })),
         }));
 
       // Heure de capture de l’échantillon : 12:57 CEST = 10:57 UTC = 46620 s civiles
@@ -219,12 +253,16 @@ describe('Appariement et Robustesse Temps Réel Berlin (Porte 3)', () => {
       console.log(`[Porte 3 Métriques U8]`);
       console.log(`  - Courses théoriques en circulation : ${activeTrips.length}`);
       console.log(`  - TripUpdates U8 reçus : ${u8Updates.length}`);
-      console.log(`  - Mises à jour écartées (non-monotones) : ${outcome.discardedNonMonotonicCount}`);
+      console.log(
+        `  - Mises à jour écartées (non-monotones) : ${outcome.discardedNonMonotonicCount}`
+      );
       console.log(`  - Courses actives appariées : ${outcome.matchedCount}`);
 
       // Taux d'appariement : toutes les courses du flux reçues qui correspondent à des courses actives
       const matchRatePct = outcome.matchRate * 100;
-      console.log(`  - Taux d’appariement des courses actives reçues : ${matchRatePct.toFixed(1)} %`);
+      console.log(
+        `  - Taux d’appariement des courses actives reçues : ${matchRatePct.toFixed(1)} %`
+      );
 
       // Taux de couverture : courses en circulation avec données RT / courses en circulation
       const coverageRatePct = (outcome.matchedCount / activeTrips.length) * 100;

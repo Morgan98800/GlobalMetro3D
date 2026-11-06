@@ -16,10 +16,16 @@ import { EdinburghRealtimeAdapter } from './edinburgh/rt/edinburgh_adapter';
  * Ajouter une ville : écrire son adaptateur dans `cities/<ville>/rt/`, ajouter
  * une entrée ici. Aucune modification de `core/`.
  */
-type AdapterFactory = (config: CityRealtimeConfig, apiKey?: string, city?: CityConfig) => RealtimeAdapter;
+type AdapterFactory = (
+  config: CityRealtimeConfig,
+  apiKey?: string,
+  city?: CityConfig
+) => RealtimeAdapter;
 
-const FACTORIES: Partial<Record<RealtimeProvider | 'ilevia-gtfsrt' | 'wmata-gtfsrt' | 'vbb-gtfsrt', AdapterFactory>> = {
-  'prim': (config, apiKey) => new PrimRealtimeAdapter(config, apiKey),
+const FACTORIES: Partial<
+  Record<RealtimeProvider | 'ilevia-gtfsrt' | 'wmata-gtfsrt' | 'vbb-gtfsrt', AdapterFactory>
+> = {
+  prim: (config, apiKey) => new PrimRealtimeAdapter(config, apiKey),
   'stm-i3': (config) => new StmRealtimeAdapter(config),
   'tfl-unified': (config) => new TflRealtimeAdapter(config),
   'gtfs-rt': (config, apiKey, city) => {
@@ -29,16 +35,20 @@ const FACTORIES: Partial<Record<RealtimeProvider | 'ilevia-gtfsrt' | 'wmata-gtfs
   },
   'ilevia-gtfsrt': (config) => new IleviaRealtimeAdapter(config),
   'wmata-gtfsrt': (config) => new WashingtonRealtimeAdapter(config),
-  'vbb-gtfsrt': (config) => new VbbRealtimeAdapter(config)
+  'vbb-gtfsrt': (config) => new VbbRealtimeAdapter(config),
 };
 
 /** Adaptateur inerte : mode purement théorique, aucune requête. */
 class NoRealtimeAdapter implements RealtimeAdapter {
   startPolling(): void {}
   stopPolling(): void {}
-  getStatus() { return { active: false }; }
+  getStatus() {
+    return { active: false };
+  }
   onUpdate(): void {}
-  getTrafficByLine() { return {}; }
+  getTrafficByLine() {
+    return {};
+  }
 }
 
 export function createRealtimeAdapter(city: CityConfig, apiKey?: string): RealtimeAdapter {
@@ -50,7 +60,7 @@ export function createRealtimeAdapter(city: CityConfig, apiKey?: string): Realti
     if (city.realtime.provider !== 'none') {
       console.warn(
         `[realtime] Aucun adaptateur pour le fournisseur « ${city.realtime.provider} » ` +
-        `(ville ${city.id}) : repli sur le mode théorique.`
+          `(ville ${city.id}) : repli sur le mode théorique.`
       );
     }
     return new NoRealtimeAdapter();

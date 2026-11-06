@@ -57,7 +57,9 @@ for (const expected of fixture.distFiles) {
   }
 
   if (actualSize === undefined) {
-    console.error(`❌ Missing file in dist/: ${expected.originalPath} (pattern: ${expected.normalizedPath})`);
+    console.error(
+      `❌ Missing file in dist/: ${expected.originalPath} (pattern: ${expected.normalizedPath})`
+    );
     missingFiles++;
     continue;
   }
@@ -65,17 +67,23 @@ for (const expected of fixture.distFiles) {
   const minAllowed = expected.minSize1Pct;
   const maxAllowed = expected.maxSize1Pct;
   if (actualSize < minAllowed || actualSize > maxAllowed) {
-    const deltaPct = ((actualSize - expected.sizeBytes) / expected.sizeBytes * 100).toFixed(2);
-    console.error(`❌ Size deviation > 1% on ${expected.originalPath}: expected ~${expected.sizeBytes}B [${minAllowed}-${maxAllowed}], got ${actualSize}B (${deltaPct}%)`);
+    const deltaPct = (((actualSize - expected.sizeBytes) / expected.sizeBytes) * 100).toFixed(2);
+    console.error(
+      `❌ Size deviation > 1% on ${expected.originalPath}: expected ~${expected.sizeBytes}B [${minAllowed}-${maxAllowed}], got ${actualSize}B (${deltaPct}%)`
+    );
     sizeErrors++;
   }
 }
 
 if (missingFiles > 0 || sizeErrors > 0) {
-  console.error(`❌ Dist footprint check failed: ${missingFiles} missing files, ${sizeErrors} size deviations.`);
+  console.error(
+    `❌ Dist footprint check failed: ${missingFiles} missing files, ${sizeErrors} size deviations.`
+  );
   process.exit(1);
 }
-console.log(`✅ Dist footprint verified: ${fixture.distFiles.length} files checked, all sizes within 1%.`);
+console.log(
+  `✅ Dist footprint verified: ${fixture.distFiles.length} files checked, all sizes within 1%.`
+);
 
 // 2. Audit Netlify Functions
 console.log('🔍 Auditing Netlify functions...');
@@ -109,7 +117,7 @@ const MIME_TYPES = {
   '.br': 'application/octet-stream',
   '.glb': 'model/gltf-binary',
   '.png': 'image/png',
-  '.svg': 'image/svg+xml'
+  '.svg': 'image/svg+xml',
 };
 
 function handleStaticRequest(reqUrl) {
@@ -122,7 +130,9 @@ function handleStaticRequest(reqUrl) {
       const dir = path.join(DIST_DIR, 'assets');
       const basePrefix = path.basename(reqPath).split('-')[0];
       const ext = path.extname(reqPath);
-      const match = fs.existsSync(dir) ? fs.readdirSync(dir).find(f => f.startsWith(basePrefix + '-') && f.endsWith(ext)) : null;
+      const match = fs.existsSync(dir)
+        ? fs.readdirSync(dir).find((f) => f.startsWith(basePrefix + '-') && f.endsWith(ext))
+        : null;
       if (match) {
         filePath = path.join(dir, match);
       } else {
@@ -144,12 +154,16 @@ for (const resItem of fixture.firstRenderResources) {
   const result = handleStaticRequest(resItem.url);
 
   if (result.status !== resItem.expectedStatus) {
-    console.error(`❌ HTTP status mismatch for ${resItem.url}: expected ${resItem.expectedStatus}, got ${result.status}`);
+    console.error(
+      `❌ HTTP status mismatch for ${resItem.url}: expected ${resItem.expectedStatus}, got ${result.status}`
+    );
     httpErrors++;
   }
 
   if (!result.mime.includes(resItem.expectedMime)) {
-    console.error(`❌ MIME type mismatch for ${resItem.url}: expected to contain "${resItem.expectedMime}", got "${result.mime}"`);
+    console.error(
+      `❌ MIME type mismatch for ${resItem.url}: expected to contain "${resItem.expectedMime}", got "${result.mime}"`
+    );
     httpErrors++;
   }
 
@@ -164,5 +178,7 @@ if (httpErrors > 0) {
   process.exit(1);
 }
 
-console.log(`✅ First-render resources verified: ${fixture.firstRenderResources.length} URLs tested (all HTTP 200 with matching MIME types).`);
+console.log(
+  `✅ First-render resources verified: ${fixture.firstRenderResources.length} URLs tested (all HTTP 200 with matching MIME types).`
+);
 console.log('🎉 ALL BUILD FOOTPRINT & FIRST-RENDER CHECKS PASSED!');

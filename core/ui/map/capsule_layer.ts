@@ -12,8 +12,15 @@ import { LATIN_CHARACTER_SET } from './labels_layer';
 
 const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
 const NEUTRAL_BODY_COLORS = [
-  '#F1EFEA', '#FFFFFF', '#767676', '#6E6E6E', '#686868',
-  '#646464', '#5F5F5F', '#4E4E4E', '#3B3D3D'
+  '#F1EFEA',
+  '#FFFFFF',
+  '#767676',
+  '#6E6E6E',
+  '#686868',
+  '#646464',
+  '#5F5F5F',
+  '#4E4E4E',
+  '#3B3D3D',
 ];
 
 function relativeLuminance(hex: string): number {
@@ -34,11 +41,14 @@ function contrastRatio(first: string, second: string): number {
 
 function getNeutralBodyColor(lineColor: string): [number, number, number, number] {
   const normalized = lineColor.toUpperCase();
-  const selected = NEUTRAL_BODY_COLORS.find((neutral) => contrastRatio(neutral, normalized) >= 3) ?? '#3B3D3D';
+  const selected =
+    NEUTRAL_BODY_COLORS.find((neutral) => contrastRatio(neutral, normalized) >= 3) ?? '#3B3D3D';
   return hexToRgba(selected, 255);
 }
 
-function getNeutralNoseColor(bodyColor: [number, number, number, number]): [number, number, number, number] {
+function getNeutralNoseColor(
+  bodyColor: [number, number, number, number]
+): [number, number, number, number] {
   const isLight = bodyColor[0] + bodyColor[1] + bodyColor[2] > 450;
   return isLight ? [59, 61, 61, 255] : [241, 239, 234, 255];
 }
@@ -57,7 +67,9 @@ function pointToTrackDistanceM(point: [number, number], path: [number, number][]
     const vx = bx - ax;
     const vy = by - ay;
     const lengthSquared = vx * vx + vy * vy;
-    const t = lengthSquared ? Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / lengthSquared)) : 0;
+    const t = lengthSquared
+      ? Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / lengthSquared))
+      : 0;
     best = Math.min(best, Math.hypot(px - (ax + t * vx), py - (ay + t * vy)));
   }
   return best;
@@ -145,13 +157,13 @@ function computeTrainLights(
         pos: [pHead[0] + offLng, pHead[1] + offLat],
         radiusM: 0.75,
         color: headlightColor,
-        elevation: elevation + 3.2
+        elevation: elevation + 3.2,
       },
       {
         pos: [pHead[0] - offLng, pHead[1] - offLat],
         radiusM: 0.75,
         color: headlightColor,
-        elevation: elevation + 3.2
+        elevation: elevation + 3.2,
       }
     );
   }
@@ -176,12 +188,15 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     selectedLineId,
     selectedTrainId,
     onHover,
-    onClick
+    onClick,
   } = params;
 
   const map = typeof window !== 'undefined' ? (window as any).__map : null;
   const zoom = typeof map?.getZoom === 'function' ? map.getZoom() : 13;
-  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'trains') {
+  if (
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('debug') === 'trains'
+  ) {
     const overlayZoom = Number((window as any).__deckOverlayZoom ?? zoom);
     if (Math.abs(overlayZoom - zoom) > 0.1) {
       console.warn('[trains-debug] zoom désynchronisé', { mapZoom: zoom, overlayZoom });
@@ -202,13 +217,15 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   }
 
   let activeTrains = selectedLineId
-    ? trains.filter(t => t.line === selectedLineId || (selectedTrainId && t.id === selectedTrainId))
+    ? trains.filter(
+        (t) => t.line === selectedLineId || (selectedTrainId && t.id === selectedTrainId)
+      )
     : trains;
 
   // Mobile capping: max 150 closest to map center
   if (isMobile && activeTrains.length > 150) {
     const [cLon, cLat] = mapCenter;
-    const selected = selectedTrainId ? activeTrains.find(t => t.id === selectedTrainId) : null;
+    const selected = selectedTrainId ? activeTrains.find((t) => t.id === selectedTrainId) : null;
     activeTrains = [...activeTrains]
       .sort((a, b) => {
         const dA = (a.pos[0] - cLon) ** 2 + (a.pos[1] - cLat) ** 2;
@@ -216,7 +233,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         return dA - dB;
       })
       .slice(0, 150);
-    if (selected && !activeTrains.some(t => t.id === selected.id)) {
+    if (selected && !activeTrains.some((t) => t.id === selected.id)) {
       activeTrains.push(selected);
     }
   }
@@ -232,9 +249,15 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   const lightPoints: RenderLightPoint[] = [];
   const labelsData: RenderTrainLabel[] = [];
   const fallbackTrains: TrainMarker[] = [];
-  const debugTrains = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('debug') === 'trains';
+  const debugTrains =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('debug') === 'trains';
   const debugRows: Array<Record<string, unknown>> = [];
-  const debugSlices: Array<{ path: [number, number][]; color: [number, number, number, number]; widthM: number }> = [];
+  const debugSlices: Array<{
+    path: [number, number][];
+    color: [number, number, number, number];
+    widthM: number;
+  }> = [];
   const debugShapeIds = new Set<string>();
   for (const train of activeTrains) {
     if (!train.shapeId) {
@@ -247,14 +270,17 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       continue;
     }
 
-    const stock: LineRollingStock = getRollingStockForLine(rollingStockDb, train.line || train.lineName);
+    const stock: LineRollingStock = getRollingStockForLine(
+      rollingStockDb,
+      train.line || train.lineName
+    );
     const trainDirection = (train.direction ?? 1) as 0 | 1;
-    const referenceDistance = (train.currentDistM ?? 0)
-      + (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
+    const referenceDistance =
+      (train.currentDistM ?? 0) +
+      (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
     const headD = referenceDistance;
-    const tailD = trainDirection === 1
-      ? headD - stock.total_length_m
-      : headD + stock.total_length_m;
+    const tailD =
+      trainDirection === 1 ? headD - stock.total_length_m : headD + stock.total_length_m;
     const elev = train.elevation || 0;
     const lodLevel = zoom < minCapsuleZoom ? 'dot' : zoom >= detailedZoom ? 'full' : 'capsule';
     const debugShape = shapes.get(train.shapeId);
@@ -280,9 +306,11 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         orphanShape: !debugShape,
         outOfBounds: Boolean(debugShape && (headD < 0 || headD > debugShape.length)),
         distanceToDisplayTrackM: Math.min(
-          ...tracks.filter((track) => track.line_id === train.line).map((track) => pointToTrackDistanceM(train.pos, track.coordinates)),
+          ...tracks
+            .filter((track) => track.line_id === train.line)
+            .map((track) => pointToTrackDistanceM(train.pos, track.coordinates)),
           Number.POSITIVE_INFINITY
-        )
+        ),
       });
       if (debugSlice.length >= 2) {
         debugSlices.push({ path: debugSlice, color: [255, 255, 255, 255], widthM: 2 });
@@ -308,7 +336,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       color: isRealtime ? [255, 215, 0, 255] : [240, 240, 240, 240],
       isSched: train.conf === 'scheduled',
       elevation: elev + 0.5,
-      train
+      train,
     });
 
     if (!isDetailed) {
@@ -318,14 +346,14 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         widthM: Math.max(stock.width_m, 3.2),
         color: bodyColor,
         elevation: elev + 1.0,
-        train
+        train,
       });
       carRoofs.push({
         path: fullPath,
-        widthM: Math.max(stock.width_m * 0.30, 0.8),
+        widthM: Math.max(stock.width_m * 0.3, 0.8),
         color: lineColorRgba,
         elevation: elev + 1.2,
-        train
+        train,
       });
     } else {
       // -----------------------------------------------------------------------
@@ -349,30 +377,31 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
             widthM: Math.max(stock.width_m, 3.2),
             color: bodyColor,
             elevation: elev + 1.0,
-            train
+            train,
           });
           carRoofs.push({
             path: carPath,
-            widthM: Math.max(stock.width_m * 0.30, 0.8),
+            widthM: Math.max(stock.width_m * 0.3, 0.8),
             color: lineColorRgba,
             elevation: elev + 1.2,
-            train
+            train,
           });
         }
       }
 
       // C. Inter-car rubber gangways / soufflets
       for (let i = 0; i < stock.cars_count - 1; i++) {
-        const carTailD = headD - i * (stock.car_length_m + stock.inter_car_gap_m) - stock.car_length_m;
+        const carTailD =
+          headD - i * (stock.car_length_m + stock.inter_car_gap_m) - stock.car_length_m;
         const nextCarHeadD = headD - (i + 1) * (stock.car_length_m + stock.inter_car_gap_m);
         const gangwayPath = sliceShape(shape, Math.max(0, nextCarHeadD), Math.max(0, carTailD));
         if (gangwayPath.length >= 2) {
           gangwaySegments.push({
             path: gangwayPath,
-            widthM: Math.max(stock.width_m * 0.70, 2.2),
+            widthM: Math.max(stock.width_m * 0.7, 2.2),
             color: [40, 40, 42, 255],
             elevation: elev + 1.6,
-            train
+            train,
           });
         }
       }
@@ -383,10 +412,10 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       if (nosePath.length >= 2) {
         noseSegments.push({
           path: nosePath,
-          widthM: Math.max(stock.width_m * 0.90, 2.9),
+          widthM: Math.max(stock.width_m * 0.9, 2.9),
           color: noseColor,
           elevation: elev + 3.8,
-          train
+          train,
         });
       }
 
@@ -404,7 +433,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         textColorHex: train.textColorHex,
         alpha: 255,
         elevation: elev + 4.5,
-        isSelected: train.id === selectedTrainId || train.line === selectedLineId
+        isSelected: train.id === selectedTrainId || train.line === selectedLineId,
       });
     }
   }
@@ -421,7 +450,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     highlightColor: [255, 255, 255, 75],
     transitions: { getColor: { duration: 140, easing: easeOut } },
     _pathType: 'open' as const,
-    parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
+    parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
   };
 
   // ---------------------------------------------------------------------------
@@ -448,8 +477,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       updateTriggers: {
         getPath: [trains],
         getColor: [trains],
-        getDashArray: [trains]
-      }
+        getDashArray: [trains],
+      },
     } as any)
   );
 
@@ -475,8 +504,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         updateTriggers: {
           getPath: [trains],
           getFillColor: [trains],
-          getWidth: [trains]
-        }
+          getWidth: [trains],
+        },
       })
     );
   }
@@ -498,8 +527,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         updateTriggers: {
           getPath: [trains],
           getFillColor: [trains],
-          getWidth: [trains]
-        }
+          getWidth: [trains],
+        },
       })
     );
   }
@@ -519,8 +548,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         getColor: (d: RenderCarSegment) => d.color,
         updateTriggers: {
           getPath: [trains],
-          getColor: [trains]
-        }
+          getColor: [trains],
+        },
       })
     );
   }
@@ -539,8 +568,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
         getColor: (d: RenderCarSegment) => d.color,
         updateTriggers: {
-          getPath: [trains]
-        }
+          getPath: [trains],
+        },
       })
     );
   }
@@ -563,8 +592,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
         updateTriggers: {
           getPosition: [trains],
-          getFillColor: [trains]
-        }
+          getFillColor: [trains],
+        },
       })
     );
   }
@@ -596,8 +625,8 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
         updateTriggers: {
           getPosition: [trains],
-          getCollisionPriority: [selectedLineId, selectedTrainId]
-        }
+          getCollisionPriority: [selectedLineId, selectedTrainId],
+        },
       } as any)
     );
   }
@@ -612,52 +641,86 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     const orphanByLine: Record<string, number> = {};
     const outOfBoundsByLine: Record<string, number> = {};
     for (const row of debugRows) {
-      if (row.orphanShape) orphanByLine[String(row.lineId)] = (orphanByLine[String(row.lineId)] || 0) + 1;
-      if (row.outOfBounds) outOfBoundsByLine[String(row.lineId)] = (outOfBoundsByLine[String(row.lineId)] || 0) + 1;
+      if (row.orphanShape)
+        orphanByLine[String(row.lineId)] = (orphanByLine[String(row.lineId)] || 0) + 1;
+      if (row.outOfBounds)
+        outOfBoundsByLine[String(row.lineId)] = (outOfBoundsByLine[String(row.lineId)] || 0) + 1;
     }
     const debugReport = {
       mapZoom: typeof map?.getZoom === 'function' ? map.getZoom() : null,
-      overlayZoom: typeof window !== 'undefined' ? (window as any).__deckOverlayZoom ?? null : null,
+      overlayZoom:
+        typeof window !== 'undefined' ? ((window as any).__deckOverlayZoom ?? null) : null,
       activeTrains: debugRows.length,
       emptySlices: debugRows.filter((row) => Number(row.sliceLength) < 2).length,
-      emptySliceRate: debugRows.length ? debugRows.filter((row) => Number(row.sliceLength) < 2).length / debugRows.length : 0,
+      emptySliceRate: debugRows.length
+        ? debugRows.filter((row) => Number(row.sliceLength) < 2).length / debugRows.length
+        : 0,
       orphanShapes: debugRows.filter((row) => row.orphanShape).length,
       orphanByLine,
       outOfBounds: debugRows.filter((row) => row.outOfBounds).length,
       outOfBoundsByLine,
       shapeIdsLoaded: debugShapeIds.size,
       lodAtCurrentZoom: debugRows[0]?.lodLevel ?? null,
-      colors: debugRows.map((row) => ({ lineId: row.lineId, color: row.color, model: row.model }))
+      colors: debugRows.map((row) => ({ lineId: row.lineId, color: row.color, model: row.model })),
     };
     (window as any).__trainDebugRows = debugRows;
     (window as any).__trainDebugReport = debugReport;
     console.log('[trains-debug] report', debugReport);
 
-    const debugSourcePaths = [...debugShapeIds].map((shapeId) => {
-      const shape = shapes.get(shapeId);
-      return shape ? { path: Array.from({ length: shape.coords.length / 2 }, (_, i) => [shape.coords[i * 2], shape.coords[i * 2 + 1]] as [number, number]), color: [255, 0, 255, 220] } : null;
-    }).filter(Boolean);
+    const debugSourcePaths = [...debugShapeIds]
+      .map((shapeId) => {
+        const shape = shapes.get(shapeId);
+        return shape
+          ? {
+              path: Array.from(
+                { length: shape.coords.length / 2 },
+                (_, i) => [shape.coords[i * 2], shape.coords[i * 2 + 1]] as [number, number]
+              ),
+              color: [255, 0, 255, 220],
+            }
+          : null;
+      })
+      .filter(Boolean);
     const debugDisplayPaths = tracks
       .filter((track) => !selectedLineId || track.line_id === selectedLineId)
       .map((track) => ({ path: track.coordinates, color: [0, 255, 255, 220] }));
-    layers.push(new PathLayer<any>({
-      id: 'trains-debug-source-magenta', data: debugSourcePaths, widthUnits: 'pixels', getWidth: 1,
-      getPath: (d: any) => d.path, getColor: (d: any) => d.color, pickable: false,
-      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
-    }));
-    layers.push(new PathLayer<any>({
-      id: 'trains-debug-display-cyan', data: debugDisplayPaths, widthUnits: 'pixels', getWidth: 1,
-      getPath: (d: any) => d.path, getColor: (d: any) => d.color, pickable: false,
-      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
-    }));
-    layers.push(new PathLayer<any>({
-      id: 'trains-debug-slice-white', data: debugSlices, widthUnits: 'pixels', getWidth: (d: any) => d.widthM,
-      getPath: (d: any) => d.path, getColor: (d: any) => d.color, pickable: false,
-      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any
-    }));
+    layers.push(
+      new PathLayer<any>({
+        id: 'trains-debug-source-magenta',
+        data: debugSourcePaths,
+        widthUnits: 'pixels',
+        getWidth: 1,
+        getPath: (d: any) => d.path,
+        getColor: (d: any) => d.color,
+        pickable: false,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+      })
+    );
+    layers.push(
+      new PathLayer<any>({
+        id: 'trains-debug-display-cyan',
+        data: debugDisplayPaths,
+        widthUnits: 'pixels',
+        getWidth: 1,
+        getPath: (d: any) => d.path,
+        getColor: (d: any) => d.color,
+        pickable: false,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+      })
+    );
+    layers.push(
+      new PathLayer<any>({
+        id: 'trains-debug-slice-white',
+        data: debugSlices,
+        widthUnits: 'pixels',
+        getWidth: (d: any) => d.widthM,
+        getPath: (d: any) => d.path,
+        getColor: (d: any) => d.color,
+        pickable: false,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+      })
+    );
   }
 
   return layers;
 }
-
-

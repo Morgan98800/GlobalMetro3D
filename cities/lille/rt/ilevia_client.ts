@@ -37,7 +37,7 @@ export class IleviaRealtimeClient {
     this.pollIntervalMs = pollIntervalMs;
     this.matcher = new IleviaMatcher({
       matchWindowSec: 120,
-      maxDelaySec: 900
+      maxDelaySec: 900,
     });
   }
 
@@ -66,15 +66,19 @@ export class IleviaRealtimeClient {
     currentCivilSeconds: number,
     filterRouteId?: string
   ): IleviaMatchOutcome {
-    const outcome = this.matcher.match(this.tripUpdates, activeTrips, currentCivilSeconds, filterRouteId);
+    const outcome = this.matcher.match(
+      this.tripUpdates,
+      activeTrips,
+      currentCivilSeconds,
+      filterRouteId
+    );
     this.lastOutcome = outcome;
     return outcome;
   }
 
   public getStatus(): IleviaStatus {
-    const minutesAgo = this.lastUpdate !== null
-      ? Math.floor((Date.now() - this.lastUpdate) / 60000)
-      : undefined;
+    const minutesAgo =
+      this.lastUpdate !== null ? Math.floor((Date.now() - this.lastUpdate) / 60000) : undefined;
 
     return {
       active: this.isPolling,
@@ -88,7 +92,7 @@ export class IleviaRealtimeClient {
       coveragePct: this.lastOutcome ? Math.round(this.lastOutcome.matchRate * 100) : undefined,
       matchedCount: this.lastOutcome?.matchedCount,
       totalReceivedCount: this.lastOutcome?.receivedCount,
-      discardedNonMonotonicCount: this.lastOutcome?.discardedNonMonotonicCount
+      discardedNonMonotonicCount: this.lastOutcome?.discardedNonMonotonicCount,
     };
   }
 

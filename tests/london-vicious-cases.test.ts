@@ -13,7 +13,7 @@ function createSyntheticShape(lengthM: number, numPoints: number = 100): Shape {
     const distM = fraction * lengthM;
     dist[i] = distM;
     const lon = -0.12 + fraction * 0.05;
-    const lat = 51.50 + Math.sin(fraction * Math.PI) * 0.02;
+    const lat = 51.5 + Math.sin(fraction * Math.PI) * 0.02;
     coords[i * 2] = lon;
     coords[i * 2 + 1] = lat;
   }
@@ -21,12 +21,11 @@ function createSyntheticShape(lengthM: number, numPoints: number = 100): Shape {
     id: 'shape_synth',
     length: lengthM,
     coords,
-    dist
+    dist,
   };
 }
 
 describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
-
   describe('Case 1: Circle Line Spiral Topology (Double Edgware Road visit)', () => {
     it('handles an open spiral journey visiting Edgware Road twice without modulo or loop jump', () => {
       // Circle line from Hammersmith (0m) to Edgware Road pass 1 (4500m) around loop to Edgware Road pass 2 (24000m)
@@ -44,37 +43,73 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [28800, 28830, 0, 'Hammersmith (H&C Line)'],
           [29400, 29430, 4500, 'Edgware Road (Circle Line) [Pass 1]'],
           [29700, 29730, 7500, 'Baker Street'],
-          [30300, 30330, 13000, 'King\'s Cross St. Pancras'],
+          [30300, 30330, 13000, "King's Cross St. Pancras"],
           [30900, 30930, 18000, 'Embankment'],
           [31500, 31530, 21000, 'Victoria'],
           [32100, 32130, 23000, 'Paddington'],
-          [32400, 32430, 24000, 'Edgware Road (Circle Line) [Terminus]']
-        ]
+          [32400, 32430, 24000, 'Edgware Road (Circle Line) [Terminus]'],
+        ],
       };
 
       // 1. Train at Hammersmith departure
-      const tDepHammersmith = computeTripKinematics(circleTrip, shape, 28815, 0, '#FFD300', '#000000', 'Circle', 0);
+      const tDepHammersmith = computeTripKinematics(
+        circleTrip,
+        shape,
+        28815,
+        0,
+        '#FFD300',
+        '#000000',
+        'Circle',
+        0
+      );
       expect(tDepHammersmith).not.toBeNull();
       expect(tDepHammersmith?.currentDistM).toBe(0);
       expect(tDepHammersmith?.spd).toBe(0);
       expect(tDepHammersmith?.next).toBe('Edgware Road (Circle Line) [Pass 1]');
 
       // 2. Train dwelling at first pass of Edgware Road (4500m)
-      const tAtEdgwarePass1 = computeTripKinematics(circleTrip, shape, 29415, 0, '#FFD300', '#000000', 'Circle', 0);
+      const tAtEdgwarePass1 = computeTripKinematics(
+        circleTrip,
+        shape,
+        29415,
+        0,
+        '#FFD300',
+        '#000000',
+        'Circle',
+        0
+      );
       expect(tAtEdgwarePass1).not.toBeNull();
       expect(tAtEdgwarePass1?.currentDistM).toBe(4500);
       expect(tAtEdgwarePass1?.spd).toBe(0);
       expect(tAtEdgwarePass1?.next).toBe('Baker Street');
 
       // 3. Train in the middle of the loop around King's Cross (13000m)
-      const tAtKingsCross = computeTripKinematics(circleTrip, shape, 30315, 0, '#FFD300', '#000000', 'Circle', 0);
+      const tAtKingsCross = computeTripKinematics(
+        circleTrip,
+        shape,
+        30315,
+        0,
+        '#FFD300',
+        '#000000',
+        'Circle',
+        0
+      );
       expect(tAtKingsCross).not.toBeNull();
       expect(tAtKingsCross?.currentDistM).toBe(13000);
       expect(tAtKingsCross?.spd).toBe(0);
       expect(tAtKingsCross?.next).toBe('Embankment');
 
       // 4. Train cruising between Victoria and Paddington (22000m)
-      const tCruisingToPaddington = computeTripKinematics(circleTrip, shape, 31800, 0, '#FFD300', '#000000', 'Circle', 0);
+      const tCruisingToPaddington = computeTripKinematics(
+        circleTrip,
+        shape,
+        31800,
+        0,
+        '#FFD300',
+        '#000000',
+        'Circle',
+        0
+      );
       expect(tCruisingToPaddington).not.toBeNull();
       expect(tCruisingToPaddington!.currentDistM).toBeGreaterThan(21000);
       expect(tCruisingToPaddington!.currentDistM).toBeLessThan(23000);
@@ -82,7 +117,16 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
       expect(tCruisingToPaddington?.next).toBe('Paddington');
 
       // 5. Train arriving at final terminus Edgware Road (24000m)
-      const tAtEdgwareTerminus = computeTripKinematics(circleTrip, shape, 32415, 0, '#FFD300', '#000000', 'Circle', 0);
+      const tAtEdgwareTerminus = computeTripKinematics(
+        circleTrip,
+        shape,
+        32415,
+        0,
+        '#FFD300',
+        '#000000',
+        'Circle',
+        0
+      );
       expect(tAtEdgwareTerminus).not.toBeNull();
       expect(tAtEdgwareTerminus?.currentDistM).toBe(24000);
       expect(tAtEdgwareTerminus?.spd).toBe(0);
@@ -111,12 +155,21 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [30600, 30630, 0, 'Baker Street'],
           [30900, 30930, 4000, 'Finchley Road'],
           // Skips Wembley Park (8500m), Preston Road (10200m), Northwick Park (11800m)
-          [31500, 31530, 14000, 'Harrow-on-the-Hill']
-        ]
+          [31500, 31530, 14000, 'Harrow-on-the-Hill'],
+        ],
       };
 
       // 1. Train departing Finchley Road at t = 30930 (4000m)
-      const tDepFinchley = computeTripKinematics(fastTrip, shape, 30930, 0, '#9B0056', '#FFFFFF', 'Metropolitan', 0);
+      const tDepFinchley = computeTripKinematics(
+        fastTrip,
+        shape,
+        30930,
+        0,
+        '#9B0056',
+        '#FFFFFF',
+        'Metropolitan',
+        0
+      );
       expect(tDepFinchley).not.toBeNull();
       expect(tDepFinchley?.currentDistM).toBe(4000);
       expect(tDepFinchley?.next).toBe('Harrow-on-the-Hill');
@@ -124,7 +177,16 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
       // 2. Train passing the location of skipped station Wembley Park (dist ~ 8500m)
       // Interpolated time between Finchley Road departure (30930s) and Harrow arrival (31500s) = 570s for 10000m
       // At t = 31200s (270s after Finchley dep), progress is ~47%, distance ~ 8700m
-      const tPassingWembley = computeTripKinematics(fastTrip, shape, 31200, 0, '#9B0056', '#FFFFFF', 'Metropolitan', 0);
+      const tPassingWembley = computeTripKinematics(
+        fastTrip,
+        shape,
+        31200,
+        0,
+        '#9B0056',
+        '#FFFFFF',
+        'Metropolitan',
+        0
+      );
       expect(tPassingWembley).not.toBeNull();
       expect(tPassingWembley!.currentDistM).toBeGreaterThan(8000);
       expect(tPassingWembley!.currentDistM).toBeLessThan(9500);
@@ -136,7 +198,16 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
       expect(tPassingWembley?.next).toBe('Harrow-on-the-Hill');
 
       // 3. Train stops normally at Harrow-on-the-Hill
-      const tAtHarrow = computeTripKinematics(fastTrip, shape, 31515, 0, '#9B0056', '#FFFFFF', 'Metropolitan', 0);
+      const tAtHarrow = computeTripKinematics(
+        fastTrip,
+        shape,
+        31515,
+        0,
+        '#9B0056',
+        '#FFFFFF',
+        'Metropolitan',
+        0
+      );
       expect(tAtHarrow).not.toBeNull();
       expect(tAtHarrow?.currentDistM).toBe(14000);
       expect(tAtHarrow?.spd).toBe(0);
@@ -166,8 +237,8 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [30800, 30820, 2800, 'Tottenham Court Road'],
           [31000, 31020, 4900, 'Charing Cross'],
           [31200, 31220, 7500, 'Waterloo'],
-          [31500, 31520, 11000, 'Kennington']
-        ]
+          [31500, 31520, 11000, 'Kennington'],
+        ],
       };
 
       const tripBank: TripData = {
@@ -180,17 +251,26 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
         destName: 'Morden',
         stops: [
           [30600, 30620, 0, 'Camden Town'],
-          [30850, 30870, 3500, 'King\'s Cross St. Pancras'],
+          [30850, 30870, 3500, "King's Cross St. Pancras"],
           [31100, 31120, 6800, 'Moorgate'],
           [31300, 31320, 8900, 'Bank'],
-          [31600, 31620, 12500, 'Kennington']
-        ]
+          [31600, 31620, 12500, 'Kennington'],
+        ],
       };
 
       const timeSec = 31110; // At ~08:38:30
 
       // Train on Charing Cross branch
-      const tCX = computeTripKinematics(tripCharingCross, shapeCharingCross, timeSec, 0, '#000000', '#FFFFFF', 'Northern', 0);
+      const tCX = computeTripKinematics(
+        tripCharingCross,
+        shapeCharingCross,
+        timeSec,
+        0,
+        '#000000',
+        '#FFFFFF',
+        'Northern',
+        0
+      );
       expect(tCX).not.toBeNull();
       expect(tCX?.shapeId).toBe('northern_shape_cx');
       expect(tCX?.next).toBe('Waterloo');
@@ -198,7 +278,16 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
       expect(tCX!.currentDistM).toBeLessThan(7500);
 
       // Train on Bank branch
-      const tBank = computeTripKinematics(tripBank, shapeBank, timeSec, 0, '#000000', '#FFFFFF', 'Northern', 0);
+      const tBank = computeTripKinematics(
+        tripBank,
+        shapeBank,
+        timeSec,
+        0,
+        '#000000',
+        '#FFFFFF',
+        'Northern',
+        0
+      );
       expect(tBank).not.toBeNull();
       expect(tBank?.shapeId).toBe('northern_shape_bank');
       expect(tBank?.next).toBe('Bank');
@@ -234,8 +323,8 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [31000, 31030, 6000, 'Whitechapel'],
           [31300, 31330, 11000, 'Canary Wharf'],
           [31700, 31730, 15000, 'Woolwich'],
-          [32000, 32030, 18000, 'Abbey Wood']
-        ]
+          [32000, 32030, 18000, 'Abbey Wood'],
+        ],
       };
 
       const tripShenfield: TripData = {
@@ -251,20 +340,47 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [31000, 31030, 6000, 'Whitechapel'],
           [31400, 31430, 12000, 'Stratford'],
           [31800, 31830, 20000, 'Romford'],
-          [32200, 32230, 32000, 'Shenfield']
-        ]
+          [32200, 32230, 32000, 'Shenfield'],
+        ],
       };
 
       // 1. Prior to bifurcation at Stepney Green (trains near Whitechapel, dist ~ 6000m)
-      const tWhitechapel = computeTripKinematics(tripAbbeyWood, shapeAbbeyWood, 31015, 0, '#6950A1', '#FFFFFF', 'Elizabeth', -15);
+      const tWhitechapel = computeTripKinematics(
+        tripAbbeyWood,
+        shapeAbbeyWood,
+        31015,
+        0,
+        '#6950A1',
+        '#FFFFFF',
+        'Elizabeth',
+        -15
+      );
       expect(tWhitechapel).not.toBeNull();
       expect(tWhitechapel?.currentDistM).toBe(6000);
       expect(tWhitechapel?.spd).toBe(0);
       expect(tWhitechapel?.next).toBe('Canary Wharf');
 
       // 2. Post bifurcation at t = 31600: Abbey Wood train cruising to Woolwich, Shenfield train cruising to Romford
-      const tPostForkAbw = computeTripKinematics(tripAbbeyWood, shapeAbbeyWood, 31500, 0, '#6950A1', '#FFFFFF', 'Elizabeth', -15);
-      const tPostForkSnf = computeTripKinematics(tripShenfield, shapeShenfield, 31600, 0, '#6950A1', '#FFFFFF', 'Elizabeth', -15);
+      const tPostForkAbw = computeTripKinematics(
+        tripAbbeyWood,
+        shapeAbbeyWood,
+        31500,
+        0,
+        '#6950A1',
+        '#FFFFFF',
+        'Elizabeth',
+        -15
+      );
+      const tPostForkSnf = computeTripKinematics(
+        tripShenfield,
+        shapeShenfield,
+        31600,
+        0,
+        '#6950A1',
+        '#FFFFFF',
+        'Elizabeth',
+        -15
+      );
 
       expect(tPostForkAbw).not.toBeNull();
       expect(tPostForkSnf).not.toBeNull();
@@ -300,12 +416,12 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
         destName: 'Watford Junction',
         stops: [
           [30600, 30630, 0, 'London Euston'],
-          [30900, 30930, 4000, 'Queen\'s Park'],
+          [30900, 30930, 4000, "Queen's Park"],
           [31200, 31230, 8500, 'Willesden Junction (Low Level)'],
           [31600, 31630, 14000, 'Harrow & Wealdstone'],
           [32400, 32430, 24000, 'Bushey'],
-          [33000, 33030, 28000, 'Watford Junction']
-        ]
+          [33000, 33030, 28000, 'Watford Junction'],
+        ],
       };
 
       const tripMildmay: TripData = {
@@ -322,14 +438,32 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [31200, 31230, 7200, 'Willesden Junction (High Level)'],
           [31600, 31630, 11500, 'West Hampstead'],
           [32200, 32230, 18000, 'Highbury & Islington'],
-          [33000, 33030, 28000, 'Stratford']
-        ]
+          [33000, 33030, 28000, 'Stratford'],
+        ],
       };
 
       const timeSec = 31215; // 08:40:15 (both trains dwelling at Willesden Junction simultaneously)
 
-      const tLioness = computeTripKinematics(tripLioness, shapeLioness, timeSec, 0, '#EF9600', '#FFFFFF', 'Lioness', 2.0);
-      const tMildmay = computeTripKinematics(tripMildmay, shapeMildmay, timeSec, 0, '#2774AE', '#FFFFFF', 'Mildmay', 2.0);
+      const tLioness = computeTripKinematics(
+        tripLioness,
+        shapeLioness,
+        timeSec,
+        0,
+        '#EF9600',
+        '#FFFFFF',
+        'Lioness',
+        2.0
+      );
+      const tMildmay = computeTripKinematics(
+        tripMildmay,
+        shapeMildmay,
+        timeSec,
+        0,
+        '#2774AE',
+        '#FFFFFF',
+        'Mildmay',
+        2.0
+      );
 
       expect(tLioness).not.toBeNull();
       expect(tMildmay).not.toBeNull();
@@ -375,12 +509,21 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
           [31660, 31680, 11000, 'Wellesley Road'],
           [31780, 31800, 11600, 'East Croydon'],
           [32000, 32020, 13000, 'Sandilands'],
-          [32700, 32720, 18500, 'New Addington']
-        ]
+          [32700, 32720, 18500, 'New Addington'],
+        ],
       };
 
       // 1. Tram entering the loop at Centrale (9700m)
-      const tAtCentrale = computeTripKinematics(tramTrip, shapeLoop, 31430, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      const tAtCentrale = computeTripKinematics(
+        tramTrip,
+        shapeLoop,
+        31430,
+        0,
+        '#00BD19',
+        '#FFFFFF',
+        'Tram',
+        1.5
+      );
       expect(tAtCentrale).not.toBeNull();
       expect(tAtCentrale?.currentDistM).toBe(9700);
       expect(tAtCentrale?.spd).toBe(0);
@@ -388,7 +531,16 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
       expect(tAtCentrale?.dest).toBe('New Addington');
 
       // 2. Tram progressing along the loop between West Croydon and Wellesley Road
-      const tInLoop = computeTripKinematics(tramTrip, shapeLoop, 31600, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      const tInLoop = computeTripKinematics(
+        tramTrip,
+        shapeLoop,
+        31600,
+        0,
+        '#00BD19',
+        '#FFFFFF',
+        'Tram',
+        1.5
+      );
       expect(tInLoop).not.toBeNull();
       expect(tInLoop!.currentDistM).toBeGreaterThan(10400);
       expect(tInLoop!.currentDistM).toBeLessThan(11000);
@@ -396,20 +548,36 @@ describe('London Vicious Cases — Simulation Kinematics & Topology', () => {
       expect(tInLoop?.next).toBe('Wellesley Road');
 
       // 3. Tram exiting the loop at East Croydon (11600m) towards New Addington
-      const tAtEastCroydon = computeTripKinematics(tramTrip, shapeLoop, 31790, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      const tAtEastCroydon = computeTripKinematics(
+        tramTrip,
+        shapeLoop,
+        31790,
+        0,
+        '#00BD19',
+        '#FFFFFF',
+        'Tram',
+        1.5
+      );
       expect(tAtEastCroydon).not.toBeNull();
       expect(tAtEastCroydon?.currentDistM).toBe(11600);
       expect(tAtEastCroydon?.spd).toBe(0);
       expect(tAtEastCroydon?.next).toBe('Sandilands');
 
       // 4. Tram arrived at New Addington terminus (18500m)
-      const tAtTerminus = computeTripKinematics(tramTrip, shapeLoop, 32710, 0, '#00BD19', '#FFFFFF', 'Tram', 1.5);
+      const tAtTerminus = computeTripKinematics(
+        tramTrip,
+        shapeLoop,
+        32710,
+        0,
+        '#00BD19',
+        '#FFFFFF',
+        'Tram',
+        1.5
+      );
       expect(tAtTerminus).not.toBeNull();
       expect(tAtTerminus?.currentDistM).toBe(18500);
       expect(tAtTerminus?.spd).toBe(0);
       expect(tAtTerminus?.next).toBe('New Addington');
     });
   });
-
 });
-

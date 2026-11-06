@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { DateTime } from 'luxon';
-import { cityClock, selectActiveTrips, serviceCandidates, type TripWindow } from '@core/sim/paris_time';
+import {
+  cityClock,
+  selectActiveTrips,
+  serviceCandidates,
+  type TripWindow,
+} from '@core/sim/paris_time';
 import { parisConfig } from '@cities/paris/city.config';
 import { montrealConfig } from '@cities/montreal/city.config';
 
@@ -14,33 +19,39 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
   const parisTrip: TripWindow = {
     t0: FIRST_DEPARTURE_SECONDS,
     t1: FIRST_ARRIVAL_SECONDS,
-    service_id: 'paris-morning-1'
+    service_id: 'paris-morning-1',
   };
 
   const montrealTrip: TripWindow = {
     t0: FIRST_DEPARTURE_SECONDS,
     t1: FIRST_ARRIVAL_SECONDS,
-    service_id: 'stm-morning-1'
+    service_id: 'stm-morning-1',
   };
 
   const londonTrip: TripWindow = {
     t0: FIRST_DEPARTURE_SECONDS,
     t1: FIRST_ARRIVAL_SECONDS,
-    service_id: 'tfl-morning-1'
+    service_id: 'tfl-morning-1',
   };
 
   it('verifies Paris, Montreal, and London on March 10, 2026 (Montreal EDT UTC-4, London GMT UTC+0, Paris CET UTC+1)', () => {
     // On March 10, 2026:
     // Quebec switched to summer time on Sunday March 8, 2026 (UTC-4)
     // UK and France are still in winter time (GMT UTC+0, CET UTC+1), switching on March 29, 2026
-    
+
     // 1. Check Paris at 05:30:00 local time (which is 04:30:00 UTC)
     const parisDateUtc = DateTime.fromISO('2026-03-10T04:30:00Z').toJSDate();
     const parisClockData = cityClock(parisDateUtc, parisConfig.timezone);
     expect(parisClockData.date).toBe('2026-03-10');
     expect(parisClockData.secondsSinceMidnight).toBe(FIRST_DEPARTURE_SECONDS);
 
-    const parisActive = selectActiveTrips([parisTrip], parisDateUtc, undefined, 0, parisConfig.timezone);
+    const parisActive = selectActiveTrips(
+      [parisTrip],
+      parisDateUtc,
+      undefined,
+      0,
+      parisConfig.timezone
+    );
     expect(parisActive.length).toBe(1);
     expect(parisActive[0].serviceSeconds).toBe(FIRST_DEPARTURE_SECONDS);
     expect(parisActive[0].serviceDate).toBe('2026-03-10');
@@ -51,7 +62,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(montrealClockData.date).toBe('2026-03-10');
     expect(montrealClockData.secondsSinceMidnight).toBe(FIRST_DEPARTURE_SECONDS);
 
-    const montrealActive = selectActiveTrips([montrealTrip], montrealDateUtc, undefined, 0, montrealConfig.timezone);
+    const montrealActive = selectActiveTrips(
+      [montrealTrip],
+      montrealDateUtc,
+      undefined,
+      0,
+      montrealConfig.timezone
+    );
     expect(montrealActive.length).toBe(1);
     expect(montrealActive[0].serviceSeconds).toBe(FIRST_DEPARTURE_SECONDS);
     expect(montrealActive[0].serviceDate).toBe('2026-03-10');
@@ -62,7 +79,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(londonClockData.date).toBe('2026-03-10');
     expect(londonClockData.secondsSinceMidnight).toBe(FIRST_DEPARTURE_SECONDS);
 
-    const londonActive = selectActiveTrips([londonTrip], londonDateUtc, undefined, 0, londonConfig.timezone);
+    const londonActive = selectActiveTrips(
+      [londonTrip],
+      londonDateUtc,
+      undefined,
+      0,
+      londonConfig.timezone
+    );
     expect(londonActive.length).toBe(1);
     expect(londonActive[0].serviceSeconds).toBe(FIRST_DEPARTURE_SECONDS);
     expect(londonActive[0].serviceDate).toBe('2026-03-10');
@@ -79,7 +102,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(parisClockData.date).toBe('2026-03-30');
     expect(parisClockData.secondsSinceMidnight).toBe(FIRST_DEPARTURE_SECONDS);
 
-    const parisActive = selectActiveTrips([parisTrip], parisDateUtc, undefined, 0, parisConfig.timezone);
+    const parisActive = selectActiveTrips(
+      [parisTrip],
+      parisDateUtc,
+      undefined,
+      0,
+      parisConfig.timezone
+    );
     expect(parisActive.length).toBe(1);
     expect(parisActive[0].serviceSeconds).toBe(FIRST_DEPARTURE_SECONDS);
     expect(parisActive[0].serviceDate).toBe('2026-03-30');
@@ -90,7 +119,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(montrealClockData.date).toBe('2026-03-30');
     expect(montrealClockData.secondsSinceMidnight).toBe(FIRST_DEPARTURE_SECONDS);
 
-    const montrealActive = selectActiveTrips([montrealTrip], montrealDateUtc, undefined, 0, montrealConfig.timezone);
+    const montrealActive = selectActiveTrips(
+      [montrealTrip],
+      montrealDateUtc,
+      undefined,
+      0,
+      montrealConfig.timezone
+    );
     expect(montrealActive.length).toBe(1);
     expect(montrealActive[0].serviceSeconds).toBe(FIRST_DEPARTURE_SECONDS);
     expect(montrealActive[0].serviceDate).toBe('2026-03-30');
@@ -101,7 +136,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(londonClockData.date).toBe('2026-03-30');
     expect(londonClockData.secondsSinceMidnight).toBe(FIRST_DEPARTURE_SECONDS);
 
-    const londonActive = selectActiveTrips([londonTrip], londonDateUtc, undefined, 0, londonConfig.timezone);
+    const londonActive = selectActiveTrips(
+      [londonTrip],
+      londonDateUtc,
+      undefined,
+      0,
+      londonConfig.timezone
+    );
     expect(londonActive.length).toBe(1);
     expect(londonActive[0].serviceSeconds).toBe(FIRST_DEPARTURE_SECONDS);
     expect(londonActive[0].serviceDate).toBe('2026-03-30');
@@ -113,7 +154,7 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     const nightTrip: TripWindow = {
       t0: 90000,
       t1: 91800,
-      service_id: 'late-night-service'
+      service_id: 'late-night-service',
     };
 
     // Civil time 01:15:00 on March 11 at Paris (00:15 UTC)
@@ -124,7 +165,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(parisCandidates[1].serviceDate).toBe('2026-03-10');
     expect(parisCandidates[1].seconds).toBe(NIGHT_SECONDS);
 
-    const activeNight = selectActiveTrips([nightTrip], parisNightUtc, undefined, 0, parisConfig.timezone);
+    const activeNight = selectActiveTrips(
+      [nightTrip],
+      parisNightUtc,
+      undefined,
+      0,
+      parisConfig.timezone
+    );
     expect(activeNight.length).toBe(1);
     expect(activeNight[0].serviceSeconds).toBe(NIGHT_SECONDS);
     expect(activeNight[0].serviceDate).toBe('2026-03-10');
@@ -138,7 +185,7 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     const nightTubeTrip: TripWindow = {
       t0: 92000,
       t1: 94000,
-      service_id: 'london-night-tube'
+      service_id: 'london-night-tube',
     };
 
     // At 01:45 BST before the fallback (00:45:00 UTC on Sunday Oct 25)
@@ -146,7 +193,13 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     const clockBefore = cityClock(beforeFallbackUtc, londonConfig.timezone);
     expect(clockBefore.date).toBe('2026-10-25');
 
-    const activeBefore = selectActiveTrips([nightTubeTrip], beforeFallbackUtc, undefined, 0, londonConfig.timezone);
+    const activeBefore = selectActiveTrips(
+      [nightTubeTrip],
+      beforeFallbackUtc,
+      undefined,
+      0,
+      londonConfig.timezone
+    );
     expect(activeBefore.length).toBe(1);
     expect(activeBefore[0].serviceDate).toBe('2026-10-24');
     expect(activeBefore[0].serviceSeconds).toBe(92700);
@@ -159,4 +212,3 @@ describe('DST Transitions Safety Net (Paris vs Montréal vs Londres)', () => {
     expect(clockAfter.secondsSinceMidnight).toBe(1 * 3600 + 45 * 60);
   });
 });
-

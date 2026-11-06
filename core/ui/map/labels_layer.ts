@@ -7,13 +7,27 @@ type Point = [number, number];
 // (covers Montparnasse - Bienvenüe, Pont de Sèvres, Saint-Denis–Université, etc.)
 export const LATIN_CHARACTER_SET = [
   ...Array.from({ length: 0x0180 - 0x20 }, (_, index) => String.fromCodePoint(0x20 + index)),
-  '–', '—', '’', '‘', '“', '”', '…', '«', '»', '•', '·'
+  '–',
+  '—',
+  '’',
+  '‘',
+  '“',
+  '”',
+  '…',
+  '«',
+  '»',
+  '•',
+  '·',
 ].join('');
 
 export const isUltraHub = (station: StationMetadata) =>
   station.lines.length >= 4 ||
-  /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau|King's Cross|Victoria|Waterloo|Oxford Circus|Bank|London Bridge|Paddington|Liverpool Street|Piccadilly Circus|Stratford|Westminster|Baker Street|Charing Cross|South Kensington|Holborn|Euston)$/i.test(station.name) ||
-  /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)|King's Cross St\. Pancras|Bank - Monument/i.test(station.name);
+  /^(Châtelet|Gare du Nord|Montparnasse|Saint-Lazare|Gare de Lyon|Gare de l'Est|Gare d'Austerlitz|République|Nation|Bastille|Charles de Gaulle|La Défense|Opéra|Denfert-Rochereau|King's Cross|Victoria|Waterloo|Oxford Circus|Bank|London Bridge|Paddington|Liverpool Street|Piccadilly Circus|Stratford|Westminster|Baker Street|Charing Cross|South Kensington|Holborn|Euston)$/i.test(
+    station.name
+  ) ||
+  /Châtelet - Les Halles|Montparnasse - Bienvenüe|Charles de Gaulle - Étoile|La Défense \(Grande Arche\)|King's Cross St\. Pancras|Bank - Monument/i.test(
+    station.name
+  );
 
 /**
  * Build a small, deterministic label set. deck.gl's TextLayer v9 does not
@@ -27,7 +41,7 @@ export function createStationLabelsLayer(
   mapCenter: Point,
   lineElevation = 0
 ): TextLayer | null {
-  const candidates = stations.filter(station => {
+  const candidates = stations.filter((station) => {
     // 1. Ligne sélectionnée : toutes les stations de la ligne sont candidates prioritaires
     if (selectedLineId) {
       return station.lines.includes(selectedLineId);
@@ -45,14 +59,15 @@ export function createStationLabelsLayer(
   });
   if (!candidates.length) return null;
 
-  const scale = 256 * Math.pow(2, zoom) / 360;
+  const scale = (256 * Math.pow(2, zoom)) / 360;
   const toPixels = (point: Point): Point => [
     (point[0] - mapCenter[0]) * scale,
-    (point[1] - mapCenter[1]) * scale
+    (point[1] - mapCenter[1]) * scale,
   ];
   const mapEl = typeof document !== 'undefined' ? document.getElementById('map') : null;
   const dockEl = typeof document !== 'undefined' ? document.getElementById('dock') : null;
-  const viewportWidth = mapEl?.clientWidth || (typeof window !== 'undefined' ? window.innerWidth : 0);
+  const viewportWidth =
+    mapEl?.clientWidth || (typeof window !== 'undefined' ? window.innerWidth : 0);
   const dockRect = dockEl?.getBoundingClientRect();
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
   // Desktop dock overlays the left edge of the map; keep labels out of its
@@ -73,26 +88,31 @@ export function createStationLabelsLayer(
   // Selection raises priority, but every label still goes through the same
   // collision pass. Returning the complete selected list created a wall of
   // overlapping station names at high zoom.
-  const visible = ordered.filter(station => {
-      const [x, y] = toPixels(station.coordinates);
-      // Reserve a little more than the nominal glyph width. Deck's SDF atlas
-      // and anti-aliasing make tight rectangles look overlapped on dense hubs.
-      const width = Math.max(28, station.name.length * 8.2) + 22;
-      const selected = Boolean(selectedLineId && station.lines.includes(selectedLineId));
-      const labelIndex = selected ? selectedLabelIndex++ : 0;
-      const offsetY = selected ? selectedLanes[labelIndex % selectedLanes.length] : 0;
-      const offsetX = selected && labelIndex % 2 === 1 ? -width - 12 : 12;
-      pixelOffsets.set(station.id, [offsetX, offsetY]);
-      const rect: [number, number, number, number] = [x + offsetX, y - 11 + offsetY, x + offsetX + width, y + 11 + offsetY];
-      if (viewportWidth > 0 && viewportWidth / 2 + rect[0] < leftLabelBoundary) return false;
-      const collides = placed.some(other => {
-        const [ox1, oy1, ox2, oy2] = other.rect;
-        return !(rect[2] < ox1 || rect[0] > ox2 || rect[3] < oy1 || rect[1] > oy2);
-      });
-      if (collides) return false;
-      placed.push({ rect, selected });
-      return true;
+  const visible = ordered.filter((station) => {
+    const [x, y] = toPixels(station.coordinates);
+    // Reserve a little more than the nominal glyph width. Deck's SDF atlas
+    // and anti-aliasing make tight rectangles look overlapped on dense hubs.
+    const width = Math.max(28, station.name.length * 8.2) + 22;
+    const selected = Boolean(selectedLineId && station.lines.includes(selectedLineId));
+    const labelIndex = selected ? selectedLabelIndex++ : 0;
+    const offsetY = selected ? selectedLanes[labelIndex % selectedLanes.length] : 0;
+    const offsetX = selected && labelIndex % 2 === 1 ? -width - 12 : 12;
+    pixelOffsets.set(station.id, [offsetX, offsetY]);
+    const rect: [number, number, number, number] = [
+      x + offsetX,
+      y - 11 + offsetY,
+      x + offsetX + width,
+      y + 11 + offsetY,
+    ];
+    if (viewportWidth > 0 && viewportWidth / 2 + rect[0] < leftLabelBoundary) return false;
+    const collides = placed.some((other) => {
+      const [ox1, oy1, ox2, oy2] = other.rect;
+      return !(rect[2] < ox1 || rect[0] > ox2 || rect[3] < oy1 || rect[1] > oy2);
     });
+    if (collides) return false;
+    placed.push({ rect, selected });
+    return true;
+  });
 
   return new TextLayer<StationMetadata>({
     id: 'subway-station-labels',
@@ -118,6 +138,9 @@ export function createStationLabelsLayer(
     getAlignmentBaseline: 'center',
     getPixelOffset: (d: StationMetadata) => pixelOffsets.get(d.id) || [12, 0],
     background: false,
-    updateTriggers: { getPosition: [selectedLineId, lineElevation, zoom, mapCenter], getText: [selectedLineId] }
+    updateTriggers: {
+      getPosition: [selectedLineId, lineElevation, zoom, mapCenter],
+      getText: [selectedLineId],
+    },
   });
 }

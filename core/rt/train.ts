@@ -1,4 +1,4 @@
-export type TrainConfidence = "rt" | "sched";
+export type TrainConfidence = 'rt' | 'sched';
 
 export interface TrainState {
   id: string;
@@ -22,5 +22,5 @@ export type CompactTrainDelta = [
   spd: number,
   delay: number,
   next: string,
-  conf: 0 | 1
+  conf: 0 | 1,
 ];

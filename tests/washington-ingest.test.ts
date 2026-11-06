@@ -29,7 +29,7 @@ describe('Washington DC (WMATA Metrorail) — Ingestion & Phase 1 Validation', (
       'station-rankings.json',
       'sections.json',
       'rolling-stock.json',
-      'feed_fingerprint.json'
+      'feed_fingerprint.json',
     ];
 
     for (const file of requiredFiles) {

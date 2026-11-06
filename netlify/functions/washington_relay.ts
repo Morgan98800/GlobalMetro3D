@@ -14,7 +14,7 @@ import type {
   WashingtonTrainUpdate,
   WashingtonSnapshot,
   WashingtonStats,
-  WashingtonAIMPrediction
+  WashingtonAIMPrediction,
 } from '../../cities/washington/rt/types';
 
 export const CACHE_TTL_SEC = 15; // [verified: false] netlify CDN and in-memory TTL
@@ -37,7 +37,7 @@ export const WMATA_LINE_MAP: Record<string, string> = {
   GREEN: 'GREEN',
   YL: 'YELLOW',
   YEL: 'YELLOW',
-  YELLOW: 'YELLOW'
+  YELLOW: 'YELLOW',
 };
 
 export function getWmataApiKey(): string {
@@ -49,7 +49,10 @@ export function getWmataApiKey(): string {
         const text = fs.readFileSync(p, 'utf8');
         for (const line of text.split('\n')) {
           if (line.trim().startsWith('WMATA_API_KEY=')) {
-            return line.split('=', 2)[1].trim().replace(/^['"]|['"]$/g, '');
+            return line
+              .split('=', 2)[1]
+              .trim()
+              .replace(/^['"]|['"]$/g, '');
           }
         }
       }
@@ -107,7 +110,7 @@ function readTripDescriptor(pbf: any, end: number): WashingtonTripDescriptor {
     routeId: td.routeId || '',
     directionId: td.directionId,
     startTime: td.startTime,
-    startDate: td.startDate
+    startDate: td.startDate,
   };
 }
 
@@ -139,13 +142,27 @@ function readVehicleDescriptor(pbf: any, end: number): WashingtonVehicleDescript
   return vd;
 }
 
-function readTripUpdate(pbf: any, end: number): { trip?: WashingtonTripDescriptor; stopTimeUpdates: WashingtonStopTimeUpdate[]; timestamp?: number; delay?: number } {
-  const tu = { stopTimeUpdates: [] as WashingtonStopTimeUpdate[], timestamp: undefined as number | undefined, delay: undefined as number | undefined, trip: undefined as WashingtonTripDescriptor | undefined };
+function readTripUpdate(
+  pbf: any,
+  end: number
+): {
+  trip?: WashingtonTripDescriptor;
+  stopTimeUpdates: WashingtonStopTimeUpdate[];
+  timestamp?: number;
+  delay?: number;
+} {
+  const tu = {
+    stopTimeUpdates: [] as WashingtonStopTimeUpdate[],
+    timestamp: undefined as number | undefined,
+    delay: undefined as number | undefined,
+    trip: undefined as WashingtonTripDescriptor | undefined,
+  };
   while (pbf.pos < end) {
     const val = pbf.readVarint();
     const tag = val >> 3;
     if (tag === 1) tu.trip = readTripDescriptor(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 2) tu.stopTimeUpdates.push(readStopTimeUpdate(pbf, pbf.readVarint() + pbf.pos));
+    else if (tag === 2)
+      tu.stopTimeUpdates.push(readStopTimeUpdate(pbf, pbf.readVarint() + pbf.pos));
     else if (tag === 4) tu.timestamp = pbf.readVarint();
     else if (tag === 5) tu.delay = pbf.readSVarint();
     else pbf.skip(val & 7);
@@ -171,7 +188,10 @@ function readVehiclePosition(pbf: any, end: number): WashingtonVehiclePosition {
   return vp;
 }
 
-export function decodeGtfsRtTripUpdates(buffer: Buffer): { totalEntities: number; filteredUpdates: WashingtonTripUpdate[] } {
+export function decodeGtfsRtTripUpdates(buffer: Buffer): {
+  totalEntities: number;
+  filteredUpdates: WashingtonTripUpdate[];
+} {
   const pbf = new Pbf(buffer);
   let totalEntities = 0;
   const filteredUpdates: WashingtonTripUpdate[] = [];
@@ -179,7 +199,8 @@ export function decodeGtfsRtTripUpdates(buffer: Buffer): { totalEntities: number
   while (pbf.pos < pbf.length) {
     const val = pbf.readVarint();
     const tag = val >> 3;
-    if (tag === 2) { // FeedEntity
+    if (tag === 2) {
+      // FeedEntity
       totalEntities++;
       const end = pbf.readVarint() + pbf.pos;
       let entityId = '';
@@ -193,13 +214,17 @@ export function decodeGtfsRtTripUpdates(buffer: Buffer): { totalEntities: number
         else pbf.skip(v2 & 7);
       }
 
-      if (tripUpdateData && tripUpdateData.trip && ALLOWED_ROUTE_IDS.has(tripUpdateData.trip.routeId.toUpperCase())) {
+      if (
+        tripUpdateData &&
+        tripUpdateData.trip &&
+        ALLOWED_ROUTE_IDS.has(tripUpdateData.trip.routeId.toUpperCase())
+      ) {
         filteredUpdates.push({
           id: entityId,
           trip: tripUpdateData.trip,
           timestamp: tripUpdateData.timestamp,
           delay: tripUpdateData.delay,
-          stopTimeUpdates: tripUpdateData.stopTimeUpdates
+          stopTimeUpdates: tripUpdateData.stopTimeUpdates,
         });
       }
     } else {
@@ -210,7 +235,10 @@ export function decodeGtfsRtTripUpdates(buffer: Buffer): { totalEntities: number
   return { totalEntities, filteredUpdates };
 }
 
-export function decodeGtfsRtVehiclePositions(buffer: Buffer): { totalEntities: number; filteredPositions: WashingtonVehiclePosition[] } {
+export function decodeGtfsRtVehiclePositions(buffer: Buffer): {
+  totalEntities: number;
+  filteredPositions: WashingtonVehiclePosition[];
+} {
   const pbf = new Pbf(buffer);
   let totalEntities = 0;
   const filteredPositions: WashingtonVehiclePosition[] = [];
@@ -218,7 +246,8 @@ export function decodeGtfsRtVehiclePositions(buffer: Buffer): { totalEntities: n
   while (pbf.pos < pbf.length) {
     const val = pbf.readVarint();
     const tag = val >> 3;
-    if (tag === 2) { // FeedEntity
+    if (tag === 2) {
+      // FeedEntity
       totalEntities++;
       const end = pbf.readVarint() + pbf.pos;
       let entityId = '';
@@ -228,7 +257,8 @@ export function decodeGtfsRtVehiclePositions(buffer: Buffer): { totalEntities: n
         const v2 = pbf.readVarint();
         const t2 = v2 >> 3;
         if (t2 === 1) entityId = pbf.readString();
-        else if (t2 === 4) vehiclePositionData = readVehiclePosition(pbf, pbf.readVarint() + pbf.pos);
+        else if (t2 === 4)
+          vehiclePositionData = readVehiclePosition(pbf, pbf.readVarint() + pbf.pos);
         else pbf.skip(v2 & 7);
       }
 
@@ -253,12 +283,60 @@ export function decodeGtfsRtVehiclePositions(buffer: Buffer): { totalEntities: n
 
 export function parseWmataIncidents(jsonTextOrObj: any): Record<string, LineTrafficReport> {
   const result: Record<string, LineTrafficReport> = {
-    RED: { lineId: 'RED', lineName: 'Red Line', status: 'normal', severity: 'normal', title: 'Red Line', message: 'Normal service', updatedAt: new Date().toISOString() },
-    ORANGE: { lineId: 'ORANGE', lineName: 'Orange Line', status: 'normal', severity: 'normal', title: 'Orange Line', message: 'Normal service', updatedAt: new Date().toISOString() },
-    SILVER: { lineId: 'SILVER', lineName: 'Silver Line', status: 'normal', severity: 'normal', title: 'Silver Line', message: 'Normal service', updatedAt: new Date().toISOString() },
-    BLUE: { lineId: 'BLUE', lineName: 'Blue Line', status: 'normal', severity: 'normal', title: 'Blue Line', message: 'Normal service', updatedAt: new Date().toISOString() },
-    GREEN: { lineId: 'GREEN', lineName: 'Green Line', status: 'normal', severity: 'normal', title: 'Green Line', message: 'Normal service', updatedAt: new Date().toISOString() },
-    YELLOW: { lineId: 'YELLOW', lineName: 'Yellow Line', status: 'normal', severity: 'normal', title: 'Yellow Line', message: 'Normal service', updatedAt: new Date().toISOString() }
+    RED: {
+      lineId: 'RED',
+      lineName: 'Red Line',
+      status: 'normal',
+      severity: 'normal',
+      title: 'Red Line',
+      message: 'Normal service',
+      updatedAt: new Date().toISOString(),
+    },
+    ORANGE: {
+      lineId: 'ORANGE',
+      lineName: 'Orange Line',
+      status: 'normal',
+      severity: 'normal',
+      title: 'Orange Line',
+      message: 'Normal service',
+      updatedAt: new Date().toISOString(),
+    },
+    SILVER: {
+      lineId: 'SILVER',
+      lineName: 'Silver Line',
+      status: 'normal',
+      severity: 'normal',
+      title: 'Silver Line',
+      message: 'Normal service',
+      updatedAt: new Date().toISOString(),
+    },
+    BLUE: {
+      lineId: 'BLUE',
+      lineName: 'Blue Line',
+      status: 'normal',
+      severity: 'normal',
+      title: 'Blue Line',
+      message: 'Normal service',
+      updatedAt: new Date().toISOString(),
+    },
+    GREEN: {
+      lineId: 'GREEN',
+      lineName: 'Green Line',
+      status: 'normal',
+      severity: 'normal',
+      title: 'Green Line',
+      message: 'Normal service',
+      updatedAt: new Date().toISOString(),
+    },
+    YELLOW: {
+      lineId: 'YELLOW',
+      lineName: 'Yellow Line',
+      status: 'normal',
+      severity: 'normal',
+      title: 'Yellow Line',
+      message: 'Normal service',
+      updatedAt: new Date().toISOString(),
+    },
   };
 
   if (!jsonTextOrObj) return result;
@@ -295,11 +373,12 @@ export function parseWmataIncidents(jsonTextOrObj: any): Record<string, LineTraf
       ['GREEN', 'GREEN'],
       ['YL', 'YELLOW'],
       ['YEL', 'YELLOW'],
-      ['YELLOW', 'YELLOW']
+      ['YELLOW', 'YELLOW'],
     ] as const;
 
     for (const [code, lineKey] of lineMappings) {
-      const isTarget = linesAffected.includes(code) || desc.toUpperCase().includes(`${lineKey} LINE`);
+      const isTarget =
+        linesAffected.includes(code) || desc.toUpperCase().includes(`${lineKey} LINE`);
       if (!isTarget) continue;
 
       const descLower = desc.toLowerCase();
@@ -315,7 +394,10 @@ export function parseWmataIncidents(jsonTextOrObj: any): Record<string, LineTraf
       const lineName = result[lineKey]?.lineName || `${lineKey} Line`;
       const title = isInterrupted ? `${lineName} (Service Interrupted)` : `${lineName} (Delays)`;
 
-      if (result[lineKey].status === 'normal' || (result[lineKey].status === 'disrupted' && status === 'interrupted')) {
+      if (
+        result[lineKey].status === 'normal' ||
+        (result[lineKey].status === 'disrupted' && status === 'interrupted')
+      ) {
         result[lineKey] = {
           lineId: lineKey,
           lineName,
@@ -323,7 +405,9 @@ export function parseWmataIncidents(jsonTextOrObj: any): Record<string, LineTraf
           severity,
           title,
           message: desc || incType || `Incident on ${lineName}`,
-          updatedAt: inc.DateUpdated ? new Date(inc.DateUpdated).toISOString() : new Date().toISOString()
+          updatedAt: inc.DateUpdated
+            ? new Date(inc.DateUpdated).toISOString()
+            : new Date().toISOString(),
         };
       }
     }
@@ -362,7 +446,9 @@ export function parseWmataStationPredictions(
     const raw = rawTrains[i];
     if (!raw || typeof raw !== 'object') continue;
 
-    const lineRaw = String(raw.Line || '').trim().toUpperCase();
+    const lineRaw = String(raw.Line || '')
+      .trim()
+      .toUpperCase();
     const routeId = WMATA_LINE_MAP[lineRaw];
     if (!routeId) continue;
 
@@ -371,7 +457,9 @@ export function parseWmataStationPredictions(
 
     const destCode = String(raw.DestinationCode || '').trim();
     const destName = String(raw.DestinationName || raw.Destination || '').trim();
-    const minStr = String(raw.Min || '').trim().toUpperCase();
+    const minStr = String(raw.Min || '')
+      .trim()
+      .toUpperCase();
 
     let timeToNextS: number | undefined;
     if (minStr === 'BRD') {
@@ -409,7 +497,7 @@ export function parseWmataStationPredictions(
       Line: lineRaw,
       LocationCode: locCode,
       LocationName: raw.LocationName ? String(raw.LocationName) : undefined,
-      Min: minStr
+      Min: minStr,
     };
     predictions.push(predItem);
 
@@ -423,7 +511,7 @@ export function parseWmataStationPredictions(
       nextStationId: `STN_${locCode}`,
       nextStationName: raw.LocationName || destName,
       timeToNextStationS: timeToNextS,
-      timestamp: nowEpochSec
+      timestamp: nowEpochSec,
     };
     trains.push(trainUpdate);
 
@@ -432,7 +520,7 @@ export function parseWmataStationPredictions(
       trip: {
         tripId,
         routeId,
-        directionId
+        directionId,
       },
       timestamp: nowEpochSec,
       delay: 0,
@@ -441,9 +529,9 @@ export function parseWmataStationPredictions(
           stopSequence: 1,
           stopId: `STN_${locCode}`,
           arrival: { time: nowEpochSec + timeToNextS },
-          departure: { time: nowEpochSec + timeToNextS + 20 }
-        }
-      ]
+          departure: { time: nowEpochSec + timeToNextS + 20 },
+        },
+      ],
     };
     tripUpdates.push(tripUpdate);
   }
@@ -456,7 +544,10 @@ export function buildSnapshotFromPredictions(
   incidentsPayload: any,
   nowEpochSec: number
 ): WashingtonSnapshot {
-  const { trains, tripUpdates, predictions } = parseWmataStationPredictions(predictionsPayload, nowEpochSec);
+  const { trains, tripUpdates, predictions } = parseWmataStationPredictions(
+    predictionsPayload,
+    nowEpochSec
+  );
   const incData = parseWmataIncidents(incidentsPayload);
   const redCount = trains.filter((t) => t.routeId === 'RED').length;
 
@@ -477,8 +568,8 @@ export function buildSnapshotFromPredictions(
       totalEntitiesInFeed: predictions.length,
       retainedEntities: trains.length,
       redCount,
-      vehiclePositionsCount: 0
-    }
+      vehiclePositionsCount: 0,
+    },
   };
 }
 
@@ -538,7 +629,7 @@ export function mergeWmataRt(
       speed: vp?.position?.speed,
       nextStationId: nextStopId,
       timeToNextStationS: timeToNextS,
-      timestamp: tu.timestamp || vp?.timestamp || nowEpoch
+      timestamp: tu.timestamp || vp?.timestamp || nowEpoch,
     });
   }
 
@@ -557,8 +648,8 @@ export function mergeWmataRt(
       totalEntitiesInFeed: tripUpdates.length,
       retainedEntities: trains.length,
       redCount: trains.length,
-      vehiclePositionsCount: vehiclePositions.length
-    }
+      vehiclePositionsCount: vehiclePositions.length,
+    },
   };
 }
 
@@ -605,13 +696,13 @@ export async function defaultWmataFetcher(
       {
         method: 'GET',
         headers: {
-          'api_key': apiKey,
+          api_key: apiKey,
           'User-Agent': 'ParisSubway3D-WashingtonRelay/1.0',
           Accept: isProtobuf
             ? 'application/x-protobuf, application/octet-stream, */*'
-            : 'application/json, */*'
+            : 'application/json, */*',
         },
-        timeout: 8000
+        timeout: 8000,
       },
       (res) => {
         const chunks: Buffer[] = [];
@@ -621,12 +712,12 @@ export async function defaultWmataFetcher(
           if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
             resolve({
               statusCode: res.statusCode,
-              data: isProtobuf ? buffer : buffer.toString('utf8')
+              data: isProtobuf ? buffer : buffer.toString('utf8'),
             });
           } else {
             resolve({
               statusCode: res.statusCode || 500,
-              error: `HTTP ${res.statusCode}`
+              error: `HTTP ${res.statusCode}`,
             });
           }
         });
@@ -645,7 +736,7 @@ export async function defaultWmataFetcher(
 function loadFixtureSnapshot(nowEpoch: number): WashingtonSnapshot {
   const fixturePaths = [
     path.resolve(process.cwd(), 'cities/washington/data/washington-rt-fixture.json'),
-    path.resolve(process.cwd(), 'web/public/cities/washington/data/washington-rt-fixture.json')
+    path.resolve(process.cwd(), 'web/public/cities/washington/data/washington-rt-fixture.json'),
   ];
 
   for (const fp of fixturePaths) {
@@ -679,10 +770,10 @@ function loadFixtureSnapshot(nowEpoch: number): WashingtonSnapshot {
         severity: 'normal',
         title: 'Red Line',
         message: 'Normal service (fixture)',
-        updatedAt: new Date(nowEpoch * 1000).toISOString()
-      }
+        updatedAt: new Date(nowEpoch * 1000).toISOString(),
+      },
     },
-    stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+    stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
   };
 }
 
@@ -718,22 +809,26 @@ export async function getOrFetchWashingtonSnapshot(
       const [tuRes, vpRes, incRes] = await Promise.all([
         fetcher('tripupdates', apiKey),
         fetcher('vehiclepositions', apiKey),
-        fetcher('incidents', apiKey)
+        fetcher('incidents', apiKey),
       ]);
 
       // Règle d'or §5.1 : Interception des 429, 401
       // WMATA 429 ou 401 n'est jamais relayé tel quel -> repli en mode théorique
-      const isRateLimited = tuRes.statusCode === 429 || vpRes.statusCode === 429 || incRes.statusCode === 429;
-      const isUnauthorized = tuRes.statusCode === 401 || vpRes.statusCode === 401 || incRes.statusCode === 401;
+      const isRateLimited =
+        tuRes.statusCode === 429 || vpRes.statusCode === 429 || incRes.statusCode === 429;
+      const isUnauthorized =
+        tuRes.statusCode === 401 || vpRes.statusCode === 401 || incRes.statusCode === 401;
 
       // Décodage des flux GTFS-RT nominaux si disponibles
-      const tuData = tuRes.statusCode === 200 && tuRes.data && Buffer.isBuffer(tuRes.data)
-        ? decodeGtfsRtTripUpdates(tuRes.data)
-        : { totalEntities: 0, filteredUpdates: [] };
+      const tuData =
+        tuRes.statusCode === 200 && tuRes.data && Buffer.isBuffer(tuRes.data)
+          ? decodeGtfsRtTripUpdates(tuRes.data)
+          : { totalEntities: 0, filteredUpdates: [] };
 
-      const vpData = vpRes.statusCode === 200 && vpRes.data && Buffer.isBuffer(vpRes.data)
-        ? decodeGtfsRtVehiclePositions(vpRes.data)
-        : { totalEntities: 0, filteredPositions: [] };
+      const vpData =
+        vpRes.statusCode === 200 && vpRes.data && Buffer.isBuffer(vpRes.data)
+          ? decodeGtfsRtVehiclePositions(vpRes.data)
+          : { totalEntities: 0, filteredPositions: [] };
 
       const incData = parseWmataIncidents(incRes.data);
 
@@ -755,12 +850,17 @@ export async function getOrFetchWashingtonSnapshot(
 
       const isNetworkError = tuRes.statusCode >= 500 || vpRes.statusCode >= 500;
 
-      if (isRateLimited || isUnauthorized || isNetworkError || (tuData.filteredUpdates.length === 0 && vpData.filteredPositions.length === 0)) {
+      if (
+        isRateLimited ||
+        isUnauthorized ||
+        isNetworkError ||
+        (tuData.filteredUpdates.length === 0 && vpData.filteredPositions.length === 0)
+      ) {
         const errorMsg = isRateLimited
           ? 'WMATA API Rate Limit exceeded (429)'
           : isUnauthorized
-          ? 'WMATA API Key Unauthorized (401)'
-          : `WMATA API Gateway Error (HTTP ${tuRes.statusCode || vpRes.statusCode})`;
+            ? 'WMATA API Key Unauthorized (401)'
+            : `WMATA API Gateway Error (HTTP ${tuRes.statusCode || vpRes.statusCode})`;
 
         const unavailableSnapshot: WashingtonSnapshot = {
           producedAt: new Date(nowEpochMs).toISOString(),
@@ -773,7 +873,7 @@ export async function getOrFetchWashingtonSnapshot(
           trains: [],
           tripUpdates: [],
           trafficByLine: incData,
-          stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+          stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
         };
 
         cachedSnapshot = unavailableSnapshot;
@@ -781,7 +881,12 @@ export async function getOrFetchWashingtonSnapshot(
         return unavailableSnapshot;
       }
 
-      const merged = mergeWmataRt(tuData.filteredUpdates, vpData.filteredPositions, incData, nowEpochSec);
+      const merged = mergeWmataRt(
+        tuData.filteredUpdates,
+        vpData.filteredPositions,
+        incData,
+        nowEpochSec
+      );
       merged.dataSource = 'gtfs-rt';
 
       cachedSnapshot = merged;
@@ -806,10 +911,10 @@ export async function getOrFetchWashingtonSnapshot(
             severity: 'normal',
             title: 'Red Line',
             message: 'Realtime unavailable - theoretical timetable active',
-            updatedAt: new Date(nowEpochMs).toISOString()
-          }
+            updatedAt: new Date(nowEpochMs).toISOString(),
+          },
         },
-        stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 }
+        stats: { totalEntitiesInFeed: 0, retainedEntities: 0, redCount: 0 },
       };
       cachedSnapshot = errSnapshot;
       lastFetchEpochMs = nowEpochMs;
@@ -831,7 +936,7 @@ export const handler = async () => {
     'Content-Type': 'application/json',
     'Cache-Control': `public, max-age=10, s-maxage=${CACHE_TTL_SEC}, stale-while-revalidate=5`,
     'Netlify-CDN-Cache-Control': `public, s-maxage=${CACHE_TTL_SEC}`,
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
   };
 
   if (isFixture) {
@@ -843,6 +948,6 @@ export const handler = async () => {
   return {
     statusCode: 200,
     headers,
-    body: JSON.stringify(snapshot)
+    body: JSON.stringify(snapshot),
   };
 };

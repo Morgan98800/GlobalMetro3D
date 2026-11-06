@@ -69,7 +69,11 @@ export class SubwayRouter {
         // ignore
       }
       this.currentCity = lastCity;
-      window.history.replaceState({ city: lastCity, lineShortName: null, dir: '0' }, '', `/${lastCity}`);
+      window.history.replaceState(
+        { city: lastCity, lineShortName: null, dir: '0' },
+        '',
+        `/${lastCity}`
+      );
     }
   }
 

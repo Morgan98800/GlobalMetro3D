@@ -3,7 +3,7 @@ import {
   parseGeneralMessagesPayload,
   extractParisClosedStations,
   isParisMetroServiceHours,
-  METRO_RER_LINES
+  METRO_RER_LINES,
 } from '../netlify/functions/prim_relay';
 
 describe('PRIM Relay Traffic Message Parser & Service Status Tests (Phase 6)', () => {
@@ -38,17 +38,18 @@ describe('PRIM Relay Traffic Message Parser & Service Status Tests (Phase 6)', (
                 {
                   LineRef: { value: 'STIF:Line::C01371:' },
                   Content: {
-                    value: "Trafic interrompu sur l'ensemble de la ligne 1 en raison d'une panne de signalisation."
+                    value:
+                      "Trafic interrompu sur l'ensemble de la ligne 1 en raison d'une panne de signalisation.",
                   },
                   MessageType: 'Perturbation',
                   Impact: 'Interruption',
-                  RecordedAtTime: '2026-09-12T14:30:00Z'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  RecordedAtTime: '2026-09-12T14:30:00Z',
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     const traffic = parseGeneralMessagesPayload(rawPayload);
@@ -74,16 +75,17 @@ describe('PRIM Relay Traffic Message Parser & Service Status Tests (Phase 6)', (
                 {
                   LineRef: { value: 'STIF:Line::C01371:' },
                   Content: {
-                    value: "Le trafic est interrompu entre Châtelet et Nation en raison d'un bagage abandonné."
+                    value:
+                      "Le trafic est interrompu entre Châtelet et Nation en raison d'un bagage abandonné.",
                   },
                   Impact: 'Interruption',
-                  RecordedAtTime: '2026-09-12T15:00:00Z'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  RecordedAtTime: '2026-09-12T15:00:00Z',
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     const traffic = parseGeneralMessagesPayload(rawPayload);
@@ -107,15 +109,16 @@ describe('PRIM Relay Traffic Message Parser & Service Status Tests (Phase 6)', (
                 {
                   LineRef: { value: 'STIF:Line::C01742:' },
                   Content: {
-                    value: "RER A : trafic interrompu entre La Défense et Nanterre-Préfecture suite à un obstacle."
+                    value:
+                      'RER A : trafic interrompu entre La Défense et Nanterre-Préfecture suite à un obstacle.',
                   },
-                  RecordedAtTime: '2026-09-12T16:00:00Z'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  RecordedAtTime: '2026-09-12T16:00:00Z',
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     const traffic = parseGeneralMessagesPayload(rawPayload);
@@ -139,16 +142,17 @@ describe('PRIM Relay Traffic Message Parser & Service Status Tests (Phase 6)', (
                 {
                   LineRef: { value: 'STIF:Line::C01384:' },
                   Content: {
-                    value: "Ligne 14 : trafic ralenti sur l'ensemble de la ligne en raison de travaux d'infrastructure."
+                    value:
+                      "Ligne 14 : trafic ralenti sur l'ensemble de la ligne en raison de travaux d'infrastructure.",
                   },
                   Impact: 'Perturbation',
-                  RecordedAtTime: '2026-09-12T17:00:00Z'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  RecordedAtTime: '2026-09-12T17:00:00Z',
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     const traffic = parseGeneralMessagesPayload(rawPayload);
@@ -170,22 +174,22 @@ describe('PRIM Relay Traffic Message Parser & Service Status Tests (Phase 6)', (
                 {
                   LineRef: { value: 'STIF:Line::C01371:' },
                   Content: {
-                    value: "Trafic interrompu entre Concorde et Bastille."
+                    value: 'Trafic interrompu entre Concorde et Bastille.',
                   },
-                  RecordedAtTime: '2026-09-12T18:00:00Z'
+                  RecordedAtTime: '2026-09-12T18:00:00Z',
                 },
                 {
                   LineRef: { value: 'STIF:Line::C01371:' },
                   Content: {
-                    value: "Rappel travaux : fermeture anticipée en soirée."
+                    value: 'Rappel travaux : fermeture anticipée en soirée.',
                   },
-                  RecordedAtTime: '2026-09-12T18:05:00Z'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  RecordedAtTime: '2026-09-12T18:05:00Z',
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     const traffic = parseGeneralMessagesPayload(rawPayload);

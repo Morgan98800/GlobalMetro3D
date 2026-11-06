@@ -12,7 +12,7 @@ import {
   type SchedTrip,
   type RtJourney,
   type RtCall,
-  type Timeline
+  type Timeline,
 } from '../../web/src/sim/rt_matching.ts';
 
 console.log('--- Testing rt_matching.ts (Levels 2 & 3) ---');
@@ -33,7 +33,9 @@ const schedulePath = path.resolve('web/public/data/schedule.json');
 const scheduleData = JSON.parse(fs.readFileSync(schedulePath, 'utf8'));
 const stations = scheduleData.stations;
 
-console.log(`Loaded schedule.json with ${stations.length} stations and ${scheduleData.trips.length} trips.`);
+console.log(
+  `Loaded schedule.json with ${stations.length} stations and ${scheduleData.trips.length} trips.`
+);
 
 // Select peak hour trips at 08:30 (8 * 3600 + 30 * 60 = 30600 seconds)
 const peakSeconds = 30600;
@@ -50,8 +52,8 @@ const activeSchedTrips: SchedTrip[] = peakTrips.map((t: any) => ({
     stopId: normalizeStopName(stations[s[3]] || ''),
     arr: s[0],
     dep: s[1],
-    dist: s[2]
-  }))
+    dist: s[2],
+  })),
 }));
 
 // Simulate realistic SIRI EstimatedTimetable journeys from active trips (with random 0 to 90s delays)
@@ -59,11 +61,11 @@ let directionDeductionSuccess = 0;
 let directionDeductionTotal = 0;
 
 const simulatedJourneys: RtJourney[] = activeSchedTrips.map((trip, idx) => {
-  const delay = Math.round((Math.sin(idx) * 45) + 30); // -15s to +75s delay
-  const calls: RtCall[] = trip.stops.map(s => ({
+  const delay = Math.round(Math.sin(idx) * 45 + 30); // -15s to +75s delay
+  const calls: RtCall[] = trip.stops.map((s) => ({
     stopId: s.stopId,
     aimed: s.arr,
-    expected: s.arr + delay
+    expected: s.arr + delay,
   }));
 
   directionDeductionTotal++;
@@ -74,7 +76,7 @@ const simulatedJourneys: RtJourney[] = activeSchedTrips.map((trip, idx) => {
     dir: trip.dir,
     destination: trip.stops[trip.stops.length - 1].stopId,
     calls,
-    journeyRef: `journey_${trip.tripId}`
+    journeyRef: `journey_${trip.tripId}`,
   };
 });
 
@@ -88,7 +90,9 @@ console.log(`Active scheduled trips: ${activeSchedTrips.length}`);
 console.log(`Feed journeys: ${simulatedJourneys.length}`);
 console.log(`Matched pairs: ${matches.length}`);
 console.log(`Unmatched journeys: ${unmatchedJourneys.length}`);
-console.log(`Matching time: ${matchDuration.toFixed(2)} ms (${(matchDuration / activeSchedTrips.length).toFixed(3)} ms/trip)`);
+console.log(
+  `Matching time: ${matchDuration.toFixed(2)} ms (${(matchDuration / activeSchedTrips.length).toFixed(3)} ms/trip)`
+);
 
 const overallRate = (matches.length / simulatedJourneys.length) * 100;
 console.log(`Global matching rate: ${overallRate.toFixed(1)}%`);
@@ -143,8 +147,8 @@ console.log(`  - scheduled:    ${scheduledCount}`);
 
 // Test Ghost Trains Suppression
 const tracker = createGhostTracker();
-const matchedTripIds = new Set(matches.map(m => m.trip.tripId));
-const everMatched = new Set(activeSchedTrips.map(t => t.tripId));
+const matchedTripIds = new Set(matches.map((m) => m.trip.tripId));
+const everMatched = new Set(activeSchedTrips.map((t) => t.tripId));
 
 // Disappear a trip
 const activeMinusOne = activeSchedTrips.slice(1);
@@ -184,29 +188,31 @@ if (fs.existsSync(rerSchedulePath)) {
       stopId: normalizeStopName(rerStations[s[3]] || ''),
       arr: s[0],
       dep: s[1],
-      dist: s[2]
-    }))
+      dist: s[2],
+    })),
   }));
 
   const rerSimulatedJourneys: RtJourney[] = rerActiveSchedTrips.map((trip, idx) => {
-    const delay = Math.round((Math.sin(idx) * 60) + 45); // retards réalistes de -15s à 105s
-    const calls: RtCall[] = trip.stops.map(s => ({
+    const delay = Math.round(Math.sin(idx) * 60 + 45); // retards réalistes de -15s à 105s
+    const calls: RtCall[] = trip.stops.map((s) => ({
       stopId: s.stopId,
       aimed: s.arr,
-      expected: s.arr + delay
+      expected: s.arr + delay,
     }));
     return {
       lineId: trip.lineId,
       dir: trip.dir,
       destination: trip.stops[trip.stops.length - 1].stopId,
       calls,
-      journeyRef: `rer_journey_${trip.tripId}`
+      journeyRef: `rer_journey_${trip.tripId}`,
     };
   });
 
   const { matches: rerMatches } = matchJourneys(rerSimulatedJourneys, rerActiveSchedTrips);
   const rerRate = (rerMatches.length / rerSimulatedJourneys.length) * 100;
-  console.log(`RER E Matching Rate (08:30): ${rerMatches.length}/${rerSimulatedJourneys.length} (${rerRate.toFixed(1)}%)`);
+  console.log(
+    `RER E Matching Rate (08:30): ${rerMatches.length}/${rerSimulatedJourneys.length} (${rerRate.toFixed(1)}%)`
+  );
   assert.ok(rerRate >= 95, `RER E Matching rate should be >= 95%, got ${rerRate}%`);
 
   for (const rm of rerMatches) {

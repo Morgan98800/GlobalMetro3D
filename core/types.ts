@@ -4,10 +4,10 @@ export interface LineMetadata {
   long_name: string;
   color: string;
   text_color: string;
-  mode: "metro" | "tram" | "rail" | "tube" | "dlr" | "elizabeth-line" | "overground";
+  mode: 'metro' | 'tram' | 'rail' | 'tube' | 'dlr' | 'elizabeth-line' | 'overground';
   destinations: {
-    "0": string;
-    "1": string;
+    '0': string;
+    '1': string;
   };
   measured_length_km: number;
   elevation_offset: number;
@@ -43,4 +43,3 @@ export interface LineTrafficReport {
   updatedAt: string;
   closedStations?: string[];
 }
-

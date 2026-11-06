@@ -20,15 +20,24 @@ import { computeLondonSnapshot } from './snapshot_generator';
 const FIXTURE_PATH = path.resolve(__dirname, 'fixtures/london-other-modes-snapshot.json');
 
 const TUBE_LINES = new Set([
-  'bakerloo', 'central', 'circle', 'district', 'hammersmith-city', 'jubilee',
-  'metropolitan', 'northern', 'piccadilly', 'victoria', 'waterloo-city'
+  'bakerloo',
+  'central',
+  'circle',
+  'district',
+  'hammersmith-city',
+  'jubilee',
+  'metropolitan',
+  'northern',
+  'piccadilly',
+  'victoria',
+  'waterloo-city',
 ]);
 
 type Train = ReturnType<typeof computeLondonSnapshot>['trains'][number];
 
 function otherModeTrains(): Train[] {
-  return computeLondonSnapshot().trains
-    .filter(t => !TUBE_LINES.has(t.line))
+  return computeLondonSnapshot()
+    .trains.filter((t) => !TUBE_LINES.has(t.line))
     .sort((a, b) => a.tripId.localeCompare(b.tripId));
 }
 
@@ -47,10 +56,10 @@ describe('Londres hors tube — non-régression de position', () => {
     ).toBe(true);
 
     const expected: Train[] = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8')).trains;
-    const expectedById = new Map(expected.map(t => [t.tripId, t]));
+    const expectedById = new Map(expected.map((t) => [t.tripId, t]));
 
     // Même ensemble de rames, ni plus ni moins
-    expect(computed.map(t => t.tripId)).toEqual(expected.map(t => t.tripId));
+    expect(computed.map((t) => t.tripId)).toEqual(expected.map((t) => t.tripId));
 
     let maxDistDeltaM = 0;
     for (const c of computed) {
@@ -61,10 +70,14 @@ describe('Londres hors tube — non-régression de position', () => {
 
       const distDeltaM = Math.abs(c.currentDistM - e.currentDistM);
       maxDistDeltaM = Math.max(maxDistDeltaM, distDeltaM);
-      expect(distDeltaM, `${c.tripId} (${c.line}) décalé de ${distDeltaM} m`).toBeLessThanOrEqual(1.0);
+      expect(distDeltaM, `${c.tripId} (${c.line}) décalé de ${distDeltaM} m`).toBeLessThanOrEqual(
+        1.0
+      );
       expect(Math.abs(c.speedMps - e.speedMps), `${c.tripId} vitesse`).toBeLessThanOrEqual(0.1);
     }
 
-    console.log(`✅ Londres hors tube : ${computed.length} rames, écart max ${maxDistDeltaM.toFixed(4)} m`);
+    console.log(
+      `✅ Londres hors tube : ${computed.length} rames, écart max ${maxDistDeltaM.toFixed(4)} m`
+    );
   });
 });

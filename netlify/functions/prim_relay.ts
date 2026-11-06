@@ -14,7 +14,10 @@ function loadLocalEnvFallback(): void {
         if (trimmed.startsWith('#') || !trimmed.includes('=')) continue;
         const [k, ...v] = trimmed.split('=');
         if (k.trim() === 'PRIM_API_KEY' && !process.env.PRIM_API_KEY) {
-          process.env.PRIM_API_KEY = v.join('=').trim().replace(/^['"]|['"]$/g, '');
+          process.env.PRIM_API_KEY = v
+            .join('=')
+            .trim()
+            .replace(/^['"]|['"]$/g, '');
         }
       }
     }
@@ -101,7 +104,7 @@ export const METRO_RER_LINES = [
   { id: 'IDFM:C01743', rawId: 'C01743', name: 'B', mode: 'rail' as const },
   { id: 'IDFM:C01727', rawId: 'C01727', name: 'C', mode: 'rail' as const },
   { id: 'IDFM:C01728', rawId: 'C01728', name: 'D', mode: 'rail' as const },
-  { id: 'IDFM:C01729', rawId: 'C01729', name: 'E', mode: 'rail' as const }
+  { id: 'IDFM:C01729', rawId: 'C01729', name: 'E', mode: 'rail' as const },
 ];
 
 /**
@@ -112,7 +115,7 @@ export function isParisMetroServiceHours(date: Date = new Date()): boolean {
     timeZone: 'Europe/Paris',
     hour12: false,
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
   const [h, m] = parisTimeStr.split(':').map(Number);
   const currentMinutes = h * 60 + m;
@@ -139,12 +142,14 @@ export function parseEstimatedTimetablePayload(
   payload: any,
   line: { id: string; rawId: string; mode: 'metro' | 'rail' }
 ): FetchLineResult {
-  const frames = payload?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame || [];
+  const frames =
+    payload?.Siri?.ServiceDelivery?.EstimatedTimetableDelivery?.[0]?.EstimatedJourneyVersionFrame ||
+    [];
   const rawJourneys = frames.flatMap((frame: any) => frame?.EstimatedVehicleJourney || []);
   const parsedJourneys: EstimatedVehicleJourneyData[] = [];
   const dirTotals: Record<string, { totalS: number; count: number }> = {
     '0': { totalS: 0, count: 0 },
-    '1': { totalS: 0, count: 0 }
+    '1': { totalS: 0, count: 0 },
   };
 
   for (const j of rawJourneys) {
@@ -153,7 +158,8 @@ export function parseEstimatedTimetablePayload(
       j?.VehicleJourneyName?.[0]?.value ||
       `j_${Math.random().toString(36).substring(2, 9)}`;
     const dirVal = String(j?.DirectionRef?.value || '0').trim();
-    const dir: '0' | '1' = dirVal.includes('1') || dirVal.toLowerCase().includes('retour') ? '1' : '0';
+    const dir: '0' | '1' =
+      dirVal.includes('1') || dirVal.toLowerCase().includes('retour') ? '1' : '0';
     const parsedCalls: EstimatedCallData[] = [];
 
     for (const c of j?.EstimatedCalls?.EstimatedCall || []) {
@@ -165,7 +171,9 @@ export function parseEstimatedTimetablePayload(
       const expectedTime = expDep || expArr;
       let delaySeconds: number | null = null;
       if (aimedTime && expectedTime) {
-        const diffS = Math.round((new Date(expectedTime).getTime() - new Date(aimedTime).getTime()) / 1000);
+        const diffS = Math.round(
+          (new Date(expectedTime).getTime() - new Date(aimedTime).getTime()) / 1000
+        );
         if (Number.isFinite(diffS) && Math.abs(diffS) <= 1800) {
           delaySeconds = diffS;
           dirTotals[dir].totalS += diffS;
@@ -182,7 +190,7 @@ export function parseEstimatedTimetablePayload(
         expectedDepartureTime: expDep,
         delaySeconds,
         arrivalStatus: c?.ArrivalStatus,
-        departureStatus: c?.DepartureStatus
+        departureStatus: c?.DepartureStatus,
       });
     }
 
@@ -195,7 +203,7 @@ export function parseEstimatedTimetablePayload(
       destinationName: j?.DestinationName?.[0]?.value || '',
       vehicleMode: line.mode,
       recordedAt: j?.RecordedAtTime || new Date().toISOString(),
-      calls: parsedCalls
+      calls: parsedCalls,
     });
   }
 
@@ -283,7 +291,7 @@ export function parseGeneralMessagesPayload(json: any): Record<string, LineTraff
       severity: 'normal',
       title: `${prefix}${line.name}`,
       message: 'Trafic fluide sur l’ensemble de la ligne',
-      updatedAt: nowIso
+      updatedAt: nowIso,
     };
   }
 
@@ -333,7 +341,8 @@ export function parseGeneralMessagesPayload(json: any): Record<string, LineTraff
     let matchingLine: (typeof METRO_RER_LINES)[number] | undefined = undefined;
     if (lineRefStr) {
       matchingLine = METRO_RER_LINES.find(
-        (l) => lineRefStr.includes(l.rawId) || lineRefStr === l.id || lineRefStr.includes(`::${l.name}:`)
+        (l) =>
+          lineRefStr.includes(l.rawId) || lineRefStr === l.id || lineRefStr.includes(`::${l.name}:`)
       );
     }
     if (!matchingLine) {
@@ -344,7 +353,10 @@ export function parseGeneralMessagesPayload(json: any): Record<string, LineTraff
         if (l.mode === 'rail') {
           return normText.includes(` rer ${l.name.toLowerCase()} `);
         } else {
-          return normText.includes(` ligne ${l.name.toLowerCase()} `) || normText.includes(` metro ${l.name.toLowerCase()} `);
+          return (
+            normText.includes(` ligne ${l.name.toLowerCase()} `) ||
+            normText.includes(` metro ${l.name.toLowerCase()} `)
+          );
         }
       });
     }
@@ -392,7 +404,9 @@ export function parseGeneralMessagesPayload(json: any): Record<string, LineTraff
       }
       // Fusionner les stations fermées si la ligne était déjà interrompue
       if (currentReport.status === 'interrupted' && currentReport.closedStations) {
-        closedStations = Array.from(new Set([...(closedStations || []), ...currentReport.closedStations]));
+        closedStations = Array.from(
+          new Set([...(closedStations || []), ...currentReport.closedStations])
+        );
       }
     }
 
@@ -411,9 +425,14 @@ export function parseGeneralMessagesPayload(json: any): Record<string, LineTraff
       status,
       severity: status === 'interrupted' ? 'alert' : status === 'disrupted' ? 'warning' : 'normal',
       title: reportTitle,
-      message: content || summary || (status === 'normal' ? 'Trafic fluide sur l’ensemble de la ligne' : 'Perturbation signalée.'),
+      message:
+        content ||
+        summary ||
+        (status === 'normal'
+          ? 'Trafic fluide sur l’ensemble de la ligne'
+          : 'Perturbation signalée.'),
       updatedAt: msg?.RecordedAtTime || msg?.updatedAt || nowIso,
-      closedStations
+      closedStations,
     };
   }
 
@@ -423,7 +442,10 @@ export function parseGeneralMessagesPayload(json: any): Record<string, LineTraff
 /**
  * Fetch general traffic disruption messages from PRIM Marketplace
  */
-export function fetchGeneralMessages(apiKey: string, timeoutMs = 6000): Promise<Record<string, LineTrafficReport>> {
+export function fetchGeneralMessages(
+  apiKey: string,
+  timeoutMs = 6000
+): Promise<Record<string, LineTrafficReport>> {
   const url = 'https://prim.iledefrance-mobilites.fr/marketplace/general-message';
   return new Promise((resolve) => {
     const req = https.get(
@@ -432,9 +454,9 @@ export function fetchGeneralMessages(apiKey: string, timeoutMs = 6000): Promise<
         headers: {
           apikey: apiKey,
           accept: 'application/json',
-          'User-Agent': 'ParisSubway3D-Relay/1.0'
+          'User-Agent': 'ParisSubway3D-Relay/1.0',
         },
-        timeout: timeoutMs
+        timeout: timeoutMs,
       },
       (res) => {
         if (res.statusCode !== 200) {
@@ -479,9 +501,9 @@ export function fetchLineEstimatedTimetable(
         headers: {
           apikey: apiKey,
           accept: 'application/json',
-          'User-Agent': 'ParisSubway3D-Relay/1.0'
+          'User-Agent': 'ParisSubway3D-Relay/1.0',
         },
-        timeout: timeoutMs
+        timeout: timeoutMs,
       },
       (res) => {
         const statusCode = res.statusCode || 0;
@@ -491,7 +513,7 @@ export function fetchLineEstimatedTimetable(
             journeys: [],
             delaysByDir: {},
             statusCode,
-            error: `HTTP ${statusCode}`
+            error: `HTTP ${statusCode}`,
           });
           return;
         }
@@ -510,7 +532,7 @@ export function fetchLineEstimatedTimetable(
               journeys: [],
               delaysByDir: {},
               statusCode: 200,
-              error: `JSON Parse error: ${err.message}`
+              error: `JSON Parse error: ${err.message}`,
             });
           }
         });
@@ -523,7 +545,7 @@ export function fetchLineEstimatedTimetable(
         journeys: [],
         delaysByDir: {},
         statusCode: 0,
-        error: err.message
+        error: err.message,
       });
     });
 
@@ -534,7 +556,7 @@ export function fetchLineEstimatedTimetable(
         journeys: [],
         delaysByDir: {},
         statusCode: 408,
-        error: 'Request timeout'
+        error: 'Request timeout',
       });
     });
   });
@@ -580,11 +602,11 @@ export async function buildOrGetSnapshot(
         linesSucceeded: 0,
         totalJourneys: 0,
         totalCalls: 0,
-        fetchDurationMs: 0
+        fetchDurationMs: 0,
       },
       delays: {},
       journeysByLine: {},
-      trafficByLine: {}
+      trafficByLine: {},
     };
     cachedSnapshot = nightSnapshot;
     lastFetchEpoch = now;
@@ -605,11 +627,11 @@ export async function buildOrGetSnapshot(
         linesSucceeded: 0,
         totalJourneys: 0,
         totalCalls: 0,
-        fetchDurationMs: 0
+        fetchDurationMs: 0,
       },
       delays: {},
       journeysByLine: {},
-      trafficByLine: {}
+      trafficByLine: {},
     };
     return unconfiguredSnapshot;
   }
@@ -680,11 +702,11 @@ export async function buildOrGetSnapshot(
           linesSucceeded,
           totalJourneys: 0,
           totalCalls: 0,
-          fetchDurationMs: durationMs
+          fetchDurationMs: durationMs,
         },
         delays: {},
         journeysByLine: {},
-        trafficByLine: {}
+        trafficByLine: {},
       };
       cachedSnapshot = degradedSnapshot;
       lastFetchEpoch = now;
@@ -705,11 +727,11 @@ export async function buildOrGetSnapshot(
         linesSucceeded,
         totalJourneys,
         totalCalls,
-        fetchDurationMs: durationMs
+        fetchDurationMs: durationMs,
       },
       delays: aggregatedDelays,
       journeysByLine,
-      trafficByLine
+      trafficByLine,
     };
 
     cachedSnapshot = newSnapshot;
@@ -738,8 +760,8 @@ export const handler = async (event: any) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'X-Prim-Produced-At': snapshot.producedAt,
-      'X-Prim-Healthy': String(snapshot.feedHealthy)
+      'X-Prim-Healthy': String(snapshot.feedHealthy),
     },
-    body: responseBody
+    body: responseBody,
   };
 };

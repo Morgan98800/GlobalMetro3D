@@ -9,7 +9,7 @@ const ORIENTATION_CANDIDATES = {
   positive_yaw: [0, SPIKE_YAW_DEGREES, 0],
   negative_yaw: [0, -SPIKE_YAW_DEGREES, 0],
   positive_yaw_roll: [0, SPIKE_YAW_DEGREES, 90],
-  negative_yaw_roll: [0, -SPIKE_YAW_DEGREES, 90]
+  negative_yaw_roll: [0, -SPIKE_YAW_DEGREES, 90],
 } as const;
 type OrientationCandidate = keyof typeof ORIENTATION_CANDIDATES;
 
@@ -36,10 +36,12 @@ function selectedOrientation(): readonly [number, number, number] {
 export function createTrainModelSpikeLayer(): ScenegraphLayer<SpikeCar> | null {
   if (!isTrainModelSpikeEnabled()) return null;
 
-  const data: SpikeCar[] = [{
-    position: [SPIKE_POSITION[0], SPIKE_POSITION[1], 0],
-    orientation: selectedOrientation()
-  }];
+  const data: SpikeCar[] = [
+    {
+      position: [SPIKE_POSITION[0], SPIKE_POSITION[1], 0],
+      orientation: selectedOrientation(),
+    },
+  ];
 
   return new ScenegraphLayer<SpikeCar>({
     id: 'train-model-spike-pneumatic',
@@ -49,13 +51,17 @@ export function createTrainModelSpikeLayer(): ScenegraphLayer<SpikeCar> | null {
     getOrientation: (car) => car.orientation,
     sizeScale: 1,
     _lighting: 'pbr',
-    pickable: false
+    pickable: false,
   });
 }
 
 export function createTrainModelSpikeLighting(): LightingEffect {
   return new LightingEffect({
     trainSpikeAmbient: new AmbientLight({ color: [255, 255, 255], intensity: 1.0 }),
-    trainSpikeKey: new DirectionalLight({ color: [255, 250, 235], intensity: 2.0, direction: [-1, -1, -2] })
+    trainSpikeKey: new DirectionalLight({
+      color: [255, 250, 235],
+      intensity: 2.0,
+      direction: [-1, -1, -2],
+    }),
   });
 }

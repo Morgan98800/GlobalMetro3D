@@ -182,7 +182,8 @@ export class SubwaySearchBar {
       if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (this.currentMatches.length > 0) {
-          this.activeIndex = (this.activeIndex - 1 + this.currentMatches.length) % this.currentMatches.length;
+          this.activeIndex =
+            (this.activeIndex - 1 + this.currentMatches.length) % this.currentMatches.length;
           this.updateActiveHighlight();
         }
         return;
@@ -215,11 +216,11 @@ export class SubwaySearchBar {
     if (!query) {
       // Show top major hubs when input is empty
       this.currentMatches = this.stations
-        .filter(s => s.lines.length >= 3 || s.is_hub)
+        .filter((s) => s.lines.length >= 3 || s.is_hub)
         .slice(0, 8);
     } else {
       this.currentMatches = this.stations
-        .filter(s => this.normalize(s.name).includes(query))
+        .filter((s) => this.normalize(s.name).includes(query))
         .slice(0, 10);
     }
 
@@ -231,12 +232,16 @@ export class SubwaySearchBar {
     this.resultsEl.innerHTML = this.currentMatches
       .map((st, index) => {
         const badges = st.lines
-          .map(lid => this.linesMap.get(lid))
+          .map((lid) => this.linesMap.get(lid))
           .filter((l): l is LineMetadata => !!l)
-          .map(l => `<span class="search-line-pill" style="background:${l.color}; color:${l.text_color};">${escapeHtml(badgeLabel(l.short_name))}</span>`)
+          .map(
+            (l) =>
+              `<span class="search-line-pill" style="background:${l.color}; color:${l.text_color};">${escapeHtml(badgeLabel(l.short_name))}</span>`
+          )
           .join('');
 
-        const hubTag = st.is_hub || st.lines.length >= 3 ? `<span class="cmd-palette-hub">Pôle</span>` : '';
+        const hubTag =
+          st.is_hub || st.lines.length >= 3 ? `<span class="cmd-palette-hub">Pôle</span>` : '';
 
         return `
           <div
@@ -257,7 +262,7 @@ export class SubwaySearchBar {
       .join('');
 
     // Click handler for result rows
-    this.resultsEl.querySelectorAll('.cmd-palette-item').forEach(el => {
+    this.resultsEl.querySelectorAll('.cmd-palette-item').forEach((el) => {
       el.addEventListener('click', () => {
         const idx = parseInt(el.getAttribute('data-index') || '0', 10);
         if (this.currentMatches[idx]) {

@@ -12,11 +12,15 @@ describe('Montreal Simulation Snapshot Safety Net', () => {
       const freshSnapshot = computeMontrealSnapshot();
       fs.mkdirSync(path.dirname(FIXTURE_PATH), { recursive: true });
       fs.writeFileSync(FIXTURE_PATH, JSON.stringify(freshSnapshot, null, 2), 'utf8');
-      console.log(`[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`);
+      console.log(
+        `[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`
+      );
     }
 
     // 2. Load frozen reference fixture
-    const expectedFixture: MontrealSnapshotFixture = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
+    const expectedFixture: MontrealSnapshotFixture = JSON.parse(
+      fs.readFileSync(FIXTURE_PATH, 'utf8')
+    );
 
     // 3. Replay computation from engine and data
     const computedSnapshot = computeMontrealSnapshot();
@@ -31,7 +35,7 @@ describe('Montreal Simulation Snapshot Safety Net', () => {
     expect(computedSnapshot.meta.trainsByLine['5']).toBe(9);
 
     // 5. Compare train by train
-    const expectedMap = new Map(expectedFixture.trains.map(t => [t.tripId, t]));
+    const expectedMap = new Map(expectedFixture.trains.map((t) => [t.tripId, t]));
 
     let maxDistDeltaM = 0;
     let maxSpeedDeltaMps = 0;
@@ -48,7 +52,7 @@ describe('Montreal Simulation Snapshot Safety Net', () => {
       // Verify Montreal bounding box coordinates
       const [lon, lat] = computed.pos;
       expect(lon).toBeGreaterThanOrEqual(-73.75);
-      expect(lon).toBeLessThanOrEqual(-73.50);
+      expect(lon).toBeLessThanOrEqual(-73.5);
       expect(lat).toBeGreaterThanOrEqual(45.42);
       expect(lat).toBeLessThanOrEqual(45.62);
 
@@ -59,10 +63,18 @@ describe('Montreal Simulation Snapshot Safety Net', () => {
       if (speedDeltaMps > maxSpeedDeltaMps) maxSpeedDeltaMps = speedDeltaMps;
 
       // Acceptance criterion: strictly reproduction within 1 meter
-      expect(distDeltaM, `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`).toBeLessThanOrEqual(1.0);
-      expect(speedDeltaMps, `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`).toBeLessThanOrEqual(0.1);
+      expect(
+        distDeltaM,
+        `Position of train ${computed.tripId} (${computed.lineName}) deviated by ${distDeltaM}m (> 1m limit)`
+      ).toBeLessThanOrEqual(1.0);
+      expect(
+        speedDeltaMps,
+        `Speed of train ${computed.tripId} (${computed.lineName}) deviated by ${speedDeltaMps} m/s`
+      ).toBeLessThanOrEqual(0.1);
     }
 
-    console.log(`✅ Montreal snapshot passed: ${computedSnapshot.trains.length} trains matched (L1: 27, L2: 32, L4: 4, L5: 9). Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s.`);
+    console.log(
+      `✅ Montreal snapshot passed: ${computedSnapshot.trains.length} trains matched (L1: 27, L2: 32, L4: 4, L5: 9). Max pos delta: ${maxDistDeltaM.toFixed(4)}m, Max speed delta: ${maxSpeedDeltaMps.toFixed(4)} m/s.`
+    );
   });
 });

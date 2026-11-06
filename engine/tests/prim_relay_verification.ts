@@ -5,15 +5,15 @@ import {
   isParisMetroServiceHours,
   type PrimSnapshot,
   type EstimatedVehicleJourneyData,
-  parseEstimatedTimetablePayload
+  parseEstimatedTimetablePayload,
 } from '../../netlify/functions/prim_relay.ts';
 
 console.log('--- Testing PRIM Relay & Quota Calculations ---');
 
 // 1. Line count verification
 assert.strictEqual(METRO_RER_LINES.length, 21, 'Must monitor exactly 21 lines (16 metro + 5 RER)');
-const metroLines = METRO_RER_LINES.filter(l => l.mode === 'metro');
-const rerLines = METRO_RER_LINES.filter(l => l.mode === 'rail');
+const metroLines = METRO_RER_LINES.filter((l) => l.mode === 'metro');
+const rerLines = METRO_RER_LINES.filter((l) => l.mode === 'rail');
 assert.strictEqual(metroLines.length, 16, '16 metro lines');
 assert.strictEqual(rerLines.length, 5, '5 RER lines (A, B, C, D, E)');
 console.log('✓ 21 lines configured (16 Metro + 5 RER)');
@@ -22,14 +22,46 @@ console.log('✓ 21 lines configured (16 Metro + 5 RER)');
 const framePayload = {
   Siri: {
     ServiceDelivery: {
-      EstimatedTimetableDelivery: [{
-        EstimatedJourneyVersionFrame: [
-          { EstimatedVehicleJourney: [{ FramedVehicleJourneyRef: { DatedVehicleJourneyRef: 'frame-1' }, DirectionRef: { value: '0' }, EstimatedCalls: { EstimatedCall: [{ AimedArrivalTime: '2026-09-10T12:00:00Z', ExpectedArrivalTime: '2026-09-10T12:00:30Z' }] } }] },
-          { EstimatedVehicleJourney: [{ FramedVehicleJourneyRef: { DatedVehicleJourneyRef: 'frame-2' }, DirectionRef: { value: '1' }, EstimatedCalls: { EstimatedCall: [{ AimedArrivalTime: '2026-09-10T12:00:00Z', ExpectedArrivalTime: '2026-09-10T12:01:00Z' }] } }] }
-        ]
-      }]
-    }
-  }
+      EstimatedTimetableDelivery: [
+        {
+          EstimatedJourneyVersionFrame: [
+            {
+              EstimatedVehicleJourney: [
+                {
+                  FramedVehicleJourneyRef: { DatedVehicleJourneyRef: 'frame-1' },
+                  DirectionRef: { value: '0' },
+                  EstimatedCalls: {
+                    EstimatedCall: [
+                      {
+                        AimedArrivalTime: '2026-09-10T12:00:00Z',
+                        ExpectedArrivalTime: '2026-09-10T12:00:30Z',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+            {
+              EstimatedVehicleJourney: [
+                {
+                  FramedVehicleJourneyRef: { DatedVehicleJourneyRef: 'frame-2' },
+                  DirectionRef: { value: '1' },
+                  EstimatedCalls: {
+                    EstimatedCall: [
+                      {
+                        AimedArrivalTime: '2026-09-10T12:00:00Z',
+                        ExpectedArrivalTime: '2026-09-10T12:01:00Z',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  },
 };
 const parsedFrames = parseEstimatedTimetablePayload(framePayload, METRO_RER_LINES[0]);
 assert.strictEqual(parsedFrames.journeys.length, 2, 'All SIRI journey frames must be aggregated');
@@ -38,13 +70,41 @@ assert.strictEqual(parsedFrames.delaysByDir['IDFM:C01371#1'], 60);
 console.log('✓ Multi-frame SIRI payload aggregated with direction-specific delays');
 
 // 2. Service Hours Verification (derived from GTFS schedule: 05:15 to 02:30 Paris time)
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T12:00:00+02:00')), true, '12:00 is active');
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T05:15:00+02:00')), true, '05:15 is active');
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T01:30:00+02:00')), true, '01:30 is active');
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T02:29:00+02:00')), true, '02:29 is active');
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T03:00:00+02:00')), false, '03:00 is inactive (night lull)');
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T04:30:00+02:00')), false, '04:30 is inactive (night lull)');
-assert.strictEqual(isParisMetroServiceHours(new Date('2026-09-10T05:14:00+02:00')), false, '05:14 is inactive (night lull)');
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T12:00:00+02:00')),
+  true,
+  '12:00 is active'
+);
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T05:15:00+02:00')),
+  true,
+  '05:15 is active'
+);
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T01:30:00+02:00')),
+  true,
+  '01:30 is active'
+);
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T02:29:00+02:00')),
+  true,
+  '02:29 is active'
+);
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T03:00:00+02:00')),
+  false,
+  '03:00 is inactive (night lull)'
+);
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T04:30:00+02:00')),
+  false,
+  '04:30 is inactive (night lull)'
+);
+assert.strictEqual(
+  isParisMetroServiceHours(new Date('2026-09-10T05:14:00+02:00')),
+  false,
+  '05:14 is inactive (night lull)'
+);
 console.log('✓ Service hours properly windowed (05:15 - 02:30 active, 02:30 - 05:15 suspended)');
 
 // 3. Realistic Snapshot Gzip Compression Measurement
@@ -69,7 +129,7 @@ for (const line of METRO_RER_LINES) {
         expectedDepartureTime: '2026-09-10T12:01:10.000Z',
         delaySeconds: 30,
         arrivalStatus: 'onTime',
-        departureStatus: 'onTime'
+        departureStatus: 'onTime',
       });
       totalCalls++;
     }
@@ -82,7 +142,7 @@ for (const line of METRO_RER_LINES) {
       destinationName: 'Terminus Test',
       vehicleMode: line.mode,
       recordedAt: new Date().toISOString(),
-      calls
+      calls,
     });
     totalJourneys++;
   }
@@ -101,10 +161,10 @@ const mockSnapshot: PrimSnapshot = {
     linesSucceeded: 21,
     totalJourneys,
     totalCalls,
-    fetchDurationMs: 3200
+    fetchDurationMs: 3200,
   },
   delays: { 'IDFM:C01371': 15, 'IDFM:C01371#0': 12, 'IDFM:C01371#1': 18 },
-  journeysByLine: mockJourneysByLine
+  journeysByLine: mockJourneysByLine,
 };
 
 const rawJsonStr = JSON.stringify(mockSnapshot);
@@ -112,7 +172,9 @@ const rawBytes = Buffer.byteLength(rawJsonStr, 'utf8');
 const gzipped = zlib.gzipSync(rawJsonStr);
 const brotli = zlib.brotliCompressSync(rawJsonStr);
 
-console.log(`✓ Snapshot size: ${Math.round(rawBytes / 1024)} KB raw JSON (${totalJourneys} journeys, ${totalCalls} calls)`);
+console.log(
+  `✓ Snapshot size: ${Math.round(rawBytes / 1024)} KB raw JSON (${totalJourneys} journeys, ${totalCalls} calls)`
+);
 console.log(`✓ Snapshot Gzip size: ${(gzipped.length / 1024).toFixed(1)} KB`);
 console.log(`✓ Snapshot Brotli size: ${(brotli.length / 1024).toFixed(1)} KB`);
 
@@ -131,6 +193,8 @@ console.log(`  - Cycles per hour: ${cyclesPerHour}`);
 console.log(`  - Service hours: ${serviceHoursPerDay}h (05:15 to 02:30)`);
 console.log(`  - Night suspension: 2h45 (02:30 to 05:15) -> 0 requests`);
 console.log(`  - Total requests / 24h: ${Math.round(totalRequests24h)} requests`);
-console.log(`  - Average rate: ${requestsPerMin.toFixed(1)} req/min (Official PRIM limit: 20 req/min, headroom: ${((1 - requestsPerMin / 20) * 100).toFixed(0)}%)`);
+console.log(
+  `  - Average rate: ${requestsPerMin.toFixed(1)} req/min (Official PRIM limit: 20 req/min, headroom: ${((1 - requestsPerMin / 20) * 100).toFixed(0)}%)`
+);
 
 console.log('--- All Relay Checks PASSED ---');

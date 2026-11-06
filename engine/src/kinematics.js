@@ -60,13 +60,7 @@ export function getSmoothedBearing(shape, distM, windowM = 30) {
 }
 
 /** Computes the TrainState for an active trip at time t (seconds since midnight) */
-export function computeTripKinematics(
-  trip,
-  shape,
-  timeSeconds,
-  delaySeconds = 0,
-  rollingStockMap
-) {
+export function computeTripKinematics(trip, shape, timeSeconds, delaySeconds = 0, rollingStockMap) {
   const stops = trip.stops;
   if (!stops || stops.length < 2) return null;
 
@@ -131,6 +125,6 @@ export function computeTripKinematics(
     next: nextStopId,
     dest: stops[stops.length - 1].stopId,
     conf: delaySeconds !== 0 ? 'rt' : 'sched',
-    stock
+    stock,
   };
 }

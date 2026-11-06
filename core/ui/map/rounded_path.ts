@@ -7,7 +7,7 @@ const CORNER_CUT_RATIO = 0.22;
 const CURVE_SAMPLES = 3;
 
 function metersPerDegreeLongitude(latitude: number): number {
-  return METERS_PER_DEGREE_LATITUDE * Math.cos(latitude * Math.PI / 180);
+  return METERS_PER_DEGREE_LATITUDE * Math.cos((latitude * Math.PI) / 180);
 }
 
 function distanceMeters(a: GeoPoint, b: GeoPoint): number {
@@ -25,21 +25,22 @@ function interpolate(a: GeoPoint, b: GeoPoint, distanceFromA: number): GeoPoint 
 }
 
 function turnDegrees(previous: GeoPoint, current: GeoPoint, next: GeoPoint): number {
-  const latitude = current[1] * Math.PI / 180;
+  const latitude = (current[1] * Math.PI) / 180;
   const scaleX = metersPerDegreeLongitude(current[1]);
   const incoming = [
     (current[0] - previous[0]) * scaleX,
-    (current[1] - previous[1]) * METERS_PER_DEGREE_LATITUDE
+    (current[1] - previous[1]) * METERS_PER_DEGREE_LATITUDE,
   ];
   const outgoing = [
     (next[0] - current[0]) * scaleX,
-    (next[1] - current[1]) * METERS_PER_DEGREE_LATITUDE
+    (next[1] - current[1]) * METERS_PER_DEGREE_LATITUDE,
   ];
   const incomingLength = Math.hypot(incoming[0], incoming[1]);
   const outgoingLength = Math.hypot(outgoing[0], outgoing[1]);
   if (incomingLength <= 0.001 || outgoingLength <= 0.001) return 0;
-  const cosine = (incoming[0] * outgoing[0] + incoming[1] * outgoing[1]) / (incomingLength * outgoingLength);
-  return Math.acos(Math.max(-1, Math.min(1, cosine))) * 180 / Math.PI;
+  const cosine =
+    (incoming[0] * outgoing[0] + incoming[1] * outgoing[1]) / (incomingLength * outgoingLength);
+  return (Math.acos(Math.max(-1, Math.min(1, cosine))) * 180) / Math.PI;
 }
 
 /**
@@ -47,7 +48,7 @@ function turnDegrees(previous: GeoPoint, current: GeoPoint, next: GeoPoint): num
  * Les points d'origine et leurs distances restent utilisés par la simulation.
  */
 export function roundPathCorners(points: readonly GeoPoint[]): GeoPoint[] {
-  if (points.length < 3) return points.map(point => [point[0], point[1]]);
+  if (points.length < 3) return points.map((point) => [point[0], point[1]]);
 
   const rounded: GeoPoint[] = [[points[0][0], points[0][1]]];
   for (let index = 1; index < points.length - 1; index++) {
@@ -81,7 +82,7 @@ export function roundPathCorners(points: readonly GeoPoint[]): GeoPoint[] {
       const oneMinusT = 1 - t;
       rounded.push([
         oneMinusT * oneMinusT * entry[0] + 2 * oneMinusT * t * current[0] + t * t * exit[0],
-        oneMinusT * oneMinusT * entry[1] + 2 * oneMinusT * t * current[1] + t * t * exit[1]
+        oneMinusT * oneMinusT * entry[1] + 2 * oneMinusT * t * current[1] + t * t * exit[1],
       ]);
     }
     rounded.push(exit);

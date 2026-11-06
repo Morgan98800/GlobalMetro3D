@@ -51,98 +51,98 @@ export function isTripUpdateMonotonic(tu: IleviaTripUpdate): boolean {
 const PREFIX_TO_STATION_NAME: Record<string, string> = {
   // Ligne 1
   '4CA': '4 Cantons Stade P. Mauroy',
-  'CSC': 'Cité Scientifique',
-  'TIO': 'Triolo',
-  'HDV': "V. D'Ascq Hotel De Ville",
-  'PDB': 'Pont De Bois',
-  'LZN': 'Square Flandres',
-  'MHE': "Mairie D'Hellemmes",
-  'MRB': 'Marbrerie',
-  'DFI': 'Fives',
-  'CIE': 'Madeleine Caulier',
-  'LIG': 'Gare Lille Flandres',
-  'RIH': 'Rihour',
-  'REP': 'République Beaux-Arts',
-  'CGA': 'Gambetta',
-  'WAZ': 'Wazemmes',
-  'PDP': 'Porte Des Postes',
-  'CHR': 'Chu - Centre O. Lambret',
-  'CAL': 'Chu - Eurasanté',
+  CSC: 'Cité Scientifique',
+  TIO: 'Triolo',
+  HDV: "V. D'Ascq Hotel De Ville",
+  PDB: 'Pont De Bois',
+  LZN: 'Square Flandres',
+  MHE: "Mairie D'Hellemmes",
+  MRB: 'Marbrerie',
+  DFI: 'Fives',
+  CIE: 'Madeleine Caulier',
+  LIG: 'Gare Lille Flandres',
+  RIH: 'Rihour',
+  REP: 'République Beaux-Arts',
+  CGA: 'Gambetta',
+  WAZ: 'Wazemmes',
+  PDP: 'Porte Des Postes',
+  CHR: 'Chu - Centre O. Lambret',
+  CAL: 'Chu - Eurasanté',
   // Ligne 2
-  'HSP': 'Saint Philibert',
-  'BRG': 'Bourg',
-  'MDE': 'Maison Des Enfants',
-  'MIT': 'Mitterie',
-  'PSU': 'Pont Supérieur',
-  'LLO': 'Lomme-Lambersart',
-  'CAN': 'Canteleu Euratechnologies',
-  'LPC': 'Bois Blancs',
-  'PTL': 'Port De Lille',
-  'COR': 'Cormontaigne',
-  'MNT': 'Montebello',
-  'PRR': "Porte D'Arras",
-  'PDO': 'Porte De Douai',
-  'PDV': 'Porte De Valenciennes',
-  'LGP': 'Lille Grand Palais',
-  'MDL': 'Mairie De Lille',
-  'EUR': 'Gare Lille Europe',
-  'SMP': 'Saint Maurice Pellevoisin',
-  'MSA': 'Mons Sarts',
-  'MDM': 'Mairie De Mons',
-  'FOR': 'Fort De Mons',
-  'PRS': 'Les Prés Edgard Pisani',
-  'JRS': 'Jean Jaurès',
-  'PVL': 'Wasquehal Pavé De Lille',
-  'WMI': 'Wasquehal Hôtel De Ville',
-  'CPL': 'Croix Centre',
-  'CXM': 'Mairie De Croix',
-  'EPL': 'Epeule Montesquieu',
-  'CDG': 'Roubaix Charles De Gaulle',
-  'ROU': 'Eurotéléport',
-  'RXP': 'Roubaix Grand Place',
-  'MGR': 'Gare Jean Lebas Roubaix',
-  'ALS': 'Alsace Plaine Images',
-  'MER': 'Mercure',
-  'CTL': 'Carliers',
-  'SEB': 'Gare De Tourcoing',
-  'TOU': 'Tourcoing Centre',
-  'COB': 'Colbert',
-  'TPH': 'Phalempins',
-  'PTN': 'Pont De Neuville',
-  'TBO': 'Bourgogne',
-  'DRO': 'C.H. Dron',
+  HSP: 'Saint Philibert',
+  BRG: 'Bourg',
+  MDE: 'Maison Des Enfants',
+  MIT: 'Mitterie',
+  PSU: 'Pont Supérieur',
+  LLO: 'Lomme-Lambersart',
+  CAN: 'Canteleu Euratechnologies',
+  LPC: 'Bois Blancs',
+  PTL: 'Port De Lille',
+  COR: 'Cormontaigne',
+  MNT: 'Montebello',
+  PRR: "Porte D'Arras",
+  PDO: 'Porte De Douai',
+  PDV: 'Porte De Valenciennes',
+  LGP: 'Lille Grand Palais',
+  MDL: 'Mairie De Lille',
+  EUR: 'Gare Lille Europe',
+  SMP: 'Saint Maurice Pellevoisin',
+  MSA: 'Mons Sarts',
+  MDM: 'Mairie De Mons',
+  FOR: 'Fort De Mons',
+  PRS: 'Les Prés Edgard Pisani',
+  JRS: 'Jean Jaurès',
+  PVL: 'Wasquehal Pavé De Lille',
+  WMI: 'Wasquehal Hôtel De Ville',
+  CPL: 'Croix Centre',
+  CXM: 'Mairie De Croix',
+  EPL: 'Epeule Montesquieu',
+  CDG: 'Roubaix Charles De Gaulle',
+  ROU: 'Eurotéléport',
+  RXP: 'Roubaix Grand Place',
+  MGR: 'Gare Jean Lebas Roubaix',
+  ALS: 'Alsace Plaine Images',
+  MER: 'Mercure',
+  CTL: 'Carliers',
+  SEB: 'Gare De Tourcoing',
+  TOU: 'Tourcoing Centre',
+  COB: 'Colbert',
+  TPH: 'Phalempins',
+  PTN: 'Pont De Neuville',
+  TBO: 'Bourgogne',
+  DRO: 'C.H. Dron',
   // Tramway R & T
-  'ROM': 'Romarin',
-  'BOT': 'Botanique',
-  'SMA': 'Saint Maur',
-  'MAB': 'Buisson',
-  'OSS': 'Brossolette',
-  'MCL': 'Clemenceau Hippodrome',
-  'CRL': 'Croise Laroche',
-  'ACA': 'Acacias',
-  'PDW': 'Pont De Wasquehal',
-  'LAT': 'La Terrasse',
-  'SNO': 'Le Sart',
-  'PLE': 'Planche Epinoy',
-  'ARQ': 'La Marque',
-  'CLD': 'Villa Cavrois',
-  'BOA': "Bol D'Air",
-  'PBA': 'Parc Barbieux',
-  'BDC': 'Hopital Victor Provo',
-  'QUI': 'Jean Moulin',
-  'MAM': 'Alfred Mongy',
-  'OCH': 'Foch',
-  'LQS': 'Le Quesne',
-  'CDA': 'Cerisaie',
-  'CTR': 'Chateau Rouge',
-  'TEL': 'Cartelot',
-  'GDC': 'Grand Cottignies',
-  'TRI': 'Triez',
+  ROM: 'Romarin',
+  BOT: 'Botanique',
+  SMA: 'Saint Maur',
+  MAB: 'Buisson',
+  OSS: 'Brossolette',
+  MCL: 'Clemenceau Hippodrome',
+  CRL: 'Croise Laroche',
+  ACA: 'Acacias',
+  PDW: 'Pont De Wasquehal',
+  LAT: 'La Terrasse',
+  SNO: 'Le Sart',
+  PLE: 'Planche Epinoy',
+  ARQ: 'La Marque',
+  CLD: 'Villa Cavrois',
+  BOA: "Bol D'Air",
+  PBA: 'Parc Barbieux',
+  BDC: 'Hopital Victor Provo',
+  QUI: 'Jean Moulin',
+  MAM: 'Alfred Mongy',
+  OCH: 'Foch',
+  LQS: 'Le Quesne',
+  CDA: 'Cerisaie',
+  CTR: 'Chateau Rouge',
+  TEL: 'Cartelot',
+  GDC: 'Grand Cottignies',
+  TRI: 'Triez',
   '3SU': 'Trois Suisses',
-  'DAI': 'Faidherbe',
-  'CAM': 'Ma Campagne',
-  'PHY': 'Pont Hydraulique',
-  'ICT': 'Victoire'
+  DAI: 'Faidherbe',
+  CAM: 'Ma Campagne',
+  PHY: 'Pont Hydraulique',
+  ICT: 'Victoire',
 };
 
 export function stopIdToNormalizedStationId(stopId: string): string {
@@ -158,7 +158,7 @@ export function epochToParisCivilSeconds(epochSec: number): number {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false
+    hour12: false,
   }).formatToParts(d);
   const h = parseInt(parts.find((p) => p.type === 'hour')?.value ?? '0', 10) % 24;
   const m = parseInt(parts.find((p) => p.type === 'minute')?.value ?? '0', 10);
@@ -182,7 +182,10 @@ export class IleviaMatcher {
     const relevantUpdates = filterRouteId
       ? updates.filter((u) => {
           const r = u.trip.routeId;
-          return r === filterRouteId || (r === '71' && (filterRouteId === 'TRAM_R' || filterRouteId === 'TRAM_T'));
+          return (
+            r === filterRouteId ||
+            (r === '71' && (filterRouteId === 'TRAM_R' || filterRouteId === 'TRAM_T'))
+          );
         })
       : updates;
 
@@ -207,7 +210,7 @@ export class IleviaMatcher {
       measured: 0,
       bracketed: 0,
       extrapolated: 0,
-      scheduled: 0
+      scheduled: 0,
     };
 
     for (const u of validUpdates) {
@@ -224,9 +227,8 @@ export class IleviaMatcher {
         const predTime = stu.arrival?.time ?? stu.departure?.time;
         if (predTime !== undefined) {
           // Si predTime est un timestamp epoch unix, le convertir en secondes civiles locales à Paris
-          const predLocalSec = predTime > 86400 * 10
-            ? epochToParisCivilSeconds(predTime)
-            : predTime;
+          const predLocalSec =
+            predTime > 86400 * 10 ? epochToParisCivilSeconds(predTime) : predTime;
 
           const diffS = predLocalSec - currentCivilSeconds;
           if (diffS >= -30) {
@@ -253,7 +255,7 @@ export class IleviaMatcher {
         confidence: conf,
         nextStationId: nextStopId,
         timeToNextStationS: timeToNextS,
-        delaySeconds: u.delay
+        delaySeconds: u.delay,
       });
     }
 
@@ -267,7 +269,7 @@ export class IleviaMatcher {
       matchRate,
       discardedNonMonotonicCount,
       confidenceCounts,
-      matchesByTripId
+      matchesByTripId,
     };
   }
 }

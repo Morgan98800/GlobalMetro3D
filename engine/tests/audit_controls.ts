@@ -15,7 +15,7 @@ const trips = schedule.trips.map((t: any) => ({
   t0: t[4],
   t1: t[5],
   destIdx: t[6],
-  stops: t[7]
+  stops: t[7],
 }));
 
 console.log(`Total courses dans schedule.json : ${trips.length}`);
@@ -41,7 +41,7 @@ const testHours = [
   { label: '23h30', iso: '2026-09-15T23:30:00+02:00' },
   { label: '00h45 (Nuit)', iso: '2026-09-15T00:45:00+02:00' },
   { label: '01h30 (Fin de service)', iso: '2026-09-15T01:30:00+02:00' },
-  { label: '03h30 (Interruption nocturne)', iso: '2026-09-15T03:30:00+02:00' }
+  { label: '03h30 (Interruption nocturne)', iso: '2026-09-15T03:30:00+02:00' },
 ];
 
 for (const th of testHours) {
@@ -56,10 +56,13 @@ const distDir = path.resolve('web/dist');
 let bundleHasSecret = false;
 
 if (fs.existsSync(distDir)) {
-  const jsFiles = fs.readdirSync(path.join(distDir, 'assets')).filter(f => f.endsWith('.js'));
+  const jsFiles = fs.readdirSync(path.join(distDir, 'assets')).filter((f) => f.endsWith('.js'));
   for (const jf of jsFiles) {
     const content = fs.readFileSync(path.join(distDir, 'assets', jf), 'utf8');
-    if (content.includes('STIF:') && content.includes('apikey') || content.includes('PRIM_API_KEY')) {
+    if (
+      (content.includes('STIF:') && content.includes('apikey')) ||
+      content.includes('PRIM_API_KEY')
+    ) {
       console.warn(`⚠️ Potentiel secret trouvé dans web/dist/assets/${jf}`);
       bundleHasSecret = true;
     }

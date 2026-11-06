@@ -5,8 +5,8 @@ import type { TrainMarker } from './trains_layer';
 
 // grazingCamera devient vrai à partir de 45° dans deck_overlay.ts.
 // TODO: remonter à 60° quand heightMeasured est validé.
-export const FOLLOW_CAMERA_PITCH = LOW_ZOOM_MAX_PITCH
-  + (HIGH_ZOOM_MAX_PITCH - LOW_ZOOM_MAX_PITCH) * 14 / 30;
+export const FOLLOW_CAMERA_PITCH =
+  LOW_ZOOM_MAX_PITCH + ((HIGH_ZOOM_MAX_PITCH - LOW_ZOOM_MAX_PITCH) * 14) / 30;
 
 const FOLLOW_DURATION_MS = 700;
 const FOLLOW_CENTER_EPSILON = 0.000002;
@@ -48,7 +48,8 @@ function cssTimeMs(value: string, fallback: number): number {
 }
 
 function cubicBezier(x1: number, y1: number, x2: number, y2: number): (value: number) => number {
-  const sample = (t: number, a: number, b: number) => 3 * (1 - t) ** 2 * t * a + 3 * (1 - t) * t ** 2 * b + t ** 3;
+  const sample = (t: number, a: number, b: number) =>
+    3 * (1 - t) ** 2 * t * a + 3 * (1 - t) * t ** 2 * b + t ** 3;
   return (value: number) => {
     let low = 0;
     let high = 1;
@@ -64,11 +65,11 @@ function cubicBezier(x1: number, y1: number, x2: number, y2: number): (value: nu
 function cssEase(): (value: number) => number {
   const value = getComputedStyle(document.documentElement).getPropertyValue('--ease');
   const match = value.match(/cubic-bezier\(([^)]+)\)/);
-  if (!match) return value => 1 - (1 - value) ** 3;
+  if (!match) return (value) => 1 - (1 - value) ** 3;
   const points = match[1].split(',').map(Number);
   return points.length === 4 && points.every(Number.isFinite)
     ? cubicBezier(points[0], points[1], points[2], points[3])
-    : value => 1 - (1 - value) ** 3;
+    : (value) => 1 - (1 - value) ** 3;
 }
 
 export class FollowCamera {
@@ -100,8 +101,12 @@ export class FollowCamera {
     this.reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
     this.map.on('dragstart', this.stopFollow);
-    this.map.getCanvasContainer().addEventListener('wheel', () => this.stopFollow(), { passive: true });
-    this.map.getCanvasContainer().addEventListener('touchstart', () => this.stopFollow(), { passive: true });
+    this.map
+      .getCanvasContainer()
+      .addEventListener('wheel', () => this.stopFollow(), { passive: true });
+    this.map
+      .getCanvasContainer()
+      .addEventListener('touchstart', () => this.stopFollow(), { passive: true });
     window.addEventListener('keydown', this.onKeyDown);
   }
 
@@ -116,10 +121,11 @@ export class FollowCamera {
     this.lastFrameAt = performance.now();
     this.smoothedCenter = [...train.pos];
     this.previousMaxPitch = this.map.getMaxPitch();
-    this.previousBuildingsVisibility = this.map.getLayer('building-3d')
-      && this.map.getLayoutProperty('building-3d', 'visibility') !== 'none'
-      ? 'visible'
-      : 'none';
+    this.previousBuildingsVisibility =
+      this.map.getLayer('building-3d') &&
+      this.map.getLayoutProperty('building-3d', 'visibility') !== 'none'
+        ? 'visible'
+        : 'none';
     this.map.setMaxPitch(HIGH_ZOOM_MAX_PITCH);
 
     this.previousDockCollapsed = this.dock.classList.contains('dock--collapsed');
@@ -132,7 +138,10 @@ export class FollowCamera {
     this.setFollowElevation(this.elevationLineId, 0);
 
     const followZoom = getFollowZoom(train);
-    const duration = cssTimeMs(getComputedStyle(document.documentElement).getPropertyValue('--t-camera'), FOLLOW_DURATION_MS);
+    const duration = cssTimeMs(
+      getComputedStyle(document.documentElement).getPropertyValue('--t-camera'),
+      FOLLOW_DURATION_MS
+    );
     this.map.once('moveend', this.beginLock);
     window.setTimeout(() => {
       if (this.tripId === train.id && !this.stopped && !this.locked) {
@@ -146,7 +155,7 @@ export class FollowCamera {
       pitch: FOLLOW_CAMERA_PITCH,
       bearing: train.brg,
       duration,
-      easing: cssEase()
+      easing: cssEase(),
     });
     return true;
   };
@@ -190,13 +199,17 @@ export class FollowCamera {
     this.lastFrameAt = now;
     const smoothingMs = getFollowSmoothingMs(train);
     const smoothing = 1 - Math.exp(-deltaMs / smoothingMs);
-    const currentCenter = this.smoothedCenter ?? [this.map.getCenter().lng, this.map.getCenter().lat];
+    const currentCenter = this.smoothedCenter ?? [
+      this.map.getCenter().lng,
+      this.map.getCenter().lat,
+    ];
     const nextCenter: [number, number] = [
       currentCenter[0] + (train.pos[0] - currentCenter[0]) * smoothing,
-      currentCenter[1] + (train.pos[1] - currentCenter[1]) * smoothing
+      currentCenter[1] + (train.pos[1] - currentCenter[1]) * smoothing,
     ];
-    const centerMoved = Math.abs(nextCenter[0] - currentCenter[0]) > FOLLOW_CENTER_EPSILON
-      || Math.abs(nextCenter[1] - currentCenter[1]) > FOLLOW_CENTER_EPSILON;
+    const centerMoved =
+      Math.abs(nextCenter[0] - currentCenter[0]) > FOLLOW_CENTER_EPSILON ||
+      Math.abs(nextCenter[1] - currentCenter[1]) > FOLLOW_CENTER_EPSILON;
 
     // Smooth heading tracking for curves (especially high-speed RER curves)
     const currentBearing = this.map.getBearing();
@@ -209,7 +222,7 @@ export class FollowCamera {
     this.smoothedCenter = nextCenter;
     this.map.jumpTo({
       center: nextCenter,
-      bearing: nextBearing
+      bearing: nextBearing,
     });
   };
 
@@ -220,7 +233,10 @@ export class FollowCamera {
 
   private updateElevation(): void {
     if (!this.elevationLineId) return;
-    const progress = Math.min(1, (performance.now() - this.elevationStartedAt) / FOLLOW_DURATION_MS);
+    const progress = Math.min(
+      1,
+      (performance.now() - this.elevationStartedAt) / FOLLOW_DURATION_MS
+    );
     this.elevationProgress = progress;
     this.setFollowElevation(this.elevationLineId, -this.elevationFrom * progress);
   }

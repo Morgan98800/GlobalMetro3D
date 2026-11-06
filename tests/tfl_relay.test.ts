@@ -5,7 +5,7 @@ import {
   isLondonTubeServiceHours,
   normalizeStationId,
   cleanVehicleId,
-  TFL_TUBE_LINE_IDS
+  TFL_TUBE_LINE_IDS,
 } from '../netlify/functions/tfl_relay';
 
 describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
@@ -25,12 +25,12 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
       const payload = [
         {
           id: 'victoria',
-          lineStatuses: [{ statusSeverity: 10, statusSeverityDescription: 'Good Service' }]
+          lineStatuses: [{ statusSeverity: 10, statusSeverityDescription: 'Good Service' }],
         },
         {
           id: 'central',
-          lineStatuses: [{ statusSeverity: 10, statusSeverityDescription: 'Good Service' }]
-        }
+          lineStatuses: [{ statusSeverity: 10, statusSeverityDescription: 'Good Service' }],
+        },
       ];
 
       const reports = parseTflLineStatuses(payload);
@@ -47,10 +47,10 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
             {
               statusSeverity: 9,
               statusSeverityDescription: 'Minor Delays',
-              reason: 'Minor delays due to an earlier customer incident at Waterloo.'
-            }
-          ]
-        }
+              reason: 'Minor delays due to an earlier customer incident at Waterloo.',
+            },
+          ],
+        },
       ];
 
       const reports = parseTflLineStatuses(payload);
@@ -68,10 +68,11 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
             {
               statusSeverity: 6,
               statusSeverityDescription: 'Severe Delays',
-              reason: 'Severe delays between Acton Town and Heathrow Airport due to signal failure.'
-            }
-          ]
-        }
+              reason:
+                'Severe delays between Acton Town and Heathrow Airport due to signal failure.',
+            },
+          ],
+        },
       ];
 
       const reports = parseTflLineStatuses(payload);
@@ -89,9 +90,9 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
             {
               statusSeverity: 5,
               statusSeverityDescription: 'Part Suspended',
-              reason: 'No service between Turnham Green and Richmond while we fix a track fault.'
-            }
-          ]
+              reason: 'No service between Turnham Green and Richmond while we fix a track fault.',
+            },
+          ],
         },
         {
           id: 'circle',
@@ -99,10 +100,10 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
             {
               statusSeverity: 1,
               statusSeverityDescription: 'Suspended',
-              reason: 'Entire line suspended due to power failure.'
-            }
-          ]
-        }
+              reason: 'Entire line suspended due to power failure.',
+            },
+          ],
+        },
       ];
 
       const reports = parseTflLineStatuses(payload);
@@ -130,7 +131,7 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
           direction: 'inbound',
           destinationNaptanId: '9400ZZLUBXN1',
           destinationName: 'Brixton Underground Station',
-          currentLocation: 'Between Warren Street and Oxford Circus'
+          currentLocation: 'Between Warren Street and Oxford Circus',
         },
         {
           id: '67890',
@@ -140,8 +141,8 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
           lineId: 'northern',
           timeToStation: 60,
           expectedArrival: '2026-09-25T10:59:00Z',
-          direction: 'outbound'
-        }
+          direction: 'outbound',
+        },
       ];
 
       const parsed = parseTflArrivals(rawArrivals);
@@ -165,14 +166,14 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
           vehicleId: '101',
           lineId: 'london-overground',
           naptanId: '910GSHMPSTD',
-          timeToStation: 90
+          timeToStation: 90,
         },
         {
           vehicleId: '555',
           lineId: 'victoria',
           naptanId: '',
-          timeToStation: 30
-        }
+          timeToStation: 30,
+        },
       ];
 
       const parsed = parseTflArrivals(rawArrivals);

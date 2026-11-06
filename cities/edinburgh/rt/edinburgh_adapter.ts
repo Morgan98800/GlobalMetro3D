@@ -10,7 +10,7 @@ export interface EdinburghRealtimeStatus extends RealtimeStatusBase {
 
 /**
  * Adaptateur temps réel pour Édimbourg (ScotRail & National Rail).
- * 
+ *
  * Édimbourg est exploitée en mode théorique (provider: 'none') avec cinématique haute précision.
  */
 export class EdinburghRealtimeAdapter implements RealtimeAdapter<EdinburghRealtimeStatus> {
@@ -27,7 +27,7 @@ export class EdinburghRealtimeAdapter implements RealtimeAdapter<EdinburghRealti
     return {
       active: false,
       provider: 'none',
-      mode: 'theoretical_only'
+      mode: 'theoretical_only',
     };
   }
 

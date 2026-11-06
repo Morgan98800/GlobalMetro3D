@@ -16,7 +16,7 @@ export const londonConfig: CityConfig = {
         format: 'gtfs',
         sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
         scheduleModel: 'trip-based',
-        stalenessToleranceDays: 14
+        stalenessToleranceDays: 14,
       },
       geometry: { source: 'osm-oobrien' },
       kinematics: {
@@ -34,9 +34,9 @@ export const londonConfig: CityConfig = {
         decayDistanceM: 4000,
         staleAfterSec: 360,
         reconcileDurationMs: 300,
-        reconcileThresholdM: 20
+        reconcileThresholdM: 20,
       },
-      realtime: { kind: 'arrival-predictions' }
+      realtime: { kind: 'arrival-predictions' },
     },
     {
       id: 'dlr',
@@ -46,7 +46,7 @@ export const londonConfig: CityConfig = {
         format: 'gtfs',
         sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
         scheduleModel: 'trip-based',
-        stalenessToleranceDays: 14
+        stalenessToleranceDays: 14,
       },
       geometry: { source: 'osm-oobrien' },
       kinematics: {
@@ -64,9 +64,9 @@ export const londonConfig: CityConfig = {
         decayDistanceM: 3000,
         staleAfterSec: 360,
         reconcileDurationMs: 300,
-        reconcileThresholdM: 20
+        reconcileThresholdM: 20,
       },
-      realtime: { kind: 'arrival-predictions' }
+      realtime: { kind: 'arrival-predictions' },
     },
     {
       id: 'elizabeth-line',
@@ -76,7 +76,7 @@ export const londonConfig: CityConfig = {
         format: 'gtfs',
         sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
         scheduleModel: 'trip-based',
-        stalenessToleranceDays: 14
+        stalenessToleranceDays: 14,
       },
       geometry: { source: 'osm-oobrien' },
       kinematics: {
@@ -94,9 +94,9 @@ export const londonConfig: CityConfig = {
         decayDistanceM: 5000,
         staleAfterSec: 360,
         reconcileDurationMs: 300,
-        reconcileThresholdM: 20
+        reconcileThresholdM: 20,
       },
-      realtime: { kind: 'arrival-predictions' }
+      realtime: { kind: 'arrival-predictions' },
     },
     {
       id: 'overground',
@@ -106,7 +106,7 @@ export const londonConfig: CityConfig = {
         format: 'gtfs',
         sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
         scheduleModel: 'trip-based',
-        stalenessToleranceDays: 14
+        stalenessToleranceDays: 14,
       },
       geometry: { source: 'osm-oobrien' },
       kinematics: {
@@ -124,9 +124,9 @@ export const londonConfig: CityConfig = {
         decayDistanceM: 4000,
         staleAfterSec: 360,
         reconcileDurationMs: 300,
-        reconcileThresholdM: 20
+        reconcileThresholdM: 20,
       },
-      realtime: { kind: 'arrival-predictions' }
+      realtime: { kind: 'arrival-predictions' },
     },
     {
       id: 'tram',
@@ -136,7 +136,7 @@ export const londonConfig: CityConfig = {
         format: 'gtfs',
         sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
         scheduleModel: 'trip-based',
-        stalenessToleranceDays: 14
+        stalenessToleranceDays: 14,
       },
       geometry: { source: 'osm-oobrien' },
       kinematics: {
@@ -154,18 +154,25 @@ export const londonConfig: CityConfig = {
         decayDistanceM: 2000,
         staleAfterSec: 360,
         reconcileDurationMs: 300,
-        reconcileThresholdM: 20
+        reconcileThresholdM: 20,
       },
-      realtime: { kind: 'arrival-predictions' }
-    }
+      realtime: { kind: 'arrival-predictions' },
+    },
   ],
   rollingStock: '/cities/london/data/rolling-stock.json',
   gtfs: {
     sourceUrl: 'https://tfl.gov.uk/tfl/syndication/feeds/journey-planner-timetables.zip',
-    agencyFilter: ['Transport for London', 'London Underground', 'Docklands Light Railway', 'Elizabeth line', 'London Overground', 'London Trams'],
+    agencyFilter: [
+      'Transport for London',
+      'London Underground',
+      'Docklands Light Railway',
+      'Elizabeth line',
+      'London Overground',
+      'London Trams',
+    ],
     routeTypes: [0, 1],
     scheduleModel: 'trip-based',
-    validityCheck: 'calendar'
+    validityCheck: 'calendar',
   },
   map: {
     center: [-0.1276, 51.5074],
@@ -174,26 +181,29 @@ export const londonConfig: CityConfig = {
     bearing: 0,
     minZoom: 9,
     maxZoom: 18,
-    bounds: [[-0.32, 51.44], [0.06, 51.58]]
+    bounds: [
+      [-0.32, 51.44],
+      [0.06, 51.58],
+    ],
   },
   realtime: {
     provider: 'tfl-unified',
     capability: { kind: 'arrival-predictions' },
     pollIntervalMs: 60000,
     endpoints: {
-      relay: '/api/tfl_arrivals'
-    }
+      relay: '/api/tfl_arrivals',
+    },
   },
   attribution: {
     operatorName: 'Transport for London (TfL)',
     datasetName: 'TfL Open Data / Journey Planner Timetables',
-    text: 'Powered by TfL Open Data · Rail geometry © Oliver O\'Brien / OpenStreetMap contributors (ODbL)',
+    text: "Powered by TfL Open Data · Rail geometry © Oliver O'Brien / OpenStreetMap contributors (ODbL)",
     licenseText: 'TfL Open Data Licence & ODbL',
     licenseUrl: 'https://tfl.gov.uk/info-for/open-data-users/our-open-data',
-    disclaimer: 'Projet indépendant, non affilié à Transport for London (TfL).'
+    disclaimer: 'Projet indépendant, non affilié à Transport for London (TfL).',
   },
   paths: {
     dataDir: '/cities/london/data',
-    modelsDir: '/models/train'
-  }
+    modelsDir: '/models/train',
+  },
 };

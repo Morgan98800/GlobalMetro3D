@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeWashingtonSnapshot,
   SNAPSHOT_TIMESTAMP_ISO_WASHINGTON,
-  SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER
+  SNAPSHOT_TIMESTAMP_ISO_WASHINGTON_WINTER,
 } from './snapshot_generator';
 import { WashingtonMatcher } from '../cities/washington/rt/washington_matching';
 import type { WashingtonTripUpdate } from '../cities/washington/rt/types';
@@ -29,33 +29,44 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
     expect(snap.meta.trainsByLine['YELLOW']).toBe(9);
 
     // Équilibre par direction sur le réseau global
-    const dir0Count = snap.trains.filter(t => t.direction === 0).length;
-    const dir1Count = snap.trains.filter(t => t.direction === 1).length;
+    const dir0Count = snap.trains.filter((t) => t.direction === 0).length;
+    const dir1Count = snap.trains.filter((t) => t.direction === 1).length;
     expect(dir0Count).toBe(49);
     expect(dir1Count).toBe(48);
   });
 
   it('PORTE 5 §2 : Garantit que la livraison de chaque ligne ne déplace aucune rame des lignes antérieures', () => {
     // Vérification de non-régression stricte sur la Ligne Red
-    const frozenRedFixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'tests/fixtures/washington-snapshot.json'), 'utf8'));
+    const frozenRedFixture = JSON.parse(
+      fs.readFileSync(path.join(ROOT, 'tests/fixtures/washington-snapshot.json'), 'utf8')
+    );
     const expectedRedTrains = frozenRedFixture.trains.filter((t: any) => t.line === 'RED');
     expect(expectedRedTrains).toHaveLength(26);
 
     const currentSnapshot = computeWashingtonSnapshot(ROOT, SNAPSHOT_TIMESTAMP_ISO_WASHINGTON);
-    const currentRedTrains = currentSnapshot.trains.filter(t => t.line === 'RED');
+    const currentRedTrains = currentSnapshot.trains.filter((t) => t.line === 'RED');
     expect(currentRedTrains).toHaveLength(26);
 
     const expectedMap = new Map(expectedRedTrains.map((t: any) => [t.tripId, t]));
 
     for (const train of currentRedTrains) {
       const expected = expectedMap.get(train.tripId) as any;
-      expect(expected, `Train Red ${train.tripId} doit exister dans le snapshot de référence`).toBeDefined();
+      expect(
+        expected,
+        `Train Red ${train.tripId} doit exister dans le snapshot de référence`
+      ).toBeDefined();
 
       const distDelta = Math.abs(train.currentDistM - expected.currentDistM);
       const speedDelta = Math.abs(train.speedMps - expected.speedMps);
 
-      expect(distDelta, `Déplacement interdit sur la rame ${train.tripId}: ${distDelta}m`).toBeLessThanOrEqual(0.001);
-      expect(speedDelta, `Écart de vitesse interdit sur la rame ${train.tripId}: ${speedDelta}m/s`).toBeLessThanOrEqual(0.001);
+      expect(
+        distDelta,
+        `Déplacement interdit sur la rame ${train.tripId}: ${distDelta}m`
+      ).toBeLessThanOrEqual(0.001);
+      expect(
+        speedDelta,
+        `Écart de vitesse interdit sur la rame ${train.tripId}: ${speedDelta}m/s`
+      ).toBeLessThanOrEqual(0.001);
       expect(train.pos[0]).toBeCloseTo(expected.pos[0], 6);
       expect(train.pos[1]).toBeCloseTo(expected.pos[1], 6);
     }
@@ -66,9 +77,10 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
 
     // Coordonnées approximatives du tronc commun Rosslyn (-77.070) à Stadium-Armory (-76.977)
     // et latitude 38.885 à 38.905
-    const trunkTrains = snap.trains.filter(t => {
+    const trunkTrains = snap.trains.filter((t) => {
       const isOSB = ['ORANGE', 'SILVER', 'BLUE'].includes(t.line);
-      const inTrunkArea = t.pos[0] >= -77.08 && t.pos[0] <= -76.97 && t.pos[1] >= 38.88 && t.pos[1] <= 38.91;
+      const inTrunkArea =
+        t.pos[0] >= -77.08 && t.pos[0] <= -76.97 && t.pos[1] >= 38.88 && t.pos[1] <= 38.91;
       return isOSB && inTrunkArea;
     });
 
@@ -97,12 +109,13 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
     }
   });
 
-  it('PORTE 5 §4 : Tronc commun Green / Yellow (L\'Enfant Plaza ↔ Mt Vernon Sq) : aucune superposition de rames hors station', () => {
+  it("PORTE 5 §4 : Tronc commun Green / Yellow (L'Enfant Plaza ↔ Mt Vernon Sq) : aucune superposition de rames hors station", () => {
     const snap = computeWashingtonSnapshot(ROOT, SNAPSHOT_TIMESTAMP_ISO_WASHINGTON);
 
-    const trunkGYTrains = snap.trains.filter(t => {
+    const trunkGYTrains = snap.trains.filter((t) => {
       const isGY = ['GREEN', 'YELLOW'].includes(t.line);
-      const inTrunkArea = t.pos[0] >= -77.03 && t.pos[0] <= -77.01 && t.pos[1] >= 38.88 && t.pos[1] <= 38.91;
+      const inTrunkArea =
+        t.pos[0] >= -77.03 && t.pos[0] <= -77.01 && t.pos[1] >= 38.88 && t.pos[1] <= 38.91;
       return isGY && inTrunkArea;
     });
 
@@ -129,7 +142,7 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
     }
   });
 
-  it('PORTE 5 §5 : Taux d\'appariement du moteur temps réel sur chaque ligne individuelle (>= 80%)', () => {
+  it("PORTE 5 §5 : Taux d'appariement du moteur temps réel sur chaque ligne individuelle (>= 80%)", () => {
     const matcher = new WashingtonMatcher({ matchWindowSec: 120, maxDelaySec: 900 });
 
     const lines = ['RED', 'ORANGE', 'SILVER', 'BLUE', 'GREEN', 'YELLOW'];
@@ -150,22 +163,22 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
           trip: {
             tripId,
             routeId: lineId,
-            directionId: t[2]
+            directionId: t[2],
           },
           stopTimeUpdates: [
             {
               stopSequence: 1,
               stopId: sched.stations[firstStop[3]],
-              departure: { time: depSec }
+              departure: { time: depSec },
             },
             {
               stopSequence: 2,
               stopId: sched.stations[stops[1][3]],
               arrival: { time: stops[1][0] },
-              departure: { time: stops[1][1] }
-            }
+              departure: { time: stops[1][1] },
+            },
           ],
-          delay: 0
+          delay: 0,
         };
       });
 
@@ -176,7 +189,7 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
         shapeId: t[3],
         t0: t[4],
         t1: t[5],
-        stops: []
+        stops: [],
       }));
 
       const outcome = matcher.match(sampleUpdates, activeTrips, 30600, lineId);
@@ -198,10 +211,16 @@ describe('Washington DC (WMATA Metrorail) — PORTE 5 : Les six lignes et tronç
 
       // Contrôle de lisibilité
       if (['YELLOW', 'SILVER', 'ORANGE'].includes(line.id)) {
-        expect(fg.toUpperCase(), `La ligne ${line.id} (${bg}) sur fond clair doit avoir un texte sombre`).toBe('#000000');
+        expect(
+          fg.toUpperCase(),
+          `La ligne ${line.id} (${bg}) sur fond clair doit avoir un texte sombre`
+        ).toBe('#000000');
       }
       if (['RED', 'BLUE', 'GREEN'].includes(line.id)) {
-        expect(fg.toUpperCase(), `La ligne ${line.id} (${bg}) sur fond foncé doit avoir un texte clair`).toBe('#FFFFFF');
+        expect(
+          fg.toUpperCase(),
+          `La ligne ${line.id} (${bg}) sur fond foncé doit avoir un texte clair`
+        ).toBe('#FFFFFF');
       }
 
       // La couleur de lines.json doit correspondre à textColorFor

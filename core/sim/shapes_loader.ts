@@ -60,9 +60,7 @@ export function resetShapesCache(): void {
 
 export function decodeShapes(buffer: ArrayBuffer): ShapeIndex {
   const view = new DataView(buffer);
-  return view.getUint32(0, false) === MAGIC_V2
-    ? decodeV2(buffer)
-    : decodeV1(buffer);
+  return view.getUint32(0, false) === MAGIC_V2 ? decodeV2(buffer) : decodeV1(buffer);
 }
 
 /* -------------------------------------------------------------------------
@@ -126,7 +124,7 @@ function decodeV2(buffer: ArrayBuffer): ShapeIndex {
       dist,
       length: dist[pointCount - 1],
       totalLengthM: dist[pointCount - 1],
-      ptCount: pointCount
+      ptCount: pointCount,
     });
   }
 
@@ -174,7 +172,7 @@ function decodeV1(buffer: ArrayBuffer): ShapeIndex {
         dist,
         length: dist[ptCount - 1] || 0,
         totalLengthM: dist[ptCount - 1] || 0,
-        ptCount
+        ptCount,
       });
     }
     return shapes;
@@ -254,11 +252,7 @@ export function coordAtDistance(shape: Shape, d: number): [number, number] {
  * Tranche de tracé entre deux distances — brique de base du rendu en capsule.
  * Tronque proprement aux extrémités.
  */
-export function sliceShape(
-  shape: Shape,
-  dStart: number,
-  dEnd: number
-): [number, number][] {
+export function sliceShape(shape: Shape, dStart: number, dEnd: number): [number, number][] {
   const isReverse = dStart > dEnd;
   const minD = Math.min(dStart, dEnd);
   const maxD = Math.max(dStart, dEnd);
@@ -319,4 +313,3 @@ export function splitIntoCars(
 
   return cars;
 }
-

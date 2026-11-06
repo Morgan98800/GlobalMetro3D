@@ -7,7 +7,7 @@ import type {
   BerlinTripDescriptor,
   BerlinTripUpdate,
   BerlinSnapshot,
-  BerlinStats
+  BerlinStats,
 } from '../../cities/berlin/rt/types';
 
 export type {
@@ -16,12 +16,13 @@ export type {
   BerlinTripDescriptor,
   BerlinTripUpdate,
   BerlinSnapshot,
-  BerlinStats
+  BerlinStats,
 };
 
 export const CACHE_TTL_SEC = 15; // [verified: false] netlify CDN and in-memory TTL (15s)
 export const VBB_FEED_URL = 'https://production.gtfsrt.vbb.de/data';
-export const USER_AGENT_CONTACT = 'ParisSubway3D/1.0 (+https://github.com/morgancanteri/paris-subway-3d; morgan.canteri@gmail.com)';
+export const USER_AGENT_CONTACT =
+  'ParisSubway3D/1.0 (+https://github.com/morgancanteri/paris-subway-3d; morgan.canteri@gmail.com)';
 
 /**
  * Identifiants officiels des 9 lignes U-Bahn dans le GTFS VBB standard (route_type = 400).
@@ -38,7 +39,7 @@ export const ALLOWED_UBAHN_ROUTES = new Set([
   '17521_400',
   '17523_400',
   '17525_400',
-  '17526_400'
+  '17526_400',
 ]);
 
 export function isUbahnRoute(routeId: string): boolean {
@@ -98,7 +99,7 @@ function readTripDescriptor(pbf: any, end: number): BerlinTripDescriptor {
     routeId: td.routeId || '',
     directionId: td.directionId,
     startTime: td.startTime,
-    startDate: td.startDate
+    startDate: td.startDate,
   };
 }
 
@@ -115,13 +116,14 @@ function readTripUpdate(
     stopTimeUpdates: [] as BerlinStopTimeUpdate[],
     timestamp: undefined as number | undefined,
     delay: undefined as number | undefined,
-    trip: undefined as BerlinTripDescriptor | undefined
+    trip: undefined as BerlinTripDescriptor | undefined,
   };
   while (pbf.pos < end) {
     const val = pbf.readVarint();
     const tag = val >> 3;
     if (tag === 1) tu.trip = readTripDescriptor(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 2) tu.stopTimeUpdates.push(readStopTimeUpdate(pbf, pbf.readVarint() + pbf.pos));
+    else if (tag === 2)
+      tu.stopTimeUpdates.push(readStopTimeUpdate(pbf, pbf.readVarint() + pbf.pos));
     else if (tag === 4) tu.timestamp = pbf.readVarint();
     else if (tag === 5) tu.delay = pbf.readSVarint();
     else pbf.skip(val & 7);
@@ -161,7 +163,7 @@ export function decodeGtfsRealtimeFeed(buffer: Buffer): {
           trip: tripUpdateData.trip,
           timestamp: tripUpdateData.timestamp,
           delay: tripUpdateData.delay,
-          stopTimeUpdates: tripUpdateData.stopTimeUpdates
+          stopTimeUpdates: tripUpdateData.stopTimeUpdates,
         });
       }
     } else {
@@ -209,7 +211,7 @@ export async function defaultVbbFetcher(options: VbbFetchOptions): Promise<VbbFe
 
   const headers: Record<string, string> = {
     'User-Agent': userAgent,
-    Accept: 'application/x-protobuf, application/octet-stream, */*'
+    Accept: 'application/x-protobuf, application/octet-stream, */*',
   };
 
   if (options.etag) {
@@ -222,7 +224,7 @@ export async function defaultVbbFetcher(options: VbbFetchOptions): Promise<VbbFe
       {
         method: 'GET',
         headers,
-        timeout: 10000
+        timeout: 10000,
       },
       (res) => {
         const chunks: Buffer[] = [];
@@ -238,13 +240,13 @@ export async function defaultVbbFetcher(options: VbbFetchOptions): Promise<VbbFe
             resolve({
               statusCode: res.statusCode,
               data: Buffer.concat(chunks),
-              etag: resETag
+              etag: resETag,
             });
           } else {
             resolve({
               statusCode: res.statusCode || 500,
               etag: resETag,
-              error: `HTTP ${res.statusCode}`
+              error: `HTTP ${res.statusCode}`,
             });
           }
         });
@@ -287,7 +289,7 @@ export async function getOrFetchBerlinSnapshot(
       const res = await fetcher({
         feedUrl,
         etag: lastETag,
-        userAgent: USER_AGENT_CONTACT
+        userAgent: USER_AGENT_CONTACT,
       });
 
       // 304 Not Modified : les données n'ont pas changé chez VBB
@@ -297,7 +299,7 @@ export async function getOrFetchBerlinSnapshot(
           ...cachedSnapshot,
           producedAt: new Date(nowEpochMs).toISOString(),
           timestamp: nowEpochSec,
-          validUntil: nowEpochSec + CACHE_TTL_SEC
+          validUntil: nowEpochSec + CACHE_TTL_SEC,
         };
         cachedSnapshot = refreshedSnapshot;
         return refreshedSnapshot;
@@ -321,8 +323,8 @@ export async function getOrFetchBerlinSnapshot(
           stats: {
             totalEntitiesInFeed: totalEntities,
             retainedEntities: filteredUpdates.length,
-            uBahnCount: filteredUpdates.length
-          }
+            uBahnCount: filteredUpdates.length,
+          },
         };
 
         cachedSnapshot = snapshot;
@@ -336,10 +338,10 @@ export async function getOrFetchBerlinSnapshot(
       const errorMsg = isRateLimited
         ? 'VBB API Rate Limit exceeded (429)'
         : isForbidden
-        ? `VBB API Forbidden (${res.statusCode})`
-        : res.error
-        ? `${res.error} (${res.statusCode})`
-        : `HTTP ${res.statusCode}`;
+          ? `VBB API Forbidden (${res.statusCode})`
+          : res.error
+            ? `${res.error} (${res.statusCode})`
+            : `HTTP ${res.statusCode}`;
 
       const fallbackSnapshot: BerlinSnapshot = {
         producedAt: new Date(nowEpochMs).toISOString(),
@@ -350,7 +352,9 @@ export async function getOrFetchBerlinSnapshot(
         lastError: errorMsg,
         tripUpdates: cachedSnapshot ? cachedSnapshot.tripUpdates : [],
         trafficByLine: {},
-        stats: cachedSnapshot ? cachedSnapshot.stats : { totalEntitiesInFeed: 0, retainedEntities: 0, uBahnCount: 0 }
+        stats: cachedSnapshot
+          ? cachedSnapshot.stats
+          : { totalEntitiesInFeed: 0, retainedEntities: 0, uBahnCount: 0 },
       };
 
       cachedSnapshot = fallbackSnapshot;
@@ -366,7 +370,9 @@ export async function getOrFetchBerlinSnapshot(
         lastError: e.message || 'Fetch failed',
         tripUpdates: cachedSnapshot ? cachedSnapshot.tripUpdates : [],
         trafficByLine: {},
-        stats: cachedSnapshot ? cachedSnapshot.stats : { totalEntitiesInFeed: 0, retainedEntities: 0, uBahnCount: 0 }
+        stats: cachedSnapshot
+          ? cachedSnapshot.stats
+          : { totalEntitiesInFeed: 0, retainedEntities: 0, uBahnCount: 0 },
       };
 
       cachedSnapshot = errSnapshot;
@@ -389,12 +395,12 @@ export const handler = async () => {
     'Content-Type': 'application/json',
     'Cache-Control': `public, max-age=10, s-maxage=${CACHE_TTL_SEC}, stale-while-revalidate=5`,
     'Netlify-CDN-Cache-Control': `public, s-maxage=${CACHE_TTL_SEC}`,
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
   };
 
   return {
     statusCode: 200,
     headers,
-    body: JSON.stringify(snapshot)
+    body: JSON.stringify(snapshot),
   };
 };

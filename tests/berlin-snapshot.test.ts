@@ -5,7 +5,7 @@ import {
   computeBerlinSnapshot,
   SNAPSHOT_TIMESTAMP_ISO_BERLIN,
   SNAPSHOT_TIMESTAMP_ISO_BERLIN_NIGHT,
-  type BerlinSnapshotFixture
+  type BerlinSnapshotFixture,
 } from './snapshot_generator';
 
 const FIXTURE_PATH = path.resolve(__dirname, 'fixtures/berlin-snapshot.json');
@@ -17,11 +17,15 @@ describe('Berlin U-Bahn U8 Simulation Snapshot Safety Net', () => {
       const freshSnapshot = computeBerlinSnapshot(process.cwd(), SNAPSHOT_TIMESTAMP_ISO_BERLIN);
       fs.mkdirSync(path.dirname(FIXTURE_PATH), { recursive: true });
       fs.writeFileSync(FIXTURE_PATH, JSON.stringify(freshSnapshot, null, 2), 'utf8');
-      console.log(`[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`);
+      console.log(
+        `[fixture] Created new reference snapshot at ${FIXTURE_PATH} (${freshSnapshot.trains.length} trains)`
+      );
     }
 
     // 2. Load frozen reference fixture
-    const expectedFixture: BerlinSnapshotFixture = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
+    const expectedFixture: BerlinSnapshotFixture = JSON.parse(
+      fs.readFileSync(FIXTURE_PATH, 'utf8')
+    );
 
     // 3. Replay computation from engine and data at fixed CEST timestamp
     const computedSnapshot = computeBerlinSnapshot(process.cwd(), SNAPSHOT_TIMESTAMP_ISO_BERLIN);
@@ -31,11 +35,11 @@ describe('Berlin U-Bahn U8 Simulation Snapshot Safety Net', () => {
     expect(computedSnapshot.meta.totalTrains).toBe(computedSnapshot.trains.length);
 
     // 5. Compare U8 trains against frozen reference fixture (strict non-regression: zero displacement)
-    const expectedU8Trains = expectedFixture.trains.filter(t => t.line === 'U8');
-    const computedU8Trains = computedSnapshot.trains.filter(t => t.line === 'U8');
+    const expectedU8Trains = expectedFixture.trains.filter((t) => t.line === 'U8');
+    const computedU8Trains = computedSnapshot.trains.filter((t) => t.line === 'U8');
     expect(computedU8Trains).toHaveLength(expectedU8Trains.length);
     expect(computedSnapshot.meta.trainsByLine['U8']).toBe(expectedU8Trains.length);
-    const expectedMap = new Map(expectedU8Trains.map(t => [t.tripId, t]));
+    const expectedMap = new Map(expectedU8Trains.map((t) => [t.tripId, t]));
 
     let maxDistDeltaM = 0;
     let maxSpeedDeltaMps = 0;
@@ -51,8 +55,8 @@ describe('Berlin U-Bahn U8 Simulation Snapshot Safety Net', () => {
       // Verify Berlin area bounding box coordinates (13.25 to 13.50 lon, 52.40 to 52.65 lat)
       const [lon, lat] = computed.pos;
       expect(lon).toBeGreaterThanOrEqual(13.25);
-      expect(lon).toBeLessThanOrEqual(13.50);
-      expect(lat).toBeGreaterThanOrEqual(52.40);
+      expect(lon).toBeLessThanOrEqual(13.5);
+      expect(lat).toBeGreaterThanOrEqual(52.4);
       expect(lat).toBeLessThanOrEqual(52.65);
 
       // Speeds must be non-negative and <= max speed (70 km/h = 19.4 m/s + margin)
@@ -66,31 +70,41 @@ describe('Berlin U-Bahn U8 Simulation Snapshot Safety Net', () => {
       if (speedDeltaMps > maxSpeedDeltaMps) maxSpeedDeltaMps = speedDeltaMps;
 
       // Acceptance criterion: strictly reproduction within 1 meter
-      expect(distDeltaM, `Position of train ${computed.tripId} deviated by ${distDeltaM}m (> 1m limit)`).toBeLessThanOrEqual(1.0);
-      expect(speedDeltaMps, `Speed of train ${computed.tripId} deviated by ${speedDeltaMps} m/s`).toBeLessThanOrEqual(0.1);
+      expect(
+        distDeltaM,
+        `Position of train ${computed.tripId} deviated by ${distDeltaM}m (> 1m limit)`
+      ).toBeLessThanOrEqual(1.0);
+      expect(
+        speedDeltaMps,
+        `Speed of train ${computed.tripId} deviated by ${speedDeltaMps} m/s`
+      ).toBeLessThanOrEqual(0.1);
     }
 
-    console.log(`[berlin-test] U8 daytime snapshot passed: ${computedSnapshot.trains.length} trains, maxDistDelta: ${maxDistDeltaM.toFixed(2)}m, maxSpeedDelta: ${maxSpeedDeltaMps.toFixed(2)}m/s`);
+    console.log(
+      `[berlin-test] U8 daytime snapshot passed: ${computedSnapshot.trains.length} trains, maxDistDelta: ${maxDistDeltaM.toFixed(2)}m, maxSpeedDelta: ${maxSpeedDeltaMps.toFixed(2)}m/s`
+    );
   });
 
   it('covers weekend 24h night service with active trains at 03:00:00 CEST Saturday', () => {
     const nightSnapshot = computeBerlinSnapshot(process.cwd(), SNAPSHOT_TIMESTAMP_ISO_BERLIN_NIGHT);
-    
+
     // U-Bahn runs throughout the weekend night with 15-minute headway
     expect(nightSnapshot.trains.length).toBeGreaterThanOrEqual(2);
     expect(nightSnapshot.meta.trainsByLine['U8']).toBeGreaterThanOrEqual(2);
 
-    for (const train of nightSnapshot.trains.filter(t => t.line === 'U8')) {
+    for (const train of nightSnapshot.trains.filter((t) => t.line === 'U8')) {
       expect(train.line).toBe('U8');
       const [lon, lat] = train.pos;
       expect(lon).toBeGreaterThanOrEqual(13.25);
-      expect(lon).toBeLessThanOrEqual(13.50);
-      expect(lat).toBeGreaterThanOrEqual(52.40);
+      expect(lon).toBeLessThanOrEqual(13.5);
+      expect(lat).toBeGreaterThanOrEqual(52.4);
       expect(lat).toBeLessThanOrEqual(52.65);
       expect(train.speedMps).toBeGreaterThanOrEqual(0);
       expect(train.speedMps).toBeLessThanOrEqual(21.0);
     }
 
-    console.log(`[berlin-test] U8 weekend night snapshot passed: ${nightSnapshot.trains.length} trains active at 03:00 CEST Saturday`);
+    console.log(
+      `[berlin-test] U8 weekend night snapshot passed: ${nightSnapshot.trains.length} trains active at 03:00 CEST Saturday`
+    );
   });
 });

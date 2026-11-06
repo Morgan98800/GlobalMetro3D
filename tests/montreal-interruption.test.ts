@@ -11,26 +11,25 @@ const MONTREAL_DIR = path.resolve(process.cwd(), 'cities/montreal/data');
 
 describe('Montreal Realtime Interruption & Train Suppression Tests (Phase 5)', () => {
   const shapesBuf = fs.readFileSync(path.join(MONTREAL_DIR, 'shapes.bin'));
-  const shapesMap = decodeShapes(shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength));
+  const shapesMap = decodeShapes(
+    shapesBuf.buffer.slice(shapesBuf.byteOffset, shapesBuf.byteOffset + shapesBuf.byteLength)
+  );
   const sched = JSON.parse(fs.readFileSync(path.join(MONTREAL_DIR, 'schedule.json'), 'utf8'));
   const lines = JSON.parse(fs.readFileSync(path.join(MONTREAL_DIR, 'lines.json'), 'utf8'));
   const stationNames: string[] = sched.stations;
 
-  const trips: TripData[] = sched.trips.map((t: any): TripData => ({
-    id: t[0],
-    line: t[1],
-    dir: (t[2] === 0 ? 0 : 1) as 0 | 1,
-    shapeId: t[3],
-    t0: t[4],
-    t1: t[5],
-    destName: stationNames[t[6]] || 'Terminus',
-    stops: t[7].map((s: any) => [
-      s[0],
-      s[1],
-      s[2],
-      stationNames[s[3]] || 'Station'
-    ])
-  }));
+  const trips: TripData[] = sched.trips.map(
+    (t: any): TripData => ({
+      id: t[0],
+      line: t[1],
+      dir: (t[2] === 0 ? 0 : 1) as 0 | 1,
+      shapeId: t[3],
+      t0: t[4],
+      t1: t[5],
+      destName: stationNames[t[6]] || 'Terminus',
+      stops: t[7].map((s: any) => [s[0], s[1], s[2], stationNames[s[3]] || 'Station']),
+    })
+  );
 
   const fixedDate = new Date('2026-09-15T08:30:00-04:00'); // Tuesday 08:30 EDT (Peak)
 
@@ -44,8 +43,10 @@ describe('Montreal Realtime Interruption & Train Suppression Tests (Phase 5)', (
       const lineTraffic = trafficByLine[trip.line];
       if (lineTraffic && lineTraffic.status === 'interrupted') {
         if (lineTraffic.closedStations && lineTraffic.closedStations.length > 0) {
-          const isInsideClosedSection = trip.stops.some(s =>
-            lineTraffic.closedStations!.some(cs => normalizeStopName(s[3]).includes(normalizeStopName(cs)))
+          const isInsideClosedSection = trip.stops.some((s) =>
+            lineTraffic.closedStations!.some((cs) =>
+              normalizeStopName(s[3]).includes(normalizeStopName(cs))
+            )
           );
           if (isInsideClosedSection) continue;
         } else {
@@ -94,8 +95,8 @@ describe('Montreal Realtime Interruption & Train Suppression Tests (Phase 5)', (
         severity: 'alert',
         title: 'Ligne 1 - Verte (Interruption de service)',
         message: 'Interruption complète du service sur la ligne verte.',
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);
@@ -120,8 +121,8 @@ describe('Montreal Realtime Interruption & Train Suppression Tests (Phase 5)', (
         title: 'Ligne 4 - Jaune (Interruption partielle)',
         message: 'Interruption entre Berri-UQAM et Jean-Drapeau.',
         updatedAt: new Date().toISOString(),
-        closedStations: ['Berri-UQAM', 'Jean-Drapeau']
-      }
+        closedStations: ['Berri-UQAM', 'Jean-Drapeau'],
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);
@@ -143,8 +144,8 @@ describe('Montreal Realtime Interruption & Train Suppression Tests (Phase 5)', (
         severity: 'warning',
         title: 'Ligne 2 - Orange (Ralentissement)',
         message: 'Ralentissement de service sur la ligne orange.',
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);

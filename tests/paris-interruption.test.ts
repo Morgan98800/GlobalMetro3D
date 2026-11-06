@@ -13,14 +13,24 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
   // 1. Load lines
   const linesJsonPath = path.resolve(DATA_DIR, 'lines.json');
   const lines: any[] = JSON.parse(fs.readFileSync(linesJsonPath, 'utf8'));
-  const linesMap = new Map(lines.map(l => [l.id, l]));
+  const linesMap = new Map(lines.map((l) => [l.id, l]));
 
   // 2. Load shapes (Metro + RER)
   const shapesMetroBuf = fs.readFileSync(path.resolve(DATA_DIR, 'shapes.bin'));
   const shapesRerBuf = fs.readFileSync(path.resolve(DATA_DIR, 'rer_shapes.bin'));
-  
-  const shapesMap = decodeShapes(shapesMetroBuf.buffer.slice(shapesMetroBuf.byteOffset, shapesMetroBuf.byteOffset + shapesMetroBuf.byteLength));
-  const shapesRerMap = decodeShapes(shapesRerBuf.buffer.slice(shapesRerBuf.byteOffset, shapesRerBuf.byteOffset + shapesRerBuf.byteLength));
+
+  const shapesMap = decodeShapes(
+    shapesMetroBuf.buffer.slice(
+      shapesMetroBuf.byteOffset,
+      shapesMetroBuf.byteOffset + shapesMetroBuf.byteLength
+    )
+  );
+  const shapesRerMap = decodeShapes(
+    shapesRerBuf.buffer.slice(
+      shapesRerBuf.byteOffset,
+      shapesRerBuf.byteOffset + shapesRerBuf.byteLength
+    )
+  );
   for (const [id, s] of shapesRerMap.entries()) {
     shapesMap.set(id, s);
   }
@@ -30,12 +40,16 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
   const schedRer = JSON.parse(fs.readFileSync(path.resolve(DATA_DIR, 'rer_schedule.json'), 'utf8'));
 
   const stationNames: string[] = [];
-  schedMetro.stations.forEach((name: string, i: number) => { stationNames[i] = name; });
-  schedRer.stations.forEach((name: string, i: number) => { stationNames[i] = name; });
+  schedMetro.stations.forEach((name: string, i: number) => {
+    stationNames[i] = name;
+  });
+  schedRer.stations.forEach((name: string, i: number) => {
+    stationNames[i] = name;
+  });
 
   const rawTrips: Array<{ trip: any; isRer: boolean }> = [
     ...schedMetro.trips.map((t: any) => ({ trip: t, isRer: false })),
-    ...schedRer.trips.map((t: any) => ({ trip: t, isRer: true }))
+    ...schedRer.trips.map((t: any) => ({ trip: t, isRer: true })),
   ];
 
   const trips: TripData[] = rawTrips.map(({ trip: t }) => {
@@ -44,7 +58,7 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
       s[0],
       s[1],
       s[2],
-      stationNames[s[3]] || 'Station'
+      stationNames[s[3]] || 'Station',
     ]);
     return {
       id: t[0],
@@ -54,7 +68,7 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
       t0: t[4],
       t1: t[5],
       destName,
-      stops
+      stops,
     };
   });
 
@@ -70,12 +84,13 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
       const lineTraffic = trafficByLine[trip.line];
       if (lineTraffic && lineTraffic.status === 'interrupted') {
         if (lineTraffic.closedStations && lineTraffic.closedStations.length > 0) {
-          const isInsideClosedSection = trip.stops.some(s => {
+          const isInsideClosedSection = trip.stops.some((s) => {
             const normStop = normalizeStopName(s[3]);
-            return lineTraffic.closedStations!.some(cs => {
+            return lineTraffic.closedStations!.some((cs) => {
               const normCs = normalizeStopName(cs);
               return (
-                (normStop.length >= 3 && normCs.length >= 3) &&
+                normStop.length >= 3 &&
+                normCs.length >= 3 &&
                 (normStop.includes(normCs) || normCs.includes(normStop))
               );
             });
@@ -132,9 +147,9 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
         status: 'interrupted',
         severity: 'alert',
         title: 'Ligne 1 (Interruption de service)',
-        message: 'Trafic interrompu sur l\'ensemble de la ligne 1.',
-        updatedAt: new Date().toISOString()
-      }
+        message: "Trafic interrompu sur l'ensemble de la ligne 1.",
+        updatedAt: new Date().toISOString(),
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);
@@ -153,9 +168,9 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
         status: 'interrupted',
         severity: 'alert',
         title: 'RER A (Interruption de service)',
-        message: 'Trafic interrompu sur l\'ensemble de la ligne RER A suite à incident caténaire.',
-        updatedAt: new Date().toISOString()
-      }
+        message: "Trafic interrompu sur l'ensemble de la ligne RER A suite à incident caténaire.",
+        updatedAt: new Date().toISOString(),
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);
@@ -174,8 +189,8 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
         title: 'RER A (Interruption partielle)',
         message: 'Trafic interrompu vers Poissy.',
         updatedAt: new Date().toISOString(),
-        closedStations: ['Poissy']
-      }
+        closedStations: ['Poissy'],
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);
@@ -197,8 +212,8 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
         title: 'Ligne 1 (Interruption partielle)',
         message: 'Trafic interrompu entre Châtelet et Nation.',
         updatedAt: new Date().toISOString(),
-        closedStations: ['Châtelet', 'Nation']
-      }
+        closedStations: ['Châtelet', 'Nation'],
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);
@@ -219,8 +234,8 @@ describe('Paris Realtime Interruption & Train Suppression Tests (Phase 6)', () =
         severity: 'warning',
         title: 'Ligne 14 (Trafic perturbé)',
         message: 'Trafic ralenti en raison de forte affluence.',
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     };
 
     const { trains, trainsByLine } = runSimulationWithTraffic(traffic);

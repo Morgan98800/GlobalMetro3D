@@ -63,9 +63,7 @@ export function serviceCandidates(
   timezone: string = 'Europe/Paris'
 ): ServiceCandidate[] {
   const { date, secondsSinceMidnight } = cityClock(now, timezone);
-  const candidates: ServiceCandidate[] = [
-    { serviceDate: date, seconds: secondsSinceMidnight },
-  ];
+  const candidates: ServiceCandidate[] = [{ serviceDate: date, seconds: secondsSinceMidnight }];
   if (secondsSinceMidnight < 5 * 3600) {
     candidates.push({
       serviceDate: shiftDate(date, -1, timezone),

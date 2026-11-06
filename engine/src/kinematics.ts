@@ -134,6 +134,6 @@ export function computeTripKinematics(
     next: nextStopId,
     dest: stops[stops.length - 1].stopId,
     conf: delaySeconds !== 0 ? 'rt' : 'sched',
-    stock
+    stock,
   };
 }

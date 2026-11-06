@@ -44,7 +44,13 @@ function closestPointOnPath(
     const vy = b[1] - a[1];
     const length = Math.hypot(vx, vy);
     if (length < 0.001) continue;
-    const t = Math.max(0, Math.min(1, ((targetMeters[0] - a[0]) * vx + (targetMeters[1] - a[1]) * vy) / (length * length)));
+    const t = Math.max(
+      0,
+      Math.min(
+        1,
+        ((targetMeters[0] - a[0]) * vx + (targetMeters[1] - a[1]) * vy) / (length * length)
+      )
+    );
     const point: [number, number] = [a[0] + vx * t, a[1] + vy * t];
     const distance = Math.hypot(targetMeters[0] - point[0], targetMeters[1] - point[1]);
     if (distance < bestDistance) {
@@ -66,7 +72,17 @@ function platformForStation(
   for (const path of paths) {
     const candidate = closestPointOnPath(station.coordinates, path);
     if (!candidate) continue;
-    if (!closest || Math.hypot(candidate.point[0] - project(station.coordinates, station.coordinates[1])[0], candidate.point[1] - project(station.coordinates, station.coordinates[1])[1]) < Math.hypot(closest.point[0] - project(station.coordinates, station.coordinates[1])[0], closest.point[1] - project(station.coordinates, station.coordinates[1])[1])) {
+    if (
+      !closest ||
+      Math.hypot(
+        candidate.point[0] - project(station.coordinates, station.coordinates[1])[0],
+        candidate.point[1] - project(station.coordinates, station.coordinates[1])[1]
+      ) <
+        Math.hypot(
+          closest.point[0] - project(station.coordinates, station.coordinates[1])[0],
+          closest.point[1] - project(station.coordinates, station.coordinates[1])[1]
+        )
+    ) {
       closest = candidate;
     }
   }
@@ -79,14 +95,30 @@ function platformForStation(
   const ny = tx;
   const center = closest.point;
   const corners: [number, number][] = [
-    [center[0] - tx * halfLength - nx * PLATFORM_WIDTH_M / 2, center[1] - ty * halfLength - ny * PLATFORM_WIDTH_M / 2],
-    [center[0] + tx * halfLength - nx * PLATFORM_WIDTH_M / 2, center[1] + ty * halfLength - ny * PLATFORM_WIDTH_M / 2],
-    [center[0] + tx * halfLength + nx * PLATFORM_WIDTH_M / 2, center[1] + ty * halfLength + ny * PLATFORM_WIDTH_M / 2],
-    [center[0] - tx * halfLength + nx * PLATFORM_WIDTH_M / 2, center[1] - ty * halfLength + ny * PLATFORM_WIDTH_M / 2]
+    [
+      center[0] - tx * halfLength - (nx * PLATFORM_WIDTH_M) / 2,
+      center[1] - ty * halfLength - (ny * PLATFORM_WIDTH_M) / 2,
+    ],
+    [
+      center[0] + tx * halfLength - (nx * PLATFORM_WIDTH_M) / 2,
+      center[1] + ty * halfLength - (ny * PLATFORM_WIDTH_M) / 2,
+    ],
+    [
+      center[0] + tx * halfLength + (nx * PLATFORM_WIDTH_M) / 2,
+      center[1] + ty * halfLength + (ny * PLATFORM_WIDTH_M) / 2,
+    ],
+    [
+      center[0] - tx * halfLength + (nx * PLATFORM_WIDTH_M) / 2,
+      center[1] - ty * halfLength + (ny * PLATFORM_WIDTH_M) / 2,
+    ],
   ];
   const polygon = corners.map((corner) => {
     const [longitude, latitude] = unproject(corner, station.coordinates[1]);
-    return [longitude, latitude, line.elevation_offset + PLATFORM_HEIGHT_M] as [number, number, number];
+    return [longitude, latitude, line.elevation_offset + PLATFORM_HEIGHT_M] as [
+      number,
+      number,
+      number,
+    ];
   });
   return { polygon, lineId: line.id, stationId: station.id };
 }
@@ -118,11 +150,11 @@ export function createPlatformsLayer(
       ambient: 0.65,
       diffuse: 0.45,
       shininess: 8,
-      specularColor: [80, 76, 70]
+      specularColor: [80, 76, 70],
     },
     parameters: { depthTest: false, depthWriteEnabled: false } as any,
     updateTriggers: {
-      getPolygon: [line.id, zoom]
-    }
+      getPolygon: [line.id, zoom],
+    },
   });
 }

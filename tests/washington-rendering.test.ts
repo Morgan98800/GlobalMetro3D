@@ -42,7 +42,7 @@ describe('Washington DC (WMATA Metrorail) — Phase 4 Rendu & Matériel Roulant'
     it('vérifie que wmata_generic__neutral.glb existe et pèse strictement moins de 15 Ko', () => {
       const glbPaths = [
         path.join(ASSETS_DIR, 'wmata_generic__neutral.glb'),
-        path.join(PUBLIC_MODELS_DIR, 'wmata_generic__neutral.glb')
+        path.join(PUBLIC_MODELS_DIR, 'wmata_generic__neutral.glb'),
       ];
 
       for (const glbPath of glbPaths) {
@@ -65,14 +65,14 @@ describe('Washington DC (WMATA Metrorail) — Phase 4 Rendu & Matériel Roulant'
       const version = buffer.readUInt32LE(4);
       const totalLength = buffer.readUInt32LE(8);
 
-      expect(magic).toBe(0x46546C67);
+      expect(magic).toBe(0x46546c67);
       expect(version).toBe(2);
       expect(totalLength).toBe(buffer.length);
 
       // JSON chunk (chunkType = 0x4E4F534A 'JSON')
       const jsonChunkLength = buffer.readUInt32LE(12);
       const jsonChunkType = buffer.readUInt32LE(16);
-      expect(jsonChunkType).toBe(0x4E4F534A);
+      expect(jsonChunkType).toBe(0x4e4f534a);
 
       const jsonText = buffer.toString('utf8', 20, 20 + jsonChunkLength);
       const gltf = JSON.parse(jsonText);

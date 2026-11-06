@@ -7,7 +7,7 @@ import type {
   IleviaTripDescriptor,
   IleviaTripUpdate,
   IleviaSnapshot,
-  IleviaStats
+  IleviaStats,
 } from '../../cities/lille/rt/types';
 
 export type {
@@ -16,7 +16,7 @@ export type {
   IleviaTripDescriptor,
   IleviaTripUpdate,
   IleviaSnapshot,
-  IleviaStats
+  IleviaStats,
 };
 
 export const ALLOWED_ROUTE_IDS = new Set(['ME1', 'ME2', '71']);
@@ -70,17 +70,31 @@ function readTripDescriptor(pbf: any, end: number): IleviaTripDescriptor {
     routeId: td.routeId || '',
     directionId: td.directionId,
     startTime: td.startTime,
-    startDate: td.startDate
+    startDate: td.startDate,
   };
 }
 
-function readTripUpdate(pbf: any, end: number): { trip?: IleviaTripDescriptor; stopTimeUpdates: IleviaStopTimeUpdate[]; timestamp?: number; delay?: number } {
-  const tu = { stopTimeUpdates: [] as IleviaStopTimeUpdate[], timestamp: undefined as number | undefined, delay: undefined as number | undefined, trip: undefined as IleviaTripDescriptor | undefined };
+function readTripUpdate(
+  pbf: any,
+  end: number
+): {
+  trip?: IleviaTripDescriptor;
+  stopTimeUpdates: IleviaStopTimeUpdate[];
+  timestamp?: number;
+  delay?: number;
+} {
+  const tu = {
+    stopTimeUpdates: [] as IleviaStopTimeUpdate[],
+    timestamp: undefined as number | undefined,
+    delay: undefined as number | undefined,
+    trip: undefined as IleviaTripDescriptor | undefined,
+  };
   while (pbf.pos < end) {
     const val = pbf.readVarint();
     const tag = val >> 3;
     if (tag === 1) tu.trip = readTripDescriptor(pbf, pbf.readVarint() + pbf.pos);
-    else if (tag === 2) tu.stopTimeUpdates.push(readStopTimeUpdate(pbf, pbf.readVarint() + pbf.pos));
+    else if (tag === 2)
+      tu.stopTimeUpdates.push(readStopTimeUpdate(pbf, pbf.readVarint() + pbf.pos));
     else if (tag === 4) tu.timestamp = pbf.readVarint();
     else if (tag === 5) tu.delay = pbf.readSVarint();
     else pbf.skip(val & 7);
@@ -88,7 +102,10 @@ function readTripUpdate(pbf: any, end: number): { trip?: IleviaTripDescriptor; s
   return tu;
 }
 
-export function decodeGtfsRealtimeFeed(buffer: Buffer): { totalEntities: number; filteredUpdates: IleviaTripUpdate[] } {
+export function decodeGtfsRealtimeFeed(buffer: Buffer): {
+  totalEntities: number;
+  filteredUpdates: IleviaTripUpdate[];
+} {
   const pbf = new Pbf(buffer);
   let totalEntities = 0;
   const filteredUpdates: IleviaTripUpdate[] = [];
@@ -96,7 +113,8 @@ export function decodeGtfsRealtimeFeed(buffer: Buffer): { totalEntities: number;
   while (pbf.pos < pbf.length) {
     const val = pbf.readVarint();
     const tag = val >> 3;
-    if (tag === 2) { // FeedEntity
+    if (tag === 2) {
+      // FeedEntity
       totalEntities++;
       const end = pbf.readVarint() + pbf.pos;
       let entityId = '';
@@ -110,13 +128,17 @@ export function decodeGtfsRealtimeFeed(buffer: Buffer): { totalEntities: number;
         else pbf.skip(v2 & 7);
       }
 
-      if (tripUpdateData && tripUpdateData.trip && ALLOWED_ROUTE_IDS.has(tripUpdateData.trip.routeId)) {
+      if (
+        tripUpdateData &&
+        tripUpdateData.trip &&
+        ALLOWED_ROUTE_IDS.has(tripUpdateData.trip.routeId)
+      ) {
         filteredUpdates.push({
           id: entityId,
           trip: tripUpdateData.trip,
           timestamp: tripUpdateData.timestamp,
           delay: tripUpdateData.delay,
-          stopTimeUpdates: tripUpdateData.stopTimeUpdates
+          stopTimeUpdates: tripUpdateData.stopTimeUpdates,
         });
       }
     } else {
@@ -142,9 +164,9 @@ export async function fetchIleviaFeed(
         method: 'GET',
         headers: {
           'User-Agent': 'ParisSubway3D-LilleRelay/1.0',
-          Accept: 'application/x-protobuf, application/octet-stream, */*'
+          Accept: 'application/x-protobuf, application/octet-stream, */*',
         },
-        timeout: 10000
+        timeout: 10000,
       },
       (res) => {
         const chunks: Buffer[] = [];
@@ -155,7 +177,7 @@ export async function fetchIleviaFeed(
           } else {
             resolve({
               statusCode: res.statusCode || 500,
-              error: `HTTP ${res.statusCode}`
+              error: `HTTP ${res.statusCode}`,
             });
           }
         });
@@ -183,7 +205,9 @@ export function resetLilleCache(): void {
 export async function getOrFetchIleviaSnapshot(
   feedUrl?: string,
   nowEpoch: number = Date.now(),
-  fetcher: (url?: string) => Promise<{ statusCode: number; data?: Buffer; error?: string }> = fetchIleviaFeed
+  fetcher: (
+    url?: string
+  ) => Promise<{ statusCode: number; data?: Buffer; error?: string }> = fetchIleviaFeed
 ): Promise<IleviaSnapshot> {
   if (cachedSnapshot && nowEpoch - lastFetchEpoch < CACHE_TTL_MS) {
     return cachedSnapshot;
@@ -193,7 +217,9 @@ export async function getOrFetchIleviaSnapshot(
   if (res.statusCode >= 200 && res.statusCode < 300 && res.data) {
     try {
       const { totalEntities, filteredUpdates } = decodeGtfsRealtimeFeed(res.data);
-      const metroCount = filteredUpdates.filter((u) => u.trip.routeId === 'ME1' || u.trip.routeId === 'ME2').length;
+      const metroCount = filteredUpdates.filter(
+        (u) => u.trip.routeId === 'ME1' || u.trip.routeId === 'ME2'
+      ).length;
       const tramCount = filteredUpdates.filter((u) => u.trip.routeId === '71').length;
 
       cachedSnapshot = {
@@ -209,8 +235,8 @@ export async function getOrFetchIleviaSnapshot(
           totalEntitiesInFeed: totalEntities,
           retainedEntities: filteredUpdates.length,
           metroCount,
-          tramCount
-        }
+          tramCount,
+        },
       };
       lastFetchEpoch = nowEpoch;
       return cachedSnapshot;
@@ -224,7 +250,7 @@ export async function getOrFetchIleviaSnapshot(
         lastError: `Protobuf decode error: ${e.message}`,
         tripUpdates: cachedSnapshot ? cachedSnapshot.tripUpdates : [],
         trafficByLine: {},
-        stats: { totalEntitiesInFeed: 0, retainedEntities: 0, metroCount: 0, tramCount: 0 }
+        stats: { totalEntitiesInFeed: 0, retainedEntities: 0, metroCount: 0, tramCount: 0 },
       };
       return errSnapshot;
     }
@@ -239,7 +265,7 @@ export async function getOrFetchIleviaSnapshot(
     lastError: res.error || 'Network error',
     tripUpdates: cachedSnapshot ? cachedSnapshot.tripUpdates : [],
     trafficByLine: {},
-    stats: { totalEntitiesInFeed: 0, retainedEntities: 0, metroCount: 0, tramCount: 0 }
+    stats: { totalEntitiesInFeed: 0, retainedEntities: 0, metroCount: 0, tramCount: 0 },
   };
 }
 
@@ -250,8 +276,8 @@ export const handler = async () => {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'public, max-age=15, s-maxage=30',
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
     },
-    body: JSON.stringify(snapshot)
+    body: JSON.stringify(snapshot),
   };
 };

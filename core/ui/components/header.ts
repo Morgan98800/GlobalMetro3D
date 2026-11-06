@@ -1,5 +1,10 @@
 import { DateTime } from 'luxon';
-import type { CityAttribution, RealtimeCapability, RealtimeProvider, ScheduleModel } from '@core/config';
+import type {
+  CityAttribution,
+  RealtimeCapability,
+  RealtimeProvider,
+  ScheduleModel,
+} from '@core/config';
 import { escapeHtml } from '../utils';
 
 export interface CityItem {
@@ -39,7 +44,7 @@ const LED_MATRICES: Record<string, string[]> = {
   '7': ['11111', '00001', '00010', '00100', '01000', '01000', '01000'],
   '8': ['01110', '10001', '10001', '01110', '10001', '10001', '01110'],
   '9': ['01110', '10001', '10001', '01111', '00001', '00010', '01100'],
-  ':': ['00000', '00100', '00100', '00000', '00100', '00100', '00000']
+  ':': ['00000', '00100', '00100', '00000', '00100', '00100', '00000'],
 };
 
 function renderLedClock(value: string, scale = 5): string {
@@ -58,7 +63,9 @@ function renderLedClock(value: string, scale = 5): string {
     matrix.forEach((row, y) => {
       [...row].forEach((enabled, x) => {
         if (enabled === '1') {
-          dots.push(`<circle cx="${offsetX + x * gap + gap / 2}" cy="${y * gap + gap / 2}" r="${dotRadius}"/>`);
+          dots.push(
+            `<circle cx="${offsetX + x * gap + gap / 2}" cy="${y * gap + gap / 2}" r="${dotRadius}"/>`
+          );
         }
       });
     });
@@ -108,7 +115,10 @@ export class TopBar {
     this.citiesDropdownTrigger.className = 'topbar__city-btn';
     this.citiesDropdownTrigger.setAttribute('aria-haspopup', 'true');
     this.citiesDropdownTrigger.setAttribute('aria-expanded', 'false');
-    this.citiesDropdownTrigger.setAttribute('aria-label', `Choisir une ville (actuellement : ${this.displayName})`);
+    this.citiesDropdownTrigger.setAttribute(
+      'aria-label',
+      `Choisir une ville (actuellement : ${this.displayName})`
+    );
 
     const triggerMark = `
       <svg class="topbar__mark" viewBox="0 0 24 24" aria-hidden="true">
@@ -124,7 +134,9 @@ export class TopBar {
     `;
 
     this.citiesDropdownTrigger.innerHTML = `${triggerMark}<span class="topbar__city-name">${escapeHtml(this.displayName.toLowerCase())}</span>${chevronSvg}`;
-    this.citiesDropdownNameEl = this.citiesDropdownTrigger.querySelector('.topbar__city-name') as HTMLElement;
+    this.citiesDropdownNameEl = this.citiesDropdownTrigger.querySelector(
+      '.topbar__city-name'
+    ) as HTMLElement;
 
     this.citiesDropdownMenu = document.createElement('ul');
     this.citiesDropdownMenu.className = 'topbar__dropdown-menu topbar__cities-menu';
@@ -134,10 +146,10 @@ export class TopBar {
     const cities = this.options.cities || [
       { id: 'paris', slug: 'paris', displayName: 'paris' },
       { id: 'montreal', slug: 'montreal', displayName: 'montréal' },
-      { id: 'london', slug: 'londres', displayName: 'londres' }
+      { id: 'london', slug: 'londres', displayName: 'londres' },
     ];
 
-    cities.forEach(city => {
+    cities.forEach((city) => {
       const li = document.createElement('li');
       li.style.display = 'contents';
       li.setAttribute('role', 'none');
@@ -220,14 +232,16 @@ export class TopBar {
     // Distance totale
     this.distanceEl = document.createElement('span');
     this.distanceEl.className = 'topbar__distance';
-    this.distanceEl.title = 'Distance cumulée calculée sur les horaires théoriques GTFS depuis le début du service.';
+    this.distanceEl.title =
+      'Distance cumulée calculée sur les horaires théoriques GTFS depuis le début du service.';
     this.distanceEl.textContent = '0,0 km · depuis le début du service';
 
     // Bloc 4: Statut temps réel discret (point 6px sans texte au repos, texte visible si live ou erreur)
     this.rtStatusEl = document.createElement('div');
     this.rtStatusEl.className = 'rt-status';
     this.rtStatusEl.dataset.state = 'standby';
-    this.rtStatusEl.title = 'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
+    this.rtStatusEl.title =
+      'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
 
     this.rtLabelEl = document.createElement('span');
     this.rtLabelEl.className = 'rt-status__label';
@@ -314,7 +328,9 @@ export class TopBar {
       </button>
     `;
 
-    this.buildingsBtn = this.dropdownMenu.querySelector('#menu-item-buildings') as HTMLButtonElement;
+    this.buildingsBtn = this.dropdownMenu.querySelector(
+      '#menu-item-buildings'
+    ) as HTMLButtonElement;
     this.themeBtn = this.dropdownMenu.querySelector('#menu-item-theme') as HTMLButtonElement;
     this.syncThemeState();
 
@@ -391,9 +407,12 @@ export class TopBar {
       this.citiesDropdownNameEl.textContent = displayName.toLowerCase();
     }
     if (this.citiesDropdownTrigger) {
-      this.citiesDropdownTrigger.setAttribute('aria-label', `Choisir une ville (actuellement : ${displayName})`);
+      this.citiesDropdownTrigger.setAttribute(
+        'aria-label',
+        `Choisir une ville (actuellement : ${displayName})`
+      );
     }
-    this.citiesDropdownMenu.querySelectorAll('.topbar__menu-item').forEach(btn => {
+    this.citiesDropdownMenu.querySelectorAll('.topbar__menu-item').forEach((btn) => {
       const el = btn as HTMLAnchorElement;
       const isActive = el.dataset.cityId === cityId;
       el.classList.toggle('is-active', isActive);
@@ -415,12 +434,14 @@ export class TopBar {
     const dt = DateTime.fromJSDate(now).setZone(this.timezone);
     const hour = dt.toFormat('HH');
     const minute = dt.toFormat('mm');
-    const requestedTestValue = typeof window !== 'undefined'
-      ? new URLSearchParams(window.location.search).get('clockTest')
-      : null;
-    const value = requestedTestValue && /^[0-9]{2}:[0-9]{2}$/.test(requestedTestValue)
-      ? requestedTestValue
-      : `${hour}:${minute}`;
+    const requestedTestValue =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('clockTest')
+        : null;
+    const value =
+      requestedTestValue && /^[0-9]{2}:[0-9]{2}$/.test(requestedTestValue)
+        ? requestedTestValue
+        : `${hour}:${minute}`;
     this.clockEl.dateTime = now.toISOString();
     this.clockEl.setAttribute('aria-label', `Heure de ${this.displayName} : ${value}`);
     this.clockEl.innerHTML = renderLedClock(value);
@@ -497,7 +518,9 @@ export class TopBar {
     if (this.options.realtimeProvider === 'none') {
       this.rtStatusEl.dataset.state = 'standby';
       this.rtLabelEl.textContent = 'cadence théorique';
-      const op = this.options.attribution?.operatorName ? ` (${this.options.attribution.operatorName})` : '';
+      const op = this.options.attribution?.operatorName
+        ? ` (${this.options.attribution.operatorName})`
+        : '';
       this.rtStatusEl.title = `Cadence théorique · intervalle nominal calculé sur la grille officielle GTFS${op}.`;
       return;
     }
@@ -510,17 +533,26 @@ export class TopBar {
     // Dominant disruption priority across all providers
     if (interrupted) {
       this.rtStatusEl.dataset.state = 'error';
-      const lineName = interrupted.lineName || String(interrupted.lineId).replace(/^IDFM:C0?/, '').replace(/^IDFM:/, '');
+      const lineName =
+        interrupted.lineName ||
+        String(interrupted.lineId)
+          .replace(/^IDFM:C0?/, '')
+          .replace(/^IDFM:/, '');
       const isRer = ['A', 'B', 'C', 'D', 'E'].includes(lineName);
       const prefix = isRer ? 'RER ' : 'Ligne ';
       const suffix = isRer ? 'interrompu' : 'interrompue';
       this.rtLabelEl.textContent = `${prefix}${lineName} ${suffix}`;
-      this.rtStatusEl.title = interrupted.message || interrupted.title || 'Interruption de service signalée.';
+      this.rtStatusEl.title =
+        interrupted.message || interrupted.title || 'Interruption de service signalée.';
       return;
     }
     if (disrupted) {
       this.rtStatusEl.dataset.state = 'warning';
-      const lineName = disrupted.lineName || String(disrupted.lineId).replace(/^IDFM:C0?/, '').replace(/^IDFM:/, '');
+      const lineName =
+        disrupted.lineName ||
+        String(disrupted.lineId)
+          .replace(/^IDFM:C0?/, '')
+          .replace(/^IDFM:/, '');
       const isRer = ['A', 'B', 'C', 'D', 'E'].includes(lineName);
       const prefix = isRer ? 'RER ' : 'Ligne ';
       const suffix = isRer ? 'perturbé' : 'perturbée';
@@ -542,13 +574,15 @@ export class TopBar {
         this.rtStatusEl.dataset.state = 'live';
         const timeStr = status.minutesAgo <= 1 ? "à l'instant" : `il y a ${status.minutesAgo} min`;
         this.rtLabelEl.textContent = `cadence théorique · service vérifié ${timeStr}`;
-        this.rtStatusEl.title = 'Cadence théorique STM · état du service vérifié en direct via l\'API i3 de la STM.';
+        this.rtStatusEl.title =
+          "Cadence théorique STM · état du service vérifié en direct via l'API i3 de la STM.";
         return;
       }
 
       this.rtStatusEl.dataset.state = 'standby';
       this.rtLabelEl.textContent = 'cadence théorique';
-      this.rtStatusEl.title = 'Cadence théorique · intervalle nominal calculé sur la grille officielle GTFS STM.';
+      this.rtStatusEl.title =
+        'Cadence théorique · intervalle nominal calculé sur la grille officielle GTFS STM.';
       return;
     }
 
@@ -557,30 +591,41 @@ export class TopBar {
       this.rtStatusEl.dataset.state = status;
       if (status === 'live') {
         this.rtLabelEl.textContent = 'recalé';
-        this.rtStatusEl.title = 'Suivi cinématique temps réel recalé sur les estimations PRIM (Île-de-France Mobilités).';
+        this.rtStatusEl.title =
+          'Suivi cinématique temps réel recalé sur les estimations PRIM (Île-de-France Mobilités).';
       } else if (status === 'error') {
         this.rtLabelEl.textContent = 'temps réel indisponible';
-        this.rtStatusEl.title = 'Service temps réel PRIM indisponible : repli sur les horaires théoriques GTFS.';
+        this.rtStatusEl.title =
+          'Service temps réel PRIM indisponible : repli sur les horaires théoriques GTFS.';
       } else {
         this.rtLabelEl.textContent = '';
-        this.rtStatusEl.title = 'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
+        this.rtStatusEl.title =
+          'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
       }
-    } else if (status && status.active && status.minutesAgo !== undefined && status.minutesAgo <= 10) {
+    } else if (
+      status &&
+      status.active &&
+      status.minutesAgo !== undefined &&
+      status.minutesAgo <= 10
+    ) {
       this.rtStatusEl.dataset.state = 'live';
       if (status.minutesAgo <= 1) {
-        this.rtLabelEl.textContent = 'recalé · à l\'instant';
+        this.rtLabelEl.textContent = "recalé · à l'instant";
       } else {
         this.rtLabelEl.textContent = `recalé · il y a ${status.minutesAgo} min`;
       }
-      this.rtStatusEl.title = 'Suivi cinématique temps réel recalé sur les estimations PRIM (Île-de-France Mobilités).';
+      this.rtStatusEl.title =
+        'Suivi cinématique temps réel recalé sur les estimations PRIM (Île-de-France Mobilités).';
     } else if (status && status.error) {
       this.rtStatusEl.dataset.state = 'error';
       this.rtLabelEl.textContent = 'temps réel indisponible';
-      this.rtStatusEl.title = 'Service temps réel PRIM indisponible : repli sur les horaires théoriques GTFS.';
+      this.rtStatusEl.title =
+        'Service temps réel PRIM indisponible : repli sur les horaires théoriques GTFS.';
     } else {
       this.rtStatusEl.dataset.state = 'standby';
       this.rtLabelEl.textContent = '';
-      this.rtStatusEl.title = 'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
+      this.rtStatusEl.title =
+        'Mode nominal : circulation calculée sur la grille horaire officielle GTFS.';
     }
   }
 }

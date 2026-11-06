@@ -1,5 +1,10 @@
 import type { LineTrafficReport } from '@core/types';
-import type { WashingtonSnapshot, WashingtonTripUpdate, WashingtonTrainUpdate, WashingtonStatus } from './types';
+import type {
+  WashingtonSnapshot,
+  WashingtonTripUpdate,
+  WashingtonTrainUpdate,
+  WashingtonStatus,
+} from './types';
 import { WashingtonMatcher, type WashingtonMatchOutcome } from './washington_matching';
 import type { SchedTrip } from '@core/rt/rt_matching';
 
@@ -24,7 +29,7 @@ export class WashingtonRealtimeClient {
     this.pollIntervalMs = pollIntervalMs;
     this.matcher = new WashingtonMatcher({
       matchWindowSec: 120,
-      maxDelaySec: 900
+      maxDelaySec: 900,
     });
   }
 
@@ -57,15 +62,19 @@ export class WashingtonRealtimeClient {
     currentCivilSeconds: number,
     filterRouteId: string = 'RED'
   ): WashingtonMatchOutcome {
-    const outcome = this.matcher.match(this.tripUpdates, activeTrips, currentCivilSeconds, filterRouteId);
+    const outcome = this.matcher.match(
+      this.tripUpdates,
+      activeTrips,
+      currentCivilSeconds,
+      filterRouteId
+    );
     this.lastOutcome = outcome;
     return outcome;
   }
 
   public getStatus(): WashingtonStatus {
-    const minutesAgo = this.lastUpdate !== null
-      ? Math.floor((Date.now() - this.lastUpdate) / 60000)
-      : undefined;
+    const minutesAgo =
+      this.lastUpdate !== null ? Math.floor((Date.now() - this.lastUpdate) / 60000) : undefined;
 
     return {
       active: this.isPolling,
@@ -81,7 +90,7 @@ export class WashingtonRealtimeClient {
       matchedCount: this.lastOutcome?.matchedCount,
       totalReceivedCount: this.lastOutcome?.receivedCount,
       discardedNonMonotonicCount: this.lastOutcome?.discardedNonMonotonicCount,
-      trainCount: this.trains.length
+      trainCount: this.trains.length,
     };
   }
 

@@ -19,9 +19,12 @@ const FAMILY_URLS = {
   rer_generic_B: '/models/train/rer_generic_B__neutral.glb',
   rer_generic_C: '/models/train/rer_generic_C__neutral.glb',
   rer_generic_D: '/models/train/rer_generic_D__neutral.glb',
-  rer_generic_E: '/models/train/rer_generic_E__neutral.glb'
+  rer_generic_E: '/models/train/rer_generic_E__neutral.glb',
 } as const;
-const MODEL_RENDER_POLICY: Record<TrainModelFamily, { heightMeasured: boolean; grazingCameraApproved: boolean }> = {
+const MODEL_RENDER_POLICY: Record<
+  TrainModelFamily,
+  { heightMeasured: boolean; grazingCameraApproved: boolean }
+> = {
   pneumatic_generic: { heightMeasured: false, grazingCameraApproved: true },
   steel_classic: { heightMeasured: false, grazingCameraApproved: true },
   wmata_generic: { heightMeasured: false, grazingCameraApproved: true },
@@ -29,7 +32,7 @@ const MODEL_RENDER_POLICY: Record<TrainModelFamily, { heightMeasured: boolean; g
   rer_generic_B: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_C: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_D: { heightMeasured: false, grazingCameraApproved: true },
-  rer_generic_E: { heightMeasured: false, grazingCameraApproved: true }
+  rer_generic_E: { heightMeasured: false, grazingCameraApproved: true },
 };
 
 type TrainModelFamily = keyof typeof FAMILY_URLS;
@@ -58,15 +61,39 @@ const parsedScenegraphs = new Map<TrainModelFamily, any>();
 const assetListeners = new Set<() => void>();
 const requestedFamilies = new Set<TrainModelFamily>();
 
-function familyForStock(stock: { drive_type: string; short_name: string; model_id?: string; car_length_m?: number }): TrainModelFamily {
+function familyForStock(stock: {
+  drive_type: string;
+  short_name: string;
+  model_id?: string;
+  car_length_m?: number;
+}): TrainModelFamily {
   if (
     stock.model_id?.startsWith('WMATA') ||
     (stock.car_length_m ?? 0) >= 20 ||
-    ['RED', 'ORANGE', 'SILVER', 'BLUE', 'GREEN', 'YELLOW', 'RD', 'OR', 'SV', 'BL', 'GR', 'YL'].includes(stock.short_name.toUpperCase())
+    [
+      'RED',
+      'ORANGE',
+      'SILVER',
+      'BLUE',
+      'GREEN',
+      'YELLOW',
+      'RD',
+      'OR',
+      'SV',
+      'BL',
+      'GR',
+      'YL',
+    ].includes(stock.short_name.toUpperCase())
   ) {
     return 'wmata_generic';
   }
-  if (stock.short_name === 'A' || stock.short_name === 'B' || stock.short_name === 'C' || stock.short_name === 'D' || stock.short_name === 'E') {
+  if (
+    stock.short_name === 'A' ||
+    stock.short_name === 'B' ||
+    stock.short_name === 'C' ||
+    stock.short_name === 'D' ||
+    stock.short_name === 'E'
+  ) {
     return `rer_generic_${stock.short_name}` as TrainModelFamily;
   }
   return stock.drive_type === 'tire' ? 'pneumatic_generic' : 'steel_classic';
@@ -91,17 +118,17 @@ function beginAssetLoad(family: TrainModelFamily): void {
   const controller = new AbortController();
   const timeout = globalThis.setTimeout(() => controller.abort(), LOAD_TIMEOUT_MS);
   fetch(FAMILY_URLS[family], { signal: controller.signal })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) throw new Error(`train model ${family}: HTTP ${response.status}`);
       return response.arrayBuffer();
     })
-    .then(buffer => parse(buffer, GLTFLoader))
-    .then(gltf => {
+    .then((buffer) => parse(buffer, GLTFLoader))
+    .then((gltf) => {
       parsedScenegraphs.set(family, gltf);
       assetStatus.set(family, 'ready');
       notifyAssetListeners();
     })
-    .catch(error => {
+    .catch((error) => {
       console.warn(`[train-models] ${family} unavailable; keeping capsules`, error);
       assetStatus.set(family, 'failed');
       notifyAssetListeners();
@@ -129,21 +156,30 @@ export function trainModelsEnabled(): boolean {
 }
 
 export function trainModelsReady(): boolean {
-  return [...assetStatus.values()].some(status => status === 'ready');
+  return [...assetStatus.values()].some((status) => status === 'ready');
 }
 
-
-function modelPosition(shape: ShapeEntry, tailDistance: number, headDistance: number, elevation: number): [number, number, number] {
+function modelPosition(
+  shape: ShapeEntry,
+  tailDistance: number,
+  headDistance: number,
+  elevation: number
+): [number, number, number] {
   const midpoint = (tailDistance + headDistance) / 2;
   const [longitude, latitude] = coordAtDistance(shape, midpoint);
   return [longitude, latitude, elevation];
 }
 
-function modelOrientation(shape: ShapeEntry, tailDistance: number, headDistance: number): readonly [number, number, number] {
+function modelOrientation(
+  shape: ShapeEntry,
+  tailDistance: number,
+  headDistance: number
+): readonly [number, number, number] {
   const tail = coordAtDistance(shape, tailDistance);
   const head = coordAtDistance(shape, headDistance);
-  const latitude = ((tail[1] + head[1]) / 2) * Math.PI / 180;
-  const compassBearing = Math.atan2((head[0] - tail[0]) * Math.cos(latitude), head[1] - tail[1]) * 180 / Math.PI;
+  const latitude = (((tail[1] + head[1]) / 2) * Math.PI) / 180;
+  const compassBearing =
+    (Math.atan2((head[0] - tail[0]) * Math.cos(latitude), head[1] - tail[1]) * 180) / Math.PI;
   const yaw = compassBearingToDeckYaw(compassBearing);
   // deck.gl 9.4.0 expects [pitch, yaw, roll]. The source cap is a compass
   // bearing; converting with 90 - cap puts it in deck.gl's mathematical yaw.
@@ -160,11 +196,18 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
     if (familyForStock(stock) !== family) continue;
     if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
       const [[west, south], [east, north]] = params.bounds;
-      if (train.pos[0] < west || train.pos[0] > east || train.pos[1] < south || train.pos[1] > north) continue;
+      if (
+        train.pos[0] < west ||
+        train.pos[0] > east ||
+        train.pos[1] < south ||
+        train.pos[1] > north
+      )
+        continue;
     }
     const trainDirection = (train.direction ?? 1) as 0 | 1;
-    const referenceDistance = (train.currentDistM ?? 0)
-      + (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
+    const referenceDistance =
+      (train.currentDistM ?? 0) +
+      (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
     const trainDir = (train.direction ?? 1) as 0 | 1;
     const carsForTrain = splitIntoCars(
       shape,
@@ -179,26 +222,28 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
       const car = carsForTrain[index];
       if (car.length < 2) continue;
       const spacingM = carCenterSpacingM(stock.car_length_m, stock.inter_car_gap_m);
-      const centerDistance = trainDir === 1
-        ? referenceDistance - index * spacingM - stock.car_length_m / 2
-        : referenceDistance + index * spacingM + stock.car_length_m / 2;
-      const bogieTailDistance = trainDir === 1
-        ? Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2))
-        : Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2));
-      const bogieHeadDistance = trainDir === 1
-        ? Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2))
-        : Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2));
+      const centerDistance =
+        trainDir === 1
+          ? referenceDistance - index * spacingM - stock.car_length_m / 2
+          : referenceDistance + index * spacingM + stock.car_length_m / 2;
+      const bogieTailDistance =
+        trainDir === 1
+          ? Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2))
+          : Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2));
+      const bogieHeadDistance =
+        trainDir === 1
+          ? Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2))
+          : Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2));
       cars.push({
         position: modelPosition(
           shape,
           bogieTailDistance,
           bogieHeadDistance,
-          (train.elevation || 0) + (params.elevationOffset?.lineId === train.line
-            ? params.elevationOffset.offset
-            : 0)
+          (train.elevation || 0) +
+            (params.elevationOffset?.lineId === train.line ? params.elevationOffset.offset : 0)
         ),
         orientation: modelOrientation(shape, bogieTailDistance, bogieHeadDistance),
-        train
+        train,
       });
     }
   }
@@ -211,7 +256,13 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
   for (const train of params.trains) {
     if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
       const [[west, south], [east, north]] = params.bounds;
-      if (train.pos[0] < west || train.pos[0] > east || train.pos[1] < south || train.pos[1] > north) continue;
+      if (
+        train.pos[0] < west ||
+        train.pos[0] > east ||
+        train.pos[1] < south ||
+        train.pos[1] > north
+      )
+        continue;
     }
     const stock = getRollingStockForLine(params.rollingStockDb, train.line || train.lineName);
     const family = familyForStock(stock);
@@ -229,28 +280,30 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
     const cars = buildFamilyCars(params, family);
     if (cars.length === 0) continue;
 
-    layers.push(new ScenegraphLayer<ModelCar>({
-      id: `subway-train-model-${family}`,
-      data: cars,
-      scenegraph: gltf,
-      getPosition: car => car.position,
-      getOrientation: car => car.orientation,
-      sizeScale: 1,
-      _lighting: 'pbr',
-      pickable: true,
-      parameters: { depthTest: false, depthWriteEnabled: false } as any,
-      onClick: (info: any) => {
-        if (info.object?.train && params.onClick) {
-          params.onClick(info.object.train);
-        }
-      },
-      onHover: (info: any) => {
-        if (params.onHover) {
-          params.onHover(info.object ? { ...info, object: info.object.train } : info);
-        }
-      },
-      onFirstDraw: () => undefined
-    }));
+    layers.push(
+      new ScenegraphLayer<ModelCar>({
+        id: `subway-train-model-${family}`,
+        data: cars,
+        scenegraph: gltf,
+        getPosition: (car) => car.position,
+        getOrientation: (car) => car.orientation,
+        sizeScale: 1,
+        _lighting: 'pbr',
+        pickable: true,
+        parameters: { depthTest: false, depthWriteEnabled: false } as any,
+        onClick: (info: any) => {
+          if (info.object?.train && params.onClick) {
+            params.onClick(info.object.train);
+          }
+        },
+        onHover: (info: any) => {
+          if (params.onHover) {
+            params.onHover(info.object ? { ...info, object: info.object.train } : info);
+          }
+        },
+        onFirstDraw: () => undefined,
+      })
+    );
   }
   return layers;
 }

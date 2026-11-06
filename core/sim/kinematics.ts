@@ -37,7 +37,6 @@ export function getSmoothedBearing(shape: Shape, distM: number, windowM: number 
   return calculateBearing(p1[0], p1[1], p2[0], p2[1]);
 }
 
-
 export interface TripData {
   id: string;
   line: string;
@@ -106,7 +105,7 @@ export function computeTripKinematics(
 
         if (tau < k) {
           // Acceleration phase
-          progress = 0.5 * (tau * tau) / (k * (1 - k));
+          progress = (0.5 * (tau * tau)) / (k * (1 - k));
           vMps = vCruise * (tau / k);
         } else if (tau <= 1 - k) {
           // Cruise phase
@@ -115,7 +114,7 @@ export function computeTripKinematics(
         } else {
           // Braking / deceleration phase
           const u = 1.0 - tau;
-          progress = 1.0 - 0.5 * (u * u) / (k * (1 - k));
+          progress = 1.0 - (0.5 * (u * u)) / (k * (1 - k));
           vMps = vCruise * (u / k);
         }
 
@@ -150,6 +149,6 @@ export function computeTripKinematics(
     conf: (delaySeconds !== 0 ? 'bracketed' : 'scheduled') as any,
     shapeId: trip.shapeId,
     currentDistM,
-    direction: (trip.dir === 0 ? 0 : 1) as 0 | 1
+    direction: (trip.dir === 0 ? 0 : 1) as 0 | 1,
   };
 }

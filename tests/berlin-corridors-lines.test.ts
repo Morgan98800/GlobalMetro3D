@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import {
   computeBerlinSnapshot,
   SNAPSHOT_TIMESTAMP_ISO_BERLIN,
-  SNAPSHOT_TIMESTAMP_ISO_BERLIN_NIGHT
+  SNAPSHOT_TIMESTAMP_ISO_BERLIN_NIGHT,
 } from './snapshot_generator';
 import { BerlinMatcher } from '../cities/berlin/rt/berlin_matching';
 import type { BerlinTripUpdate } from '../cities/berlin/rt/types';
@@ -52,13 +52,22 @@ describe('Berlin U-Bahn (BVG) — PORTE 5 : Les 9 lignes et tronçon partagé U1
 
     for (const train of currentU8Trains) {
       const expected = expectedMap.get(train.tripId) as any;
-      expect(expected, `Train U8 ${train.tripId} doit exister dans le snapshot de référence`).toBeDefined();
+      expect(
+        expected,
+        `Train U8 ${train.tripId} doit exister dans le snapshot de référence`
+      ).toBeDefined();
 
       const distDelta = Math.abs(train.currentDistM - expected.currentDistM);
       const speedDelta = Math.abs(train.speedMps - expected.speedMps);
 
-      expect(distDelta, `Déplacement interdit sur la rame ${train.tripId}: ${distDelta}m`).toBeLessThanOrEqual(0.001);
-      expect(speedDelta, `Écart de vitesse interdit sur la rame ${train.tripId}: ${speedDelta}m/s`).toBeLessThanOrEqual(0.001);
+      expect(
+        distDelta,
+        `Déplacement interdit sur la rame ${train.tripId}: ${distDelta}m`
+      ).toBeLessThanOrEqual(0.001);
+      expect(
+        speedDelta,
+        `Écart de vitesse interdit sur la rame ${train.tripId}: ${speedDelta}m/s`
+      ).toBeLessThanOrEqual(0.001);
       expect(train.pos[0]).toBeCloseTo(expected.pos[0], 6);
       expect(train.pos[1]).toBeCloseTo(expected.pos[1], 6);
     }
@@ -132,7 +141,13 @@ describe('Berlin U-Bahn (BVG) — PORTE 5 : Les 9 lignes et tronçon partagé U1
     const u6Trips = sched.trips.filter((t: any) => t[1] === 'U6');
 
     // Aucune course U6 ne doit desservir Alt-Tegel, Borsigwerke, Holzhauser Str., Otisstr. ni Scharnweberstr.
-    const closedStations = ['Alt-Tegel', 'Borsigwerke', 'Holzhauser Str.', 'Otisstr.', 'Scharnweberstr.'];
+    const closedStations = [
+      'Alt-Tegel',
+      'Borsigwerke',
+      'Holzhauser Str.',
+      'Otisstr.',
+      'Scharnweberstr.',
+    ];
 
     for (const t of u6Trips) {
       const stopNames = t[7].map((s: any) => stations[s[3]]);
@@ -181,22 +196,22 @@ describe('Berlin U-Bahn (BVG) — PORTE 5 : Les 9 lignes et tronçon partagé U1
           trip: {
             tripId,
             routeId: lineId,
-            directionId: t[2]
+            directionId: t[2],
           },
           stopTimeUpdates: [
             {
               stopSequence: 1,
               stopId: `stn_${stops[0][3]}`,
-              departure: { time: firstDep }
+              departure: { time: firstDep },
             },
             {
               stopSequence: 2,
               stopId: `stn_${stops[1][3]}`,
               arrival: { time: stops[1][0] },
-              departure: { time: stops[1][1] }
-            }
+              departure: { time: stops[1][1] },
+            },
           ],
-          delay: 0
+          delay: 0,
         };
       });
 
@@ -205,7 +220,7 @@ describe('Berlin U-Bahn (BVG) — PORTE 5 : Les 9 lignes et tronçon partagé U1
         lineId: t[1],
         dir: t[2] as 0 | 1,
         shapeId: t[3],
-        stops: []
+        stops: [],
       }));
 
       const outcome = matcher.match(sampleUpdates, activeTrips, 50400, lineId);

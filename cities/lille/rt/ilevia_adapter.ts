@@ -61,8 +61,8 @@ export class IleviaRealtimeAdapter implements RealtimeAdapter<IleviaStatus> {
               {
                 stopId: m.nextStationId,
                 aimed: stop.arr,
-                expected: ctx.civilSeconds + m.timeToNextStationS
-              }
+                expected: ctx.civilSeconds + m.timeToNextStationS,
+              },
             ]
           : [];
         ctx.timelines.set(tripId, buildTimeline(schedTrip, calls));

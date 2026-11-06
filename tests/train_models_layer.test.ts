@@ -39,13 +39,21 @@ describe('train_models_layer and RER specifications', () => {
       assert.equal(stock.car_length_m, 15.0);
       assert.equal(stock.total_length_m, 110.0);
 
-      const glbPath = path.resolve(import.meta.dirname, `../web/public/models/train/rer_generic_${letter}__neutral.glb`);
-      assert.ok(fs.existsSync(glbPath), `rer_generic_${letter}__neutral.glb must exist in web/public`);
+      const glbPath = path.resolve(
+        import.meta.dirname,
+        `../web/public/models/train/rer_generic_${letter}__neutral.glb`
+      );
+      assert.ok(
+        fs.existsSync(glbPath),
+        `rer_generic_${letter}__neutral.glb must exist in web/public`
+      );
     }
   });
 
   it('should validate follow camera zoom, smoothing, and RER line identification', async () => {
-    const { isRerTrain, getFollowZoom, getFollowSmoothingMs } = await import('@core/ui/map/follow_camera');
+    const { isRerTrain, getFollowZoom, getFollowSmoothingMs } = await import(
+      '@core/ui/map/follow_camera'
+    );
 
     const rerMarkerA = { line: 'IDFM:C01742', lineName: 'A' } as any;
     const rerMarkerE = { line: 'IDFM:C01729', lineName: 'E' } as any;

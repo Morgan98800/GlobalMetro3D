@@ -271,7 +271,7 @@ export function buildTimeline(
   }
 
   // écart connu par index d'arrêt, null si inconnu
-  const known: (number | null) = null as never;
+  const known: number | null = null as never;
   const offsets: (number | null)[] = trip.stops.map((s) => {
     const raw = measured.get(s.stopId);
     if (raw === undefined) return null;
@@ -284,9 +284,7 @@ export function buildTimeline(
     return raw;
   });
 
-  const measuredIdx = offsets
-    .map((o, i) => (o === null ? -1 : i))
-    .filter((i) => i >= 0);
+  const measuredIdx = offsets.map((o, i) => (o === null ? -1 : i)).filter((i) => i >= 0);
 
   const resolve = (i: number): number => {
     if (offsets[i] !== null) return offsets[i]!;

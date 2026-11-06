@@ -6,7 +6,7 @@ import type { Shape } from '@core/sim/shapes_loader';
  * Creates a synthetic linear or curved Shape with regular 10m steps.
  */
 function createSyntheticShape(lengthM: number, numPoints: number = 100): Shape {
-  const coords = new Float32Array((numPoints + 1) * 2);
+  const coords = new Float64Array((numPoints + 1) * 2);
   const dist = new Float32Array(numPoints + 1);
   for (let i = 0; i <= numPoints; i++) {
     const fraction = i / numPoints;

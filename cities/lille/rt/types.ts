@@ -19,6 +19,7 @@ export interface IleviaStopTimeUpdate {
   stopId?: string;
   arrival?: IleviaStopTimeEvent;
   departure?: IleviaStopTimeEvent;
+  scheduleRelationship?: number;
 }
 
 export interface IleviaTripUpdate {

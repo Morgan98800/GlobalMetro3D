@@ -447,7 +447,7 @@ export class BrowserSubwayEngine {
           timelines: this.timelines
         });
 
-        if (result?.suppressedTripIds) {
+        if (result && result.suppressedTripIds) {
           // Initiate smooth 240ms fade out for newly suppressed ghosts
           const fadeTimestamp = performance.now();
           for (const ghostId of result.suppressedTripIds) {

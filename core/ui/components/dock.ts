@@ -147,10 +147,35 @@ export class SubwayDock {
       this.dockEl.style.height = '';
       this.setSheetState(nearest);
     };
-    const start = (event: PointerEvent) => onPointerStart(event.clientY);
+    const start = (event: PointerEvent) => {
+      const target = event.currentTarget as HTMLElement | null;
+      if (target && typeof target.setPointerCapture === 'function') {
+        try {
+          target.setPointerCapture(event.pointerId);
+        } catch {
+          // Environment or pointer state may not support capture
+        }
+      }
+      onPointerStart(event.clientY);
+    };
     const move = (event: PointerEvent) => onPointerMove(event.clientY);
-    const end = () => onPointerEnd();
+    const end = (event: PointerEvent) => {
+      const target = event.currentTarget as HTMLElement | null;
+      if (target && typeof target.releasePointerCapture === 'function') {
+        try {
+          if (target.hasPointerCapture(event.pointerId)) {
+            target.releasePointerCapture(event.pointerId);
+          }
+        } catch {
+          // Ignore release errors
+        }
+      }
+      onPointerEnd();
+    };
     this.handleEl?.addEventListener('pointerdown', start);
+    this.handleEl?.addEventListener('pointermove', move);
+    this.handleEl?.addEventListener('pointerup', end);
+    this.handleEl?.addEventListener('pointercancel', end);
     this.dockEl.addEventListener('pointermove', move);
     this.dockEl.addEventListener('pointerup', end);
     this.dockEl.addEventListener('pointercancel', end);

@@ -1089,6 +1089,53 @@ async function bootstrap() {
     }
   });
 
+  // 11. Edinburgh 3D High-Precision Relief & Trains View
+  if (cityConfig.id === 'edinburgh') {
+    const { initEdinburghThreeView } = await import('./edinburgh_three_view');
+    const threeContainer = document.createElement('div');
+    threeContainer.id = 'edinburgh-three-container';
+    threeContainer.style.position = 'absolute';
+    threeContainer.style.inset = '0';
+    threeContainer.style.zIndex = '2'; // Above map (z-index: 1), below dock & topbar
+    threeContainer.style.width = '100%';
+    threeContainer.style.height = '100%';
+    document.getElementById('app')?.appendChild(threeContainer);
+
+    const handle = initEdinburghThreeView(threeContainer);
+
+    const controlsAside = document.getElementById('map-controls');
+    if (controlsAside) {
+      const presetWrap = document.createElement('div');
+      presetWrap.className = 'edinburgh-camera-presets';
+      presetWrap.style.display = 'flex';
+      presetWrap.style.flexDirection = 'column';
+      presetWrap.style.gap = '6px';
+      presetWrap.style.marginBottom = '8px';
+
+      presetWrap.innerHTML = `
+        <button class="map-control-btn is-visible" id="btn-preset-waverley" title="Vue Vallée de Waverley" aria-label="Vue Vallée de Waverley" style="font-size:14px;">🚂</button>
+        <button class="map-control-btn is-visible" id="btn-preset-castle" title="Vue Castle Rock & Princes St" aria-label="Vue Castle Rock & Princes St" style="font-size:14px;">🏰</button>
+        <button class="map-control-btn is-visible" id="btn-preset-calton" title="Vue Calton Hill" aria-label="Vue Calton Hill" style="font-size:14px;">🏛️</button>
+        <button class="map-control-btn is-visible" id="btn-preset-overview" title="Vue d'ensemble" aria-label="Vue d'ensemble" style="font-size:14px;">🔭</button>
+        <button class="map-control-btn is-visible" id="btn-toggle-view" title="Basculer Mode 3D Relief / Mode Carte" aria-label="Basculer 3D / 2D" style="font-size:11px;font-weight:700;">3D</button>
+      `;
+      controlsAside.prepend(presetWrap);
+
+      document.getElementById('btn-preset-waverley')?.addEventListener('click', () => handle.setCameraPreset('waverley'));
+      document.getElementById('btn-preset-castle')?.addEventListener('click', () => handle.setCameraPreset('castle'));
+      document.getElementById('btn-preset-calton')?.addEventListener('click', () => handle.setCameraPreset('calton'));
+      document.getElementById('btn-preset-overview')?.addEventListener('click', () => handle.setCameraPreset('overview'));
+
+      let is3dActive = true;
+      document.getElementById('btn-toggle-view')?.addEventListener('click', () => {
+        is3dActive = !is3dActive;
+        threeContainer.style.display = is3dActive ? 'block' : 'none';
+        const btn = document.getElementById('btn-toggle-view');
+        if (btn) btn.textContent = is3dActive ? '3D' : '2D';
+      });
+    }
+  }
+
 }
 
 bootstrap().catch(err => {

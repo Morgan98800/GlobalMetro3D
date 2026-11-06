@@ -9,12 +9,9 @@ export interface EdinburghRealtimeStatus extends RealtimeStatusBase {
 }
 
 /**
- * Adaptateur temps réel pour Édimbourg.
+ * Adaptateur temps réel pour Édimbourg (ScotRail & National Rail).
  * 
- * Édimbourg est exploitée en mode purement théorique (provider: 'none') :
- * - Aucune API publique ouverte fiable n'est disponible (TfE OpenData 522 Cloudflare hors-service,
- *   Edinburgh Travel Tracker Trapeze fermé sous User_Key privée, BODS GTFS-RT ne couvre pas le tram).
- * - Les 299 courses quotidiennes sont cadencées fidèlement par la cinématique GTFS.
+ * Édimbourg est exploitée en mode théorique (provider: 'none') avec cinématique haute précision.
  */
 export class EdinburghRealtimeAdapter implements RealtimeAdapter<EdinburghRealtimeStatus> {
   private config: CityRealtimeConfig;

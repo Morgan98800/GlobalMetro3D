@@ -4,283 +4,119 @@
     "timestampIso": "2026-11-06T14:00:00Z",
     "serviceDate": "2026-11-06",
     "civilSeconds": 50400,
-    "totalTrains": 16,
+    "totalTrains": 6,
     "trainsByLine": {
-      "T50": 16
+      "GLA": 2,
+      "FIF": 2,
+      "BOR": 0,
+      "NCL": 1,
+      "SHO": 1,
+      "LNER": 0,
+      "CS": 0
     }
   },
   "trains": [
     {
-      "tripId": "VJ08081e6af172d92b8c3dbde86f09b6cd108c9f29",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
+      "tripId": "1R216_FIF",
+      "line": "FIF",
+      "lineName": "FIF",
+      "shapeId": "shp_FIF_1",
       "direction": 1,
-      "currentDistM": 15243.67,
-      "speedKmh": 19,
-      "speedMps": 5.23,
-      "pos": [
-        -3.1749865,
-        55.966836
-      ],
-      "bearing": 25.5,
-      "nextStation": "Foot of the Walk",
-      "destStation": "Newhaven"
-    },
-    {
-      "tripId": "VJ1779259b3964d90465532fec62f34e9ea735f70e",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
-      "direction": 0,
-      "currentDistM": 1980.7,
+      "currentDistM": 3650,
       "speedKmh": 0,
       "speedMps": 0,
       "pos": [
-        -3.1668899,
-        55.9750221
+        -3.2488566,
+        55.9387179
       ],
-      "bearing": 203,
-      "nextStation": "Foot of the Walk",
-      "destStation": "Edinburgh Airport"
+      "bearing": 248.4,
+      "nextStation": "Edinburgh Waverley",
+      "destStation": "Edinburgh Waverley"
     },
     {
-      "tripId": "VJ31516dda889e18898cce33d50855d1d192b927fa",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
+      "tripId": "1R68_GLA",
+      "line": "GLA",
+      "lineName": "EXP",
+      "shapeId": "shp_GLA_1",
       "direction": 1,
-      "currentDistM": 12041.36,
-      "speedKmh": 25,
-      "speedMps": 6.96,
+      "currentDistM": 1300.36,
+      "speedKmh": 13,
+      "speedMps": 3.57,
       "pos": [
-        -3.2087812,
-        55.9498607
+        -3.2137531,
+        55.9464597
       ],
-      "bearing": 59.2,
-      "nextStation": "Princes Street",
-      "destStation": "Newhaven"
+      "bearing": 247.7,
+      "nextStation": "Edinburgh Waverley",
+      "destStation": "Edinburgh Waverley"
     },
     {
-      "tripId": "VJ38a4b732e46d1a9f8bcebff714c9d787292fe8f6",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
+      "tripId": "1S217_FIF",
+      "line": "FIF",
+      "lineName": "FIF",
+      "shapeId": "shp_FIF_0",
       "direction": 0,
-      "currentDistM": 14781.2,
-      "speedKmh": 16,
-      "speedMps": 4.48,
-      "pos": [
-        -3.3197649,
-        55.9394763
-      ],
-      "bearing": 343.6,
-      "nextStation": "Edinburgh Gateway",
-      "destStation": "Edinburgh Airport"
-    },
-    {
-      "tripId": "VJ56cb121273a04c3c7212ddd28d284a05aa3ee98d",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
-      "direction": 1,
-      "currentDistM": 3502.05,
-      "speedKmh": 16,
-      "speedMps": 4.43,
-      "pos": [
-        -3.3197587,
-        55.9394554
-      ],
-      "bearing": 163.3,
-      "nextStation": "Gyle Centre",
-      "destStation": "Newhaven"
-    },
-    {
-      "tripId": "VJ6bd48cb558afce1cbff48bc7e28f6af7da20031b",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
-      "direction": 0,
-      "currentDistM": 5565.8,
-      "speedKmh": 0,
-      "speedMps": 0,
-      "pos": [
-        -3.198504,
-        55.9516921
-      ],
-      "bearing": 252.7,
-      "nextStation": "West End - Princes Street",
-      "destStation": "Edinburgh Airport"
-    },
-    {
-      "tripId": "VJ843825628b4ecc61cb36b968d9fc7b4a8208c977",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
-      "direction": 1,
-      "currentDistM": 6472.76,
-      "speedKmh": 32,
-      "speedMps": 8.77,
-      "pos": [
-        -3.2882347,
-        55.9295907
-      ],
-      "bearing": 74,
-      "nextStation": "Saughton",
-      "destStation": "Newhaven"
-    },
-    {
-      "tripId": "VJ87aa54190243b0e18a590b98d5b3ca937c890441",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
-      "direction": 0,
-      "currentDistM": 11286.43,
-      "speedKmh": 32,
-      "speedMps": 8.77,
-      "pos": [
-        -3.2804459,
-        55.9313124
-      ],
-      "bearing": 248.1,
-      "nextStation": "Bankhead",
-      "destStation": "Edinburgh Airport"
-    },
-    {
-      "tripId": "VJ8ad91e3826f839a2926031df4a6f59a5be9063d9",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
-      "direction": 0,
-      "currentDistM": 7682.4,
-      "speedKmh": 24,
-      "speedMps": 6.71,
-      "pos": [
-        -3.2282766,
-        55.9435683
-      ],
-      "bearing": 254.1,
-      "nextStation": "Murrayfield Stadium",
-      "destStation": "Edinburgh Airport"
-    },
-    {
-      "tripId": "VJ8e09d61c02dbd1b48a5b2d5a7eb9b9440d4cd6d5",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
-      "direction": 1,
-      "currentDistM": 13888.2,
-      "speedKmh": 0,
-      "speedMps": 0,
-      "pos": [
-        -3.1868805,
-        55.9568345
-      ],
-      "bearing": 69.4,
-      "nextStation": "McDonald Road",
-      "destStation": "Newhaven"
-    },
-    {
-      "tripId": "VJ91edf887a29cff9dc6191b45446f46b2ca3585ec",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
-      "direction": 1,
-      "currentDistM": 17303.83,
-      "speedKmh": 22,
-      "speedMps": 6.18,
-      "pos": [
-        -3.174885,
-        55.9804667
-      ],
-      "bearing": 310.6,
-      "nextStation": "Ocean Terminal",
-      "destStation": "Newhaven"
-    },
-    {
-      "tripId": "VJ981a055b5d651e9875f3a14f36d84a9e17c92a60",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
-      "direction": 0,
-      "currentDistM": 4114.65,
-      "speedKmh": 22,
-      "speedMps": 6.18,
-      "pos": [
-        -3.1840671,
-        55.9586172
-      ],
-      "bearing": 209.9,
-      "nextStation": "Picardy Place",
-      "destStation": "Edinburgh Airport"
-    },
-    {
-      "tripId": "VJa25af7eadf741cd447732b68a8824186ec602216",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
-      "direction": 1,
-      "currentDistM": 10603.2,
-      "speedKmh": 24,
-      "speedMps": 6.7,
-      "pos": [
-        -3.2282064,
-        55.9435821
-      ],
-      "bearing": 73.7,
-      "nextStation": "Haymarket",
-      "destStation": "Newhaven"
-    },
-    {
-      "tripId": "VJa6e78cf54db9e22dd36a5558bd2dd0afdb0f2f19",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "762825bb-0ce4-4881-bbee-d2a5e9e8f4da",
-      "direction": 1,
       "currentDistM": 0,
       "speedKmh": 0,
       "speedMps": 0,
       "pos": [
-        -3.3605152,
-        55.9476205
+        -3.362203,
+        55.96611
       ],
-      "bearing": 153.9,
-      "nextStation": "Ingliston Park & Ride",
-      "destStation": "Newhaven"
+      "bearing": 142.6,
+      "nextStation": "Haymarket",
+      "destStation": "Edinburgh Gateway"
     },
     {
-      "tripId": "VJee915782b0f622ba5bd6351a8946f8c6371f9fbd",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
+      "tripId": "1S405_NCL",
+      "line": "NCL",
+      "lineName": "NCL",
+      "shapeId": "shp_NCL_0",
       "direction": 0,
-      "currentDistM": 538.92,
-      "speedKmh": 20,
-      "speedMps": 5.53,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
       "pos": [
-        -3.1801715,
-        55.9798289
+        -3.245642,
+        55.939307
       ],
-      "bearing": 110.5,
-      "nextStation": "Ocean Terminal",
-      "destStation": "Edinburgh Airport"
+      "bearing": 249.8,
+      "nextStation": "Haymarket",
+      "destStation": "Edinburgh Park"
     },
     {
-      "tripId": "VJfbd483ed491f8b7c258679289c80ccc8f1e47229",
-      "line": "T50",
-      "lineName": "T50",
-      "shapeId": "7edf55fd-2e55-4a64-8a33-eba6898f6ff2",
+      "tripId": "1S479_SHO",
+      "line": "SHO",
+      "lineName": "SHO",
+      "shapeId": "shp_SHO_0",
       "direction": 0,
-      "currentDistM": 17663.04,
-      "speedKmh": 23,
-      "speedMps": 6.34,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
       "pos": [
-        -3.3565225,
-        55.942537
+        -3.242915,
+        55.927009
       ],
-      "bearing": 341.1,
-      "nextStation": "Edinburgh Airport",
-      "destStation": "Edinburgh Airport"
+      "bearing": 229.1,
+      "nextStation": "Haymarket",
+      "destStation": "Curriehill"
+    },
+    {
+      "tripId": "1S69_GLA",
+      "line": "GLA",
+      "lineName": "EXP",
+      "shapeId": "shp_GLA_0",
+      "direction": 0,
+      "currentDistM": 0,
+      "speedKmh": 0,
+      "speedMps": 0,
+      "pos": [
+        -3.362203,
+        55.96611
+      ],
+      "bearing": 142.6,
+      "nextStation": "Haymarket",
+      "destStation": "Haymarket"
     }
   ]
 }

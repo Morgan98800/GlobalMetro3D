@@ -1,16 +1,100 @@
 [
   {
-    "id": "T50",
-    "short_name": "T50",
-    "long_name": "Edinburgh Trams",
-    "color": "#8B1D42",
+    "id": "GLA",
+    "short_name": "EXP",
+    "long_name": "ScotRail Express (Glasgow)",
+    "color": "#002D62",
     "text_color": "#FFFFFF",
-    "mode": "tram",
+    "mode": "train",
     "destinations": {
-      "0": "Edinburgh Airport",
-      "1": "Newhaven"
+      "0": "Glasgow Queen Street",
+      "1": "Edinburgh Waverley"
     },
-    "measured_length_km": 18.28,
+    "measured_length_km": 76.5,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "FIF",
+    "short_name": "FIF",
+    "long_name": "ScotRail Fife Circle",
+    "color": "#00823B",
+    "text_color": "#FFFFFF",
+    "mode": "train",
+    "destinations": {
+      "0": "Cowdenbeath / Gateway",
+      "1": "Edinburgh Waverley"
+    },
+    "measured_length_km": 28.4,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "BOR",
+    "short_name": "BOR",
+    "long_name": "ScotRail Borders Railway",
+    "color": "#7B1FA2",
+    "text_color": "#FFFFFF",
+    "mode": "train",
+    "destinations": {
+      "0": "Tweedbank",
+      "1": "Edinburgh Waverley"
+    },
+    "measured_length_km": 49.8,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "NCL",
+    "short_name": "NCL",
+    "long_name": "ScotRail North Clyde Line",
+    "color": "#0097A7",
+    "text_color": "#FFFFFF",
+    "mode": "train",
+    "destinations": {
+      "0": "Helensburgh / Bathgate",
+      "1": "Edinburgh Waverley"
+    },
+    "measured_length_km": 42.1,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "SHO",
+    "short_name": "SHO",
+    "long_name": "ScotRail Shotts Line",
+    "color": "#E65100",
+    "text_color": "#FFFFFF",
+    "mode": "train",
+    "destinations": {
+      "0": "Glasgow Central via Shotts",
+      "1": "Edinburgh Waverley"
+    },
+    "measured_length_km": 54.3,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "LNER",
+    "short_name": "LNER",
+    "long_name": "LNER East Coast Main Line",
+    "color": "#BA0C2F",
+    "text_color": "#FFFFFF",
+    "mode": "train",
+    "destinations": {
+      "0": "London King's Cross",
+      "1": "Edinburgh Waverley"
+    },
+    "measured_length_km": 632.0,
+    "elevation_offset": 0.0
+  },
+  {
+    "id": "CS",
+    "short_name": "CS",
+    "long_name": "Caledonian Sleeper",
+    "color": "#1338BE",
+    "text_color": "#FFFFFF",
+    "mode": "train",
+    "destinations": {
+      "0": "London Euston (via Carstairs)",
+      "1": "Edinburgh Waverley"
+    },
+    "measured_length_km": 645.0,
     "elevation_offset": 0.0
   }
 ]

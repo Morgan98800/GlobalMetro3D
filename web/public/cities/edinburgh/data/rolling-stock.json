@@ -1,47 +1,122 @@
 {
   "asset_families": {
-    "edinburgh_trams": {
-      "family_id": "edinburgh_trams",
+    "scotrail_class_385": {
+      "family_id": "scotrail_class_385",
       "reference_dimensions_m": {
-        "car_length_m": 42.8,
-        "car_height_m": 3.4,
-        "width_m": 2.65
+        "car_length_m": 23.4,
+        "car_height_m": 3.75,
+        "width_m": 2.8
       }
     }
   },
   "models": {
-    "CAF_URBOS_3": {
-      "model_id": "CAF_URBOS_3",
-      "name": "CAF Urbos 3 (Edinburgh Trams)",
-      "manufacturer": "CAF (Construcciones y Auxiliar de Ferrocarriles)",
-      "cars_count": 7,
-      "total_length_m": 42.8,
-      "car_length_m": 6.11,
-      "bogie_centres_m": 8.0,
-      "width_m": 2.65,
-      "inter_car_gap_m": 0.2,
+    "CLASS_385_EMU": {
+      "model_id": "CLASS_385_EMU",
+      "name": "Automotrice \u00e9cossaise ScotRail Class 385 (Hitachi A-train)",
+      "manufacturer": "Hitachi Rail",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
       "drive_type": "overhead_wire",
       "driverless": false,
-      "source": "Spécifications CAF Urbos 3 Édimbourg (7 caisses articulées, 42.8 m)",
-      "verified": false
+      "source": "Flotte ScotRail Express et Fife Circle (24m/voiture)",
+      "verified": true
     }
   },
   "lines": {
-    "T50": {
-      "line_id": "T50",
-      "short_name": "T50",
-      "model_id": "CAF_URBOS_3",
-      "name": "CAF Urbos 3 (7 caisses)",
-      "cars_count": 7,
-      "total_length_m": 42.8,
-      "car_length_m": 6.11,
-      "bogie_centres_m": 8.0,
-      "width_m": 2.65,
-      "inter_car_gap_m": 0.2,
-      "drive_type": "overhead_wire",
-      "driverless": false,
-      "source": "Flotte de 27 rames CAF Urbos 3 d'Édimbourg",
-      "verified": false
+    "GLA": {
+      "line_id": "GLA",
+      "short_name": "EXP",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (EXP)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
+    },
+    "FIF": {
+      "line_id": "FIF",
+      "short_name": "FIF",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (FIF)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
+    },
+    "BOR": {
+      "line_id": "BOR",
+      "short_name": "BOR",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (BOR)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
+    },
+    "NCL": {
+      "line_id": "NCL",
+      "short_name": "NCL",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (NCL)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
+    },
+    "SHO": {
+      "line_id": "SHO",
+      "short_name": "SHO",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (SHO)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
+    },
+    "LNER": {
+      "line_id": "LNER",
+      "short_name": "LNER",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (LNER)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
+    },
+    "CS": {
+      "line_id": "CS",
+      "short_name": "CS",
+      "model_id": "CLASS_385_EMU",
+      "name": "ScotRail Class 385 (CS)",
+      "cars_count": 3,
+      "total_length_m": 71.0,
+      "car_length_m": 23.4,
+      "bogie_centres_m": 16.0,
+      "width_m": 2.8,
+      "inter_car_gap_m": 0.4,
+      "asset_family": "scotrail_class_385"
     }
   }
 }

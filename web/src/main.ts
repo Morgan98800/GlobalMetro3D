@@ -184,7 +184,7 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
       <text x="440" y="248" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0A0A0A" letter-spacing="2">EUR 1,90 CB</text>
     </svg>`;
 
-  const badgeLabel = activeCityConfig.id === 'edinburgh' ? 'Tramway' : (activeCityConfig.id === 'lille' ? 'VAL & Tramway' : (activeCityConfig.id === 'london' ? 'Underground' : (activeCityConfig.id === 'washington' ? 'Metrorail' : (activeCityConfig.id === 'berlin' ? 'U-Bahn' : '100% Souterrain'))));
+  const badgeLabel = activeCityConfig.id === 'edinburgh' ? 'Train' : (activeCityConfig.id === 'lille' ? 'VAL & Tramway' : (activeCityConfig.id === 'london' ? 'Underground' : (activeCityConfig.id === 'washington' ? 'Metrorail' : (activeCityConfig.id === 'berlin' ? 'U-Bahn' : '100% Souterrain'))));
   const cityEmblem = `
     <div class="about-card-emblem" style="background:var(--eleve-hi);border:1px solid var(--bordure);border-radius:8px;padding:20px 14px;text-align:center;">
       <span style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.6;display:block;margin-bottom:6px;">Réseau Métropolitain</span>
@@ -305,7 +305,7 @@ async function bootstrap() {
   const loaderTextEl = document.getElementById('app-loader-text') || document.querySelector('#app-loader p');
   if (loaderTextEl) {
     const cityLoaderNames: Record<string, string> = {
-      edinburgh: "Chargement du tramway d'Édimbourg",
+      edinburgh: "Chargement du réseau ferroviaire d'Édimbourg",
       berlin: 'Chargement du métro de Berlin (U-Bahn)',
       washington: 'Chargement du métro de Washington',
       london: 'Chargement du métro de Londres',
@@ -753,6 +753,8 @@ async function bootstrap() {
   mapEl.addEventListener('pointerleave', hideTooltip);
   window.addEventListener('blur', hideTooltip);
 
+  let edinburghHandle: any = null;
+
   // 5. Initialize Dock ("Le Quai" Niveau 2 with Station Ladder)
   dock = new SubwayDock({
     rollingStockDb,
@@ -765,6 +767,7 @@ async function bootstrap() {
       deckOverlay.setSelectedTrain(null);
       deckOverlay.setSelectedLine(lineId);
       engine.setFocusedLine(lineId);
+      edinburghHandle?.selectLine(lineId);
 
       const line = lines.find(l => l.id === lineId);
       router.setRoute(line ? line.short_name : null, dir, cityConfig.slug);
@@ -792,6 +795,7 @@ async function bootstrap() {
       trackedTrain = null;
       followCamera?.stopFollow();
       deckOverlay.setSelectedTrain(null);
+      edinburghHandle?.focusStation(station.name);
       map.flyTo({
         center: station.coordinates,
         zoom: 15.5,
@@ -1101,7 +1105,17 @@ async function bootstrap() {
     threeContainer.style.height = '100%';
     document.getElementById('app')?.appendChild(threeContainer);
 
-    const handle = initEdinburghThreeView(threeContainer);
+    edinburghHandle = initEdinburghThreeView(threeContainer, {
+      onTrainClick: (service) => {
+        dock.selectLine(service.lineId);
+      },
+      onStationClick: (stationName) => {
+        const st = stations.find(s => s.name === stationName);
+        if (st && st.lines.length > 0) {
+          dock.selectLine(st.lines[0]);
+        }
+      }
+    });
 
     const controlsAside = document.getElementById('map-controls');
     if (controlsAside) {
@@ -1122,11 +1136,11 @@ async function bootstrap() {
       `;
       controlsAside.prepend(presetWrap);
 
-      document.getElementById('btn-preset-waverley')?.addEventListener('click', () => handle.setCameraPreset('waverley'));
-      document.getElementById('btn-preset-castle')?.addEventListener('click', () => handle.setCameraPreset('castle'));
-      document.getElementById('btn-preset-calton')?.addEventListener('click', () => handle.setCameraPreset('calton'));
-      document.getElementById('btn-preset-overview')?.addEventListener('click', () => handle.setCameraPreset('overview'));
-      document.getElementById('btn-follow-train')?.addEventListener('click', () => handle.toggleFollowTrain());
+      document.getElementById('btn-preset-waverley')?.addEventListener('click', () => edinburghHandle.setCameraPreset('waverley'));
+      document.getElementById('btn-preset-castle')?.addEventListener('click', () => edinburghHandle.setCameraPreset('castle'));
+      document.getElementById('btn-preset-calton')?.addEventListener('click', () => edinburghHandle.setCameraPreset('calton'));
+      document.getElementById('btn-preset-overview')?.addEventListener('click', () => edinburghHandle.setCameraPreset('overview'));
+      document.getElementById('btn-follow-train')?.addEventListener('click', () => edinburghHandle.toggleFollowTrain());
 
       let is3dActive = true;
       document.getElementById('btn-toggle-view')?.addEventListener('click', () => {

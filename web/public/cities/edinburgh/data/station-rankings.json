@@ -1,284 +1,116 @@
 {
   "weekday": [
     {
-      "name": "Gogarburn",
-      "count": 284
-    },
-    {
-      "name": "Ingliston Park & Ride",
-      "count": 284
-    },
-    {
-      "name": "Edinburgh Airport",
-      "count": 284
-    },
-    {
-      "name": "Newhaven",
-      "count": 278
-    },
-    {
-      "name": "Ocean Terminal",
-      "count": 278
-    },
-    {
-      "name": "Port of Leith",
-      "count": 278
-    },
-    {
-      "name": "The Shore",
-      "count": 278
-    },
-    {
-      "name": "Foot of the Walk",
-      "count": 278
-    },
-    {
-      "name": "Balfour Street",
-      "count": 278
-    },
-    {
-      "name": "McDonald Road",
-      "count": 278
-    },
-    {
-      "name": "Picardy Place",
-      "count": 278
-    },
-    {
-      "name": "St Andrew Square",
-      "count": 278
-    },
-    {
-      "name": "Princes Street",
-      "count": 278
-    },
-    {
-      "name": "West End - Princes Street",
-      "count": 278
+      "name": "Edinburgh Waverley",
+      "count": 566
     },
     {
       "name": "Haymarket",
-      "count": 278
-    },
-    {
-      "name": "Murrayfield Stadium",
-      "count": 278
-    },
-    {
-      "name": "Balgreen",
-      "count": 278
-    },
-    {
-      "name": "Saughton",
-      "count": 278
-    },
-    {
-      "name": "Bankhead",
-      "count": 278
-    },
-    {
-      "name": "Edinburgh Park Station",
-      "count": 278
-    },
-    {
-      "name": "Edinburgh Park Central",
-      "count": 278
-    },
-    {
-      "name": "Gyle Centre",
-      "count": 278
+      "count": 454
     },
     {
       "name": "Edinburgh Gateway",
-      "count": 270
+      "count": 148
+    },
+    {
+      "name": "South Gyle",
+      "count": 148
+    },
+    {
+      "name": "Edinburgh Park",
+      "count": 74
+    },
+    {
+      "name": "Slateford",
+      "count": 74
+    },
+    {
+      "name": "Kingsknowe",
+      "count": 74
+    },
+    {
+      "name": "Wester Hailes",
+      "count": 74
+    },
+    {
+      "name": "Curriehill",
+      "count": 74
     }
   ],
   "saturday": [
     {
-      "name": "Gogarburn",
-      "count": 280
-    },
-    {
-      "name": "Ingliston Park & Ride",
-      "count": 280
-    },
-    {
-      "name": "Edinburgh Airport",
-      "count": 280
-    },
-    {
-      "name": "Newhaven",
-      "count": 278
-    },
-    {
-      "name": "Ocean Terminal",
-      "count": 278
-    },
-    {
-      "name": "Port of Leith",
-      "count": 278
-    },
-    {
-      "name": "The Shore",
-      "count": 278
-    },
-    {
-      "name": "Foot of the Walk",
-      "count": 278
-    },
-    {
-      "name": "Balfour Street",
-      "count": 278
-    },
-    {
-      "name": "McDonald Road",
-      "count": 278
-    },
-    {
-      "name": "Picardy Place",
-      "count": 278
-    },
-    {
-      "name": "St Andrew Square",
-      "count": 278
-    },
-    {
-      "name": "Princes Street",
-      "count": 278
-    },
-    {
-      "name": "West End - Princes Street",
-      "count": 278
+      "name": "Edinburgh Waverley",
+      "count": 566
     },
     {
       "name": "Haymarket",
-      "count": 278
-    },
-    {
-      "name": "Murrayfield Stadium",
-      "count": 278
-    },
-    {
-      "name": "Balgreen",
-      "count": 278
-    },
-    {
-      "name": "Saughton",
-      "count": 278
-    },
-    {
-      "name": "Bankhead",
-      "count": 278
-    },
-    {
-      "name": "Edinburgh Park Station",
-      "count": 278
-    },
-    {
-      "name": "Edinburgh Park Central",
-      "count": 278
-    },
-    {
-      "name": "Gyle Centre",
-      "count": 278
+      "count": 454
     },
     {
       "name": "Edinburgh Gateway",
-      "count": 268
+      "count": 148
+    },
+    {
+      "name": "South Gyle",
+      "count": 148
+    },
+    {
+      "name": "Edinburgh Park",
+      "count": 74
+    },
+    {
+      "name": "Slateford",
+      "count": 74
+    },
+    {
+      "name": "Kingsknowe",
+      "count": 74
+    },
+    {
+      "name": "Wester Hailes",
+      "count": 74
+    },
+    {
+      "name": "Curriehill",
+      "count": 74
     }
   ],
   "sunday": [
     {
-      "name": "Gogarburn",
-      "count": 280
-    },
-    {
-      "name": "Ingliston Park & Ride",
-      "count": 280
-    },
-    {
-      "name": "Edinburgh Airport",
-      "count": 280
-    },
-    {
-      "name": "Newhaven",
-      "count": 278
-    },
-    {
-      "name": "Ocean Terminal",
-      "count": 278
-    },
-    {
-      "name": "Port of Leith",
-      "count": 278
-    },
-    {
-      "name": "The Shore",
-      "count": 278
-    },
-    {
-      "name": "Foot of the Walk",
-      "count": 278
-    },
-    {
-      "name": "Balfour Street",
-      "count": 278
-    },
-    {
-      "name": "McDonald Road",
-      "count": 278
-    },
-    {
-      "name": "Picardy Place",
-      "count": 278
-    },
-    {
-      "name": "St Andrew Square",
-      "count": 278
-    },
-    {
-      "name": "Princes Street",
-      "count": 278
-    },
-    {
-      "name": "West End - Princes Street",
-      "count": 278
+      "name": "Edinburgh Waverley",
+      "count": 566
     },
     {
       "name": "Haymarket",
-      "count": 278
-    },
-    {
-      "name": "Murrayfield Stadium",
-      "count": 278
-    },
-    {
-      "name": "Balgreen",
-      "count": 278
-    },
-    {
-      "name": "Saughton",
-      "count": 278
-    },
-    {
-      "name": "Bankhead",
-      "count": 278
-    },
-    {
-      "name": "Edinburgh Park Station",
-      "count": 278
-    },
-    {
-      "name": "Edinburgh Park Central",
-      "count": 278
-    },
-    {
-      "name": "Gyle Centre",
-      "count": 278
+      "count": 454
     },
     {
       "name": "Edinburgh Gateway",
-      "count": 268
+      "count": 148
+    },
+    {
+      "name": "South Gyle",
+      "count": 148
+    },
+    {
+      "name": "Edinburgh Park",
+      "count": 74
+    },
+    {
+      "name": "Slateford",
+      "count": 74
+    },
+    {
+      "name": "Kingsknowe",
+      "count": 74
+    },
+    {
+      "name": "Wester Hailes",
+      "count": 74
+    },
+    {
+      "name": "Curriehill",
+      "count": 74
     }
   ]
 }

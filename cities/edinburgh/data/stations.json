@@ -1,255 +1,111 @@
 [
   {
-    "id": "940GZZEDAIR",
-    "name": "Edinburgh Airport",
+    "id": "EDB",
+    "name": "Edinburgh Waverley",
     "coordinates": [
-      -3.36039,
-      55.94749
+      -3.188674,
+      55.95223
     ],
     "lines": [
-      "T50"
+      "GLA",
+      "FIF",
+      "BOR",
+      "NCL",
+      "SHO",
+      "LNER",
+      "CS"
     ]
   },
   {
-    "id": "940GZZEDING",
-    "name": "Ingliston Park & Ride",
-    "coordinates": [
-      -3.355703,
-      55.940466
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDGOG",
-    "name": "Gogarburn",
-    "coordinates": [
-      -3.332313,
-      55.937998
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDGAT",
-    "name": "Edinburgh Gateway",
-    "coordinates": [
-      -3.321756,
-      55.940466
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDGYL",
-    "name": "Gyle Centre",
-    "coordinates": [
-      -3.318261,
-      55.937951
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDPKC",
-    "name": "Edinburgh Park Central",
-    "coordinates": [
-      -3.314585,
-      55.931353
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDPKS",
-    "name": "Edinburgh Park Station",
-    "coordinates": [
-      -3.306895,
-      55.927346
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDBAN",
-    "name": "Bankhead",
-    "coordinates": [
-      -3.293415,
-      55.928903
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDSAU",
-    "name": "Saughton",
-    "coordinates": [
-      -3.275443,
-      55.932328
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDBAL",
-    "name": "Balgreen",
-    "coordinates": [
-      -3.252212,
-      55.938119
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDMUR",
-    "name": "Murrayfield Stadium",
-    "coordinates": [
-      -3.237291,
-      55.942028
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZEDHAY",
+    "id": "HYM",
     "name": "Haymarket",
     "coordinates": [
-      -3.21973,
-      55.945795
+      -3.218307,
+      55.945328
     ],
     "lines": [
-      "T50"
+      "GLA",
+      "FIF",
+      "NCL",
+      "SHO",
+      "CS"
     ]
   },
   {
-    "id": "940GZZEDSHA",
-    "name": "West End - Princes Street",
+    "id": "EDG",
+    "name": "Edinburgh Gateway",
     "coordinates": [
-      -3.212102,
-      55.948409
+      -3.320135,
+      55.940939
     ],
     "lines": [
-      "T50"
+      "FIF"
     ]
   },
   {
-    "id": "940GZZEDPRS",
-    "name": "Princes Street",
+    "id": "EDP",
+    "name": "Edinburgh Park",
     "coordinates": [
-      -3.198472,
-      55.95171
+      -3.307566,
+      55.927597
     ],
     "lines": [
-      "T50"
+      "NCL"
     ]
   },
   {
-    "id": "940GZZEDSTA",
-    "name": "St Andrew Square",
+    "id": "SGL",
+    "name": "South Gyle",
     "coordinates": [
-      -3.192316,
-      55.954618
+      -3.299342,
+      55.936495
     ],
     "lines": [
-      "T50"
+      "FIF"
     ]
   },
   {
-    "id": "940GZZTWWJU",
-    "name": "Picardy Place",
+    "id": "SLA",
+    "name": "Slateford",
     "coordinates": [
-      -3.186849,
-      55.956771
+      -3.244207,
+      55.926485
     ],
     "lines": [
-      "T50"
+      "SHO"
     ]
   },
   {
-    "id": "940GZZTWWJT",
-    "name": "McDonald Road",
+    "id": "KGS",
+    "name": "Kingsknowe",
     "coordinates": [
-      -3.18157,
-      55.960695
+      -3.264855,
+      55.918908
     ],
     "lines": [
-      "T50"
+      "SHO"
     ]
   },
   {
-    "id": "940GZZTWWJS",
-    "name": "Balfour Street",
+    "id": "WTH",
+    "name": "Wester Hailes",
     "coordinates": [
-      -3.176411,
-      55.965254
+      -3.283818,
+      55.914371
     ],
     "lines": [
-      "T50"
+      "SHO"
     ]
   },
   {
-    "id": "940GZZTWWJR",
-    "name": "Foot of the Walk",
+    "id": "CUR",
+    "name": "Curriehill",
     "coordinates": [
-      -3.171061,
-      55.970744
+      -3.318735,
+      55.900488
     ],
     "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZTWWJQ",
-    "name": "The Shore",
-    "coordinates": [
-      -3.166924,
-      55.975031
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZTWWJP",
-    "name": "Port of Leith",
-    "coordinates": [
-      -3.166363,
-      55.978124
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZTWWJO",
-    "name": "Ocean Terminal",
-    "coordinates": [
-      -3.177634,
-      55.980198
-    ],
-    "lines": [
-      "T50"
-    ]
-  },
-  {
-    "id": "940GZZTWWJN",
-    "name": "Newhaven",
-    "coordinates": [
-      -3.188723,
-      55.980004
-    ],
-    "lines": [
-      "T50"
+      "SHO"
     ]
   }
 ]

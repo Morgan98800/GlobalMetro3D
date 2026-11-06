@@ -1,525 +1,705 @@
 {
-  "T50": {
-    "id": "T50",
-    "short_name": "T50",
-    "color": "#8B1D42",
+  "GLA": {
+    "id": "GLA",
+    "short_name": "EXP",
+    "color": "#002D62",
     "text_color": "#FFFFFF",
     "directions": {
       "0": {
-        "origin": "Newhaven",
-        "terminus": "Edinburgh Airport",
+        "origin": "Edinburgh Waverley",
+        "terminus": "Haymarket",
         "stations": [
           {
-            "id": "940GZZTWWJN",
-            "name": "Newhaven",
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
             "distance_m": 0.0,
             "coordinates": [
-              -3.188723,
-              55.980004
+              -3.188674,
+              55.95223
             ],
             "is_hub": true,
-            "transfers": []
+            "transfers": [
+              "FIF",
+              "BOR",
+              "NCL",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
           },
           {
-            "id": "940GZZTWWJO",
-            "name": "Ocean Terminal",
-            "distance_m": 746.2,
-            "coordinates": [
-              -3.177634,
-              55.980198
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJP",
-            "name": "Port of Leith",
-            "distance_m": 1579.4,
-            "coordinates": [
-              -3.166363,
-              55.978124
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJQ",
-            "name": "The Shore",
-            "distance_m": 1980.7,
-            "coordinates": [
-              -3.166924,
-              55.975031
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJR",
-            "name": "Foot of the Walk",
-            "distance_m": 2525.9,
-            "coordinates": [
-              -3.171061,
-              55.970744
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJS",
-            "name": "Balfour Street",
-            "distance_m": 3235.4,
-            "coordinates": [
-              -3.176411,
-              55.965254
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJT",
-            "name": "McDonald Road",
-            "distance_m": 3836.4,
-            "coordinates": [
-              -3.18157,
-              55.960695
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJU",
-            "name": "Picardy Place",
-            "distance_m": 4392.9,
-            "coordinates": [
-              -3.186849,
-              55.956771
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDSTA",
-            "name": "St Andrew Square",
-            "distance_m": 4911.2,
-            "coordinates": [
-              -3.192316,
-              55.954618
-            ],
-            "is_hub": true,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDPRS",
-            "name": "Princes Street",
-            "distance_m": 5565.8,
-            "coordinates": [
-              -3.198472,
-              55.95171
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDSHA",
-            "name": "West End - Princes Street",
-            "distance_m": 6503.2,
-            "coordinates": [
-              -3.212102,
-              55.948409
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDHAY",
+            "id": "HYM",
             "name": "Haymarket",
-            "distance_m": 7078.4,
+            "distance_m": 1998.3,
             "coordinates": [
-              -3.21973,
-              55.945795
+              -3.218307,
+              55.945328
             ],
             "is_hub": true,
-            "transfers": []
+            "transfers": [
+              "FIF",
+              "NCL",
+              "SHO",
+              "CS"
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Haymarket",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "FIF",
+              "NCL",
+              "SHO",
+              "CS"
+            ]
           },
           {
-            "id": "940GZZEDMUR",
-            "name": "Murrayfield Stadium",
-            "distance_m": 8286.4,
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 1998.3,
             "coordinates": [
-              -3.237291,
-              55.942028
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "FIF",
+              "BOR",
+              "NCL",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "FIF": {
+    "id": "FIF",
+    "short_name": "FIF",
+    "color": "#00823B",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Edinburgh Gateway",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "BOR",
+              "NCL",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          },
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 1998.3,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "NCL",
+              "SHO",
+              "CS"
+            ]
+          },
+          {
+            "id": "SGL",
+            "name": "South Gyle",
+            "distance_m": 7139.4,
+            "coordinates": [
+              -3.299342,
+              55.936495
             ],
             "is_hub": false,
             "transfers": []
           },
           {
-            "id": "940GZZEDBAL",
-            "name": "Balgreen",
-            "distance_m": 9322.8,
-            "coordinates": [
-              -3.252212,
-              55.938119
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDSAU",
-            "name": "Saughton",
-            "distance_m": 10957.4,
-            "coordinates": [
-              -3.275443,
-              55.932328
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDBAN",
-            "name": "Bankhead",
-            "distance_m": 12141.9,
-            "coordinates": [
-              -3.293415,
-              55.928903
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDPKS",
-            "name": "Edinburgh Park Station",
-            "distance_m": 12999.0,
-            "coordinates": [
-              -3.306895,
-              55.927346
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDPKC",
-            "name": "Edinburgh Park Central",
-            "distance_m": 13794.9,
-            "coordinates": [
-              -3.314585,
-              55.931353
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDGYL",
-            "name": "Gyle Centre",
-            "distance_m": 14579.5,
-            "coordinates": [
-              -3.318261,
-              55.937951
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDGAT",
+            "id": "EDG",
             "name": "Edinburgh Gateway",
-            "distance_m": 14982.9,
+            "distance_m": 8525.4,
             "coordinates": [
-              -3.321756,
-              55.940466
-            ],
-            "is_hub": true,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDGOG",
-            "name": "Gogarburn",
-            "distance_m": 15698.7,
-            "coordinates": [
-              -3.332313,
-              55.937998
+              -3.320135,
+              55.940939
             ],
             "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDING",
-            "name": "Ingliston Park & Ride",
-            "distance_m": 17425.4,
-            "coordinates": [
-              -3.355703,
-              55.940466
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDAIR",
-            "name": "Edinburgh Airport",
-            "distance_m": 18280.9,
-            "coordinates": [
-              -3.36039,
-              55.94749
-            ],
-            "is_hub": true,
             "transfers": []
           }
         ]
       },
       "1": {
-        "origin": "Edinburgh Airport",
-        "terminus": "Newhaven",
+        "origin": "Edinburgh Gateway",
+        "terminus": "Edinburgh Waverley",
         "stations": [
           {
-            "id": "940GZZEDAIR",
-            "name": "Edinburgh Airport",
+            "id": "EDG",
+            "name": "Edinburgh Gateway",
             "distance_m": 0.0,
             "coordinates": [
-              -3.36039,
-              55.94749
-            ],
-            "is_hub": true,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDING",
-            "name": "Ingliston Park & Ride",
-            "distance_m": 852.4,
-            "coordinates": [
-              -3.355703,
-              55.940466
+              -3.320135,
+              55.940939
             ],
             "is_hub": false,
             "transfers": []
           },
           {
-            "id": "940GZZEDGOG",
-            "name": "Gogarburn",
-            "distance_m": 2587.4,
+            "id": "SGL",
+            "name": "South Gyle",
+            "distance_m": 1386.0,
             "coordinates": [
-              -3.332313,
-              55.937998
+              -3.299342,
+              55.936495
             ],
             "is_hub": false,
             "transfers": []
           },
           {
-            "id": "940GZZEDGAT",
-            "name": "Edinburgh Gateway",
-            "distance_m": 3302.9,
-            "coordinates": [
-              -3.321756,
-              55.940466
-            ],
-            "is_hub": true,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDGYL",
-            "name": "Gyle Centre",
-            "distance_m": 3701.2,
-            "coordinates": [
-              -3.318261,
-              55.937951
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDPKC",
-            "name": "Edinburgh Park Central",
-            "distance_m": 4483.5,
-            "coordinates": [
-              -3.314585,
-              55.931353
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDPKS",
-            "name": "Edinburgh Park Station",
-            "distance_m": 5286.4,
-            "coordinates": [
-              -3.306895,
-              55.927346
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDBAN",
-            "name": "Bankhead",
-            "distance_m": 6143.7,
-            "coordinates": [
-              -3.293415,
-              55.928903
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDSAU",
-            "name": "Saughton",
-            "distance_m": 7328.3,
-            "coordinates": [
-              -3.275443,
-              55.932328
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDBAL",
-            "name": "Balgreen",
-            "distance_m": 8963.3,
-            "coordinates": [
-              -3.252212,
-              55.938119
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDMUR",
-            "name": "Murrayfield Stadium",
-            "distance_m": 9999.9,
-            "coordinates": [
-              -3.237291,
-              55.942028
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDHAY",
+            "id": "HYM",
             "name": "Haymarket",
-            "distance_m": 11206.5,
+            "distance_m": 6527.1,
             "coordinates": [
-              -3.21973,
-              55.945795
+              -3.218307,
+              55.945328
             ],
             "is_hub": true,
-            "transfers": []
+            "transfers": [
+              "GLA",
+              "NCL",
+              "SHO",
+              "CS"
+            ]
           },
           {
-            "id": "940GZZEDSHA",
-            "name": "West End - Princes Street",
-            "distance_m": 11780.3,
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 8525.4,
             "coordinates": [
-              -3.212102,
-              55.948409
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDPRS",
-            "name": "Princes Street",
-            "distance_m": 12720.1,
-            "coordinates": [
-              -3.198472,
-              55.95171
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZEDSTA",
-            "name": "St Andrew Square",
-            "distance_m": 13366.9,
-            "coordinates": [
-              -3.192316,
-              55.954618
+              -3.188674,
+              55.95223
             ],
             "is_hub": true,
-            "transfers": []
-          },
+            "transfers": [
+              "GLA",
+              "BOR",
+              "NCL",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "BOR": {
+    "id": "BOR",
+    "short_name": "BOR",
+    "color": "#7B1FA2",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
           {
-            "id": "940GZZTWWJU",
-            "name": "Picardy Place",
-            "distance_m": 13888.2,
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
             "coordinates": [
-              -3.186849,
-              55.956771
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJT",
-            "name": "McDonald Road",
-            "distance_m": 14445.3,
-            "coordinates": [
-              -3.18157,
-              55.960695
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJS",
-            "name": "Balfour Street",
-            "distance_m": 15047.7,
-            "coordinates": [
-              -3.176411,
-              55.965254
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJR",
-            "name": "Foot of the Walk",
-            "distance_m": 15753.2,
-            "coordinates": [
-              -3.171061,
-              55.970744
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJQ",
-            "name": "The Shore",
-            "distance_m": 16300.3,
-            "coordinates": [
-              -3.166924,
-              55.975031
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJP",
-            "name": "Port of Leith",
-            "distance_m": 16701.5,
-            "coordinates": [
-              -3.166363,
-              55.978124
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJO",
-            "name": "Ocean Terminal",
-            "distance_m": 17535.5,
-            "coordinates": [
-              -3.177634,
-              55.980198
-            ],
-            "is_hub": false,
-            "transfers": []
-          },
-          {
-            "id": "940GZZTWWJN",
-            "name": "Newhaven",
-            "distance_m": 18281.0,
-            "coordinates": [
-              -3.188723,
-              55.980004
+              -3.188674,
+              55.95223
             ],
             "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "NCL",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "NCL",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "NCL": {
+    "id": "NCL",
+    "short_name": "NCL",
+    "color": "#0097A7",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Edinburgh Park",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          },
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 1998.3,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "SHO",
+              "CS"
+            ]
+          },
+          {
+            "id": "EDP",
+            "name": "Edinburgh Park",
+            "distance_m": 7896.7,
+            "coordinates": [
+              -3.307566,
+              55.927597
+            ],
+            "is_hub": false,
             "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Edinburgh Park",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "EDP",
+            "name": "Edinburgh Park",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.307566,
+              55.927597
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 5898.5,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "SHO",
+              "CS"
+            ]
+          },
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 7896.7,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "SHO",
+              "LNER",
+              "CS"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "SHO": {
+    "id": "SHO",
+    "short_name": "SHO",
+    "color": "#E65100",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Curriehill",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "NCL",
+              "LNER",
+              "CS"
+            ]
+          },
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 1998.3,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "NCL",
+              "CS"
+            ]
+          },
+          {
+            "id": "SLA",
+            "name": "Slateford",
+            "distance_m": 4642.5,
+            "coordinates": [
+              -3.244207,
+              55.926485
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "KGS",
+            "name": "Kingsknowe",
+            "distance_m": 6180.3,
+            "coordinates": [
+              -3.264855,
+              55.918908
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "WTH",
+            "name": "Wester Hailes",
+            "distance_m": 7465.2,
+            "coordinates": [
+              -3.283818,
+              55.914371
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "CUR",
+            "name": "Curriehill",
+            "distance_m": 10133.4,
+            "coordinates": [
+              -3.318735,
+              55.900488
+            ],
+            "is_hub": false,
+            "transfers": []
+          }
+        ]
+      },
+      "1": {
+        "origin": "Curriehill",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "CUR",
+            "name": "Curriehill",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.318735,
+              55.900488
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "WTH",
+            "name": "Wester Hailes",
+            "distance_m": 2668.2,
+            "coordinates": [
+              -3.283818,
+              55.914371
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "KGS",
+            "name": "Kingsknowe",
+            "distance_m": 3953.1,
+            "coordinates": [
+              -3.264855,
+              55.918908
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "SLA",
+            "name": "Slateford",
+            "distance_m": 5490.9,
+            "coordinates": [
+              -3.244207,
+              55.926485
+            ],
+            "is_hub": false,
+            "transfers": []
+          },
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 8135.1,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "NCL",
+              "CS"
+            ]
+          },
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 10133.4,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "NCL",
+              "LNER",
+              "CS"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "LNER": {
+    "id": "LNER",
+    "short_name": "LNER",
+    "color": "#BA0C2F",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "NCL",
+              "SHO",
+              "CS"
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "NCL",
+              "SHO",
+              "CS"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "CS": {
+    "id": "CS",
+    "short_name": "CS",
+    "color": "#1338BE",
+    "text_color": "#FFFFFF",
+    "directions": {
+      "0": {
+        "origin": "Edinburgh Waverley",
+        "terminus": "Haymarket",
+        "stations": [
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "NCL",
+              "SHO",
+              "LNER"
+            ]
+          },
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 1998.3,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "NCL",
+              "SHO"
+            ]
+          }
+        ]
+      },
+      "1": {
+        "origin": "Haymarket",
+        "terminus": "Edinburgh Waverley",
+        "stations": [
+          {
+            "id": "HYM",
+            "name": "Haymarket",
+            "distance_m": 0.0,
+            "coordinates": [
+              -3.218307,
+              55.945328
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "NCL",
+              "SHO"
+            ]
+          },
+          {
+            "id": "EDB",
+            "name": "Edinburgh Waverley",
+            "distance_m": 1998.3,
+            "coordinates": [
+              -3.188674,
+              55.95223
+            ],
+            "is_hub": true,
+            "transfers": [
+              "GLA",
+              "FIF",
+              "BOR",
+              "NCL",
+              "SHO",
+              "LNER"
+            ]
           }
         ]
       }

@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
   "source": {
-    "provider": "Edinburgh Trams",
+    "provider": "Network Rail / Scottish Government / OSM Rail",
     "classification": {
-      "flat": "Réseau modélisé à plat (tramway urbain de surface)"
+      "tunnels": "Tunnels ferroviaires du Mound (350m), de Calton Hill (400m) et de Haymarket",
+      "surface": "Voies en tranch\u00e9e et surface \u00e0 travers Princes Street Gardens et la banlieue ouest"
     }
   },
   "summary": {
-    "aerial_sections": 0,
-    "aerial_km": 0.0,
-    "network_type": "Tramway urbain de surface"
+    "underground_sections": 18,
+    "surface_sections": 420,
+    "network_type": "Lourd ferroviaire avec tranch\u00e9es ouvertes et franchissements souterrains historiques"
   }
 }

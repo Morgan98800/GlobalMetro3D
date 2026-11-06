@@ -598,6 +598,7 @@ async function bootstrap() {
     hideTooltip();
     trackedTrain = train;
     deckOverlay.setSelectedTrain(train.id);
+    edinburghHandle?.startFollowTrain(train.id);
     if (!followCamera?.startFollow(train)) {
       map.flyTo({
         center: train.pos,
@@ -1078,6 +1079,7 @@ async function bootstrap() {
       latestRenderedTrains = new Map(trains.map(train => [train.id, train]));
       deckOverlay.setTrains(trains);
       followCamera?.onSimulationFrame();
+      edinburghHandle?.updateSimulationTrains(trains);
     },
     onPrimStatus: (status) => {
       dock.setRealtimeState(status);
@@ -1106,8 +1108,13 @@ async function bootstrap() {
     document.getElementById('app')?.appendChild(threeContainer);
 
     edinburghHandle = initEdinburghThreeView(threeContainer, {
-      onTrainClick: (service) => {
-        dock.selectLine(service.lineId);
+      onTrainClick: (trainId, lineId) => {
+        const train = latestRenderedTrains.get(trainId);
+        if (train) {
+          focusTrain(train);
+        } else {
+          dock.selectLine(lineId);
+        }
       },
       onStationClick: (stationName) => {
         const st = stations.find(s => s.name === stationName);
@@ -1130,6 +1137,7 @@ async function bootstrap() {
         <button class="map-control-btn is-visible" id="btn-preset-waverley" title="Vue Vallée de Waverley" aria-label="Vue Vallée de Waverley" style="font-size:14px;">🚂</button>
         <button class="map-control-btn is-visible" id="btn-preset-castle" title="Vue Castle Rock & Princes St" aria-label="Vue Castle Rock & Princes St" style="font-size:14px;">🏰</button>
         <button class="map-control-btn is-visible" id="btn-preset-calton" title="Vue Calton Hill" aria-label="Vue Calton Hill" style="font-size:14px;">🏛️</button>
+        <button class="map-control-btn is-visible" id="btn-preset-scotland" title="Vue Panorama Écosse (Forth Bridge & Régions)" aria-label="Vue Écosse" style="font-size:14px;">🏴󠁧󠁢󠁳󠁣󠁴󠁿</button>
         <button class="map-control-btn is-visible" id="btn-preset-overview" title="Vue d'ensemble" aria-label="Vue d'ensemble" style="font-size:14px;">🔭</button>
         <button class="map-control-btn is-visible" id="btn-follow-train" title="Suivre un train écossais (caméra embarquée)" aria-label="Suivre un train" style="font-size:14px;">🎥</button>
         <button class="map-control-btn is-visible" id="btn-toggle-view" title="Basculer Mode 3D Relief / Mode Carte" aria-label="Basculer 3D / 2D" style="font-size:11px;font-weight:700;">3D</button>
@@ -1139,6 +1147,7 @@ async function bootstrap() {
       document.getElementById('btn-preset-waverley')?.addEventListener('click', () => edinburghHandle.setCameraPreset('waverley'));
       document.getElementById('btn-preset-castle')?.addEventListener('click', () => edinburghHandle.setCameraPreset('castle'));
       document.getElementById('btn-preset-calton')?.addEventListener('click', () => edinburghHandle.setCameraPreset('calton'));
+      document.getElementById('btn-preset-scotland')?.addEventListener('click', () => edinburghHandle.setCameraPreset('scotland'));
       document.getElementById('btn-preset-overview')?.addEventListener('click', () => edinburghHandle.setCameraPreset('overview'));
       document.getElementById('btn-follow-train')?.addEventListener('click', () => edinburghHandle.toggleFollowTrain());
 

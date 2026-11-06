@@ -443,6 +443,8 @@ def build_artifacts():
 
     # 6. line_ladders.json (pour le SubwayDock)
     ladders = {}
+    lines_meta_map = {l["id"]: l for l in LINES_DATA}
+
     for l in LINES_DATA:
         line_id = l["id"]
         st_seq = l["stations_seq"]
@@ -455,13 +457,26 @@ def build_artifacts():
             if i > 0:
                 prev_st = station_id_map[st_seq[i - 1]]
                 d_accum += haversine(prev_st["coordinates"], st["coordinates"])
+            
+            # Formater les correspondances comme objets complets attendus par StationLadder
+            station_transfers = []
+            for other_line_id in st["lines"]:
+                if other_line_id != line_id and other_line_id in lines_meta_map:
+                    other_meta = lines_meta_map[other_line_id]
+                    station_transfers.append({
+                        "id": other_meta["id"],
+                        "short_name": other_meta["short_name"],
+                        "color": other_meta["color"],
+                        "text_color": other_meta["text_color"]
+                    })
+
             dir0_stations.append({
                 "id": st["id"],
                 "name": st["name"],
                 "distance_m": round(d_accum, 1),
                 "coordinates": st["coordinates"],
                 "is_hub": st["is_hub"],
-                "transfers": [x for x in st["lines"] if x != line_id]
+                "transfers": station_transfers
             })
 
         # Dir 1
@@ -473,13 +488,25 @@ def build_artifacts():
             if i > 0:
                 prev_st = station_id_map[rev_seq[i - 1]]
                 d_accum_1 += haversine(prev_st["coordinates"], st["coordinates"])
+            
+            station_transfers_1 = []
+            for other_line_id in st["lines"]:
+                if other_line_id != line_id and other_line_id in lines_meta_map:
+                    other_meta = lines_meta_map[other_line_id]
+                    station_transfers_1.append({
+                        "id": other_meta["id"],
+                        "short_name": other_meta["short_name"],
+                        "color": other_meta["color"],
+                        "text_color": other_meta["text_color"]
+                    })
+
             dir1_stations.append({
                 "id": st["id"],
                 "name": st["name"],
                 "distance_m": round(d_accum_1, 1),
                 "coordinates": st["coordinates"],
                 "is_hub": st["is_hub"],
-                "transfers": [x for x in st["lines"] if x != line_id]
+                "transfers": station_transfers_1
             })
 
         ladders[line_id] = {

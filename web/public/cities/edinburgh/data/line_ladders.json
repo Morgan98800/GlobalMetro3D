@@ -19,12 +19,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "FIF",
-              "BOR",
-              "NCL",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -37,10 +67,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "FIF",
-              "NCL",
-              "SHO",
-              "CS"
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -59,10 +109,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "FIF",
-              "NCL",
-              "SHO",
-              "CS"
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -75,12 +145,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "FIF",
-              "BOR",
-              "NCL",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -107,12 +207,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "BOR",
-              "NCL",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -125,10 +255,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "NCL",
-              "SHO",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -191,10 +341,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "NCL",
-              "SHO",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -207,12 +377,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "BOR",
-              "NCL",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -239,12 +439,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "NCL",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -263,12 +493,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "NCL",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -295,12 +555,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -313,10 +603,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "SHO",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -357,10 +667,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "SHO",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -373,12 +703,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "SHO",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -405,12 +765,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "NCL",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -423,10 +813,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "NCL",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -533,10 +943,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "NCL",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -549,12 +979,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "NCL",
-              "LNER",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -581,12 +1041,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "NCL",
-              "SHO",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -605,12 +1095,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "NCL",
-              "SHO",
-              "CS"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "CS",
+                "short_name": "CS",
+                "color": "#1338BE",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -637,12 +1157,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "NCL",
-              "SHO",
-              "LNER"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -655,10 +1205,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "NCL",
-              "SHO"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]
@@ -677,10 +1247,30 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "NCL",
-              "SHO"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              }
             ]
           },
           {
@@ -693,12 +1283,42 @@
             ],
             "is_hub": true,
             "transfers": [
-              "GLA",
-              "FIF",
-              "BOR",
-              "NCL",
-              "SHO",
-              "LNER"
+              {
+                "id": "GLA",
+                "short_name": "EXP",
+                "color": "#002D62",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "FIF",
+                "short_name": "FIF",
+                "color": "#00823B",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "BOR",
+                "short_name": "BOR",
+                "color": "#7B1FA2",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "NCL",
+                "short_name": "NCL",
+                "color": "#0097A7",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "SHO",
+                "short_name": "SHO",
+                "color": "#E65100",
+                "text_color": "#FFFFFF"
+              },
+              {
+                "id": "LNER",
+                "short_name": "LNER",
+                "color": "#BA0C2F",
+                "text_color": "#FFFFFF"
+              }
             ]
           }
         ]

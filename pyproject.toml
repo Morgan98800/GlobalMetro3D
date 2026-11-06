@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paris-subway-3d"
+version = "1.0.0"
+description = "Ingest pipeline and tools for Paris Subway 3D"
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.31.0",
+    "shapely>=2.0.0",
+    "numpy>=1.24.0",
+    "Pillow>=10.0.0",
+    "scipy>=1.11.0",
+    "tqdm>=4.66.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+]
+
+[tool.setuptools]
+packages = [
+    "core",
+    "core.ingest",
+    "core.ingest.src",
+    "core.ingest.tests",
+    "scripts",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["core/ingest/tests"]
+pythonpath = ["."]
+filterwarnings = [
+    "ignore::urllib3.exceptions.NotOpenSSLWarning",
+]

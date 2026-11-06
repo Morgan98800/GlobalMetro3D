@@ -33,6 +33,7 @@
     "format": "biome format --write",
     "format:check": "biome format",
     "test": "vitest run",
+    "test:python": "pytest",
     "test:london-other-modes-snapshot": "vitest run tests/london-other-modes-snapshot.test.ts",
     "test:engine-realtime": "vitest run tests/engine-realtime-adapter.test.ts"
   },

@@ -108,12 +108,76 @@ class TestPhaseAAcceptance:
         start, end = coords[index], coords[index + 1]
         return (start[0] + fraction * (end[0] - start[0]), start[1] + fraction * (end[1] - start[1]))
 
+    @classmethod
+    def _ensure_network_sqlite(cls, processed_dir: Path):
+        db_path = processed_dir / "network.sqlite"
+        schedule_path = processed_dir / "schedule.json"
+        if not schedule_path.exists():
+            schedule_path = ROOT / "web" / "public" / "data" / "schedule.json"
+        if not schedule_path.exists():
+            return
+
+        needs_build = not db_path.exists()
+        if not needs_build:
+            try:
+                with sqlite3.connect(db_path) as conn:
+                    cur = conn.cursor()
+                    cur.execute("SELECT 1 FROM trip_stops LIMIT 1")
+                    cur.execute("SELECT 1 FROM trips_index LIMIT 1")
+            except sqlite3.OperationalError:
+                needs_build = True
+
+        if needs_build:
+            with open(schedule_path, "r", encoding="utf-8") as f:
+                sched = json.load(f)
+            trips = sched.get("trips", [])
+            conn = sqlite3.connect(db_path)
+            cur = conn.cursor()
+            cur.execute("PRAGMA journal_mode = WAL;")
+            cur.execute("PRAGMA synchronous = NORMAL;")
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS trips_index (
+                    trip_id TEXT PRIMARY KEY,
+                    route_id TEXT NOT NULL,
+                    direction_id INT NOT NULL,
+                    service_id TEXT NOT NULL,
+                    shape_id TEXT NOT NULL,
+                    start_time_s INT NOT NULL,
+                    end_time_s INT NOT NULL,
+                    block_id TEXT
+                );
+            """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS trip_stops (
+                    trip_id TEXT NOT NULL,
+                    stop_sequence INT NOT NULL,
+                    stop_id TEXT NOT NULL,
+                    arrival_time INT NOT NULL,
+                    departure_time INT NOT NULL,
+                    shape_dist_traveled REAL NOT NULL,
+                    PRIMARY KEY (trip_id, stop_sequence)
+                );
+            """)
+            trip_rows = []
+            stop_rows = []
+            for t in trips:
+                tid, route_id, dir_id, shape_id, start_s, end_s, _term, stops = t[:8]
+                trip_rows.append((tid, route_id, dir_id, "default", shape_id, start_s, end_s, ""))
+                for seq, st in enumerate(stops):
+                    arr_s, dep_s, curv_dist, st_idx = st
+                    stop_rows.append((tid, seq, str(st_idx), arr_s, dep_s, curv_dist))
+            cur.executemany("INSERT OR REPLACE INTO trips_index VALUES (?, ?, ?, ?, ?, ?, ?, ?);", trip_rows)
+            cur.executemany("INSERT OR REPLACE INTO trip_stops VALUES (?, ?, ?, ?, ?, ?);", stop_rows)
+            conn.commit()
+            conn.close()
+
     @pytest.fixture(scope="class")
     def processed_data_dir(self):
         processed_dir = ROOT / "cities" / "paris" / "data" / "processed"
         if not processed_dir.exists():
             processed_dir = ROOT / "data" / "processed"
         assert processed_dir.exists(), f"Directory {processed_dir} does not exist. Ingestion not run yet."
+        self._ensure_network_sqlite(processed_dir)
         return str(processed_dir)
 
     def test_criterion_1_all_16_metro_lines_present(self, processed_data_dir):

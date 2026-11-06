@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Python package
+        run: pip install -e ".[test]"
+
       - name: Run typecheck
         run: npm run typecheck
 
@@ -36,8 +39,11 @@ jobs:
       - name: Check code formatting
         run: npm run format:check
 
-      - name: Run tests
+      - name: Run JS/TS tests
         run: npm test
+
+      - name: Run Python tests
+        run: pytest
 
       - name: Build web application
         run: npm run build:web

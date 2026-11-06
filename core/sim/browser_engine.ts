@@ -122,7 +122,9 @@ export class BrowserSubwayEngine {
 
   public async initialize(lines: LineMetadata[], externalShapesMap?: Map<string, Shape>) {
     this.externalShapesMap = externalShapesMap;
-    lines.forEach((l) => this.linesMap.set(l.id, l));
+    for (const l of lines) {
+      this.linesMap.set(l.id, l);
+    }
 
     // 1. Fetch shapes.bin & schedule.json in parallel
     const dataDir = this.config.paths.dataDir;

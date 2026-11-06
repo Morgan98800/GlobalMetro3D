@@ -450,7 +450,9 @@ export class StationLadder {
     this.containerEl.querySelectorAll<HTMLElement>('.ladder-node-train-slot').forEach((slot) => {
       if (!trainsByStation.has(Number(slot.id.replace('slot-station-', '')))) {
         slot.classList.remove('ladder-node-train-slot--double');
-        slot.querySelectorAll('.ladder-train-cursor').forEach((element) => element.remove());
+        slot.querySelectorAll('.ladder-train-cursor').forEach((element) => {
+          element.remove();
+        });
       }
     });
 

@@ -225,7 +225,9 @@ export function initEdinburghThreeView(
       for (const track of tracks) {
         if (!track.coordinates || track.coordinates.length < 2) continue;
         const pts = track.coordinates.map((c) => lonLatToWorld(c[0], c[1], 53.0));
-        pts.forEach((p) => (p.y += 0.035)); // Évite le z-fighting avec le sol
+        for (const p of pts) {
+          p.y += 0.035; // Évite le z-fighting avec le sol
+        }
 
         const geo = new THREE.BufferGeometry().setFromPoints(pts);
         const mat = new THREE.LineBasicMaterial({

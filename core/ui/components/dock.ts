@@ -281,7 +281,11 @@ export class SubwayDock {
     for (const grp of sortedGroups) {
       appendGroup(grp.label, grp.lines);
     }
-    this.setGridSelected = (lineId) => setters.forEach((setSelected) => setSelected(lineId));
+    this.setGridSelected = (lineId) => {
+      for (const setSelected of setters) {
+        setSelected(lineId);
+      }
+    };
     this.linesGridEl.replaceChildren(fragment);
     this.renderContent();
   }

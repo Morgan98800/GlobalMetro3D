@@ -1,13 +1,23 @@
 import assert from 'node:assert/strict';
+import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { resolveTrainRenderLayers } from '@core/ui/map/train_render_fallback';
 import { carCenterSpacingM, compassBearingToDeckYaw } from '@core/ui/map/train_model_geometry';
 import { getRollingStockForLine } from '@core/sim/rolling_stock';
 
-import { describe, it } from 'vitest';
+import { beforeAll, describe, it } from 'vitest';
 
 describe('train_models_layer and RER specifications', () => {
+  beforeAll(() => {
+    const glbPath = path.resolve(
+      import.meta.dirname,
+      '../web/public/models/train/rer_generic_A__neutral.glb'
+    );
+    if (!fs.existsSync(glbPath)) {
+      execSync('npm run models:publish', { stdio: 'pipe' });
+    }
+  });
   it('should validate fallback layers and geometry', () => {
     const capsuleLayers = ['capsule-base', 'capsule-core'];
     const modelLayers = ['model-pneumatic', 'model-steel'];

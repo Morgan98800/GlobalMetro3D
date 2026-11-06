@@ -30,6 +30,9 @@ jobs:
       - name: Install Python package
         run: pip install -e ".[test]"
 
+      - name: Publish train models & asset manifest
+        run: npm run models:publish
+
       - name: Run typecheck
         run: npm run typecheck
 

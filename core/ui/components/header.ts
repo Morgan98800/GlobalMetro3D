@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import type { CityAttribution, RealtimeCapability, RealtimeProvider, ScheduleModel } from '@core/config';
+import { escapeHtml } from '../utils';
 
 export interface CityItem {
   id: string;
@@ -122,7 +123,7 @@ export class TopBar {
       </svg>
     `;
 
-    this.citiesDropdownTrigger.innerHTML = `${triggerMark}<span class="topbar__city-name">${this.displayName.toLowerCase()}</span>${chevronSvg}`;
+    this.citiesDropdownTrigger.innerHTML = `${triggerMark}<span class="topbar__city-name">${escapeHtml(this.displayName.toLowerCase())}</span>${chevronSvg}`;
     this.citiesDropdownNameEl = this.citiesDropdownTrigger.querySelector('.topbar__city-name') as HTMLElement;
 
     this.citiesDropdownMenu = document.createElement('ul');
@@ -157,7 +158,7 @@ export class TopBar {
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
           <circle cx="12" cy="12" r="5" fill="currentColor"/>
         </svg>
-        <span class="topbar__city-name">${city.displayName.toLowerCase()}</span>
+        <span class="topbar__city-name">${escapeHtml(city.displayName.toLowerCase())}</span>
       `;
 
       link.addEventListener('click', (e) => {

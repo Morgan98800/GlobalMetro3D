@@ -17,6 +17,7 @@ import '@core/ui/styles/chrome.css';
 import { TopBar } from '@core/ui/components/header';
 import { auditLineContrast, LineLike, lineBadge } from '@core/ui/components/line_badge';
 import { FollowCamera } from '@core/ui/map/follow_camera';
+import { escapeHtml } from '@core/ui/utils';
 
 const DATA_REVISION = '20260910-07';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
@@ -53,7 +54,6 @@ function expandBounds(bounds: MapBounds, marginKm = 30): MapBounds {
 
 function openNetworkRecords(rankings: any) {
   document.getElementById('records-modal')?.remove();
-  const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char] || char));
   const dayLabels: Record<string, string> = { weekday: 'Semaine', saturday: 'Samedi', sunday: 'Dimanche' };
   const sections = Object.entries(dayLabels).map(([day, label]) => {
     const rows = rankings.by_station?.[day] || [];
@@ -653,7 +653,7 @@ async function bootstrap() {
           : '';
 
         tooltipEl.innerHTML = `
-          <div class="tooltip-name">${st.name}</div>
+          <div class="tooltip-name">${escapeHtml(st.name)}</div>
           <div class="tooltip-lines">${badgesHtml}</div>
           ${serviceHtml}
         `;
@@ -714,10 +714,10 @@ async function bootstrap() {
         tooltipEl.innerHTML = `
           <div class="train-tooltip-header">
             ${trainBadge}
-            <span class="train-tooltip-dest">${tr.dest}</span>
+            <span class="train-tooltip-dest">${escapeHtml(tr.dest)}</span>
           </div>
           <div class="train-tooltip-body">
-            <div>Prochain arrêt : <strong>${tr.next || '—'}</strong></div>
+            <div>Prochain arrêt : <strong>${escapeHtml(tr.next || '—')}</strong></div>
             <div class="train-tooltip-meta">
               <span>Vitesse : <strong>${Number(tr.spd || 0).toLocaleString('fr-FR')} km/h</strong></span>
               <span>Écart : ${delayText}</span>

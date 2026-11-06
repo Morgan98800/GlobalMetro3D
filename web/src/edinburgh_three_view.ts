@@ -300,7 +300,7 @@ export function initEdinburghThreeView(
     badge.style.pointerEvents = 'auto';
     badge.style.whiteSpace = 'nowrap';
     badge.style.boxShadow = '0 2px 8px rgba(0,0,0,0.4)';
-    badge.innerHTML = `🚆 ${name}`;
+    badge.textContent = `🚆 ${name}`;
 
     badge.addEventListener('click', () => {
       options?.onStationClick?.(name);
@@ -331,7 +331,7 @@ export function initEdinburghThreeView(
     badge.style.pointerEvents = 'auto';
     badge.style.cursor = 'pointer';
     badge.style.whiteSpace = 'nowrap';
-    badge.innerHTML = `${info.icon} ${name}`;
+    badge.textContent = `${info.icon} ${name}`;
 
     badge.addEventListener('click', () => {
       flyToTarget(new THREE.Vector3(info.pos[0], info.pos[1], info.pos[2]), 40);

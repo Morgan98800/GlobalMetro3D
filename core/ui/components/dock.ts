@@ -5,6 +5,7 @@ import { lineBadgeGrid, LineLike } from './line_badge';
 import type { RollingStockDatabase } from '@core/sim/rolling_stock';
 import { getRollingStockForLine } from '@core/sim/rolling_stock';
 import type { LineTrafficReport } from '@core/types';
+import { escapeHtml } from '../utils';
 
 export interface DockServiceStatus {
   state: 'loading' | 'before_first' | 'active' | 'ended';
@@ -336,7 +337,7 @@ export class SubwayDock {
     const lineStations = this.stations.filter(s => s.lines.includes(line.id));
     const title = document.createElement('div');
     title.className = 'dock-line-title';
-    title.innerHTML = `<span class="dock-badge" style="background:${line.color}; color:${line.text_color};">${line.short_name}</span> ${line.long_name || line.short_name}`;
+    title.innerHTML = `<span class="dock-badge" style="background:${line.color}; color:${line.text_color};">${escapeHtml(line.short_name)}</span> ${escapeHtml(line.long_name || line.short_name)}`;
     const list = document.createElement('div');
     list.className = 'station-list';
     for (const s of lineStations) {
@@ -348,7 +349,7 @@ export class SubwayDock {
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
       item.setAttribute('aria-label', `Station ${s.name}`);
-      item.innerHTML = `<span class="station-name" title="${s.name}">${s.name}</span>`;
+      item.innerHTML = `<span class="station-name" title="${escapeHtml(s.name)}">${escapeHtml(s.name)}</span>`;
       item.addEventListener('click', () => this.onStationClick(s));
       item.addEventListener('keydown', (e: KeyboardEvent) => {
         if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
@@ -399,26 +400,26 @@ export class SubwayDock {
     summary.className = 'dock-line-summary';
     summary.innerHTML = `
       <div class="dock-line-summary-head">
-        <div class="dock-line-summary-title"><span class="dock-line-summary-badge" style="background:${line.color}; color:${line.text_color};">${line.short_name.replace(/bis$/i, 'b')}</span> Indicateurs de la ligne ${line.short_name}</div>
+        <div class="dock-line-summary-title"><span class="dock-line-summary-badge" style="background:${line.color}; color:${line.text_color};">${escapeHtml(line.short_name.replace(/bis$/i, 'b'))}</span> Indicateurs de la ligne ${escapeHtml(line.short_name)}</div>
         <button type="button" class="dock-line-close" aria-label="Désélectionner la ligne" title="Retour au réseau global">×</button>
       </div>
       ${trafficBlock}
-      <div class="dock-line-directions" role="group" aria-label="Directions de la ligne ${line.short_name}">
+      <div class="dock-line-directions" role="group" aria-label="Directions de la ligne ${escapeHtml(line.short_name)}">
         ${(['0', '1'] as const).filter(dir => line.destinations[dir]).map(dir => `
           <button type="button" class="dock-line-direction ${this.selectedDir === dir ? 'active' : ''}" data-dock-dir="${dir}">
-            → ${line.destinations[dir]}
+            → ${escapeHtml(line.destinations[dir])}
           </button>
         `).join('')}
       </div>
       <div class="dock-line-summary-grid">
-        <div><span class="dock-stat-label">Rames → ${line.destinations['0'] || 'sens 1'}</span><strong id="dock-line-count-0">0</strong></div>
-        <div><span class="dock-stat-label">Rames → ${line.destinations['1'] || 'sens 2'}</span><strong id="dock-line-count-1">0</strong></div>
+        <div><span class="dock-stat-label">Rames → ${escapeHtml(line.destinations['0'] || 'sens 1')}</span><strong id="dock-line-count-0">0</strong></div>
+        <div><span class="dock-stat-label">Rames → ${escapeHtml(line.destinations['1'] || 'sens 2')}</span><strong id="dock-line-count-1">0</strong></div>
         <div><span class="dock-stat-label">Intervalle moyen sens 1</span><strong id="dock-line-headway-0">—</strong></div>
         <div><span class="dock-stat-label">Intervalle moyen sens 2</span><strong id="dock-line-headway-1">—</strong></div>
         <div><span class="dock-stat-label">Vitesse moyenne</span><strong id="dock-line-speed">—</strong></div>
         <div><span class="dock-stat-label">Stations · longueur</span><strong>${stations.length.toLocaleString('fr-FR')} · ${line.measured_length_km.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} km</strong></div>
-        <div><span class="dock-stat-label">Matériel roulant</span><strong>${stock?.name || 'Non renseigné'}</strong></div>
-        <div><span class="dock-stat-label">État du service</span><strong id="dock-line-service">${serviceLabel}</strong></div>
+        <div><span class="dock-stat-label">Matériel roulant</span><strong>${escapeHtml(stock?.name || 'Non renseigné')}</strong></div>
+        <div><span class="dock-stat-label">État du service</span><strong id="dock-line-service">${escapeHtml(serviceLabel)}</strong></div>
       </div>
       ${rerConfidence}
     `;

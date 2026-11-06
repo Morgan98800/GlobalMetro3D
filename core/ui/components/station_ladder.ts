@@ -1,4 +1,5 @@
 import type { TrainMarker } from '@core/ui/map/trains_layer';
+import { escapeHtml } from '../utils';
 
 export interface StationLadderNode {
   id: string;
@@ -58,19 +59,9 @@ export class StationLadder {
     return Math.max(0, Math.min(140, speed));
   }
 
-  private escapeHtml(value: string): string {
-    return value.replace(/[&<>"']/g, character => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;',
-    }[character] || character));
-  }
-
   private renderSignal(speed: number, dest: string, atQuai: boolean): string {
     const chevron = '<svg class="sig__arrow" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 1l3 3-3 3"/></svg>';
-    const safeDest = this.escapeHtml(dest);
+    const safeDest = escapeHtml(dest);
     const safeSpeed = this.clampSpeed(speed);
     const content = atQuai
       ? '<span class="sig__dot" aria-hidden="true"></span><span class="sig__quai">à quai</span>'
@@ -198,18 +189,18 @@ export class StationLadder {
       const isLast = i === dirData.stations.length - 1;
 
       html += `
-        <div class="ladder-station-node" role="button" tabindex="0" aria-label="Station ${st.name}" data-station-name="${st.name}" data-station-idx="${i}" data-lat="${st.coordinates[1]}" data-lng="${st.coordinates[0]}">
+        <div class="ladder-station-node" role="button" tabindex="0" aria-label="Station ${escapeHtml(st.name)}" data-station-name="${escapeHtml(st.name)}" data-station-idx="${i}" data-lat="${st.coordinates[1]}" data-lng="${st.coordinates[0]}">
           <div class="ladder-node-bullet ${isFirst || isLast ? 'terminus' : ''} ${st.is_hub ? 'hub' : ''}" style="border-color: ${color};">
             <div class="ladder-node-inner" style="background-color: ${isFirst || isLast || st.is_hub ? color : 'var(--fonte-surface)'};"></div>
           </div>
           <div class="ladder-node-details">
-            <span class="ladder-node-name ${st.is_hub ? 'bold' : ''}" title="${st.name}">${st.name}</span>
+            <span class="ladder-node-name ${st.is_hub ? 'bold' : ''}" title="${escapeHtml(st.name)}">${escapeHtml(st.name)}</span>
             <div class="ladder-node-transfers">
               ${st.transfers
                 .map(
                   t => `
-                <button class="pill-mini transfer-pill" data-transfer-id="${t.id}" style="background-color: ${t.color}; color: ${t.text_color};" title="Correspondance Ligne ${t.short_name}">
-                  ${t.short_name}
+                <button class="pill-mini transfer-pill" data-transfer-id="${t.id}" style="background-color: ${t.color}; color: ${t.text_color};" title="Correspondance Ligne ${escapeHtml(t.short_name)}">
+                  ${escapeHtml(t.short_name)}
                 </button>
               `
                 )

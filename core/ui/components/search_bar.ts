@@ -1,5 +1,6 @@
 import type { StationMetadata, LineMetadata } from '@core/types';
 import { badgeLabel } from './line_badge';
+import { escapeHtml } from '../utils';
 
 export interface SearchBarOptions {
   triggerId?: string;
@@ -232,7 +233,7 @@ export class SubwaySearchBar {
         const badges = st.lines
           .map(lid => this.linesMap.get(lid))
           .filter((l): l is LineMetadata => !!l)
-          .map(l => `<span class="search-line-pill" style="background:${l.color}; color:${l.text_color};">${badgeLabel(l.short_name)}</span>`)
+          .map(l => `<span class="search-line-pill" style="background:${l.color}; color:${l.text_color};">${escapeHtml(badgeLabel(l.short_name))}</span>`)
           .join('');
 
         const hubTag = st.is_hub || st.lines.length >= 3 ? `<span class="cmd-palette-hub">Pôle</span>` : '';
@@ -246,7 +247,7 @@ export class SubwaySearchBar {
             data-index="${index}"
           >
             <div class="cmd-palette-item-name">
-              <span>${st.name}</span>
+              <span>${escapeHtml(st.name)}</span>
               ${hubTag}
             </div>
             <div class="cmd-palette-item-badges">${badges}</div>

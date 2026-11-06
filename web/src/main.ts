@@ -1117,6 +1117,7 @@ async function bootstrap() {
         <button class="map-control-btn is-visible" id="btn-preset-castle" title="Vue Castle Rock & Princes St" aria-label="Vue Castle Rock & Princes St" style="font-size:14px;">🏰</button>
         <button class="map-control-btn is-visible" id="btn-preset-calton" title="Vue Calton Hill" aria-label="Vue Calton Hill" style="font-size:14px;">🏛️</button>
         <button class="map-control-btn is-visible" id="btn-preset-overview" title="Vue d'ensemble" aria-label="Vue d'ensemble" style="font-size:14px;">🔭</button>
+        <button class="map-control-btn is-visible" id="btn-follow-train" title="Suivre un train écossais (caméra embarquée)" aria-label="Suivre un train" style="font-size:14px;">🎥</button>
         <button class="map-control-btn is-visible" id="btn-toggle-view" title="Basculer Mode 3D Relief / Mode Carte" aria-label="Basculer 3D / 2D" style="font-size:11px;font-weight:700;">3D</button>
       `;
       controlsAside.prepend(presetWrap);
@@ -1125,6 +1126,7 @@ async function bootstrap() {
       document.getElementById('btn-preset-castle')?.addEventListener('click', () => handle.setCameraPreset('castle'));
       document.getElementById('btn-preset-calton')?.addEventListener('click', () => handle.setCameraPreset('calton'));
       document.getElementById('btn-preset-overview')?.addEventListener('click', () => handle.setCameraPreset('overview'));
+      document.getElementById('btn-follow-train')?.addEventListener('click', () => handle.toggleFollowTrain());
 
       let is3dActive = true;
       document.getElementById('btn-toggle-view')?.addEventListener('click', () => {

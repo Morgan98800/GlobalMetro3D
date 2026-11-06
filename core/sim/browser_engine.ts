@@ -17,7 +17,7 @@ import {
 } from '@core/rt/rt_matching';
 import { cityClock, selectActiveTrips, serviceCandidates } from './paris_time';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
-import type { LineMetadata } from '@core/types';
+import type { LineMetadata, LineTrafficReport } from '@core/types';
 import type { CityConfig } from '@core/config';
 
 export interface EngineEvents {
@@ -88,6 +88,11 @@ export class BrowserSubwayEngine {
   private serviceDistanceM = 0;
   private distanceServiceDate = '';
   private distanceByTrip = new Map<string, number>();
+
+  private firstMetroSeconds = 0;
+  private lastServiceSeconds = 0;
+  private lastTrafficByLine: Record<string, LineTrafficReport> | null = null;
+  private closedStationsRules = new Map<string, { allClosed: boolean; normalizedSet: Set<string>; normalizedList: string[] }>();
 
   private externalShapesMap?: Map<string, Shape>;
   private config: CityConfig;
@@ -172,6 +177,7 @@ export class BrowserSubwayEngine {
 
     console.log(`[engine] Loaded ${this.shapes.size} shapes and ${this.trips.length} scheduled trips.`);
 
+    this.recomputeTripTimeBounds();
     this.lineIds = lines.map(l => l.id);
     this.initializeServiceDistance(new Date());
 
@@ -254,6 +260,7 @@ export class BrowserSubwayEngine {
       });
 
       this.trips.push(...rerTrips);
+      this.recomputeTripTimeBounds();
       console.log(`[engine] Loaded ${rerShapesMap.size} RER shapes and ${rerTrips.length} RER scheduled trips.`);
     } catch (err) {
       console.warn('[engine] Could not load RER dataset:', err);
@@ -272,6 +279,8 @@ export class BrowserSubwayEngine {
     this.realtime.reset?.();
     this.suppressedTripIds.clear();
     this.fadingOutGhosts.clear();
+    this.closedStationsRules.clear();
+    this.lastTrafficByLine = null;
   }
 
   public isRealtimeActive(): boolean {
@@ -293,7 +302,7 @@ export class BrowserSubwayEngine {
 
   private serviceDateFor(now: Date): string {
     const clock = cityClock(now, this.config.timezone);
-    const firstTrip = this.trips.reduce((min, trip) => Math.min(min, trip.t0), Number.POSITIVE_INFINITY);
+    const firstTrip = this.firstMetroSeconds;
     const candidates = serviceCandidates(now, this.config.timezone);
     if (clock.secondsSinceMidnight < firstTrip && candidates.length > 1) {
       return candidates[1].serviceDate;
@@ -365,8 +374,8 @@ export class BrowserSubwayEngine {
       };
     }
 
-    const firstMetroSeconds = Math.min(...this.trips.map(trip => trip.t0));
-    const lastServiceSeconds = Math.max(...this.trips.map(trip => trip.t1));
+    const firstMetroSeconds = this.firstMetroSeconds;
+    const lastServiceSeconds = this.lastServiceSeconds;
     const active = serviceCandidates(now, this.config.timezone).some(candidate =>
       candidate.seconds >= firstMetroSeconds && candidate.seconds <= lastServiceSeconds
     );
@@ -391,6 +400,47 @@ export class BrowserSubwayEngine {
       secondsUntilFirst: state === 'active' ? 0 : Math.max(0, firstTodayOrTomorrow - secondsSinceMidnight),
       nowCivilSeconds: secondsSinceMidnight
     };
+  }
+
+  private recomputeTripTimeBounds() {
+    if (this.trips.length === 0) {
+      this.firstMetroSeconds = 0;
+      this.lastServiceSeconds = 0;
+      return;
+    }
+    let minT0 = Number.POSITIVE_INFINITY;
+    let maxT1 = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < this.trips.length; i++) {
+      const t = this.trips[i];
+      if (t.t0 < minT0) minT0 = t.t0;
+      if (t.t1 > maxT1) maxT1 = t.t1;
+    }
+    this.firstMetroSeconds = Number.isFinite(minT0) ? minT0 : 0;
+    this.lastServiceSeconds = Number.isFinite(maxT1) ? maxT1 : 0;
+  }
+
+  private syncTrafficRules(trafficByLine: Record<string, LineTrafficReport>) {
+    this.closedStationsRules.clear();
+    for (const [lineId, report] of Object.entries(trafficByLine)) {
+      if (report && report.status === 'interrupted') {
+        if (!report.closedStations || report.closedStations.length === 0) {
+          this.closedStationsRules.set(lineId, {
+            allClosed: true,
+            normalizedSet: new Set(),
+            normalizedList: []
+          });
+        } else {
+          const normalized = report.closedStations
+            .map(cs => normalizeStopName(cs))
+            .filter(cs => cs.length >= 3);
+          this.closedStationsRules.set(lineId, {
+            allClosed: false,
+            normalizedSet: new Set(normalized),
+            normalizedList: normalized
+          });
+        }
+      }
+    }
   }
 
   public toggleRealtime(): boolean {
@@ -425,6 +475,11 @@ export class BrowserSubwayEngine {
     if (events.onRealtimeStatus) {
       this.realtime.onUpdate(events.onRealtimeStatus);
     }
+    this.realtime.onUpdate(() => {
+      const traffic = this.realtime.getTrafficByLine();
+      this.lastTrafficByLine = traffic;
+      this.syncTrafficRules(traffic);
+    });
 
     const onTick = () => {
       if (!this.isRunning) return;
@@ -436,6 +491,10 @@ export class BrowserSubwayEngine {
       const activeTrips = selectActiveTrips(this.trips, now, undefined, 0, this.config.timezone);
       const activeSchedTrips = activeTrips.map(a => this.schedTripsMap.get(a.trip.id)!).filter(Boolean);
       const trafficByLine = this.realtime.getTrafficByLine();
+      if (trafficByLine !== this.lastTrafficByLine) {
+        this.lastTrafficByLine = trafficByLine;
+        this.syncTrafficRules(trafficByLine);
+      }
 
       // Levels 2 & 3: the city's adapter recalibrates timelines, if it can.
       if (this.realtime.applyTick && this.realtime.getStatus().active) {
@@ -475,24 +534,18 @@ export class BrowserSubwayEngine {
         if (this.suppressedTripIds.has(trip.id)) continue;
 
         // Info Trafic check: suspend trips on interrupted sections
-        const lineTraffic = trafficByLine[trip.line];
-        if (lineTraffic && lineTraffic.status === 'interrupted') {
-          if (lineTraffic.closedStations && lineTraffic.closedStations.length > 0) {
-            const isInsideClosedSection = trip.stops.some(s => {
-              const normStop = normalizeStopName(s[3]);
-              return lineTraffic.closedStations!.some(cs => {
-                const normCs = normalizeStopName(cs);
-                return (
-                  (normStop.length >= 3 && normCs.length >= 3) &&
-                  (normStop.includes(normCs) || normCs.includes(normStop))
-                );
-              });
-            });
-            if (isInsideClosedSection) continue;
-          } else {
-            // Line-level interruption without specific stations: suppress all trains on this line!
-            continue;
-          }
+        const trafficRule = this.closedStationsRules.get(trip.line);
+        if (trafficRule) {
+          if (trafficRule.allClosed) continue;
+          const isInsideClosedSection = trip.stops.some(s => {
+            const normStop = normalizeStopName(s[3]);
+            if (normStop.length < 3) return false;
+            if (trafficRule.normalizedSet.has(normStop)) return true;
+            return trafficRule.normalizedList.some(normCs =>
+              normStop.includes(normCs) || normCs.includes(normStop)
+            );
+          });
+          if (isInsideClosedSection) continue;
         }
 
         const shape = this.shapes.get(trip.shapeId);

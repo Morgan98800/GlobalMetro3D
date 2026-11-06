@@ -345,3 +345,36 @@ Le script [`cities/berlin/ingest/build_berlin_artifacts.py`](file:///Users/morga
 - `bvg_kleinprofil__neutral.glb` (3 208 octets = 3,13 Ko < 15 Ko) : caisse Kleinprofil compacte jaune BVG (#F2C200) pour U1, U2, U3, U4.
 - `bvg_grossprofil__neutral.glb` (3 184 octets = 3,11 Ko < 15 Ko) : caisse Großprofil large jaune BVG (#F2C200) pour U5, U6, U7, U8, U9.
 
+---
+
+## 9. Pipeline Réseau d'Édimbourg Tramway (`cities/edinburgh/ingest/`)
+
+Le script [`cities/edinburgh/ingest/build_edinburgh_artifacts.py`](file:///Users/morgancanteri/Documents/Paris%20subway%203D/cities/edinburgh/ingest/build_edinburgh_artifacts.py) génère l'ensemble des 10 artefacts normalisés pour la ligne de tramway d'Édimbourg (Edinburgh Trams, route T50 / 2908) :
+
+### Données sources & Ingestion
+- **GTFS Statique BODS Écosse (DfT / ITO World)** : archive nationale GTFS couvrant le tramway d'Édimbourg (agence `OP599`, ligne `2908`, `route_type: 0`).
+- **Plage de validité** : 6 novembre 2026 au 5 août 2027 (ligne complète opérationnelle après rétablissement de service suite à l'incendie Debenhams de Princes Street du 9 juillet au 29 août 2026).
+- **23 Arrêts canoniques** : séquence Airport ↔ Newhaven rigoureusement vérifiée et validée (York Place fermé en 2023 exclu, Picardy Place bien présent, Edinburgh Gateway rattaché).
+- **Recalage métrique sur le tracé** : 16 stations ont un écart initial au tracé OSM < 5 m (conforme). Les 7 stations dépassant 5 m (dont Edinburgh Airport à 17,28 m et Ingliston P&R à 16,96 m en raison du placement des abris piétons NaPTAN) ont été projetées et recalées sur l'axe des rails.
+- **Services partiels préservés** : 36 missions partielles vers/depuis le dépôt Gogarburn, Gyle Centre et Edinburgh Gateway fidèlement conservées sans prolongement artificiel.
+
+### 10 Artefacts normalisés produits (`cities/edinburgh/data/`)
+1. **`lines.json`** : 1 ligne `T50` (« Edinburgh Trams »), couleur officielle bordeaux `#8B1D42` (`text_color: #FFFFFF`), mode `tram`, longueur mesurée 18,28 km.
+2. **`stations.json`** : 23 stations canoniques uniques avec identifiants NaPTAN autoritaires (`940GZZ*`).
+3. **`tracks.json`** : 2 voies physiques représentatives (Airport => Newhaven et Newhaven => Airport) issues des relations OSM haute précision 4116776 et 2632877.
+4. **`shapes.bin`** : 6 tracés SHP2 quantifiés au pas fixe de 10 m (24 Ko, 5 971 points).
+5. **`schedule.json`** : 299 courses actives du service de semaine nominal (exactement 16 rames actives au snapshot de 14:00:00 GMT).
+6. **`line_ladders.json`** : Thermomètres d'arrêts ordonnés par direction avec repérage des hubs (Airport, Gateway, Haymarket, St Andrew Square, Newhaven).
+7. **`sections.json`** : Réseau de surface à plat (tramway urbain).
+8. **`station-rankings.json`** : Desserte théorique par station (semaine, samedi, dimanche).
+9. **`rolling-stock.json`** : Rame articulée CAF Urbos 3 (7 caisses, 42,8 m × 2,65 m × 3,40 m) avec mention `verified: false`.
+10. **`feed_fingerprint.json`** : Empreinte de fraîcheur du flux BODS Scotland GTFS (OGL v3.0).
+
+### Modèle 3D Matériel Roulant (`scripts/build_edinburgh_train_models.py`)
+- `caf_urbos_3__neutral.glb` (3 280 octets = 3,20 Ko < 15 Ko) : rame clean-room complète 7 modules en livrée bordeaux et blanc cassé Edinburgh Trams.
+
+### Relief et Bâti 3D Historique
+- Validation LiDAR écossais Phase 5 (Scottish Government / Fugro 2021, OGL v3.0) sur les 6 édifices majeurs (The Hub 72,0 m, Scott Monument 57,5 m, St Mary's 86,2 m, St Giles 48,2 m, etc.).
+- Jumeau numérique fourni `edinburgh_3d.glb` (20 Mo, 10 147 bâtiments géoréférencés sur relief 3D, axes X=est, Y=haut, Z=sud).
+
+

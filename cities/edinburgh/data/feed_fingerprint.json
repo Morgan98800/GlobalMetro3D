@@ -1,0 +1,12 @@
+{
+  "url": "https://data.bus-data.dft.gov.uk/timetable/download/gtfs-file/scotland/",
+  "source": "Bus Open Data Service (BODS) / Department for Transport (OGL v3.0)",
+  "dataset": "itm_scotland_gtfs.zip (Edinburgh Trams route 2908 / T50)",
+  "generated_at": "2026-11-06",
+  "timezone": "Europe/London",
+  "max_gtfs_time": "24:51:00",
+  "service_date": "20261106",
+  "lines": [
+    "T50"
+  ]
+}

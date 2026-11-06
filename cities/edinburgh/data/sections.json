@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "source": {
+    "provider": "Edinburgh Trams",
+    "classification": {
+      "flat": "Réseau modélisé à plat (tramway urbain de surface)"
+    }
+  },
+  "summary": {
+    "aerial_sections": 0,
+    "aerial_km": 0.0,
+    "network_type": "Tramway urbain de surface"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-10-14",
+  "generated_on": "2026-11-06",
   "status": "awaiting_human_asset_approval",
   "policy": {
     "external_downloads": "blocked_until_human_source_and_license_approval",
@@ -9,6 +9,7 @@
     "train_model_files": [
       "train/bvg_grossprofil__neutral.glb",
       "train/bvg_kleinprofil__neutral.glb",
+      "train/caf_urbos_3__neutral.glb",
       "train/pneumatic_generic__neutral.glb",
       "train/rer_generic_A__cab.glb",
       "train/rer_generic_A__neutral.glb",

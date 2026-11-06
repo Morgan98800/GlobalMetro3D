@@ -6,6 +6,7 @@ import { TflRealtimeAdapter } from './london/rt/tfl_adapter';
 import { IleviaRealtimeAdapter } from './lille/rt/ilevia_adapter';
 import { WashingtonRealtimeAdapter } from './washington/rt/washington_adapter';
 import { VbbRealtimeAdapter } from './berlin/rt/vbb_adapter';
+import { EdinburghRealtimeAdapter } from './edinburgh/rt/edinburgh_adapter';
 
 /**
  * Registre des adaptateurs temps réel.
@@ -41,6 +42,9 @@ class NoRealtimeAdapter implements RealtimeAdapter {
 }
 
 export function createRealtimeAdapter(city: CityConfig, apiKey?: string): RealtimeAdapter {
+  if (city.id === 'edinburgh') {
+    return new EdinburghRealtimeAdapter(city.realtime);
+  }
   const factory = FACTORIES[city.realtime.provider];
   if (!factory) {
     if (city.realtime.provider !== 'none') {

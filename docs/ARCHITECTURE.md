@@ -148,8 +148,15 @@ Le moteur partagé (`core/sim/browser_engine.ts`) est rigoureusement agnostique 
   - **Lille (`gtfs-rt`)** : `IleviaRealtimeAdapter` (TripUpdates GTFS-RT Ilévia pour le métro VAL et le tramway).
   - **Washington DC (`gtfs-rt`)** : `WashingtonRealtimeAdapter` (TripUpdates & VehiclePositions GTFS-RT 2.0 WMATA pour les 6 lignes Metrorail).
   - **Berlin (`gtfs-rt`)** : `VbbRealtimeAdapter` (TripUpdates GTFS-RT Protobuf VBB pour les 9 lignes U-Bahn BVG).
+  - **Édimbourg (`none`)** : `EdinburghRealtimeAdapter` (mode théorique pur pour le tramway, justifié par l'évaluation des flux ouverts).
 - **Consolidation future des adaptateurs GTFS-RT TripUpdate (§5.2)** :
   Lille (`IleviaRealtimeAdapter`), Washington (`WashingtonRealtimeAdapter`) et Berlin (`VbbRealtimeAdapter`) implémentent la même boucle fondamentale de traitement GTFS-RT : parsing de `TripUpdate`, résolution de station (par nom ou correspondance d'identifiants), validation de monotonie chronologique, et calcul de retard ou encadrement. Ces trois implémentations constituent un candidat de choix pour être unifiées dans un adaptateur générique `GtfsRtTripUpdateAdapter` dans `core/rt/` lors d'un futur refactoring, chaque ville ne fournissant plus qu'un `StationMapper` et des paramètres de filtrage.
+- **Réseau d'Édimbourg Tramway (`cities/edinburgh/`)** :
+  - Tramway d'Édimbourg : une ligne unique Edinburgh Airport ↔ Newhaven (route T50 / 2908), 18,3 km, 23 arrêts (dont York Place remplacé par Picardy Place depuis 2023).
+  - Flotte de 27 rames CAF Urbos 3 (7 caisses articulées, 42,80 m), modélisée par le composant 3D clean-room `caf_urbos_3__neutral.glb` (3,28 Ko < 15 Ko).
+  - Ingestion BODS GTFS (DfT / ITO World) : 299 courses en semaine, 16 rames actives au snapshot de référence (14:00:00 GMT).
+  - Mode théorique pur justifié par l'inaccessibilité publique immédiate des flux temps réel (TfE OpenData 522 Cloudflare hors-service, Trapeze fermé sous User_Key contractuelle, absence tram sur BODS GTFS-RT).
+  - Bâti 3D et relief historique : validation LiDAR écossais Phase 5 (OGL v3.0, 50 cm) et intégration du jumeau numérique `edinburgh_3d.glb` (20 Mo, 10 147 bâtiments géoréférencés).
 - **Réseau de Berlin U-Bahn (`cities/berlin/`)** :
   - Métro de Berlin (BVG / VBB) : 9 lignes (U1 à U9), 170 stations actives, 118 rames actives au snapshot de jour (08:30:00 CEST).
   - Fermeture nord U6 : le tronçon de 5 stations au nord de Kurt-Schumacher-Platz jusqu'à Alt-Tegel (en travaux jusqu'en 2027/28) est exclu des courses actives de `schedule.json`, les missions s'arrêtant strictement à Kurt-Schumacher-Platz.

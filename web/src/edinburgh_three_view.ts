@@ -135,11 +135,21 @@ export function initEdinburghThreeView(
             roughness: 0.85,
             metalness: 0.05,
           });
-        } else if (name.startsWith('Batiments') || name.startsWith('Buildings')) {
+        } else if (
+          name.startsWith('Batiments') ||
+          name.startsWith('Buildings') ||
+          name.startsWith('Bati_')
+        ) {
           mesh.material = new THREE.MeshStandardMaterial({
             vertexColors: true,
             roughness: 0.72,
             metalness: 0.1,
+          });
+        } else if (name.startsWith('Monument_') || name.startsWith('Monument')) {
+          mesh.material = new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#3d3730'),
+            roughness: 0.6,
+            metalness: 0.2,
           });
         } else if (name.includes('Gare_Edinburgh_Waverley') || name.includes('Waverley')) {
           mesh.material = new THREE.MeshPhysicalMaterial({

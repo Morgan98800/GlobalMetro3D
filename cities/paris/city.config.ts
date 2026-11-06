@@ -37,6 +37,36 @@ export const parisConfig: CityConfig = {
         reconcileThresholdM: 20
       },
       realtime: { kind: 'per-trip-offsets' }
+    },
+    {
+      id: 'rail',
+      displayName: 'RER',
+      enabled: true,
+      schedule: {
+        format: 'gtfs',
+        sourceUrl: 'https://data.iledefrance-mobilites.fr/explore/dataset/offre-horaires-tc-gtfs-idfm/download/?format=csv&timezone=Europe/Berlin&lang=fr',
+        scheduleModel: 'trip-based',
+        stalenessToleranceDays: 30
+      },
+      geometry: { source: 'idfm-osm' },
+      kinematics: {
+        maxSpeedKmh: 130,
+        accelMs2: 1.0,
+        decelMs2: 1.2,
+        dwellSec: 30,
+        vMaxMs: 36.11,
+        k: 0.25,
+        windowM: 90,
+        minDwellSec: 20,
+        matchWindowSec: 120,
+        maxDelaySec: 900,
+        alpha: 0.4,
+        decayDistanceM: 4000,
+        staleAfterSec: 360,
+        reconcileDurationMs: 300,
+        reconcileThresholdM: 20
+      },
+      realtime: { kind: 'per-trip-offsets' }
     }
   ],
   rollingStock: '/data/rolling-stock.json',

@@ -9,7 +9,6 @@ import {
   buildTimeline,
   positionAt,
   clampSpeed,
-  isRerLine,
   getKinematicProfile,
   type SchedTrip,
   type Timeline,
@@ -443,6 +442,18 @@ export class BrowserSubwayEngine {
     }
   }
 
+  private getLineMaxDisplaySpeed(lineId: string): number {
+    const line = this.linesMap.get(lineId);
+    if (line?.mode) {
+      const mode = this.config.modes.find(m => m.id === line.mode);
+      if (mode?.kinematics?.maxSpeedKmh) {
+        return mode.kinematics.maxSpeedKmh;
+      }
+      if (line.mode === 'rail') return 130;
+    }
+    return this.config.modes[0]?.kinematics?.maxSpeedKmh ?? 90;
+  }
+
   public toggleRealtime(): boolean {
     if (this.isRealtimeActive()) {
       this.stopRealtime();
@@ -583,7 +594,7 @@ export class BrowserSubwayEngine {
           });
         }
         const vMps = clampSpeed(posResult.speed);
-        const maxDisplaySpeed = isRerLine(trip.line) ? 130 : 90;
+        const maxDisplaySpeed = this.getLineMaxDisplaySpeed(trip.line);
         const speedKmh = Math.round(Math.min(maxDisplaySpeed, vMps * 3.6));
         const delaySeconds = posResult.delay;
         const confidence: Confidence = posResult.confidence;

@@ -1,5 +1,11 @@
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { createVectorDarkStyle, MapTheme } from './vector_style';
+
+if (typeof maplibregl.setWorkerUrl === 'function') {
+  maplibregl.setWorkerUrl(maplibreWorkerUrl);
+}
 
 export const BUILDING_EXTRUSION_ZOOM = 14;
 export const LOW_ZOOM_MAX_PITCH = 30;

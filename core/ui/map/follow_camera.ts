@@ -1,4 +1,4 @@
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 import { HIGH_ZOOM_MAX_PITCH, LOW_ZOOM_MAX_PITCH, maxPitchForZoom } from './maplibre';
 import { trainModelsEnabled } from './train_models_layer';
 import type { TrainMarker } from './trains_layer';
@@ -100,7 +100,7 @@ export class FollowCamera {
     this.onStop = options.onStop;
     this.reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
-    this.map.on('dragstart', this.stopFollow);
+    this.map.on('dragstart', () => this.stopFollow());
     this.map
       .getCanvasContainer()
       .addEventListener('wheel', () => this.stopFollow(), { passive: true });

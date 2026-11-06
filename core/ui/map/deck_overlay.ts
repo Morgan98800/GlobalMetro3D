@@ -1,4 +1,4 @@
-import { MapboxOverlay } from '@deck.gl/mapbox';
+import { MapLibreOverlay } from '@deck.gl/maplibre';
 import { PathLayer } from '@deck.gl/layers';
 import { ScatterplotLayer } from '@deck.gl/layers';
 import type { LineMetadata, StationMetadata } from '@core/types';
@@ -136,7 +136,7 @@ function deduplicateStations(stations: StationMetadata[]): StationMetadata[] {
 const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
 
 export class SubwayDeckOverlay {
-  private overlay: MapboxOverlay;
+  private overlay: MapLibreOverlay;
   private data: SubwayMapData | null = null;
   private selectedLineId: string | null = null;
   private selectedTrainId: string | null = null;
@@ -178,7 +178,7 @@ export class SubwayDeckOverlay {
       preloadTrainModels();
     }
 
-    this.overlay = new MapboxOverlay({
+    this.overlay = new MapLibreOverlay({
       interleaved: false,
       layers: [],
       effects:
@@ -186,7 +186,7 @@ export class SubwayDeckOverlay {
     });
   }
 
-  public getOverlay(): MapboxOverlay {
+  public getOverlay(): MapLibreOverlay {
     return this.overlay;
   }
 

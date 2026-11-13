@@ -718,7 +718,7 @@ export class BrowserSubwayEngine {
             }
           }
 
-          let dHat = dTick + speedMps * dt + currentError;
+          let dHat = train.atStop ? dTick : dTick + speedMps * dt + currentError;
           dHat = Math.max(0, Math.min(shape.length, dHat));
           state.extrapolatedD = dHat;
 
@@ -739,7 +739,8 @@ export class BrowserSubwayEngine {
             this.fadingOutGhosts.delete(id);
           } else {
             // Keep ghost train in rendered set during 240ms fade
-            renderedTrains.push({ ...ghost.train, isGhost: true });
+            const ghostAlpha = Math.max(0, Math.min(1, 1 - elapsed / 240));
+            renderedTrains.push({ ...ghost.train, isGhost: true, ghostAlpha });
           }
         }
 

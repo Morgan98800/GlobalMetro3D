@@ -88,6 +88,7 @@ export class FollowCamera {
   private elevationProgress = 0;
   private elevationStartedAt = 0;
   private elevationFrom = 0;
+  private elevationSettled = false;
   private readonly reducedMotion: boolean;
   private lastFrameAt = 0;
   private smoothedCenter: [number, number] | null = null;
@@ -135,6 +136,7 @@ export class FollowCamera {
     this.elevationFrom = train.elevation || 0;
     this.elevationStartedAt = performance.now();
     this.elevationProgress = 0;
+    this.elevationSettled = false;
     this.setFollowElevation(this.elevationLineId, 0);
 
     const followZoom = getFollowZoom(train);
@@ -176,6 +178,7 @@ export class FollowCamera {
     }
     this.setFollowElevation(null, 0);
     this.elevationLineId = null;
+    this.elevationSettled = false;
     if (notify) this.onStop?.();
   };
 
@@ -232,12 +235,15 @@ export class FollowCamera {
   };
 
   private updateElevation(): void {
-    if (!this.elevationLineId) return;
+    if (!this.elevationLineId || this.elevationSettled) return;
     const progress = Math.min(
       1,
       (performance.now() - this.elevationStartedAt) / FOLLOW_DURATION_MS
     );
     this.elevationProgress = progress;
+    if (progress >= 1) {
+      this.elevationSettled = true;
+    }
     this.setFollowElevation(this.elevationLineId, -this.elevationFrom * progress);
   }
 

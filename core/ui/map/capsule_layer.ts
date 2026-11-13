@@ -325,15 +325,31 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     }
 
     const isRealtime = train.conf === 'measured' || train.conf === 'bracketed';
-    const lineColorRgba = hexToRgba(train.colorHex, 255);
-    const bodyColor = getNeutralBodyColor(train.colorHex);
-    const noseColor = getNeutralNoseColor(bodyColor);
+    const ghostScale = train.ghostAlpha ?? 1;
+    const alpha255 = Math.round(255 * ghostScale);
+    const lineColorRgba = hexToRgba(train.colorHex, alpha255);
+    const rawBodyColor = getNeutralBodyColor(train.colorHex);
+    const bodyColor: [number, number, number, number] = [
+      rawBodyColor[0],
+      rawBodyColor[1],
+      rawBodyColor[2],
+      Math.round(rawBodyColor[3] * ghostScale),
+    ];
+    const rawNoseColor = getNeutralNoseColor(bodyColor);
+    const noseColor: [number, number, number, number] = [
+      rawNoseColor[0],
+      rawNoseColor[1],
+      rawNoseColor[2],
+      Math.round(rawNoseColor[3] * ghostScale),
+    ];
 
     // Layer 1: Outline halo (Wider than the track to ensure 100% visibility)
     outlineSegments.push({
       path: fullPath,
       widthM: stock.width_m + 1.2,
-      color: isRealtime ? [255, 215, 0, 255] : [240, 240, 240, 240],
+      color: isRealtime
+        ? [255, 215, 0, alpha255]
+        : [240, 240, 240, Math.round(240 * ghostScale)],
       isSched: train.conf === 'scheduled',
       elevation: elev + 0.5,
       train,
@@ -431,7 +447,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         lineName: train.lineName,
         colorHex: train.colorHex,
         textColorHex: train.textColorHex,
-        alpha: 255,
+        alpha: Math.round(255 * ghostScale),
         elevation: elev + 4.5,
         isSelected: train.id === selectedTrainId || train.line === selectedLineId,
       });
@@ -615,7 +631,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         getBackgroundColor: (d: RenderTrainLabel) => hexToRgba(d.colorHex, 245),
         background: true,
         backgroundPadding: [6, 4],
-        fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
+        fontFamily: 'Switzer, system-ui, -apple-system, sans-serif',
         fontWeight: 700,
         characterSet: LATIN_CHARACTER_SET,
         billboard: true,

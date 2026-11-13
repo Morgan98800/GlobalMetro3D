@@ -79,4 +79,36 @@ describe('train_models_layer and RER specifications', () => {
     assert.equal(getFollowSmoothingMs(rerMarkerA), 360);
     assert.equal(getFollowSmoothingMs(metroMarker1), 520);
   });
+
+  it('should map rolling stock families for Berlin, Edinburgh, Washington, and Paris', async () => {
+    const { familyForStock, TRAIN_MODEL_ZOOM_THRESHOLD } = await import(
+      '@core/ui/map/train_models_layer'
+    );
+
+    assert.equal(TRAIN_MODEL_ZOOM_THRESHOLD, 13.0);
+    assert.equal(
+      familyForStock({ drive_type: 'steel', short_name: 'U5', model_id: 'BVG_GROSSPROFIL_GENERIC' }),
+      'bvg_grossprofil'
+    );
+    assert.equal(
+      familyForStock({ drive_type: 'steel', short_name: 'U1', model_id: 'BVG_KLEINPROFIL_GENERIC' }),
+      'bvg_kleinprofil'
+    );
+    assert.equal(
+      familyForStock({ drive_type: 'steel', short_name: 'EXP', model_id: 'CLASS_385_EMU' }),
+      'scotrail_class_385'
+    );
+    assert.equal(
+      familyForStock({ drive_type: 'steel', short_name: 'Red', model_id: 'WMATA_GENERIC_2V' }),
+      'wmata_generic'
+    );
+    assert.equal(
+      familyForStock({ drive_type: 'tire', short_name: '1', model_id: 'MP05' }),
+      'pneumatic_generic'
+    );
+    assert.equal(
+      familyForStock({ drive_type: 'steel', short_name: 'A', model_id: 'RER_A_MI09_UM2' }),
+      'rer_generic_A'
+    );
+  });
 });

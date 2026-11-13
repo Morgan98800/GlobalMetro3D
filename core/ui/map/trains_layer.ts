@@ -21,7 +21,13 @@ export interface TrainMarker {
   direction?: 0 | 1;
   atStop?: boolean;
   isGhost?: boolean;
+  ghostAlpha?: number;
 }
+
+const iconCache = new Map<
+  string,
+  { url: string; width: number; height: number; anchorY: number }
+>();
 
 /**
  * Creates high-contrast train layers with 4 confidence levels:
@@ -40,10 +46,6 @@ export function createTrainsLayers(
   const filtered = selectedLineId ? trains.filter((t) => t.line === selectedLineId) : trains;
 
   const isLowZoom = zoom < 11.5 && !selectedLineId;
-  const iconCache = new Map<
-    string,
-    { url: string; width: number; height: number; anchorY: number }
-  >();
   const iconFor = (train: TrainMarker) => {
     const key = `${train.colorHex}-${train.conf}`;
     const cached = iconCache.get(key);
@@ -90,7 +92,6 @@ export function createTrainsLayers(
     },
     updateTriggers: {
       getPosition: [trains],
-      getIcon: [trains],
       getSize: [zoom, selectedLineId],
     },
   });

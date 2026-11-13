@@ -17,8 +17,8 @@ import type { ShapeEntry } from '@core/sim/shapes';
 import type { RollingStockDatabase } from '@core/sim/rolling_stock';
 import {
   createTrainModelLayers,
+  isTrainModelReadyForTrain,
   requestTrainModel,
-  preloadTrainModels,
   subscribeTrainModelAssets,
   trainModelsEnabled,
   TRAIN_MODEL_ZOOM_THRESHOLD,
@@ -152,6 +152,12 @@ export class SubwayDeckOverlay {
   private trackRevealProgress = 1;
   private trackRevealFrame: number | null = null;
   private layerUpdateFrame: number | null = null;
+  private roundedTrackPaths = new WeakMap<TrackItem, [number, number][]>();
+  private roundedRerPaths = new WeakMap<RerTrackSegment, [number, number][]>();
+  private cachedTerminusMarkers: TerminusMarker[] = [];
+  private cachedPreTrainLayers: any[] = [];
+  private cachedPostTrainLayers: any[] = [];
+  private staticLayersDirty = true;
   private onStationHover: (info: any) => void;
   private onStationClick: (station: StationMetadata) => void;
   private onTrainHover: (info: any) => void;
@@ -174,9 +180,6 @@ export class SubwayDeckOverlay {
     this.onLineSelect = options.onLineSelect || (() => undefined);
     this.onBackgroundClick = options.onBackgroundClick || (() => undefined);
     subscribeTrainModelAssets(() => this.updateLayers());
-    if (trainModelsEnabled()) {
-      preloadTrainModels();
-    }
 
     this.overlay = new MapLibreOverlay({
       interleaved: false,
@@ -235,11 +238,18 @@ export class SubwayDeckOverlay {
       }
     }
     this.rerTracks = segments;
+    this.roundedRerPaths = new WeakMap();
+    for (const seg of segments) {
+      this.roundedRerPaths.set(seg, roundPathCorners(seg.coordinates));
+    }
+    this.staticLayersDirty = true;
     this.updateLayers();
   }
 
   public setShowRer(show: boolean) {
+    if (this.showRer === show) return;
     this.showRer = show;
+    this.staticLayersDirty = true;
     this.updateLayers();
   }
 
@@ -249,6 +259,10 @@ export class SubwayDeckOverlay {
     bounds?: [[number, number], [number, number]] | null,
     pitch: number = 0
   ) {
+    const zoomChanged = Math.abs(this.zoom - zoom) > 0.01;
+    const centerChanged =
+      Math.abs(this.mapCenter[0] - mapCenter[0]) > 0.0005 ||
+      Math.abs(this.mapCenter[1] - mapCenter[1]) > 0.0005;
     this.zoom = zoom;
     this.pitch = pitch;
     if (
@@ -261,17 +275,29 @@ export class SubwayDeckOverlay {
     if (bounds) {
       this.bounds = bounds;
     }
+    if (zoomChanged || centerChanged) {
+      this.staticLayersDirty = true;
+    }
     this.updateLayers();
   }
 
   public setData(data: SubwayMapData) {
     this.data = data;
     this.showRer = true;
+    this.roundedTrackPaths = new WeakMap();
+    for (const track of data.tracks) {
+      this.roundedTrackPaths.set(track, roundPathCorners(track.coordinates));
+    }
+    const displayStations = deduplicateStations(data.stations);
+    this.cachedTerminusMarkers = this.resolveTerminusMarkers(data.lines, displayStations);
+    this.staticLayersDirty = true;
     this.updateLayers();
   }
 
   public setSelectedLine(lineId: string | null) {
+    if (this.selectedLineId === lineId) return;
     this.selectedLineId = lineId;
+    this.staticLayersDirty = true;
     this.updateLayers();
   }
 
@@ -314,12 +340,36 @@ export class SubwayDeckOverlay {
       debug.textContent = `Rendu réseau indisponible: ${error instanceof Error ? error.message : String(error)}`;
       debug.setAttribute(
         'style',
-        'position:fixed;left:380px;top:80px;z-index:9999;color:#ff8f80;background:#321;padding:8px;white-space:pre-wrap;max-width:60vw'
+        'position:fixed;left:24px;bottom:24px;z-index:9999;color:var(--texte,#f4f1eb);background:var(--surface,#161413);border:1px solid var(--carmin,#d9463c);border-radius:var(--r-card,14px);padding:10px 14px;font-family:var(--font,sans-serif);font-size:13px;white-space:pre-wrap;max-width:60vw'
       );
     }
   }
 
   private renderLayers() {
+    if (!this.data) return;
+
+    if (this.staticLayersDirty) {
+      this.rebuildStaticLayers();
+      this.staticLayersDirty = false;
+    }
+
+    const trainLayers = this.buildTrainLayers();
+    const layers: any[] = [...this.cachedPreTrainLayers, ...trainLayers];
+    const trainModelSpikeLayer = createTrainModelSpikeLayer();
+    if (trainModelSpikeLayer) {
+      layers.push(trainModelSpikeLayer);
+    }
+    layers.push(...this.cachedPostTrainLayers);
+
+    this.overlay.setProps({
+      layers,
+      onClick: (info: any) => {
+        if (!info.object) this.onBackgroundClick();
+      },
+    });
+  }
+
+  private rebuildStaticLayers() {
     if (!this.data) return;
 
     const { tracks, stations, lines } = this.data;
@@ -399,7 +449,8 @@ export class SubwayDeckOverlay {
     const pathForTrack = (d: TrackItem): [number, number, number][] => {
       const line = lineMap.get(d.line_id);
       const z = line ? line.elevation_offset : 0;
-      return roundPathCorners(d.coordinates).map((pt: [number, number]) => [pt[0], pt[1], z]);
+      const rounded = this.roundedTrackPaths.get(d) ?? roundPathCorners(d.coordinates);
+      return rounded.map((pt: [number, number]) => [pt[0], pt[1], z]);
     };
 
     const pathLayers: any[] = [];
@@ -543,9 +594,10 @@ export class SubwayDeckOverlay {
       },
     });
 
-    const terminusMarkers = this.resolveTerminusMarkers(lines, displayStations);
+    const terminusMarkers = this.cachedTerminusMarkers;
+    const filteredStationIds = new Set(filteredStations.map((station) => station.id));
     const visibleTermini = terminusMarkers.filter((marker) =>
-      filteredStations.some((station) => station.id === marker.station.id)
+      filteredStationIds.has(marker.station.id)
     );
     const terminusLayer = new ScatterplotLayer<TerminusMarker>({
       id: 'subway-termini',
@@ -595,8 +647,73 @@ export class SubwayDeckOverlay {
       this.zoom
     );
 
-    const showTrainModels = trainModelsEnabled();
-    if (showTrainModels && this.data?.rollingStockDb) {
+    let rerLayer: any = null;
+    if (this.showRer && this.rerTracks.length > 0) {
+      rerLayer = new PathLayer<any>({
+        id: 'rer-tracks',
+        data: selectedRerShortName
+          ? this.rerTracks.filter((track) => track.shortName === selectedRerShortName)
+          : this.selectedLineId
+            ? []
+            : this.rerTracks,
+        pickable: false,
+        widthUnits: 'pixels',
+        getWidth: 3.5, // 3.5px vs 2.5px métro
+        getPath: ((d: RerTrackSegment) => {
+          const rounded = this.roundedRerPaths.get(d) ?? roundPathCorners(d.coordinates);
+          return rounded.map((pt) => [pt[0], pt[1], -1]);
+        }) as any, // Tracé sous les lignes de métro
+        getColor: (d: RerTrackSegment) => {
+          const baseAlpha = d.isBanlieue ? 130 : 230;
+          return hexToRgba(d.color, baseAlpha);
+        },
+        extensions: [new PathStyleExtension({ dash: true })],
+        getDashArray: (d: RerTrackSegment) => (d.isBanlieue ? [4, 3] : [0, 0]),
+        dashUnits: 'pixels',
+        capRounded: true,
+        jointRounded: true,
+        parameters: { depthTest: false, depthWriteEnabled: false } as any,
+      } as any);
+    }
+
+    const lineHitboxes = visibleLineOrder.map(
+      (line) =>
+        new PathLayer<any>({
+          id: `subway-track-${line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-')}-hitbox`,
+          data: tracksByLine.get(line.id) || [],
+          pickable: true,
+          widthUnits: 'pixels',
+          getWidth: () => trackWidthAtZoom(false) + 14,
+          getPath: pathForTrack as any,
+          getColor: [0, 0, 0, 0],
+          opacity: revealOpacityFor(line.id),
+          capRounded: true,
+          jointRounded: true,
+          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          onClick: () => this.onLineSelect(line.id),
+          onHover: this.onStationHover,
+          updateTriggers: { getWidth: [this.zoom] },
+        })
+    );
+
+    this.cachedPreTrainLayers = [
+      ...(rerLayer ? [rerLayer] : []),
+      ...lineHitboxes,
+      ...pathLayers,
+      ...(platformsLayer ? [platformsLayer] : []),
+      stationsLayer,
+      terminusLayer,
+    ];
+    this.cachedPostTrainLayers = labelsLayer ? [labelsLayer] : [];
+  }
+
+  private buildTrainLayers(): readonly any[] {
+    if (!this.data) return [];
+    const { tracks } = this.data;
+
+    const prefetchModels = trainModelsEnabled() && this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD - 1.0;
+    const showTrainModels = trainModelsEnabled() && this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD;
+    if (prefetchModels && this.data?.rollingStockDb) {
       for (const train of this.trains) {
         requestTrainModel(train, this.data.rollingStockDb);
       }
@@ -623,107 +740,43 @@ export class SubwayDeckOverlay {
             onHover: this.onTrainHover,
           })
         : [];
+
+    const fallbackTrains =
+      showTrainModels && this.data?.rollingStockDb && modelLayers.length > 0
+        ? this.trains.filter(
+            (train) => !isTrainModelReadyForTrain(train, this.data!.rollingStockDb!)
+          )
+        : this.trains;
+
     const capsuleLayers =
-      this.data?.shapes && this.data?.rollingStockDb
-        ? createCapsuleLayers({
-            trains: this.trains,
-            shapes: this.data.shapes,
-            tracks,
-            rollingStockDb: this.data.rollingStockDb,
-            mapCenter: this.mapCenter,
-            selectedLineId: this.selectedLineId,
-            selectedTrainId: this.selectedTrainId,
-            onHover: this.onTrainHover,
-            onClick: (train) => {
-              if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
-              this.selectedTrainId = train.id;
-              this.onTrainClick(train);
-              this.updateLayers();
-            },
-          })
-        : createTrainsLayers(
-            this.trains,
-            this.selectedLineId,
-            this.onTrainHover,
-            this.onTrainClick,
-            this.zoom
-          );
-    const trainLayers = isTrainModelSpikeEnabled()
-      ? []
-      : resolveTrainRenderLayers(modelLayers, capsuleLayers);
+      fallbackTrains.length === 0
+        ? []
+        : this.data?.shapes && this.data?.rollingStockDb
+          ? createCapsuleLayers({
+              trains: fallbackTrains,
+              shapes: this.data.shapes,
+              tracks,
+              rollingStockDb: this.data.rollingStockDb,
+              mapCenter: this.mapCenter,
+              selectedLineId: this.selectedLineId,
+              selectedTrainId: this.selectedTrainId,
+              onHover: this.onTrainHover,
+              onClick: (train) => {
+                if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+                this.selectedTrainId = train.id;
+                this.onTrainClick(train);
+                this.updateLayers();
+              },
+            })
+          : createTrainsLayers(
+              fallbackTrains,
+              this.selectedLineId,
+              this.onTrainHover,
+              this.onTrainClick,
+              this.zoom
+            );
 
-    let rerLayer: any = null;
-    if (this.showRer && this.rerTracks.length > 0) {
-      rerLayer = new PathLayer<any>({
-        id: 'rer-tracks',
-        data: selectedRerShortName
-          ? this.rerTracks.filter((track) => track.shortName === selectedRerShortName)
-          : this.selectedLineId
-            ? []
-            : this.rerTracks,
-        pickable: false,
-        widthUnits: 'pixels',
-        getWidth: 3.5, // 3.5px vs 2.5px métro
-        getPath: ((d: RerTrackSegment) =>
-          roundPathCorners(d.coordinates).map((pt) => [pt[0], pt[1], -1])) as any, // Tracé sous les lignes de métro
-        getColor: (d: RerTrackSegment) => {
-          const baseAlpha = d.isBanlieue ? 130 : 230;
-          return hexToRgba(d.color, baseAlpha);
-        },
-        extensions: [new PathStyleExtension({ dash: true })],
-        getDashArray: (d: RerTrackSegment) => (d.isBanlieue ? [4, 3] : [0, 0]),
-        dashUnits: 'pixels',
-        capRounded: true,
-        jointRounded: true,
-        parameters: { depthTest: false, depthWriteEnabled: false } as any,
-      } as any);
-    }
-
-    const layers: any[] = [];
-    if (rerLayer) {
-      layers.push(rerLayer); // RER placé SOUS les lignes de métro
-    }
-    const lineHitboxes = visibleLineOrder.map(
-      (line) =>
-        new PathLayer<any>({
-          id: `subway-track-${line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-')}-hitbox`,
-          data: tracksByLine.get(line.id) || [],
-          pickable: true,
-          widthUnits: 'pixels',
-          getWidth: () => trackWidthAtZoom(false) + 14,
-          getPath: pathForTrack as any,
-          getColor: [0, 0, 0, 0],
-          opacity: revealOpacityFor(line.id),
-          capRounded: true,
-          jointRounded: true,
-          parameters: { depthTest: false, depthWriteEnabled: false } as any,
-          onClick: () => this.onLineSelect(line.id),
-          onHover: this.onStationHover,
-          updateTriggers: { getWidth: [this.zoom] },
-        })
-    );
-    layers.push(
-      ...lineHitboxes,
-      ...pathLayers,
-      ...(platformsLayer ? [platformsLayer] : []),
-      stationsLayer,
-      terminusLayer,
-      ...trainLayers
-    );
-    const trainModelSpikeLayer = createTrainModelSpikeLayer();
-    if (trainModelSpikeLayer) {
-      layers.push(trainModelSpikeLayer);
-    }
-    if (labelsLayer) {
-      layers.push(labelsLayer);
-    }
-
-    this.overlay.setProps({
-      layers,
-      onClick: (info: any) => {
-        if (!info.object) this.onBackgroundClick();
-      },
-    });
+    return isTrainModelSpikeEnabled() ? [] : resolveTrainRenderLayers(modelLayers, capsuleLayers);
   }
 
   /**
@@ -795,8 +848,16 @@ export class SubwayDeckOverlay {
     return markers;
   }
 
-  public setTrains(trains: TrainMarker[]) {
+  public setTrains(trains: TrainMarker[], immediate: boolean = false) {
     this.trains = trains;
+    if (immediate) {
+      if (this.layerUpdateFrame !== null && typeof cancelAnimationFrame !== 'undefined') {
+        cancelAnimationFrame(this.layerUpdateFrame);
+        this.layerUpdateFrame = null;
+      }
+      this.renderLayersNow();
+      return;
+    }
     this.updateLayers();
   }
 
@@ -812,21 +873,25 @@ export class SubwayDeckOverlay {
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion || typeof requestAnimationFrame === 'undefined' || document.hidden) {
       this.trackRevealProgress = 1;
+      this.staticLayersDirty = true;
       this.updateLayers();
       return;
     }
 
     this.trackRevealProgress = 0;
+    this.staticLayersDirty = true;
     this.updateLayers();
     const startedAt = performance.now();
     const frame = (now: number) => {
       if (document.hidden) {
         this.trackRevealProgress = 1;
         this.trackRevealFrame = null;
+        this.staticLayersDirty = true;
         this.updateLayers();
         return;
       }
       this.trackRevealProgress = Math.min(1, (now - startedAt) / durationMs);
+      this.staticLayersDirty = true;
       this.updateLayers();
       if (this.trackRevealProgress < 1) {
         this.trackRevealFrame = requestAnimationFrame(frame);

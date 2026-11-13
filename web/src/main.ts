@@ -1139,6 +1139,7 @@ async function bootstrap() {
       hideTooltip();
       document.getElementById('records-modal')?.remove();
       document.getElementById('method-modal')?.remove();
+      document.getElementById('about-modal')?.remove();
       topbar.closeMenu();
     }
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -1188,9 +1189,12 @@ async function bootstrap() {
         trains = [demoTrain];
         activeCount = 1;
       }
-      latestRenderedTrains = new Map(trains.map((train) => [train.id, train]));
-      deckOverlay.setTrains(trains);
+      latestRenderedTrains.clear();
+      for (const train of trains) {
+        latestRenderedTrains.set(train.id, train);
+      }
       followCamera?.onSimulationFrame();
+      deckOverlay.setTrains(trains, Boolean(followCamera?.isFollowing()));
       edinburghHandle?.updateSimulationTrains(trains);
     },
     onPrimStatus: (status) => {

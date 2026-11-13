@@ -37,16 +37,16 @@ const XRAY_OPACITY_EXPR: any = [
   13.5,
   0,
   14.5,
-  0.14,
+  0.46,
   16.5,
-  0.11,
+  0.42,
 ];
 
 export function setBuildingsXrayMode(map: maplibregl.Map, xrayActive: boolean): void {
   if (mapXrayState.get(map) === xrayActive) return;
   mapXrayState.set(map, xrayActive);
   const expr = xrayActive ? XRAY_OPACITY_EXPR : DEFAULT_OPACITY_EXPR;
-  const fallbackOpacity = xrayActive ? 0.14 : 0.82;
+  const fallbackOpacity = xrayActive ? 0.44 : 0.82;
   try {
     if (map.getLayer(OVERTURE_BUILDING_LAYER_ID)) {
       map.setPaintProperty(OVERTURE_BUILDING_LAYER_ID, 'fill-extrusion-opacity', expr);

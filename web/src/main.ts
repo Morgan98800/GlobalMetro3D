@@ -7,7 +7,6 @@ import {
   setBuildingsVisible,
   setBuildingsXrayMode,
 } from '@core/ui/map/maplibre';
-import { shouldEnableUndergroundXray } from '@core/ui/map/station_detail_lod';
 import { SubwayDeckOverlay, TrackItem } from '@core/ui/map/deck_overlay';
 import { SubwayDock } from '@core/ui/components/dock';
 import { SubwaySearchBar } from '@core/ui/components/search_bar';
@@ -1313,11 +1312,7 @@ async function bootstrap() {
         : null;
       deckOverlay.setViewState(zoom, center, boundsTuple, map.getPitch());
       if (!followCamera?.isFollowing()) {
-        const selectedLineMeta = activeLineId ? lines.find((l) => l.id === activeLineId) : null;
-        setBuildingsXrayMode(
-          map,
-          shouldEnableUndergroundXray(zoom, center, selectedLineMeta?.short_name ?? null)
-        );
+        setBuildingsXrayMode(map, false);
       }
     };
     map.on('move', syncOverlayView);

@@ -1,4 +1,4 @@
-import { IconLayer, PathLayer, PolygonLayer, SolidPolygonLayer } from '@deck.gl/layers';
+import { PathLayer, PolygonLayer, SolidPolygonLayer } from '@deck.gl/layers';
 import type { LineMetadata, StationMetadata } from '@core/types';
 import { isMobileGpuDevice } from './device_perf';
 import { closestPointOnPath } from './platforms_layer';
@@ -33,15 +33,6 @@ interface RailPathDatum {
   widthM: number;
 }
 
-interface SignSpriteDatum {
-  position: [number, number, number];
-  url: string;
-  key: string;
-  width: number;
-  height: number;
-  sizePx: number;
-}
-
 export const STATION_DETAIL_ZOOM_MIN = 14.5;
 const LAT_SCALE = 111_320;
 const RAIL_HALF_GAUGE_M = 0.72; // 1.44m standard track gauge
@@ -49,9 +40,6 @@ const THIRD_RAIL_OFFSET_M = -1.08;
 const SLEEPER_HALF_LEN_M = 1.08;
 const SLEEPER_HALF_WIDTH_M = 0.12;
 const WALL_BAY_COUNT = 6;
-
-const signSpriteCache = new Map<string, string>();
-const MAX_SIGN_CACHE = 48;
 
 function projectM(point: [number, number], refLat: number): [number, number] {
   const lonScale = LAT_SCALE * Math.cos((refLat * Math.PI) / 180);
@@ -119,116 +107,15 @@ function quadM(
   });
 }
 
-function getOrCreateStationPlaqueSprite(
-  line: LineMetadata,
-  stationName: string
-): { key: string; url: string } | null {
-  if (typeof document === 'undefined') return null;
-  const key = `plaque:${line.short_name}:${stationName}`;
-  const cached = signSpriteCache.get(key);
-  if (cached) return { key, url: cached };
-
-  const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 56;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-
-  // Classic Parisian dark-blue enameled station plaque (#183b75) with crisp white rule
-  ctx.fillStyle = '#143366';
-  ctx.beginPath();
-  ctx.roundRect(2, 2, 252, 52, 10);
-  ctx.fill();
-
-  ctx.strokeStyle = 'rgba(255,255,255,0.88)';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.roundRect(6, 6, 244, 44, 7);
-  ctx.stroke();
-
-  // Line badge circle
-  ctx.fillStyle = line.color || '#FFCD00';
-  ctx.beginPath();
-  ctx.arc(30, 28, 13, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = line.text_color || '#FFFFFF';
-  ctx.font = 'bold 14px system-ui, -apple-system, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(line.short_name, 30, 29);
-
-  // Truncate long station names cleanly
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = '600 16px system-ui, -apple-system, sans-serif';
-  ctx.textAlign = 'left';
-  let label = stationName;
-  while (label.length > 4 && ctx.measureText(label).width > 186) {
-    label = `${label.slice(0, -2)}…`;
-  }
-  ctx.fillText(label, 52, 29);
-
-  const dataUrl = canvas.toDataURL('image/png');
-  if (signSpriteCache.size >= MAX_SIGN_CACHE) {
-    const firstKey = signSpriteCache.keys().next().value;
-    if (firstKey) signSpriteCache.delete(firstKey);
-  }
-  signSpriteCache.set(key, dataUrl);
-  return { key, url: dataUrl };
-}
-
-function getOrCreateSielSprite(stationId: string): { key: string; url: string } | null {
-  if (typeof document === 'undefined') return null;
-  // Deterministic realistic countdown minute pairs (1-4 min) per station hash
-  let h = 0;
-  for (let i = 0; i < stationId.length; i += 1) {
-    h = (h * 31 + stationId.charCodeAt(i)) | 0;
-  }
-  const m1 = 1 + (Math.abs(h) % 3);
-  const m2 = m1 + 2 + (Math.abs(h >> 3) % 3);
-  const key = `siel:${m1}:${m2}`;
-  const cached = signSpriteCache.get(key);
-  if (cached) return { key, url: cached };
-
-  const canvas = document.createElement('canvas');
-  canvas.width = 144;
-  canvas.height = 44;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-
-  ctx.fillStyle = '#121418';
-  ctx.beginPath();
-  ctx.roundRect(2, 2, 140, 40, 7);
-  ctx.fill();
-
-  ctx.strokeStyle = 'rgba(255,255,255,0.22)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  ctx.fillStyle = '#9aa1ad';
-  ctx.font = '600 10px system-ui, -apple-system, sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('PROCHAIN', 11, 16);
-
-  ctx.fillStyle = '#ff9f2e';
-  ctx.font = '700 16px ui-monospace, SFMono-Regular, monospace';
-  ctx.fillText(`${m1} mn   ${m2} mn`, 11, 33);
-
-  const dataUrl = canvas.toDataURL('image/png');
-  if (signSpriteCache.size >= MAX_SIGN_CACHE) {
-    const firstKey = signSpriteCache.keys().next().value;
-    if (firstKey) signSpriteCache.delete(firstKey);
-  }
-  signSpriteCache.set(key, dataUrl);
-  return { key, url: dataUrl };
-}
-
 export function shouldEnableUndergroundXray(
   zoom: number,
   center: [number, number],
-  selectedLineShortName?: string | null
+  selectedLineShortName?: string | null,
+  isFollowingTrain = false
 ): boolean {
-  if (zoom < 15.0) return false;
+  // Never fade 3D city buildings during normal map exploration/zooming;
+  // reserve X-ray translucency strictly for tight underground train-follow cameras.
+  if (!isFollowingTrain || zoom < 15.0) return false;
   if (selectedLineShortName && isAerialViaductLocation(selectedLineShortName, center)) {
     return false;
   }
@@ -267,7 +154,6 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
   const stationStructures: CutawayPolygonDatum[] = [];
   const sleepers: SleeperDatum[] = [];
   const railPaths: RailPathDatum[] = [];
-  const sprites: SignSpriteDatum[] = [];
 
   // 1. Local track sleepers, twin running rails, third rail, and cutaway/viaduct decks
   let sleeperCount = 0;
@@ -508,7 +394,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
           refLat
         ),
         fillColor: isLight ? [34, 37, 44, 210] : [8, 10, 14, 232],
-        lineColor: [lr, lg, lb, 130],
+        lineColor: [lr, lg, lb, 68],
         elevationM: 0.04,
         extruded: false,
       });
@@ -657,41 +543,6 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
         extruded: true,
       });
     }
-
-    // D. Floating Enameled Paris Station Plaque + Digital SIEL Countdown Sprite
-    const plaqueSprite = getOrCreateStationPlaqueSprite(line, station.name);
-    if (plaqueSprite) {
-      const plaquePosM: [number, number] = [
-        anchor.point[0] + normal[0] * 3.85,
-        anchor.point[1] + normal[1] * 3.85,
-      ];
-      const [lng, lat] = unprojectM(plaquePosM, refLat);
-      sprites.push({
-        position: [lng, lat, baseZ + 2.95],
-        url: plaqueSprite.url,
-        key: plaqueSprite.key,
-        width: 256,
-        height: 56,
-        sizePx: input.zoom >= 16.5 ? 56 : 42,
-      });
-    }
-
-    const sielSprite = getOrCreateSielSprite(station.id);
-    if (sielSprite && input.zoom >= 15.2) {
-      const sielPosM: [number, number] = [
-        anchor.point[0] + tangent[0] * (halfLen * 0.28) + normal[0] * 3.15,
-        anchor.point[1] + tangent[1] * (halfLen * 0.28) + normal[1] * 3.15,
-      ];
-      const [lng, lat] = unprojectM(sielPosM, refLat);
-      sprites.push({
-        position: [lng, lat, baseZ + 2.45],
-        url: sielSprite.url,
-        key: sielSprite.key,
-        width: 144,
-        height: 44,
-        sizePx: input.zoom >= 16.5 ? 40 : 32,
-      });
-    }
   }
 
   const layers: any[] = [];
@@ -788,28 +639,6 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
           specularColor: [110, 108, 104],
         },
         parameters: { depthTest: true, depthWriteEnabled: true } as any,
-      })
-    );
-  }
-
-  if (sprites.length > 0) {
-    layers.push(
-      new IconLayer<SignSpriteDatum>({
-        id: 'station-lod-plaques',
-        data: sprites,
-        pickable: false,
-        billboard: true,
-        sizeUnits: 'pixels',
-        getPosition: (d) => d.position,
-        getIcon: (d) => ({
-          url: d.url,
-          id: d.key,
-          width: d.width,
-          height: d.height,
-          mask: false,
-        }),
-        getSize: (d) => d.sizePx,
-        parameters: { depthTest: false, depthWriteEnabled: false } as any,
       })
     );
   }

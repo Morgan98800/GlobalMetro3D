@@ -109,18 +109,20 @@ describe('station_detail_lod & platforms_layer', () => {
     expect(ids).toContain('station-lod-sleepers');
     expect(ids).toContain('station-lod-rails');
     expect(ids).toContain('station-lod-architecture');
+    expect(ids).not.toContain('station-lod-plaques');
     expect(ids).not.toContain('station-lod-viaducts');
   });
 
-  it('detects Paris Line 2 & 6 aerial viaducts and keeps buildings solid there', () => {
+  it('detects Paris Line 2 & 6 aerial viaducts and keeps buildings solid during normal zoom', () => {
     // Bir-Hakeim on Line 6 is an aerial viaduct
     expect(isAerialViaductLocation('6', [2.2893, 48.8539])).toBe(true);
-    expect(shouldEnableUndergroundXray(16.5, [2.2893, 48.8539], '6')).toBe(false);
+    expect(shouldEnableUndergroundXray(16.5, [2.2893, 48.8539], '6', true)).toBe(false);
 
-    // Châtelet on Line 1 is underground
+    // Châtelet on Line 1 is underground: keep buildings solid on normal zoom, X-ray only during follow
     expect(isAerialViaductLocation('1', [2.347, 48.8584])).toBe(false);
-    expect(shouldEnableUndergroundXray(16.5, [2.347, 48.8584], '1')).toBe(true);
-    expect(shouldEnableUndergroundXray(13.5, [2.347, 48.8584], '1')).toBe(false);
+    expect(shouldEnableUndergroundXray(16.5, [2.347, 48.8584], '1', false)).toBe(false);
+    expect(shouldEnableUndergroundXray(16.5, [2.347, 48.8584], '1', true)).toBe(true);
+    expect(shouldEnableUndergroundXray(13.5, [2.347, 48.8584], '1', true)).toBe(false);
   });
 
   it('renders viaduct decks/piers instead of underground cutouts on Line 6 viaducts', () => {

@@ -5,14 +5,15 @@ import { getOvertureBuildingThemeColors, type MapTheme } from './vector_style';
 const OVERTURE_INDEX_URL =
   'https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/?list-type=2&prefix=tiles/&delimiter=/';
 const FALLBACK_OVERTURE_RELEASE = '2026-10-21.0';
-const SESSION_RELEASE_KEY = 'overture-pmtiles-release-v1';
+const LOCAL_RELEASE_KEY = 'overture-pmtiles-release-v2';
+const RELEASE_TTL_MS = 24 * 60 * 60 * 1000;
 
 export const OVERTURE_SOURCE_ID = 'overture-buildings';
 export const OVERTURE_BUILDING_LAYER_ID = 'overture-building-3d';
 export const OVERTURE_PART_LAYER_ID = 'overture-building-part-3d';
 
 let pmtilesProtocolRegistered = false;
-let cachedReleasePromise: Promise<string> | null = null;
+let backgroundRefreshStarted = false;
 const mapDesiredVisibility = new WeakMap<maplibregl.Map, boolean>();
 const mapXrayState = new WeakMap<maplibregl.Map, boolean>();
 
@@ -74,49 +75,62 @@ function ensurePmtilesProtocol(): void {
   }
 }
 
-async function resolveLatestOvertureRelease(): Promise<string> {
+export function getCachedOvertureReleaseSync(): { release: string; stale: boolean } {
   if (typeof window !== 'undefined') {
     try {
-      const stored = sessionStorage.getItem(SESSION_RELEASE_KEY);
-      if (stored && /^\d{4}-\d{2}-\d{2}\.\d+$/.test(stored)) {
-        return stored;
+      const raw = localStorage.getItem(LOCAL_RELEASE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { release?: string; ts?: number };
+        if (
+          parsed?.release &&
+          /^\d{4}-\d{2}-\d{2}\.\d+$/.test(parsed.release) &&
+          typeof parsed.ts === 'number'
+        ) {
+          return {
+            release: parsed.release,
+            stale: Date.now() - parsed.ts > RELEASE_TTL_MS,
+          };
+        }
       }
     } catch {
-      // sessionStorage restricted
+      // localStorage unavailable or malformed
     }
   }
+  return { release: FALLBACK_OVERTURE_RELEASE, stale: true };
+}
 
-  if (cachedReleasePromise) return cachedReleasePromise;
-
-  cachedReleasePromise = (async () => {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 3500);
-    try {
-      const res = await fetch(OVERTURE_INDEX_URL, { signal: controller.signal });
-      if (!res.ok) return FALLBACK_OVERTURE_RELEASE;
+function refreshOvertureReleaseInBackground(): void {
+  if (backgroundRefreshStarted || typeof fetch !== 'function') return;
+  backgroundRefreshStarted = true;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
+  void fetch(OVERTURE_INDEX_URL, { signal: controller.signal })
+    .then(async (res) => {
+      if (!res.ok) return;
       const xml = await res.text();
       const matches = Array.from(
         xml.matchAll(/<Prefix>tiles\/(\d{4}-\d{2}-\d{2}\.\d+)\/<\/Prefix>/g)
       )
         .map((m) => m[1])
         .sort();
-      const latest = matches[matches.length - 1] || FALLBACK_OVERTURE_RELEASE;
-      if (typeof window !== 'undefined') {
+      const latest = matches[matches.length - 1];
+      if (latest && typeof window !== 'undefined') {
         try {
-          sessionStorage.setItem(SESSION_RELEASE_KEY, latest);
+          localStorage.setItem(
+            LOCAL_RELEASE_KEY,
+            JSON.stringify({ release: latest, ts: Date.now() })
+          );
         } catch {
           // Ignore storage error
         }
       }
-      return latest;
-    } catch {
-      return FALLBACK_OVERTURE_RELEASE;
-    } finally {
+    })
+    .catch(() => {
+      // Background refresh is best-effort only
+    })
+    .finally(() => {
       clearTimeout(timer);
-    }
-  })();
-
-  return cachedReleasePromise;
+    });
 }
 
 export function setBuildingsVisible(map: maplibregl.Map, visible: boolean): void {
@@ -159,12 +173,12 @@ export function areBuildingsVisible(map: maplibregl.Map): boolean {
   return map.getLayoutProperty(layerId, 'visibility') !== 'none';
 }
 
-export async function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): Promise<void> {
-  if (typeof fetch !== 'function') return;
+export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): void {
   ensurePmtilesProtocol();
-
-  const release = await resolveLatestOvertureRelease();
   if (!map.getStyle() || map.getSource(OVERTURE_SOURCE_ID)) return;
+
+  const { release, stale } = getCachedOvertureReleaseSync();
+  if (stale) refreshOvertureReleaseInBackground();
 
   const pmtilesUrl = `pmtiles://https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/${release}/buildings.pmtiles`;
   const colors = getOvertureBuildingThemeColors(theme);
@@ -240,13 +254,20 @@ export async function attachOvertureBuildings(map: maplibregl.Map, theme: MapThe
       beforeId
     );
 
-    // Wait for first loaded tile from Overture before hiding generic OpenFreeMap buildings,
-    // and revert cleanly if Overture errors out.
+    // Keep OpenFreeMap building-3d visible until Overture tiles in the active viewport settle,
+    // avoiding a visual flash or missing buildings while Overture PMTiles streams in.
     const onSourceData = (e: any) => {
       if (e.sourceId !== OVERTURE_SOURCE_ID || !e.isSourceLoaded) return;
       map.off('sourcedata', onSourceData);
-      if (map.getLayer('building-3d')) {
-        map.setLayoutProperty('building-3d', 'visibility', 'none');
+      const hideFallback = () => {
+        if (map.getLayer('building-3d') && map.getLayer(OVERTURE_BUILDING_LAYER_ID)) {
+          map.setLayoutProperty('building-3d', 'visibility', 'none');
+        }
+      };
+      if (typeof map.once === 'function') {
+        map.once('idle', hideFallback);
+      } else {
+        hideFallback();
       }
     };
     const onSourceError = (e: any) => {

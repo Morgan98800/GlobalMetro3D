@@ -109,8 +109,17 @@ describe('station_detail_lod & platforms_layer', () => {
     expect(ids).toContain('station-lod-sleepers');
     expect(ids).toContain('station-lod-rails');
     expect(ids).toContain('station-lod-architecture');
+    expect(ids).toContain('station-lod-vault-ribs');
+    expect(ids).toContain('station-lod-names');
     expect(ids).not.toContain('station-lod-plaques');
     expect(ids).not.toContain('station-lod-viaducts');
+
+    const namesLayer = layers.find((l) => l.id === 'station-lod-names') as any;
+    expect(namesLayer?.props?.billboard).toBe(false);
+    expect(namesLayer?.props?.sizeUnits).toBe('meters');
+
+    const archLayer = layers.find((l) => l.id === 'station-lod-architecture') as any;
+    expect(archLayer?.props?.data?.length).toBeGreaterThan(20);
   });
 
   it('detects Paris Line 2 & 6 aerial viaducts and keeps buildings solid during normal zoom', () => {

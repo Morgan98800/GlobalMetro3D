@@ -689,6 +689,8 @@ async function bootstrap() {
   let edinburghHandle: any = null;
   let parisRideHandle: {
     setRoute: (k: string, s?: string, d?: string) => void;
+    setView: (v: 'vault' | 'ride') => void;
+    syncFromSimulation: (trains: TrainMarker[]) => void;
     dispose: () => void;
   } | null = null;
   let parisRideOpening = false;
@@ -699,6 +701,7 @@ async function bootstrap() {
 
   const isParisMetroLine = (lineName?: string | null) =>
     Boolean(lineName && !['A', 'B', 'C', 'D', 'E'].includes(lineName.toUpperCase()));
+  const isParisRideSupportedLine = (lineName?: string | null) => Boolean(lineName?.trim());
 
   const closeParisRideMode = () => {
     if (!parisRideHandle) return;
@@ -713,6 +716,8 @@ async function bootstrap() {
     initialLine?: string;
     initialDest?: string;
     initialStation?: string;
+    initialTrainId?: string;
+    initialView?: 'ride' | 'vault';
   }) => {
     if (cityConfig.id !== 'paris' || parisRideHandle || parisRideOpening) return;
     parisRideOpening = true;
@@ -725,6 +730,9 @@ async function bootstrap() {
           closeParisRideMode();
         },
       });
+      if (latestRenderedTrains.size > 0) {
+        parisRideHandle.syncFromSimulation(Array.from(latestRenderedTrains.values()));
+      }
     } finally {
       parisRideOpening = false;
     }
@@ -779,11 +787,12 @@ async function bootstrap() {
           followCamera?.stopFollow();
         } else if (target?.closest('.follow-hud__ride')) {
           const active = trackedTrain;
-          if (active && isParisMetroLine(active.lineName)) {
+          if (active && isParisRideSupportedLine(active.lineName)) {
             void openParisRideMode({
               initialLine: active.lineName,
               initialDest: active.dest,
               initialStation: active.next,
+              initialTrainId: active.id,
             });
           } else {
             void openParisRideMode({ initialLine: '6' });
@@ -807,7 +816,7 @@ async function bootstrap() {
       : `<span class="line-badge">${escapeHtml(train.lineName)}</span>`;
     const subPrefix = train.atStop ? 'À quai' : 'Prochain';
     const barColor = lineMeta?.color || 'var(--laiton)';
-    const canRideInside = cityConfig.id === 'paris' && isParisMetroLine(train.lineName);
+    const canRideInside = cityConfig.id === 'paris' && isParisRideSupportedLine(train.lineName);
 
     followHudEl.innerHTML = `
       ${badgeHtml}
@@ -1010,6 +1019,15 @@ async function bootstrap() {
   dock = new SubwayDock({
     rollingStockDb,
     onRecordsOpen: () => openNetworkRecords(stationRankings),
+    onInspectTrain3D:
+      cityConfig.id === 'paris'
+        ? (line) => {
+            void openParisRideMode({
+              initialLine: line.short_name,
+              initialView: 'vault',
+            });
+          }
+        : undefined,
     onLineSelect: (lineId, dir = '0') => {
       hideTooltip();
       activeLineId = lineId;
@@ -1219,17 +1237,20 @@ async function bootstrap() {
         </svg>
       `;
       rideBtn.addEventListener('click', () => {
-        if (trackedTrain && isParisMetroLine(trackedTrain.lineName)) {
+        if (trackedTrain && isParisRideSupportedLine(trackedTrain.lineName)) {
           void openParisRideMode({
             initialLine: trackedTrain.lineName,
             initialDest: trackedTrain.dest,
             initialStation: trackedTrain.next,
+            initialTrainId: trackedTrain.id,
           });
           return;
         }
         const selectedMeta = activeLineId ? lines.find((l) => l.id === activeLineId) : null;
         const initialLine =
-          selectedMeta && isParisMetroLine(selectedMeta.short_name) ? selectedMeta.short_name : '6';
+          selectedMeta && isParisRideSupportedLine(selectedMeta.short_name)
+            ? selectedMeta.short_name
+            : '6';
         void openParisRideMode({ initialLine });
       });
       controlsAside.insertBefore(rideBtn, divider);
@@ -1429,7 +1450,10 @@ async function bootstrap() {
       for (const train of trains) {
         latestRenderedTrains.set(train.id, train);
       }
-      if (parisRideHandle) return;
+      if (parisRideHandle) {
+        parisRideHandle.syncFromSimulation(trains);
+        return;
+      }
       followCamera?.onSimulationFrame();
       deckOverlay.setTrains(trains, Boolean(followCamera?.isFollowing()));
       edinburghHandle?.updateSimulationTrains(trains);

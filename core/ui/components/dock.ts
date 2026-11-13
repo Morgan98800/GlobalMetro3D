@@ -38,6 +38,7 @@ export class SubwayDock {
   private onStationClick: (station: StationMetadata) => void;
   private onTrainClick: (train: TrainMarker) => void;
   private onRecordsOpen?: () => void;
+  private onInspectTrain3D?: (line: LineMetadata) => void;
   private serviceStatus: DockServiceStatus | null = null;
   private realtimeAvailable = false;
   private rollingStockDb: RollingStockDatabase | null = null;
@@ -77,6 +78,7 @@ export class SubwayDock {
     onTrainClick: (train: TrainMarker) => void;
     rollingStockDb?: RollingStockDatabase;
     onRecordsOpen?: () => void;
+    onInspectTrain3D?: (line: LineMetadata) => void;
   }) {
     this.dockEl = document.getElementById('dock')!;
     this.linesGridEl = document.getElementById('lines-grid')!;
@@ -93,6 +95,7 @@ export class SubwayDock {
     this.onTrainClick = options.onTrainClick;
     this.rollingStockDb = options.rollingStockDb || null;
     this.onRecordsOpen = options.onRecordsOpen;
+    this.onInspectTrain3D = options.onInspectTrain3D;
 
     this.stationLadder = new StationLadder({
       containerId: 'dock-content',
@@ -475,11 +478,15 @@ export class SubwayDock {
         <div><span class="dock-stat-label">Matériel roulant</span><strong>${escapeHtml(stock?.name || 'Non renseigné')}</strong></div>
         <div><span class="dock-stat-label">État du service</span><strong id="dock-line-service">${escapeHtml(serviceLabel)}</strong></div>
       </div>
+      ${this.onInspectTrain3D ? '<div class="dock-line-actions"><button type="button" class="dock-line-action-btn" data-dock-inspect-3d>Voir la rame en 3D sur le quai</button></div>' : ''}
       ${rerConfidence}
     `;
     summary
       .querySelector<HTMLButtonElement>('.dock-line-close')
       ?.addEventListener('click', () => this.selectLine(null));
+    summary
+      .querySelector<HTMLButtonElement>('[data-dock-inspect-3d]')
+      ?.addEventListener('click', () => this.onInspectTrain3D?.(line));
     summary.querySelectorAll<HTMLButtonElement>('[data-dock-dir]').forEach((button) => {
       button.addEventListener('click', () => {
         const direction = button.dataset.dockDir;

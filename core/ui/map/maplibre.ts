@@ -153,7 +153,7 @@ export function createMap(containerId: string, options: CreateMapOptions = {}): 
     pitch: options.pitch ?? 0,
     bearing: options.bearing ?? 0,
     maxPitch: HIGH_ZOOM_MAX_PITCH,
-    maxZoom: 18,
+    maxZoom: 20.5,
     pixelRatio: getOptimalPixelRatio(2, 1.5),
     fadeDuration: isMobileGpuDevice() ? 120 : 300,
     attributionControl: false,
@@ -173,7 +173,7 @@ export function createMap(containerId: string, options: CreateMapOptions = {}): 
       document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
     applyMapSky(map, activeTheme);
     applyMapLighting(map, activeTheme);
-    void attachOvertureBuildings(map, activeTheme);
+    attachOvertureBuildings(map, activeTheme);
     try {
       if (facadesExperimentEnabled() && map.getLayer('building-3d')) {
         map.addImage('paris-facade-grid', createFacadePattern(), { pixelRatio: 1 });

@@ -290,12 +290,13 @@ export class SubwayDeckOverlay {
       this.bounds = bounds;
     }
     const detailZoomBucket =
-      zoom < STATION_DETAIL_ZOOM_MIN ? 0 : zoom < 15.2 ? 1 : zoom < 16.5 ? 2 : 3;
+      zoom < STATION_DETAIL_ZOOM_MIN ? 0 : zoom < 15.2 ? 1 : zoom < 16.0 ? 2 : zoom < 17.5 ? 3 : 4;
+    const moveThreshold = zoom >= 17.0 ? 0.0005 : 0.0009;
     const detailMoved =
       this.zoom >= STATION_DETAIL_ZOOM_MIN &&
       (!this.localDetailAnchor ||
-        Math.abs(this.localDetailAnchor[0] - mapCenter[0]) > 0.0009 ||
-        Math.abs(this.localDetailAnchor[1] - mapCenter[1]) > 0.0009);
+        Math.abs(this.localDetailAnchor[0] - mapCenter[0]) > moveThreshold ||
+        Math.abs(this.localDetailAnchor[1] - mapCenter[1]) > moveThreshold);
     const detailZoomChanged = detailZoomBucket !== this.localDetailZoomBucket;
     if (detailMoved || detailZoomChanged) {
       this.localDetailDirty = true;
@@ -409,7 +410,15 @@ export class SubwayDeckOverlay {
     if (this.localDetailDirty) {
       this.localDetailAnchor = [this.mapCenter[0], this.mapCenter[1]];
       this.localDetailZoomBucket =
-        this.zoom < STATION_DETAIL_ZOOM_MIN ? 0 : this.zoom < 15.2 ? 1 : this.zoom < 16.5 ? 2 : 3;
+        this.zoom < STATION_DETAIL_ZOOM_MIN
+          ? 0
+          : this.zoom < 15.2
+            ? 1
+            : this.zoom < 16.0
+              ? 2
+              : this.zoom < 17.5
+                ? 3
+                : 4;
       this.cachedLocalDetailLayers = createLocalStationDetailLayers({
         lines: this.data.lines,
         stations: this.cachedDisplayStations,
@@ -742,13 +751,18 @@ export class SubwayDeckOverlay {
     });
 
     const lineElev = selectedLine ? selectedLine.elevation_offset : 0;
-    const labelsLayer = createStationLabelsLayer(
-      displayStations,
-      this.selectedLineId,
-      this.zoom,
-      this.mapCenter,
-      lineElev
-    );
+    // At z >= 15.8, in-world station name plaques (`station-lod-names`) take over cleanly
+    // near the center so we skip floating billboard labels that would double up on platforms.
+    const labelsLayer =
+      this.zoom >= 16.0
+        ? null
+        : createStationLabelsLayer(
+            displayStations,
+            this.selectedLineId,
+            this.zoom,
+            this.mapCenter,
+            lineElev
+          );
     const tracksCoordsByLine = new Map<string, [number, number][][]>();
     for (const [lineId, lineTracks] of tracksByLine.entries()) {
       tracksCoordsByLine.set(

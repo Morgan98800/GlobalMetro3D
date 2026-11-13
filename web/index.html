@@ -38,6 +38,10 @@
          par <link> dans le <head>, jamais par @import : sur file://
          l'import distant échoue silencieusement (origine opaque). -->
     <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+    <link rel="preconnect" href="https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com" crossorigin>
+    <link rel="dns-prefetch" href="https://tiles.openfreemap.org">
+    <link rel="dns-prefetch" href="https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com">
     <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
     
     <!-- Ordre de dépendance des feuilles géré dans src/main.ts :

@@ -1,6 +1,7 @@
-import { PathLayer, PolygonLayer, SolidPolygonLayer } from '@deck.gl/layers';
+import { PathLayer, PolygonLayer, SolidPolygonLayer, TextLayer } from '@deck.gl/layers';
 import type { LineMetadata, StationMetadata } from '@core/types';
 import { isMobileGpuDevice } from './device_perf';
+import { LATIN_CHARACTER_SET } from './labels_layer';
 import { closestPointOnPath } from './platforms_layer';
 
 export interface LocalStationDetailInput {
@@ -32,6 +33,23 @@ interface RailPathDatum {
   color: [number, number, number, number];
   widthM: number;
 }
+
+interface WallNameDatum {
+  position: [number, number, number];
+  text: string;
+  angleDeg: number;
+}
+
+const FAKE_AD_PALETTES: Array<{
+  bg: [number, number, number, number];
+  accent: [number, number, number, number];
+  band: [number, number, number, number];
+}> = [
+  { bg: [34, 54, 104, 248], accent: [245, 200, 82, 248], band: [18, 28, 56, 250] },
+  { bg: [143, 31, 43, 248], accent: [233, 196, 106, 248], band: [42, 15, 18, 250] },
+  { bg: [47, 93, 70, 248], accent: [207, 227, 184, 248], band: [27, 53, 40, 250] },
+  { bg: [201, 113, 59, 248], accent: [243, 230, 203, 248], band: [60, 35, 22, 250] },
+];
 
 export const STATION_DETAIL_ZOOM_MIN = 14.5;
 const LAT_SCALE = 111_320;
@@ -154,6 +172,8 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
   const stationStructures: CutawayPolygonDatum[] = [];
   const sleepers: SleeperDatum[] = [];
   const railPaths: RailPathDatum[] = [];
+  const vaultRibs: RailPathDatum[] = [];
+  const wallNames: WallNameDatum[] = [];
 
   // 1. Local track sleepers, twin running rails, third rail, and cutaway/viaduct decks
   let sleeperCount = 0;
@@ -543,6 +563,168 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
         extruded: true,
       });
     }
+
+    // D. Simplified RATP Station Architecture Details (z >= 15.8):
+    // 1) Framed 4x3 "fausses pubs" mounted flush along inner face of the tiled wall (+5.32m..+5.46m)
+    if (input.zoom >= 15.8) {
+      const adOffsets = [-halfLen * 0.62, -halfLen * 0.14, halfLen * 0.34];
+      adOffsets.forEach((ax, adIdx) => {
+        const pal = FAKE_AD_PALETTES[(adIdx + station.name.length) % FAKE_AD_PALETTES.length];
+        // Dark metallic frame recessed on tiled wall
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            ax - 2.05,
+            ax + 2.05,
+            5.34,
+            5.48,
+            deckZ + 0.72,
+            refLat
+          ),
+          fillColor: [24, 28, 34, 250],
+          lineColor: [175, 178, 184, 210],
+          elevationM: 2.05,
+          extruded: true,
+        });
+        // Stylized colorful poster canvas inside frame
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            ax - 1.85,
+            ax + 1.85,
+            5.27,
+            5.36,
+            deckZ + 0.85,
+            refLat
+          ),
+          fillColor: pal.bg,
+          lineColor: pal.accent,
+          elevationM: 1.78,
+          extruded: true,
+        });
+        // Graphic poster motif stripe & bottom title band
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            ax - 1.82,
+            ax + 1.82,
+            5.23,
+            5.29,
+            deckZ + 0.85,
+            refLat
+          ),
+          fillColor: pal.band,
+          lineColor: pal.accent,
+          elevationM: 0.48,
+          extruded: true,
+        });
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            ax - 0.9,
+            ax + 0.9,
+            5.23,
+            5.29,
+            deckZ + 1.56,
+            refLat
+          ),
+          fillColor: pal.accent,
+          lineColor: pal.bg,
+          elevationM: 0.62,
+          extruded: true,
+        });
+      });
+
+      // 2) Navy-blue RATP station name cartouches inlaid on wall between posters + in-world text
+      const plaqueOffsets = [-halfLen * 0.38, halfLen * 0.1];
+      for (const qx of plaqueOffsets) {
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            qx - 2.35,
+            qx + 2.35,
+            5.28,
+            5.48,
+            deckZ + (isViaduct ? 1.05 : 2.18),
+            refLat
+          ),
+          fillColor: [20, 51, 102, 252],
+          lineColor: [244, 246, 250, 230],
+          elevationM: 0.68,
+          extruded: true,
+        });
+      }
+
+      // Ground-embedded navy enamel nameplate strip on platform apron (+4.72m..+5.34m) + world-aligned TextLayer
+      stationStructures.push({
+        polygon: quadM(
+          anchor.point,
+          tangent,
+          normal,
+          -Math.min(halfLen * 0.52, Math.max(8, station.name.length * 0.56 + 2.2)),
+          Math.min(halfLen * 0.52, Math.max(8, station.name.length * 0.56 + 2.2)),
+          4.45,
+          5.38,
+          deckZ + 0.02,
+          refLat
+        ),
+        fillColor: [20, 51, 102, 244],
+        lineColor: [242, 245, 250, 225],
+        elevationM: 0.08,
+        extruded: true,
+      });
+
+      const namePosM: [number, number] = [
+        anchor.point[0] + normal[0] * 4.92,
+        anchor.point[1] + normal[1] * 4.92,
+      ];
+      const [nameLng, nameLat] = unprojectM(namePosM, refLat);
+      let angleDeg = (Math.atan2(tangent[1], tangent[0]) * 180) / Math.PI;
+      if (angleDeg > 90) angleDeg -= 180;
+      if (angleDeg < -90) angleDeg += 180;
+      wallNames.push({
+        position: [nameLng, nameLat, deckZ + 0.14],
+        text: station.name,
+        angleDeg,
+      });
+
+      // 3) Lightweight cutaway CMP elliptical vault ribs over underground stations (open top for BIM view)
+      if (!isViaduct && input.zoom >= 16.0) {
+        const ribOffsets = [-halfLen * 0.66, -halfLen * 0.33, 0, halfLen * 0.33, halfLen * 0.66];
+        for (const rx of ribOffsets) {
+          const arcPts: [number, number, number][] = [];
+          const steps = 8;
+          for (let step = 0; step <= steps; step += 1) {
+            const frac = step / steps;
+            const nPos = 5.72 - frac * 7.8; // +5.72m (back wall) across track to -2.08m
+            const archZ = deckZ + 3.25 + Math.sin(frac * Math.PI) * 1.9;
+            const worldPt = unprojectM(
+              [
+                anchor.point[0] + tangent[0] * rx + normal[0] * nPos,
+                anchor.point[1] + tangent[1] * rx + normal[1] * nPos,
+              ],
+              refLat
+            );
+            arcPts.push([worldPt[0], worldPt[1], archZ]);
+          }
+          vaultRibs.push({
+            path: arcPts,
+            color: isLight ? [196, 192, 184, 215] : [228, 224, 216, 195],
+            widthM: 0.22,
+          });
+        }
+      }
+    }
   }
 
   const layers: any[] = [];
@@ -639,6 +821,46 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
           specularColor: [110, 108, 104],
         },
         parameters: { depthTest: true, depthWriteEnabled: true } as any,
+      })
+    );
+  }
+
+  if (vaultRibs.length > 0) {
+    layers.push(
+      new PathLayer<RailPathDatum>({
+        id: 'station-lod-vault-ribs',
+        data: vaultRibs,
+        pickable: false,
+        widthUnits: 'meters',
+        getWidth: (d) => d.widthM,
+        getPath: (d) => d.path,
+        getColor: (d) => d.color,
+        capRounded: true,
+        jointRounded: true,
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
+      })
+    );
+  }
+
+  if (wallNames.length > 0) {
+    layers.push(
+      new TextLayer<WallNameDatum>({
+        id: 'station-lod-names',
+        data: wallNames,
+        pickable: false,
+        billboard: false,
+        sizeUnits: 'meters',
+        characterSet: LATIN_CHARACTER_SET,
+        fontFamily: 'Switzer, system-ui, -apple-system, sans-serif',
+        fontWeight: 700,
+        getPosition: (d) => d.position,
+        getText: (d) => d.text,
+        getSize: () => 1.85,
+        getAngle: (d) => d.angleDeg,
+        getColor: () => [246, 248, 252, 245],
+        getTextAnchor: () => 'middle',
+        getAlignmentBaseline: () => 'center',
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
       })
     );
   }

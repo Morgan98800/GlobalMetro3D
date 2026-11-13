@@ -1,19 +1,34 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { getOptimalPixelRatio, isMobileGpuDevice } from '@core/ui/map/device_perf';
+import type { TrainMarker } from '@core/ui/map/trains_layer';
 
 export interface ParisRideOptions {
   initialLine?: string;
   initialDest?: string;
   initialStation?: string;
+  initialTrainId?: string;
+  initialView?: 'ride' | 'vault';
   onExit?: () => void;
   onRouteChange?: (routeKey: string) => void;
 }
 
 export interface ParisRideHandle {
   setRoute: (key: string, stationName?: string, destName?: string) => void;
+  setView: (view: 'vault' | 'ride') => void;
+  syncFromSimulation: (trains: TrainMarker[]) => void;
   dispose: () => void;
 }
+
+export type ParisGlbFamily =
+  | 'pneumatic_generic'
+  | 'steel_classic'
+  | 'rer_generic_A'
+  | 'rer_generic_B'
+  | 'rer_generic_C'
+  | 'rer_generic_D'
+  | 'rer_generic_E';
 
 interface RouteStationDef {
   name: string;
@@ -673,6 +688,97 @@ const RAW_ROUTES: Array<{
       'Aéroport d’Orly',
     ],
   },
+  {
+    key: 'A',
+    num: 'A',
+    bg: '#EB2132',
+    fg: '#ffffff',
+    st: [
+      'Cergy / Poissy',
+      'Nanterre-Préfecture',
+      'La Défense',
+      'Charles de Gaulle – Étoile',
+      'Auber',
+      'Châtelet – Les Halles',
+      'Gare de Lyon',
+      'Nation',
+      'Vincennes',
+      'Val de Fontenay',
+      'Marne-la-Vallée / Boissy',
+    ],
+  },
+  {
+    key: 'B',
+    num: 'B',
+    bg: '#5091CB',
+    fg: '#ffffff',
+    st: [
+      'Aéroport CDG 2 / Mitry',
+      'Aulnay-sous-Bois',
+      'Gare du Nord',
+      'Châtelet – Les Halles',
+      'Saint-Michel Notre-Dame',
+      'Luxembourg',
+      'Port-Royal',
+      'Denfert-Rochereau',
+      'Cité Universitaire',
+      'Bourg-la-Reine',
+      'Antony / Saint-Rémy',
+    ],
+  },
+  {
+    key: 'C',
+    num: 'C',
+    bg: '#FFCC30',
+    fg: '#000000',
+    st: [
+      'Pontoise / Versailles-Château',
+      'Javel',
+      'Champ de Mars – Tour Eiffel',
+      'Pont de l’Alma',
+      'Invalides',
+      'Musée d’Orsay',
+      'Saint-Michel Notre-Dame',
+      'Gare d’Austerlitz',
+      'Bibliothèque François Mitterrand',
+      'Choisy-le-Roi',
+      'Juvisy',
+    ],
+  },
+  {
+    key: 'D',
+    num: 'D',
+    bg: '#008B5B',
+    fg: '#ffffff',
+    st: [
+      'Orry-la-Ville – Creil',
+      'Saint-Denis',
+      'Stade de France – Saint-Denis',
+      'Gare du Nord',
+      'Châtelet – Les Halles',
+      'Gare de Lyon',
+      'Maisons-Alfort – Alfortville',
+      'Villeneuve-Saint-Georges',
+      'Juvisy / Melun',
+    ],
+  },
+  {
+    key: 'E',
+    num: 'E',
+    bg: '#B94E9A',
+    fg: '#ffffff',
+    st: [
+      'Nanterre-la-Folie',
+      'La Défense',
+      'Neuilly – Porte Maillot',
+      'Haussmann – Saint-Lazare',
+      'Magenta',
+      'Rosa Parks',
+      'Pantin',
+      'Noisy-le-Sec',
+      'Chelles / Tournan',
+    ],
+  },
 ];
 
 const OPEN: Record<
@@ -713,9 +819,18 @@ const OPEN: Record<
   '11': { air: ['Coteaux Beauclair'] },
   '13s': { air: ['Châtillon – Montrouge', 'Malakoff – Étienne Dolet'] },
   '13a': { air: ['Châtillon – Montrouge', 'Malakoff – Étienne Dolet'] },
+  A: { air: ['Nanterre-Préfecture', 'Vincennes', 'Val de Fontenay'] },
+  B: { air: ['Aulnay-sous-Bois', 'Cité Universitaire', 'Bourg-la-Reine', 'Antony / Saint-Rémy'] },
+  C: {
+    air: ['Javel', 'Champ de Mars – Tour Eiffel', 'Pont de l’Alma', 'Invalides', 'Choisy-le-Roi'],
+    seine: [['Javel', 'Champ de Mars – Tour Eiffel']],
+    tower: ['Javel', 'Champ de Mars – Tour Eiffel'],
+  },
+  D: { air: ['Saint-Denis', 'Stade de France – Saint-Denis', 'Maisons-Alfort – Alfortville'] },
+  E: { air: ['Rosa Parks', 'Pantin', 'Noisy-le-Sec'] },
 };
 
-const ROUTES: RouteDef[] = RAW_ROUTES.map((r) => {
+export const ROUTES: RouteDef[] = RAW_ROUTES.map((r) => {
   const open = OPEN[r.key] ?? {};
   return {
     key: r.key,
@@ -743,6 +858,72 @@ const ROUTES: RouteDef[] = RAW_ROUTES.map((r) => {
   };
 });
 
+export function isRerLineNum(num: string): boolean {
+  const up = num.trim().toUpperCase();
+  return up === 'A' || up === 'B' || up === 'C' || up === 'D' || up === 'E';
+}
+
+const PNEUMATIC_LINES = new Set(['1', '4', '6', '11', '14']);
+
+export function resolveTrainGlbFamily(lineNumOrKey: string): ParisGlbFamily {
+  const upper = lineNumOrKey
+    .trim()
+    .toUpperCase()
+    .replace(/^RER\s+/, '');
+  if (upper === 'A' || upper === 'B' || upper === 'C' || upper === 'D' || upper === 'E') {
+    return `rer_generic_${upper}` as ParisGlbFamily;
+  }
+  if (PNEUMATIC_LINES.has(upper)) {
+    return 'pneumatic_generic';
+  }
+  return 'steel_classic';
+}
+
+export function getGlbUrlsForFamily(family: ParisGlbFamily): {
+  neutral: string;
+  cab: string;
+  tail: string;
+} {
+  if (family.startsWith('rer_generic_')) {
+    return {
+      neutral: `/models/train/${family}__neutral.glb`,
+      cab: `/models/train/${family}__cab.glb`,
+      tail: `/models/train/${family}__tail.glb`,
+    };
+  }
+  return {
+    neutral: `/models/train/${family}__neutral.glb`,
+    cab: `/models/train/${family}__neutral__cab.glb`,
+    tail: `/models/train/${family}__neutral__tail.glb`,
+  };
+}
+
+export function computeLiveStepS(params: {
+  prevFront: number;
+  targetFront: number;
+  curS: number;
+  dir: 1 | -1;
+  atStop: boolean;
+  speedMps: number;
+  dt: number;
+}): number {
+  const { prevFront, targetFront, curS, dir, atStop, speedMps, dt } = params;
+  if (atStop) {
+    const gap = targetFront - curS;
+    if (Math.abs(gap) < 0.05) return targetFront;
+    return curS + gap * Math.min(1, dt * 4.5);
+  }
+  const minBound =
+    dir > 0 ? Math.min(prevFront, targetFront - 4) : Math.max(prevFront, targetFront + 4);
+  const stopHoldBound = targetFront - dir * 5.5;
+  const maxAdvance = Math.max(0.5, speedMps) * dt;
+  const candidate = curS + dir * maxAdvance;
+  if (dir > 0) {
+    return Math.min(stopHoldBound, Math.max(minBound, candidate));
+  }
+  return Math.max(stopHoldBound, Math.min(minBound, candidate));
+}
+
 function normalizeStr(v: string): string {
   return v
     .toLowerCase()
@@ -756,7 +937,10 @@ function normalizeStr(v: string): string {
 
 export function resolveRideRouteKey(line?: string, dest?: string): string {
   if (!line) return '6';
-  const cleaned = line.trim().toLowerCase();
+  const cleaned = line
+    .trim()
+    .toLowerCase()
+    .replace(/^rer\s+/, '');
   if (cleaned === '7') {
     const destNorm = normalizeStr(dest ?? '');
     if (destNorm.includes('ivry')) return '7i';
@@ -799,6 +983,63 @@ function rnd(seed: number): number {
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 }
 
+interface GlbFamilyScenes {
+  neutral: THREE.Group;
+  cab: THREE.Group;
+  tail: THREE.Group;
+}
+
+const gltfLoader = new GLTFLoader();
+const glbFamilyCache = new Map<ParisGlbFamily, Promise<GlbFamilyScenes | null>>();
+
+function normalizeGlbCarScene(raw: THREE.Group, rotateTail: boolean): THREE.Group {
+  const wrapper = new THREE.Group();
+  const model = raw.clone(true);
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model);
+  const size = new THREE.Vector3();
+  const center = new THREE.Vector3();
+  box.getSize(size);
+  box.getCenter(center);
+
+  const scale = size.x > 0.1 ? L / size.x : 1;
+  model.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
+  model.scale.setScalar(scale);
+  if (rotateTail) {
+    const rotGroup = new THREE.Group();
+    rotGroup.rotation.y = PI;
+    rotGroup.add(model);
+    wrapper.add(rotGroup);
+  } else {
+    wrapper.add(model);
+  }
+  return wrapper;
+}
+
+function loadGlbFamily(family: ParisGlbFamily): Promise<GlbFamilyScenes | null> {
+  const existing = glbFamilyCache.get(family);
+  if (existing) return existing;
+  const urls = getGlbUrlsForFamily(family);
+  const loadOne = (url: string) => gltfLoader.loadAsync(url).then((gltf) => gltf.scene);
+  const promise = Promise.all([
+    loadOne(urls.neutral),
+    loadOne(urls.cab).catch(() => null),
+    loadOne(urls.tail).catch(() => null),
+  ])
+    .then(([neutral, cab, tail]) => ({
+      neutral,
+      cab: cab ?? neutral,
+      tail: tail ?? cab ?? neutral,
+    }))
+    .catch((err) => {
+      console.warn(`[paris-ride] Failed to load 3D train model ${family}:`, err);
+      glbFamilyCache.delete(family);
+      return null;
+    });
+  glbFamilyCache.set(family, promise);
+  return promise;
+}
+
 export function mountParisRideView(
   container: HTMLElement,
   options: ParisRideOptions = {}
@@ -815,7 +1056,7 @@ export function mountParisRideView(
       <div class="paris-ride-top-right">
         <label class="paris-ride-card paris-ride-picker">
           <span class="paris-ride-badge" data-ride-badge>1</span>
-          <select data-ride-route aria-label="Ligne de métro"></select>
+          <select data-ride-route aria-label="Ligne de métro ou RER"></select>
         </label>
         <button type="button" class="paris-ride-btn paris-ride-btn--close" data-ride-exit>
           Carte 3D (Esc)
@@ -831,6 +1072,10 @@ export function mountParisRideView(
             <div class="paris-ride-row"><span data-ride-now-label>À quai</span><b data-ride-now>—</b></div>
             <div class="paris-ride-row"><span>Prochain</span><b data-ride-next>—</b></div>
           </div>
+          <button type="button" class="paris-ride-live-pill" data-ride-live aria-pressed="true" title="Synchronisation temps réel avec la simulation">
+            <span class="paris-ride-live-dot" aria-hidden="true"></span>
+            <span data-ride-live-label>EN DIRECT</span>
+          </button>
         </div>
         <div class="paris-ride-row"><span>Direction</span><b data-ride-toward>—</b></div>
         <div class="paris-ride-row"><span>Voie</span><b data-ride-track>—</b></div>
@@ -839,6 +1084,7 @@ export function mountParisRideView(
       <div class="paris-ride-card paris-ride-controls" role="group" aria-label="Contrôles de caméra et lecture">
         <button type="button" class="paris-ride-btn" data-ride-view="vault" aria-pressed="false">Quai</button>
         <button type="button" class="paris-ride-btn" data-ride-view="ride" aria-pressed="true">Cabine</button>
+        <button type="button" class="paris-ride-btn" data-ride-eiffel aria-pressed="false" hidden>Tour Eiffel</button>
         <button type="button" class="paris-ride-btn" data-ride-speed aria-label="Vitesse de lecture">1×</button>
         <button type="button" class="paris-ride-btn" data-ride-pause aria-pressed="false">Pause</button>
       </div>
@@ -860,6 +1106,9 @@ export function mountParisRideView(
   const elToward = root.querySelector('[data-ride-toward]') as HTMLElement;
   const elTrack = root.querySelector('[data-ride-track]') as HTMLElement;
   const elBar = root.querySelector('[data-ride-bar]') as HTMLElement;
+  const liveBtn = root.querySelector('[data-ride-live]') as HTMLButtonElement;
+  const liveLabelEl = root.querySelector('[data-ride-live-label]') as HTMLElement;
+  const eiffelBtn = root.querySelector('[data-ride-eiffel]') as HTMLButtonElement;
   const speedBtn = root.querySelector('[data-ride-speed]') as HTMLButtonElement;
   const pauseBtn = root.querySelector('[data-ride-pause]') as HTMLButtonElement;
   const viewButtons = Array.from(root.querySelectorAll('[data-ride-view]')) as HTMLButtonElement[];
@@ -876,6 +1125,8 @@ export function mountParisRideView(
     options.onExit?.();
     return {
       setRoute: () => {},
+      setView: () => {},
+      syncFromSimulation: () => {},
       dispose: () => {},
     };
   }
@@ -1704,11 +1955,16 @@ export function mountParisRideView(
     plug: trackMat(new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide })),
     tower: trackMat(
       new THREE.MeshStandardMaterial({
-        color: 0x5b4a3a,
-        roughness: 0.7,
-        metalness: 0.4,
-        envMapIntensity: 0.4,
+        color: 0x6b5642,
+        roughness: 0.58,
+        metalness: 0.45,
+        envMapIntensity: 0.55,
         side: THREE.DoubleSide,
+      })
+    ),
+    towerBeacon: trackMat(
+      new THREE.MeshBasicMaterial({
+        color: 0xffdf99,
       })
     ),
   };
@@ -2011,7 +2267,7 @@ export function mountParisRideView(
     55,
     (container.clientWidth || window.innerWidth) / (container.clientHeight || window.innerHeight),
     0.05,
-    isMobileGpu ? 380 : 800
+    isMobileGpu ? 950 : 1400
   );
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -2074,7 +2330,7 @@ export function mountParisRideView(
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
     textures.push(t);
-    const skyGeo = trackGeo(new THREE.SphereGeometry(700, 32, 16));
+    const skyGeo = trackGeo(new THREE.SphereGeometry(1150, 32, 16));
     const skyMat = trackMat(
       new THREE.MeshBasicMaterial({ map: t, side: THREE.BackSide, fog: false, depthWrite: false })
     );
@@ -2713,36 +2969,84 @@ export function mountParisRideView(
     g.add(r);
   }
 
+  let towerWorldPos: THREE.Vector3 | null = null;
+
   function eiffel(geos: THREE.BufferGeometry[]) {
-    const pts = [
-      [62, 0],
-      [47, 30],
-      [35, 57],
-      [25, 82],
-      [18, 115],
-      [12, 160],
-      [8, 205],
-      [5, 250],
-      [3, 280],
-      [1.4, 305],
-      [0, 324],
-    ].map((p) => new THREE.Vector2(p[0], p[1]));
-    const geo = new THREE.LatheGeometry(pts, 4);
-    geo.rotateY(PI / 4);
-    geos.push(geo);
     const grp = new THREE.Group();
-    grp.add(new THREE.Mesh(geo, M.tower));
+    // Quatre piliers évasés de la base (y = 0) jusqu'au 2e étage (y = 115)
+    const legGeo = new THREE.CylinderGeometry(3.2, 11.5, 62, 6);
+    const upperLegGeo = new THREE.CylinderGeometry(2.2, 4.4, 60, 6);
+    geos.push(legGeo, upperLegGeo);
+    const lowerR = 45;
+    const midR = 23;
     [
-      [57, 6, 70],
-      [115, 4, 40],
-      [276, 3, 10],
+      [1, 1],
+      [-1, 1],
+      [-1, -1],
+      [1, -1],
+    ].forEach(([sx, sz]) => {
+      const leg = new THREE.Mesh(legGeo, M.tower);
+      leg.position.set(sx * lowerR, 28, sz * lowerR);
+      leg.rotation.z = sx * 0.34;
+      leg.rotation.x = -sz * 0.34;
+      grp.add(leg);
+
+      const upper = new THREE.Mesh(upperLegGeo, M.tower);
+      upper.position.set(sx * midR, 86, sz * midR);
+      upper.rotation.z = sx * 0.16;
+      upper.rotation.x = -sz * 0.16;
+      grp.add(upper);
+    });
+
+    // Fût supérieur (y = 115 -> 324) + antenne
+    const shaftPts = [
+      [19, 115],
+      [13, 158],
+      [8.5, 205],
+      [5.5, 250],
+      [3.4, 280],
+      [1.6, 305],
+      [0.4, 324],
+    ].map((p) => new THREE.Vector2(p[0], p[1]));
+    const shaftGeo = new THREE.LatheGeometry(shaftPts, 4);
+    shaftGeo.rotateY(PI / 4);
+    geos.push(shaftGeo);
+    grp.add(new THREE.Mesh(shaftGeo, M.tower));
+
+    // Ceinture ajourée des 4 faces sous le 1er étage
+    const archGeo = new THREE.TorusGeometry(26, 2.2, 6, 18, PI);
+    geos.push(archGeo);
+    [0, PI / 2, PI, -PI / 2].forEach((rotY) => {
+      const arch = new THREE.Mesh(archGeo, M.tower);
+      arch.position.set(Math.sin(rotY) * 32, 24, Math.cos(rotY) * 32);
+      arch.rotation.y = rotY;
+      grp.add(arch);
+    });
+
+    // 3 plateformes emblématiques + liseré doré
+    [
+      [57, 6.2, 68],
+      [115, 4.5, 41],
+      [276, 3.4, 13],
     ].forEach(([y, h, w]) => {
       const bg = new THREE.BoxGeometry(w, h, w);
       geos.push(bg);
       const m = new THREE.Mesh(bg, M.tower);
       m.position.y = y;
       grp.add(m);
+      const glowGeo = new THREE.BoxGeometry(w + 0.6, 0.9, w + 0.6);
+      geos.push(glowGeo);
+      const glowMesh = new THREE.Mesh(glowGeo, M.towerBeacon);
+      glowMesh.position.y = y - h / 2 - 0.35;
+      grp.add(glowMesh);
     });
+
+    // Phare lumineux au sommet (324 m)
+    const beaconGeo = new THREE.SphereGeometry(2.6, 10, 8);
+    geos.push(beaconGeo);
+    const beacon = new THREE.Mesh(beaconGeo, M.towerBeacon);
+    beacon.position.y = 325;
+    grp.add(beacon);
     return grp;
   }
 
@@ -2841,6 +3145,8 @@ export function mountParisRideView(
       n++;
       if (river && s > river[0] - 40 && s < river[1] + 40) continue;
       [-1, 1].forEach((side) => {
+        // Garde la berge côté Champ-de-Mars dégagée pour voir toute la Tour Eiffel depuis la rame
+        if (t?.tower && side < 0) return;
         const q = seed + n * 13 + side * 7;
         list.push({
           P: { ...pose(s, { x: 0, z: 0, h: 0 }) },
@@ -2855,12 +3161,14 @@ export function mountParisRideView(
     cityBlocks(g, list);
 
     if (t && t.tower) {
-      const P = pose(mid + 110, { x: 0, z: 0, h: 0 });
+      const twPosS = s0 + (s1 - s0) * 0.62;
+      const P = pose(twPosS, { x: 0, z: 0, h: 0 });
       const tw = eiffel(geos);
-      const lat = -340;
+      const lat = -190;
       tw.position.set(P.x - Math.sin(P.h) * lat, GY, P.z + Math.cos(P.h) * lat);
+      towerWorldPos = new THREE.Vector3(tw.position.x, GY + 135, tw.position.z);
       g.add(tw);
-      const padGeo = new THREE.CircleGeometry(230, 40);
+      const padGeo = new THREE.CircleGeometry(210, 36);
       geos.push(padGeo);
       const pad = new THREE.Mesh(padGeo, M.ground);
       pad.rotation.x = -PI / 2;
@@ -3102,6 +3410,7 @@ export function mountParisRideView(
   }
 
   function clearAll() {
+    towerWorldPos = null;
     built.forEach((o) => {
       o.parts.forEach((p) => scene.remove(p.g));
       o.dispose();
@@ -3129,7 +3438,7 @@ export function mountParisRideView(
     const o = openMix;
     if (scene.fog instanceof THREE.FogExp2) {
       scene.fog.color.copy(FOG_IN).lerp(FOG_OUT, o);
-      scene.fog.density = 0.0085 + (0.0026 - 0.0085) * o;
+      scene.fog.density = 0.0085 + (0.00105 - 0.0085) * o;
     }
     sun.intensity = 1.9 * o;
     hemi.intensity = 0.42 + 0.6 * o;
@@ -3151,10 +3460,11 @@ export function mountParisRideView(
   }
 
   /* ---------- The Train ---------- */
+  type TrainCarEntry = { outer: THREE.Group; inner: THREE.Group; glbSlot: THREE.Group };
   const tr = {
-    cars: [] as Array<{ outer: THREE.Group; inner: THREE.Group }>,
+    cars: [] as TrainCarEntry[],
     s: 0,
-    dir: 1,
+    dir: 1 as 1 | -1,
     v: 0,
     state: 'dwell' as 'dwell' | 'run',
     dwell: 0,
@@ -3166,6 +3476,51 @@ export function mountParisRideView(
     destMat: trackMat(new THREE.MeshBasicMaterial({})),
   };
 
+  let glbLoadToken = 0;
+  let glbStatus: 'loading' | 'ready' | 'failed' = 'loading';
+  let loadedGlbFamily: ParisGlbFamily | null = null;
+  let disposed = false;
+
+  function syncCarVisibility(v: 'vault' | 'ride') {
+    const showGlb = v === 'vault' && glbStatus === 'ready';
+    const showInner = v === 'ride' || (v === 'vault' && glbStatus === 'failed');
+    for (const c of tr.cars) {
+      c.glbSlot.visible = showGlb;
+      c.inner.visible = showInner;
+    }
+  }
+
+  function applyTrainGlbForRoute(r: RouteDef) {
+    const family = resolveTrainGlbFamily(r.num);
+    if (loadedGlbFamily === family && glbStatus === 'ready') {
+      syncCarVisibility(view);
+      return;
+    }
+    const token = ++glbLoadToken;
+    glbStatus = 'loading';
+    syncCarVisibility(view);
+    void loadGlbFamily(family).then((scenes) => {
+      if (disposed || token !== glbLoadToken) return;
+      if (!scenes) {
+        glbStatus = 'failed';
+        loadedGlbFamily = null;
+        syncCarVisibility(view);
+        return;
+      }
+      tr.cars.forEach((carEntry, idx) => {
+        carEntry.glbSlot.clear();
+        const isCab = idx === 0;
+        const isTail = idx === tr.cars.length - 1 && tr.cars.length > 1;
+        const source = isCab ? scenes.cab : isTail ? scenes.tail : scenes.neutral;
+        const mesh = normalizeGlbCarScene(source, isTail);
+        carEntry.glbSlot.add(mesh);
+      });
+      loadedGlbFamily = family;
+      glbStatus = 'ready';
+      syncCarVisibility(view);
+    });
+  }
+
   {
     const cls = [0, 0, 1, 0, 0];
     for (let i = 0; i < NC; i++) {
@@ -3176,16 +3531,20 @@ export function mountParisRideView(
         Boolean(cls[i])
       );
       inner.position.x = -L / 2;
+      const glbSlot = new THREE.Group();
+      glbSlot.position.y = 0.05;
+      glbSlot.visible = false;
       const outer = new THREE.Group();
       outer.rotation.order = 'YXZ';
       outer.add(inner);
+      outer.add(glbSlot);
       if (i < NC - 1) {
         const gw = new THREE.Mesh(G.gangway, M.rubber);
         gw.position.x = -L / 2 - GAP / 2;
         outer.add(gw);
       }
       scene.add(outer);
-      tr.cars.push({ outer, inner });
+      tr.cars.push({ outer, inner, glbSlot });
     }
     const front = tr.cars[0].inner;
     const rear = tr.cars[NC - 1].inner;
@@ -3263,14 +3622,30 @@ export function mountParisRideView(
     tr.target = nextFrom(tr.cur, tr.dir);
   }
 
-  let view: 'vault' | 'ride' = 'ride';
+  let view: 'vault' | 'ride' = options.initialView ?? 'ride';
   let paused = false;
   let speed = 1;
   let focusKey = '';
   let veilTimeout: ReturnType<typeof setTimeout> | null = null;
+  let cabYaw = 0;
+  let cabPitch = 0;
+  let eiffelGlance = false;
+
+  let liveMode = true;
+  let liveActive = false;
+  let liveTargetTrainId: string | null = options.initialTrainId ?? null;
+  let latestLiveTrain: TrainMarker | null = null;
+  let liveLegKey = '';
+
+  function updateLiveUi() {
+    liveBtn.setAttribute('aria-pressed', String(liveMode));
+    liveBtn.classList.toggle('is-live-active', liveMode && liveActive);
+    liveLabelEl.textContent = liveMode ? (liveActive ? 'EN DIRECT' : 'DIRECT...') : 'SIMU';
+    speedBtn.hidden = liveMode && liveActive;
+  }
 
   function turnBack() {
-    tr.dir = -tr.dir;
+    tr.dir = tr.dir > 0 ? -1 : 1;
     if (tr.dir < 0) {
       tr.s = tailB.s0 + 180;
       tr.cur = stations.length;
@@ -3326,6 +3701,79 @@ export function mountParisRideView(
     tr.wheel += (tr.v * dt) / WR;
   }
 
+  function stepLiveTrain(train: TrainMarker, dt: number) {
+    tr.time += dt;
+    const nextIdx = resolveStationIndex(train.next);
+    const dir = resolveDirection(train.dest, nextIdx);
+    const dirChanged = tr.dir !== dir;
+    tr.dir = dir;
+    if (dirChanged) setDest();
+
+    const targetFront = stations[nextIdx].sc + (dir * TRAIN_LEN) / 2;
+    const prevIdx = Math.max(0, Math.min(stations.length - 1, nextIdx - dir));
+    const prevFront = stations[prevIdx].sc + (dir * TRAIN_LEN) / 2;
+    const atStop = Boolean(train.atStop);
+    const legKey = `${route.key}|${dir}|${nextIdx}`;
+
+    if (legKey !== liveLegKey) {
+      const wasAdjacent =
+        liveLegKey.startsWith(`${route.key}|${dir}|`) &&
+        Math.abs(nextIdx - Number(liveLegKey.split('|')[2])) <= 1;
+      liveLegKey = legKey;
+      if (!wasAdjacent) {
+        tr.s = atStop ? targetFront : prevFront + (targetFront - prevFront) * 0.42;
+      }
+    }
+
+    const speedMps = train.speedMps ?? Math.max(0, (train.spd || 0) / 3.6);
+    tr.s = computeLiveStepS({
+      prevFront,
+      targetFront,
+      curS: tr.s,
+      dir,
+      atStop,
+      speedMps: atStop ? 0 : Math.max(4, speedMps),
+      dt,
+    });
+    tr.v = atStop ? Math.max(0, tr.v - A_BRAKE * 2 * dt) : Math.max(1, speedMps);
+    tr.cur = atStop ? nextIdx : prevIdx;
+    tr.state = atStop ? 'dwell' : 'run';
+    tr.target = { type: 'stn', k: nextIdx, front: targetFront };
+
+    const targetDoor = atStop ? 1 : 0;
+    const sp = dt / 1.1;
+    tr.door += Math.max(-sp, Math.min(sp, targetDoor - tr.door));
+    tr.wheel += (tr.v * dt) / WR;
+  }
+
+  function syncFromSimulation(trains: TrainMarker[]) {
+    if (!trains.length) {
+      latestLiveTrain = null;
+      liveActive = false;
+      updateLiveUi();
+      return;
+    }
+    const routeNumNorm = route.num.trim().toLowerCase();
+    let match: TrainMarker | undefined;
+    if (liveTargetTrainId) {
+      match = trains.find((t) => t.id === liveTargetTrainId && !t.isGhost);
+    }
+    if (!match) {
+      match = trains.find(
+        (t) =>
+          !t.isGhost &&
+          t.lineName
+            .trim()
+            .toLowerCase()
+            .replace(/^rer\s+/, '') === routeNumNorm
+      );
+      if (match) liveTargetTrainId = match.id;
+    }
+    latestLiveTrain = match ?? null;
+    liveActive = Boolean(match);
+    updateLiveUi();
+  }
+
   const PC = { x: 0, z: 0, h: 0 };
   function poseTrain() {
     const e = tr.door < 0.5 ? 2 * tr.door * tr.door : 1 - Math.pow(-2 * tr.door + 2, 2) / 2;
@@ -3379,8 +3827,8 @@ export function mountParisRideView(
   function aimVault(k: number) {
     const P = pose(stations[k].sc, { x: 0, z: 0, h: 0 });
     const d = tr.dir;
-    toWorld(P, d * 56, 5.0, 0.3, camera.position);
-    toWorld(P, -d * 18, 2.0, 0, controls.target);
+    toWorld(P, d * 36, 2.75, d * 4.85, camera.position);
+    toWorld(P, -d * 6, 1.85, d * 1.5, controls.target);
     controls.update();
   }
 
@@ -3389,8 +3837,10 @@ export function mountParisRideView(
     focusKey = '';
     viewButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.rideView === v)));
     controls.enabled = v === 'vault';
-    camera.fov = v === 'ride' ? 62 : 55;
+    camera.fov = v === 'ride' ? 62 : 52;
     camera.updateProjectionMatrix();
+    syncCarVisibility(v);
+    eiffelBtn.hidden = v !== 'ride' || !route.open.tower;
   }
 
   ROUTES.forEach((r) => {
@@ -3398,7 +3848,8 @@ export function mountParisRideView(
     o.value = r.key;
     const a = r.stations[0].name;
     const b = r.stations[r.stations.length - 1].name;
-    o.textContent = `Ligne ${r.num}${r.branch ? ` (${r.branch})` : ''} · ${a} – ${b}`;
+    const prefix = isRerLineNum(r.num) ? 'RER' : 'Ligne';
+    o.textContent = `${prefix} ${r.num}${r.branch ? ` (${r.branch})` : ''} · ${a} – ${b}`;
     sel.appendChild(o);
   });
 
@@ -3465,8 +3916,17 @@ export function mountParisRideView(
       s: startSt.sc + (dir * TRAIN_LEN) / 2,
       target: null,
     });
+    liveLegKey = '';
+    if (!stationName) liveTargetTrainId = null;
+    eiffelGlance = false;
+    cabYaw = 0;
+    cabPitch = 0;
+    eiffelBtn.setAttribute('aria-pressed', 'false');
+    eiffelBtn.hidden = view !== 'ride' || !route.open.tower;
+
     planNext();
     setDest();
+    applyTrainGlbForRoute(route);
     elBar.style.background = route.bg;
     focusKey = '';
     stream(startIdx - 2, startIdx + 2, 99);
@@ -3475,23 +3935,36 @@ export function mountParisRideView(
   }
 
   function trackText(s: number) {
+    const speedSuffix =
+      liveMode && liveActive && latestLiveTrain
+        ? ` · ${Math.round(latestLiveTrain.spd || 0)} km/h`
+        : '';
     for (const st of stations) {
-      if (s >= st.s0 && s <= st.s0 + SL) return st.air ? 'Station aérienne' : 'Station souterraine';
+      if (s >= st.s0 && s <= st.s0 + SL) {
+        return `${st.air ? 'Station aérienne' : 'Station souterraine'}${speedSuffix}`;
+      }
     }
     const t = tunnels.find((item) => s >= item.s0 && s < item.s1);
     if (isOpen(s)) {
-      return t && t.seine
-        ? t.tower
-          ? 'Traversée de la Seine · vue Tour Eiffel'
-          : 'Traversée de la Seine'
-        : 'Sur le viaduc, plein air';
+      const base =
+        t && t.seine
+          ? t.tower
+            ? 'Traversée de la Seine · vue Tour Eiffel'
+            : 'Traversée de la Seine'
+          : 'Sur le viaduc, plein air';
+      return `${base}${speedSuffix}`;
     }
-    return 'En tunnel';
+    return `En tunnel${speedSuffix}`;
   }
 
   function updateHud() {
     const N = stations.length;
-    const toward = tr.dir > 0 ? stations[N - 1].name : stations[0].name;
+    const toward =
+      liveMode && liveActive && latestLiveTrain?.dest
+        ? latestLiveTrain.dest
+        : tr.dir > 0
+          ? stations[N - 1].name
+          : stations[0].name;
     let now = '';
     let label = '';
     let next = '';
@@ -3528,6 +4001,11 @@ export function mountParisRideView(
     const denom = stations[N - 1].sc - stations[0].sc || 1;
     const frac = (tr.s - stations[0].sc) / denom;
     elBar.style.width = `${Math.max(0, Math.min(1, frac)) * 100}%`;
+    eiffelBtn.hidden = view !== 'ride' || !route.open.tower;
+    eiffelBtn.classList.toggle(
+      'paris-ride-btn--highlight',
+      Boolean(route.open.tower && camEnv === 'out')
+    );
   }
 
   /* ---------- Event Listeners ---------- */
@@ -3538,6 +4016,22 @@ export function mountParisRideView(
   };
   viewButtons.forEach((b) => b.addEventListener('click', onViewClick));
 
+  const onLiveClick = () => {
+    liveMode = !liveMode;
+    updateLiveUi();
+  };
+  liveBtn.addEventListener('click', onLiveClick);
+
+  const onEiffelClick = () => {
+    eiffelGlance = !eiffelGlance;
+    eiffelBtn.setAttribute('aria-pressed', String(eiffelGlance));
+    if (!eiffelGlance) {
+      cabYaw = 0;
+      cabPitch = 0;
+    }
+  };
+  eiffelBtn.addEventListener('click', onEiffelClick);
+
   const onPauseClick = () => {
     paused = !paused;
     pauseBtn.setAttribute('aria-pressed', String(paused));
@@ -3546,13 +4040,18 @@ export function mountParisRideView(
   pauseBtn.addEventListener('click', onPauseClick);
 
   const onSpeedClick = () => {
+    liveMode = false;
+    updateLiveUi();
     speed = speed === 1 ? 2 : speed === 2 ? 4 : 1;
     speedBtn.textContent = `${speed}×`;
   };
   speedBtn.addEventListener('click', onSpeedClick);
 
   const onRouteSelect = () => {
-    if (!route || sel.value !== route.key) setRoute(sel.value);
+    if (!route || sel.value !== route.key) {
+      liveTargetTrainId = null;
+      setRoute(sel.value);
+    }
   };
   sel.addEventListener('change', onRouteSelect);
 
@@ -3560,6 +4059,44 @@ export function mountParisRideView(
     options.onExit?.();
   };
   exitBtn.addEventListener('click', onExitClick);
+
+  let draggingCab = false;
+  let lastPtrX = 0;
+  let lastPtrY = 0;
+  const onCanvasPointerDown = (e: PointerEvent) => {
+    if (view !== 'ride') return;
+    draggingCab = true;
+    lastPtrX = e.clientX;
+    lastPtrY = e.clientY;
+    renderer.domElement.setPointerCapture?.(e.pointerId);
+  };
+  const onCanvasPointerMove = (e: PointerEvent) => {
+    if (!draggingCab || view !== 'ride') return;
+    const dx = e.clientX - lastPtrX;
+    const dy = e.clientY - lastPtrY;
+    lastPtrX = e.clientX;
+    lastPtrY = e.clientY;
+    eiffelGlance = false;
+    eiffelBtn.setAttribute('aria-pressed', 'false');
+    cabYaw = Math.max(-1.85, Math.min(1.85, cabYaw - dx * 0.0045));
+    cabPitch = Math.max(-0.25, Math.min(0.75, cabPitch + dy * 0.0035));
+  };
+  const onCanvasPointerUp = (e: PointerEvent) => {
+    draggingCab = false;
+    renderer.domElement.releasePointerCapture?.(e.pointerId);
+  };
+  const onCanvasDblClick = () => {
+    if (view !== 'ride') return;
+    cabYaw = 0;
+    cabPitch = 0;
+    eiffelGlance = false;
+    eiffelBtn.setAttribute('aria-pressed', 'false');
+  };
+  renderer.domElement.addEventListener('pointerdown', onCanvasPointerDown);
+  renderer.domElement.addEventListener('pointermove', onCanvasPointerMove);
+  renderer.domElement.addEventListener('pointerup', onCanvasPointerUp);
+  renderer.domElement.addEventListener('pointercancel', onCanvasPointerUp);
+  renderer.domElement.addEventListener('dblclick', onCanvasDblClick);
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -3583,21 +4120,27 @@ export function mountParisRideView(
   /* ---------- Bootstrap & Render Loop ---------- */
   const initialRouteKey = resolveRideRouteKey(options.initialLine, options.initialDest);
   setRoute(initialRouteKey, options.initialStation, options.initialDest);
-  setView('ride');
+  setView(options.initialView ?? 'ride');
+  updateLiveUi();
 
   const camLocal = new THREE.Vector3(L / 2 - 1.0, BY + 1.62, 0.5);
   const lookLocal = new THREE.Vector3(L / 2 + 30, BY + 1.2, 0.5);
+  const WORLD_UP = new THREE.Vector3(0, 1, 0);
   const tmpA = new THREE.Vector3();
   const tmpB = new THREE.Vector3();
+  const tmpC = new THREE.Vector3();
   const clock = new THREE.Clock();
   let hudT = 0;
-  let disposed = false;
 
   renderer.setAnimationLoop(() => {
     if (disposed) return;
     const dt = Math.min(0.05, clock.getDelta());
     if (!paused) {
-      for (let i = 0; i < speed; i++) stepTrain(dt);
+      if (liveMode && latestLiveTrain) {
+        stepLiveTrain(latestLiveTrain, dt);
+      } else {
+        for (let i = 0; i < speed; i++) stepTrain(dt);
+      }
     }
     poseTrain();
     const near = nearestStation();
@@ -3621,8 +4164,21 @@ export function mountParisRideView(
       placeLights(near);
       const car = tr.cars[0].outer;
       car.updateMatrixWorld(true);
-      camera.position.copy(car.localToWorld(tmpA.copy(camLocal)));
-      camera.lookAt(car.localToWorld(tmpB.copy(lookLocal)));
+      car.localToWorld(tmpA.copy(camLocal));
+      car.localToWorld(tmpB.copy(lookLocal));
+      const fwdDir = tmpB.sub(tmpA).normalize();
+      if (eiffelGlance && towerWorldPos) {
+        const toTower = tmpC.copy(towerWorldPos).sub(tmpA).normalize();
+        fwdDir.copy(toTower);
+      } else {
+        if (Math.abs(cabYaw) > 0.0001) fwdDir.applyAxisAngle(WORLD_UP, cabYaw);
+        if (Math.abs(cabPitch) > 0.0001) {
+          fwdDir.y = Math.max(-0.55, Math.min(0.88, fwdDir.y + cabPitch));
+          fwdDir.normalize();
+        }
+      }
+      camera.position.copy(tmpA);
+      camera.lookAt(tmpB.copy(tmpA).addScaledVector(fwdDir, 30));
       applyEnv(tr.s - tr.dir * 1.5, dt);
     }
     hudT -= dt;
@@ -3635,6 +4191,8 @@ export function mountParisRideView(
 
   return {
     setRoute,
+    setView,
+    syncFromSimulation,
     dispose() {
       if (disposed) return;
       disposed = true;
@@ -3642,7 +4200,14 @@ export function mountParisRideView(
       renderer.setAnimationLoop(null);
       window.removeEventListener('keydown', onKeyDown, true);
       window.removeEventListener('resize', onResize);
+      renderer.domElement.removeEventListener('pointerdown', onCanvasPointerDown);
+      renderer.domElement.removeEventListener('pointermove', onCanvasPointerMove);
+      renderer.domElement.removeEventListener('pointerup', onCanvasPointerUp);
+      renderer.domElement.removeEventListener('pointercancel', onCanvasPointerUp);
+      renderer.domElement.removeEventListener('dblclick', onCanvasDblClick);
       viewButtons.forEach((b) => b.removeEventListener('click', onViewClick));
+      liveBtn.removeEventListener('click', onLiveClick);
+      eiffelBtn.removeEventListener('click', onEiffelClick);
       pauseBtn.removeEventListener('click', onPauseClick);
       speedBtn.removeEventListener('click', onSpeedClick);
       sel.removeEventListener('change', onRouteSelect);

@@ -1,0 +1,169 @@
+import { describe, expect, it } from 'vitest';
+import type { LineMetadata, StationMetadata } from '@core/types';
+import { createPlatformsLayer } from '@core/ui/map/platforms_layer';
+import {
+  createLocalStationDetailLayers,
+  isAerialViaductLocation,
+  shouldEnableUndergroundXray,
+} from '@core/ui/map/station_detail_lod';
+
+const METRO_LINE_6: LineMetadata = {
+  id: 'L6',
+  short_name: '6',
+  long_name: 'Ligne 6',
+  mode: 'metro',
+  color: '#6ECA97',
+  text_color: '#111111',
+  destinations: { '0': 'Charles de Gaulle - Étoile', '1': 'Nation' },
+  measured_length_km: 13.6,
+  elevation_offset: 5,
+};
+
+const METRO_LINE_1: LineMetadata = {
+  id: 'L1',
+  short_name: '1',
+  long_name: 'Ligne 1',
+  mode: 'metro',
+  color: '#FFCD00',
+  text_color: '#111111',
+  destinations: { '0': 'La Défense', '1': 'Château de Vincennes' },
+  measured_length_km: 16.5,
+  elevation_offset: 0,
+};
+
+const STATIONS: StationMetadata[] = [
+  {
+    id: 'st-chatelet',
+    name: 'Châtelet',
+    coordinates: [2.347, 48.8584],
+    lines: ['L1'],
+    is_hub: true,
+    wheelchair_boarding: 1,
+  },
+  {
+    id: 'st-bir-hakeim',
+    name: 'Bir-Hakeim',
+    coordinates: [2.2893, 48.8539],
+    lines: ['L6'],
+    is_hub: false,
+    wheelchair_boarding: 1,
+  },
+  {
+    id: 'st-far',
+    name: 'La Défense',
+    coordinates: [2.238, 48.8919],
+    lines: ['L1'],
+    is_hub: true,
+    wheelchair_boarding: 1,
+  },
+];
+
+describe('station_detail_lod & platforms_layer', () => {
+  it('returns no LOD detail layers below zoom 14.5', () => {
+    const tracksByLine = new Map<string, [number, number][][]>([
+      [
+        'L1',
+        [
+          [
+            [2.345, 48.8584],
+            [2.349, 48.8584],
+          ],
+        ],
+      ],
+    ]);
+    const layers = createLocalStationDetailLayers({
+      lines: [METRO_LINE_1],
+      stations: STATIONS,
+      tracksByLine,
+      selectedLineId: 'L1',
+      zoom: 13.8,
+      mapCenter: [2.347, 48.8584],
+      theme: 'dark',
+    });
+    expect(layers).toEqual([]);
+  });
+
+  it('builds local sleepers, rails, underground cutaway trench, and architecture at zoom >= 14.5', () => {
+    const tracksByLine = new Map<string, [number, number][][]>([
+      [
+        'L1',
+        [
+          [
+            [2.3455, 48.8584],
+            [2.3485, 48.8584],
+          ],
+        ],
+      ],
+    ]);
+    const layers = createLocalStationDetailLayers({
+      lines: [METRO_LINE_1],
+      stations: STATIONS,
+      tracksByLine,
+      selectedLineId: 'L1',
+      zoom: 16.2,
+      mapCenter: [2.347, 48.8584],
+      theme: 'dark',
+    });
+    const ids = layers.map((l) => l.id);
+    expect(ids).toContain('station-lod-cutouts');
+    expect(ids).toContain('station-lod-sleepers');
+    expect(ids).toContain('station-lod-rails');
+    expect(ids).toContain('station-lod-architecture');
+    expect(ids).not.toContain('station-lod-viaducts');
+  });
+
+  it('detects Paris Line 2 & 6 aerial viaducts and keeps buildings solid there', () => {
+    // Bir-Hakeim on Line 6 is an aerial viaduct
+    expect(isAerialViaductLocation('6', [2.2893, 48.8539])).toBe(true);
+    expect(shouldEnableUndergroundXray(16.5, [2.2893, 48.8539], '6')).toBe(false);
+
+    // Châtelet on Line 1 is underground
+    expect(isAerialViaductLocation('1', [2.347, 48.8584])).toBe(false);
+    expect(shouldEnableUndergroundXray(16.5, [2.347, 48.8584], '1')).toBe(true);
+    expect(shouldEnableUndergroundXray(13.5, [2.347, 48.8584], '1')).toBe(false);
+  });
+
+  it('renders viaduct decks/piers instead of underground cutouts on Line 6 viaducts', () => {
+    const tracksByLine = new Map<string, [number, number][][]>([
+      [
+        'L6',
+        [
+          [
+            [2.288, 48.8539],
+            [2.291, 48.8539],
+          ],
+        ],
+      ],
+    ]);
+    const layers = createLocalStationDetailLayers({
+      lines: [METRO_LINE_6],
+      stations: STATIONS,
+      tracksByLine,
+      selectedLineId: 'L6',
+      zoom: 16.4,
+      mapCenter: [2.2893, 48.8539],
+      theme: 'light',
+    });
+    const ids = layers.map((l) => l.id);
+    expect(ids).toContain('station-lod-viaducts');
+    expect(ids).not.toContain('station-lod-cutouts');
+  });
+
+  it('creates multi-bay tiled platforms and safety strips from zoom 13.5', () => {
+    const layer = createPlatformsLayer(
+      [STATIONS[0]],
+      METRO_LINE_1,
+      [
+        [
+          [2.3455, 48.8584],
+          [2.3485, 48.8584],
+        ],
+      ],
+      14.5,
+      'dark'
+    );
+    expect(layer).not.toBeNull();
+    // 6 stone tile bays + 1 trackside safety coping strip = 7 polygons per station
+    expect((layer as any).props.data).toHaveLength(7);
+  });
+});

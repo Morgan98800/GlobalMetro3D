@@ -5,11 +5,12 @@ import {
   areBuildingsVisible,
   attachOvertureBuildings,
   setBuildingsVisible,
+  setBuildingsXrayMode,
 } from './overture_buildings';
 import { getOptimalPixelRatio, isMobileGpuDevice } from './device_perf';
 import { createVectorDarkStyle, getMapThemePaints, MapTheme } from './vector_style';
 
-export { areBuildingsVisible, setBuildingsVisible };
+export { areBuildingsVisible, setBuildingsVisible, setBuildingsXrayMode };
 
 if (typeof maplibregl.setWorkerUrl === 'function') {
   maplibregl.setWorkerUrl(maplibreWorkerUrl);

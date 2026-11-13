@@ -14,6 +14,53 @@ export const OVERTURE_PART_LAYER_ID = 'overture-building-part-3d';
 let pmtilesProtocolRegistered = false;
 let cachedReleasePromise: Promise<string> | null = null;
 const mapDesiredVisibility = new WeakMap<maplibregl.Map, boolean>();
+const mapXrayState = new WeakMap<maplibregl.Map, boolean>();
+
+const DEFAULT_OPACITY_EXPR: any = [
+  'interpolate',
+  ['linear'],
+  ['zoom'],
+  13.5,
+  0,
+  14.3,
+  0.42,
+  15.5,
+  0.74,
+  16.8,
+  0.9,
+];
+
+const XRAY_OPACITY_EXPR: any = [
+  'interpolate',
+  ['linear'],
+  ['zoom'],
+  13.5,
+  0,
+  14.5,
+  0.14,
+  16.5,
+  0.11,
+];
+
+export function setBuildingsXrayMode(map: maplibregl.Map, xrayActive: boolean): void {
+  if (mapXrayState.get(map) === xrayActive) return;
+  mapXrayState.set(map, xrayActive);
+  const expr = xrayActive ? XRAY_OPACITY_EXPR : DEFAULT_OPACITY_EXPR;
+  const fallbackOpacity = xrayActive ? 0.14 : 0.82;
+  try {
+    if (map.getLayer(OVERTURE_BUILDING_LAYER_ID)) {
+      map.setPaintProperty(OVERTURE_BUILDING_LAYER_ID, 'fill-extrusion-opacity', expr);
+    }
+    if (map.getLayer(OVERTURE_PART_LAYER_ID)) {
+      map.setPaintProperty(OVERTURE_PART_LAYER_ID, 'fill-extrusion-opacity', expr);
+    }
+    if (map.getLayer('building-3d')) {
+      map.setPaintProperty('building-3d', 'fill-extrusion-opacity', fallbackOpacity as any);
+    }
+  } catch {
+    // Graceful no-op in headless/stubbed maps
+  }
+}
 
 function ensurePmtilesProtocol(): void {
   if (pmtilesProtocolRegistered) return;
@@ -134,19 +181,8 @@ export async function attachOvertureBuildings(map: maplibregl.Map, theme: MapThe
         '<a href="https://docs.overturemaps.org/attribution" target="_blank">© Overture Maps</a>',
     });
 
-    const opacityExpr: any = [
-      'interpolate',
-      ['linear'],
-      ['zoom'],
-      13.5,
-      0,
-      14.3,
-      0.42,
-      15.5,
-      0.74,
-      16.8,
-      0.9,
-    ];
+    const xrayActive = mapXrayState.get(map) === true;
+    const opacityExpr: any = xrayActive ? XRAY_OPACITY_EXPR : DEFAULT_OPACITY_EXPR;
 
     const beforeId = map.getLayer('building-3d') ? 'building-3d' : undefined;
 

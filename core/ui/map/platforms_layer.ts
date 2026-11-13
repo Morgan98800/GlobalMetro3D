@@ -7,17 +7,23 @@ export interface PlatformPath {
   elevation: number;
 }
 
-interface PlatformDatum {
+interface PlatformTileDatum {
   polygon: [number, number, number][];
   lineId: string;
   stationId: string;
-  color: [number, number, number, number];
+  fillColor: [number, number, number, number];
+  lineColor: [number, number, number, number];
+  elevationM: number;
+  stroked: boolean;
 }
 
 const LAT_SCALE = 111_320;
-const PLATFORM_WIDTH_M = 5.5;
+const TRACK_CLEARANCE_M = 1.52;
+const PLATFORM_WIDTH_M = 4.0;
 const PLATFORM_HEIGHT_M = 0.45;
-const PLATFORM_TOP_OFFSET_M = -0.15;
+const PLATFORM_TOP_OFFSET_M = -0.14;
+const SAFETY_STRIP_WIDTH_M = 0.36;
+const TILE_BAY_COUNT = 6;
 
 function project(point: [number, number], latitude: number): [number, number] {
   const lonScale = LAT_SCALE * Math.cos((latitude * Math.PI) / 180);
@@ -29,10 +35,10 @@ function unproject(point: [number, number], latitude: number): [number, number] 
   return [point[0] / lonScale, point[1] / LAT_SCALE];
 }
 
-function closestPointOnPath(
+export function closestPointOnPath(
   target: [number, number],
   path: [number, number][]
-): { point: [number, number]; tangent: [number, number] } | null {
+): { point: [number, number]; tangent: [number, number]; distanceM: number } | null {
   if (path.length < 2) return null;
   const targetMeters = project(target, target[1]);
   let bestDistance = Number.POSITIVE_INFINITY;
@@ -62,71 +68,129 @@ function closestPointOnPath(
     }
   }
 
-  return { point: bestPoint, tangent: bestTangent };
+  return { point: bestPoint, tangent: bestTangent, distanceM: bestDistance };
 }
 
-function platformForStation(
+function makeQuadPolygon(
+  centerM: [number, number],
+  tangent: [number, number],
+  normal: [number, number],
+  s0: number,
+  s1: number,
+  n0: number,
+  n1: number,
+  z: number,
+  refLat: number
+): [number, number, number][] {
+  const [tx, ty] = tangent;
+  const [nx, ny] = normal;
+  const pts: [number, number][] = [
+    [centerM[0] + tx * s0 + nx * n0, centerM[1] + ty * s0 + ny * n0],
+    [centerM[0] + tx * s1 + nx * n0, centerM[1] + ty * s1 + ny * n0],
+    [centerM[0] + tx * s1 + nx * n1, centerM[1] + ty * s1 + ny * n1],
+    [centerM[0] + tx * s0 + nx * n1, centerM[1] + ty * s0 + ny * n1],
+  ];
+  return pts.map((corner) => {
+    const [lng, lat] = unproject(corner, refLat);
+    return [lng, lat, z];
+  });
+}
+
+function platformTilesForStation(
   station: StationMetadata,
   line: LineMetadata,
-  paths: [number, number][][]
-): PlatformDatum | null {
-  let closest: { point: [number, number]; tangent: [number, number] } | null = null;
+  paths: [number, number][][],
+  theme: 'dark' | 'light',
+  followOffsetM: number
+): PlatformTileDatum[] {
+  let closest: { point: [number, number]; tangent: [number, number]; distanceM: number } | null =
+    null;
   for (const path of paths) {
     const candidate = closestPointOnPath(station.coordinates, path);
     if (!candidate) continue;
-    if (
-      !closest ||
-      Math.hypot(
-        candidate.point[0] - project(station.coordinates, station.coordinates[1])[0],
-        candidate.point[1] - project(station.coordinates, station.coordinates[1])[1]
-      ) <
-        Math.hypot(
-          closest.point[0] - project(station.coordinates, station.coordinates[1])[0],
-          closest.point[1] - project(station.coordinates, station.coordinates[1])[1]
-        )
-    ) {
+    if (!closest || candidate.distanceM < closest.distanceM) {
       closest = candidate;
     }
   }
-  if (!closest) return null;
+  if (!closest) return [];
 
-  const length = station.is_hub || station.lines.length > 1 ? 115 : 90;
+  const length = station.is_hub || station.lines.length > 1 ? 114 : 90;
   const halfLength = length / 2;
   const [tx, ty] = closest.tangent;
-  const nx = -ty;
-  const ny = tx;
+  const normal: [number, number] = [-ty, tx];
   const center = closest.point;
-  const corners: [number, number][] = [
-    [
-      center[0] - tx * halfLength - (nx * PLATFORM_WIDTH_M) / 2,
-      center[1] - ty * halfLength - (ny * PLATFORM_WIDTH_M) / 2,
-    ],
-    [
-      center[0] + tx * halfLength - (nx * PLATFORM_WIDTH_M) / 2,
-      center[1] + ty * halfLength - (ny * PLATFORM_WIDTH_M) / 2,
-    ],
-    [
-      center[0] + tx * halfLength + (nx * PLATFORM_WIDTH_M) / 2,
-      center[1] + ty * halfLength + (ny * PLATFORM_WIDTH_M) / 2,
-    ],
-    [
-      center[0] - tx * halfLength + (nx * PLATFORM_WIDTH_M) / 2,
-      center[1] - ty * halfLength + (ny * PLATFORM_WIDTH_M) / 2,
-    ],
-  ];
-  const polygon = corners.map((corner) => {
-    const [longitude, latitude] = unproject(corner, station.coordinates[1]);
-    return [
-      longitude,
-      latitude,
-      line.elevation_offset + PLATFORM_TOP_OFFSET_M - PLATFORM_HEIGHT_M,
-    ] as [number, number, number];
-  });
+
+  const baseZ = line.elevation_offset + followOffsetM + PLATFORM_TOP_OFFSET_M - PLATFORM_HEIGHT_M;
   const hex = (line.color || '#A9A29A').replace('#', '');
-  const r = hex.length === 6 ? parseInt(hex.slice(0, 2), 16) : 169;
-  const g = hex.length === 6 ? parseInt(hex.slice(2, 4), 16) : 162;
-  const b = hex.length === 6 ? parseInt(hex.slice(4, 6), 16) : 154;
-  return { polygon, lineId: line.id, stationId: station.id, color: [r, g, b, 215] };
+  const lr = hex.length === 6 ? parseInt(hex.slice(0, 2), 16) : 169;
+  const lg = hex.length === 6 ? parseInt(hex.slice(2, 4), 16) : 162;
+  const lb = hex.length === 6 ? parseInt(hex.slice(4, 6), 16) : 154;
+  const accentColor: [number, number, number, number] = [lr, lg, lb, 230];
+  const seamColor: [number, number, number, number] =
+    theme === 'light' ? [95, 90, 84, 150] : [58, 56, 54, 165];
+
+  const tiles: PlatformTileDatum[] = [];
+  const bayLen = length / TILE_BAY_COUNT;
+
+  // Subdivided mineral concrete bays for visible granite tile grain on zoom-in
+  for (let b = 0; b < TILE_BAY_COUNT; b += 1) {
+    const s0 = -halfLength + b * bayLen;
+    const s1 = s0 + bayLen - 0.14;
+    const isAlt = b % 2 === 0;
+    const fillColor: [number, number, number, number] =
+      theme === 'light'
+        ? isAlt
+          ? [134, 129, 122, 224]
+          : [122, 117, 110, 224]
+        : isAlt
+          ? [164, 159, 151, 222]
+          : [151, 146, 138, 222];
+
+    tiles.push({
+      polygon: makeQuadPolygon(
+        center,
+        closest.tangent,
+        normal,
+        s0,
+        s1,
+        TRACK_CLEARANCE_M + SAFETY_STRIP_WIDTH_M,
+        TRACK_CLEARANCE_M + PLATFORM_WIDTH_M,
+        baseZ,
+        station.coordinates[1]
+      ),
+      lineId: line.id,
+      stationId: station.id,
+      fillColor,
+      lineColor: seamColor,
+      elevationM: PLATFORM_HEIGHT_M,
+      stroked: true,
+    });
+  }
+
+  // Crisp trackside safety tactile coping strip along +1.52m .. +1.88m edge (clear of train envelope)
+  const safetyFill: [number, number, number, number] =
+    theme === 'light' ? [246, 242, 232, 245] : [232, 226, 212, 242];
+  tiles.push({
+    polygon: makeQuadPolygon(
+      center,
+      closest.tangent,
+      normal,
+      -halfLength,
+      halfLength,
+      TRACK_CLEARANCE_M,
+      TRACK_CLEARANCE_M + SAFETY_STRIP_WIDTH_M,
+      baseZ + 0.02,
+      station.coordinates[1]
+    ),
+    lineId: line.id,
+    stationId: station.id,
+    fillColor: safetyFill,
+    lineColor: accentColor,
+    elevationM: PLATFORM_HEIGHT_M + 0.02,
+    stroked: true,
+  });
+
+  return tiles;
 }
 
 export function createPlatformsLayer(
@@ -135,32 +199,34 @@ export function createPlatformsLayer(
   paths: [number, number][][],
   zoom: number,
   theme: 'dark' | 'light' = 'dark',
-  allLines?: { lines: LineMetadata[]; tracksByLine: Map<string, [number, number][][]> }
-): PolygonLayer<PlatformDatum> | null {
-  let data: PlatformDatum[] = [];
+  allLines?: { lines: LineMetadata[]; tracksByLine: Map<string, [number, number][][]> },
+  followElevation?: { lineId: string | null; offset: number }
+): PolygonLayer<PlatformTileDatum> | null {
+  let data: PlatformTileDatum[] = [];
+  const offsetFor = (lineId: string) =>
+    followElevation && followElevation.lineId === lineId ? followElevation.offset : 0;
+
   if (line && paths.length > 0 && zoom >= 13.5) {
-    data = stations
-      .filter((station) => station.lines.includes(line.id))
-      .map((station) => platformForStation(station, line, paths))
-      .filter((platform): platform is PlatformDatum => platform !== null);
+    const lineOff = offsetFor(line.id);
+    for (const station of stations) {
+      if (!station.lines.includes(line.id)) continue;
+      data.push(...platformTilesForStation(station, line, paths, theme, lineOff));
+    }
   } else if (!line && allLines && zoom >= 15.0) {
     for (const candidateLine of allLines.lines) {
       if (candidateLine.mode !== 'metro' && candidateLine.mode !== 'tube') continue;
       const linePaths = allLines.tracksByLine.get(candidateLine.id);
       if (!linePaths || linePaths.length === 0) continue;
+      const lineOff = offsetFor(candidateLine.id);
       for (const station of stations) {
         if (!station.lines.includes(candidateLine.id)) continue;
-        const platform = platformForStation(station, candidateLine, linePaths);
-        if (platform) data.push(platform);
+        data.push(...platformTilesForStation(station, candidateLine, linePaths, theme, lineOff));
       }
     }
   }
   if (data.length === 0) return null;
 
-  const baseFill: [number, number, number, number] =
-    theme === 'light' ? [120, 115, 108, 210] : [169, 162, 154, 205];
-
-  return new PolygonLayer<PlatformDatum>({
+  return new PolygonLayer<PlatformTileDatum>({
     id: 'subway-platforms',
     data,
     pickable: false,
@@ -169,20 +235,20 @@ export function createPlatformsLayer(
     filled: true,
     stroked: true,
     lineWidthUnits: 'meters',
-    getLineWidth: 0.6,
-    getLineColor: (datum) => datum.color,
+    getLineWidth: 0.16,
+    getLineColor: (datum) => datum.lineColor,
     getPolygon: (datum) => datum.polygon,
-    getElevation: PLATFORM_HEIGHT_M,
-    getFillColor: baseFill,
+    getElevation: (datum) => datum.elevationM,
+    getFillColor: (datum) => datum.fillColor,
     material: {
-      ambient: 0.65,
-      diffuse: 0.45,
-      shininess: 8,
-      specularColor: [80, 76, 70],
+      ambient: 0.68,
+      diffuse: 0.48,
+      shininess: 10,
+      specularColor: [90, 86, 78],
     },
     parameters: { depthTest: true, depthWriteEnabled: true } as any,
     updateTriggers: {
-      getPolygon: [line?.id ?? 'all', Math.floor(zoom * 2)],
+      getPolygon: [line?.id ?? 'all', Math.floor(zoom * 2), followElevation?.lineId ?? ''],
       getFillColor: [theme],
     },
   });

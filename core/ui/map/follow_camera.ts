@@ -1,5 +1,11 @@
 import * as maplibregl from 'maplibre-gl';
-import { HIGH_ZOOM_MAX_PITCH, LOW_ZOOM_MAX_PITCH, maxPitchForZoom } from './maplibre';
+import {
+  HIGH_ZOOM_MAX_PITCH,
+  LOW_ZOOM_MAX_PITCH,
+  maxPitchForZoom,
+  setBuildingsXrayMode,
+} from './maplibre';
+import { isAerialViaductLocation } from './station_detail_lod';
 import type { TrainMarker } from './trains_layer';
 
 // grazingCamera devient vrai à partir de 45° dans deck_overlay.ts.
@@ -126,6 +132,7 @@ export class FollowCamera {
         ? 'visible'
         : 'none';
     this.map.setMaxPitch(HIGH_ZOOM_MAX_PITCH);
+    setBuildingsXrayMode(this.map, !isAerialViaductLocation(train.lineName, train.pos));
 
     this.previousDockCollapsed = this.dock.classList.contains('dock--collapsed');
     this.dock.classList.add('dock--collapsed');
@@ -168,6 +175,7 @@ export class FollowCamera {
     this.smoothedCenter = null;
     this.lastFrameAt = 0;
     this.map.setMaxPitch(this.previousMaxPitch || maxPitchForZoom(this.map.getZoom()));
+    setBuildingsXrayMode(this.map, false);
     if (this.map.getLayer('building-3d')) {
       this.map.setLayoutProperty('building-3d', 'visibility', this.previousBuildingsVisibility);
     }
@@ -195,6 +203,7 @@ export class FollowCamera {
     }
 
     this.updateElevation();
+    setBuildingsXrayMode(this.map, !isAerialViaductLocation(train.lineName, train.pos));
     if (!this.locked) return;
     const now = performance.now();
     const deltaMs = Math.min(100, Math.max(0, now - this.lastFrameAt));

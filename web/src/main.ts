@@ -5,7 +5,9 @@ import {
   MapBounds,
   maxPitchForZoom,
   setBuildingsVisible,
+  setBuildingsXrayMode,
 } from '@core/ui/map/maplibre';
+import { shouldEnableUndergroundXray } from '@core/ui/map/station_detail_lod';
 import { SubwayDeckOverlay, TrackItem } from '@core/ui/map/deck_overlay';
 import { SubwayDock } from '@core/ui/components/dock';
 import { SubwaySearchBar } from '@core/ui/components/search_bar';
@@ -1301,18 +1303,22 @@ async function bootstrap() {
 
     const syncOverlayView = () => {
       const b = map.getBounds();
+      const zoom = map.getZoom();
+      const center: [number, number] = [map.getCenter().lng, map.getCenter().lat];
       const boundsTuple: [[number, number], [number, number]] | null = b
         ? [
             [b.getWest(), b.getSouth()],
             [b.getEast(), b.getNorth()],
           ]
         : null;
-      deckOverlay.setViewState(
-        map.getZoom(),
-        [map.getCenter().lng, map.getCenter().lat],
-        boundsTuple,
-        map.getPitch()
-      );
+      deckOverlay.setViewState(zoom, center, boundsTuple, map.getPitch());
+      if (!followCamera?.isFollowing()) {
+        const selectedLineMeta = activeLineId ? lines.find((l) => l.id === activeLineId) : null;
+        setBuildingsXrayMode(
+          map,
+          shouldEnableUndergroundXray(zoom, center, selectedLineMeta?.short_name ?? null)
+        );
+      }
     };
     map.on('move', syncOverlayView);
     syncOverlayView();

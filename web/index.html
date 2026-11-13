@@ -40,14 +40,8 @@
     <link rel="preconnect" href="https://api.fontshare.com">
     <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
     
-    <!-- Ordre de dépendance des feuilles (annexe B du prompt) :
-         jetons → typographie → mouvement → couche d'application.
-         main.css reste en dernier : c'est le seul mécanisme d'override
-         du dépôt, il n'y a pas de !important de confort. -->
-    <link rel="stylesheet" href="../core/ui/styles/tokens.css" />
-    <link rel="stylesheet" href="../core/ui/styles/typography.css" />
-    <link rel="stylesheet" href="../core/ui/styles/motion.css" />
-    <link rel="stylesheet" href="../core/ui/styles/main.css" />
+    <!-- Ordre de dépendance des feuilles géré dans src/main.ts :
+         jetons → typographie → mouvement → couche d'application → chrome. -->
 
     <script>
       // Cleanly suppress any injected Netlify HUD, drawer, or feedback widget
@@ -85,9 +79,33 @@
       <!-- Modal / popup container for station search -->
       <div id="search-container" class="search-modal-wrap" style="display: none;"></div>
 
-      <!-- View controls (Contextual Recenter) -->
+      <!-- View controls (Clustered quick controls + Contextual Recenter) -->
       <aside class="map-controls" id="map-controls" aria-label="Contrôles de vue">
-        <button class="map-control-btn" id="btn-recenter" title="Recadrer sur le réseau" aria-label="Recadrer sur le réseau de métro">
+        <button class="map-control-btn is-active" id="btn-toggle-pitch" type="button" title="Vue 3D / 2D" aria-label="Basculer entre la vue 3D et 2D" aria-pressed="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/>
+            <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>
+          </svg>
+        </button>
+        <button class="map-control-btn" id="btn-toggle-buildings" type="button" title="Bâti 3D (B)" aria-label="Afficher ou masquer les bâtiments 3D" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="8" width="7" height="13" rx="1"/>
+            <rect x="13" y="4" width="7" height="17" rx="1"/>
+            <line x1="7.5" y1="12" x2="7.5" y2="12.01"/>
+            <line x1="7.5" y1="16" x2="7.5" y2="16.01"/>
+            <line x1="16.5" y1="8" x2="16.5" y2="8.01"/>
+            <line x1="16.5" y1="12" x2="16.5" y2="12.01"/>
+            <line x1="16.5" y1="16" x2="16.5" y2="16.01"/>
+          </svg>
+        </button>
+        <button class="map-control-btn" id="btn-toggle-theme" type="button" title="Mode clair / sombre" aria-label="Basculer le thème clair ou sombre" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </button>
+        <div class="map-controls__divider" aria-hidden="true"></div>
+        <button class="map-control-btn" id="btn-recenter" type="button" title="Recadrer sur le réseau" aria-label="Recadrer sur le réseau de métro">
           <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
             <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/>
             <circle cx="12" cy="12" r="2" fill="currentColor"/>

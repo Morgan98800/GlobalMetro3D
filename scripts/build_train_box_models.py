@@ -54,22 +54,23 @@ LONG_AXIS = "+X"
 # atlas regions, in pixels: (x0, y0, x1, y1)
 R_ROOF = (0, 0, 512, 160)
 R_SIDE = (0, 160, 512, 320)
-R_END = (0, 320, 160, 448)
+R_END_FRONT = (0, 320, 80, 448)
+R_END_REAR = (80, 320, 160, 448)
 R_UNDER = (160, 320, 512, 384)
 
 # authored livery geometry, in metres or fractions of body height
-DOOR_WIDTH_M = 1.30
-WINDOW_BAND = (0.42, 0.74)   # fraction of body height, bottom..top
-SKIRT_TOP = 0.14             # fraction of body height
+DOOR_WIDTH_M = 1.32
+WINDOW_BAND = (0.44, 0.76)   # fraction of body height, bottom..top
+SKIRT_TOP = 0.25             # iconic RATP MF 67 / MP 89 lower teal band height fraction
 ROOF_STRIP_FRAC = 0.38       # grey equipment strip, fraction of body width
-BODY_COLOR = (232, 234, 236)
-LIVERY_BLUE = (0, 114, 188)
-GLASS_COLOR = (26, 30, 34)
-DOOR_COLOR = (200, 204, 208)
-ROOF_COLOR = (150, 156, 162)
-EQUIP_COLOR = (96, 101, 106)
-UNDER_COLOR = (22, 24, 27)
-END_COLOR = (44, 48, 52)
+BODY_COLOR = (240, 240, 240) # off-white 0xf0f0f0
+LIVERY_BLUE = (0, 138, 138)  # RATP teal 0x008a8a
+GLASS_COLOR = (17, 17, 17)   # deep reflective glass 0x111111
+DOOR_COLOR = (224, 226, 228) # clean light sliding doors
+ROOF_COLOR = (166, 170, 174)
+EQUIP_COLOR = (84, 88, 94)
+UNDER_COLOR = (26, 28, 32)
+END_COLOR = (240, 240, 240)
 
 # drive_type alone selects the body family. Driverless remains metadata and never
 # changes the physical steel-versus-pneumatic body choice.
@@ -201,35 +202,48 @@ def hex_to_rgb(v) -> tuple[int, int, int]:
 # geometry
 
 
-def build_geometry(length: float, width: float, height: float):
-    """Chamfered box, crowned roof, tapered ends. Returns (P, N, UV, I, stats)."""
+def build_geometry(length: float, width: float, height: float, cab: bool = False):
+    """Chamfered box with crowned roof, rooftop HVAC pods, bogies, and optional sloped cab at +X."""
     L, W2 = length, width / 2.0
-    # y = 0 is the rail head; `height` is rail head to the top of the crowned roof
-    y_uf, y_b = 0.0, 1.05                        # underframe bottom, body floor
-    if height <= y_b + 1.5:
+    # y = 0 is the rail head; `height` is rail head to the highest rooftop point
+    y_uf, y_b = 0.0, 1.02                        # bogie bottom, body floor
+    y_belly = 0.32                               # raised center underframe clearance
+    hvac_h = 0.13                                # rooftop HVAC fairing height above body crown
+    body_top = height - hvac_h
+    if body_top <= y_b + 1.4:
         raise DataError(f"height {height} m leaves no body above a {y_b} m floor line")
-    crown = 0.055 * (height - y_b)
-    y_r = height - crown                         # roof shoulder line
+    crown = 0.055 * (body_top - y_b)
+    y_r = body_top - crown                       # roof shoulder line
     c = min(0.18, 0.35 * W2)                     # lower chamfer
     c2 = min(0.22, 0.30 * (y_r - y_b))           # shoulder height
     c3 = min(0.20, 0.30 * W2)                    # shoulder inset
-    taper = 0.55                                 # end taper length along X
-    taper_z = 0.82                               # end section width factor
+    rear_taper = 0.45
+    rear_taper_z = 0.86
+    front_taper = 0.82 if cab else 0.45
+    front_taper_z = 0.78 if cab else 0.86
+    cab_rake = min(0.55, L * 0.045) if cab else 0.0
 
     profile = np.array([
         (-W2, y_b + c), (-W2 + c, y_b), (W2 - c, y_b), (W2, y_b + c),
         (W2, y_r - c2), (W2 - c3, y_r), (0.0, y_r + crown), (-W2 + c3, y_r), (-W2, y_r - c2),
     ])
-    stations = [(-L / 2, taper_z), (-L / 2 + taper, 1.0), (L / 2 - taper, 1.0), (L / 2, taper_z)]
 
-    rings = []
-    for x, sz in stations:
-        ring = np.stack([
-            np.full(len(profile), x),
-            y_b + (profile[:, 1] - y_b) * (1.0 if sz == 1.0 else 0.97),
-            profile[:, 0] * sz,
-        ], axis=1)
-        rings.append(ring)
+    def build_ring(x_pos: float, sz: float, rake: float):
+        y_sill = y_b + c + 0.15
+        y_span = max(body_top - y_sill, 0.5)
+        r_frac = np.clip((profile[:, 1] - y_sill) / y_span, 0.0, 1.0)
+        xs = x_pos - rake * (r_frac ** 1.15)
+        ys = y_b + (profile[:, 1] - y_b) * (1.0 if sz == 1.0 else (0.95 if cab and rake > 0 else 0.97))
+        zs = profile[:, 0] * sz
+        return np.stack([xs, ys, zs], axis=1)
+
+    stations = [
+        (-L / 2, rear_taper_z, 0.0),
+        (-L / 2 + rear_taper, 1.0, 0.0),
+        (L / 2 - front_taper, 1.0, 0.0),
+        (L / 2, front_taper_z, cab_rake),
+    ]
+    rings = [build_ring(x, sz, rake) for x, sz, rake in stations]
 
     faces: list[tuple[np.ndarray, str]] = []
     n = len(profile)
@@ -237,7 +251,13 @@ def build_geometry(length: float, width: float, height: float):
         a, b = rings[k], rings[k + 1]
         for i in range(n):
             j = (i + 1) % n
-            faces.append((np.array([a[i], a[j], b[j], b[i]]), "auto"))
+            quad = np.array([a[i], a[j], b[j], b[i]])
+            if cab and k == len(rings) - 2:
+                # Split raked cab facets into planar triangles so shading normals match winding exactly
+                faces.append((np.array([quad[0], quad[1], quad[2]]), "auto"))
+                faces.append((np.array([quad[0], quad[2], quad[3]]), "auto"))
+            else:
+                faces.append((quad, "auto"))
     # end caps, fanned from the profile centroid
     for ring, flip in ((rings[0], True), (rings[-1], False)):
         ctr = ring.mean(axis=0)
@@ -245,22 +265,116 @@ def build_geometry(length: float, width: float, height: float):
             j = (i + 1) % n
             tri = np.array([ctr, ring[j], ring[i]]) if flip else np.array([ctr, ring[i], ring[j]])
             faces.append((tri, "end"))
-    # underframe: plain inset box, one dark quad set, no bogies
-    uw, ul = W2 * 0.80, L / 2 - 0.35
-    box = [
-        [(-ul, y_uf, -uw), (ul, y_uf, -uw), (ul, y_b, -uw), (-ul, y_b, -uw)],
-        [(ul, y_uf, uw), (-ul, y_uf, uw), (-ul, y_b, uw), (ul, y_b, uw)],
-        [(-ul, y_uf, -uw), (ul, y_uf, -uw), (ul, y_uf, uw), (-ul, y_uf, uw)],
-        [(-ul, y_uf, -uw), (-ul, y_b, -uw), (-ul, y_b, uw), (-ul, y_uf, uw)],
-        [(ul, y_uf, uw), (ul, y_b, uw), (ul, y_b, -uw), (ul, y_uf, -uw)],
-    ]
-    for q in box:
-        faces.append((np.array(q, dtype=float), "under"))
 
-    # every surface of the body and of the underframe box is on a convex hull, so
-    # windings can be oriented outward mechanically instead of by hand. Without this
-    # the shell comes out inside-out, which back-face culling turns into a hollow car.
-    center = np.array([0.0, (y_uf + y_r + crown) / 2.0, 0.0])
+    # Underframe with protruding bogie trucks & raised center equipment belly
+    uw = W2 * 0.78
+    bw = W2 * 0.87
+    ul = L / 2 - 0.35
+    xb = min(L * 0.30, ul - 1.25)
+    bhl = min(1.05, max(0.75, L * 0.07))
+    ramp = min(bhl * 1.15, max(0.95, (y_belly - y_uf) * max(xb - bhl, 1.0) / max(height * 0.36, 0.9)))
+    if xb - bhl - ramp > 0.35 and ul > xb + bhl + 0.55:
+        uf_prof = [
+            (-ul, y_belly, uw),
+            (-xb - bhl - 0.35, y_belly, uw),
+            (-xb - bhl, y_uf, bw),
+            (-xb + bhl * 0.45, y_uf, bw),
+            (-xb + bhl * 0.45 + ramp, y_belly, uw),
+            (xb - bhl * 0.45 - ramp, y_belly, uw),
+            (xb - bhl * 0.45, y_uf, bw),
+            (xb + bhl, y_uf, bw),
+            (xb + bhl + 0.35, y_belly, uw),
+            (ul, y_belly, uw),
+        ]
+        uf_rings = [
+            np.array([(x, y_lo, -wz), (x, y_lo, wz), (x, y_b, wz), (x, y_b, -wz)], dtype=float)
+            for x, y_lo, wz in uf_prof
+        ]
+        for k in range(len(uf_rings) - 1):
+            ra, rb = uf_rings[k], uf_rings[k + 1]
+            for i in (0, 1, 3):  # bottom, +Z side, -Z side (skip hidden top face inside body)
+                j = (i + 1) % 4
+                faces.append((np.array([ra[i], ra[j], rb[j], rb[i]]), "under"))
+        faces.append((np.array([uf_rings[0][0], uf_rings[0][1], uf_rings[0][2], uf_rings[0][3]]), "under"))
+        faces.append((np.array([uf_rings[-1][0], uf_rings[-1][3], uf_rings[-1][2], uf_rings[-1][1]]), "under"))
+    else:
+        box = [
+            [(-ul, y_uf, -uw), (ul, y_uf, -uw), (ul, y_b, -uw), (-ul, y_b, -uw)],
+            [(ul, y_uf, uw), (-ul, y_uf, uw), (-ul, y_b, uw), (ul, y_b, uw)],
+            [(-ul, y_uf, -uw), (ul, y_uf, -uw), (ul, y_uf, uw), (-ul, y_uf, uw)],
+            [(-ul, y_uf, -uw), (-ul, y_b, -uw), (-ul, y_b, uw), (-ul, y_uf, uw)],
+            [(ul, y_uf, uw), (ul, y_b, uw), (ul, y_b, -uw), (ul, y_uf, -uw)],
+        ]
+        for q in box:
+            faces.append((np.array(q, dtype=float), "under"))
+
+    # Rooftop HVAC equipment pods (beveled ramps guaranteed outward relative to centroid)
+    pod_y0 = body_top - 0.03
+    pod_y1 = height
+    pod_w0 = min(W2 * 0.44, 0.56)
+    pod_w1 = pod_w0 * 0.84
+    if L >= 10.0:
+        pod_hl = min(1.50, L * 0.095)
+        max_safe_xc = max(0.0, (pod_hl * 0.55) * max(pod_y0 - height * 0.5, 0.5) / max(pod_y1 - pod_y0, 0.1) * 0.72)
+        xc_offset = min(0.22 * L, L / 2 - 2.4, max_safe_xc)
+        pod_centers = [-xc_offset, xc_offset] if xc_offset >= 1.8 else [0.0]
+    else:
+        pod_hl = min(1.10, L * 0.16)
+        pod_centers = [0.0]
+
+    for xc in pod_centers:
+        ramp_x = min(pod_hl * 0.62, max(0.45, (pod_y1 - pod_y0) * (abs(xc) + pod_hl) / max(pod_y0 - height * 0.5, 0.4) * 0.55))
+        deck_hl = max(0.25, pod_hl - ramp_x)
+        x0, x1 = xc - pod_hl, xc + pod_hl
+        tx0, tx1 = xc - deck_hl, xc + deck_hl
+        faces.append((np.array([(tx0, pod_y1, -pod_w1), (tx1, pod_y1, -pod_w1), (tx1, pod_y1, pod_w1), (tx0, pod_y1, pod_w1)]), "equip"))
+        faces.append((np.array([(x0, pod_y0, -pod_w0), (tx0, pod_y1, -pod_w1), (tx0, pod_y1, pod_w1), (x0, pod_y0, pod_w0)]), "equip"))
+        faces.append((np.array([(x1, pod_y0, pod_w0), (tx1, pod_y1, pod_w1), (tx1, pod_y1, -pod_w1), (x1, pod_y0, -pod_w0)]), "equip"))
+        faces.append((np.array([(x0, pod_y0, pod_w0), (tx0, pod_y1, pod_w1), (tx1, pod_y1, pod_w1), (x1, pod_y0, pod_w0)]), "equip"))
+        faces.append((np.array([(x1, pod_y0, -pod_w0), (tx1, pod_y1, -pod_w1), (tx0, pod_y1, -pod_w1), (x0, pod_y0, -pod_w0)]), "equip"))
+
+    # Protruding bogie wheels (outer octagonal caps + shallow bevel rim facing +/-Z cleanly)
+    if xb - bhl - ramp > 0.35 and ul > xb + bhl + 0.55:
+        wheel_r = min(0.36, y_belly * 0.92 + 0.08)
+        wheel_cy = wheel_r
+        wheel_in_z = bw - 0.01
+        wheel_out_z = bw + 0.075
+        wheel_sides = 8
+        angles = np.linspace(0.0, 2.0 * np.pi, wheel_sides, endpoint=False)
+        for bogie_x in (-xb, xb):
+            for axle_dx in (-bhl * 0.44, bhl * 0.44):
+                wx = bogie_x + axle_dx
+                for side_sign in (1.0, -1.0):
+                    z0 = side_sign * wheel_in_z
+                    z1 = side_sign * wheel_out_z
+                    ring_in = [
+                        np.array([wx + wheel_r * np.cos(a), wheel_cy + wheel_r * np.sin(a), z0], dtype=float)
+                        for a in angles
+                    ]
+                    ring_out = [
+                        np.array([wx + (wheel_r - 0.025) * np.cos(a), wheel_cy + (wheel_r - 0.025) * np.sin(a), z1], dtype=float)
+                        for a in angles
+                    ]
+                    cap_ctr = np.array([wx, wheel_cy, z1], dtype=float)
+                    for si in range(wheel_sides):
+                        sj = (si + 1) % wheel_sides
+                        faces.append((np.array([ring_in[si], ring_in[sj], ring_out[sj], ring_out[si]]), "under"))
+                        faces.append((np.array([cap_ctr, ring_out[si], ring_out[sj]]), "under"))
+
+    # Optional front destination brow crest on cab cars (subtle MF 67 brow profile)
+    if cab:
+        bx0 = L / 2 - cab_rake - 0.14
+        bx1 = L / 2 - cab_rake * 0.52 + 0.06
+        by0 = body_top - 0.24
+        by1 = body_top + 0.02
+        bw2 = min(W2 * 0.44, 0.58)
+        faces.append((np.array([(bx1, by0, -bw2), (bx1, by0, bw2), (bx1, by1, bw2), (bx1, by1, -bw2)]), "end"))
+        faces.append((np.array([(bx0, by1, -bw2), (bx1, by1, -bw2), (bx1, by1, bw2), (bx0, by1, bw2)]), "roof"))
+        faces.append((np.array([(bx0, by0, bw2), (bx1, by0, bw2), (bx1, by1, bw2), (bx0, by1, bw2)]), "side"))
+        faces.append((np.array([(bx1, by0, -bw2), (bx0, by0, -bw2), (bx0, by1, -bw2), (bx1, by1, -bw2)]), "side"))
+
+    # every surface is on a convex shell relative to the car centroid
+    center = np.array([0.0, height / 2.0, 0.0])
 
     P, N, UV, I = [], [], [], []
     flipped = 0
@@ -275,7 +389,7 @@ def build_geometry(length: float, width: float, height: float):
             nrm = -nrm
             flipped += 1
         region = tag if tag != "auto" else classify(nrm)
-        uvs = np.array([uv_for(v, region, L, W2, y_b, y_r + crown) for v in verts])
+        uvs = np.array([uv_for(v, region, L, W2, y_b, body_top) for v in verts])
         base = len(P)
         P.extend(verts)
         N.extend([nrm] * len(verts))
@@ -307,7 +421,17 @@ def classify(nrm) -> str:
 
 
 def region_uv(region: str, u: float, v: float) -> tuple[float, float]:
-    x0, y0, x1, y1 = {"roof": R_ROOF, "side": R_SIDE, "end": R_END, "under": R_UNDER}[region]
+    if region == "equip":
+        x0, y0, x1, y1 = R_UNDER
+        y1 = y0 + (y1 - y0) // 2
+    else:
+        x0, y0, x1, y1 = {
+            "roof": R_ROOF,
+            "side": R_SIDE,
+            "end_front": R_END_FRONT,
+            "end_rear": R_END_REAR,
+            "under": R_UNDER,
+        }[region]
     pad = 1.5
     return (
         (x0 + pad + u * (x1 - x0 - 2 * pad)) / ATLAS,
@@ -326,10 +450,17 @@ def uv_for(p, region: str, L: float, W2: float, y_b: float, y_top: float):
         u = (x + L / 2) / L
         v = (z + W2) / (2 * W2)
     elif region == "end":
+        region = "end_front" if x >= 0 else "end_rear"
         u = (z + W2) / (2 * W2)
         v = (y_top - y) / (y_top - y_b)
+    elif region == "equip":
+        u = ((x + L / 2) / L * 4.0) % 1.0
+        v = np.clip((z + W2 * 0.5) / W2, 0.0, 1.0)
     else:
-        u, v = 0.5, 0.5
+        return (
+            (R_UNDER[0] + (R_UNDER[2] - R_UNDER[0]) * 0.5) / ATLAS,
+            (R_UNDER[1] + (R_UNDER[3] - R_UNDER[1]) * 0.78) / ATLAS,
+        )
     return region_uv(region, float(np.clip(u, 0, 1)), float(np.clip(v, 0, 1)))
 
 
@@ -337,28 +468,74 @@ def uv_for(p, region: str, L: float, W2: float, y_b: float, y_top: float):
 # atlas
 
 
+def _iter_side_windows(x0: int, x1: int, wb0: int, wb1: int, doors_per_side: int, length: float):
+    """Yield passenger window rectangles cleanly separated by door bays and structural pillars."""
+    total_w = x1 - x0
+    dw = max(6, int(total_w * DOOR_WIDTH_M / length))
+    bay_edges = [x0 + 4]
+    for i in range(doors_per_side):
+        cx = x0 + int(total_w * (i + 0.5) / doors_per_side)
+        bay_edges.append(cx - dw // 2 - 3)
+        bay_edges.append(cx + dw // 2 + 3)
+    bay_edges.append(x1 - 5)
+    for k in range(0, len(bay_edges), 2):
+        left, right = bay_edges[k], bay_edges[k + 1]
+        if right - left < 6:
+            continue
+        # Split wide inter-door bays into 2 discrete window panes with a thin pillar
+        if right - left >= 28:
+            mid = (left + right) // 2
+            yield (left, wb0 + 1, mid - 2, wb1 - 1)
+            yield (mid + 2, wb0 + 1, right, wb1 - 1)
+        else:
+            yield (left, wb0 + 1, right, wb1 - 1)
+
+
+def _encode_png(im: Image.Image) -> bytes:
+    """Losslessly quantize flat/banded atlases to indexed PNG without dithering."""
+    q = im.quantize(colors=64, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    buf = io.BytesIO()
+    q.save(buf, format="PNG", optimize=True)
+    return buf.getvalue()
+
+
 def paint_atlas(length: float, height: float, doors_per_side: int,
-                line_color: tuple[int, int, int] | None, livery: str) -> bytes:
+                line_color: tuple[int, int, int] | None, livery: str,
+                end_mode: str = "gangway",
+                body_color: tuple[int, int, int] = BODY_COLOR) -> bytes:
+    """end_mode: 'gangway' (middle car), 'head' (front cab at +X), 'tail' (rear cab at +X), 'double'."""
     band = (line_color or ROOF_COLOR) if livery == "line_coded" else LIVERY_BLUE
     im = Image.new("RGB", (ATLAS, ATLAS), UNDER_COLOR)
     d = ImageDraw.Draw(im)
 
-    # ---- side: body, skirt, window band, doors, shoulder stripe
+    # ---- side: MF 67 style off-white body, deep RATP teal bottom band, dark glass windows, crisp doors
     x0, y0, x1, y1 = R_SIDE
     h = y1 - y0
-    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=BODY_COLOR)
-    d.rectangle([x0, y1 - int(h * SKIRT_TOP), x1 - 1, y1 - 1], fill=(58, 62, 66))
+    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=body_color)
+    skirt_px = int(h * SKIRT_TOP)
+    d.rectangle([x0, y1 - skirt_px, x1 - 1, y1 - 1], fill=band)
+    d.rectangle([x0, y1 - 6, x1 - 1, y1 - 1], fill=(28, 30, 34))
     wb0 = y1 - int(h * WINDOW_BAND[1])
     wb1 = y1 - int(h * WINDOW_BAND[0])
-    d.rectangle([x0, wb0, x1 - 1, wb1], fill=GLASS_COLOR)
-    d.rectangle([x0, y0, x1 - 1, y0 + max(4, int(h * 0.19))], fill=band)
+    # Dark window surround frieze, then glossy dark glass panes
+    d.rectangle([x0, wb0 - 2, x1 - 1, wb1 + 2], fill=(38, 42, 46))
+    for wx0, wy0, wx1, wy1 in _iter_side_windows(x0, x1, wb0, wb1, doors_per_side, length):
+        d.rectangle([wx0, wy0, wx1, wy1], fill=GLASS_COLOR)
+    # Subtle off-white upper header border & crisp teal beltline rule
+    d.rectangle([x0, y0, x1 - 1, y0 + 4], fill=ROOF_COLOR)
+    d.line([x0, y1 - skirt_px, x1 - 1, y1 - skirt_px], fill=(215, 224, 224), width=1)
+
     dw = max(6, int((x1 - x0) * DOOR_WIDTH_M / length))
     for i in range(doors_per_side):
         cx = x0 + int((x1 - x0) * (i + 0.5) / doors_per_side)
-        d.rectangle([cx - dw // 2, y0 + int(h * 0.10), cx + dw // 2, y1 - int(h * SKIRT_TOP) - 1],
-                    fill=DOOR_COLOR)
-        d.rectangle([cx - dw // 2 + 2, wb0, cx + dw // 2 - 2, wb1], fill=GLASS_COLOR)
-        d.line([cx, y0 + int(h * 0.10), cx, y1 - int(h * SKIRT_TOP) - 1], fill=(120, 126, 132))
+        dl, dr = cx - dw // 2, cx + dw // 2
+        d.rectangle([dl, y0 + int(h * 0.12), dr, y1 - 7], fill=DOOR_COLOR)
+        d.rectangle([dl, y1 - skirt_px, dr, y1 - 7], fill=band)
+        # Door frame seal & dual door glass panes + crisp dark center gasket
+        d.rectangle([dl, y0 + int(h * 0.12), dr, y1 - 7], outline=(48, 52, 56))
+        d.rectangle([dl + 2, wb0 + 1, cx - 2, wb1 - 1], fill=GLASS_COLOR)
+        d.rectangle([cx + 2, wb0 + 1, dr - 2, wb1 - 1], fill=GLASS_COLOR)
+        d.line([cx, y0 + int(h * 0.12), cx, y1 - 7], fill=(18, 20, 22), width=2)
 
     # ---- roof
     x0, y0, x1, y1 = R_ROOF
@@ -368,39 +545,162 @@ def paint_atlas(length: float, height: float, doors_per_side: int,
         s0 = y0 + int(hh * (0.5 - ROOF_STRIP_FRAC / 2))
         s1 = y0 + int(hh * (0.5 + ROOF_STRIP_FRAC / 2))
     else:
-        edge = max(4, int(hh * 0.16))
-        d.rectangle([x0, y0, x1 - 1, y0 + edge], fill=LIVERY_BLUE)
-        d.rectangle([x0, y1 - 1 - edge, x1 - 1, y1 - 1], fill=LIVERY_BLUE)
-        s0, s1 = y0 + int(hh * 0.28), y1 - int(hh * 0.28)
+        edge = max(4, int(hh * 0.14))
+        d.rectangle([x0, y0, x1 - 1, y0 + edge], fill=body_color)
+        d.rectangle([x0, y1 - 1 - edge, x1 - 1, y1 - 1], fill=body_color)
+        s0, s1 = y0 + int(hh * 0.24), y1 - int(hh * 0.24)
     d.rectangle([x0, s0, x1 - 1, s1], fill=ROOF_COLOR)
     for i in range(4):
         cx = x0 + int((x1 - x0) * (i + 0.5) / 4)
         w = int((x1 - x0) * 0.06)
         d.rectangle([cx - w, s0 + 3, cx + w, s1 - 3], fill=EQUIP_COLOR)
-    d.line([x0, y0, x1 - 1, y0], fill=(30, 32, 36))
-    d.line([x0, y1 - 1, x1 - 1, y1 - 1], fill=(30, 32, 36))
+    d.line([x0, y0, x1 - 1, y0], fill=(42, 46, 50))
+    d.line([x0, y1 - 1, x1 - 1, y1 - 1], fill=(42, 46, 50))
 
-    # ---- end: dark panel, glazing, band at the top
-    x0, y0, x1, y1 = R_END
-    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=END_COLOR)
-    d.rectangle([x0 + 8, y0 + int((y1 - y0) * 0.20), x1 - 9, y0 + int((y1 - y0) * 0.52)],
-                fill=GLASS_COLOR)
-    d.rectangle([x0, y0, x1 - 1, y0 + 4], fill=band)
+    # ---- ends (+X and -X)
+    end_configs = {
+        "gangway": ((R_END_FRONT, "gangway"), (R_END_REAR, "gangway")),
+        "head": ((R_END_FRONT, "head"), (R_END_REAR, "gangway")),
+        "tail": ((R_END_FRONT, "tail"), (R_END_REAR, "gangway")),
+        "double": ((R_END_FRONT, "head"), (R_END_REAR, "tail")),
+    }[end_mode]
+    for region, kind in end_configs:
+        x0, y0, x1, y1 = region
+        ew, eh = x1 - x0, y1 - y0
+        if kind == "gangway":
+            d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=(56, 60, 64))
+            d.rectangle([x0, y0, x1 - 1, y0 + 6], fill=band)
+            gx0, gx1 = x0 + int(ew * 0.24), x0 + int(ew * 0.76)
+            d.rectangle([gx0, y0 + int(eh * 0.14), gx1, y1 - 4], fill=(32, 34, 38))
+            d.rectangle([gx0 + 5, y0 + int(eh * 0.22), gx1 - 5, y0 + int(eh * 0.50)], fill=GLASS_COLOR)
+        else:
+            # Iconic MF 67 off-white brow + full RATP teal lower front mask + dark panoramic windshield
+            d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=body_color)
+            d.rectangle([x0 + 2, y0 + int(eh * 0.24), x1 - 3, y1 - 5], fill=band)
+            d.rectangle([x0, y1 - 6, x1 - 1, y1 - 1], fill=(24, 26, 28))
+            d.rectangle([x0 + 6, y0 + int(eh * 0.18), x1 - 7, y0 + int(eh * 0.54)], fill=GLASS_COLOR)
+            if kind == "head":
+                # Green/amber LED destination header box at brow top + white fleet plate below
+                d.rectangle([x0 + int(ew * 0.20), y0 + int(eh * 0.05), x0 + int(ew * 0.80), y0 + int(eh * 0.15)],
+                            fill=(12, 16, 14))
+                d.rectangle([x0 + int(ew * 0.25), y0 + int(eh * 0.08), x0 + int(ew * 0.75), y0 + int(eh * 0.12)],
+                            fill=(85, 235, 115))
+                light_color = (255, 252, 196)
+            else:
+                d.rectangle([x0 + int(ew * 0.20), y0 + int(eh * 0.05), x0 + int(ew * 0.80), y0 + int(eh * 0.15)],
+                            fill=(26, 28, 30))
+                light_color = (240, 48, 42)
+            # Crisp circular dual headlights / taillights + subtle RATP ring accent + fleet number block
+            lr = max(4, int(ew * 0.085))
+            ly = y0 + int(eh * 0.67)
+            lx_l, lx_r = x0 + int(ew * 0.24), x0 + int(ew * 0.76)
+            d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=light_color, outline=(36, 38, 42))
+            d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=light_color, outline=(36, 38, 42))
+            d.rectangle([x0 + int(ew * 0.40), y0 + int(eh * 0.78), x0 + int(ew * 0.60), y0 + int(eh * 0.88)],
+                        fill=(248, 248, 248), outline=(36, 38, 42))
 
-    # ---- underframe
+    # ---- underframe (bottom half) + HVAC fan louvres (top half) in R_UNDER
     x0, y0, x1, y1 = R_UNDER
-    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=UNDER_COLOR)
+    ym = (y0 + y1) // 2
+    d.rectangle([x0, y0, x1 - 1, ym - 1], fill=(92, 96, 102))
+    for gx in range(x0 + 6, x1 - 6, 10):
+        d.line([gx, y0 + 3, gx, ym - 4], fill=(48, 52, 56), width=3)
+    d.rectangle([x0, ym, x1 - 1, y1 - 1], fill=UNDER_COLOR)
 
-    buf = io.BytesIO()
-    im.save(buf, format="PNG", optimize=True)
-    return buf.getvalue()
+    return _encode_png(im)
+
+
+def paint_mr_atlas(length: float, doors_per_side: int) -> bytes:
+    """Paint glTF metallicRoughnessTexture (G=roughness, B=metallic)."""
+    # Default matte underframe / roof equipment: roughness 0.86 (220), metallic 0.05 (13)
+    im = Image.new("RGB", (ATLAS, ATLAS), (0, 220, 13))
+    d = ImageDraw.Draw(im)
+
+    # Side painted body: satin off-white + RATP teal enamel (roughness 0.38 -> 97, metallic 0.24 -> 61)
+    x0, y0, x1, y1 = R_SIDE
+    h = y1 - y0
+    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=(0, 97, 61))
+    # Lower rubber/composite sill: matte dark composite (roughness 0.84 -> 214, metallic 0.08 -> 20)
+    d.rectangle([x0, y1 - 6, x1 - 1, y1 - 1], fill=(0, 214, 20))
+
+    wb0 = y1 - int(h * WINDOW_BAND[1])
+    wb1 = y1 - int(h * WINDOW_BAND[0])
+    # Side doors: satin enamel/metal (roughness 0.34 -> 87, metallic 0.36 -> 92)
+    dw = max(6, int((x1 - x0) * DOOR_WIDTH_M / length))
+    for i in range(doors_per_side):
+        cx = x0 + int((x1 - x0) * (i + 0.5) / doors_per_side)
+        dl, dr = cx - dw // 2, cx + dw // 2
+        d.rectangle([dl, y0 + int(h * 0.12), dr, y1 - 7], fill=(0, 87, 92))
+        d.rectangle([dl + 2, wb0 + 1, cx - 2, wb1 - 1], fill=(0, 20, 40))
+        d.rectangle([cx + 2, wb0 + 1, dr - 2, wb1 - 1], fill=(0, 20, 40))
+
+    # Passenger window glass: glossy tinted glass (roughness 0.08 -> 20, metallic 0.16 -> 40)
+    for wx0, wy0, wx1, wy1 in _iter_side_windows(x0, x1, wb0, wb1, doors_per_side, length):
+        d.rectangle([wx0, wy0, wx1, wy1], fill=(0, 20, 40))
+
+    # Roof body: semi-matte painted shell (roughness 0.58 -> 148, metallic 0.16 -> 41)
+    rx0, ry0, rx1, ry1 = R_ROOF
+    d.rectangle([rx0, ry0, rx1 - 1, ry1 - 1], fill=(0, 148, 41))
+
+    # Ends: satin shell + glossy windshield
+    for region in (R_END_FRONT, R_END_REAR):
+        ex0, ey0, ex1, ey1 = region
+        eh = ey1 - ey0
+        d.rectangle([ex0, ey0, ex1 - 1, ey1 - 1], fill=(0, 102, 58))
+        d.rectangle([ex0 + 6, ey0 + int(eh * 0.18), ex1 - 7, ey0 + int(eh * 0.54)], fill=(0, 20, 40))
+
+    return _encode_png(im)
+
+
+def paint_emissive_atlas(length: float, doors_per_side: int, end_mode: str = "gangway") -> bytes:
+    """Paint emissive atlas: subtle warm interior windows + directional headlights/taillights."""
+    im = Image.new("RGB", (ATLAS, ATLAS), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+
+    # Subtle warm interior saloon glow through passenger & door windows
+    x0, y0, x1, y1 = R_SIDE
+    h = y1 - y0
+    wb0 = y1 - int(h * WINDOW_BAND[1])
+    wb1 = y1 - int(h * WINDOW_BAND[0])
+    cabin_glow = (34, 29, 20)
+    for wx0, wy0, wx1, wy1 in _iter_side_windows(x0, x1, wb0, wb1, doors_per_side, length):
+        d.rectangle([wx0 + 1, wy0 + 1, wx1 - 1, wy1 - 1], fill=cabin_glow)
+    dw = max(6, int((x1 - x0) * DOOR_WIDTH_M / length))
+    for i in range(doors_per_side):
+        cx = x0 + int((x1 - x0) * (i + 0.5) / doors_per_side)
+        dl, dr = cx - dw // 2, cx + dw // 2
+        if cx - dl >= 5:
+            d.rectangle([dl + 3, wb0 + 2, cx - 2, wb1 - 2], fill=cabin_glow)
+            d.rectangle([cx + 2, wb0 + 2, dr - 3, wb1 - 2], fill=cabin_glow)
+
+    end_configs = {
+        "gangway": (),
+        "head": ((R_END_FRONT, "head"),),
+        "tail": ((R_END_FRONT, "tail"),),
+        "double": ((R_END_FRONT, "head"), (R_END_REAR, "tail")),
+    }[end_mode]
+    for region, kind in end_configs:
+        ex0, ey0, ex1, ey1 = region
+        ew, eh = ex1 - ex0, ey1 - ey0
+        lr = max(4, int(ew * 0.085))
+        ly = ey0 + int(eh * 0.67)
+        lx_l, lx_r = ex0 + int(ew * 0.24), ex0 + int(ew * 0.76)
+        light_color = (255, 248, 185) if kind == "head" else (255, 42, 36)
+        d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=light_color)
+        d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=light_color)
+        if kind == "head":
+            d.rectangle([ex0 + int(ew * 0.25), ey0 + int(eh * 0.08), ex0 + int(ew * 0.75), ey0 + int(eh * 0.12)],
+                        fill=(55, 215, 92))
+            d.rectangle([ex0 + 8, ey0 + int(eh * 0.22), ex1 - 9, ey0 + int(eh * 0.48)], fill=(24, 21, 16))
+
+    return _encode_png(im)
 
 
 # --------------------------------------------------------------------------------------
 # glTF writer
 
 
-def write_glb(path: Path, P, N, UV, I, png: bytes, name: str) -> None:
+def write_glb(path: Path, P, N, UV, I, png: bytes, mr_png: bytes, emissive_png: bytes, name: str) -> None:
     def pad4(b: bytes, fill=b"\x00") -> bytes:
         return b + fill * ((-len(b)) % 4)
 
@@ -420,6 +720,8 @@ def write_glb(path: Path, P, N, UV, I, png: bytes, name: str) -> None:
     v_uv = add(UV.astype("<f4").tobytes(), target=34962)
     v_idx = add(I.astype("<u2").tobytes(), target=34963)
     v_img = add(png)
+    v_mr = add(mr_png)
+    v_emi = add(emissive_png)
 
     gltf = {
         "asset": {"version": "2.0", "generator": "build_train_box_models.py"},
@@ -440,14 +742,25 @@ def write_glb(path: Path, P, N, UV, I, png: bytes, name: str) -> None:
             "name": "body",
             "pbrMetallicRoughness": {
                 "baseColorTexture": {"index": 0},
-                "metallicFactor": 0.0,
-                "roughnessFactor": 0.65,
+                "metallicRoughnessTexture": {"index": 1},
+                "metallicFactor": 1.0,
+                "roughnessFactor": 1.0,
             },
+            "emissiveTexture": {"index": 2},
+            "emissiveFactor": [1.0, 1.0, 1.0],
             "doubleSided": False,
         }],
-        "textures": [{"sampler": 0, "source": 0}],
+        "textures": [
+            {"sampler": 0, "source": 0},
+            {"sampler": 0, "source": 1},
+            {"sampler": 0, "source": 2},
+        ],
         "samplers": [{"magFilter": 9729, "minFilter": 9987, "wrapS": 33071, "wrapT": 33071}],
-        "images": [{"bufferView": v_img, "mimeType": "image/png"}],
+        "images": [
+            {"bufferView": v_img, "mimeType": "image/png"},
+            {"bufferView": v_mr, "mimeType": "image/png"},
+            {"bufferView": v_emi, "mimeType": "image/png"},
+        ],
         "bufferViews": views,
         "buffers": [{"byteLength": offset}],
     }
@@ -538,30 +851,43 @@ def main(argv=None) -> int:
              "assets": []}
 
     for fam, m in sorted(families.items()):
-        P, N, UV, I = build_geometry(m["length_m"], m["width_m"], m["height_m"])
-        tris = len(I) // 3
+        geom_neutral = build_geometry(m["length_m"], m["width_m"], m["height_m"], cab=False)
+        geom_cab = build_geometry(m["length_m"], m["width_m"], m["height_m"], cab=True)
+        mr_png = paint_mr_atlas(m["length_m"], a.doors_per_side)
+        emissive_gangway = paint_emissive_atlas(m["length_m"], a.doors_per_side, "gangway")
+        emissive_head = paint_emissive_atlas(m["length_m"], a.doors_per_side, "head")
+        emissive_tail = paint_emissive_atlas(m["length_m"], a.doors_per_side, "tail")
+
         variants = [(None, "neutral")] + (
             [] if a.neutral_only else [(colors[l], l) for l in sorted(combos.get(fam, ()))])
         for color, label in variants:
-            png = paint_atlas(m["length_m"], m["height_m"], a.doors_per_side, color, a.livery)
-            name = f"{fam}__{label}"
-            dest = a.out / f"{name}.glb"
-            if not a.dry_run:
-                write_glb(dest, P, N, UV, I, png, name)
-                if a.serve_dir:
-                    (a.serve_dir / dest.name).write_bytes(dest.read_bytes())
-            size = dest.stat().st_size if dest.exists() else 0
-            index["assets"].append({
-                "file": dest.name, "family": fam, "line": None if label == "neutral" else label,
-                "model_id": m["model_id"], "triangles": tris, "vertices": len(P),
-                "bytes": size,
-                "dimensions_m": {"length_x": m["length_m"], "width_z": m["width_m"],
-                                 "height_y": m["height_m"]},
-                "height_source": m["height_source"], "height_measured": m["height_measured"],
-                "grazing_camera_approved": m["height_measured"],
-                "sha256": hashlib.sha256(dest.read_bytes()).hexdigest() if dest.exists() else None,
-            })
-            print(f"{dest.name:38s} {tris:4d} tris  {len(P):4d} verts  {size/1024:6.1f} KiB")
+            roles = (
+                ("", geom_neutral, "gangway", emissive_gangway),
+                ("__cab", geom_cab, "head", emissive_head),
+                ("__tail", geom_cab, "tail", emissive_tail),
+            )
+            for suffix, (P, N, UV, I), end_mode, emi_png in roles:
+                tris = len(I) // 3
+                png = paint_atlas(m["length_m"], m["height_m"], a.doors_per_side, color, a.livery, end_mode)
+                name = f"{fam}__{label}{suffix}"
+                dest = a.out / f"{name}.glb"
+                if not a.dry_run:
+                    write_glb(dest, P, N, UV, I, png, mr_png, emi_png, name)
+                    if a.serve_dir:
+                        (a.serve_dir / dest.name).write_bytes(dest.read_bytes())
+                size = dest.stat().st_size if dest.exists() else 0
+                index["assets"].append({
+                    "file": dest.name, "family": fam, "line": None if label == "neutral" else label,
+                    "role": suffix.lstrip("_") or "neutral",
+                    "model_id": m["model_id"], "triangles": tris, "vertices": len(P),
+                    "bytes": size,
+                    "dimensions_m": {"length_x": m["length_m"], "width_z": m["width_m"],
+                                     "height_y": m["height_m"]},
+                    "height_source": m["height_source"], "height_measured": m["height_measured"],
+                    "grazing_camera_approved": m["height_measured"],
+                    "sha256": hashlib.sha256(dest.read_bytes()).hexdigest() if dest.exists() else None,
+                })
+                print(f"{dest.name:42s} {tris:4d} tris  {len(P):4d} verts  {size/1024:6.1f} KiB")
 
     if not a.dry_run:
         (a.out / "generated-index.json").write_text(json.dumps(index, indent=2), encoding="utf-8")

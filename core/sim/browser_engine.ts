@@ -4,7 +4,7 @@ const DATA_REVISION = '20260910-09';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
 import { TripData, getCoordAtDistance, getSmoothedBearing } from './kinematics';
 import { normalizeStopName } from '@core/rt/stop_names';
-import type { RealtimeAdapter, RealtimeStatusBase } from '@core/rt/adapter';
+import type { RealtimeAdapter } from '@core/rt/adapter';
 import {
   buildTimeline,
   positionAt,
@@ -656,7 +656,7 @@ export class BrowserSubwayEngine {
         const profile = getKinematicProfile(trip.line);
         const existing = this.trackedTrains.get(train.id);
         let reconcileOffset = 0;
-        let reconcileStartTime = tickTimestamp;
+        const reconcileStartTime = tickTimestamp;
 
         if (existing) {
           const rawError = existing.extrapolatedD - dTick;

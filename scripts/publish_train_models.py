@@ -18,6 +18,7 @@ def publish_train_models(destination_dir: Path = DESTINATION_DIR) -> list[Path]:
         ROOT / "cities" / "washington" / "assets" / "models" / "train",
         ROOT / "cities" / "berlin" / "assets" / "models" / "train",
         ROOT / "cities" / "edinburgh" / "assets" / "models" / "train",
+        ROOT / "cities" / "lille" / "assets" / "models" / "train",
     ]
     source_files = []
     for sdir in source_dirs:

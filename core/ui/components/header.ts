@@ -29,8 +29,6 @@ export interface TopBarOptions {
   onToggleRealtime?: () => void;
   onAbout?: () => void;
   onRecords?: () => void;
-  onToggleBuildings?: (active: boolean) => void;
-  onToggleTheme?: (theme: 'dark' | 'light') => void;
 }
 
 const LED_MATRICES: Record<string, string[]> = {
@@ -89,9 +87,6 @@ export class TopBar {
   private citiesDropdownTrigger!: HTMLButtonElement;
   private citiesDropdownNameEl!: HTMLElement;
   private citiesDropdownMenu!: HTMLElement;
-  private buildingsBtn!: HTMLButtonElement;
-  private isBuildingsActive: boolean = true;
-  private themeBtn!: HTMLButtonElement;
   private activeCityId: string;
   private timezone: string;
   private displayName: string;
@@ -314,25 +309,7 @@ export class TopBar {
         </svg>
         <span>Records</span>
       </button>
-      <button type="button" class="topbar__menu-item" id="menu-item-buildings" role="menuitemcheckbox" aria-checked="true">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M3 21h18M5 21V7l8-4v18M13 10l6 3v8"></path>
-        </svg>
-        <span style="flex: 1;">Bâti 3D</span>
-        <span class="topbar__menu-toggle-state is-active" id="menu-buildings-state">Actif</span>
-      </button>
-      <button type="button" class="topbar__menu-item" id="menu-item-theme" role="menuitemcheckbox">
-        <span aria-hidden="true">◐</span>
-        <span style="flex: 1;">Mode clair</span>
-        <span class="topbar__menu-toggle-state" id="menu-theme-state"></span>
-      </button>
     `;
-
-    this.buildingsBtn = this.dropdownMenu.querySelector(
-      '#menu-item-buildings'
-    ) as HTMLButtonElement;
-    this.themeBtn = this.dropdownMenu.querySelector('#menu-item-theme') as HTMLButtonElement;
-    this.syncThemeState();
 
     this.menuBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -350,19 +327,6 @@ export class TopBar {
       this.options.onAbout?.();
     });
 
-    this.buildingsBtn?.addEventListener('click', () => {
-      this.setBuildingsActive(!this.isBuildingsActive);
-      this.options.onToggleBuildings?.(this.isBuildingsActive);
-    });
-
-    this.themeBtn?.addEventListener('click', () => {
-      const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-      document.documentElement.dataset.theme = theme;
-      localStorage.setItem('paris-subway-theme', theme);
-      this.syncThemeState();
-      this.options.onToggleTheme?.(theme);
-    });
-
     document.addEventListener('click', (e) => {
       if (!menuContainer.contains(e.target as Node)) {
         this.closeMenu();
@@ -372,15 +336,27 @@ export class TopBar {
     menuContainer.appendChild(this.menuBtn);
     menuContainer.appendChild(this.dropdownMenu);
 
-    // Assemblage final
-    this.el.appendChild(citiesNav);
-    this.el.appendChild(this.clockEl);
-    this.el.appendChild(spacer);
-    this.el.appendChild(countContainer);
-    this.el.appendChild(this.distanceEl);
-    this.el.appendChild(this.rtStatusEl);
-    this.el.appendChild(this.searchBtn);
-    this.el.appendChild(menuContainer);
+    // Assemblage en trois îlots flottants (marque · recherche · télémétrie)
+    const brandIsland = document.createElement('div');
+    brandIsland.className = 'topbar__island topbar__island--brand';
+    brandIsland.appendChild(citiesNav);
+
+    const searchIsland = document.createElement('div');
+    searchIsland.className = 'topbar__island topbar__island--search';
+    searchIsland.appendChild(this.searchBtn);
+
+    const telemetryIsland = document.createElement('div');
+    telemetryIsland.className = 'topbar__island topbar__island--telemetry';
+    telemetryIsland.appendChild(this.clockEl);
+    telemetryIsland.appendChild(countContainer);
+    telemetryIsland.appendChild(this.distanceEl);
+    telemetryIsland.appendChild(this.rtStatusEl);
+    telemetryIsland.appendChild(menuContainer);
+
+    this.el.appendChild(brandIsland);
+    this.el.appendChild(searchIsland);
+    this.el.appendChild(telemetryIsland);
+    void spacer;
   }
 
   public getSearchTriggerElement(): HTMLElement {
@@ -448,25 +424,6 @@ export class TopBar {
     const delay = 1000 - (Date.now() % 1000);
     this.clockTimer = setTimeout(this.updateCityClock, delay);
   };
-
-  public setBuildingsActive(active: boolean) {
-    this.isBuildingsActive = active;
-    if (this.buildingsBtn) {
-      this.buildingsBtn.setAttribute('aria-checked', String(active));
-      const stateEl = this.buildingsBtn.querySelector('#menu-buildings-state');
-      if (stateEl) {
-        stateEl.textContent = active ? 'Actif' : 'Inactif';
-        stateEl.classList.toggle('is-active', active);
-      }
-    }
-  }
-
-  private syncThemeState() {
-    const light = document.documentElement.dataset.theme === 'light';
-    this.themeBtn?.setAttribute('aria-checked', String(light));
-    const state = this.themeBtn?.querySelector('#menu-theme-state');
-    if (state) state.textContent = light ? 'Actif' : '';
-  }
 
   public closeMenu() {
     this.dropdownMenu.classList.remove('is-open');

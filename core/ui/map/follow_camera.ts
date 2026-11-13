@@ -1,6 +1,5 @@
 import * as maplibregl from 'maplibre-gl';
 import { HIGH_ZOOM_MAX_PITCH, LOW_ZOOM_MAX_PITCH, maxPitchForZoom } from './maplibre';
-import { trainModelsEnabled } from './train_models_layer';
 import type { TrainMarker } from './trains_layer';
 
 // grazingCamera devient vrai à partir de 45° dans deck_overlay.ts.
@@ -85,7 +84,6 @@ export class FollowCamera {
   private previousBuildingsVisibility: 'visible' | 'none' = 'none';
   private previousDockCollapsed = false;
   private elevationLineId: string | null = null;
-  private elevationProgress = 0;
   private elevationStartedAt = 0;
   private elevationFrom = 0;
   private elevationSettled = false;
@@ -130,12 +128,12 @@ export class FollowCamera {
     this.map.setMaxPitch(HIGH_ZOOM_MAX_PITCH);
 
     this.previousDockCollapsed = this.dock.classList.contains('dock--collapsed');
-    if (window.innerWidth <= 768) this.dock.classList.add('dock--collapsed');
+    this.dock.classList.add('dock--collapsed');
+    document.body.classList.add('is-following-train');
 
     this.elevationLineId = train.line;
     this.elevationFrom = train.elevation || 0;
     this.elevationStartedAt = performance.now();
-    this.elevationProgress = 0;
     this.elevationSettled = false;
     this.setFollowElevation(this.elevationLineId, 0);
 
@@ -173,7 +171,8 @@ export class FollowCamera {
     if (this.map.getLayer('building-3d')) {
       this.map.setLayoutProperty('building-3d', 'visibility', this.previousBuildingsVisibility);
     }
-    if (window.innerWidth <= 768 && !this.previousDockCollapsed) {
+    document.body.classList.remove('is-following-train');
+    if (!this.previousDockCollapsed) {
       this.dock.classList.remove('dock--collapsed');
     }
     this.setFollowElevation(null, 0);
@@ -240,7 +239,6 @@ export class FollowCamera {
       1,
       (performance.now() - this.elevationStartedAt) / FOLLOW_DURATION_MS
     );
-    this.elevationProgress = progress;
     if (progress >= 1) {
       this.elevationSettled = true;
     }

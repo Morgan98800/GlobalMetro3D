@@ -11,11 +11,13 @@ interface PlatformDatum {
   polygon: [number, number, number][];
   lineId: string;
   stationId: string;
+  color: [number, number, number, number];
 }
 
 const LAT_SCALE = 111_320;
 const PLATFORM_WIDTH_M = 5.5;
-const PLATFORM_HEIGHT_M = 0.9;
+const PLATFORM_HEIGHT_M = 0.45;
+const PLATFORM_TOP_OFFSET_M = -0.15;
 
 function project(point: [number, number], latitude: number): [number, number] {
   const lonScale = LAT_SCALE * Math.cos((latitude * Math.PI) / 180);
@@ -114,27 +116,49 @@ function platformForStation(
   ];
   const polygon = corners.map((corner) => {
     const [longitude, latitude] = unproject(corner, station.coordinates[1]);
-    return [longitude, latitude, line.elevation_offset + PLATFORM_HEIGHT_M] as [
-      number,
-      number,
-      number,
-    ];
+    return [
+      longitude,
+      latitude,
+      line.elevation_offset + PLATFORM_TOP_OFFSET_M - PLATFORM_HEIGHT_M,
+    ] as [number, number, number];
   });
-  return { polygon, lineId: line.id, stationId: station.id };
+  const hex = (line.color || '#A9A29A').replace('#', '');
+  const r = hex.length === 6 ? parseInt(hex.slice(0, 2), 16) : 169;
+  const g = hex.length === 6 ? parseInt(hex.slice(2, 4), 16) : 162;
+  const b = hex.length === 6 ? parseInt(hex.slice(4, 6), 16) : 154;
+  return { polygon, lineId: line.id, stationId: station.id, color: [r, g, b, 215] };
 }
 
 export function createPlatformsLayer(
   stations: StationMetadata[],
   line: LineMetadata | null,
   paths: [number, number][][],
-  zoom: number
+  zoom: number,
+  theme: 'dark' | 'light' = 'dark',
+  allLines?: { lines: LineMetadata[]; tracksByLine: Map<string, [number, number][][]> }
 ): PolygonLayer<PlatformDatum> | null {
-  if (!line || paths.length === 0 || zoom < 13.5) return null;
-  const data = stations
-    .filter((station) => station.lines.includes(line.id))
-    .map((station) => platformForStation(station, line, paths))
-    .filter((platform): platform is PlatformDatum => platform !== null);
+  let data: PlatformDatum[] = [];
+  if (line && paths.length > 0 && zoom >= 13.5) {
+    data = stations
+      .filter((station) => station.lines.includes(line.id))
+      .map((station) => platformForStation(station, line, paths))
+      .filter((platform): platform is PlatformDatum => platform !== null);
+  } else if (!line && allLines && zoom >= 15.0) {
+    for (const candidateLine of allLines.lines) {
+      if (candidateLine.mode !== 'metro' && candidateLine.mode !== 'tube') continue;
+      const linePaths = allLines.tracksByLine.get(candidateLine.id);
+      if (!linePaths || linePaths.length === 0) continue;
+      for (const station of stations) {
+        if (!station.lines.includes(candidateLine.id)) continue;
+        const platform = platformForStation(station, candidateLine, linePaths);
+        if (platform) data.push(platform);
+      }
+    }
+  }
   if (data.length === 0) return null;
+
+  const baseFill: [number, number, number, number] =
+    theme === 'light' ? [120, 115, 108, 210] : [169, 162, 154, 205];
 
   return new PolygonLayer<PlatformDatum>({
     id: 'subway-platforms',
@@ -143,18 +167,23 @@ export function createPlatformsLayer(
     extruded: true,
     wireframe: false,
     filled: true,
+    stroked: true,
+    lineWidthUnits: 'meters',
+    getLineWidth: 0.6,
+    getLineColor: (datum) => datum.color,
     getPolygon: (datum) => datum.polygon,
     getElevation: PLATFORM_HEIGHT_M,
-    getFillColor: [169, 162, 154, 205],
+    getFillColor: baseFill,
     material: {
       ambient: 0.65,
       diffuse: 0.45,
       shininess: 8,
       specularColor: [80, 76, 70],
     },
-    parameters: { depthTest: false, depthWriteEnabled: false } as any,
+    parameters: { depthTest: true, depthWriteEnabled: true } as any,
     updateTriggers: {
-      getPolygon: [line.id, zoom],
+      getPolygon: [line?.id ?? 'all', Math.floor(zoom * 2)],
+      getFillColor: [theme],
     },
   });
 }

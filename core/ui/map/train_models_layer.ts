@@ -18,6 +18,9 @@ const FAMILY_URLS = {
   bvg_grossprofil: '/models/train/bvg_grossprofil__neutral.glb',
   bvg_kleinprofil: '/models/train/bvg_kleinprofil__neutral.glb',
   scotrail_class_385: '/models/train/scotrail_class_385__neutral.glb',
+  val_208: '/models/train/val_208__neutral.glb',
+  val_52m: '/models/train/val_52m__neutral.glb',
+  breda_vlc: '/models/train/breda_vlc__neutral.glb',
   rer_generic_A: '/models/train/rer_generic_A__neutral.glb',
   rer_generic_B: '/models/train/rer_generic_B__neutral.glb',
   rer_generic_C: '/models/train/rer_generic_C__neutral.glb',
@@ -25,11 +28,36 @@ const FAMILY_URLS = {
   rer_generic_E: '/models/train/rer_generic_E__neutral.glb',
 } as const;
 const CAB_URLS: Partial<Record<TrainModelFamily, string>> = {
+  pneumatic_generic: '/models/train/pneumatic_generic__neutral__cab.glb',
+  steel_classic: '/models/train/steel_classic__neutral__cab.glb',
+  wmata_generic: '/models/train/wmata_generic__cab.glb',
+  bvg_grossprofil: '/models/train/bvg_grossprofil__cab.glb',
+  bvg_kleinprofil: '/models/train/bvg_kleinprofil__cab.glb',
+  scotrail_class_385: '/models/train/scotrail_class_385__cab.glb',
+  val_208: '/models/train/val_208__cab.glb',
+  val_52m: '/models/train/val_52m__cab.glb',
+  breda_vlc: '/models/train/breda_vlc__cab.glb',
   rer_generic_A: '/models/train/rer_generic_A__cab.glb',
   rer_generic_B: '/models/train/rer_generic_B__cab.glb',
   rer_generic_C: '/models/train/rer_generic_C__cab.glb',
   rer_generic_D: '/models/train/rer_generic_D__cab.glb',
   rer_generic_E: '/models/train/rer_generic_E__cab.glb',
+};
+const TAIL_URLS: Partial<Record<TrainModelFamily, string>> = {
+  pneumatic_generic: '/models/train/pneumatic_generic__neutral__tail.glb',
+  steel_classic: '/models/train/steel_classic__neutral__tail.glb',
+  wmata_generic: '/models/train/wmata_generic__tail.glb',
+  bvg_grossprofil: '/models/train/bvg_grossprofil__tail.glb',
+  bvg_kleinprofil: '/models/train/bvg_kleinprofil__tail.glb',
+  scotrail_class_385: '/models/train/scotrail_class_385__tail.glb',
+  val_208: '/models/train/val_208__tail.glb',
+  val_52m: '/models/train/val_52m__tail.glb',
+  breda_vlc: '/models/train/breda_vlc__tail.glb',
+  rer_generic_A: '/models/train/rer_generic_A__tail.glb',
+  rer_generic_B: '/models/train/rer_generic_B__tail.glb',
+  rer_generic_C: '/models/train/rer_generic_C__tail.glb',
+  rer_generic_D: '/models/train/rer_generic_D__tail.glb',
+  rer_generic_E: '/models/train/rer_generic_E__tail.glb',
 };
 const MODEL_RENDER_POLICY: Record<
   TrainModelFamily,
@@ -41,6 +69,9 @@ const MODEL_RENDER_POLICY: Record<
   bvg_grossprofil: { heightMeasured: false, grazingCameraApproved: true },
   bvg_kleinprofil: { heightMeasured: false, grazingCameraApproved: true },
   scotrail_class_385: { heightMeasured: false, grazingCameraApproved: true },
+  val_208: { heightMeasured: false, grazingCameraApproved: true },
+  val_52m: { heightMeasured: false, grazingCameraApproved: true },
+  breda_vlc: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_A: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_B: { heightMeasured: false, grazingCameraApproved: true },
   rer_generic_C: { heightMeasured: false, grazingCameraApproved: true },
@@ -55,7 +86,7 @@ interface ModelCar {
   position: [number, number, number];
   orientation: readonly [number, number, number];
   train: TrainMarker;
-  isCab: boolean;
+  role: 'cab' | 'tail' | 'neutral';
 }
 
 interface ModelLayerParams {
@@ -70,11 +101,12 @@ interface ModelLayerParams {
   onHover?: (info: any) => void;
 }
 
-const assetStatus = new Map<TrainModelFamily, AssetStatus>();
-const parsedScenegraphs = new Map<TrainModelFamily, any>();
-const parsedCabScenegraphs = new Map<TrainModelFamily, any>();
+const assetStatus = new Map<string, AssetStatus>();
+const parsedScenegraphs = new Map<string, any>();
+const parsedCabScenegraphs = new Map<string, any>();
+const parsedTailScenegraphs = new Map<string, any>();
 const assetListeners = new Set<() => void>();
-const requestedFamilies = new Set<TrainModelFamily>();
+const requestedAssets = new Set<string>();
 
 export function familyForStock(stock: {
   drive_type: string;
@@ -91,6 +123,15 @@ export function familyForStock(stock: {
   }
   if (modelId === 'CLASS_385_EMU' || modelId.includes('CLASS_385')) {
     return 'scotrail_class_385';
+  }
+  if (modelId === 'VAL_208' || modelId.includes('VAL_208')) {
+    return 'val_208';
+  }
+  if (modelId === 'VAL_52M' || modelId.includes('VAL_52M')) {
+    return 'val_52m';
+  }
+  if (modelId === 'BREDA_VLC' || modelId.includes('BREDA')) {
+    return 'breda_vlc';
   }
   if (
     modelId.startsWith('WMATA') ||
@@ -124,55 +165,78 @@ export function familyForStock(stock: {
   return stock.drive_type === 'tire' ? 'pneumatic_generic' : 'steel_classic';
 }
 
+function assetKeyForStock(stock: {
+  drive_type: string;
+  short_name: string;
+  model_id?: string;
+  car_length_m?: number;
+}): {
+  family: TrainModelFamily;
+  key: string;
+  url: string;
+  cabUrl?: string;
+  tailUrl?: string;
+} {
+  const family = familyForStock(stock);
+  return {
+    family,
+    key: family,
+    url: FAMILY_URLS[family],
+    cabUrl: CAB_URLS[family],
+    tailUrl: TAIL_URLS[family],
+  };
+}
+
 export function isTrainModelReadyForTrain(
   train: TrainMarker,
   rollingStockDb: RollingStockDatabase
 ): boolean {
   const stock = getRollingStockForLine(rollingStockDb, train.line || train.lineName);
-  const family = familyForStock(stock);
-  return assetStatus.get(family) === 'ready' && parsedScenegraphs.has(family);
+  const { key } = assetKeyForStock(stock);
+  return assetStatus.get(key) === 'ready' && parsedScenegraphs.has(key);
 }
 
 export function requestTrainModel(train: TrainMarker, rollingStockDb: RollingStockDatabase): void {
   const stock = getRollingStockForLine(rollingStockDb, train.line || train.lineName);
-  const family = familyForStock(stock);
-  requestedFamilies.add(family);
-  beginAssetLoad(family);
+  const { key, url, cabUrl, tailUrl } = assetKeyForStock(stock);
+  requestedAssets.add(key);
+  beginAssetLoad(key, url, cabUrl, tailUrl);
 }
 
 function notifyAssetListeners(): void {
   for (const listener of assetListeners) listener();
 }
 
-function beginAssetLoad(family: TrainModelFamily): void {
-  if (assetStatus.get(family) !== undefined) return;
-  assetStatus.set(family, 'loading');
+function beginAssetLoad(key: string, url: string, cabUrl?: string, tailUrl?: string): void {
+  if (assetStatus.get(key) !== undefined) return;
+  assetStatus.set(key, 'loading');
   notifyAssetListeners();
 
   const controller = new AbortController();
   const timeout = globalThis.setTimeout(() => controller.abort(), LOAD_TIMEOUT_MS);
-  const fetchGlb = (url: string) =>
-    fetch(url, { signal: controller.signal })
+  const fetchGlb = (targetUrl: string) =>
+    fetch(targetUrl, { signal: controller.signal })
       .then((response) => {
-        if (!response.ok) throw new Error(`train model ${family}: HTTP ${response.status}`);
+        if (!response.ok) throw new Error(`train model ${key}: HTTP ${response.status}`);
         return response.arrayBuffer();
       })
       .then((buffer) => parse(buffer, GLTFLoader));
 
-  const cabUrl = CAB_URLS[family];
   Promise.all([
-    fetchGlb(FAMILY_URLS[family]),
+    fetchGlb(url),
     cabUrl ? fetchGlb(cabUrl).catch(() => null) : Promise.resolve(null),
+    tailUrl ? fetchGlb(tailUrl).catch(() => null) : Promise.resolve(null),
   ])
-    .then(([neutralGltf, cabGltf]) => {
-      parsedScenegraphs.set(family, neutralGltf);
-      if (cabGltf) parsedCabScenegraphs.set(family, cabGltf);
-      assetStatus.set(family, 'ready');
+    .then(([neutralGltf, cabGltf, tailGltf]) => {
+      parsedScenegraphs.set(key, neutralGltf);
+      if (cabGltf) parsedCabScenegraphs.set(key, cabGltf);
+      if (tailGltf) parsedTailScenegraphs.set(key, tailGltf);
+      assetStatus.set(key, 'ready');
       notifyAssetListeners();
     })
     .catch((error) => {
-      console.warn(`[train-models] ${family} unavailable; keeping capsules`, error);
-      assetStatus.set(family, 'failed');
+      console.warn(`[train-models] ${key} unavailable; keeping capsules`, error);
+      assetStatus.set(key, 'failed');
       notifyAssetListeners();
     })
     .finally(() => globalThis.clearTimeout(timeout));
@@ -185,8 +249,8 @@ export function subscribeTrainModelAssets(listener: () => void): () => void {
 
 export function preloadTrainModels(): void {
   for (const family of Object.keys(FAMILY_URLS) as TrainModelFamily[]) {
-    requestedFamilies.add(family);
-    beginAssetLoad(family);
+    requestedAssets.add(family);
+    beginAssetLoad(family, FAMILY_URLS[family], CAB_URLS[family], TAIL_URLS[family]);
   }
 }
 
@@ -228,14 +292,14 @@ function modelOrientation(
   return [0, yaw, 90];
 }
 
-function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): ModelCar[] {
+function buildAssetCars(params: ModelLayerParams, assetKey: string): ModelCar[] {
   const cars: ModelCar[] = [];
   for (const train of params.trains) {
     if (!train.shapeId) continue;
     const shape = params.shapes.get(train.shapeId);
     if (!shape) continue;
     const stock = getRollingStockForLine(params.rollingStockDb, train.line || train.lineName);
-    if (familyForStock(stock) !== family) continue;
+    if (assetKeyForStock(stock).key !== assetKey) continue;
     if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
       const [[west, south], [east, north]] = params.bounds;
       if (
@@ -293,7 +357,7 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
         ),
         orientation,
         train,
-        isCab: isLeadCar || isTailCar,
+        role: isLeadCar ? 'cab' : isTailCar ? 'tail' : 'neutral',
       });
     }
   }
@@ -302,7 +366,7 @@ function buildFamilyCars(params: ModelLayerParams, family: TrainModelFamily): Mo
 
 export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLayer<ModelCar>[] {
   if (!trainModelsEnabled()) return [];
-  const usedFamilies = new Set<TrainModelFamily>();
+  const usedAssets = new Map<string, TrainModelFamily>();
   for (const train of params.trains) {
     if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
       const [[west, south], [east, north]] = params.bounds;
@@ -315,24 +379,39 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
         continue;
     }
     const stock = getRollingStockForLine(params.rollingStockDb, train.line || train.lineName);
-    const family = familyForStock(stock);
-    if (!requestedFamilies.has(family)) continue;
-    usedFamilies.add(family);
+    const { family, key } = assetKeyForStock(stock);
+    if (!requestedAssets.has(key)) continue;
+    usedAssets.set(key, family);
   }
   const layers: ScenegraphLayer<ModelCar>[] = [];
 
-  for (const family of usedFamilies) {
+  for (const [assetKey, family] of usedAssets.entries()) {
     if (params.grazingCamera && !MODEL_RENDER_POLICY[family].grazingCameraApproved) continue;
-    if (assetStatus.get(family) !== 'ready') continue;
-    const gltf = parsedScenegraphs.get(family);
+    if (assetStatus.get(assetKey) !== 'ready') continue;
+    const gltf = parsedScenegraphs.get(assetKey);
     if (!gltf) continue;
 
-    const cars = buildFamilyCars(params, family);
+    const cars = buildAssetCars(params, assetKey);
     if (cars.length === 0) continue;
 
-    const cabGltf = parsedCabScenegraphs.get(family);
-    const neutralCars = cabGltf ? cars.filter((car) => !car.isCab) : cars;
-    const cabCars = cabGltf ? cars.filter((car) => car.isCab) : [];
+    const cabGltf = parsedCabScenegraphs.get(assetKey);
+    const tailGltf = parsedTailScenegraphs.get(assetKey) ?? cabGltf;
+    const neutralCars = cars.filter(
+      (car) =>
+        car.role === 'neutral' ||
+        (car.role === 'cab' && !cabGltf) ||
+        (car.role === 'tail' && !tailGltf)
+    );
+    const cabCars = cabGltf ? cars.filter((car) => car.role === 'cab') : [];
+    const tailCars = tailGltf
+      ? tailGltf === cabGltf
+        ? []
+        : cars.filter((car) => car.role === 'tail')
+      : [];
+    const combinedCabCars =
+      tailGltf && tailGltf === cabGltf
+        ? cars.filter((car) => car.role === 'cab' || car.role === 'tail')
+        : cabCars;
 
     const makeLayer = (id: string, scenegraph: any, data: ModelCar[]) =>
       new ScenegraphLayer<ModelCar>({
@@ -359,10 +438,13 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
       });
 
     if (neutralCars.length > 0) {
-      layers.push(makeLayer(`subway-train-model-${family}`, gltf, neutralCars));
+      layers.push(makeLayer(`subway-train-model-${assetKey}`, gltf, neutralCars));
     }
-    if (cabCars.length > 0 && cabGltf) {
-      layers.push(makeLayer(`subway-train-model-${family}-cab`, cabGltf, cabCars));
+    if (combinedCabCars.length > 0 && cabGltf) {
+      layers.push(makeLayer(`subway-train-model-${assetKey}-cab`, cabGltf, combinedCabCars));
+    }
+    if (tailCars.length > 0 && tailGltf) {
+      layers.push(makeLayer(`subway-train-model-${assetKey}-tail`, tailGltf, tailCars));
     }
   }
   return layers;

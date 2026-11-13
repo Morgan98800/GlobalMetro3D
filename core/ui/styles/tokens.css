@@ -14,6 +14,9 @@
   --texte: #f4f1eb; /* texte principal                */
   --secondaire: #a9a29a; /* texte secondaire               */
   --tertiaire: #8a837b; /* hint, placeholder              */
+  --glass: rgba(22, 20, 19, 0.78);
+  --glass-hi: rgba(28, 25, 23, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.1);
 
   /* Le laiton ne sert qu'à l'interaction : focus, état actif,
      action primaire. Jamais un fond de panneau, jamais un accent
@@ -179,6 +182,9 @@ html[data-theme="light"] {
   --texte: #24211e;
   --secondaire: #5e5851;
   --tertiaire: #81796f;
+  --glass: rgba(252, 251, 248, 0.82);
+  --glass-hi: rgba(252, 251, 248, 0.92);
+  --glass-border: rgba(36, 33, 30, 0.12);
   --vignette: radial-gradient(75% 65% at 50% 45%, #fcfbf8 0%, #f2f0eb 60%, #e7e3db 100%);
   --laiton-soft: rgba(153, 119, 20, 0.15);
   --laiton: #997714;

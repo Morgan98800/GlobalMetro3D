@@ -25,6 +25,7 @@ import {
 } from './train_models_layer';
 import { resolveTrainRenderLayers } from './train_render_fallback';
 import { createPlatformsLayer } from './platforms_layer';
+import { getOptimalPixelRatio } from './device_perf';
 
 export interface TrackItem {
   line_id: string;
@@ -158,6 +159,10 @@ export class SubwayDeckOverlay {
   private cachedPreTrainLayers: any[] = [];
   private cachedPostTrainLayers: any[] = [];
   private staticLayersDirty = true;
+  private theme: 'dark' | 'light' =
+    typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light'
+      ? 'light'
+      : 'dark';
   private onStationHover: (info: any) => void;
   private onStationClick: (station: StationMetadata) => void;
   private onTrainHover: (info: any) => void;
@@ -182,7 +187,8 @@ export class SubwayDeckOverlay {
     subscribeTrainModelAssets(() => this.updateLayers());
 
     this.overlay = new MapLibreOverlay({
-      interleaved: false,
+      interleaved: true,
+      useDevicePixels: getOptimalPixelRatio(2, 1.5),
       layers: [],
       effects:
         isTrainModelSpikeEnabled() || trainModelsEnabled() ? [createTrainModelSpikeLighting()] : [],
@@ -259,10 +265,11 @@ export class SubwayDeckOverlay {
     bounds?: [[number, number], [number, number]] | null,
     pitch: number = 0
   ) {
-    const zoomChanged = Math.abs(this.zoom - zoom) > 0.01;
+    const zoomChanged = Math.abs(this.zoom - zoom) > 0.04;
     const centerChanged =
-      Math.abs(this.mapCenter[0] - mapCenter[0]) > 0.0005 ||
-      Math.abs(this.mapCenter[1] - mapCenter[1]) > 0.0005;
+      Math.abs(this.mapCenter[0] - mapCenter[0]) > 0.004 ||
+      Math.abs(this.mapCenter[1] - mapCenter[1]) > 0.004;
+    const pitchBandChanged = this.pitch >= 45 !== pitch >= 45;
     this.zoom = zoom;
     this.pitch = pitch;
     if (
@@ -271,14 +278,16 @@ export class SubwayDeckOverlay {
     ) {
       (window as any).__deckOverlayZoom = zoom;
     }
-    this.mapCenter = mapCenter;
     if (bounds) {
       this.bounds = bounds;
     }
     if (zoomChanged || centerChanged) {
+      this.mapCenter = mapCenter;
       this.staticLayersDirty = true;
+      this.updateLayers();
+    } else if (pitchBandChanged) {
+      this.updateLayers();
     }
-    this.updateLayers();
   }
 
   public setData(data: SubwayMapData) {
@@ -297,6 +306,13 @@ export class SubwayDeckOverlay {
   public setSelectedLine(lineId: string | null) {
     if (this.selectedLineId === lineId) return;
     this.selectedLineId = lineId;
+    this.staticLayersDirty = true;
+    this.updateLayers();
+  }
+
+  public setTheme(theme: 'dark' | 'light') {
+    if (this.theme === theme) return;
+    this.theme = theme;
     this.staticLayersDirty = true;
     this.updateLayers();
   }
@@ -453,10 +469,42 @@ export class SubwayDeckOverlay {
       return rounded.map((pt: [number, number]) => [pt[0], pt[1], z]);
     };
 
+    const isLight = this.theme === 'light';
+    const casingColor: [number, number, number, number] = isLight
+      ? [244, 241, 235, 255]
+      : [21, 14, 18, 255];
+    const stationFillColor: [number, number, number, number] = isLight
+      ? [28, 25, 23, 245]
+      : [241, 239, 234, 245];
+
     const pathLayers: any[] = [];
     const visibleLineOrder = this.selectedLineId
       ? lineOrder.filter((line) => line.id === this.selectedLineId)
       : lineOrder;
+    const elevatedTracks =
+      this.zoom >= 13.5
+        ? visibleLineOrder
+            .filter((line) => line.elevation_offset > 0)
+            .flatMap((line) => tracksByLine.get(line.id) || [])
+        : [];
+    const viaductShadowLayer =
+      elevatedTracks.length > 0
+        ? new PathLayer<TrackItem>({
+            id: 'subway-viaduct-shadows',
+            data: elevatedTracks,
+            pickable: false,
+            widthUnits: 'meters',
+            getWidth: 4.8,
+            getPath: ((d: TrackItem) => {
+              const rounded = this.roundedTrackPaths.get(d) ?? roundPathCorners(d.coordinates);
+              return rounded.map((pt: [number, number]) => [pt[0], pt[1], 0.15]);
+            }) as any,
+            getColor: isLight ? [20, 18, 16, 55] : [0, 0, 0, 110],
+            capRounded: true,
+            jointRounded: true,
+            parameters: { depthTest: true, depthWriteEnabled: false } as any,
+          })
+        : null;
     for (const line of visibleLineOrder) {
       const lineTracks = tracksByLine.get(line.id) || [];
       const isSelected = !this.selectedLineId || line.id === this.selectedLineId;
@@ -470,7 +518,7 @@ export class SubwayDeckOverlay {
           widthUnits: 'pixels',
           getWidth: () => trackWidthAtZoom(isSelected) + 3,
           getPath: pathForTrack as any,
-          getColor: [21, 14, 18, 255], // --laque, opaque casing
+          getColor: casingColor,
           opacity: revealOpacityFor(line.id),
           capRounded: true,
           jointRounded: true,
@@ -478,6 +526,7 @@ export class SubwayDeckOverlay {
           transitions: { opacity: { duration: 140, easing: easeOut } } as any,
           updateTriggers: {
             getWidth: [this.zoom, this.selectedLineId],
+            getColor: [this.theme],
           },
         })
       );
@@ -567,8 +616,8 @@ export class SubwayDeckOverlay {
         }
         return this.zoom < 15.0 ? 3.5 : 4.5;
       },
-      getFillColor: () => [241, 239, 234, 245], // --opale
-      getLineColor: () => [21, 14, 18, 255], // --laque
+      getFillColor: () => stationFillColor,
+      getLineColor: () => casingColor,
       getLineWidth: (d: StationMetadata) => {
         if (isUltraHub(d)) return 1.5;
         return 1.0;
@@ -587,8 +636,8 @@ export class SubwayDeckOverlay {
       },
       updateTriggers: {
         getPosition: [this.selectedLineId],
-        getFillColor: [this.zoom, this.selectedLineId],
-        getLineColor: [this.zoom, this.selectedLineId],
+        getFillColor: [this.zoom, this.selectedLineId, this.theme],
+        getLineColor: [this.zoom, this.selectedLineId, this.theme],
         getRadius: [this.zoom, this.selectedLineId],
         getLineWidth: [this.zoom, this.selectedLineId],
       },
@@ -618,7 +667,7 @@ export class SubwayDeckOverlay {
         d.elevation + 2.5,
       ],
       getRadius: (d: TerminusMarker) => (this.selectedLineId ? 9 : this.zoom < 14 ? 6.5 : 9),
-      getFillColor: [21, 14, 18, 255], // cercle évidé, intérieur --laque
+      getFillColor: casingColor,
       getLineColor: (d: TerminusMarker) => {
         return hexToRgba(d.lineColor, 255);
       },
@@ -628,6 +677,7 @@ export class SubwayDeckOverlay {
         getPosition: [this.zoom, this.selectedLineId],
         getRadius: [this.zoom, this.selectedLineId],
         getLineColor: [this.selectedLineId],
+        getFillColor: [this.theme],
       },
     });
 
@@ -639,12 +689,21 @@ export class SubwayDeckOverlay {
       this.mapCenter,
       lineElev
     );
+    const tracksCoordsByLine = new Map<string, [number, number][][]>();
+    for (const [lineId, lineTracks] of tracksByLine.entries()) {
+      tracksCoordsByLine.set(
+        lineId,
+        lineTracks.map((t) => t.coordinates)
+      );
+    }
     const isPlatformEligible = selectedLine?.mode === 'metro' || selectedLine?.mode === 'tube';
     const platformsLayer = createPlatformsLayer(
       displayStations,
       isPlatformEligible ? selectedLine : null,
       isPlatformEligible ? selectedLinePaths : [],
-      this.zoom
+      this.zoom,
+      this.theme,
+      selectedLine ? undefined : { lines, tracksByLine: tracksCoordsByLine }
     );
 
     let rerLayer: any = null;
@@ -698,6 +757,7 @@ export class SubwayDeckOverlay {
 
     this.cachedPreTrainLayers = [
       ...(rerLayer ? [rerLayer] : []),
+      ...(viaductShadowLayer ? [viaductShadowLayer] : []),
       ...lineHitboxes,
       ...pathLayers,
       ...(platformsLayer ? [platformsLayer] : []),

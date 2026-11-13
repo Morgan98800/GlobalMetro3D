@@ -1,4 +1,11 @@
-import { applyMapTheme, createMap, maxPitchForZoom, MapBounds } from '@core/ui/map/maplibre';
+import {
+  applyMapTheme,
+  areBuildingsVisible,
+  createMap,
+  MapBounds,
+  maxPitchForZoom,
+  setBuildingsVisible,
+} from '@core/ui/map/maplibre';
 import { SubwayDeckOverlay, TrackItem } from '@core/ui/map/deck_overlay';
 import { SubwayDock } from '@core/ui/components/dock';
 import { SubwaySearchBar } from '@core/ui/components/search_bar';
@@ -13,6 +20,10 @@ import { loadRollingStock } from '@core/sim/rolling_stock';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
 import type { LineMetadata, StationMetadata } from '@core/types';
 import { DEFAULT_PITCH, DEFAULT_BEARING } from '@core/constants';
+import '@core/ui/styles/tokens.css';
+import '@core/ui/styles/typography.css';
+import '@core/ui/styles/motion.css';
+import '@core/ui/styles/main.css';
 import '@core/ui/styles/chrome.css';
 import { TopBar } from '@core/ui/components/header';
 import { auditLineContrast, LineLike, lineBadge } from '@core/ui/components/line_badge';
@@ -245,37 +256,36 @@ function openAboutModal(activeCityConfig: CityConfig = parisConfig) {
   modal.innerHTML = `
     <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
       <header class="about-sheet__header">
-        <h2 id="about-title">À propos — ${activeCityConfig.displayName.toUpperCase()}</h2>
+        <div>
+          <span class="about-sheet__eyebrow">${activeCityConfig.networkName}</span>
+          <h2 id="about-title">À propos — ${activeCityConfig.displayName}</h2>
+        </div>
         <button type="button" class="about-sheet__close" aria-label="Fermer">×</button>
       </header>
       <div class="about-sheet__body">
-        <section class="about-item">
+        <div class="about-hero">
           <div class="about-item__ticket">${cardGraphic}</div>
-          <div class="about-item__content">
+        </div>
+        <div class="about-grid">
+          <section class="about-card">
             <h3 class="about-item__title">Données</h3>
-            <p class="about-item__text">Données d'offre : <strong>${attrib.datasetName}</strong></p>
+            <p class="about-item__text">Offre : <strong>${attrib.datasetName}</strong></p>
             <p class="about-item__text">Exploitant : <strong>${attrib.operatorName}</strong></p>
             ${rtHtml}
-          </div>
-        </section>
-        <section class="about-item">
-          <div class="about-item__ticket">${cardGraphic}</div>
-          <div class="about-item__content">
+          </section>
+          <section class="about-card">
             <h3 class="about-item__title">Licences</h3>
-            <p class="about-item__text">Données de transport : <a href="${attrib.licenseUrl}" target="_blank" rel="noopener"><strong>${attrib.licenseText}</strong></a></p>
+            <p class="about-item__text">Transport : <a href="${attrib.licenseUrl}" target="_blank" rel="noopener"><strong>${attrib.licenseText}</strong></a></p>
             ${activeCityConfig.id === 'edinburgh' ? '<p class="about-item__text">Relief & Bâti 3D : <strong>Scottish Government & Fugro (2021)</strong> (OGL v3.0)</p>' : ''}
-            <p class="about-item__text">Fond cartographique : <strong>OpenMapTiles · OpenStreetMap</strong> (ODbL)</p>
-            <p class="about-item__text">Hébergement tuiles : <strong>OpenFreeMap</strong></p>
+            <p class="about-item__text">Carte : <strong>OpenMapTiles · OpenStreetMap</strong> (ODbL) · <strong>OpenFreeMap</strong></p>
+            <p class="about-item__text">Bâti 3D : <strong>Overture Maps Foundation</strong> (CDLA-Permissive-2.0)</p>
             <p class="about-item__text">Typographie : <strong>Switzer</strong> (Fontshare)</p>
-          </div>
-        </section>
-        <section class="about-item">
-          <div class="about-item__ticket">${cardGraphic}</div>
-          <div class="about-item__content">
-            <h3 class="about-item__title">Mentions</h3>
-            <p class="about-item__text">${attrib.disclaimer}</p>
-            <a href="/methode" target="_blank" rel="noopener" class="about-item__link">Consulter la méthode complète <span aria-hidden="true">→</span></a>
-          </div>
+          </section>
+        </div>
+        <section class="about-card about-card--wide">
+          <h3 class="about-item__title">Mentions</h3>
+          <p class="about-item__text">${attrib.disclaimer}</p>
+          <a href="/methode" target="_blank" rel="noopener" class="about-item__link">Consulter la méthode complète <span aria-hidden="true">→</span></a>
         </section>
       </div>
     </div>
@@ -676,6 +686,143 @@ async function bootstrap() {
   let latestRenderedTrains = new Map<string, TrainMarker>();
   let followCamera: FollowCamera | null = null;
   let edinburghHandle: any = null;
+  let parisRideHandle: {
+    setRoute: (k: string, s?: string, d?: string) => void;
+    dispose: () => void;
+  } | null = null;
+  let parisRideOpening = false;
+  let followHudEl: HTMLElement | null = null;
+  let lastFollowHudKey = '';
+  let followLegKey = '';
+  let followLegStartMs = 0;
+
+  const isParisMetroLine = (lineName?: string | null) =>
+    Boolean(lineName && !['A', 'B', 'C', 'D', 'E'].includes(lineName.toUpperCase()));
+
+  const closeParisRideMode = () => {
+    if (!parisRideHandle) return;
+    parisRideHandle.dispose();
+    parisRideHandle = null;
+    if (latestRenderedTrains.size > 0) {
+      deckOverlay.setTrains(Array.from(latestRenderedTrains.values()), true);
+    }
+  };
+
+  const openParisRideMode = async (opts?: {
+    initialLine?: string;
+    initialDest?: string;
+    initialStation?: string;
+  }) => {
+    if (cityConfig.id !== 'paris' || parisRideHandle || parisRideOpening) return;
+    parisRideOpening = true;
+    try {
+      const { mountParisRideView } = await import('./paris_ride_view');
+      if (parisRideHandle) return;
+      parisRideHandle = mountParisRideView(document.body, {
+        ...opts,
+        onExit: () => {
+          closeParisRideMode();
+        },
+      });
+    } finally {
+      parisRideOpening = false;
+    }
+  };
+
+  const confLabelMap: Record<string, string> = {
+    measured: 'Arrêt mesuré',
+    bracketed: 'Encadré temps réel',
+    extrapolated: 'Extrapolé',
+    scheduled: 'Théorique GTFS',
+  };
+
+  const updateFollowHud = (train: TrainMarker | null) => {
+    if (!train || !followCamera?.isFollowing()) {
+      if (followHudEl) {
+        followHudEl.remove();
+        followHudEl = null;
+        lastFollowHudKey = '';
+        followLegKey = '';
+      }
+      return;
+    }
+
+    const legKey = `${train.id}|${train.next}`;
+    if (legKey !== followLegKey) {
+      followLegKey = legKey;
+      followLegStartMs = performance.now();
+    }
+    const progressPct = train.atStop
+      ? 100
+      : Math.min(
+          92,
+          Math.max(14, Math.round(((performance.now() - followLegStartMs) / 40000) * 100))
+        );
+
+    const confLabel = confLabelMap[train.conf] || 'Théorique GTFS';
+    const key = `${train.id}|${train.next}|${train.dest}|${train.conf}|${Boolean(train.atStop)}`;
+    if (key === lastFollowHudKey && followHudEl) {
+      const barEl = followHudEl.querySelector('.follow-hud__bar') as HTMLElement | null;
+      if (barEl) barEl.style.width = `${progressPct}%`;
+      return;
+    }
+    lastFollowHudKey = key;
+
+    if (!followHudEl) {
+      followHudEl = document.createElement('aside');
+      followHudEl.className = 'follow-hud';
+      followHudEl.setAttribute('aria-label', 'Suivi de rame');
+      followHudEl.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement | null;
+        if (target?.closest('.follow-hud__exit')) {
+          followCamera?.stopFollow();
+        } else if (target?.closest('.follow-hud__ride')) {
+          const active = trackedTrain;
+          if (active && isParisMetroLine(active.lineName)) {
+            void openParisRideMode({
+              initialLine: active.lineName,
+              initialDest: active.dest,
+              initialStation: active.next,
+            });
+          } else {
+            void openParisRideMode({ initialLine: '6' });
+          }
+        }
+      });
+      document.body.appendChild(followHudEl);
+    }
+
+    const lineMeta = lines.find((l) => l.id === train.line);
+    const badgeHtml = lineMeta
+      ? lineBadge(
+          {
+            line_id: lineMeta.id,
+            short_name: lineMeta.short_name,
+            route_color: lineMeta.color,
+            route_text_color: lineMeta.text_color,
+          },
+          { interactive: false }
+        ).outerHTML
+      : `<span class="line-badge">${escapeHtml(train.lineName)}</span>`;
+    const subPrefix = train.atStop ? 'À quai' : 'Prochain';
+    const barColor = lineMeta?.color || 'var(--laiton)';
+    const canRideInside = cityConfig.id === 'paris' && isParisMetroLine(train.lineName);
+
+    followHudEl.innerHTML = `
+      ${badgeHtml}
+      <div class="follow-hud__meta">
+        <div class="follow-hud__dest">→ ${escapeHtml(train.dest)}</div>
+        <div class="follow-hud__sub">${subPrefix} : ${escapeHtml(train.next)} · ${escapeHtml(confLabel)}</div>
+        <div class="follow-hud__track" aria-hidden="true">
+          <div class="follow-hud__bar" style="width: ${progressPct}%; background: ${escapeHtml(barColor)};"></div>
+        </div>
+      </div>
+      <div class="follow-hud__actions">
+        ${canRideInside ? '<button type="button" class="follow-hud__ride">Monter à bord</button>' : ''}
+        <button type="button" class="follow-hud__exit">Quitter (Esc)</button>
+      </div>
+    `;
+  };
 
   const focusTrain = (train: TrainMarker) => {
     hideTooltip();
@@ -691,6 +838,7 @@ async function bootstrap() {
         duration: 900,
       });
     }
+    updateFollowHud(train);
     updateRecenterState();
   };
 
@@ -796,6 +944,11 @@ async function bootstrap() {
           { interactive: false }
         ).outerHTML;
 
+        const speedHtml =
+          cityConfig.id === 'paris' && isParisMetroLine(tr.lineName)
+            ? ''
+            : `<span>Vitesse : <strong>${Number(tr.spd || 0).toLocaleString('fr-FR')} km/h</strong></span>`;
+
         tooltipEl.innerHTML = `
           <div class="train-tooltip-header">
             ${trainBadge}
@@ -804,7 +957,7 @@ async function bootstrap() {
           <div class="train-tooltip-body">
             <div>Prochain arrêt : <strong>${escapeHtml(tr.next || '—')}</strong></div>
             <div class="train-tooltip-meta">
-              <span>Vitesse : <strong>${Number(tr.spd || 0).toLocaleString('fr-FR')} km/h</strong></span>
+              ${speedHtml}
               <span>Écart : ${delayText}</span>
               ${confBadge}
             </div>
@@ -915,6 +1068,7 @@ async function bootstrap() {
     dock: document.getElementById('dock')!,
     onStop: () => {
       deckOverlay.setSelectedTrain(null);
+      updateFollowHud(null);
       updateRecenterState();
     },
   });
@@ -974,18 +1128,6 @@ async function bootstrap() {
       hideTooltip();
       openNetworkRecords(stationRankings);
     },
-    onToggleBuildings: (active: boolean) => {
-      try {
-        if (map.getLayer('building-3d')) {
-          map.setLayoutProperty('building-3d', 'visibility', active ? 'visible' : 'none');
-        }
-      } catch (err) {
-        console.warn('[map] Could not toggle building layer:', err);
-      }
-    },
-    onToggleTheme: (theme) => {
-      applyMapTheme(map, theme);
-    },
     onToggleRealtime: () => {
       isRealtimeEnabled = !isRealtimeEnabled;
       if (isRealtimeEnabled) {
@@ -1000,9 +1142,101 @@ async function bootstrap() {
     },
   });
   topbar.mount();
+
+  const btnTogglePitch = document.getElementById('btn-toggle-pitch') as HTMLButtonElement | null;
+  const btnToggleBuildings = document.getElementById(
+    'btn-toggle-buildings'
+  ) as HTMLButtonElement | null;
+  const btnToggleTheme = document.getElementById('btn-toggle-theme') as HTMLButtonElement | null;
+
+  const syncBuildingsButton = (active: boolean) => {
+    btnToggleBuildings?.classList.toggle('is-active', active);
+    btnToggleBuildings?.setAttribute('aria-pressed', String(active));
+  };
+
+  function setBuildingsEnabled(active: boolean) {
+    setBuildingsVisible(map, active);
+    syncBuildingsButton(active);
+  }
+
+  const syncThemeButton = (theme: 'dark' | 'light') => {
+    const isLight = theme === 'light';
+    btnToggleTheme?.classList.toggle('is-active', isLight);
+    btnToggleTheme?.setAttribute('aria-pressed', String(isLight));
+  };
+
+  function applyThemeMode(theme: 'dark' | 'light') {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('paris-subway-theme', theme);
+    syncThemeButton(theme);
+    applyMapTheme(map, theme);
+    deckOverlay.setTheme(theme);
+  }
+
+  const syncPitchButton = () => {
+    const is3d = map.getPitch() > 8;
+    btnTogglePitch?.classList.toggle('is-active', is3d);
+    btnTogglePitch?.setAttribute('aria-pressed', String(is3d));
+  };
+  map.on('pitch', syncPitchButton);
+  syncPitchButton();
+  syncThemeButton(document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+
+  btnTogglePitch?.addEventListener('click', () => {
+    const is3d = map.getPitch() > 8;
+    const targetPitch = is3d ? 0 : Math.min(52, maxPitchForZoom(map.getZoom()));
+    map.easeTo({ pitch: targetPitch, duration: 480 });
+  });
+
+  btnToggleBuildings?.addEventListener('click', () => {
+    const active = btnToggleBuildings.getAttribute('aria-pressed') === 'true';
+    setBuildingsEnabled(!active);
+  });
+
+  btnToggleTheme?.addEventListener('click', () => {
+    const nextTheme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    applyThemeMode(nextTheme);
+  });
+
+  if (cityConfig.id === 'paris') {
+    const controlsAside = document.getElementById('map-controls');
+    const divider = controlsAside?.querySelector('.map-controls__divider');
+    if (controlsAside && divider && !document.getElementById('btn-ride-metro')) {
+      const rideBtn = document.createElement('button');
+      rideBtn.className = 'map-control-btn';
+      rideBtn.id = 'btn-ride-metro';
+      rideBtn.type = 'button';
+      rideBtn.title = 'Monter à bord du métro (Vue 3D intérieure)';
+      rideBtn.setAttribute('aria-label', 'Monter à bord d’une rame en 3D');
+      rideBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="3" width="12" height="14" rx="3"/>
+          <path d="M6 10h12"/>
+          <circle cx="9.5" cy="13.5" r="0.9" fill="currentColor" stroke="none"/>
+          <circle cx="14.5" cy="13.5" r="0.9" fill="currentColor" stroke="none"/>
+          <path d="M8 17l-2 4M16 17l2 4"/>
+        </svg>
+      `;
+      rideBtn.addEventListener('click', () => {
+        if (trackedTrain && isParisMetroLine(trackedTrain.lineName)) {
+          void openParisRideMode({
+            initialLine: trackedTrain.lineName,
+            initialDest: trackedTrain.dest,
+            initialStation: trackedTrain.next,
+          });
+          return;
+        }
+        const selectedMeta = activeLineId ? lines.find((l) => l.id === activeLineId) : null;
+        const initialLine =
+          selectedMeta && isParisMetroLine(selectedMeta.short_name) ? selectedMeta.short_name : '6';
+        void openParisRideMode({ initialLine });
+      });
+      controlsAside.insertBefore(rideBtn, divider);
+    }
+  }
+
   const syncBuildingsState = () => {
-    if (!map.getLayer('building-3d')) return;
-    topbar.setBuildingsActive(map.getLayoutProperty('building-3d', 'visibility') !== 'none');
+    syncBuildingsButton(areBuildingsVisible(map));
   };
   if (map.isStyleLoaded()) syncBuildingsState();
   else map.once('style.load', syncBuildingsState);
@@ -1145,10 +1379,7 @@ async function bootstrap() {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
     if (e.key === 'b' || e.key === 'B') {
       try {
-        const currentVis = map.getLayoutProperty('building-3d', 'visibility');
-        const nextActive = currentVis !== 'visible';
-        map.setLayoutProperty('building-3d', 'visibility', nextActive ? 'visible' : 'none');
-        topbar.setBuildingsActive(nextActive);
+        setBuildingsEnabled(!areBuildingsVisible(map));
       } catch (err) {
         console.warn('[map] Error toggling buildings:', err);
       }
@@ -1181,6 +1412,10 @@ async function bootstrap() {
       if (now - lastDomUpdateTime >= 1000) {
         lastDomUpdateTime = now;
         dock.updateTrains(trains);
+        if (followCamera?.isFollowing() && trackedTrain) {
+          const freshTrain = latestRenderedTrains.get(trackedTrain.id) ?? trackedTrain;
+          updateFollowHud(freshTrain);
+        }
       }
     },
     onRender: (trains, activeCount) => {
@@ -1193,6 +1428,7 @@ async function bootstrap() {
       for (const train of trains) {
         latestRenderedTrains.set(train.id, train);
       }
+      if (parisRideHandle) return;
       followCamera?.onSimulationFrame();
       deckOverlay.setTrains(trains, Boolean(followCamera?.isFollowing()));
       edinburghHandle?.updateSimulationTrains(trains);

@@ -20,13 +20,45 @@
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
-  height: calc(var(--h-topbar) + env(safe-area-inset-top, 0px));
-  padding: env(safe-area-inset-top, 0px) 16px 0;
-  background: var(--surface);
-  border-bottom: 1px solid var(--bord);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  justify-content: space-between;
+  gap: var(--gap-md);
+  height: auto;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 0
+    max(16px, env(safe-area-inset-left, 0px));
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  pointer-events: none;
   font-family: var(--font-ui, system-ui, sans-serif);
+}
+
+.topbar__island {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-height: 46px;
+  padding: 5px;
+  border-radius: var(--r-modal);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--sh-2);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+.topbar__island--brand {
+  padding: 5px;
+}
+
+.topbar__island--search {
+  flex: 0 1 320px;
+  padding: 3px;
+}
+
+.topbar__island--telemetry {
+  gap: 10px;
+  padding: 5px 5px 5px 12px;
 }
 
 .topbar__brand {
@@ -56,29 +88,27 @@
 .topbar__city-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 10px;
-  border-radius: var(--r-sm);
-  background: var(--eleve);
-  border: 1px solid var(--bord);
+  gap: 7px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: calc(var(--r-modal) - 4px);
+  background: transparent;
+  border: none;
   color: var(--texte);
   text-decoration: none;
   font-family: var(--font-title);
   font-size: var(--fs-md);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: var(--tr-sub);
   cursor: pointer;
   user-select: none;
   transition:
     background var(--t-state) var(--ease),
-    color var(--t-state) var(--ease),
-    border-color var(--t-state) var(--ease);
+    color var(--t-state) var(--ease);
 }
 
 .topbar__city-btn:hover {
-  background: var(--eleve-hi);
-  border-color: var(--laiton);
+  background: var(--eleve);
   color: var(--laiton);
 }
 
@@ -127,45 +157,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 135px;
-  height: 50px;
-  padding: 6px 12px;
+  width: 78px;
+  height: 28px;
+  padding: 2px 4px;
   flex: 0 0 auto;
   transform: none;
   overflow: hidden;
   border: 0;
   border-radius: var(--r-xs);
-  background: #0a0806;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--laiton) 35%, transparent),
-    inset 0 1px 0 rgba(0, 0, 0, 0.8);
-  color: #ffa500;
-}
-
-.topbar__clock::after {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0,
-    transparent 2px,
-    rgba(0, 0, 0, 0.13) 2px,
-    rgba(0, 0, 0, 0.13) 3px
-  );
-  content: "";
-  pointer-events: none;
+  background: transparent;
+  color: var(--laiton);
 }
 
 .topbar__clock-svg {
   display: block;
-  width: 111px;
-  height: 35px;
+  width: 72px;
+  height: 23px;
   overflow: visible;
 }
 
 .topbar__clock-svg circle {
-  fill: #ffa500;
-  filter: drop-shadow(0 0 3px #ff8c00) drop-shadow(0 0 6px rgba(255, 140, 0, 0.6));
+  fill: #e8a728;
+  filter: drop-shadow(0 0 2px rgba(232, 167, 40, 0.35));
+}
+
+html[data-theme="light"] .topbar__clock-svg circle {
+  fill: #997714;
+  filter: none;
 }
 
 .topbar__mark {
@@ -227,12 +245,7 @@
 }
 
 .topbar__distance {
-  color: var(--secondaire);
-  font-size: 12px;
-  font-weight: 400;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1;
-  white-space: nowrap;
+  display: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -333,59 +346,39 @@
   display: flex;
   align-items: center;
   gap: var(--gap-sm);
-  /* Cible tactile de 44 px à toutes les largeurs : le bandeau ne doit jamais
-     rendre la recherche inopérable au doigt (cf. LOT 1, point 1). */
-  min-height: var(--h-btn-quiet);
-  height: var(--h-btn-quiet);
-  width: 220px;
-  padding: 0 var(--pad-btn-quiet);
+  min-height: 40px;
+  height: 40px;
+  width: 100%;
+  min-width: 220px;
+  padding: 0 14px;
   flex-shrink: 0;
-  background: var(--eleve);
-  border: 1px solid var(--bord);
-  border-radius: var(--r-sm);
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--r-modal) - 3px);
   color: var(--secondaire);
   font: inherit;
   font-size: var(--fs-md);
   cursor: pointer;
-  border: none;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   transition:
     background var(--t-state) var(--ease),
-    color var(--t-state) var(--ease),
-    transform var(--t-press) var(--ease),
-    box-shadow var(--t-state) var(--ease);
+    color var(--t-state) var(--ease);
   user-select: none;
 }
 
 .topbar__search-trigger:hover {
-  background: var(--eleve-hi);
+  background: var(--eleve);
   color: var(--texte);
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .topbar__search-trigger:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(0, 0, 0, 0.3),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  background: var(--eleve-hi);
 }
 
 .topbar__search-trigger:focus-visible {
   outline: none;
   --ring-offset: var(--fond);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.4),
-    0 0 0 2px var(--fond),
-    0 0 0 4px var(--laiton);
+  box-shadow: var(--ring-focus);
 }
 
 .topbar__search-icon {
@@ -423,67 +416,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Idem recherche : 44 px à toutes les largeurs. L'ancienne valeur (36 px)
-     n'était relevée à 44 px qu'en dessous de 767 px, ce qui laissait un trou
-     exactement à 768 px (bouton de 36 px hors viewport). */
-  width: var(--h-btn-quiet);
-  height: var(--h-btn-quiet);
-  min-width: var(--h-btn-quiet);
-  min-height: var(--h-btn-quiet);
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   background: var(--eleve);
   border: none;
-  border-radius: var(--r-sm);
+  border-radius: calc(var(--r-modal) - 5px);
   color: var(--secondaire);
   cursor: pointer;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   transition:
     background var(--t-state) var(--ease),
-    color var(--t-state) var(--ease),
-    transform var(--t-press) var(--ease),
-    box-shadow var(--t-state) var(--ease);
+    color var(--t-state) var(--ease);
 }
 
 .topbar__menu-btn:hover {
-  color: var(--texte);
+  color: var(--laiton);
   background: var(--eleve-hi);
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
-    0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .topbar__menu-btn:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(0, 0, 0, 0.3),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  opacity: 0.85;
 }
 
 .topbar__menu-btn:focus-visible {
   outline: none;
   --ring-offset: var(--fond);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-    0 1px 0 rgba(0, 0, 0, 0.4),
-    0 0 0 2px var(--fond),
-    0 0 0 4px var(--laiton);
+  box-shadow: var(--ring-focus);
 }
 
-/* Menu flottant : ombre, donc pas de filet (§3.2). */
 .topbar__dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
-  width: 160px;
-  background: var(--surface);
-  border: none;
-  border-radius: var(--r-sm);
+  width: 196px;
+  background: var(--glass-hi);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-card);
   box-shadow: var(--sh-2);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   padding: 6px;
   display: none;
   flex-direction: column;
@@ -859,8 +832,13 @@
    bouton-icône 44×44. Seuil relevé de 900 px à 1100 px car à 1024 px le
    bandeau débordait de 22 px (search-trigger à x=774, menu-btn coupé à x=1046). */
 @media (max-width: 1100px) {
+  .topbar__island--search {
+    flex: 0 0 auto;
+    padding: 3px;
+  }
   .topbar__search-trigger {
     width: var(--h-btn-quiet);
+    min-width: var(--h-btn-quiet);
     height: var(--h-btn-quiet);
     padding: 0;
     justify-content: center;
@@ -869,17 +847,49 @@
   .topbar__search-kbd {
     display: none;
   }
+  .topbar__count-label {
+    display: none;
+  }
 }
 
-/* Seuil unique à 768 px : il était à 767 px ici, alors que main.css (bloc
-   mobile), main.ts (184), labels_layer.ts (57) et capsule_layer.ts (226)
-   basculent à 768 px. Il en résultait un trou exactement à 768 px. */
+/* Seuil unique à 768 px */
 @media (max-width: 768px) {
   .topbar {
-    gap: var(--gap-sm);
-    height: calc(var(--h-topbar) + env(safe-area-inset-top, 0px));
-    padding-left: max(12px, env(safe-area-inset-left, 0px));
-    padding-right: max(12px, env(safe-area-inset-right, 0px));
+    gap: 8px;
+    padding: max(8px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 0
+      max(10px, env(safe-area-inset-left, 0px));
+  }
+
+  .topbar__island {
+    min-height: 44px;
+    padding: 3px;
+    border-radius: var(--r-card);
+    gap: 4px;
+  }
+
+  .topbar__island--telemetry {
+    padding: 3px 4px 3px 8px;
+    gap: 6px;
+  }
+
+  .topbar__city-btn {
+    height: 38px;
+    padding: 0 10px;
+    font-size: var(--fs-md);
+  }
+
+  .topbar__search-trigger {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    min-height: 38px;
+  }
+
+  .topbar__menu-btn {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    min-height: 38px;
   }
 
   .topbar__distance {
@@ -965,14 +975,19 @@
     transform: none;
   }
 
-  .topbar__count,
-  .rt-status {
+  .topbar__count {
     display: none;
   }
 
   .topbar__clock {
-    width: 135px;
-    height: 50px;
+    width: 64px;
+    height: 22px;
+    padding: 0 2px;
+  }
+
+  .topbar__clock-svg {
+    width: 60px;
+    height: 19px;
   }
 
   .cmd-palette-backdrop {
@@ -981,7 +996,467 @@
 }
 
 @media (max-width: 359px) {
-  .topbar__name {
+  .topbar__clock {
     display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Follow-mode telemetry pill
+   -------------------------------------------------------------------------- */
+.follow-hud {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 155;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--r-modal);
+  background: var(--glass-hi);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--sh-3);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  color: var(--texte);
+  font-family: var(--font);
+  font-size: var(--fs-md);
+  min-width: min(320px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+}
+
+@media (max-width: 768px) {
+  .follow-hud {
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px) + var(--attrib-h, 24px));
+    padding: 10px 12px;
+    gap: 10px;
+  }
+}
+
+.follow-hud__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.follow-hud__dest {
+  font-weight: 600;
+  color: var(--texte);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.follow-hud__sub {
+  font-size: var(--fs-xs);
+  color: var(--secondaire);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.follow-hud__track {
+  position: relative;
+  height: 2px;
+  width: 100%;
+  border-radius: var(--r-pill);
+  background: var(--bord);
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.follow-hud__bar {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--laiton);
+  transition: width 320ms var(--ease);
+}
+
+.follow-hud__exit {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 11px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--eleve);
+  color: var(--texte);
+  font-family: var(--font);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color var(--t-state) var(--ease),
+    color var(--t-state) var(--ease);
+}
+
+.follow-hud__exit:hover {
+  border-color: var(--laiton);
+  color: var(--laiton);
+}
+
+.follow-hud__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.follow-hud__ride {
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--laiton);
+  background: var(--laiton-soft);
+  color: var(--texte);
+  font-family: var(--font);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    background var(--t-state) var(--ease),
+    color var(--t-state) var(--ease),
+    border-color var(--t-state) var(--ease);
+}
+
+.follow-hud__ride:hover {
+  background: var(--laiton);
+  color: #161413;
+}
+
+@media (max-width: 560px) {
+  .follow-hud {
+    flex-wrap: wrap;
+  }
+
+  .follow-hud__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Paris 3D Ride Overlay ("Monter à bord")
+   -------------------------------------------------------------------------- */
+.paris-ride-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  background: #050404;
+  color: var(--texte);
+  font-family: var(--font);
+  animation: paris-ride-fade-in 240ms var(--ease);
+}
+
+@keyframes paris-ride-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.paris-ride-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.paris-ride-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.paris-ride-top {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+.paris-ride-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  pointer-events: auto;
+}
+
+.paris-ride-plaque {
+  background: #1d3f7a;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px 18px 9px;
+  box-shadow:
+    inset 0 0 0 2px #1d3f7a,
+    inset 0 0 0 3.5px rgba(255, 255, 255, 0.88),
+    var(--sh-2);
+  font-weight: 600;
+  font-size: clamp(15px, 2.2vw, 20px);
+  letter-spacing: 0.015em;
+  max-width: min(70vw, 480px);
+}
+
+.paris-ride-card {
+  pointer-events: auto;
+  background: var(--glass-hi);
+  color: var(--texte);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--sh-3);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-radius: var(--r-modal);
+}
+
+.paris-ride-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px 5px 6px;
+}
+
+.paris-ride-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex: none;
+}
+
+.paris-ride-badge--sm {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.paris-ride-picker select {
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--texte);
+  background: var(--eleve);
+  border: 1px solid var(--bord);
+  border-radius: var(--r-sm);
+  padding: 6px 10px;
+  max-width: min(56vw, 310px);
+  cursor: pointer;
+}
+
+.paris-ride-picker select:focus-visible,
+.paris-ride-btn:focus-visible {
+  outline: 2px solid var(--laiton);
+  outline-offset: 2px;
+}
+
+.paris-ride-hud {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.paris-ride-board {
+  padding: 12px 14px;
+  min-width: 280px;
+  max-width: min(400px, calc(100vw - 32px));
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.paris-ride-board-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.paris-ride-board-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.paris-ride-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.paris-ride-row span:first-child {
+  color: var(--secondaire);
+  flex-shrink: 0;
+}
+
+.paris-ride-row b {
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.paris-ride-progress {
+  height: 3px;
+  border-radius: var(--r-pill);
+  background: var(--bord);
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.paris-ride-progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  transition: width 320ms var(--ease);
+}
+
+.paris-ride-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+}
+
+.paris-ride-btn {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--eleve);
+  color: var(--texte);
+  font-family: var(--font);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--t-state) var(--ease),
+    border-color var(--t-state) var(--ease),
+    color var(--t-state) var(--ease);
+}
+
+.paris-ride-btn:hover {
+  border-color: var(--laiton);
+  color: var(--laiton);
+}
+
+.paris-ride-btn[aria-pressed="true"] {
+  background: var(--laiton);
+  border-color: var(--laiton);
+  color: #161413;
+  font-weight: 600;
+}
+
+.paris-ride-btn--close {
+  height: 40px;
+  background: var(--glass-hi);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--sh-2);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-radius: var(--r-modal);
+  padding: 0 14px;
+  font-weight: 600;
+}
+
+.paris-ride-veil {
+  position: fixed;
+  inset: 0;
+  background: #050404;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 350ms var(--ease);
+  display: grid;
+  place-items: center;
+  color: rgba(244, 241, 235, 0.85);
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .paris-ride-top {
+    left: 12px;
+    right: 12px;
+    top: calc(12px + env(safe-area-inset-top, 0px));
+  }
+
+  .paris-ride-plaque {
+    max-width: 100%;
+    font-size: 15px;
+    padding: 6px 14px 7px;
+  }
+
+  .paris-ride-top-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .paris-ride-picker {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .paris-ride-picker select {
+    max-width: none;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .paris-ride-hud {
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .paris-ride-board {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .paris-ride-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .paris-ride-controls .paris-ride-btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paris-ride-overlay,
+  .paris-ride-veil,
+  .paris-ride-progress i {
+    animation: none;
+    transition: none;
   }
 }

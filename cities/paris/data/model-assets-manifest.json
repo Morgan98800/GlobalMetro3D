@@ -1,29 +1,55 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-11-06",
+  "generated_on": "2026-11-13",
   "status": "awaiting_human_asset_approval",
   "policy": {
     "external_downloads": "blocked_until_human_source_and_license_approval",
     "marketplace_models": "never_download_without_explicit_license_approval",
     "train_models_present": true,
     "train_model_files": [
+      "train/breda_vlc__cab.glb",
+      "train/breda_vlc__neutral.glb",
+      "train/breda_vlc__tail.glb",
+      "train/bvg_grossprofil__cab.glb",
       "train/bvg_grossprofil__neutral.glb",
+      "train/bvg_grossprofil__tail.glb",
+      "train/bvg_kleinprofil__cab.glb",
       "train/bvg_kleinprofil__neutral.glb",
+      "train/bvg_kleinprofil__tail.glb",
       "train/pneumatic_generic__neutral.glb",
+      "train/pneumatic_generic__neutral__cab.glb",
+      "train/pneumatic_generic__neutral__tail.glb",
       "train/rer_generic_A__cab.glb",
       "train/rer_generic_A__neutral.glb",
+      "train/rer_generic_A__tail.glb",
       "train/rer_generic_B__cab.glb",
       "train/rer_generic_B__neutral.glb",
+      "train/rer_generic_B__tail.glb",
       "train/rer_generic_C__cab.glb",
       "train/rer_generic_C__neutral.glb",
+      "train/rer_generic_C__tail.glb",
       "train/rer_generic_D__cab.glb",
       "train/rer_generic_D__neutral.glb",
+      "train/rer_generic_D__tail.glb",
       "train/rer_generic_E__cab.glb",
       "train/rer_generic_E__neutral.glb",
+      "train/rer_generic_E__tail.glb",
       "train/rer_generic__neutral.glb",
+      "train/scotrail_class_385__cab.glb",
       "train/scotrail_class_385__neutral.glb",
+      "train/scotrail_class_385__tail.glb",
       "train/steel_classic__neutral.glb",
-      "train/wmata_generic__neutral.glb"
+      "train/steel_classic__neutral__cab.glb",
+      "train/steel_classic__neutral__tail.glb",
+      "train/val_208__cab.glb",
+      "train/val_208__neutral.glb",
+      "train/val_208__tail.glb",
+      "train/val_52m__cab.glb",
+      "train/val_52m__neutral.glb",
+      "train/val_52m__tail.glb",
+      "train/wmata_generic__cab.glb",
+      "train/wmata_generic__neutral.glb",
+      "train/wmata_generic__tail.glb"
     ]
   },
   "render_contract": {
@@ -199,12 +225,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_A__neutral.glb",
-          "source_sha256": "ee2a77d0f236efa2eab76b622e1b355dca00ff2fcf7dc20c5d192219b9396c1f",
+          "source_sha256": "e18375b3bb9dd2bfdc0256ad65bb6cffcad98602d49eb1e4e7608fbc4bd543f7",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_A__neutral.glb",
-        "sha256": "ee2a77d0f236efa2eab76b622e1b355dca00ff2fcf7dc20c5d192219b9396c1f"
+        "sha256": "e18375b3bb9dd2bfdc0256ad65bb6cffcad98602d49eb1e4e7608fbc4bd543f7"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -239,12 +265,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_B__neutral.glb",
-          "source_sha256": "bb73f0becd126f08578ce20437f0226fbf6f29a26c79f455741c5d5161b90d83",
+          "source_sha256": "52cc6d034aa8406307ec483456c2cd9f30ae695e7037b6f9a9ca34679a703c9b",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_B__neutral.glb",
-        "sha256": "bb73f0becd126f08578ce20437f0226fbf6f29a26c79f455741c5d5161b90d83"
+        "sha256": "52cc6d034aa8406307ec483456c2cd9f30ae695e7037b6f9a9ca34679a703c9b"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -279,12 +305,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_C__neutral.glb",
-          "source_sha256": "6adf98bee2f1f9f5fbdfc3a0817405036fd975d38ce2ccab3803efe67722aad7",
+          "source_sha256": "f6434e58bdb1a00f3b985120218711e1d53188752c4d4377c0694ab01f3ceab4",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_C__neutral.glb",
-        "sha256": "6adf98bee2f1f9f5fbdfc3a0817405036fd975d38ce2ccab3803efe67722aad7"
+        "sha256": "f6434e58bdb1a00f3b985120218711e1d53188752c4d4377c0694ab01f3ceab4"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -319,12 +345,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_D__neutral.glb",
-          "source_sha256": "6c5e120df6571417cae59a212645e3399f4bd54f38c41ebd6167e3c88d96139e",
+          "source_sha256": "404dcbd234aa4e44d0d689164e25e3c1c997750c69eb6d4bf210689b53e9eb13",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_D__neutral.glb",
-        "sha256": "6c5e120df6571417cae59a212645e3399f4bd54f38c41ebd6167e3c88d96139e"
+        "sha256": "404dcbd234aa4e44d0d689164e25e3c1c997750c69eb6d4bf210689b53e9eb13"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -359,12 +385,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_E__neutral.glb",
-          "source_sha256": "31263ecaa75428f24256f9cacc603f774fa41a70f6cb0d9824f66d7438e5fd59",
+          "source_sha256": "b48a440ff674bce4a7244e0eeab84e699fc701e0eb1787d36f92e140369764cf",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_E__neutral.glb",
-        "sha256": "31263ecaa75428f24256f9cacc603f774fa41a70f6cb0d9824f66d7438e5fd59"
+        "sha256": "b48a440ff674bce4a7244e0eeab84e699fc701e0eb1787d36f92e140369764cf"
       },
       "livery": {
         "status": "not_for_distribution",

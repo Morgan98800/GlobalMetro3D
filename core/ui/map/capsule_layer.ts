@@ -327,15 +327,25 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     const isRealtime = train.conf === 'measured' || train.conf === 'bracketed';
     const ghostScale = train.ghostAlpha ?? 1;
     const alpha255 = Math.round(255 * ghostScale);
+    const isMetro =
+      !['A', 'B', 'C', 'D', 'E'].includes(train.lineName.toUpperCase()) &&
+      !stock.model_id?.startsWith('RER_');
     const lineColorRgba = hexToRgba(train.colorHex, alpha255);
-    const rawBodyColor = getNeutralBodyColor(train.colorHex);
+    const roofColor: [number, number, number, number] = isMetro
+      ? [0, 138, 138, alpha255]
+      : lineColorRgba;
+    const rawBodyColor = isMetro
+      ? ([240, 240, 240, 255] as [number, number, number, number])
+      : getNeutralBodyColor(train.colorHex);
     const bodyColor: [number, number, number, number] = [
       rawBodyColor[0],
       rawBodyColor[1],
       rawBodyColor[2],
       Math.round(rawBodyColor[3] * ghostScale),
     ];
-    const rawNoseColor = getNeutralNoseColor(bodyColor);
+    const rawNoseColor = isMetro
+      ? ([17, 17, 17, 255] as [number, number, number, number])
+      : getNeutralNoseColor(bodyColor);
     const noseColor: [number, number, number, number] = [
       rawNoseColor[0],
       rawNoseColor[1],
@@ -365,7 +375,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       carRoofs.push({
         path: fullPath,
         widthM: Math.max(stock.width_m * 0.3, 0.8),
-        color: lineColorRgba,
+        color: roofColor,
         elevation: elev + 1.2,
         train,
       });
@@ -396,7 +406,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
           carRoofs.push({
             path: carPath,
             widthM: Math.max(stock.width_m * 0.3, 0.8),
-            color: lineColorRgba,
+            color: roofColor,
             elevation: elev + 1.2,
             train,
           });

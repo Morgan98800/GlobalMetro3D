@@ -33,6 +33,20 @@ export default defineConfig({
         main: path.resolve(__dirname, 'index.html'),
         methode: path.resolve(__dirname, 'methode.html'),
       },
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/maplibre-gl')) return 'maplibre';
+          if (
+            id.includes('node_modules/@deck.gl') ||
+            id.includes('node_modules/@luma.gl') ||
+            id.includes('node_modules/@loaders.gl') ||
+            id.includes('node_modules/@math.gl')
+          ) {
+            return 'deckgl';
+          }
+          if (id.includes('node_modules/three')) return 'three';
+        },
+      },
     },
   },
 });

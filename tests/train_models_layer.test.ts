@@ -111,6 +111,23 @@ describe('train_models_layer and RER specifications', () => {
       'wmata_generic'
     );
     assert.equal(
+      familyForStock({ drive_type: 'tire', short_name: '1', model_id: 'VAL_208' }),
+      'val_208'
+    );
+    assert.equal(
+      familyForStock({ drive_type: 'tire', short_name: '1', model_id: 'VAL_52M' }),
+      'val_52m'
+    );
+    assert.equal(
+      familyForStock({
+        drive_type: 'steel',
+        short_name: 'TRAM',
+        model_id: 'Breda_VLC',
+        car_length_m: 30.0,
+      }),
+      'breda_vlc'
+    );
+    assert.equal(
       familyForStock({ drive_type: 'tire', short_name: '1', model_id: 'MP05' }),
       'pneumatic_generic'
     );

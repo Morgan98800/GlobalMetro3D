@@ -87,11 +87,19 @@ describe('train_models_layer and RER specifications', () => {
 
     assert.equal(TRAIN_MODEL_ZOOM_THRESHOLD, 13.0);
     assert.equal(
-      familyForStock({ drive_type: 'steel', short_name: 'U5', model_id: 'BVG_GROSSPROFIL_GENERIC' }),
+      familyForStock({
+        drive_type: 'steel',
+        short_name: 'U5',
+        model_id: 'BVG_GROSSPROFIL_GENERIC',
+      }),
       'bvg_grossprofil'
     );
     assert.equal(
-      familyForStock({ drive_type: 'steel', short_name: 'U1', model_id: 'BVG_KLEINPROFIL_GENERIC' }),
+      familyForStock({
+        drive_type: 'steel',
+        short_name: 'U1',
+        model_id: 'BVG_KLEINPROFIL_GENERIC',
+      }),
       'bvg_kleinprofil'
     );
     assert.equal(

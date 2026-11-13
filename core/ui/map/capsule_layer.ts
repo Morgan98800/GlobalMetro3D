@@ -347,9 +347,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     outlineSegments.push({
       path: fullPath,
       widthM: stock.width_m + 1.2,
-      color: isRealtime
-        ? [255, 215, 0, alpha255]
-        : [240, 240, 240, Math.round(240 * ghostScale)],
+      color: isRealtime ? [255, 215, 0, alpha255] : [240, 240, 240, Math.round(240 * ghostScale)],
       isSched: train.conf === 'scheduled',
       elevation: elev + 0.5,
       train,

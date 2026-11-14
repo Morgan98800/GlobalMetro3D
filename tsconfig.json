@@ -3,15 +3,17 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "skipLibCheck": true,
     "baseUrl": ".",
     "types": ["vite/client", "node"],
     "paths": {
+      "@/*": ["web/*"],
       "@core/*": ["core/*"],
       "@cities/*": ["cities/*"],
       "@cities": ["cities/index.ts"],
       "@paris-subway/shared": ["core/index.ts"]
     }
   },
-  "include": ["core", "cities", "tests", "web/src"]
+  "include": ["core", "cities", "tests", "web/src", "web/components", "web/utils"]
 }

@@ -198,22 +198,24 @@ html[data-theme="light"] {
   --grain-opacity: 0.025;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-body,
-html {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: var(--fond);
-  color: var(--texte);
-  font-family: var(--font-main);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  body,
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--fond);
+    color: var(--texte);
+    font-family: var(--font-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 /* Tabular figures for digits across the UI */

@@ -177,4 +177,63 @@ describe('station_detail_lod & platforms_layer', () => {
     // 6 stone tile bays + 1 trackside safety coping strip = 7 polygons per station
     expect((layer as any).props.data).toHaveLength(7);
   });
+
+  it('separates co-located multi-level hubs vertically and adds transfer shafts without z-overlap', () => {
+    const strasbourg: StationMetadata = {
+      id: 'st-strasbourg',
+      name: 'Strasbourg - Saint-Denis',
+      coordinates: [2.353635, 48.869483],
+      lines: ['L4', 'L8'],
+      is_hub: true,
+      wheelchair_boarding: 0,
+    };
+    const line4: LineMetadata = { ...METRO_LINE_1, id: 'L4', short_name: '4', elevation_offset: 6 };
+    const line8: LineMetadata = { ...METRO_LINE_6, id: 'L8', short_name: '8', elevation_offset: 8 };
+    const tracksByLine = new Map<string, [number, number][][]>([
+      [
+        'L4',
+        [
+          [
+            [2.3536, 48.8685],
+            [2.3536, 48.8705],
+          ],
+        ],
+      ],
+      [
+        'L8',
+        [
+          [
+            [2.3522, 48.8695],
+            [2.3552, 48.8695],
+          ],
+        ],
+      ],
+    ]);
+
+    const layers = createLocalStationDetailLayers({
+      lines: [line4, line8],
+      stations: [strasbourg],
+      tracksByLine,
+      selectedLineId: null,
+      zoom: 16.2,
+      mapCenter: strasbourg.coordinates,
+      theme: 'dark',
+    });
+
+    const cutoutsLayer = layers.find((l) => l.id === 'station-lod-cutouts') as any;
+    const archLayer = layers.find((l) => l.id === 'station-lod-architecture') as any;
+    const cutoutZs = (cutoutsLayer?.props?.data ?? []).map((d: any) => d.polygon[0][2]);
+    expect(cutoutZs).toHaveLength(2);
+    expect(Math.abs(cutoutZs[0] - cutoutZs[1])).toBeGreaterThanOrEqual(7.4);
+
+    const upperAlpha = cutoutsLayer.props.data
+      .slice()
+      .sort((a: any, b: any) => a.polygon[0][2] - b.polygon[0][2])[1].fillColor[3];
+    expect(upperAlpha).toBeLessThan(100);
+
+    const shafts = (archLayer?.props?.data ?? []).filter(
+      (d: any) => d.fillColor[0] === 201 && d.fillColor[1] === 162 && d.fillColor[2] === 39
+    );
+    expect(shafts.length).toBeGreaterThanOrEqual(2);
+  });
 });

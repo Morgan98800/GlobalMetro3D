@@ -3,6 +3,7 @@ import type { LineMetadata, StationMetadata } from '@core/types';
 import { isMobileGpuDevice } from './device_perf';
 import { LATIN_CHARACTER_SET } from './labels_layer';
 import { closestPointOnPath } from './platforms_layer';
+import { buildHubRegistry, type HubRegistry, resolveLineElevationAt } from './station_levels';
 
 export interface LocalStationDetailInput {
   lines: LineMetadata[];
@@ -13,6 +14,7 @@ export interface LocalStationDetailInput {
   mapCenter: [number, number];
   theme: 'dark' | 'light';
   followElevation?: { lineId: string | null; offset: number };
+  hubRegistry?: HubRegistry | null;
 }
 
 interface CutawayPolygonDatum {
@@ -151,12 +153,13 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
 
   const isMobile = isMobileGpuDevice();
   const radiusM = isMobile ? 350 : 480;
-  const maxStations = isMobile ? 4 : 6;
+  const maxStations = isMobile ? 6 : 9;
   const sleeperStepM = isMobile ? 1.2 : 0.92;
   const maxSleepers = isMobile ? 340 : 540;
   const refLat = input.mapCenter[1];
   const centerM = projectM(input.mapCenter, refLat);
   const isLight = input.theme === 'light';
+  const registry = input.hubRegistry ?? buildHubRegistry(input.stations, input.lines);
 
   const visibleLines = input.selectedLineId
     ? input.lines.filter((l) => l.id === input.selectedLineId)
@@ -183,7 +186,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
     if (line.mode !== 'metro' && line.mode !== 'tube' && line.mode !== 'rail') continue;
     const linePaths = input.tracksByLine.get(line.id);
     if (!linePaths || linePaths.length === 0) continue;
-    const baseZ = line.elevation_offset + offsetFor(line.id);
+    const lineOffset = offsetFor(line.id);
     const isMetro = line.mode === 'metro' || line.mode === 'tube';
     const [lr, lg, lb] = hexToRgb(line.color);
 
@@ -250,9 +253,12 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
         const ny = tx;
         const midLngLat: [number, number] = [(p0[0] + p1[0]) * 0.5, (p0[1] + p1[1]) * 0.5];
         const isViaduct = isAerialViaductLocation(line.short_name, midLngLat);
+        const z0 = resolveLineElevationAt(p0, line, registry) + lineOffset;
+        const z1 = resolveLineElevationAt(p1, line, registry) + lineOffset;
+        const midZ = (z0 + z1) * 0.5;
 
         if (bedPath.length === 0) {
-          bedPath.push([p0[0], p0[1], baseZ - 0.15]);
+          bedPath.push([p0[0], p0[1], z0 - 0.15]);
           const l0 = unprojectM(
             [aM[0] + nx * RAIL_HALF_GAUGE_M, aM[1] + ny * RAIL_HALF_GAUGE_M],
             refLat
@@ -261,18 +267,18 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
             [aM[0] - nx * RAIL_HALF_GAUGE_M, aM[1] - ny * RAIL_HALF_GAUGE_M],
             refLat
           );
-          leftRail.push([l0[0], l0[1], baseZ - 0.02]);
-          rightRail.push([r0[0], r0[1], baseZ - 0.02]);
+          leftRail.push([l0[0], l0[1], z0 - 0.02]);
+          rightRail.push([r0[0], r0[1], z0 - 0.02]);
           if (isMetro) {
             const t0 = unprojectM(
               [aM[0] + nx * THIRD_RAIL_OFFSET_M, aM[1] + ny * THIRD_RAIL_OFFSET_M],
               refLat
             );
-            thirdRail.push([t0[0], t0[1], baseZ + 0.03]);
+            thirdRail.push([t0[0], t0[1], z0 + 0.03]);
           }
         }
 
-        bedPath.push([p1[0], p1[1], baseZ - 0.15]);
+        bedPath.push([p1[0], p1[1], z1 - 0.15]);
         const l1 = unprojectM(
           [bM[0] + nx * RAIL_HALF_GAUGE_M, bM[1] + ny * RAIL_HALF_GAUGE_M],
           refLat
@@ -281,18 +287,18 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
           [bM[0] - nx * RAIL_HALF_GAUGE_M, bM[1] - ny * RAIL_HALF_GAUGE_M],
           refLat
         );
-        leftRail.push([l1[0], l1[1], baseZ - 0.02]);
-        rightRail.push([r1[0], r1[1], baseZ - 0.02]);
+        leftRail.push([l1[0], l1[1], z1 - 0.02]);
+        rightRail.push([r1[0], r1[1], z1 - 0.02]);
         if (isMetro) {
           const t1 = unprojectM(
             [bM[0] + nx * THIRD_RAIL_OFFSET_M, bM[1] + ny * THIRD_RAIL_OFFSET_M],
             refLat
           );
-          thirdRail.push([t1[0], t1[1], baseZ + 0.03]);
+          thirdRail.push([t1[0], t1[1], z1 + 0.03]);
         }
 
         // Elevated viaduct stone/concrete bridge piers (Lines 2 & 6)
-        if (isViaduct && baseZ > 1.2) {
+        if (isViaduct && midZ > 1.2) {
           viaductPierAccum += segLen;
           if (viaductPierAccum >= 26) {
             viaductPierAccum = 0;
@@ -300,7 +306,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
               polygon: quadM(midM, [tx, ty], [nx, ny], -0.8, 0.8, -1.35, 1.35, 0, refLat),
               fillColor: isLight ? [138, 132, 124, 240] : [82, 78, 72, 240],
               lineColor: [lr, lg, lb, 150],
-              elevationM: Math.max(0.5, baseZ - 0.18),
+              elevationM: Math.max(0.5, midZ - 0.18),
               extruded: true,
             });
           }
@@ -317,6 +323,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
             ];
             if (Math.hypot(sm[0] - centerM[0], sm[1] - centerM[1]) > radiusM * 0.85) continue;
             const sleeperAlt = sleeperCount % 2 === 0;
+            const sz = z0 + (z1 - z0) * frac;
             sleepers.push({
               polygon: quadM(
                 sm,
@@ -326,7 +333,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
                 SLEEPER_HALF_WIDTH_M,
                 -SLEEPER_HALF_LEN_M,
                 SLEEPER_HALF_LEN_M,
-                baseZ - 0.11,
+                sz - 0.11,
                 refLat
               ),
               color: sleeperAlt
@@ -388,9 +395,13 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
   nearStations.sort((a, b) => a.distM - b.distM);
   const chosenStations = nearStations.slice(0, maxStations);
 
+  const renderedHubShafts = new Set<string>();
+
   for (const item of chosenStations) {
     const { station, line, anchor } = item;
-    const baseZ = line.elevation_offset + offsetFor(line.id);
+    const baseZ = resolveLineElevationAt(station.coordinates, line, registry) + offsetFor(line.id);
+    const hubInfo = registry.stationLineLevel.get(`${station.id}::${line.id}`);
+    const isStackedUpper = Boolean(hubInfo && hubInfo.bottomUpIdx > 0);
     const deckZ = baseZ - 0.14;
     const tangent = anchor.tangent;
     const normal: [number, number] = [-tangent[1], tangent[0]];
@@ -398,6 +409,40 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
     const halfLen = len / 2;
     const isViaduct = isAerialViaductLocation(line.short_name, station.coordinates);
     const [lr, lg, lb] = hexToRgb(line.color);
+
+    // Glazed brass vertical transfer shafts ("puits de correspondance") linking stacked hub platforms
+    if (hubInfo && !input.selectedLineId && !renderedHubShafts.has(hubInfo.hub.id)) {
+      renderedHubShafts.add(hubInfo.hub.id);
+      const { hub } = hubInfo;
+      for (let level = 0; level < hub.deepToShallowLineIds.length - 1; level += 1) {
+        const lowerId = hub.deepToShallowLineIds[level];
+        const upperId = hub.deepToShallowLineIds[level + 1];
+        const zLow = (hub.zByLineId.get(lowerId) ?? 0) + offsetFor(lowerId);
+        const zHigh = (hub.zByLineId.get(upperId) ?? 0) + offsetFor(upperId);
+        const span = zHigh - zLow;
+        if (span < 2.0) continue;
+        const shaftCenterM = projectM(hub.coordinates, refLat);
+        for (const sOffset of [-6.5, 6.5]) {
+          stationStructures.push({
+            polygon: quadM(
+              shaftCenterM,
+              tangent,
+              normal,
+              sOffset - 1.15,
+              sOffset + 1.15,
+              6.2,
+              8.4,
+              zLow - 0.1,
+              refLat
+            ),
+            fillColor: [201, 162, 39, 86],
+            lineColor: [228, 198, 108, 210],
+            elevationM: span + 0.45,
+            extruded: true,
+          });
+        }
+      }
+    }
 
     // A. Excavated Ground Cutout Trench for Underground Stations OR Concrete Viaduct Deck
     if (!isViaduct) {
@@ -413,8 +458,14 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
           baseZ - 0.62,
           refLat
         ),
-        fillColor: isLight ? [34, 37, 44, 210] : [8, 10, 14, 232],
-        lineColor: [lr, lg, lb, 68],
+        fillColor: isStackedUpper
+          ? isLight
+            ? [44, 48, 56, 72]
+            : [16, 18, 24, 78]
+          : isLight
+            ? [34, 37, 44, 210]
+            : [8, 10, 14, 232],
+        lineColor: [lr, lg, lb, isStackedUpper ? 130 : 68],
         elevationM: 0.04,
         extruded: false,
       });

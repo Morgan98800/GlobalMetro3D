@@ -1,10 +1,10 @@
 import { MapLibreOverlay } from '@deck.gl/maplibre';
-import { PathLayer } from '@deck.gl/layers';
-import { ScatterplotLayer } from '@deck.gl/layers';
+import { PathLayer, ScatterplotLayer, TextLayer } from '@deck.gl/layers';
 import type { LineMetadata, StationMetadata } from '@core/types';
+import type { TransitItinerary } from '@core/ui/utils/transit_router';
 
 import { createTrainsLayers, TrainMarker } from './trains_layer';
-import { createStationLabelsLayer } from './labels_layer';
+import { createStationLabelsLayer, LATIN_CHARACTER_SET } from './labels_layer';
 import { createCapsuleLayers } from './capsule_layer';
 import { roundPathCorners } from './rounded_path';
 import { PathStyleExtension } from '@deck.gl/extensions';
@@ -27,6 +27,12 @@ import { resolveTrainRenderLayers } from './train_render_fallback';
 import { createPlatformsLayer } from './platforms_layer';
 import { getOptimalPixelRatio } from './device_perf';
 import { createLocalStationDetailLayers, STATION_DETAIL_ZOOM_MIN } from './station_detail_lod';
+import {
+  buildHubRegistry,
+  elevateTrackPath,
+  type HubRegistry,
+  resolveLineElevationAt,
+} from './station_levels';
 
 export interface TrackItem {
   line_id: string;
@@ -167,6 +173,8 @@ export class SubwayDeckOverlay {
   private localDetailFollowOffset = 0;
   private localDetailDirty = true;
   private staticLayersDirty = true;
+  private hubRegistry: HubRegistry | null = null;
+  private activeItinerary: TransitItinerary | null = null;
   private theme: 'dark' | 'light' =
     typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light'
       ? 'light'
@@ -316,6 +324,7 @@ export class SubwayDeckOverlay {
   public setData(data: SubwayMapData) {
     this.data = data;
     this.showRer = true;
+    this.hubRegistry = buildHubRegistry(data.stations, data.lines);
     this.roundedTrackPaths = new WeakMap();
     for (const track of data.tracks) {
       this.roundedTrackPaths.set(track, roundPathCorners(track.coordinates));
@@ -331,6 +340,12 @@ export class SubwayDeckOverlay {
     this.selectedLineId = lineId;
     this.staticLayersDirty = true;
     this.localDetailDirty = true;
+    this.updateLayers();
+  }
+
+  public setActiveItinerary(itinerary: TransitItinerary | null) {
+    this.activeItinerary = itinerary;
+    this.staticLayersDirty = true;
     this.updateLayers();
   }
 
@@ -430,6 +445,7 @@ export class SubwayDeckOverlay {
         followElevation: this.followElevationLineId
           ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
           : undefined,
+        hubRegistry: this.hubRegistry,
       });
       this.localDetailDirty = false;
     }
@@ -533,9 +549,9 @@ export class SubwayDeckOverlay {
 
     const pathForTrack = (d: TrackItem): [number, number, number][] => {
       const line = lineMap.get(d.line_id);
-      const z = line ? line.elevation_offset : 0;
       const rounded = this.roundedTrackPaths.get(d) ?? roundPathCorners(d.coordinates);
-      return rounded.map((pt: [number, number]) => [pt[0], pt[1], z]);
+      if (!line) return rounded.map((pt: [number, number]) => [pt[0], pt[1], 0]);
+      return elevateTrackPath(rounded, line, this.hubRegistry);
     };
 
     const isLight = this.theme === 'light';
@@ -782,7 +798,8 @@ export class SubwayDeckOverlay {
       selectedLine ? undefined : { lines, tracksByLine: tracksCoordsByLine },
       this.followElevationLineId
         ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
-        : undefined
+        : undefined,
+      this.hubRegistry
     );
 
     let rerLayer: any = null;
@@ -834,12 +851,137 @@ export class SubwayDeckOverlay {
         })
     );
 
+    const itineraryLayers: any[] = [];
+    if (this.activeItinerary) {
+      const walkSegments = this.activeItinerary.legs
+        .filter((leg) => (leg.kind === 'walk' || leg.kind === 'transfer') && leg.path?.length)
+        .map((leg) => ({
+          path: leg.path!.map(([lng, lat]) => [lng, lat, 1.2] as [number, number, number]),
+          kind: leg.kind,
+        }));
+      const rideSegments = this.activeItinerary.legs
+        .filter((leg) => leg.kind === 'ride' && leg.path && leg.path.length >= 2)
+        .map((leg) => {
+          const legLine = leg.lineId ? lineMap.get(leg.lineId) : undefined;
+          return {
+            path: legLine
+              ? elevateTrackPath(leg.path!, legLine, this.hubRegistry).map(
+                  ([lng, lat, z]) => [lng, lat, z + 0.6] as [number, number, number]
+                )
+              : leg.path!.map(([lng, lat]) => [lng, lat, 2.5] as [number, number, number]),
+            color: hexToRgba(leg.lineColor || '#C9A227', 255),
+          };
+        });
+
+      if (rideSegments.length > 0) {
+        itineraryLayers.push(
+          new PathLayer({
+            id: 'itinerary-ride-glow',
+            data: rideSegments,
+            pickable: false,
+            widthUnits: 'pixels',
+            getWidth: 8,
+            getPath: (d: any) => d.path,
+            getColor: [201, 162, 39, 150],
+            capRounded: true,
+            jointRounded: true,
+            parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          }),
+          new PathLayer({
+            id: 'itinerary-ride-core',
+            data: rideSegments,
+            pickable: false,
+            widthUnits: 'pixels',
+            getWidth: 4.5,
+            getPath: (d: any) => d.path,
+            getColor: (d: any) => d.color,
+            capRounded: true,
+            jointRounded: true,
+            parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          })
+        );
+      }
+      if (walkSegments.length > 0) {
+        itineraryLayers.push(
+          new PathLayer({
+            id: 'itinerary-walk-paths',
+            data: walkSegments,
+            pickable: false,
+            widthUnits: 'pixels',
+            getWidth: 3.5,
+            getPath: (d: any) => d.path,
+            getColor: [201, 162, 39, 240],
+            extensions: [new PathStyleExtension({ dash: true })],
+            getDashArray: [6, 4],
+            dashUnits: 'pixels',
+            capRounded: true,
+            parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          } as any)
+        );
+      }
+
+      const endpoints = [
+        {
+          position: [
+            this.activeItinerary.origin.coordinates[0],
+            this.activeItinerary.origin.coordinates[1],
+            6,
+          ] as [number, number, number],
+          tag: 'A',
+          fill: [34, 197, 94, 245] as [number, number, number, number],
+        },
+        {
+          position: [
+            this.activeItinerary.destination.coordinates[0],
+            this.activeItinerary.destination.coordinates[1],
+            6,
+          ] as [number, number, number],
+          tag: 'B',
+          fill: [201, 162, 39, 250] as [number, number, number, number],
+        },
+      ];
+      itineraryLayers.push(
+        new ScatterplotLayer({
+          id: 'itinerary-endpoint-pins',
+          data: endpoints,
+          pickable: false,
+          billboard: true,
+          radiusUnits: 'pixels',
+          lineWidthUnits: 'pixels',
+          getPosition: (d: any) => d.position,
+          getRadius: 11,
+          getFillColor: (d: any) => d.fill,
+          getLineColor: [21, 14, 18, 255],
+          getLineWidth: 2,
+          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+        }),
+        new TextLayer({
+          id: 'itinerary-endpoint-labels',
+          data: endpoints,
+          pickable: false,
+          billboard: true,
+          characterSet: LATIN_CHARACTER_SET,
+          sizeUnits: 'pixels',
+          getPosition: (d: any) => d.position,
+          getText: (d: any) => d.tag,
+          getSize: 12,
+          getColor: [18, 16, 14, 255],
+          fontFamily: 'Switzer, system-ui, sans-serif',
+          fontWeight: 700,
+          getTextAnchor: () => 'middle',
+          getAlignmentBaseline: () => 'center',
+          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+        })
+      );
+    }
+
     this.cachedPreTrainLayers = [
       ...(rerLayer ? [rerLayer] : []),
       ...(viaductShadowLayer ? [viaductShadowLayer] : []),
       ...lineHitboxes,
       ...pathLayers,
       ...(platformsLayer ? [platformsLayer] : []),
+      ...itineraryLayers,
       stationsLayer,
       terminusLayer,
     ];
@@ -988,7 +1130,17 @@ export class SubwayDeckOverlay {
   }
 
   public setTrains(trains: TrainMarker[], immediate: boolean = false) {
-    this.trains = trains;
+    if (this.data && this.hubRegistry && this.hubRegistry.anchors.length > 0) {
+      const lineMap = new Map(this.data.lines.map((l) => [l.id, l]));
+      this.trains = trains.map((train) => {
+        const line = lineMap.get(train.line);
+        if (!line) return train;
+        const elev = resolveLineElevationAt(train.pos, line, this.hubRegistry);
+        return elev === train.elevation ? train : { ...train, elevation: elev };
+      });
+    } else {
+      this.trains = trains;
+    }
     if (immediate) {
       if (this.layerUpdateFrame !== null && typeof cancelAnimationFrame !== 'undefined') {
         cancelAnimationFrame(this.layerUpdateFrame);

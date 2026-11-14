@@ -1080,7 +1080,7 @@ html[data-theme="light"] .topbar__clock-svg circle {
   flex-shrink: 0;
   height: 32px;
   padding: 0 11px;
-  border-radius: var(--r-sm);
+  border-radius: var(--radius-2lg, 10px);
   border: 1px solid var(--glass-border);
   background: var(--eleve);
   color: var(--texte);
@@ -1220,7 +1220,7 @@ html[data-theme="light"] .topbar__clock-svg circle {
   box-shadow: var(--sh-3);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border-radius: var(--r-modal);
+  border-radius: var(--radius-2xl, 16px);
 }
 
 .paris-ride-picker {
@@ -1348,7 +1348,7 @@ html[data-theme="light"] .topbar__clock-svg circle {
 .paris-ride-btn {
   height: 34px;
   padding: 0 12px;
-  border-radius: var(--r-sm);
+  border-radius: var(--radius-2lg, 10px);
   border: 1px solid var(--glass-border);
   background: var(--eleve);
   color: var(--texte);

@@ -37,6 +37,122 @@ export interface ServiceStatus {
   nowCivilSeconds: number;
 }
 
+export interface StationDeparture {
+  tripId: string;
+  lineId: string;
+  lineShortName: string;
+  colorHex: string;
+  textColorHex: string;
+  direction: 0 | 1;
+  destName: string;
+  arrivalSeconds: number;
+  waitSeconds: number;
+  waitMinutes: number;
+  atStop: boolean;
+  confidence: Confidence;
+}
+
+export function computeStationDepartures(params: {
+  stationName: string;
+  trips: readonly TripData[];
+  linesMap: ReadonlyMap<string, LineMetadata>;
+  timelines?: ReadonlyMap<string, Timeline>;
+  suppressedTripIds?: ReadonlySet<string>;
+  closedLineIds?: ReadonlySet<string>;
+  serviceSecondsCandidates: readonly number[];
+  limitPerLineDir?: number;
+  horizonSeconds?: number;
+}): StationDeparture[] {
+  const {
+    stationName,
+    trips,
+    linesMap,
+    timelines,
+    suppressedTripIds,
+    closedLineIds,
+    serviceSecondsCandidates,
+    limitPerLineDir = 2,
+    horizonSeconds = 2700,
+  } = params;
+
+  const targetNorm = normalizeStopName(stationName);
+  if (!targetNorm) return [];
+
+  const matchesStop = (stopNorm: string) =>
+    stopNorm === targetNorm ||
+    (stopNorm.length >= 4 &&
+      targetNorm.length >= 4 &&
+      (stopNorm.includes(targetNorm) || targetNorm.includes(stopNorm)));
+
+  const perGroup = new Map<string, StationDeparture[]>();
+
+  for (const trip of trips) {
+    if (suppressedTripIds?.has(trip.id)) continue;
+    if (closedLineIds?.has(trip.line)) continue;
+    if (trip.stops.length < 2) continue;
+
+    // On ignore le dernier arrêt (descente uniquement au terminus)
+    const stopIndex = trip.stops.findIndex(
+      (s, idx) => idx < trip.stops.length - 1 && matchesStop(normalizeStopName(s[3]))
+    );
+    if (stopIndex < 0) continue;
+
+    const schedStop = trip.stops[stopIndex];
+    const timeline = timelines?.get(trip.id);
+    const tlStop = timeline?.stops?.[stopIndex];
+    const arr = tlStop ? tlStop.cArr : schedStop[0];
+    const dep = tlStop ? tlStop.cDep : schedStop[1];
+
+    let bestWait: number | null = null;
+    let atStop = false;
+    for (const sec of serviceSecondsCandidates) {
+      if (sec <= dep + 15 && sec >= arr - 15) {
+        bestWait = 0;
+        atStop = true;
+        break;
+      }
+      const delta = arr - sec;
+      if (delta >= 0 && delta <= horizonSeconds) {
+        if (bestWait === null || delta < bestWait) bestWait = delta;
+      }
+    }
+    if (bestWait === null) continue;
+
+    const line = linesMap.get(trip.line);
+    const groupKey = `${trip.line}|${trip.dir}`;
+    const list = perGroup.get(groupKey) ?? [];
+    const confidence: Confidence = tlStop?.measured
+      ? 'measured'
+      : timeline && timeline.measuredCount > 0
+        ? 'bracketed'
+        : 'scheduled';
+
+    list.push({
+      tripId: trip.id,
+      lineId: trip.line,
+      lineShortName: line?.short_name || trip.line,
+      colorHex: line?.color || '#6B7280',
+      textColorHex: line?.text_color || '#FFFFFF',
+      direction: trip.dir === 1 ? 1 : 0,
+      destName: trip.destName || line?.destinations?.[String(trip.dir) as '0' | '1'] || 'Terminus',
+      arrivalSeconds: arr,
+      waitSeconds: Math.max(0, Math.round(bestWait)),
+      waitMinutes: Math.max(0, Math.round(bestWait / 60)),
+      atStop,
+      confidence,
+    });
+    perGroup.set(groupKey, list);
+  }
+
+  const out: StationDeparture[] = [];
+  for (const list of perGroup.values()) {
+    list.sort((a, b) => a.waitSeconds - b.waitSeconds);
+    out.push(...list.slice(0, limitPerLineDir));
+  }
+  out.sort((a, b) => a.waitSeconds - b.waitSeconds);
+  return out;
+}
+
 function formatClock(seconds: number): string {
   const civilSeconds = ((Math.floor(seconds) % 86400) + 86400) % 86400;
   const hours = Math.floor(civilSeconds / 3600);
@@ -114,6 +230,33 @@ export class BrowserSubwayEngine {
 
   public getShapes(): Map<string, Shape> {
     return this.shapes;
+  }
+
+  public getStationDepartures(
+    stationName: string,
+    limitPerLineDir = 2,
+    nowOverride?: Date
+  ): StationDeparture[] {
+    const now =
+      nowOverride ??
+      (this.virtualTimeOffsetS !== 0
+        ? new Date(Date.now() + this.virtualTimeOffsetS * 1000)
+        : new Date());
+    const candidates = serviceCandidates(now, this.config.timezone).map((c) => c.seconds);
+    const closedLineIds = new Set<string>();
+    for (const [lineId, rule] of this.closedStationsRules.entries()) {
+      if (rule.allClosed) closedLineIds.add(lineId);
+    }
+    return computeStationDepartures({
+      stationName,
+      trips: this.trips,
+      linesMap: this.linesMap,
+      timelines: this.timelines,
+      suppressedTripIds: this.suppressedTripIds,
+      closedLineIds,
+      serviceSecondsCandidates: candidates,
+      limitPerLineDir,
+    });
   }
 
   public setFocusedLine(lineId: string | null) {

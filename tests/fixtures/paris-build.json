@@ -1,9 +1,9 @@
 {
   "meta": {
     "description": "Paris Build Footprint and First-Render Safety Net",
-    "buildDate": "2026-09-12",
+    "buildDate": "2026-11-14",
     "distDirectory": "web/dist",
-    "totalFiles": 43
+    "totalFiles": 169
   },
   "distFiles": [
     {
@@ -21,130 +21,718 @@
       "maxSize1Pct": 582
     },
     {
-      "originalPath": "index.html",
-      "normalizedPath": "index.html",
-      "sizeBytes": 8154,
-      "minSize1Pct": 8072,
-      "maxSize1Pct": 8236
+      "originalPath": "assets/deckgl-D8GvGDIW.js",
+      "normalizedPath": "assets/deckgl-D8GvGDIW.js",
+      "sizeBytes": 1327639,
+      "minSize1Pct": 1314362,
+      "maxSize1Pct": 1340916
     },
     {
-      "originalPath": "methode.html",
-      "normalizedPath": "methode.html",
-      "sizeBytes": 17448,
-      "minSize1Pct": 17273,
-      "maxSize1Pct": 17623
+      "originalPath": "assets/edinburgh_three_view-KodGfWDP.js",
+      "normalizedPath": "assets/edinburgh_three_view-KodGfWDP.js",
+      "sizeBytes": 10029,
+      "minSize1Pct": 9928,
+      "maxSize1Pct": 10130
     },
     {
-      "originalPath": "og-image.png",
-      "normalizedPath": "og-image.png",
-      "sizeBytes": 26885,
-      "minSize1Pct": 26616,
-      "maxSize1Pct": 27154
+      "originalPath": "assets/main-BQzAwrr4.js",
+      "normalizedPath": "assets/main.[hash].js",
+      "sizeBytes": 482463,
+      "minSize1Pct": 477638,
+      "maxSize1Pct": 487288
     },
     {
-      "originalPath": "og-image.svg",
-      "normalizedPath": "og-image.svg",
-      "sizeBytes": 5483,
-      "minSize1Pct": 5428,
-      "maxSize1Pct": 5538
+      "originalPath": "assets/main-3mCHpSlf.css",
+      "normalizedPath": "assets/main.[hash].css",
+      "sizeBytes": 206030,
+      "minSize1Pct": 203969,
+      "maxSize1Pct": 208091
     },
     {
-      "originalPath": "sections-report.html",
-      "normalizedPath": "sections-report.html",
-      "sizeBytes": 2065,
-      "minSize1Pct": 2044,
-      "maxSize1Pct": 2086
+      "originalPath": "assets/maplibre--S9olhOP.css",
+      "normalizedPath": "assets/maplibre--S9olhOP.css",
+      "sizeBytes": 71505,
+      "minSize1Pct": 70789,
+      "maxSize1Pct": 72221
     },
     {
-      "originalPath": "models/train/pneumatic_generic__neutral.glb",
-      "normalizedPath": "models/train/pneumatic_generic__neutral.glb",
-      "sizeBytes": 9468,
-      "minSize1Pct": 9373,
-      "maxSize1Pct": 9563
+      "originalPath": "assets/maplibre-Bch_CCyq.js",
+      "normalizedPath": "assets/maplibre-Bch_CCyq.js",
+      "sizeBytes": 1046785,
+      "minSize1Pct": 1036317,
+      "maxSize1Pct": 1057253
     },
     {
-      "originalPath": "models/train/rer_generic_A__cab.glb",
-      "normalizedPath": "models/train/rer_generic_A__cab.glb",
-      "sizeBytes": 21712,
-      "minSize1Pct": 21494,
-      "maxSize1Pct": 21930
+      "originalPath": "assets/maplibre-gl-worker-DYmqHawY.js",
+      "normalizedPath": "assets/maplibre-gl-worker-DYmqHawY.js",
+      "sizeBytes": 516800,
+      "minSize1Pct": 511632,
+      "maxSize1Pct": 521968
     },
     {
-      "originalPath": "models/train/rer_generic_A__neutral.glb",
-      "normalizedPath": "models/train/rer_generic_A__neutral.glb",
-      "sizeBytes": 16836,
-      "minSize1Pct": 16667,
-      "maxSize1Pct": 17005
+      "originalPath": "assets/paris_ride_view-B0byygIA.js",
+      "normalizedPath": "assets/paris_ride_view.[hash].js",
+      "sizeBytes": 64886,
+      "minSize1Pct": 64237,
+      "maxSize1Pct": 65535
     },
     {
-      "originalPath": "models/train/rer_generic_B__cab.glb",
-      "normalizedPath": "models/train/rer_generic_B__cab.glb",
-      "sizeBytes": 21672,
-      "minSize1Pct": 21455,
-      "maxSize1Pct": 21889
+      "originalPath": "assets/three-BgfFQ9rQ.js",
+      "normalizedPath": "assets/three-BgfFQ9rQ.js",
+      "sizeBytes": 711464,
+      "minSize1Pct": 704349,
+      "maxSize1Pct": 718579
     },
     {
-      "originalPath": "models/train/rer_generic_B__neutral.glb",
-      "normalizedPath": "models/train/rer_generic_B__neutral.glb",
-      "sizeBytes": 16800,
-      "minSize1Pct": 16632,
-      "maxSize1Pct": 16969
+      "originalPath": "assets/tokens-BdTpkK56.css",
+      "normalizedPath": "assets/tokens-BdTpkK56.css",
+      "sizeBytes": 3615,
+      "minSize1Pct": 3578,
+      "maxSize1Pct": 3652
     },
     {
-      "originalPath": "models/train/rer_generic_C__cab.glb",
-      "normalizedPath": "models/train/rer_generic_C__cab.glb",
-      "sizeBytes": 21728,
-      "minSize1Pct": 21510,
-      "maxSize1Pct": 21946
+      "originalPath": "assets/tokens-DBY8cIJT.js",
+      "normalizedPath": "assets/tokens-DBY8cIJT.js",
+      "sizeBytes": 711,
+      "minSize1Pct": 703,
+      "maxSize1Pct": 719
     },
     {
-      "originalPath": "models/train/rer_generic_C__neutral.glb",
-      "normalizedPath": "models/train/rer_generic_C__neutral.glb",
-      "sizeBytes": 16852,
-      "minSize1Pct": 16683,
-      "maxSize1Pct": 17021
+      "originalPath": "assets/ui-vendor-Da4FVtwq.js",
+      "normalizedPath": "assets/ui-vendor-Da4FVtwq.js",
+      "sizeBytes": 425544,
+      "minSize1Pct": 421288,
+      "maxSize1Pct": 429800
     },
     {
-      "originalPath": "models/train/rer_generic_D__cab.glb",
-      "normalizedPath": "models/train/rer_generic_D__cab.glb",
-      "sizeBytes": 21592,
-      "minSize1Pct": 21376,
-      "maxSize1Pct": 21808
+      "originalPath": "cities/berlin/data/feed_fingerprint.json",
+      "normalizedPath": "cities/berlin/data/feed_fingerprint.json",
+      "sizeBytes": 389,
+      "minSize1Pct": 385,
+      "maxSize1Pct": 393
     },
     {
-      "originalPath": "models/train/rer_generic_D__neutral.glb",
-      "normalizedPath": "models/train/rer_generic_D__neutral.glb",
-      "sizeBytes": 16716,
-      "minSize1Pct": 16548,
-      "maxSize1Pct": 16884
+      "originalPath": "cities/berlin/data/line_ladders.json",
+      "normalizedPath": "cities/berlin/data/line_ladders.json",
+      "sizeBytes": 103896,
+      "minSize1Pct": 102857,
+      "maxSize1Pct": 104935
     },
     {
-      "originalPath": "models/train/rer_generic_E__cab.glb",
-      "normalizedPath": "models/train/rer_generic_E__cab.glb",
-      "sizeBytes": 21412,
-      "minSize1Pct": 21197,
-      "maxSize1Pct": 21627
+      "originalPath": "cities/berlin/data/lines.json",
+      "normalizedPath": "cities/berlin/data/lines.json",
+      "sizeBytes": 2663,
+      "minSize1Pct": 2636,
+      "maxSize1Pct": 2690
     },
     {
-      "originalPath": "models/train/rer_generic_E__neutral.glb",
-      "normalizedPath": "models/train/rer_generic_E__neutral.glb",
-      "sizeBytes": 16536,
-      "minSize1Pct": 16370,
-      "maxSize1Pct": 16702
+      "originalPath": "cities/berlin/data/rolling-stock.json",
+      "normalizedPath": "cities/berlin/data/rolling-stock.json",
+      "sizeBytes": 5713,
+      "minSize1Pct": 5655,
+      "maxSize1Pct": 5771
     },
     {
-      "originalPath": "models/train/rer_generic__neutral.glb",
-      "normalizedPath": "models/train/rer_generic__neutral.glb",
-      "sizeBytes": 10852,
-      "minSize1Pct": 10743,
-      "maxSize1Pct": 10961
+      "originalPath": "cities/berlin/data/schedule.json",
+      "normalizedPath": "cities/berlin/data/schedule.json",
+      "sizeBytes": 2391853,
+      "minSize1Pct": 2367934,
+      "maxSize1Pct": 2415772
     },
     {
-      "originalPath": "models/train/steel_classic__neutral.glb",
-      "normalizedPath": "models/train/steel_classic__neutral.glb",
-      "sizeBytes": 9460,
-      "minSize1Pct": 9365,
-      "maxSize1Pct": 9555
+      "originalPath": "cities/berlin/data/sections.json",
+      "normalizedPath": "cities/berlin/data/sections.json",
+      "sizeBytes": 337,
+      "minSize1Pct": 333,
+      "maxSize1Pct": 341
+    },
+    {
+      "originalPath": "cities/berlin/data/shapes.bin",
+      "normalizedPath": "cities/berlin/data/shapes.bin",
+      "sizeBytes": 624300,
+      "minSize1Pct": 618057,
+      "maxSize1Pct": 630543
+    },
+    {
+      "originalPath": "cities/berlin/data/station-rankings.json",
+      "normalizedPath": "cities/berlin/data/station-rankings.json",
+      "sizeBytes": 32815,
+      "minSize1Pct": 32486,
+      "maxSize1Pct": 33144
+    },
+    {
+      "originalPath": "cities/berlin/data/stations.json",
+      "normalizedPath": "cities/berlin/data/stations.json",
+      "sizeBytes": 28278,
+      "minSize1Pct": 27995,
+      "maxSize1Pct": 28561
+    },
+    {
+      "originalPath": "cities/berlin/data/tracks.json",
+      "normalizedPath": "cities/berlin/data/tracks.json",
+      "sizeBytes": 53131,
+      "minSize1Pct": 52599,
+      "maxSize1Pct": 53663
+    },
+    {
+      "originalPath": "cities/berlin/models/berlin_ubahn.glb",
+      "normalizedPath": "cities/berlin/models/berlin_ubahn.glb",
+      "sizeBytes": 3312040,
+      "minSize1Pct": 3278919,
+      "maxSize1Pct": 3345161
+    },
+    {
+      "originalPath": "cities/berlin/models/berlin_ubahn.json",
+      "normalizedPath": "cities/berlin/models/berlin_ubahn.json",
+      "sizeBytes": 46197,
+      "minSize1Pct": 45735,
+      "maxSize1Pct": 46659
+    },
+    {
+      "originalPath": "cities/berlin/models/train/bvg_grossprofil__cab.glb",
+      "normalizedPath": "cities/berlin/models/train/bvg_grossprofil__cab.glb",
+      "sizeBytes": 16292,
+      "minSize1Pct": 16129,
+      "maxSize1Pct": 16455
+    },
+    {
+      "originalPath": "cities/berlin/models/train/bvg_grossprofil__neutral.glb",
+      "normalizedPath": "cities/berlin/models/train/bvg_grossprofil__neutral.glb",
+      "sizeBytes": 14748,
+      "minSize1Pct": 14600,
+      "maxSize1Pct": 14896
+    },
+    {
+      "originalPath": "cities/berlin/models/train/bvg_grossprofil__tail.glb",
+      "normalizedPath": "cities/berlin/models/train/bvg_grossprofil__tail.glb",
+      "sizeBytes": 15972,
+      "minSize1Pct": 15812,
+      "maxSize1Pct": 16132
+    },
+    {
+      "originalPath": "cities/berlin/models/train/bvg_kleinprofil__cab.glb",
+      "normalizedPath": "cities/berlin/models/train/bvg_kleinprofil__cab.glb",
+      "sizeBytes": 16308,
+      "minSize1Pct": 16144,
+      "maxSize1Pct": 16472
+    },
+    {
+      "originalPath": "cities/berlin/models/train/bvg_kleinprofil__neutral.glb",
+      "normalizedPath": "cities/berlin/models/train/bvg_kleinprofil__neutral.glb",
+      "sizeBytes": 14772,
+      "minSize1Pct": 14624,
+      "maxSize1Pct": 14920
+    },
+    {
+      "originalPath": "cities/berlin/models/train/bvg_kleinprofil__tail.glb",
+      "normalizedPath": "cities/berlin/models/train/bvg_kleinprofil__tail.glb",
+      "sizeBytes": 15992,
+      "minSize1Pct": 15832,
+      "maxSize1Pct": 16152
+    },
+    {
+      "originalPath": "cities/edinburgh/data/feed_fingerprint.json",
+      "normalizedPath": "cities/edinburgh/data/feed_fingerprint.json",
+      "sizeBytes": 318,
+      "minSize1Pct": 314,
+      "maxSize1Pct": 322
+    },
+    {
+      "originalPath": "cities/edinburgh/data/line_ladders.json",
+      "normalizedPath": "cities/edinburgh/data/line_ladders.json",
+      "sizeBytes": 34988,
+      "minSize1Pct": 34638,
+      "maxSize1Pct": 35338
+    },
+    {
+      "originalPath": "cities/edinburgh/data/lines.json",
+      "normalizedPath": "cities/edinburgh/data/lines.json",
+      "sizeBytes": 2289,
+      "minSize1Pct": 2266,
+      "maxSize1Pct": 2312
+    },
+    {
+      "originalPath": "cities/edinburgh/data/rail_curves_3d.json",
+      "normalizedPath": "cities/edinburgh/data/rail_curves_3d.json",
+      "sizeBytes": 483625,
+      "minSize1Pct": 478788,
+      "maxSize1Pct": 488462
+    },
+    {
+      "originalPath": "cities/edinburgh/data/rolling-stock.json",
+      "normalizedPath": "cities/edinburgh/data/rolling-stock.json",
+      "sizeBytes": 3257,
+      "minSize1Pct": 3224,
+      "maxSize1Pct": 3290
+    },
+    {
+      "originalPath": "cities/edinburgh/data/schedule.json",
+      "normalizedPath": "cities/edinburgh/data/schedule.json",
+      "sizeBytes": 76242,
+      "minSize1Pct": 75479,
+      "maxSize1Pct": 77005
+    },
+    {
+      "originalPath": "cities/edinburgh/data/sections.json",
+      "normalizedPath": "cities/edinburgh/data/sections.json",
+      "sizeBytes": 540,
+      "minSize1Pct": 534,
+      "maxSize1Pct": 546
+    },
+    {
+      "originalPath": "cities/edinburgh/data/shapes.bin",
+      "normalizedPath": "cities/edinburgh/data/shapes.bin",
+      "sizeBytes": 56576,
+      "minSize1Pct": 56010,
+      "maxSize1Pct": 57142
+    },
+    {
+      "originalPath": "cities/edinburgh/data/station-rankings.json",
+      "normalizedPath": "cities/edinburgh/data/station-rankings.json",
+      "sizeBytes": 1724,
+      "minSize1Pct": 1706,
+      "maxSize1Pct": 1742
+    },
+    {
+      "originalPath": "cities/edinburgh/data/stations.json",
+      "normalizedPath": "cities/edinburgh/data/stations.json",
+      "sizeBytes": 1464,
+      "minSize1Pct": 1449,
+      "maxSize1Pct": 1479
+    },
+    {
+      "originalPath": "cities/edinburgh/data/tracks.json",
+      "normalizedPath": "cities/edinburgh/data/tracks.json",
+      "sizeBytes": 506441,
+      "minSize1Pct": 501376,
+      "maxSize1Pct": 511506
+    },
+    {
+      "originalPath": "cities/edinburgh/models/automotrice_ecossaise.glb",
+      "normalizedPath": "cities/edinburgh/models/automotrice_ecossaise.glb",
+      "sizeBytes": 521332,
+      "minSize1Pct": 516118,
+      "maxSize1Pct": 526546
+    },
+    {
+      "originalPath": "cities/edinburgh/models/edinburgh_3d.glb",
+      "normalizedPath": "cities/edinburgh/models/edinburgh_3d.glb",
+      "sizeBytes": 21230700,
+      "minSize1Pct": 21018393,
+      "maxSize1Pct": 21443007
+    },
+    {
+      "originalPath": "cities/edinburgh/models/edinburgh_3d.json",
+      "normalizedPath": "cities/edinburgh/models/edinburgh_3d.json",
+      "sizeBytes": 1568467,
+      "minSize1Pct": 1552782,
+      "maxSize1Pct": 1584152
+    },
+    {
+      "originalPath": "cities/edinburgh/models/edinburgh_city.glb",
+      "normalizedPath": "cities/edinburgh/models/edinburgh_city.glb",
+      "sizeBytes": 4266144,
+      "minSize1Pct": 4223482,
+      "maxSize1Pct": 4308806
+    },
+    {
+      "originalPath": "cities/edinburgh/models/monuments.json",
+      "normalizedPath": "cities/edinburgh/models/monuments.json",
+      "sizeBytes": 3104,
+      "minSize1Pct": 3072,
+      "maxSize1Pct": 3136
+    },
+    {
+      "originalPath": "cities/edinburgh/models/train/caf_urbos_3__neutral.glb",
+      "normalizedPath": "cities/edinburgh/models/train/caf_urbos_3__neutral.glb",
+      "sizeBytes": 3280,
+      "minSize1Pct": 3247,
+      "maxSize1Pct": 3313
+    },
+    {
+      "originalPath": "cities/edinburgh/models/train/scotrail_class_385__cab.glb",
+      "normalizedPath": "cities/edinburgh/models/train/scotrail_class_385__cab.glb",
+      "sizeBytes": 16232,
+      "minSize1Pct": 16069,
+      "maxSize1Pct": 16395
+    },
+    {
+      "originalPath": "cities/edinburgh/models/train/scotrail_class_385__neutral.glb",
+      "normalizedPath": "cities/edinburgh/models/train/scotrail_class_385__neutral.glb",
+      "sizeBytes": 15664,
+      "minSize1Pct": 15507,
+      "maxSize1Pct": 15821
+    },
+    {
+      "originalPath": "cities/edinburgh/models/train/scotrail_class_385__tail.glb",
+      "normalizedPath": "cities/edinburgh/models/train/scotrail_class_385__tail.glb",
+      "sizeBytes": 15892,
+      "minSize1Pct": 15733,
+      "maxSize1Pct": 16051
+    },
+    {
+      "originalPath": "cities/lille/data/feed_fingerprint.json",
+      "normalizedPath": "cities/lille/data/feed_fingerprint.json",
+      "sizeBytes": 308,
+      "minSize1Pct": 304,
+      "maxSize1Pct": 312
+    },
+    {
+      "originalPath": "cities/lille/data/line_ladders.json",
+      "normalizedPath": "cities/lille/data/line_ladders.json",
+      "sizeBytes": 70014,
+      "minSize1Pct": 69313,
+      "maxSize1Pct": 70715
+    },
+    {
+      "originalPath": "cities/lille/data/lines.json",
+      "normalizedPath": "cities/lille/data/lines.json",
+      "sizeBytes": 1243,
+      "minSize1Pct": 1230,
+      "maxSize1Pct": 1256
+    },
+    {
+      "originalPath": "cities/lille/data/rolling-stock.json",
+      "normalizedPath": "cities/lille/data/rolling-stock.json",
+      "sizeBytes": 3743,
+      "minSize1Pct": 3705,
+      "maxSize1Pct": 3781
+    },
+    {
+      "originalPath": "cities/lille/data/schedule.json",
+      "normalizedPath": "cities/lille/data/schedule.json",
+      "sizeBytes": 1627917,
+      "minSize1Pct": 1611637,
+      "maxSize1Pct": 1644197
+    },
+    {
+      "originalPath": "cities/lille/data/sections.json",
+      "normalizedPath": "cities/lille/data/sections.json",
+      "sizeBytes": 504,
+      "minSize1Pct": 498,
+      "maxSize1Pct": 510
+    },
+    {
+      "originalPath": "cities/lille/data/shapes.bin",
+      "normalizedPath": "cities/lille/data/shapes.bin",
+      "sizeBytes": 53436,
+      "minSize1Pct": 52901,
+      "maxSize1Pct": 53971
+    },
+    {
+      "originalPath": "cities/lille/data/station-rankings.json",
+      "normalizedPath": "cities/lille/data/station-rankings.json",
+      "sizeBytes": 17430,
+      "minSize1Pct": 17255,
+      "maxSize1Pct": 17605
+    },
+    {
+      "originalPath": "cities/lille/data/stations.json",
+      "normalizedPath": "cities/lille/data/stations.json",
+      "sizeBytes": 14586,
+      "minSize1Pct": 14440,
+      "maxSize1Pct": 14732
+    },
+    {
+      "originalPath": "cities/lille/data/tracks.json",
+      "normalizedPath": "cities/lille/data/tracks.json",
+      "sizeBytes": 125941,
+      "minSize1Pct": 124681,
+      "maxSize1Pct": 127201
+    },
+    {
+      "originalPath": "cities/lille/models/train/breda_vlc__cab.glb",
+      "normalizedPath": "cities/lille/models/train/breda_vlc__cab.glb",
+      "sizeBytes": 16260,
+      "minSize1Pct": 16097,
+      "maxSize1Pct": 16423
+    },
+    {
+      "originalPath": "cities/lille/models/train/breda_vlc__neutral.glb",
+      "normalizedPath": "cities/lille/models/train/breda_vlc__neutral.glb",
+      "sizeBytes": 15692,
+      "minSize1Pct": 15535,
+      "maxSize1Pct": 15849
+    },
+    {
+      "originalPath": "cities/lille/models/train/breda_vlc__tail.glb",
+      "normalizedPath": "cities/lille/models/train/breda_vlc__tail.glb",
+      "sizeBytes": 15924,
+      "minSize1Pct": 15764,
+      "maxSize1Pct": 16084
+    },
+    {
+      "originalPath": "cities/lille/models/train/val_208__cab.glb",
+      "normalizedPath": "cities/lille/models/train/val_208__cab.glb",
+      "sizeBytes": 16264,
+      "minSize1Pct": 16101,
+      "maxSize1Pct": 16427
+    },
+    {
+      "originalPath": "cities/lille/models/train/val_208__neutral.glb",
+      "normalizedPath": "cities/lille/models/train/val_208__neutral.glb",
+      "sizeBytes": 14716,
+      "minSize1Pct": 14568,
+      "maxSize1Pct": 14864
+    },
+    {
+      "originalPath": "cities/lille/models/train/val_208__tail.glb",
+      "normalizedPath": "cities/lille/models/train/val_208__tail.glb",
+      "sizeBytes": 15936,
+      "minSize1Pct": 15776,
+      "maxSize1Pct": 16096
+    },
+    {
+      "originalPath": "cities/lille/models/train/val_52m__cab.glb",
+      "normalizedPath": "cities/lille/models/train/val_52m__cab.glb",
+      "sizeBytes": 16264,
+      "minSize1Pct": 16101,
+      "maxSize1Pct": 16427
+    },
+    {
+      "originalPath": "cities/lille/models/train/val_52m__neutral.glb",
+      "normalizedPath": "cities/lille/models/train/val_52m__neutral.glb",
+      "sizeBytes": 14716,
+      "minSize1Pct": 14568,
+      "maxSize1Pct": 14864
+    },
+    {
+      "originalPath": "cities/lille/models/train/val_52m__tail.glb",
+      "normalizedPath": "cities/lille/models/train/val_52m__tail.glb",
+      "sizeBytes": 15936,
+      "minSize1Pct": 15776,
+      "maxSize1Pct": 16096
+    },
+    {
+      "originalPath": "cities/london/data/feed_fingerprint.json",
+      "normalizedPath": "cities/london/data/feed_fingerprint.json",
+      "sizeBytes": 318,
+      "minSize1Pct": 314,
+      "maxSize1Pct": 322
+    },
+    {
+      "originalPath": "cities/london/data/line_ladders.json",
+      "normalizedPath": "cities/london/data/line_ladders.json",
+      "sizeBytes": 441141,
+      "minSize1Pct": 436729,
+      "maxSize1Pct": 445553
+    },
+    {
+      "originalPath": "cities/london/data/lines.json",
+      "normalizedPath": "cities/london/data/lines.json",
+      "sizeBytes": 6395,
+      "minSize1Pct": 6331,
+      "maxSize1Pct": 6459
+    },
+    {
+      "originalPath": "cities/london/data/rolling-stock.json",
+      "normalizedPath": "cities/london/data/rolling-stock.json",
+      "sizeBytes": 19086,
+      "minSize1Pct": 18895,
+      "maxSize1Pct": 19277
+    },
+    {
+      "originalPath": "cities/london/data/schedule.json",
+      "normalizedPath": "cities/london/data/schedule.json",
+      "sizeBytes": 8252820,
+      "minSize1Pct": 8170291,
+      "maxSize1Pct": 8335349
+    },
+    {
+      "originalPath": "cities/london/data/sections.json",
+      "normalizedPath": "cities/london/data/sections.json",
+      "sizeBytes": 1142,
+      "minSize1Pct": 1130,
+      "maxSize1Pct": 1154
+    },
+    {
+      "originalPath": "cities/london/data/shapes.bin",
+      "normalizedPath": "cities/london/data/shapes.bin",
+      "sizeBytes": 4045032,
+      "minSize1Pct": 4004581,
+      "maxSize1Pct": 4085483
+    },
+    {
+      "originalPath": "cities/london/data/station-rankings.json",
+      "normalizedPath": "cities/london/data/station-rankings.json",
+      "sizeBytes": 87515,
+      "minSize1Pct": 86639,
+      "maxSize1Pct": 88391
+    },
+    {
+      "originalPath": "cities/london/data/stations.json",
+      "normalizedPath": "cities/london/data/stations.json",
+      "sizeBytes": 81176,
+      "minSize1Pct": 80364,
+      "maxSize1Pct": 81988
+    },
+    {
+      "originalPath": "cities/london/data/tracks.json",
+      "normalizedPath": "cities/london/data/tracks.json",
+      "sizeBytes": 426961,
+      "minSize1Pct": 422691,
+      "maxSize1Pct": 431231
+    },
+    {
+      "originalPath": "cities/montreal/data/line_ladders.json",
+      "normalizedPath": "cities/montreal/data/line_ladders.json",
+      "sizeBytes": 46546,
+      "minSize1Pct": 46080,
+      "maxSize1Pct": 47012
+    },
+    {
+      "originalPath": "cities/montreal/data/lines.json",
+      "normalizedPath": "cities/montreal/data/lines.json",
+      "sizeBytes": 1177,
+      "minSize1Pct": 1165,
+      "maxSize1Pct": 1189
+    },
+    {
+      "originalPath": "cities/montreal/data/rolling-stock.json",
+      "normalizedPath": "cities/montreal/data/rolling-stock.json",
+      "sizeBytes": 3590,
+      "minSize1Pct": 3554,
+      "maxSize1Pct": 3626
+    },
+    {
+      "originalPath": "cities/montreal/data/schedule.json",
+      "normalizedPath": "cities/montreal/data/schedule.json",
+      "sizeBytes": 882122,
+      "minSize1Pct": 873300,
+      "maxSize1Pct": 890944
+    },
+    {
+      "originalPath": "cities/montreal/data/sections.json",
+      "normalizedPath": "cities/montreal/data/sections.json",
+      "sizeBytes": 336,
+      "minSize1Pct": 332,
+      "maxSize1Pct": 340
+    },
+    {
+      "originalPath": "cities/montreal/data/shapes.bin",
+      "normalizedPath": "cities/montreal/data/shapes.bin",
+      "sizeBytes": 68736,
+      "minSize1Pct": 68048,
+      "maxSize1Pct": 69424
+    },
+    {
+      "originalPath": "cities/montreal/data/station-rankings.json",
+      "normalizedPath": "cities/montreal/data/station-rankings.json",
+      "sizeBytes": 4183,
+      "minSize1Pct": 4141,
+      "maxSize1Pct": 4225
+    },
+    {
+      "originalPath": "cities/montreal/data/stations.json",
+      "normalizedPath": "cities/montreal/data/stations.json",
+      "sizeBytes": 10558,
+      "minSize1Pct": 10452,
+      "maxSize1Pct": 10664
+    },
+    {
+      "originalPath": "cities/montreal/data/tracks.json",
+      "normalizedPath": "cities/montreal/data/tracks.json",
+      "sizeBytes": 4865,
+      "minSize1Pct": 4816,
+      "maxSize1Pct": 4914
+    },
+    {
+      "originalPath": "cities/washington/data/feed_fingerprint.json",
+      "normalizedPath": "cities/washington/data/feed_fingerprint.json",
+      "sizeBytes": 455,
+      "minSize1Pct": 450,
+      "maxSize1Pct": 460
+    },
+    {
+      "originalPath": "cities/washington/data/line_ladders.json",
+      "normalizedPath": "cities/washington/data/line_ladders.json",
+      "sizeBytes": 140315,
+      "minSize1Pct": 138911,
+      "maxSize1Pct": 141719
+    },
+    {
+      "originalPath": "cities/washington/data/lines.json",
+      "normalizedPath": "cities/washington/data/lines.json",
+      "sizeBytes": 1872,
+      "minSize1Pct": 1853,
+      "maxSize1Pct": 1891
+    },
+    {
+      "originalPath": "cities/washington/data/rolling-stock.json",
+      "normalizedPath": "cities/washington/data/rolling-stock.json",
+      "sizeBytes": 3729,
+      "minSize1Pct": 3691,
+      "maxSize1Pct": 3767
+    },
+    {
+      "originalPath": "cities/washington/data/schedule.json",
+      "normalizedPath": "cities/washington/data/schedule.json",
+      "sizeBytes": 1065773,
+      "minSize1Pct": 1055115,
+      "maxSize1Pct": 1076431
+    },
+    {
+      "originalPath": "cities/washington/data/sections.json",
+      "normalizedPath": "cities/washington/data/sections.json",
+      "sizeBytes": 351,
+      "minSize1Pct": 347,
+      "maxSize1Pct": 355
+    },
+    {
+      "originalPath": "cities/washington/data/shapes.bin",
+      "normalizedPath": "cities/washington/data/shapes.bin",
+      "sizeBytes": 2960092,
+      "minSize1Pct": 2930491,
+      "maxSize1Pct": 2989693
+    },
+    {
+      "originalPath": "cities/washington/data/station-rankings.json",
+      "normalizedPath": "cities/washington/data/station-rankings.json",
+      "sizeBytes": 18609,
+      "minSize1Pct": 18422,
+      "maxSize1Pct": 18796
+    },
+    {
+      "originalPath": "cities/washington/data/stations.json",
+      "normalizedPath": "cities/washington/data/stations.json",
+      "sizeBytes": 16117,
+      "minSize1Pct": 15955,
+      "maxSize1Pct": 16279
+    },
+    {
+      "originalPath": "cities/washington/data/tracks.json",
+      "normalizedPath": "cities/washington/data/tracks.json",
+      "sizeBytes": 111688,
+      "minSize1Pct": 110571,
+      "maxSize1Pct": 112805
+    },
+    {
+      "originalPath": "cities/washington/data/washington-rt-fixture.json",
+      "normalizedPath": "cities/washington/data/washington-rt-fixture.json",
+      "sizeBytes": 112715,
+      "minSize1Pct": 111587,
+      "maxSize1Pct": 113843
+    },
+    {
+      "originalPath": "cities/washington/models/train/wmata_generic__cab.glb",
+      "normalizedPath": "cities/washington/models/train/wmata_generic__cab.glb",
+      "sizeBytes": 16316,
+      "minSize1Pct": 16152,
+      "maxSize1Pct": 16480
+    },
+    {
+      "originalPath": "cities/washington/models/train/wmata_generic__neutral.glb",
+      "normalizedPath": "cities/washington/models/train/wmata_generic__neutral.glb",
+      "sizeBytes": 14776,
+      "minSize1Pct": 14628,
+      "maxSize1Pct": 14924
+    },
+    {
+      "originalPath": "cities/washington/models/train/wmata_generic__tail.glb",
+      "normalizedPath": "cities/washington/models/train/wmata_generic__tail.glb",
+      "sizeBytes": 15996,
+      "minSize1Pct": 15836,
+      "maxSize1Pct": 16156
     },
     {
       "originalPath": "data/line_ladders.json",
@@ -175,18 +763,18 @@
       "maxSize1Pct": 50
     },
     {
-      "originalPath": "data/rer_lines.json",
-      "normalizedPath": "data/rer_lines.json",
-      "sizeBytes": 2708449,
-      "minSize1Pct": 2681364,
-      "maxSize1Pct": 2735534
-    },
-    {
       "originalPath": "data/rer_lines_meta.json",
       "normalizedPath": "data/rer_lines_meta.json",
       "sizeBytes": 1760,
       "minSize1Pct": 1742,
       "maxSize1Pct": 1778
+    },
+    {
+      "originalPath": "data/rer_lines.json",
+      "normalizedPath": "data/rer_lines.json",
+      "sizeBytes": 2708449,
+      "minSize1Pct": 2681364,
+      "maxSize1Pct": 2735534
     },
     {
       "originalPath": "data/rer_schedule.json",
@@ -266,46 +854,340 @@
       "maxSize1Pct": 24713
     },
     {
-      "originalPath": "assets/expression-Bl_GL2tO.js",
-      "normalizedPath": "assets/expression.[hash].js",
-      "sizeBytes": 1188,
-      "minSize1Pct": 1176,
-      "maxSize1Pct": 1200
+      "originalPath": "index.html",
+      "normalizedPath": "index.html",
+      "sizeBytes": 6632,
+      "minSize1Pct": 6565,
+      "maxSize1Pct": 6699
     },
     {
-      "originalPath": "assets/index-BpDRp17g.js",
-      "normalizedPath": "assets/index.[hash].js",
-      "sizeBytes": 18994,
-      "minSize1Pct": 18804,
-      "maxSize1Pct": 19184
+      "originalPath": "methode.html",
+      "normalizedPath": "methode.html",
+      "sizeBytes": 17527,
+      "minSize1Pct": 17351,
+      "maxSize1Pct": 17703
     },
     {
-      "originalPath": "assets/index-hGBCYR6D.js",
-      "normalizedPath": "assets/index.[hash].js",
-      "sizeBytes": 16706,
-      "minSize1Pct": 16538,
-      "maxSize1Pct": 16874
+      "originalPath": "models/train/breda_vlc__cab.glb",
+      "normalizedPath": "models/train/breda_vlc__cab.glb",
+      "sizeBytes": 16260,
+      "minSize1Pct": 16097,
+      "maxSize1Pct": 16423
     },
     {
-      "originalPath": "assets/main-Bf86VsYu.js",
-      "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 2627803,
-      "minSize1Pct": 2601524,
-      "maxSize1Pct": 2654082
+      "originalPath": "models/train/breda_vlc__neutral.glb",
+      "normalizedPath": "models/train/breda_vlc__neutral.glb",
+      "sizeBytes": 15692,
+      "minSize1Pct": 15535,
+      "maxSize1Pct": 15849
     },
     {
-      "originalPath": "assets/main-qt5s65VT.css",
-      "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 51134,
-      "minSize1Pct": 50622,
-      "maxSize1Pct": 51646
+      "originalPath": "models/train/breda_vlc__tail.glb",
+      "normalizedPath": "models/train/breda_vlc__tail.glb",
+      "sizeBytes": 15924,
+      "minSize1Pct": 15764,
+      "maxSize1Pct": 16084
     },
     {
-      "originalPath": "assets/tokens-D3M_eBDk.css",
-      "normalizedPath": "assets/tokens.[hash].css",
-      "sizeBytes": 3387,
-      "minSize1Pct": 3353,
-      "maxSize1Pct": 3421
+      "originalPath": "models/train/bvg_grossprofil__cab.glb",
+      "normalizedPath": "models/train/bvg_grossprofil__cab.glb",
+      "sizeBytes": 16292,
+      "minSize1Pct": 16129,
+      "maxSize1Pct": 16455
+    },
+    {
+      "originalPath": "models/train/bvg_grossprofil__neutral.glb",
+      "normalizedPath": "models/train/bvg_grossprofil__neutral.glb",
+      "sizeBytes": 14748,
+      "minSize1Pct": 14600,
+      "maxSize1Pct": 14896
+    },
+    {
+      "originalPath": "models/train/bvg_grossprofil__tail.glb",
+      "normalizedPath": "models/train/bvg_grossprofil__tail.glb",
+      "sizeBytes": 15972,
+      "minSize1Pct": 15812,
+      "maxSize1Pct": 16132
+    },
+    {
+      "originalPath": "models/train/bvg_kleinprofil__cab.glb",
+      "normalizedPath": "models/train/bvg_kleinprofil__cab.glb",
+      "sizeBytes": 16308,
+      "minSize1Pct": 16144,
+      "maxSize1Pct": 16472
+    },
+    {
+      "originalPath": "models/train/bvg_kleinprofil__neutral.glb",
+      "normalizedPath": "models/train/bvg_kleinprofil__neutral.glb",
+      "sizeBytes": 14772,
+      "minSize1Pct": 14624,
+      "maxSize1Pct": 14920
+    },
+    {
+      "originalPath": "models/train/bvg_kleinprofil__tail.glb",
+      "normalizedPath": "models/train/bvg_kleinprofil__tail.glb",
+      "sizeBytes": 15992,
+      "minSize1Pct": 15832,
+      "maxSize1Pct": 16152
+    },
+    {
+      "originalPath": "models/train/pneumatic_generic__neutral__cab.glb",
+      "normalizedPath": "models/train/pneumatic_generic__neutral__cab.glb",
+      "sizeBytes": 32528,
+      "minSize1Pct": 32202,
+      "maxSize1Pct": 32854
+    },
+    {
+      "originalPath": "models/train/pneumatic_generic__neutral__tail.glb",
+      "normalizedPath": "models/train/pneumatic_generic__neutral__tail.glb",
+      "sizeBytes": 32180,
+      "minSize1Pct": 31858,
+      "maxSize1Pct": 32502
+    },
+    {
+      "originalPath": "models/train/pneumatic_generic__neutral.glb",
+      "normalizedPath": "models/train/pneumatic_generic__neutral.glb",
+      "sizeBytes": 30132,
+      "minSize1Pct": 29830,
+      "maxSize1Pct": 30434
+    },
+    {
+      "originalPath": "models/train/rer_generic__neutral.glb",
+      "normalizedPath": "models/train/rer_generic__neutral.glb",
+      "sizeBytes": 37580,
+      "minSize1Pct": 37204,
+      "maxSize1Pct": 37956
+    },
+    {
+      "originalPath": "models/train/rer_generic_A__cab.glb",
+      "normalizedPath": "models/train/rer_generic_A__cab.glb",
+      "sizeBytes": 39144,
+      "minSize1Pct": 38752,
+      "maxSize1Pct": 39536
+    },
+    {
+      "originalPath": "models/train/rer_generic_A__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_A__neutral.glb",
+      "sizeBytes": 38356,
+      "minSize1Pct": 37972,
+      "maxSize1Pct": 38740
+    },
+    {
+      "originalPath": "models/train/rer_generic_A__tail.glb",
+      "normalizedPath": "models/train/rer_generic_A__tail.glb",
+      "sizeBytes": 38680,
+      "minSize1Pct": 38293,
+      "maxSize1Pct": 39067
+    },
+    {
+      "originalPath": "models/train/rer_generic_B__cab.glb",
+      "normalizedPath": "models/train/rer_generic_B__cab.glb",
+      "sizeBytes": 39108,
+      "minSize1Pct": 38716,
+      "maxSize1Pct": 39500
+    },
+    {
+      "originalPath": "models/train/rer_generic_B__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_B__neutral.glb",
+      "sizeBytes": 38336,
+      "minSize1Pct": 37952,
+      "maxSize1Pct": 38720
+    },
+    {
+      "originalPath": "models/train/rer_generic_B__tail.glb",
+      "normalizedPath": "models/train/rer_generic_B__tail.glb",
+      "sizeBytes": 38672,
+      "minSize1Pct": 38285,
+      "maxSize1Pct": 39059
+    },
+    {
+      "originalPath": "models/train/rer_generic_C__cab.glb",
+      "normalizedPath": "models/train/rer_generic_C__cab.glb",
+      "sizeBytes": 39220,
+      "minSize1Pct": 38827,
+      "maxSize1Pct": 39613
+    },
+    {
+      "originalPath": "models/train/rer_generic_C__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_C__neutral.glb",
+      "sizeBytes": 38392,
+      "minSize1Pct": 38008,
+      "maxSize1Pct": 38776
+    },
+    {
+      "originalPath": "models/train/rer_generic_C__tail.glb",
+      "normalizedPath": "models/train/rer_generic_C__tail.glb",
+      "sizeBytes": 38712,
+      "minSize1Pct": 38324,
+      "maxSize1Pct": 39100
+    },
+    {
+      "originalPath": "models/train/rer_generic_D__cab.glb",
+      "normalizedPath": "models/train/rer_generic_D__cab.glb",
+      "sizeBytes": 39060,
+      "minSize1Pct": 38669,
+      "maxSize1Pct": 39451
+    },
+    {
+      "originalPath": "models/train/rer_generic_D__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_D__neutral.glb",
+      "sizeBytes": 38300,
+      "minSize1Pct": 37917,
+      "maxSize1Pct": 38683
+    },
+    {
+      "originalPath": "models/train/rer_generic_D__tail.glb",
+      "normalizedPath": "models/train/rer_generic_D__tail.glb",
+      "sizeBytes": 38640,
+      "minSize1Pct": 38253,
+      "maxSize1Pct": 39027
+    },
+    {
+      "originalPath": "models/train/rer_generic_E__cab.glb",
+      "normalizedPath": "models/train/rer_generic_E__cab.glb",
+      "sizeBytes": 38836,
+      "minSize1Pct": 38447,
+      "maxSize1Pct": 39225
+    },
+    {
+      "originalPath": "models/train/rer_generic_E__neutral.glb",
+      "normalizedPath": "models/train/rer_generic_E__neutral.glb",
+      "sizeBytes": 38208,
+      "minSize1Pct": 37825,
+      "maxSize1Pct": 38591
+    },
+    {
+      "originalPath": "models/train/rer_generic_E__tail.glb",
+      "normalizedPath": "models/train/rer_generic_E__tail.glb",
+      "sizeBytes": 38548,
+      "minSize1Pct": 38162,
+      "maxSize1Pct": 38934
+    },
+    {
+      "originalPath": "models/train/scotrail_class_385__cab.glb",
+      "normalizedPath": "models/train/scotrail_class_385__cab.glb",
+      "sizeBytes": 16232,
+      "minSize1Pct": 16069,
+      "maxSize1Pct": 16395
+    },
+    {
+      "originalPath": "models/train/scotrail_class_385__neutral.glb",
+      "normalizedPath": "models/train/scotrail_class_385__neutral.glb",
+      "sizeBytes": 15664,
+      "minSize1Pct": 15507,
+      "maxSize1Pct": 15821
+    },
+    {
+      "originalPath": "models/train/scotrail_class_385__tail.glb",
+      "normalizedPath": "models/train/scotrail_class_385__tail.glb",
+      "sizeBytes": 15892,
+      "minSize1Pct": 15733,
+      "maxSize1Pct": 16051
+    },
+    {
+      "originalPath": "models/train/steel_classic__neutral__cab.glb",
+      "normalizedPath": "models/train/steel_classic__neutral__cab.glb",
+      "sizeBytes": 32516,
+      "minSize1Pct": 32190,
+      "maxSize1Pct": 32842
+    },
+    {
+      "originalPath": "models/train/steel_classic__neutral__tail.glb",
+      "normalizedPath": "models/train/steel_classic__neutral__tail.glb",
+      "sizeBytes": 32172,
+      "minSize1Pct": 31850,
+      "maxSize1Pct": 32494
+    },
+    {
+      "originalPath": "models/train/steel_classic__neutral.glb",
+      "normalizedPath": "models/train/steel_classic__neutral.glb",
+      "sizeBytes": 30128,
+      "minSize1Pct": 29826,
+      "maxSize1Pct": 30430
+    },
+    {
+      "originalPath": "models/train/val_208__cab.glb",
+      "normalizedPath": "models/train/val_208__cab.glb",
+      "sizeBytes": 16264,
+      "minSize1Pct": 16101,
+      "maxSize1Pct": 16427
+    },
+    {
+      "originalPath": "models/train/val_208__neutral.glb",
+      "normalizedPath": "models/train/val_208__neutral.glb",
+      "sizeBytes": 14716,
+      "minSize1Pct": 14568,
+      "maxSize1Pct": 14864
+    },
+    {
+      "originalPath": "models/train/val_208__tail.glb",
+      "normalizedPath": "models/train/val_208__tail.glb",
+      "sizeBytes": 15936,
+      "minSize1Pct": 15776,
+      "maxSize1Pct": 16096
+    },
+    {
+      "originalPath": "models/train/val_52m__cab.glb",
+      "normalizedPath": "models/train/val_52m__cab.glb",
+      "sizeBytes": 16264,
+      "minSize1Pct": 16101,
+      "maxSize1Pct": 16427
+    },
+    {
+      "originalPath": "models/train/val_52m__neutral.glb",
+      "normalizedPath": "models/train/val_52m__neutral.glb",
+      "sizeBytes": 14716,
+      "minSize1Pct": 14568,
+      "maxSize1Pct": 14864
+    },
+    {
+      "originalPath": "models/train/val_52m__tail.glb",
+      "normalizedPath": "models/train/val_52m__tail.glb",
+      "sizeBytes": 15936,
+      "minSize1Pct": 15776,
+      "maxSize1Pct": 16096
+    },
+    {
+      "originalPath": "models/train/wmata_generic__cab.glb",
+      "normalizedPath": "models/train/wmata_generic__cab.glb",
+      "sizeBytes": 16316,
+      "minSize1Pct": 16152,
+      "maxSize1Pct": 16480
+    },
+    {
+      "originalPath": "models/train/wmata_generic__neutral.glb",
+      "normalizedPath": "models/train/wmata_generic__neutral.glb",
+      "sizeBytes": 14776,
+      "minSize1Pct": 14628,
+      "maxSize1Pct": 14924
+    },
+    {
+      "originalPath": "models/train/wmata_generic__tail.glb",
+      "normalizedPath": "models/train/wmata_generic__tail.glb",
+      "sizeBytes": 15996,
+      "minSize1Pct": 15836,
+      "maxSize1Pct": 16156
+    },
+    {
+      "originalPath": "og-image.png",
+      "normalizedPath": "og-image.png",
+      "sizeBytes": 26885,
+      "minSize1Pct": 26616,
+      "maxSize1Pct": 27154
+    },
+    {
+      "originalPath": "og-image.svg",
+      "normalizedPath": "og-image.svg",
+      "sizeBytes": 5483,
+      "minSize1Pct": 5428,
+      "maxSize1Pct": 5538
+    },
+    {
+      "originalPath": "sections-report.html",
+      "normalizedPath": "sections-report.html",
+      "sizeBytes": 2065,
+      "minSize1Pct": 2044,
+      "maxSize1Pct": 2086
     }
   ],
   "netlifyFunctions": [

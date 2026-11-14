@@ -11,10 +11,13 @@
 
     <script>
       (function () {
-        var theme = localStorage.getItem('paris-subway-theme');
-        if (theme === 'light' || theme === 'dark') {
-          document.documentElement.dataset.theme = theme;
-        }
+        var pref = localStorage.getItem('paris-subway-theme-pref') || 'system';
+        var prefersDark =
+          typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var resolved = pref === 'light' || pref === 'dark' ? pref : prefersDark ? 'dark' : 'light';
+        document.documentElement.dataset.theme = resolved;
+        document.documentElement.classList.toggle('dark', resolved === 'dark');
       })();
     </script>
 
@@ -80,68 +83,8 @@
     <div id="app">
       <div id="map"></div>
 
-      <!-- Modal / popup container for station search -->
-      <div id="search-container" class="search-modal-wrap" style="display: none;"></div>
-
-      <!-- View controls (Clustered quick controls + Contextual Recenter) -->
-      <aside class="map-controls" id="map-controls" aria-label="Contrôles de vue">
-        <button class="map-control-btn is-active" id="btn-toggle-pitch" type="button" title="Vue 3D / 2D" aria-label="Basculer entre la vue 3D et 2D" aria-pressed="true">
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/>
-            <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>
-          </svg>
-        </button>
-        <button class="map-control-btn" id="btn-toggle-buildings" type="button" title="Bâti 3D (B)" aria-label="Afficher ou masquer les bâtiments 3D" aria-pressed="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="8" width="7" height="13" rx="1"/>
-            <rect x="13" y="4" width="7" height="17" rx="1"/>
-            <line x1="7.5" y1="12" x2="7.5" y2="12.01"/>
-            <line x1="7.5" y1="16" x2="7.5" y2="16.01"/>
-            <line x1="16.5" y1="8" x2="16.5" y2="8.01"/>
-            <line x1="16.5" y1="12" x2="16.5" y2="12.01"/>
-            <line x1="16.5" y1="16" x2="16.5" y2="16.01"/>
-          </svg>
-        </button>
-        <button class="map-control-btn" id="btn-toggle-theme" type="button" title="Mode clair / sombre" aria-label="Basculer le thème clair ou sombre" aria-pressed="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-          </svg>
-        </button>
-        <div class="map-controls__divider" aria-hidden="true"></div>
-        <button class="map-control-btn" id="btn-recenter" type="button" title="Recadrer sur le réseau" aria-label="Recadrer sur le réseau de métro">
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-            <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/>
-            <circle cx="12" cy="12" r="2" fill="currentColor"/>
-            <line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="2" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <line x1="19" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </aside>
-
-      <!-- Lateral dock / Mobile Bottom Sheet ("Le Quai") -->
-      <nav class="dock" id="dock" aria-label="Sélection de ligne et stations">
-        <div class="dock-handle" id="dock-handle" title="Glisser pour afficher / masquer"></div>
-        <div class="dock-header">
-          <span class="dock-title">Lignes du réseau</span>
-          <div class="dock-header-actions">
-            <button class="dock-collapse-btn" id="dock-collapse" type="button" aria-label="Réduire le panneau" aria-expanded="true" title="Réduire le panneau"></button>
-            <button class="dock-reset-btn" id="dock-reset" style="display: none;">Tout afficher</button>
-          </div>
-        </div>
-        <!-- Grille et contenu partagent une seule zone défilante : la grille
-             était auparavant une soeur de .dock-content, donc hors de la zone
-             défilante, et se retrouvait rognée par .dock{overflow:hidden}
-             au-delà de sa hauteur maximale (à 320 px : 6 pastilles coupées). -->
-        <div class="dock-scroll" id="dock-scroll">
-          <div class="lines-grid" id="lines-grid" role="group" aria-label="Liste des 21 lignes"></div>
-          <div class="dock-content" id="dock-content">
-            <div class="dock-empty-state"><p>Chargement des lignes, stations et horaires GTFS…</p></div>
-          </div>
-        </div>
-      </nav>
+      <!-- Interface React + BoardUI (TopBar, Drawers, Contrôles carte, CommandPalette, Modales) -->
+      <div id="ui-root"></div>
 
       <!-- Interactive Tooltip -->
       <div class="map-tooltip" id="tooltip">

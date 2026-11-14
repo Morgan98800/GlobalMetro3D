@@ -1,5 +1,6 @@
 import { PolygonLayer } from '@deck.gl/layers';
 import type { LineMetadata, StationMetadata } from '@core/types';
+import { type HubRegistry, resolveLineElevationAt } from './station_levels';
 
 export interface PlatformPath {
   coordinates: [number, number][];
@@ -101,7 +102,8 @@ function platformTilesForStation(
   line: LineMetadata,
   paths: [number, number][][],
   theme: 'dark' | 'light',
-  followOffsetM: number
+  followOffsetM: number,
+  hubRegistry?: HubRegistry | null
 ): PlatformTileDatum[] {
   let closest: { point: [number, number]; tangent: [number, number]; distanceM: number } | null =
     null;
@@ -120,7 +122,8 @@ function platformTilesForStation(
   const normal: [number, number] = [-ty, tx];
   const center = closest.point;
 
-  const baseZ = line.elevation_offset + followOffsetM + PLATFORM_TOP_OFFSET_M - PLATFORM_HEIGHT_M;
+  const lineElev = resolveLineElevationAt(station.coordinates, line, hubRegistry);
+  const baseZ = lineElev + followOffsetM + PLATFORM_TOP_OFFSET_M - PLATFORM_HEIGHT_M;
   const hex = (line.color || '#A9A29A').replace('#', '');
   const lr = hex.length === 6 ? parseInt(hex.slice(0, 2), 16) : 169;
   const lg = hex.length === 6 ? parseInt(hex.slice(2, 4), 16) : 162;
@@ -200,7 +203,8 @@ export function createPlatformsLayer(
   zoom: number,
   theme: 'dark' | 'light' = 'dark',
   allLines?: { lines: LineMetadata[]; tracksByLine: Map<string, [number, number][][]> },
-  followElevation?: { lineId: string | null; offset: number }
+  followElevation?: { lineId: string | null; offset: number },
+  hubRegistry?: HubRegistry | null
 ): PolygonLayer<PlatformTileDatum> | null {
   let data: PlatformTileDatum[] = [];
   const offsetFor = (lineId: string) =>
@@ -210,7 +214,7 @@ export function createPlatformsLayer(
     const lineOff = offsetFor(line.id);
     for (const station of stations) {
       if (!station.lines.includes(line.id)) continue;
-      data.push(...platformTilesForStation(station, line, paths, theme, lineOff));
+      data.push(...platformTilesForStation(station, line, paths, theme, lineOff, hubRegistry));
     }
   } else if (!line && allLines && zoom >= 15.0) {
     for (const candidateLine of allLines.lines) {
@@ -220,7 +224,9 @@ export function createPlatformsLayer(
       const lineOff = offsetFor(candidateLine.id);
       for (const station of stations) {
         if (!station.lines.includes(candidateLine.id)) continue;
-        data.push(...platformTilesForStation(station, candidateLine, linePaths, theme, lineOff));
+        data.push(
+          ...platformTilesForStation(station, candidateLine, linePaths, theme, lineOff, hubRegistry)
+        );
       }
     }
   }

@@ -394,7 +394,7 @@ export function CommandPaletteItem({ icon: Icon, description, shortcut, classNam
       textValue={props.textValue ?? (typeof children === "string" ? children : undefined)}
       className={cx(
         // The highlight is the palette's gliding layer behind the list, so rows stay transparent.
-        "flex w-full shrink-0 cursor-pointer items-center gap-2.5 rounded-2lg px-2 py-1.5 text-start outline-none",
+        "flex w-full shrink-0 cursor-pointer items-center gap-2.5 overflow-hidden rounded-2lg px-2 py-1.5 text-start outline-none",
         "transition-[opacity,translate] duration-200 ease-out starting:opacity-0 motion-safe:starting:translate-y-1",
         "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         className,
@@ -403,11 +403,11 @@ export function CommandPaletteItem({ icon: Icon, description, shortcut, classNam
       {({ isFocused }) => (
         <>
           {isFocused ? <HighlightAnchor /> : null}
-          <span className="flex min-w-0 flex-1 items-center gap-2.5">
+          <span className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden">
             {Icon ? <Icon className="size-4 shrink-0 text-foreground-icon-secondary" aria-hidden /> : null}
-            <span className="flex min-w-0 items-center gap-2 truncate text-body-medium text-text-primary">{children}</span>
+            <span className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden text-body-medium text-text-primary">{children}</span>
           </span>
-          {description ? <span className="shrink-0 text-body-2-regular text-text-tertiary">{description}</span> : null}
+          {description ? <span className="min-w-0 max-w-[44%] shrink truncate text-body-2-regular text-text-tertiary">{description}</span> : null}
           {shortcut ? <Kbd>{shortcut}</Kbd> : null}
         </>
       )}

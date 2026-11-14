@@ -168,13 +168,13 @@ function EndpointPicker({
                   setText(st.name);
                   setFocused(false);
                 }}
-                className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-start text-body-2-medium text-text-primary hover:bg-background-secondary-hover"
+                className="flex w-full cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-lg px-2.5 py-2 text-start text-body-2-medium text-text-primary hover:bg-background-secondary-hover"
               >
-                <span className="flex min-w-0 items-center gap-2">
+                <span className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
                   <RiSubwayLine className="size-4 shrink-0 text-accent-500" aria-hidden />
                   <span className="truncate">{st.name}</span>
                 </span>
-                <Chip color="soft" variant="caption">
+                <Chip color="soft" variant="caption" className="shrink-0">
                   Station
                 </Chip>
               </button>
@@ -197,14 +197,14 @@ function EndpointPicker({
                   setText(pl.name);
                   setFocused(false);
                 }}
-                className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-start hover:bg-background-secondary-hover"
+                className="flex w-full cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-lg px-2.5 py-2 text-start hover:bg-background-secondary-hover"
               >
-                <span className="flex min-w-0 items-start gap-2">
+                <span className="flex min-w-0 flex-1 items-start gap-2 overflow-hidden">
                   <RiMapPin2Line
                     className="mt-0.5 size-4 shrink-0 text-foreground-icon-secondary"
                     aria-hidden
                   />
-                  <span className="min-w-0">
+                  <span className="min-w-0 flex-1">
                     <span className="block truncate text-body-2-medium text-text-primary">
                       {pl.name}
                     </span>
@@ -215,7 +215,7 @@ function EndpointPicker({
                     ) : null}
                   </span>
                 </span>
-                <Chip color="soft" variant="caption">
+                <Chip color="soft" variant="caption" className="shrink-0">
                   {pl.category}
                 </Chip>
               </button>
@@ -325,13 +325,13 @@ export function RoutePlannerDrawer() {
                         type="button"
                         onClick={() => handlers.onSelectItineraryIndex?.(index)}
                         className={cx(
-                          'flex w-full cursor-pointer items-center justify-between gap-2 rounded-xl border px-3 py-2.5 text-start transition-colors',
+                          'flex w-full cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl border px-3 py-2.5 text-start transition-colors',
                           selected
                             ? 'border-accent-500 bg-accent-500/12'
                             : 'border-separator-border bg-background-secondary-default/60 hover:bg-background-secondary-hover'
                         )}
                       >
-                        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
                           {rideLegs.length === 0 ? (
                             <span className="inline-flex items-center gap-1 text-body-2-medium text-text-primary">
                               <RiFootprintLine className="size-4" aria-hidden />À pied
@@ -375,7 +375,7 @@ export function RoutePlannerDrawer() {
                       {activeRoute.legs.map((leg, idx) => (
                         <li
                           key={`${leg.kind}:${idx}`}
-                          className="flex items-start gap-2.5 rounded-xl border border-separator-border bg-background-secondary-default/55 px-3 py-2.5"
+                          className="flex min-w-0 items-start gap-2.5 overflow-hidden rounded-xl border border-separator-border bg-background-secondary-default/55 px-3 py-2.5"
                         >
                           {leg.kind === 'walk' ? (
                             <RiFootprintLine
@@ -397,8 +397,8 @@ export function RoutePlannerDrawer() {
                           )}
 
                           <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="truncate text-body-2-medium text-text-primary">
+                            <div className="flex min-w-0 items-center justify-between gap-2">
+                              <span className="min-w-0 flex-1 truncate text-body-2-medium text-text-primary">
                                 {leg.kind === 'walk'
                                   ? `Marche vers ${leg.toLabel}`
                                   : leg.kind === 'transfer'
@@ -409,7 +409,7 @@ export function RoutePlannerDrawer() {
                                 {formatDuration(leg.durationSec)}
                               </span>
                             </div>
-                            <p className="text-caption-1-regular text-text-tertiary">
+                            <p className="truncate text-caption-1-regular text-text-tertiary">
                               {leg.kind === 'ride'
                                 ? `Direction ${leg.terminusName} · ${Math.max(1, (leg.stops?.length ?? 2) - 1)} arrêt${(leg.stops?.length ?? 2) - 1 > 1 ? 's' : ''}`
                                 : `${formatMeters(leg.distanceM)}`}

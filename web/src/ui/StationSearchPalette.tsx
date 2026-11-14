@@ -168,7 +168,7 @@ export function StationSearchPalette() {
             id="action:route-planner"
             icon={RiCompass3Line}
             textValue="Calculer un itinéraire entre 2 points A B"
-            description="Marche + Métro / RER depuis un point de départ"
+            description="A → B · Marche & Métro"
             onAction={() => {
               handlers.onOpenRoutePlanner?.();
             }}
@@ -188,12 +188,18 @@ export function StationSearchPalette() {
               id={place.id}
               icon={RiMapPin2Line}
               textValue={`${place.name} ${place.subtitle} ${place.category}`}
-              description={place.subtitle || undefined}
               onAction={() => {
                 handlers.onSelectPlace?.(place, true);
               }}
             >
-              <span className="truncate">{place.name}</span>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="truncate text-body-2-medium text-text-primary">{place.name}</span>
+                {place.subtitle ? (
+                  <span className="truncate text-caption-1-regular text-text-tertiary">
+                    {place.subtitle}
+                  </span>
+                ) : null}
+              </span>
               <span className="flex shrink-0 items-center gap-1.5">
                 <Chip color="soft" variant="caption">
                   {place.category}

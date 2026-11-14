@@ -101,7 +101,7 @@ export function TopNavBar() {
       id="topbar"
       className="pointer-events-none fixed inset-x-0 top-0 z-30 flex flex-col gap-1.5 px-2.5 pt-2 sm:px-4 sm:pt-3"
     >
-      <div className="pointer-events-auto mx-auto flex w-full max-w-6xl items-center justify-between gap-2 rounded-2xl border border-border-button-default bg-background-primary-default/88 px-2.5 py-1.5 shadow-md backdrop-blur-md">
+      <div className="pointer-events-auto mx-auto flex w-full max-w-6xl items-center justify-between gap-1.5 overflow-hidden rounded-2xl border border-border-button-default bg-background-primary-default/88 px-2 py-1.5 shadow-md backdrop-blur-md sm:gap-2 sm:px-2.5">
         {/* Gauche : sélecteur de ville */}
         <div className="flex shrink-0 items-center gap-1.5">
           <Dropdown isOpen={cityMenuOpen} onOpenChange={setCityMenuOpen}>
@@ -147,9 +147,12 @@ export function TopNavBar() {
           )}
           aria-label="Où allez-vous ? Adresse, restaurant, station ou itinéraire (⌘K)"
         >
-          <span className="flex min-w-0 items-center gap-2 text-body-2-regular text-text-tertiary">
+          <span className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden text-body-2-regular text-text-tertiary">
             <RiSearchLine className="size-4 shrink-0 text-foreground-icon-secondary" aria-hidden />
-            <span className="truncate">Où allez-vous ? Adresse, resto, station…</span>
+            <span className="hidden truncate sm:inline">
+              Où allez-vous ? Adresse, resto, station…
+            </span>
+            <span className="truncate sm:hidden">Où ?</span>
           </span>
           <Kbd className="hidden shrink-0 sm:inline-flex">⌘K</Kbd>
         </button>
@@ -281,8 +284,8 @@ export function TopNavBar() {
 
       {/* Bandeau télémétrie compact uniquement en Mode Passionné */}
       {expertMode ? (
-        <div className="pointer-events-auto mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 rounded-xl border border-border-button-default bg-background-primary-default/82 px-3 py-1.5 shadow-sm backdrop-blur-md">
-          <div className="flex flex-wrap items-center gap-3 text-caption-1-medium text-text-secondary">
+        <div className="pointer-events-auto mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 overflow-hidden rounded-xl border border-border-button-default bg-background-primary-default/82 px-3 py-1.5 shadow-sm backdrop-blur-md">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 text-caption-1-medium text-text-secondary sm:gap-3">
             <span className="inline-flex items-center gap-1.5 font-mono text-text-primary tabular-nums">
               <StatusDot color={isDegraded ? 'yellow' : isRealtimeActive ? 'green' : 'indigo'} />
               {clockText}

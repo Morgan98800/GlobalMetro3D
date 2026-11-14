@@ -106,7 +106,7 @@ export function NearbyDrawer() {
                         className="flex w-full cursor-pointer flex-col gap-2 rounded-xl border border-separator-border bg-background-secondary-default/65 p-3 text-start transition-colors hover:border-border-button-hover hover:bg-background-secondary-hover outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0">
+                          <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5 text-body-medium text-text-primary">
                               <RiMapPinLine
                                 className="size-4 shrink-0 text-foreground-icon-secondary"
@@ -115,8 +115,10 @@ export function NearbyDrawer() {
                               <span className="truncate">{station.name}</span>
                             </div>
                             <div className="mt-0.5 flex items-center gap-1 text-caption-1-medium text-text-tertiary">
-                              <RiWalkLine className="size-3.5" aria-hidden />
-                              <span>{formatDistance(distanceM, walkMinutes)}</span>
+                              <RiWalkLine className="size-3.5 shrink-0" aria-hidden />
+                              <span className="truncate">
+                                {formatDistance(distanceM, walkMinutes)}
+                              </span>
                             </div>
                           </div>
 
@@ -152,7 +154,7 @@ export function NearbyDrawer() {
                                 <Chip
                                   color={dep.atStop || dep.waitMinutes <= 1 ? 'lime' : 'soft'}
                                   variant="caption"
-                                  className="tabular-nums"
+                                  className="shrink-0 tabular-nums"
                                 >
                                   {dep.atStop || dep.waitMinutes <= 0
                                     ? 'À quai'

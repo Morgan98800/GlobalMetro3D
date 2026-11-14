@@ -169,16 +169,16 @@ export function StationDrawer() {
                       return (
                         <li
                           key={`${dep.tripId}-${dep.lineId}-${dep.direction}`}
-                          className="flex items-center justify-between gap-2.5 rounded-xl border border-separator-border bg-background-secondary-default/70 px-3 py-2"
+                          className="flex min-w-0 items-center justify-between gap-2.5 overflow-hidden rounded-xl border border-separator-border bg-background-secondary-default/70 px-3 py-2"
                         >
-                          <div className="flex min-w-0 items-center gap-2.5">
+                          <div className="flex min-w-0 flex-1 items-center gap-2.5">
                             <LineBadgeChip
                               shortName={dep.lineShortName}
                               color={dep.colorHex}
                               textColor={dep.textColorHex}
                               size="sm"
                             />
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1">
                               <div className="truncate text-body-medium text-text-primary">
                                 {dep.destName}
                               </div>
@@ -219,7 +219,7 @@ export function StationDrawer() {
             </DrawerBody>
 
             <DrawerFooter className="flex-wrap justify-between gap-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Button
                   variant="secondary"
                   size="small"
@@ -229,7 +229,7 @@ export function StationDrawer() {
                     close();
                   }}
                 >
-                  Zoomer 3D
+                  Zoom 3D
                 </Button>
                 <Button
                   variant="secondary"
@@ -280,7 +280,7 @@ export function StationDrawer() {
                     });
                   }}
                 >
-                  Voir le quai en 3D
+                  Quai 3D
                 </Button>
               ) : null}
             </DrawerFooter>

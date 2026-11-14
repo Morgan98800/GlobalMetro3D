@@ -9,8 +9,9 @@ import {
   RiSubwayLine,
   RiTimerLine,
 } from '@remixicon/react';
-import { StatCards, type Stat } from '@/components/application/dashboard/stat-cards';
+import { type Stat } from '@/components/application/dashboard/stat-cards';
 import { Button } from '@/components/base/buttons/button';
+import { Chip } from '@/components/base/badges/chip';
 import { CloseButton } from '@/components/base/buttons/close-button';
 import { StatusDot } from '@/components/base/badges/status-dot';
 import { Divider } from '@/components/base/divider/divider';
@@ -197,7 +198,7 @@ export function LineDetailsPanel() {
       id="dock"
       aria-label="Lignes du réseau et détail de ligne"
       className={cx(
-        'fixed z-20 flex flex-col overflow-hidden rounded-2xl border border-border-button-default bg-background-primary-default/90 shadow-lg backdrop-blur-md',
+        'pointer-events-auto fixed z-20 flex flex-col overflow-hidden rounded-2xl border border-border-button-default bg-background-primary-default/90 shadow-lg backdrop-blur-md',
         'transition-[transform,opacity] duration-200 ease-out',
         expertMode
           ? 'inset-x-2.5 bottom-4 max-h-[52vh] md:inset-x-auto md:left-4 md:bottom-4 md:w-[348px] md:max-h-[calc(100dvh-132px)]'
@@ -207,12 +208,12 @@ export function LineDetailsPanel() {
     >
       {/* En-tête du panneau */}
       <div className="flex shrink-0 items-center justify-between gap-2 border-b border-separator-border px-3.5 py-2.5">
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="truncate text-body-medium text-text-primary">
+        <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
+          <span className="shrink-0 text-body-medium text-text-primary">
             {activeLine ? `Ligne ${activeLine.short_name}` : 'Lignes du réseau'}
           </span>
           {activeLine?.long_name ? (
-            <span className="hidden truncate text-caption-1-medium text-text-tertiary sm:inline">
+            <span className="hidden min-w-0 flex-1 truncate text-caption-1-medium text-text-tertiary sm:inline">
               {activeLine.long_name}
             </span>
           ) : null}
@@ -248,7 +249,7 @@ export function LineDetailsPanel() {
       </div>
 
       {/* Corps défilant */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain p-3.5 [scrollbar-width:thin]">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-x-hidden overflow-y-auto overscroll-contain p-3.5 [scrollbar-width:thin]">
         {/* Grille compacte de sélection des lignes */}
         <div className="flex flex-wrap gap-1.5" role="group" aria-label="Choisir une ligne">
           {sortedLines.map((line) => {
@@ -290,13 +291,13 @@ export function LineDetailsPanel() {
                     handlers.onLineDirChange?.(activeLine.id, first);
                   }
                 }}
-                className="w-full"
+                className="w-full max-w-full overflow-hidden"
               >
-                <SegmentedControlItem id="0" className="min-w-0 flex-1 truncate">
-                  {dirLabels.d0}
+                <SegmentedControlItem id="0" className="min-w-0 flex-1 overflow-hidden">
+                  <span className="block w-full truncate">{dirLabels.d0}</span>
                 </SegmentedControlItem>
-                <SegmentedControlItem id="1" className="min-w-0 flex-1 truncate">
-                  {dirLabels.d1}
+                <SegmentedControlItem id="1" className="min-w-0 flex-1 overflow-hidden">
+                  <span className="block w-full truncate">{dirLabels.d1}</span>
                 </SegmentedControlItem>
               </SegmentedControl>
             ) : null}
@@ -305,21 +306,21 @@ export function LineDetailsPanel() {
             {traffic && traffic.status !== 'normal' ? (
               <div
                 role="alert"
-                className="flex items-start gap-2 rounded-xl border border-separator-border bg-status-rose-background p-2.5 text-status-rose-text"
+                className="flex min-w-0 items-start gap-2 overflow-hidden rounded-xl border border-separator-border bg-status-rose-background p-2.5 text-status-rose-text"
               >
                 <RiAlertLine className="mt-0.5 size-4 shrink-0" aria-hidden />
-                <div className="min-w-0">
-                  <div className="text-body-2-medium">{traffic.title}</div>
-                  <p className="text-caption-1-medium opacity-90">{traffic.message}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-body-2-medium">{traffic.title}</div>
+                  <p className="break-words text-caption-1-medium opacity-90">{traffic.message}</p>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-between rounded-xl border border-separator-border bg-background-secondary-default/65 px-3 py-2 text-caption-1-medium text-text-secondary">
-                <span className="inline-flex items-center gap-2">
-                  <StatusDot color="green" />
-                  Trafic normal sur la ligne
+              <div className="flex min-w-0 items-center justify-between gap-2 overflow-hidden rounded-xl border border-separator-border bg-background-secondary-default/65 px-3 py-2 text-caption-1-medium text-text-secondary">
+                <span className="inline-flex min-w-0 items-center gap-2">
+                  <StatusDot color="green" className="shrink-0" />
+                  <span className="truncate">Trafic normal sur la ligne</span>
                 </span>
-                <span className="tabular-nums text-text-primary">
+                <span className="shrink-0 tabular-nums text-text-primary">
                   {activeLineTrains.length} rames
                 </span>
               </div>
@@ -327,7 +328,37 @@ export function LineDetailsPanel() {
 
             {/* KPIs avancés uniquement en Mode Passionné */}
             {expertMode && lineStats.length > 0 ? (
-              <StatCards variant="plain" columns={2} stats={lineStats} className="gap-2" />
+              <div className="grid grid-cols-2 gap-2">
+                {lineStats.map((stat) => {
+                  const Icon = stat.icon;
+                  return (
+                    <section
+                      key={stat.label}
+                      className="flex min-w-0 flex-col gap-1.5 overflow-hidden rounded-xl border border-separator-border bg-background-secondary-default/75 p-2.5"
+                    >
+                      <div className="flex min-w-0 items-center gap-1.5 text-caption-1-medium text-text-secondary">
+                        <Icon
+                          className="size-3.5 shrink-0 text-foreground-icon-secondary"
+                          aria-hidden
+                        />
+                        <span className="truncate">{stat.label}</span>
+                      </div>
+                      <div className="truncate text-body-medium font-semibold tabular-nums text-text-primary">
+                        {stat.value}
+                      </div>
+                      <div className="flex min-w-0">
+                        <Chip
+                          variant="caption"
+                          color={stat.deltaColor}
+                          className="max-w-full truncate"
+                        >
+                          {stat.delta}
+                        </Chip>
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
             ) : null}
 
             {/* Action 3D Paris */}
@@ -336,7 +367,7 @@ export function LineDetailsPanel() {
                 variant="primary"
                 size="small"
                 leadingIcon={RiBox3Line}
-                className="w-full"
+                className="w-full max-w-full"
                 onClick={() =>
                   handlers.onOpenParisRide?.({
                     initialLine: activeLine.short_name,
@@ -344,7 +375,7 @@ export function LineDetailsPanel() {
                   })
                 }
               >
-                {expertMode ? 'Monter en cabine 3D en direct' : 'Voir la rame en 3D sur le quai'}
+                {expertMode ? 'Cabine 3D en direct' : 'Voir la rame en 3D'}
               </Button>
             ) : null}
 
@@ -352,7 +383,7 @@ export function LineDetailsPanel() {
             <div
               id={ladderHostId}
               ref={ladderHostRef}
-              className="dock-content min-h-[160px] rounded-xl border border-separator-border bg-background-secondary-default/40 p-2"
+              className="dock-content min-h-[160px] overflow-x-hidden rounded-xl border border-separator-border bg-background-secondary-default/40 p-2"
             />
           </div>
         ) : (

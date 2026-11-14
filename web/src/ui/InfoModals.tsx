@@ -362,23 +362,27 @@ export function InfoModals() {
                   const bottom5 = rows.slice(-5).reverse();
                   return (
                     <TabPanel key={dayKey} id={dayKey} className="grid gap-4 sm:grid-cols-2">
-                      <div className="flex flex-col gap-2 rounded-xl border border-separator-border bg-background-secondary-default/65 p-3">
-                        <div className="text-body-2-medium text-text-primary">
+                      <div className="flex min-w-0 flex-col gap-2 overflow-hidden rounded-xl border border-separator-border bg-background-secondary-default/65 p-3">
+                        <div className="truncate text-body-2-medium text-text-primary">
                           Stations les plus fréquentées
                         </div>
                         <ol className="flex flex-col gap-1.5">
                           {top5.map((row, index) => (
                             <li
                               key={`${dayKey}-top-${row.station_name}`}
-                              className="flex items-center justify-between gap-2 text-body-2-regular"
+                              className="flex min-w-0 items-center justify-between gap-2 text-body-2-regular"
                             >
-                              <span className="truncate text-text-secondary">
+                              <span className="min-w-0 flex-1 truncate text-text-secondary">
                                 <span className="me-1.5 font-mono text-caption-1-semibold text-text-tertiary">
                                   #{index + 1}
                                 </span>
                                 {row.station_name}
                               </span>
-                              <Chip color="lime" variant="caption" className="tabular-nums">
+                              <Chip
+                                color="lime"
+                                variant="caption"
+                                className="shrink-0 tabular-nums"
+                              >
                                 {Number(row.counts?.[dayKey] || 0).toLocaleString('fr-FR')}/j
                               </Chip>
                             </li>
@@ -386,23 +390,27 @@ export function InfoModals() {
                         </ol>
                       </div>
 
-                      <div className="flex flex-col gap-2 rounded-xl border border-separator-border bg-background-secondary-default/65 p-3">
-                        <div className="text-body-2-medium text-text-primary">
+                      <div className="flex min-w-0 flex-col gap-2 overflow-hidden rounded-xl border border-separator-border bg-background-secondary-default/65 p-3">
+                        <div className="truncate text-body-2-medium text-text-primary">
                           Stations les plus calmes
                         </div>
                         <ol className="flex flex-col gap-1.5">
                           {bottom5.map((row, index) => (
                             <li
                               key={`${dayKey}-bot-${row.station_name}`}
-                              className="flex items-center justify-between gap-2 text-body-2-regular"
+                              className="flex min-w-0 items-center justify-between gap-2 text-body-2-regular"
                             >
-                              <span className="truncate text-text-secondary">
+                              <span className="min-w-0 flex-1 truncate text-text-secondary">
                                 <span className="me-1.5 font-mono text-caption-1-semibold text-text-tertiary">
                                   #{index + 1}
                                 </span>
                                 {row.station_name}
                               </span>
-                              <Chip color="soft" variant="caption" className="tabular-nums">
+                              <Chip
+                                color="soft"
+                                variant="caption"
+                                className="shrink-0 tabular-nums"
+                              >
                                 {Number(row.counts?.[dayKey] || 0).toLocaleString('fr-FR')}/j
                               </Chip>
                             </li>
@@ -517,16 +525,16 @@ export function InfoModals() {
                         handlers.onSetThemePreference?.(next);
                       }
                     }}
-                    className="w-full"
+                    className="w-full max-w-full overflow-hidden"
                   >
-                    <SegmentedControlItem id="system" className="flex-1">
-                      Système
+                    <SegmentedControlItem id="system" className="min-w-0 flex-1 overflow-hidden">
+                      <span className="truncate">Système</span>
                     </SegmentedControlItem>
-                    <SegmentedControlItem id="light" className="flex-1">
-                      Clair
+                    <SegmentedControlItem id="light" className="min-w-0 flex-1 overflow-hidden">
+                      <span className="truncate">Clair</span>
                     </SegmentedControlItem>
-                    <SegmentedControlItem id="dark" className="flex-1">
-                      Sombre
+                    <SegmentedControlItem id="dark" className="min-w-0 flex-1 overflow-hidden">
+                      <span className="truncate">Sombre</span>
                     </SegmentedControlItem>
                   </SegmentedControl>
                   <p className="text-caption-1-regular text-text-tertiary">
@@ -539,7 +547,7 @@ export function InfoModals() {
 
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between gap-3">
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div className="text-body-medium text-text-primary">Mode Passionné</div>
                       <p className="text-caption-1-regular text-text-tertiary">
                         Affiche la télémétrie en direct, le matériel roulant et les intervalles.
@@ -554,7 +562,7 @@ export function InfoModals() {
                   </div>
 
                   <div className="flex items-center justify-between gap-3">
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <div className="text-body-medium text-text-primary">Bâtiments 3D</div>
                       <p className="text-caption-1-regular text-text-tertiary">
                         Affiche le bâti urbain autour des stations et lignes aériennes.

@@ -38,28 +38,28 @@ export function FollowTrainHud() {
   return (
     <aside
       aria-label="Suivi de rame en cours"
-      className="fixed inset-x-3 bottom-7 z-20 mx-auto flex max-w-md flex-col gap-2.5 rounded-2xl border border-border-button-default bg-background-primary-default/92 p-3.5 shadow-xl backdrop-blur-md"
+      className="pointer-events-auto fixed inset-x-3 bottom-7 z-20 mx-auto flex max-w-md flex-col gap-2.5 overflow-hidden rounded-2xl border border-border-button-default bg-background-primary-default/92 p-3.5 shadow-xl backdrop-blur-md"
     >
       <div className="flex items-start justify-between gap-2.5">
-        <div className="flex min-w-0 items-center gap-2.5">
+        <div className="flex min-w-0 flex-1 items-center gap-2.5">
           <LineBadgeChip
             shortName={trackedTrain.lineName}
             color={trackedTrain.colorHex}
             textColor={trackedTrain.textColorHex}
             size="md"
           />
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="truncate text-body-medium text-text-primary">
               Vers {trackedTrain.dest}
             </div>
-            <div className="flex flex-wrap items-center gap-1.5 text-caption-1-medium text-text-secondary">
-              <span className="truncate">
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5 text-caption-1-medium text-text-secondary">
+              <span className="min-w-0 truncate">
                 {trackedTrain.atStop
                   ? `À quai · ${trackedTrain.next}`
                   : `Prochain arrêt : ${trackedTrain.next}`}
               </span>
               {trackedTrain.atStop ? (
-                <Chip color="lime" variant="caption">
+                <Chip color="lime" variant="caption" className="shrink-0">
                   À quai
                 </Chip>
               ) : null}
@@ -85,20 +85,20 @@ export function FollowTrainHud() {
         />
       </div>
 
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-caption-1-medium text-text-tertiary">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2 text-caption-1-medium text-text-tertiary">
           {expertMode ? (
             <>
-              <span className="tabular-nums text-text-primary">{speedKmh} km/h</span>
-              <span>•</span>
-              <span>{confLabel}</span>
+              <span className="shrink-0 tabular-nums text-text-primary">{speedKmh} km/h</span>
+              <span className="shrink-0">•</span>
+              <span className="truncate">{confLabel}</span>
             </>
           ) : (
-            <span>Suivi caméra 3D actif</span>
+            <span className="truncate">Suivi caméra 3D actif</span>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-1.5">
           {isParis && trackedTrain.lineName?.trim() ? (
             <Button
               variant="primary"

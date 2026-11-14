@@ -35,18 +35,18 @@
       "maxSize1Pct": 10130
     },
     {
-      "originalPath": "assets/main-BQzAwrr4.js",
+      "originalPath": "assets/main-BolUsOUE.js",
       "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 482463,
-      "minSize1Pct": 477638,
-      "maxSize1Pct": 487288
+      "sizeBytes": 472884,
+      "minSize1Pct": 468155,
+      "maxSize1Pct": 477613
     },
     {
-      "originalPath": "assets/main-3mCHpSlf.css",
+      "originalPath": "assets/main-f3iYy0GU.css",
       "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 206030,
-      "minSize1Pct": 203969,
-      "maxSize1Pct": 208091
+      "sizeBytes": 206592,
+      "minSize1Pct": 204526,
+      "maxSize1Pct": 208658
     },
     {
       "originalPath": "assets/maplibre--S9olhOP.css",
@@ -70,7 +70,7 @@
       "maxSize1Pct": 521968
     },
     {
-      "originalPath": "assets/paris_ride_view-B0byygIA.js",
+      "originalPath": "assets/paris_ride_view-DuI5DQTj.js",
       "normalizedPath": "assets/paris_ride_view.[hash].js",
       "sizeBytes": 64886,
       "minSize1Pct": 64237,

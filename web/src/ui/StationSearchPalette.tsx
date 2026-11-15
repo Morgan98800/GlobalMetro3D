@@ -1,284 +1,166 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  RiArrowDownLine,
-  RiArrowUpLine,
-  RiCompass3Line,
-  RiCornerDownLeftLine,
-  RiMapPin2Line,
-  RiMapPinLine,
-  RiSubwayLine,
-} from '@remixicon/react';
-import { searchPlaces, type PlaceCandidate } from '@core/ui/utils/geocoding';
-import { Chip } from '@/components/base/badges/chip';
-import {
-  CommandPalette,
-  CommandPaletteItem,
-  CommandPaletteSection,
-} from '@/components/base/command-palette/command-palette';
-import { Kbd } from '@/components/base/kbd/kbd';
-import { Spinner } from '@/components/base/spinner/spinner';
+import { RiGitCommitLine, RiMapPin2Line, RiRouteLine, RiSearchLine } from '@remixicon/react';
+import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
+import { Button } from './Button';
+import { cx } from './cx';
+import { Kbd } from './Kbd';
 import { LineBadgeChip } from './LineBadgeChip';
-import { uiStore, useUiStore } from './ui_store';
+import { lineName, type LineRef } from './lines';
+import { useIsDesktop } from './useMediaQuery';
 
-function normalizeQuery(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim();
+/**
+ * Recherche ⌘K (v2.1). Un champ, une liste. Aucun bouton : l’itinéraire A → B est
+ * la première option, pas un bouton à part. Combobox ARIA, flèches + Entrée.
+ * La correspondance est en gras, jamais en couleur.
+ */
+export type ResultatRecherche =
+  | { type: 'itineraire' }
+  | { type: 'station'; id: string; nom: string; lignes: LineRef[]; detail?: string }
+  | { type: 'ligne'; ligne: LineRef; termini: [string, string] }
+  | { type: 'lieu'; id: string; nom: string; detail?: string };
+
+export interface StationSearchPaletteProps {
+  ouverte: boolean;
+  requete: string;
+  onRequete: (v: string) => void;
+  stations: Extract<ResultatRecherche, { type: 'station' }>[];
+  lignes: Extract<ResultatRecherche, { type: 'ligne' }>[];
+  lieux: Extract<ResultatRecherche, { type: 'lieu' }>[];
+  onChoisir: (r: ResultatRecherche) => void;
+  onClose: () => void;
+  /** Option active au montage (maquettes) */
+  actifInitial?: number;
 }
 
-function formatDistanceLabel(meters?: number): string {
-  if (meters === undefined || !Number.isFinite(meters)) return '';
-  if (meters < 1000) return `${Math.round(meters)} m`;
-  return `${(meters / 1000).toFixed(1)} km`;
+const plier = (c: string) => c.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().charAt(0) || c;
+
+/** Met en gras la partie qui correspond, insensible aux accents et à la casse. */
+function surligner(texte: string, q: string): ReactNode {
+  const query = q.trim();
+  if (!query) return texte;
+  const folded = Array.from(texte).map(plier).join('');
+  const fq = Array.from(query).map(plier).join('');
+  const i = folded.indexOf(fq);
+  if (i < 0) return texte;
+  const chars = Array.from(texte);
+  return (
+    <>
+      {chars.slice(0, i).join('')}
+      <mark className="bg-transparent font-bold text-encre">{chars.slice(i, i + fq.length).join('')}</mark>
+      {chars.slice(i + fq.length).join('')}
+    </>
+  );
 }
 
-export function StationSearchPalette() {
-  const { searchOpen, stations, lines, cityConfig, handlers } = useUiStore();
-  const [query, setQuery] = useState('');
-  const [places, setPlaces] = useState<PlaceCandidate[]>([]);
-  const [loadingPlaces, setLoadingPlaces] = useState(false);
+export function StationSearchPalette(p: StationSearchPaletteProps) {
+  const desktop = useIsDesktop();
+  const listId = useId();
+  const options = useMemo<ResultatRecherche[]>(() => [{ type: 'itineraire' }, ...p.stations, ...p.lignes, ...p.lieux], [p.stations, p.lignes, p.lieux]);
+  const [actif, setActif] = useState(p.actifInitial ?? 0);
+  useEffect(() => setActif((a) => Math.min(a, options.length - 1)), [options.length]);
+  if (!p.ouverte) return null;
 
-  const lineById = useMemo(() => new Map(lines.map((line) => [line.id, line])), [lines]);
+  const optId = (i: number) => `${listId}-o${i}`;
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActif((a) => (a + (e.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      p.onChoisir(options[actif]);
+    } else if (e.key === 'Escape') p.onClose();
+  };
 
-  useEffect(() => {
-    const trimmed = query.trim();
-    if (!searchOpen || trimmed.length < 3) {
-      setPlaces([]);
-      setLoadingPlaces(false);
-      return;
-    }
-
-    const controller = new AbortController();
-    setLoadingPlaces(true);
-    const timer = window.setTimeout(() => {
-      searchPlaces(trimmed, {
-        cityId: cityConfig?.id,
-        center: cityConfig?.map?.center,
-        limit: 6,
-        signal: controller.signal,
-      })
-        .then((res) => {
-          if (!controller.signal.aborted) {
-            setPlaces(res);
-          }
-        })
-        .catch(() => {
-          if (!controller.signal.aborted) {
-            setPlaces([]);
-          }
-        })
-        .finally(() => {
-          if (!controller.signal.aborted) {
-            setLoadingPlaces(false);
-          }
-        });
-    }, 220);
-
-    return () => {
-      window.clearTimeout(timer);
-      controller.abort();
-    };
-  }, [query, searchOpen, cityConfig?.id, cityConfig?.map?.center]);
-
-  const { matchedLines, matchedStations } = useMemo(() => {
-    const q = normalizeQuery(query);
-    if (!q) {
-      return {
-        matchedLines: lines.slice(0, 4),
-        matchedStations: stations.slice(0, 8),
-      };
-    }
-
-    const linesFiltered = lines
-      .filter((line) => {
-        const shortN = normalizeQuery(line.short_name);
-        const longN = normalizeQuery(line.long_name || '');
-        return shortN.includes(q) || longN.includes(q) || `ligne ${shortN}`.includes(q);
-      })
-      .slice(0, 6);
-
-    const stationsFiltered = stations
-      .map((station) => {
-        const norm = normalizeQuery(station.name);
-        const idx = norm.indexOf(q);
-        if (idx === -1) return null;
-        return { station, score: idx === 0 ? 0 : idx };
-      })
-      .filter(
-        (entry): entry is { station: (typeof stations)[number]; score: number } => entry !== null
-      )
-      .sort((a, b) => a.score - b.score || a.station.name.localeCompare(b.station.name, 'fr'))
-      .slice(0, 12)
-      .map((entry) => entry.station);
-
-    return { matchedLines: linesFiltered, matchedStations: stationsFiltered };
-  }, [lines, stations, query]);
-
-  const showPlannerShortcut =
-    !query.trim() || normalizeQuery('itineraire trajet a vers b').includes(normalizeQuery(query));
+  let index = 0;
+  const option = (r: ResultatRecherche, contenu: ReactNode) => {
+    const i = index++;
+    return (
+      <div
+        key={optId(i)}
+        id={optId(i)}
+        role="option"
+        aria-selected={i === actif}
+        onMouseEnter={() => setActif(i)}
+        onClick={() => p.onChoisir(r)}
+        className={cx(
+          'grid cursor-pointer grid-cols-[36px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-2 transition-colors duration-100',
+          i === actif ? 'bg-selection' : 'hover:bg-encart',
+        )}
+      >
+        {contenu}
+      </div>
+    );
+  };
+  const vignette = (icon: ReactNode) => (
+    <span aria-hidden className="grid size-9 place-items-center rounded-[9px] bg-encart text-icone-2 [&_svg]:size-[18px]">{icon}</span>
+  );
+  const titre = (t: ReactNode, sous?: ReactNode, signal = false) => (
+    <span className="min-w-0">
+      <span className={cx('block truncate text-[15px] leading-[20px] text-encre', signal ? 'signaletique text-[16px] font-medium' : 'font-medium')}>{t}</span>
+      {sous && <span className="block truncate text-legende text-encre-3">{sous}</span>}
+    </span>
+  );
 
   return (
-    <CommandPalette
-      isOpen={searchOpen}
-      onOpenChange={(open) => {
-        uiStore.setSearchOpen(open);
-        if (!open) {
-          setQuery('');
-          setPlaces([]);
-        }
-      }}
-      shortcut="k"
-      aria-label="Navigation : adresse, restaurant, station ou itinéraire"
-      placeholder="Où allez-vous ? Adresse, resto, station…"
-      inputValue={query}
-      onInputChange={setQuery}
-      filter={null}
-      emptyState={
-        loadingPlaces ? 'Recherche d’adresses et lieux…' : 'Aucun lieu, station ni ligne trouvé'
-      }
-      footer={
-        <>
-          <span className="flex items-center gap-1.5">
-            <Kbd aria-label="Flèches">
-              <RiArrowUpLine className="size-3" aria-hidden />
-            </Kbd>
-            <Kbd aria-label="Flèche bas">
-              <RiArrowDownLine className="size-3" aria-hidden />
-            </Kbd>
-            Naviguer
-          </span>
-          <span className="flex items-center gap-1.5">
-            {loadingPlaces ? (
-              <Spinner size="xs" aria-label="Recherche en cours" />
-            ) : (
-              <Kbd aria-label="Entrée">
-                <RiCornerDownLeftLine className="size-3" aria-hidden />
-              </Kbd>
+    <div className="fixed inset-0 z-50 flex justify-center md:items-start md:pt-[11vh]">
+      <div aria-hidden className="absolute inset-0 bg-nuit-950/45 backdrop-blur-[2px]" onClick={p.onClose} />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Rechercher une station, une adresse ou une ligne"
+        className="relative flex h-full w-full flex-col overflow-hidden bg-surface animate-feuille md:h-auto md:max-h-[72dvh] md:w-[600px] md:rounded-feuille [box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),var(--shadow-flotte)]"
+      >
+        <div className="flex h-16 shrink-0 items-center gap-3 border-b border-joint px-4 pt-[env(safe-area-inset-top)]">
+          <RiSearchLine aria-hidden className="size-5 shrink-0 text-icone-2" />
+          <input
+            autoFocus
+            role="combobox"
+            aria-expanded="true"
+            aria-controls={listId}
+            aria-autocomplete="list"
+            aria-activedescendant={optId(actif)}
+            value={p.requete}
+            onChange={(e) => p.onRequete(e.target.value)}
+            onKeyDown={onKey}
+            placeholder="Station, adresse, lieu ou ligne"
+            className="min-w-0 flex-1 bg-transparent text-[18px] text-encre outline-none placeholder:text-encre-3"
+          />
+          {desktop ? <Kbd>Échap</Kbd> : <Button variant="discret" size="sm" onClick={p.onClose}>Annuler</Button>}
+        </div>
+
+        <div id={listId} role="listbox" aria-label="Résultats" className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
+          {option({ type: 'itineraire' }, <>{vignette(<RiRouteLine />)}{titre('Itinéraire entre deux points', 'De A à B, avec les correspondances')}<span /></>)}
+          <Groupe titre="Stations" vide={!p.stations.length}>
+            {p.stations.map((s) =>
+              option(s, <>{vignette(<RiGitCommitLine />)}{titre(surligner(s.nom, p.requete), s.detail, true)}<span className="flex gap-1">{s.lignes.map((l) => <LineBadgeChip key={l.shortName} {...l} size="xs" />)}</span></>),
             )}
-            {loadingPlaces ? 'Géocodage…' : 'Y aller / Ouvrir'}
-          </span>
-        </>
-      }
-    >
-      {showPlannerShortcut ? (
-        <CommandPaletteSection title="Navigation">
-          <CommandPaletteItem
-            id="action:route-planner"
-            icon={RiCompass3Line}
-            textValue="Calculer un itinéraire entre 2 points A B"
-            description="A → B · Marche & Métro"
-            onAction={() => {
-              handlers.onOpenRoutePlanner?.();
-            }}
-          >
-            <span className="truncate font-medium text-accent-500">
-              Itinéraire entre 2 points (A → B)
-            </span>
-          </CommandPaletteItem>
-        </CommandPaletteSection>
-      ) : null}
+          </Groupe>
+          <Groupe titre="Lignes" vide={!p.lignes.length}>
+            {p.lignes.map((l) =>
+              option(l, <><span className="grid size-9 place-items-center"><LineBadgeChip {...l.ligne} size="sm" /></span>{titre(lineName(l.ligne.shortName), `${l.termini[0]} – ${l.termini[1]}`)}<span /></>),
+            )}
+          </Groupe>
+          <Groupe titre="Adresses et lieux" vide={!p.lieux.length}>
+            {p.lieux.map((l) => option(l, <>{vignette(<RiMapPin2Line />)}{titre(surligner(l.nom, p.requete), l.detail)}<span /></>))}
+          </Groupe>
+        </div>
 
-      {places.length > 0 ? (
-        <CommandPaletteSection title="Adresses, restaurants & lieux">
-          {places.map((place) => (
-            <CommandPaletteItem
-              key={place.id}
-              id={place.id}
-              icon={RiMapPin2Line}
-              textValue={`${place.name} ${place.subtitle} ${place.category}`}
-              onAction={() => {
-                handlers.onSelectPlace?.(place, true);
-              }}
-            >
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate text-body-2-medium text-text-primary">{place.name}</span>
-                {place.subtitle ? (
-                  <span className="truncate text-caption-1-regular text-text-tertiary">
-                    {place.subtitle}
-                  </span>
-                ) : null}
-              </span>
-              <span className="flex shrink-0 items-center gap-1.5">
-                <Chip color="soft" variant="caption">
-                  {place.category}
-                </Chip>
-                {place.distanceM !== undefined ? (
-                  <span className="text-caption-1-medium tabular-nums text-text-tertiary">
-                    {formatDistanceLabel(place.distanceM)}
-                  </span>
-                ) : null}
-              </span>
-            </CommandPaletteItem>
-          ))}
-        </CommandPaletteSection>
-      ) : null}
+        {desktop && (
+          <footer className="flex shrink-0 items-center gap-5 border-t border-joint px-4 py-2.5 text-legende text-encre-3">
+            <span className="flex items-center gap-1"><Kbd>↑</Kbd><Kbd>↓</Kbd> pour choisir</span>
+            <span className="flex items-center gap-1"><Kbd>Entrée</Kbd> pour ouvrir</span>
+          </footer>
+        )}
+      </div>
+    </div>
+  );
+}
 
-      {matchedStations.length > 0 ? (
-        <CommandPaletteSection title={query ? 'Stations correspondantes' : 'Stations principales'}>
-          {matchedStations.map((station) => {
-            const serving = station.lines
-              .map((lineId) => lineById.get(lineId))
-              .filter((line): line is (typeof lines)[number] => Boolean(line));
-            return (
-              <CommandPaletteItem
-                key={`station:${station.id}`}
-                id={`station:${station.id}`}
-                icon={RiMapPinLine}
-                textValue={station.name}
-                onAction={() => {
-                  handlers.onStationSelect?.(station);
-                }}
-              >
-                <span className="truncate">{station.name}</span>
-                <span className="flex shrink-0 items-center gap-1">
-                  {serving.slice(0, 5).map((line) => (
-                    <LineBadgeChip
-                      key={line.id}
-                      shortName={line.short_name}
-                      color={line.color}
-                      textColor={line.text_color}
-                      size="xs"
-                    />
-                  ))}
-                  {serving.length > 5 ? (
-                    <span className="text-caption-1-medium text-text-tertiary">
-                      +{serving.length - 5}
-                    </span>
-                  ) : null}
-                </span>
-              </CommandPaletteItem>
-            );
-          })}
-        </CommandPaletteSection>
-      ) : null}
-
-      {matchedLines.length > 0 ? (
-        <CommandPaletteSection title="Lignes du réseau">
-          {matchedLines.map((line) => (
-            <CommandPaletteItem
-              key={`line:${line.id}`}
-              id={`line:${line.id}`}
-              icon={RiSubwayLine}
-              textValue={`Ligne ${line.short_name} ${line.long_name || ''}`}
-              description={line.long_name || undefined}
-              onAction={() => {
-                handlers.onLineSelect?.(line.id, '0');
-                uiStore.setLineDrawerOpen(true);
-              }}
-            >
-              <LineBadgeChip
-                shortName={line.short_name}
-                color={line.color}
-                textColor={line.text_color}
-                size="xs"
-              />
-              <span className="truncate">Ligne {line.short_name}</span>
-            </CommandPaletteItem>
-          ))}
-        </CommandPaletteSection>
-      ) : null}
-    </CommandPalette>
+function Groupe({ titre, vide, children }: { titre: string; vide: boolean; children: ReactNode }) {
+  if (vide) return null;
+  return (
+    <div role="group" aria-label={titre} className="mt-2">
+      <p aria-hidden className="px-2 pb-1 pt-2 text-[12px] font-semibold text-encre-3">{titre}</p>
+      {children}
+    </div>
   );
 }

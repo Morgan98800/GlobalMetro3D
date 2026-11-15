@@ -1,163 +1,70 @@
-import { RiBox3Line, RiBuilding2Line, RiCrosshair2Line, RiTrainLine } from '@remixicon/react';
-import { Focusable } from 'react-aria-components';
-import { IconButton } from '@/components/base/buttons/icon-button';
-import { Divider } from '@/components/base/divider/divider';
-import { Tooltip, TooltipTrigger } from '@/components/base/tooltip/tooltip';
-import { cx } from '@/utils/cx';
-import { useUiStore, type EdinburghPreset } from './ui_store';
+import {
+  RiAddLine, RiBox3Line, RiBuilding2Line, RiCameraLensLine, RiCompass3Line, RiFocus3Line, RiNavigationFill,
+  RiNavigationLine, RiSubtractLine,
+} from '@remixicon/react';
+import { IconButton } from './Button';
+import { cx } from './cx';
+import { MenuBouton, type MenuEntree } from './Menu';
+import { Panneau } from './Panneau';
 
-const EDINBURGH_PRESETS: { id: EdinburghPreset; label: string; badge: string }[] = [
-  { id: 'waverley', label: 'Vallée de Waverley', badge: 'W' },
-  { id: 'castle', label: 'Castle Rock & Princes St', badge: 'C' },
-  { id: 'calton', label: 'Calton Hill', badge: 'H' },
-  { id: 'scotland', label: 'Panorama Écosse', badge: 'S' },
-  { id: 'overview', label: "Vue d'ensemble", badge: 'V' },
-];
+/**
+ * Contrôles de carte (v2.1) : uniquement des IconButton, uniquement des actions
+ * sur la carte. L’entrée « Cabine & Quai 3D » est retirée : entrer en 3D est une
+ * action sur un sujet (ligne, station, rame) et vit dans le panneau de ce sujet.
+ */
+export interface MapControlsProps {
+  vue3d: boolean;
+  onVue3d: () => void;
+  /** Seul endroit du réglage « Bâtiments en relief » (optionnel en mode Simple) */
+  batiments?: boolean;
+  onBatiments?: () => void;
+  /** Suivi continu de la position (GPS en direct) */
+  gps: boolean;
+  onGps: () => void;
+  /** Affiché seulement quand la caméra s’est éloignée : « Recentrer sur Paris », « Recentrer sur Bastille » */
+  recentrer?: { label: string; onClick: () => void } | null;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  /** Cap en degrés ; la boussole n’apparaît que hors nord */
+  cap?: number;
+  onNord?: () => void;
+  /** Points de vue propres à une ville (Édimbourg…), en noms complets */
+  pointsDeVue?: MenuEntree[];
+  zoom?: boolean;
+  className?: string;
+}
 
-export function MapControls() {
-  const {
-    cityConfig,
-    lines,
-    activeLineId,
-    trackedTrain,
-    pitch3D,
-    buildingsVisible,
-    recenterVisible,
-    recenterLabel,
-    expertMode,
-    handlers,
-  } = useUiStore();
-
-  const isParis = cityConfig?.id === 'paris';
-  const isEdinburgh = cityConfig?.id === 'edinburgh';
-
-  const handleOpenRide = () => {
-    if (trackedTrain && trackedTrain.lineName?.trim()) {
-      handlers.onOpenParisRide?.({
-        initialLine: trackedTrain.lineName,
-        initialDest: trackedTrain.dest,
-        initialStation: trackedTrain.next,
-        initialTrainId: trackedTrain.id,
-      });
-      return;
-    }
-    const selectedLine = activeLineId ? lines.find((l) => l.id === activeLineId) : null;
-    handlers.onOpenParisRide?.({
-      initialLine: selectedLine?.short_name?.trim() ? selectedLine.short_name : '6',
-    });
-  };
-
+export function MapControls(p: MapControlsProps) {
+  const cap = p.cap ?? 0;
   return (
-    <aside
-      id="map-controls"
-      aria-label="Contrôles de vue"
-      className={cx(
-        'pointer-events-auto fixed end-2.5 z-20 flex flex-col items-center gap-1.5 rounded-2xl border border-border-button-default bg-background-primary-default/85 p-1.5 shadow-md backdrop-blur-md md:top-auto md:end-4 md:bottom-4',
-        expertMode ? 'top-[118px]' : 'top-[68px]'
+    <div className={cx('pointer-events-none flex flex-col items-end gap-2', p.className)}>
+      <Panneau className="flex flex-col gap-0.5 p-1">
+        <IconButton label="Vue en 3D" pressed={p.vue3d} onClick={p.onVue3d} icon={<RiBox3Line aria-hidden />} />
+        {p.onBatiments && (
+          <IconButton label="Bâtiments en relief" pressed={Boolean(p.batiments)} onClick={p.onBatiments} icon={<RiBuilding2Line aria-hidden />} />
+        )}
+        <span aria-hidden className="mx-2 my-0.5 h-px bg-joint" />
+        <IconButton
+          label="Suivre ma position"
+          pressed={p.gps}
+          onClick={p.onGps}
+          icon={p.gps ? <RiNavigationFill aria-hidden /> : <RiNavigationLine aria-hidden />}
+        />
+        {p.recentrer && <IconButton label={p.recentrer.label} onClick={p.recentrer.onClick} icon={<RiFocus3Line aria-hidden />} />}
+        {Math.abs(cap) > 1 && p.onNord && (
+          <IconButton label="Revenir au nord" onClick={p.onNord} icon={<RiCompass3Line aria-hidden style={{ transform: `rotate(${-cap}deg)` }} />} />
+        )}
+        {p.pointsDeVue && p.pointsDeVue.length > 0 && (
+          <MenuBouton size="md" align="gauche" label="Points de vue" icon={<RiCameraLensLine aria-hidden />} entrees={p.pointsDeVue} />
+        )}
+      </Panneau>
+      {(p.zoom ?? true) && p.onZoomIn && p.onZoomOut && (
+        <Panneau className="hidden flex-col gap-0.5 p-1 md:flex">
+          <IconButton label="Zoom avant" onClick={p.onZoomIn} icon={<RiAddLine aria-hidden />} />
+          <span aria-hidden className="mx-2 h-px bg-joint" />
+          <IconButton label="Zoom arrière" onClick={p.onZoomOut} icon={<RiSubtractLine aria-hidden />} />
+        </Panneau>
       )}
-    >
-      {isEdinburgh ? (
-        <>
-          {EDINBURGH_PRESETS.map((preset) => (
-            <TooltipTrigger key={preset.id} delay={150}>
-              <Focusable>
-                <button
-                  type="button"
-                  aria-label={preset.label}
-                  onClick={() => handlers.onEdinburghPreset?.(preset.id)}
-                  className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border border-border-button-default bg-background-primary-default text-caption-1-semibold text-text-primary shadow-xs transition-colors hover:bg-background-primary-hover outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring"
-                >
-                  {preset.badge}
-                </button>
-              </Focusable>
-              <Tooltip size="sm" placement="start">
-                {preset.label}
-              </Tooltip>
-            </TooltipTrigger>
-          ))}
-          <TooltipTrigger delay={150}>
-            <Focusable>
-              <IconButton
-                icon={RiTrainLine}
-                size="small"
-                aria-label="Suivre un train écossais (caméra 3D)"
-                onClick={() => handlers.onEdinburghFollow?.()}
-              />
-            </Focusable>
-            <Tooltip size="sm" placement="start">
-              Suivre un train
-            </Tooltip>
-          </TooltipTrigger>
-          <Divider className="my-0.5" />
-        </>
-      ) : null}
-
-      <TooltipTrigger delay={150}>
-        <Focusable>
-          <IconButton
-            icon={RiBox3Line}
-            size="small"
-            aria-label="Basculer entre la vue 3D et 2D"
-            aria-pressed={pitch3D}
-            className={cx(pitch3D && 'border-accent-500 bg-accent-500/12 text-accent-500')}
-            onClick={() => handlers.onTogglePitch?.()}
-          />
-        </Focusable>
-        <Tooltip size="sm" placement="start">
-          Vue 3D / 2D
-        </Tooltip>
-      </TooltipTrigger>
-
-      <TooltipTrigger delay={150}>
-        <Focusable>
-          <IconButton
-            icon={RiBuilding2Line}
-            size="small"
-            aria-label="Afficher ou masquer les bâtiments 3D"
-            aria-pressed={buildingsVisible}
-            className={cx(buildingsVisible && 'border-accent-500 bg-accent-500/12 text-accent-500')}
-            onClick={() => handlers.onToggleBuildings?.()}
-          />
-        </Focusable>
-        <Tooltip size="sm" placement="start">
-          Bâtiments 3D (B)
-        </Tooltip>
-      </TooltipTrigger>
-
-      {isParis ? (
-        <TooltipTrigger delay={150}>
-          <Focusable>
-            <IconButton
-              icon={RiTrainLine}
-              size="small"
-              aria-label="Monter à bord d’une rame en 3D"
-              onClick={handleOpenRide}
-            />
-          </Focusable>
-          <Tooltip size="sm" placement="start">
-            Cabine & Quai 3D
-          </Tooltip>
-        </TooltipTrigger>
-      ) : null}
-
-      {recenterVisible ? (
-        <>
-          <Divider className="my-0.5" />
-          <TooltipTrigger delay={150}>
-            <Focusable>
-              <IconButton
-                icon={RiCrosshair2Line}
-                size="small"
-                aria-label={recenterLabel}
-                onClick={() => handlers.onRecenter?.()}
-              />
-            </Focusable>
-            <Tooltip size="sm" placement="start">
-              {recenterLabel}
-            </Tooltip>
-          </TooltipTrigger>
-        </>
-      ) : null}
-    </aside>
+    </div>
   );
 }

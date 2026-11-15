@@ -14,7 +14,7 @@
       "model_id": "MP89_CC_5V",
       "triangles": 342,
       "vertices": 766,
-      "bytes": 30132,
+      "bytes": 30736,
       "dimensions_m": {
         "length_x": 15.06,
         "width_z": 2.44,
@@ -23,7 +23,7 @@
       "height_source": "derived_from_pneumatic_generic_reference",
       "height_measured": false,
       "grazing_camera_approved": false,
-      "sha256": "fdf03fa44cad6390edeae2141e449e352f8936e18c883b263d507242ed1c9198"
+      "sha256": "ac0c37ef4f15e4b9a6113096721437c38fdb068316fba537e4edfacb8227629c"
     },
     {
       "file": "pneumatic_generic__neutral__cab.glb",
@@ -33,7 +33,7 @@
       "model_id": "MP89_CC_5V",
       "triangles": 350,
       "vertices": 800,
-      "bytes": 32528,
+      "bytes": 32660,
       "dimensions_m": {
         "length_x": 15.06,
         "width_z": 2.44,
@@ -42,7 +42,7 @@
       "height_source": "derived_from_pneumatic_generic_reference",
       "height_measured": false,
       "grazing_camera_approved": false,
-      "sha256": "1d8f8702ba10ea14de15673f3285dce76d5158de26d2f105d77bf63190e2c0eb"
+      "sha256": "9275c93e966c912b085e3cfc21cebe0b13cff504b644e526d9a944c061abe6c6"
     },
     {
       "file": "pneumatic_generic__neutral__tail.glb",
@@ -52,7 +52,7 @@
       "model_id": "MP89_CC_5V",
       "triangles": 350,
       "vertices": 800,
-      "bytes": 32180,
+      "bytes": 32316,
       "dimensions_m": {
         "length_x": 15.06,
         "width_z": 2.44,
@@ -61,7 +61,7 @@
       "height_source": "derived_from_pneumatic_generic_reference",
       "height_measured": false,
       "grazing_camera_approved": false,
-      "sha256": "2f2c0330e97ceb5e511bf8ad3a22aa2d41d1c4f2cdc942804c6dbb6a86c55fa1"
+      "sha256": "ef35eae6cc084c0b3b7d43aa501ef2b0df2198aea5193e6b555f392de9efa2ae"
     },
     {
       "file": "steel_classic__neutral.glb",
@@ -71,7 +71,7 @@
       "model_id": "MF77",
       "triangles": 342,
       "vertices": 766,
-      "bytes": 30128,
+      "bytes": 30728,
       "dimensions_m": {
         "length_x": 15.49,
         "width_z": 2.46,
@@ -80,7 +80,7 @@
       "height_source": "derived_from_pneumatic_generic_reference",
       "height_measured": false,
       "grazing_camera_approved": false,
-      "sha256": "35089f110867e559c8f50a5b2fd6bb242e80ab060d925fa8448e8812d7cbaee6"
+      "sha256": "48581b0474d96fb4c7ae195242641697166ec58245d4182321f6ca9320c9c576"
     },
     {
       "file": "steel_classic__neutral__cab.glb",
@@ -90,7 +90,7 @@
       "model_id": "MF77",
       "triangles": 350,
       "vertices": 800,
-      "bytes": 32516,
+      "bytes": 32644,
       "dimensions_m": {
         "length_x": 15.49,
         "width_z": 2.46,
@@ -99,7 +99,7 @@
       "height_source": "derived_from_pneumatic_generic_reference",
       "height_measured": false,
       "grazing_camera_approved": false,
-      "sha256": "12a7ca1b4d9c597aaeb493582399e3e83b463c4b8b4e5ef7548645f451740a28"
+      "sha256": "0ea878d858eb60a4dcf22cfec442b8e5a3ba5d7aa26b100e801c73d430d355a1"
     },
     {
       "file": "steel_classic__neutral__tail.glb",
@@ -109,7 +109,7 @@
       "model_id": "MF77",
       "triangles": 350,
       "vertices": 800,
-      "bytes": 32172,
+      "bytes": 32304,
       "dimensions_m": {
         "length_x": 15.49,
         "width_z": 2.46,
@@ -118,7 +118,7 @@
       "height_source": "derived_from_pneumatic_generic_reference",
       "height_measured": false,
       "grazing_camera_approved": false,
-      "sha256": "b941494fb26a324486dd3069d1adcd43da44f80d6a8c4fe05f7abfad7d72fd2d"
+      "sha256": "4ec5cc3ad4a88e87a7a60a2d419daca721f899448855a3fe7d7a4acd6f759059"
     },
     {
       "file": "rer_generic__neutral.glb",

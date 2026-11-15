@@ -38,15 +38,15 @@ Accès direct en production : **[https://parisian3dsubway.netlify.app](https://p
    - Visualisation en direct des rames en approche en face de leur prochain arrêt avec vitesse instantanée et retard calculé.
    - Indicateur en direct d'intervalle moyen (*headway*).
 
-5. **Recherche Instantanée de Stations (`⌘K` / Loupe)** :
-   - Autocomplétion floue instantanée sur les 468 stations publiées du réseau.
-   - Affichage des pastilles officielles des correspondances et tags Hub.
-   - Vol de caméra cinématique immédiat avec zoom 16x sur la station choisie.
+5. **Calcul d'Itinéraires A→B, GPS Continu & Favoris (`⌘K` / Itinéraire)** :
+   - Recherche d'adresses, lieux (Photon/Nominatim) et 468 stations publiées du réseau.
+   - Calcul d'itinéraire multimodal (`transit_router.ts`) tenant compte du **trafic PRIM en direct** (lignes interrompues contournées, stations fermées évitées), des **horaires réels**, du positionnement de rame conseillé (`Avant` / `Milieu` / `Arrière`) et des lieux enregistrés (`Domicile`, `Travail`, `Favoris`).
+   - Géolocalisation continue (`watchPosition`) avec halo de précision, cône d'orientation et partage d'URL (`?station=`, `?from=&to=`).
 
-6. **Optimisation Mobile Smartphone & Typographie Institutionnelle** :
-   - Tiroir rétractable en bas d'écran (Bottom Sheet tactile) avec support des zones protégées (`safe-area-inset`).
-   - Typographie **Switzer** pour l'interface et **Cabinet Grotesk** pour les titres, servies par Fontshare, avec **Inter** en repli ; chiffres tabulaires (`tnum`) pour les chronomètres et indices de lignes.
-   - Cibles tactiles de 52 px sur mobile, et plafond de 150 rames découpées simultanément.
+6. **Quai 3D & Cabines Fidèles + PWA Hors-Ligne** :
+   - Vue immersive Three.js (`paris_ride_view.ts`) fidèle au matériel parisien : pupitre de conduite animé (tachymètre temps réel, manipulateur de traction, arrêt d'urgence) pour les rames conducteurs (`MP 89 CC`, `MF 01`, `MF 77`, `MF 67`, `MI 09`, `RER NG`, bascule historique `Sprague 1930`) et *vue voie* panoramique + portes palières synchronisées (`L1`, `L4`, `L14`), afficheurs **SIEL** et frises CMP en station.
+   - Design system **BoardUI + Tailwind CSS v4** (tokens sémantiques, accent **Laiton #c9a227**, typographie **Switzer**, dark/light automatique selon le système et réglable dans Paramètres).
+   - Application **PWA installable** (`manifest.webmanifest`, service worker `/sw.js` mettant en cache les données de lignes et modèles GLB pour les tunnels).
 
 7. **Vertu de Bande Passante** :
    - Voies dédupliquées **24,6 Ko** (`tracks.json`), tracés binaires **0,80 Mo** brut (**0,17 Mo Brotli**, `shapes.bin.br`) — ces deux artefacts étant considérés comme les plus critiques par la carte réseau.
@@ -64,8 +64,13 @@ Paris subway 3D/
 │   ├── REALTIME_PRIM.md         # Intégration de l'API IDFM PRIM SIRI-Lite
 │   ├── 3D_RENDERING.md          # MapLibre, deck.gl, bâti 3D et matériel roulant
 │   ├── UI_AND_ROUTING.md        # Interface utilisateur, Quai & routage SPA
-│   ├── DEPLOYMENT_AND_OPS.md    # Build, Netlify, en-têtes CDN & exploitation
-│   └── CHARTE-intERVALLE-sprague.md # Charte typographique (spécification)
+│   └── DEPLOYMENT_AND_OPS.md    # Build, Netlify, en-têtes CDN & exploitation
+│
+├── design/                      # Charte graphique vivante (BoardUI + Switzer + captures)
+│   ├── README.md                # Synthèse visuelle & captures Playwright
+│   ├── TOKENS_ET_COMPOSANTS.md  # Tokens Tailwind v4 & patterns React BoardUI
+│   ├── capture_showcase.mjs     # Générateur reproductible des captures UI/3D
+│   └── screenshots/             # Captures desktop, mobile & Quai 3D / Cabine
 │
 ├── ingest/                      # Pipeline d'ingestion Python
 │   ├── fetch.py                 # Téléchargement du flux GTFS officiel IDFM
@@ -187,8 +192,7 @@ Consultez les guides techniques dédiés dans le dossier [`docs/`](file:///Users
 - **[Interface Utilisateur & Navigation](docs/UI_AND_ROUTING.md)** : Composants UI, ergonomie smartphone, raccourcis et routage SPA.
 - **[Déploiement & Exploitation](docs/DEPLOYMENT_AND_OPS.md)** : Build Vite, Netlify, en-têtes CDN et poids des bundles.
 - **[Audit géométrique](docs/cartographie_geographie_reseau.md)** : fichier **généré** par `scripts/generate_geo_audit.py` — ne pas éditer à la main.
-- **[Charte typographique](docs/CHARTE-intERVALLE-sprague.md)** : spécification de design (voir l'encadré de statut en tête de fichier).
-- **[Audits historiques](DESIGN_AUDIT.md)** : relevés de mesures datés (`DESIGN_AUDIT.md`, `MOBILE_AUDIT.md`) — ils décrivent l'état du produit au moment de la mesure, pas l'état courant.
+- **[Charte Graphique & Composants (`design/`)](design/README.md)** : documentation vivante du système visuel (BoardUI, Tailwind v4, Switzer, Laiton, Quai 3D & Cabines) avec captures automatisées et extraits de code.
 
 ---
 

@@ -36,6 +36,7 @@ import {
   type TransitItinerary,
 } from '@core/ui/utils/transit_router';
 import { SubwayAppShell } from './ui/SubwayAppShell';
+import { applyFaienceBasemap } from './map/basemap_palette';
 import { uiStore, type EdinburghPreset, type ThemePreference } from './ui/ui_store';
 
 const DATA_REVISION = '20260910-07';
@@ -806,6 +807,7 @@ async function bootstrap() {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     uiStore.patch({ theme });
     applyMapTheme(map, theme);
+    applyFaienceBasemap(map, theme === 'dark' ? 'nuit' : 'jour');
     deckOverlay.setTheme(theme);
   }
 
@@ -826,6 +828,15 @@ async function bootstrap() {
   });
 
   function resolveUserRoutePoint(): Promise<RoutePoint> {
+    const liveFix = uiStore.getSnapshot().userLocation;
+    if (liveFix && Date.now() - liveFix.updatedAt < 120_000) {
+      return Promise.resolve({
+        label: 'Ma position',
+        subtitle: 'Position GPS en direct',
+        coordinates: [liveFix.lng, liveFix.lat],
+        kind: 'user',
+      });
+    }
     const fallbackPoint: RoutePoint = {
       label: `Centre (${cityConfig.displayName})`,
       subtitle: 'Position par défaut (géolocalisation indisponible)',
@@ -838,10 +849,19 @@ async function bootstrap() {
     return new Promise((resolve) => {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
+          const fix = {
+            lng: pos.coords.longitude,
+            lat: pos.coords.latitude,
+            accuracyM: pos.coords.accuracy || 25,
+            headingDeg: Number.isFinite(pos.coords.heading) ? pos.coords.heading : null,
+            updatedAt: Date.now(),
+          };
+          uiStore.patch({ userLocation: fix });
+          deckOverlay.setUserLocation(fix);
           resolve({
             label: 'Ma position',
             subtitle: 'Position actuelle GPS',
-            coordinates: [pos.coords.longitude, pos.coords.latitude],
+            coordinates: [fix.lng, fix.lat],
             kind: 'user',
           });
         },
@@ -849,6 +869,59 @@ async function bootstrap() {
         { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
       );
     });
+  }
+
+  let gpsWatchId: number | null = null;
+  let gpsFollowCamera = false;
+
+  map.on('dragstart', () => {
+    gpsFollowCamera = false;
+  });
+
+  function toggleGpsFollow() {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return;
+    if (gpsWatchId !== null) {
+      navigator.geolocation.clearWatch(gpsWatchId);
+      gpsWatchId = null;
+      gpsFollowCamera = false;
+      uiStore.patch({ gpsWatchActive: false });
+      return;
+    }
+    gpsFollowCamera = true;
+    uiStore.patch({ gpsWatchActive: true });
+    gpsWatchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const fix = {
+          lng: pos.coords.longitude,
+          lat: pos.coords.latitude,
+          accuracyM: pos.coords.accuracy || 20,
+          headingDeg:
+            pos.coords.heading !== null && Number.isFinite(pos.coords.heading)
+              ? pos.coords.heading
+              : null,
+          updatedAt: Date.now(),
+        };
+        if (fix.accuracyM > 350 && uiStore.getSnapshot().userLocation) return;
+        uiStore.patch({ userLocation: fix });
+        deckOverlay.setUserLocation(fix);
+        if (gpsFollowCamera) {
+          map.easeTo({
+            center: [fix.lng, fix.lat],
+            zoom: Math.max(map.getZoom(), 15.8),
+            duration: 650,
+          });
+        }
+      },
+      () => {
+        if (gpsWatchId !== null) {
+          navigator.geolocation.clearWatch(gpsWatchId);
+          gpsWatchId = null;
+        }
+        gpsFollowCamera = false;
+        uiStore.patch({ gpsWatchActive: false });
+      },
+      { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }
+    );
   }
 
   function fitMapToItinerary(itinerary: TransitItinerary) {
@@ -887,6 +960,8 @@ async function bootstrap() {
       stations,
       lines,
       ladders: laddersData,
+      trafficByLine: uiStore.getSnapshot().trafficByLine,
+      getNextDepartures: (stationName) => engine.getStationDepartures(stationName, 2),
     });
     if (candidates.length === 0) {
       uiStore.patch({
@@ -950,10 +1025,22 @@ async function bootstrap() {
   map.on('pitch', syncPitchButton);
   syncPitchButton();
 
+  const syncBearing = () => {
+    uiStore.patch({ bearingDeg: map.getBearing() });
+  };
+  map.on('rotate', syncBearing);
+  syncBearing();
+
   const initialPref = uiStore.getSnapshot().themePreference;
   const initialTheme: 'dark' | 'light' = resolveThemeFromPref(initialPref);
   document.documentElement.dataset.theme = initialTheme;
   document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+
+  const onStyleLoadFaience = () => {
+    applyFaienceBasemap(map, uiStore.getSnapshot().theme === 'dark' ? 'nuit' : 'jour');
+  };
+  if (map.isStyleLoaded()) onStyleLoadFaience();
+  map.on('style.load', onStyleLoadFaience);
 
   const syncBuildingsState = () => {
     uiStore.patch({ buildingsVisible: areBuildingsVisible(map) });
@@ -988,7 +1075,7 @@ async function bootstrap() {
       router.setRoute(line ? line.short_name : null, dir, cityConfig.slug);
       uiStore.patch({ activeDir: dir });
     },
-    onStationSelect: (station) => selectStation(station, false),
+    onStationSelect: (station) => selectStation(station, uiStore.getSnapshot().expertMode),
     onStationZoom20: (station) => selectStation(station, true),
     onTrainFollow: (train) => focusTrain(train),
     onTrainFollowById: (tripId, lineId) => {
@@ -1032,6 +1119,9 @@ async function bootstrap() {
     onToggleBuildings: () => {
       setBuildingsEnabled(!uiStore.getSnapshot().buildingsVisible);
     },
+    onZoomIn: () => map.zoomIn({ duration: 240 }),
+    onZoomOut: () => map.zoomOut({ duration: 240 }),
+    onResetNorth: () => map.easeTo({ bearing: 0, duration: 360 }),
     onRecenter: () => {
       followCamera?.stopFollow();
       if (trackedTrain) {
@@ -1106,6 +1196,7 @@ async function bootstrap() {
       });
       deckOverlay.setActiveItinerary(null);
     },
+    onToggleGpsFollow: () => toggleGpsFollow(),
     onEdinburghPreset: (preset: EdinburghPreset) => {
       edinburghHandle?.setCameraPreset(preset);
     },
@@ -1134,28 +1225,159 @@ async function bootstrap() {
     auditLineContrast(lineLikes);
   }
 
-  // 7. Route resolution for initial line selection
-  const initialRoute = router.getInitialRoute();
-  if (initialRoute.lineShortName) {
-    const line = lines.find(
-      (l) => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase()
+  // 7. Route & deep-link resolution for initial line, station, or shared itinerary
+  const normalizeLookup = (value: string) =>
+    value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[-–—’']/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+
+  const findStationByName = (rawName: string) => {
+    const needle = normalizeLookup(rawName);
+    if (!needle) return undefined;
+    return (
+      stations.find((s) => normalizeLookup(s.name) === needle) ??
+      stations.find((s) => normalizeLookup(s.name).includes(needle))
     );
-    if (line) {
-      selectLine(line.id, initialRoute.dir || '0');
-      uiStore.setLineDrawerOpen(true);
+  };
+
+  const parseEndpointParam = (raw: string | null): RoutePoint | null => {
+    if (!raw) return null;
+    const atIdx = raw.lastIndexOf('@');
+    if (atIdx > 0) {
+      const label = raw.slice(0, atIdx).trim();
+      const coordsPart = raw.slice(atIdx + 1).split(',');
+      const lat = Number(coordsPart[0]);
+      const lng = Number(coordsPart[1]);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        return { label: label || 'Point partagé', coordinates: [lng, lat], kind: 'place' };
+      }
     }
+    const matchedStation = findStationByName(raw);
+    if (matchedStation) {
+      return {
+        label: matchedStation.name,
+        subtitle: 'Station',
+        coordinates: matchedStation.coordinates,
+        kind: 'station',
+        station: matchedStation,
+      };
+    }
+    return null;
+  };
+
+  const applyInitialRoute = () => {
+    const initialRoute = router.getInitialRoute();
+    if (initialRoute.lineShortName) {
+      const line = lines.find(
+        (l) => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase()
+      );
+      if (line) {
+        selectLine(line.id, initialRoute.dir || '0');
+        uiStore.setLineDrawerOpen(true);
+      }
+    } else if (initialRoute.from && initialRoute.to) {
+      const fromPt = parseEndpointParam(initialRoute.from);
+      const toPt = parseEndpointParam(initialRoute.to);
+      if (fromPt && toPt) {
+        uiStore.setRoutePlannerOpen(true);
+        runItineraryComputation(fromPt, toPt);
+      }
+    } else if (initialRoute.station) {
+      const targetStation = findStationByName(initialRoute.station);
+      if (targetStation) {
+        selectStation(targetStation, true);
+      }
+    }
+  };
+
+  // Context menu (right-click) on map to quickly route from/to any point on the 3D map
+  let ctxMenuEl: HTMLDivElement | null = null;
+  const dismissCtxMenu = () => {
+    ctxMenuEl?.remove();
+    ctxMenuEl = null;
+  };
+  map.on('movestart', dismissCtxMenu);
+  map.on('click', dismissCtxMenu);
+  map.on('contextmenu', (ev) => {
+    dismissCtxMenu();
+    const lngLat: [number, number] = [ev.lngLat.lng, ev.lngLat.lat];
+    const point: RoutePoint = {
+      label: `Repère carte (${lngLat[1].toFixed(4)}, ${lngLat[0].toFixed(4)})`,
+      subtitle: 'Point sélectionné sur la carte 3D',
+      coordinates: lngLat,
+      kind: 'place',
+    };
+    const menu = document.createElement('div');
+    menu.className =
+      'fixed z-50 flex flex-col gap-1 rounded-xl border border-border-button-default bg-background-primary-default/95 p-1.5 shadow-xl backdrop-blur-md';
+    menu.style.left = `${Math.min(window.innerWidth - 180, Math.max(8, ev.point.x))}px`;
+    menu.style.top = `${Math.min(window.innerHeight - 96, Math.max(8, ev.point.y))}px`;
+    const mkBtn = (label: string, onClick: () => void) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.className =
+        'cursor-pointer rounded-lg px-3 py-1.5 text-start text-body-2-medium text-text-primary hover:bg-background-secondary-hover';
+      b.onclick = () => {
+        dismissCtxMenu();
+        onClick();
+      };
+      return b;
+    };
+    menu.appendChild(mkBtn('Partir d’ici (A)', () => void openRoutePlannerWith({ origin: point })));
+    menu.appendChild(
+      mkBtn('Aller ici (B)', () => void openRoutePlannerWith({ destination: point }))
+    );
+    document.body.appendChild(menu);
+    ctxMenuEl = menu;
+  });
+
+  // Daytime PRIM Live auto-start for Paris service hours (05:30 - 01:15 Europe/Paris) unless ?rt=0
+  const rtOverride = new URLSearchParams(window.location.search).get('rt');
+  if (
+    cityConfig.id === 'paris' &&
+    cityConfig.realtime.provider === 'prim' &&
+    !demoRer &&
+    rtOverride !== '0'
+  ) {
+    const parisHourStr = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Paris',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(new Date());
+    const [hh, mm] = parisHourStr.split(':').map(Number);
+    const mins = (hh || 0) * 60 + (mm || 0);
+    const inDaytimeService = mins >= 5 * 60 + 30 || mins <= 75;
+    if (inDaytimeService || rtOverride === '1') {
+      isRealtimeEnabled = true;
+      engine.startRealtime();
+      uiStore.patch({
+        realtimeEnabled: true,
+        realtimeState: { active: true, delays: {} },
+      });
+    }
+  }
+
+  // Register offline PWA service worker in production
+  if (!import.meta.env.DEV && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
   }
 
   // 8. Connect deck.gl to map
   const initOverlay = () => {
     fitMetroNetwork(0);
-    setTimeout(() => {
-      nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
-      nominalMetroZoom = map.getZoom();
-      nominalMetroPitch = map.getPitch();
-      nominalMetroBearing = map.getBearing();
-      updateRecenterState();
-    }, 200);
+    nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
+    nominalMetroZoom = map.getZoom();
+    nominalMetroPitch = map.getPitch();
+    nominalMetroBearing = map.getBearing();
+    updateRecenterState();
 
     map.addControl(deckOverlay.getOverlay() as any);
     deckOverlay.setData({
@@ -1196,22 +1418,30 @@ async function bootstrap() {
     map.on('move', syncOverlayView);
     syncOverlayView();
 
-    // Handle initial route
-    const initialRoute = router.getInitialRoute();
-    if (initialRoute.lineShortName) {
-      const line = lines.find(
-        (l) => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase()
-      );
-      if (line) {
-        selectLine(line.id, initialRoute.dir || '0');
-      }
-    }
+    // Capture nominal city-wide framing synchronously after fitMetroNetwork(0), then apply any deep link
+    nominalMetroCenter = [map.getCenter().lng, map.getCenter().lat];
+    nominalMetroZoom = map.getZoom();
+    nominalMetroPitch = map.getPitch();
+    nominalMetroBearing = map.getBearing();
+    updateRecenterState();
+
+    // Handle initial route (?line=, ?from=&to=, ?station=) after map load so fitMetroNetwork(0) cannot cancel it
+    setTimeout(() => applyInitialRoute(), 80);
   };
 
-  if (map.loaded()) {
+  let overlayInitialized = false;
+  const ensureOverlayInitialized = () => {
+    if (overlayInitialized) return;
+    overlayInitialized = true;
     initOverlay();
+  };
+
+  if (map.loaded() || map.isStyleLoaded()) {
+    ensureOverlayInitialized();
   } else {
-    map.once('load', initOverlay);
+    map.once('style.load', ensureOverlayInitialized);
+    map.once('load', ensureOverlayInitialized);
+    setTimeout(ensureOverlayInitialized, 1200);
   }
 
   // 9. Keyboard shortcuts

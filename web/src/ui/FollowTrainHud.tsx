@@ -1,127 +1,79 @@
-import { useEffect, useRef, useState } from 'react';
 import { RiBox3Line, RiCloseLine } from '@remixicon/react';
-import { Button } from '@/components/base/buttons/button';
-import { Chip } from '@/components/base/badges/chip';
+import { useEffect } from 'react';
+import { Afficheur, type Passage } from './Afficheur';
+import { Button, IconButton } from './Button';
+import { cx } from './cx';
 import { LineBadgeChip } from './LineBadgeChip';
-import { useUiStore } from './ui_store';
+import { resolveLine, type LineRef } from './lines';
+import { Panneau } from './Panneau';
+import { PlanDeLigneHorizontal } from './PlanDeLigne';
 
-const CONFIDENCE_LABELS: Record<string, string> = {
-  measured: 'Arrêt mesuré',
-  bracketed: 'Encadré temps réel',
-  extrapolated: 'Extrapolé',
-  scheduled: 'Théorique GTFS',
-};
+/**
+ * Suivi d’une rame sur la carte (v2.1). Une seule sortie : × « Arrêter le suivi »
+ * (et Échap) — le bouton « Quitter » est supprimé. Une seule entrée 3D, contextuelle :
+ * « Monter dans cette rame » (afficheur, Paris).
+ */
+export interface FollowTrainHudProps {
+  ligne: LineRef;
+  direction: string;
+  prochaine: string;
+  /** Temps jusqu’à la prochaine station */
+  arrivee?: Passage;
+  arrets: string[];
+  index: number;
+  progression: number;
+  /** Mode Passionné */
+  vitesse?: number;
+  /** Mode Passionné : « Position mesurée », « estimée entre deux passages »… */
+  confiance?: string;
+  /** Paris uniquement */
+  onMonter?: () => void;
+  onArreter: () => void;
+  className?: string;
+}
 
-export function FollowTrainHud() {
-  const { cityConfig, trackedTrain, isFollowing, expertMode, handlers } = useUiStore();
-  const [legStartMs, setLegStartMs] = useState<number>(() => performance.now());
-  const prevLegKeyRef = useRef<string>('');
-
-  const legKey = trackedTrain ? `${trackedTrain.id}|${trackedTrain.next}` : '';
+export function FollowTrainHud(p: FollowTrainHudProps) {
+  const { onArreter } = p;
   useEffect(() => {
-    if (legKey && legKey !== prevLegKeyRef.current) {
-      prevLegKeyRef.current = legKey;
-      setLegStartMs(performance.now());
-    }
-  }, [legKey]);
-
-  if (!isFollowing || !trackedTrain) return null;
-
-  const progressPct = trackedTrain.atStop
-    ? 100
-    : Math.min(92, Math.max(14, Math.round(((performance.now() - legStartMs) / 40000) * 100)));
-
-  const isParis = cityConfig?.id === 'paris';
-  const speedKmh = Math.round(trackedTrain.spd || (trackedTrain.speedMps ?? 0) * 3.6);
-  const confLabel = CONFIDENCE_LABELS[trackedTrain.conf] || 'Théorique GTFS';
-
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onArreter();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onArreter]);
+  const { color } = resolveLine(p.ligne);
   return (
-    <aside
-      aria-label="Suivi de rame en cours"
-      className="pointer-events-auto fixed inset-x-3 bottom-7 z-20 mx-auto flex max-w-md flex-col gap-2.5 overflow-hidden rounded-2xl border border-border-button-default bg-background-primary-default/92 p-3.5 shadow-xl backdrop-blur-md"
-    >
-      <div className="flex items-start justify-between gap-2.5">
-        <div className="flex min-w-0 flex-1 items-center gap-2.5">
-          <LineBadgeChip
-            shortName={trackedTrain.lineName}
-            color={trackedTrain.colorHex}
-            textColor={trackedTrain.textColorHex}
-            size="md"
-          />
-          <div className="min-w-0 flex-1">
-            <div className="truncate text-body-medium text-text-primary">
-              Vers {trackedTrain.dest}
-            </div>
-            <div className="flex min-w-0 flex-wrap items-center gap-1.5 text-caption-1-medium text-text-secondary">
-              <span className="min-w-0 truncate">
-                {trackedTrain.atStop
-                  ? `À quai · ${trackedTrain.next}`
-                  : `Prochain arrêt : ${trackedTrain.next}`}
-              </span>
-              {trackedTrain.atStop ? (
-                <Chip color="lime" variant="caption" className="shrink-0">
-                  À quai
-                </Chip>
-              ) : null}
-            </div>
-          </div>
-        </div>
-
-        <Button
-          variant="ghost"
-          size="xs"
-          iconOnly
-          leadingIcon={RiCloseLine}
-          aria-label="Quitter le suivi de rame"
-          onClick={() => handlers.onStopFollow?.()}
-        />
+    <Panneau as="section" aria-label="Suivi de la rame" className={cx('w-[440px] max-w-[calc(100vw-24px)] p-4 animate-feuille', p.className)}>
+      <div className="flex items-start gap-2.5">
+        <LineBadgeChip {...p.ligne} size="sm" className="mt-0.5" />
+        <p className="min-w-0 flex-1 text-[12px] font-semibold text-encre-3">
+          Rame suivie, direction
+          <span className="signaletique block truncate text-[16px] font-[650] leading-[20px] text-encre">{p.direction}</span>
+        </p>
+        <IconButton size="sm" label="Arrêter le suivi" icon={<RiCloseLine aria-hidden />} onClick={p.onArreter} />
       </div>
-
-      {/* Barre de progression entre stations */}
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-background-tertiary-default">
-        <div
-          className="h-full rounded-full bg-accent-500 transition-[width] duration-300 ease-out"
-          style={{ width: `${progressPct}%` }}
-        />
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2 text-caption-1-medium text-text-tertiary">
-          {expertMode ? (
-            <>
-              <span className="shrink-0 tabular-nums text-text-primary">{speedKmh} km/h</span>
-              <span className="shrink-0">•</span>
-              <span className="truncate">{confLabel}</span>
-            </>
-          ) : (
-            <span className="truncate">Suivi caméra 3D actif</span>
-          )}
+      <div className="mt-3 flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[12px] font-semibold text-encre-3">Prochaine station</p>
+          <p className="signaletique truncate text-[22px] font-[650] leading-[26px] text-encre">{p.prochaine}</p>
         </div>
-
-        <div className="flex shrink-0 items-center gap-1.5">
-          {isParis && trackedTrain.lineName?.trim() ? (
-            <Button
-              variant="primary"
-              size="small"
-              leadingIcon={RiBox3Line}
-              onClick={() =>
-                handlers.onOpenParisRide?.({
-                  initialLine: trackedTrain.lineName,
-                  initialDest: trackedTrain.dest,
-                  initialStation: trackedTrain.next,
-                  initialTrainId: trackedTrain.id,
-                  initialView: 'ride',
-                })
-              }
-            >
-              Cabine 3D
-            </Button>
-          ) : null}
-          <Button variant="secondary" size="small" onClick={() => handlers.onStopFollow?.()}>
-            Quitter
-          </Button>
-        </div>
+        {p.arrivee && <Afficheur passages={[p.arrivee]} max={1} size="md" />}
       </div>
-    </aside>
+      <PlanDeLigneHorizontal couleur={color} arrets={p.arrets} index={p.index} progression={p.progression} className="mt-3" />
+      {p.vitesse != null && (
+        <div className="mt-3 flex items-center gap-2.5 border-t border-joint pt-3">
+          <span className="afficheur chiffres inline-flex h-8 items-baseline gap-1 px-2 pt-[7px] font-bold">
+            <span className="text-[19px] leading-none">{Math.round(p.vitesse)}</span>
+            <span className="signaletique text-[10px] font-semibold">km/h</span>
+          </span>
+          {p.confiance && <span className="text-legende text-encre-3">{p.confiance}</span>}
+        </div>
+      )}
+      {p.onMonter && (
+        <Button variant="afficheur" fullWidth className="mt-3" icon={<RiBox3Line aria-hidden />} onClick={p.onMonter}>
+          Monter dans cette rame
+        </Button>
+      )}
+    </Panneau>
   );
 }

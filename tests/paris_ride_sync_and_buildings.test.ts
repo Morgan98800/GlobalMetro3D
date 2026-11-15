@@ -4,6 +4,7 @@ import {
   computeLiveStepS,
   getGlbUrlsForFamily,
   isRerLineNum,
+  resolveParisStockSpec,
   resolveRideRouteKey,
   resolveTrainGlbFamily,
 } from '../web/src/paris_ride_view';
@@ -90,5 +91,43 @@ describe('paris_ride_view routes, GLB rolling stock mapping, and live sync helpe
       dt: 0.5,
     });
     expect(docked).toBe(1600);
+  });
+
+  it('resolves Paris rolling stock specs across automatic, driven, RER, and Sprague modes', () => {
+    const mp14 = resolveParisStockSpec('14', false);
+    expect(mp14.id).toBe('mp14_ca');
+    expect(mp14.driverless).toBe(true);
+    expect(mp14.hasPsd).toBe(true);
+    expect(mp14.boa).toBe(true);
+
+    const mp05 = resolveParisStockSpec('1', false);
+    expect(mp05.id).toBe('mp05_ca');
+    expect(mp05.driverless).toBe(true);
+    expect(mp05.hasPsd).toBe(true);
+
+    const mf01 = resolveParisStockSpec('9', false);
+    expect(mf01.id).toBe('mf01');
+    expect(mf01.driverless).toBe(false);
+    expect(mf01.hasPsd).toBe(false);
+    expect(mf01.boa).toBe(true);
+
+    const mf67 = resolveParisStockSpec('12', false);
+    expect(mf67.id).toBe('mf67');
+    expect(mf67.driverless).toBe(false);
+    expect(mf67.boa).toBe(false);
+
+    const rerA = resolveParisStockSpec('A', false);
+    expect(rerA.driverless).toBe(false);
+    expect(rerA.boa).toBe(false);
+
+    const rerE = resolveParisStockSpec('RER E', false);
+    expect(rerE.label).toBe('RER NG');
+    expect(rerE.boa).toBe(true);
+
+    const sprague = resolveParisStockSpec('14', true);
+    expect(sprague.id).toBe('sprague_1930');
+    expect(sprague.driverless).toBe(false);
+    expect(sprague.hasPsd).toBe(false);
+    expect(sprague.boa).toBe(false);
   });
 });

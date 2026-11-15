@@ -11,6 +11,20 @@ import type { RoutePoint, TransitItinerary } from '@core/ui/utils/transit_router
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
+export interface UserLocationFix {
+  lng: number;
+  lat: number;
+  accuracyM: number;
+  headingDeg: number | null;
+  updatedAt: number;
+}
+
+export interface SavedPlacesState {
+  home: RoutePoint | null;
+  work: RoutePoint | null;
+  favorites: RoutePoint[];
+}
+
 export interface CityMenuItem {
   id: string;
   slug: string;
@@ -51,6 +65,9 @@ export interface UiHandlers {
   onTogglePitch?: () => void;
   onToggleBuildings?: () => void;
   onRecenter?: () => void;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onResetNorth?: () => void;
   onOpenParisRide?: (opts?: {
     initialLine?: string;
     initialDest?: string;
@@ -67,6 +84,7 @@ export interface UiHandlers {
   onComputeItinerary?: (origin: RoutePoint | null, destination: RoutePoint | null) => void;
   onSelectItineraryIndex?: (index: number) => void;
   onClearItinerary?: () => void;
+  onToggleGpsFollow?: () => void;
   onEdinburghPreset?: (preset: EdinburghPreset) => void;
   onEdinburghFollow?: () => void;
 }
@@ -106,12 +124,16 @@ export interface UiSnapshot {
   themePreference: ThemePreference;
   theme: 'dark' | 'light';
   pitch3D: boolean;
+  bearingDeg: number;
   buildingsVisible: boolean;
   recenterVisible: boolean;
   recenterLabel: string;
   serviceStatus: ServiceStatus | null;
   realtimeState: RealtimeUiState;
   realtimeEnabled: boolean;
+  userLocation: UserLocationFix | null;
+  gpsWatchActive: boolean;
+  savedPlaces: SavedPlacesState;
   searchOpen: boolean;
   activeModal: ActiveInfoModal;
   stalenessWarning: string | null;
@@ -120,6 +142,33 @@ export interface UiSnapshot {
 
 const EXPERT_STORAGE_KEY = 'paris-subway-expert';
 const THEME_PREF_STORAGE_KEY = 'paris-subway-theme-pref';
+const SAVED_PLACES_STORAGE_KEY = 'paris-subway-saved-places-v1';
+
+function readInitialSavedPlaces(): SavedPlacesState {
+  try {
+    const raw =
+      typeof localStorage !== 'undefined' ? localStorage.getItem(SAVED_PLACES_STORAGE_KEY) : null;
+    if (!raw) return { home: null, work: null, favorites: [] };
+    const parsed = JSON.parse(raw) as Partial<SavedPlacesState>;
+    return {
+      home: parsed.home && Array.isArray(parsed.home.coordinates) ? parsed.home : null,
+      work: parsed.work && Array.isArray(parsed.work.coordinates) ? parsed.work : null,
+      favorites: Array.isArray(parsed.favorites)
+        ? parsed.favorites.filter((f) => f && Array.isArray(f.coordinates)).slice(0, 12)
+        : [],
+    };
+  } catch {
+    return { home: null, work: null, favorites: [] };
+  }
+}
+
+function persistSavedPlaces(next: SavedPlacesState) {
+  try {
+    localStorage.setItem(SAVED_PLACES_STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // Ignore storage quota errors
+  }
+}
 
 function readInitialThemePreference(): ThemePreference {
   try {
@@ -184,12 +233,16 @@ let state: UiSnapshot = {
   themePreference: readInitialThemePreference(),
   theme: readInitialTheme(),
   pitch3D: true,
+  bearingDeg: 0,
   buildingsVisible: false,
   recenterVisible: false,
   recenterLabel: 'Recadrer sur le réseau de métro',
   serviceStatus: null,
   realtimeState: 'standby',
   realtimeEnabled: false,
+  userLocation: null,
+  gpsWatchActive: false,
+  savedPlaces: readInitialSavedPlaces(),
   searchOpen: false,
   activeModal: null,
   stalenessWarning: null,
@@ -281,6 +334,31 @@ export const uiStore = {
 
   setActiveModal(modal: ActiveInfoModal) {
     state = { ...state, activeModal: modal };
+    emitChange();
+  },
+
+  setPresetPlace(slot: 'home' | 'work', place: RoutePoint | null) {
+    const next: SavedPlacesState = {
+      ...state.savedPlaces,
+      [slot]: place,
+    };
+    persistSavedPlaces(next);
+    state = { ...state, savedPlaces: next };
+    emitChange();
+  },
+
+  toggleFavoritePlace(place: RoutePoint) {
+    const exists = state.savedPlaces.favorites.some(
+      (f) => f.label === place.label && f.kind === place.kind
+    );
+    const favorites = exists
+      ? state.savedPlaces.favorites.filter(
+          (f) => !(f.label === place.label && f.kind === place.kind)
+        )
+      : [place, ...state.savedPlaces.favorites].slice(0, 10);
+    const next: SavedPlacesState = { ...state.savedPlaces, favorites };
+    persistSavedPlaces(next);
+    state = { ...state, savedPlaces: next };
     emitChange();
   },
 };

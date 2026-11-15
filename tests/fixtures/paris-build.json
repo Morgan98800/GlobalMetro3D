@@ -3,15 +3,15 @@
     "description": "Paris Build Footprint and First-Render Safety Net",
     "buildDate": "2026-11-14",
     "distDirectory": "web/dist",
-    "totalFiles": 169
+    "totalFiles": 175
   },
   "distFiles": [
     {
       "originalPath": "_headers",
       "normalizedPath": "_headers",
-      "sizeBytes": 406,
-      "minSize1Pct": 401,
-      "maxSize1Pct": 411
+      "sizeBytes": 496,
+      "minSize1Pct": 491,
+      "maxSize1Pct": 501
     },
     {
       "originalPath": "_redirects",
@@ -22,84 +22,84 @@
     },
     {
       "originalPath": "assets/deckgl-D8GvGDIW.js",
-      "normalizedPath": "assets/deckgl-D8GvGDIW.js",
+      "normalizedPath": "assets/deckgl.[hash].js",
       "sizeBytes": 1327639,
       "minSize1Pct": 1314362,
       "maxSize1Pct": 1340916
     },
     {
-      "originalPath": "assets/edinburgh_three_view-KodGfWDP.js",
-      "normalizedPath": "assets/edinburgh_three_view-KodGfWDP.js",
+      "originalPath": "assets/edinburgh_three_view-i3dBQzQJ.js",
+      "normalizedPath": "assets/edinburgh_three_view.[hash].js",
       "sizeBytes": 10029,
       "minSize1Pct": 9928,
       "maxSize1Pct": 10130
     },
     {
-      "originalPath": "assets/main-BolUsOUE.js",
-      "normalizedPath": "assets/main.[hash].js",
-      "sizeBytes": 472884,
-      "minSize1Pct": 468155,
-      "maxSize1Pct": 477613
+      "originalPath": "assets/main-BTdNZXXC.css",
+      "normalizedPath": "assets/main.[hash].css",
+      "sizeBytes": 207107,
+      "minSize1Pct": 205035,
+      "maxSize1Pct": 209179
     },
     {
-      "originalPath": "assets/main-f3iYy0GU.css",
-      "normalizedPath": "assets/main.[hash].css",
-      "sizeBytes": 206592,
-      "minSize1Pct": 204526,
-      "maxSize1Pct": 208658
+      "originalPath": "assets/main-r3SVcKiU.js",
+      "normalizedPath": "assets/main.[hash].js",
+      "sizeBytes": 488932,
+      "minSize1Pct": 484042,
+      "maxSize1Pct": 493822
     },
     {
       "originalPath": "assets/maplibre--S9olhOP.css",
-      "normalizedPath": "assets/maplibre--S9olhOP.css",
+      "normalizedPath": "assets/maplibre.[hash].css",
       "sizeBytes": 71505,
       "minSize1Pct": 70789,
       "maxSize1Pct": 72221
     },
     {
       "originalPath": "assets/maplibre-Bch_CCyq.js",
-      "normalizedPath": "assets/maplibre-Bch_CCyq.js",
+      "normalizedPath": "assets/maplibre.[hash].js",
       "sizeBytes": 1046785,
       "minSize1Pct": 1036317,
       "maxSize1Pct": 1057253
     },
     {
       "originalPath": "assets/maplibre-gl-worker-DYmqHawY.js",
-      "normalizedPath": "assets/maplibre-gl-worker-DYmqHawY.js",
+      "normalizedPath": "assets/maplibre.[hash].js",
       "sizeBytes": 516800,
       "minSize1Pct": 511632,
       "maxSize1Pct": 521968
     },
     {
-      "originalPath": "assets/paris_ride_view-DuI5DQTj.js",
+      "originalPath": "assets/paris_ride_view-Di7G_6fu.js",
       "normalizedPath": "assets/paris_ride_view.[hash].js",
-      "sizeBytes": 64886,
-      "minSize1Pct": 64237,
-      "maxSize1Pct": 65535
+      "sizeBytes": 74880,
+      "minSize1Pct": 74131,
+      "maxSize1Pct": 75629
     },
     {
-      "originalPath": "assets/three-BgfFQ9rQ.js",
-      "normalizedPath": "assets/three-BgfFQ9rQ.js",
+      "originalPath": "assets/three-CRzG12ik.js",
+      "normalizedPath": "assets/three.[hash].js",
       "sizeBytes": 711464,
       "minSize1Pct": 704349,
       "maxSize1Pct": 718579
     },
     {
       "originalPath": "assets/tokens-BdTpkK56.css",
-      "normalizedPath": "assets/tokens-BdTpkK56.css",
+      "normalizedPath": "assets/tokens.[hash].css",
       "sizeBytes": 3615,
       "minSize1Pct": 3578,
       "maxSize1Pct": 3652
     },
     {
       "originalPath": "assets/tokens-DBY8cIJT.js",
-      "normalizedPath": "assets/tokens-DBY8cIJT.js",
+      "normalizedPath": "assets/tokens.[hash].js",
       "sizeBytes": 711,
       "minSize1Pct": 703,
       "maxSize1Pct": 719
     },
     {
       "originalPath": "assets/ui-vendor-Da4FVtwq.js",
-      "normalizedPath": "assets/ui-vendor-Da4FVtwq.js",
+      "normalizedPath": "assets/ui.[hash].js",
       "sizeBytes": 425544,
       "minSize1Pct": 421288,
       "maxSize1Pct": 429800
@@ -854,11 +854,46 @@
       "maxSize1Pct": 24713
     },
     {
+      "originalPath": "icons/apple-touch-icon.png",
+      "normalizedPath": "icons/apple-touch-icon.png",
+      "sizeBytes": 14781,
+      "minSize1Pct": 14633,
+      "maxSize1Pct": 14929
+    },
+    {
+      "originalPath": "icons/icon-192.png",
+      "normalizedPath": "icons/icon-192.png",
+      "sizeBytes": 16258,
+      "minSize1Pct": 16095,
+      "maxSize1Pct": 16421
+    },
+    {
+      "originalPath": "icons/icon-512.png",
+      "normalizedPath": "icons/icon-512.png",
+      "sizeBytes": 42377,
+      "minSize1Pct": 41953,
+      "maxSize1Pct": 42801
+    },
+    {
+      "originalPath": "icons/icon-maskable-512.png",
+      "normalizedPath": "icons/icon-maskable-512.png",
+      "sizeBytes": 30802,
+      "minSize1Pct": 30493,
+      "maxSize1Pct": 31111
+    },
+    {
       "originalPath": "index.html",
       "normalizedPath": "index.html",
-      "sizeBytes": 6632,
-      "minSize1Pct": 6565,
-      "maxSize1Pct": 6699
+      "sizeBytes": 6899,
+      "minSize1Pct": 6830,
+      "maxSize1Pct": 6968
+    },
+    {
+      "originalPath": "manifest.webmanifest",
+      "normalizedPath": "manifest.webmanifest",
+      "sizeBytes": 710,
+      "minSize1Pct": 702,
+      "maxSize1Pct": 718
     },
     {
       "originalPath": "methode.html",
@@ -933,23 +968,23 @@
     {
       "originalPath": "models/train/pneumatic_generic__neutral__cab.glb",
       "normalizedPath": "models/train/pneumatic_generic__neutral__cab.glb",
-      "sizeBytes": 32528,
-      "minSize1Pct": 32202,
-      "maxSize1Pct": 32854
+      "sizeBytes": 32660,
+      "minSize1Pct": 32333,
+      "maxSize1Pct": 32987
     },
     {
       "originalPath": "models/train/pneumatic_generic__neutral__tail.glb",
       "normalizedPath": "models/train/pneumatic_generic__neutral__tail.glb",
-      "sizeBytes": 32180,
-      "minSize1Pct": 31858,
-      "maxSize1Pct": 32502
+      "sizeBytes": 32316,
+      "minSize1Pct": 31992,
+      "maxSize1Pct": 32640
     },
     {
       "originalPath": "models/train/pneumatic_generic__neutral.glb",
       "normalizedPath": "models/train/pneumatic_generic__neutral.glb",
-      "sizeBytes": 30132,
-      "minSize1Pct": 29830,
-      "maxSize1Pct": 30434
+      "sizeBytes": 30736,
+      "minSize1Pct": 30428,
+      "maxSize1Pct": 31044
     },
     {
       "originalPath": "models/train/rer_generic__neutral.glb",
@@ -1087,23 +1122,23 @@
     {
       "originalPath": "models/train/steel_classic__neutral__cab.glb",
       "normalizedPath": "models/train/steel_classic__neutral__cab.glb",
-      "sizeBytes": 32516,
-      "minSize1Pct": 32190,
-      "maxSize1Pct": 32842
+      "sizeBytes": 32644,
+      "minSize1Pct": 32317,
+      "maxSize1Pct": 32971
     },
     {
       "originalPath": "models/train/steel_classic__neutral__tail.glb",
       "normalizedPath": "models/train/steel_classic__neutral__tail.glb",
-      "sizeBytes": 32172,
-      "minSize1Pct": 31850,
-      "maxSize1Pct": 32494
+      "sizeBytes": 32304,
+      "minSize1Pct": 31980,
+      "maxSize1Pct": 32628
     },
     {
       "originalPath": "models/train/steel_classic__neutral.glb",
       "normalizedPath": "models/train/steel_classic__neutral.glb",
-      "sizeBytes": 30128,
-      "minSize1Pct": 29826,
-      "maxSize1Pct": 30430
+      "sizeBytes": 30728,
+      "minSize1Pct": 30420,
+      "maxSize1Pct": 31036
     },
     {
       "originalPath": "models/train/val_208__cab.glb",
@@ -1188,6 +1223,13 @@
       "sizeBytes": 2065,
       "minSize1Pct": 2044,
       "maxSize1Pct": 2086
+    },
+    {
+      "originalPath": "sw.js",
+      "normalizedPath": "sw.js",
+      "sizeBytes": 2822,
+      "minSize1Pct": 2793,
+      "maxSize1Pct": 2851
     }
   ],
   "netlifyFunctions": [

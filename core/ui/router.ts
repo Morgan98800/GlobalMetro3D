@@ -2,6 +2,9 @@ export interface RouteParams {
   city: string;
   lineShortName: string | null;
   dir: string | null;
+  station?: string | null;
+  from?: string | null;
+  to?: string | null;
 }
 
 export class SubwayRouter {
@@ -11,7 +14,7 @@ export class SubwayRouter {
   constructor(onRouteChange: (params: RouteParams) => void) {
     this.onRouteChange = onRouteChange;
 
-    // Handle root redirect to last-visited city or default 'paris'
+    // Handle root redirect to last-visited city or default 'paris' while preserving query string
     this.ensureCityPath();
 
     window.addEventListener('popstate', () => {
@@ -59,6 +62,23 @@ export class SubwayRouter {
     }
   }
 
+  public setShareQuery(
+    params: { station?: string | null; from?: string | null; to?: string | null },
+    city?: string
+  ): string {
+    const activeCity = city || this.currentCity;
+    const sp = new URLSearchParams();
+    if (params.station) sp.set('station', params.station);
+    if (params.from) sp.set('from', params.from);
+    if (params.to) sp.set('to', params.to);
+    const qs = sp.toString();
+    const nextUrl = `/${encodeURIComponent(activeCity)}${qs ? `?${qs}` : ''}`;
+    if (window.location.pathname + window.location.search !== nextUrl) {
+      window.history.replaceState({ city: activeCity, ...params }, '', nextUrl);
+    }
+    return `${window.location.origin}${nextUrl}`;
+  }
+
   private ensureCityPath(): void {
     const pathname = window.location.pathname;
     if (pathname === '/' || pathname === '') {
@@ -72,7 +92,7 @@ export class SubwayRouter {
       window.history.replaceState(
         { city: lastCity, lineShortName: null, dir: '0' },
         '',
-        `/${lastCity}`
+        `/${encodeURIComponent(lastCity)}${window.location.search}${window.location.hash}`
       );
     }
   }
@@ -81,6 +101,9 @@ export class SubwayRouter {
     const pathname = window.location.pathname;
     const searchParams = new URLSearchParams(window.location.search);
     const dir = searchParams.get('dir');
+    const station = searchParams.get('station');
+    const from = searchParams.get('from');
+    const to = searchParams.get('to');
 
     // Root or empty path: default to stored last city or paris
     if (pathname === '/' || pathname === '') {
@@ -90,7 +113,7 @@ export class SubwayRouter {
       } catch {
         // ignore
       }
-      return { city: lastCity, lineShortName: null, dir: null };
+      return { city: lastCity, lineShortName: null, dir: null, station, from, to };
     }
 
     // Pattern: /:city/ligne/:shortName
@@ -99,14 +122,14 @@ export class SubwayRouter {
       const city = decodeURIComponent(cityLineMatch[1]);
       const lineShortName = decodeURIComponent(cityLineMatch[2]);
       this.currentCity = city;
-      return { city, lineShortName, dir: dir || '0' };
+      return { city, lineShortName, dir: dir || '0', station, from, to };
     }
 
     // Legacy pattern: /ligne/:shortName (treat as paris)
     const legacyLineMatch = pathname.match(/^\/ligne\/([^/?#]+)/);
     if (legacyLineMatch) {
       const lineShortName = decodeURIComponent(legacyLineMatch[1]);
-      return { city: 'paris', lineShortName, dir: dir || '0' };
+      return { city: 'paris', lineShortName, dir: dir || '0', station, from, to };
     }
 
     // Pattern: /:city
@@ -114,9 +137,9 @@ export class SubwayRouter {
     if (cityMatch) {
       const city = decodeURIComponent(cityMatch[1]);
       this.currentCity = city;
-      return { city, lineShortName: null, dir: null };
+      return { city, lineShortName: null, dir: null, station, from, to };
     }
 
-    return { city: 'paris', lineShortName: null, dir: null };
+    return { city: 'paris', lineShortName: null, dir: null, station, from, to };
   }
 }

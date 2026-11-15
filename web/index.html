@@ -7,6 +7,10 @@
 
     <meta name="description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
     <meta name="theme-color" content="#F2F0EB" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="canonical" href="https://parisian3dsubway.netlify.app/" />
 
     <script>
@@ -36,16 +40,11 @@
     <meta name="twitter:description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
     <meta name="twitter:image" content="https://parisian3dsubway.netlify.app/og-image.png" />
     
-    <!-- Typographie : Switzer seul. Cabinet Grotesk et Inter sont retirés
-         du produit (charte, §Typographie). Une police distante se charge
-         par <link> dans le <head>, jamais par @import : sur file://
-         l'import distant échoue silencieusement (origine opaque). -->
-    <link rel="preconnect" href="https://api.fontshare.com">
+    <!-- Typographie : Asap variable auto-hébergée via Fontsource (fonts.css). -->
     <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
     <link rel="preconnect" href="https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com" crossorigin>
     <link rel="dns-prefetch" href="https://tiles.openfreemap.org">
     <link rel="dns-prefetch" href="https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com">
-    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
     
     <!-- Ordre de dépendance des feuilles géré dans src/main.ts :
          jetons → typographie → mouvement → couche d'application → chrome. -->

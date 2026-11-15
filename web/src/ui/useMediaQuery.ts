@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
-export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState<boolean>(() =>
-    typeof window !== 'undefined' ? window.matchMedia(query).matches : false
+/** Subscribes to a media query. Desktop breakpoint matches Tailwind `md`. */
+export function useMediaQuery(query: string, fallback = false): boolean {
+  return useSyncExternalStore(
+    (notify) => {
+      const mq = window.matchMedia(query);
+      mq.addEventListener('change', notify);
+      return () => mq.removeEventListener('change', notify);
+    },
+    () => window.matchMedia(query).matches,
+    () => fallback,
   );
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mq = window.matchMedia(query);
-    const update = () => setMatches(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, [query]);
-
-  return matches;
 }
+
+export const useIsDesktop = () => useMediaQuery('(min-width: 768px)', true);

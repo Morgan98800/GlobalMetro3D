@@ -396,6 +396,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
   const chosenStations = nearStations.slice(0, maxStations);
 
   const renderedHubShafts = new Set<string>();
+  const renderedSurfaceTotems = new Set<string>();
 
   for (const item of chosenStations) {
     const { station, line, anchor } = item;
@@ -594,7 +595,7 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
       });
     }
 
-    // Translucent Metroskop-style Escalator / Access Shaft Ring at platform entrance corner
+    // Translucent Metroskop-style Escalator / Access Shaft Ring + stepped stairs & street-level Paris "M" totem
     if (!isViaduct) {
       stationStructures.push({
         polygon: quadM(
@@ -613,6 +614,140 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
         elevationM: 4.8,
         extruded: true,
       });
+      // Stepped escalator treads ascending toward surface hall
+      for (let st = 0; st < 4; st += 1) {
+        const stepX0 = halfLen * 0.42 - 1.45 + st * 0.72;
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            stepX0,
+            stepX0 + 0.65,
+            4.55,
+            5.85,
+            deckZ + 0.15 + st * 0.72,
+            refLat
+          ),
+          fillColor: [148, 154, 162, 238],
+          lineColor: [201, 162, 39, 175],
+          elevationM: 0.45,
+          extruded: true,
+        });
+      }
+      if (!renderedSurfaceTotems.has(station.id)) {
+        renderedSurfaceTotems.add(station.id);
+        const totemX = halfLen * 0.42 + 2.3;
+        const totemY = 5.4;
+        // Emerald RATP/Val d'Osne entrance base post at surface (z >= 0)
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            totemX - 0.24,
+            totemX + 0.24,
+            totemY - 0.24,
+            totemY + 0.24,
+            0.05,
+            refLat
+          ),
+          fillColor: [28, 76, 56, 252],
+          lineColor: [201, 162, 39, 240],
+          elevationM: 3.1,
+          extruded: true,
+        });
+        // Brass "M" medallion crown
+        stationStructures.push({
+          polygon: quadM(
+            anchor.point,
+            tangent,
+            normal,
+            totemX - 0.56,
+            totemX + 0.56,
+            totemY - 0.56,
+            totemY + 0.56,
+            3.15,
+            refLat
+          ),
+          fillColor: [201, 162, 39, 252],
+          lineColor: [248, 242, 224, 245],
+          elevationM: 0.58,
+          extruded: true,
+        });
+      }
+    }
+
+    // Tactile platform safety strip along trackside edge (+1.68m .. +1.92m)
+    stationStructures.push({
+      polygon: quadM(
+        anchor.point,
+        tangent,
+        normal,
+        -halfLen + 0.5,
+        halfLen - 0.5,
+        1.68,
+        1.92,
+        deckZ + 0.02,
+        refLat
+      ),
+      fillColor: [232, 208, 128, 235],
+      lineColor: [185, 162, 86, 180],
+      elevationM: 0.04,
+      extruded: true,
+    });
+
+    // Overhead warm light strips & automated line platform screen doors ("portes palières" on L1, L4, L14)
+    const isAutomatedLine =
+      line.short_name === '1' || line.short_name === '4' || line.short_name === '14';
+    if (input.zoom >= 15.8) {
+      if (isAutomatedLine) {
+        const doorBayCount = 5;
+        const doorBayLen = (len - 8) / doorBayCount;
+        for (let db = 0; db < doorBayCount; db += 1) {
+          const dx0 = -halfLen + 4 + db * doorBayLen;
+          stationStructures.push({
+            polygon: quadM(
+              anchor.point,
+              tangent,
+              normal,
+              dx0 + 0.35,
+              dx0 + doorBayLen - 0.35,
+              1.94,
+              2.06,
+              deckZ + 0.06,
+              refLat
+            ),
+            fillColor: [176, 218, 238, 92],
+            lineColor: [215, 226, 235, 210],
+            elevationM: 1.88,
+            extruded: true,
+          });
+        }
+      }
+
+      if (!isViaduct) {
+        const lampOffsets = [-halfLen * 0.65, -halfLen * 0.22, halfLen * 0.22, halfLen * 0.65];
+        for (const lx of lampOffsets) {
+          stationStructures.push({
+            polygon: quadM(
+              anchor.point,
+              tangent,
+              normal,
+              lx - 3.6,
+              lx + 3.6,
+              2.6,
+              3.05,
+              deckZ + 3.45,
+              refLat
+            ),
+            fillColor: [255, 244, 214, 215],
+            lineColor: [235, 224, 198, 160],
+            elevationM: 0.14,
+            extruded: true,
+          });
+        }
+      }
     }
 
     // D. Simplified RATP Station Architecture Details (z >= 15.8):

@@ -1,184 +1,144 @@
-import { useMemo } from 'react';
-import { RiMapPinLine, RiNavigationLine, RiRefreshLine, RiWalkLine } from '@remixicon/react';
-import { Button } from '@/components/base/buttons/button';
-import { Chip } from '@/components/base/badges/chip';
-import { Drawer, DrawerBody, DrawerFooter, DrawerHeader } from '@/components/base/drawer/drawer';
-import { Skeleton } from '@/components/base/skeleton/skeleton';
+import { RiCloseLine, RiFocus3Line } from '@remixicon/react';
+import { Afficheur, type Passage } from './Afficheur';
+import { Button, IconButton } from './Button';
+import { cx } from './cx';
+import { formatNombre } from './format';
 import { LineBadgeChip } from './LineBadgeChip';
-import { uiStore, useUiStore } from './ui_store';
-import { useMediaQuery } from './useMediaQuery';
+import type { LineRef } from './lines';
+import { Panneau } from './Panneau';
+import { useIsDesktop } from './useMediaQuery';
+import { useSheetSwipe } from './useSheetSwipe';
 
-function formatDistance(distanceM: number, walkMinutes: number): string {
-  const distLabel = distanceM >= 1000 ? `${(distanceM / 1000).toFixed(1)} km` : `${distanceM} m`;
-  return `${distLabel} · ~${walkMinutes} min à pied`;
+/**
+ * Autour de moi (v2.1). Des rangées, pas des cartes : temps à pied d’abord
+ * (c’est ce qui décide), puis la station, puis les deux prochains départs, chacun
+ * marqué de l’onglet couleur de sa ligne. Pas de « Fermer » en pied (× en en-tête).
+ */
+export interface StationProche {
+  id: string;
+  nom: string;
+  lignes: LineRef[];
+  minutes: number;
+  metres: number;
+  /** Les deux prochains départs toutes lignes confondues, avec `ligne` renseignée */
+  passages: Passage[];
 }
 
-export function NearbyDrawer() {
-  const {
-    nearbyOpen,
-    nearbyLoading,
-    nearbyError,
-    nearbyStations,
-    nearbyDepartures,
-    lines,
-    handlers,
-  } = useUiStore();
-  const isMobile = useMediaQuery('(max-width: 767px)');
+export type ErreurPosition = 'refus' | 'indisponible' | 'delai';
 
-  const lineById = useMemo(() => new Map(lines.map((line) => [line.id, line])), [lines]);
+export interface NearbyDrawerProps {
+  etat: 'chargement' | 'pret' | 'erreur';
+  erreur?: ErreurPosition;
+  stations: StationProche[];
+  /** Précision de la position, en mètres */
+  precision?: number;
+  onStation: (id: string) => void;
+  onReessayer: () => void;
+  onRechercher: () => void;
+  onClose: () => void;
+  presentation?: 'cote' | 'basse';
+  className?: string;
+}
 
+const ERREURS: Record<ErreurPosition, { texte: string; principal: 'reessayer' | 'rechercher' }> = {
+  refus: {
+    texte: 'La localisation est bloquée pour ce site. Autorisez-la dans les réglages du navigateur, ou cherchez une station.',
+    principal: 'rechercher',
+  },
+  indisponible: {
+    texte: 'Votre position n’a pas pu être déterminée. Vérifiez que la localisation de l’appareil est activée.',
+    principal: 'reessayer',
+  },
+  delai: { texte: 'La localisation met trop de temps à répondre. Réessayez, de préférence à découvert.', principal: 'reessayer' },
+};
+
+
+export function NearbyDrawer(p: NearbyDrawerProps) {
+  const desktop = useIsDesktop();
+  const basse = (p.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
+  const swipe = useSheetSwipe({ enabled: basse, onSwipeDown: p.onClose });
+  const pad = basse ? 'px-4' : 'px-5';
   return (
-    <Drawer
-      isOpen={nearbyOpen}
-      onOpenChange={(open) => uiStore.setNearbyOpen(open)}
-      placement={isMobile ? 'bottom' : 'end'}
-      size="md"
-      aria-label="Stations autour de moi"
+    <Panneau
+      matiere="feuille"
+      as="section"
+      role="dialog"
+      aria-labelledby="autour-titre"
+      className={cx('flex min-h-0 flex-col animate-feuille', basse ? 'max-h-[80dvh] rounded-b-none' : 'max-h-full', p.className)}
     >
-      {({ close }) => (
-        <>
-          <DrawerHeader
-            title="Autour de moi"
-            description="Les stations les plus proches et leurs prochains passages"
-          />
-
-          <DrawerBody className="flex flex-col gap-3">
-            {nearbyLoading ? (
-              <div className="flex flex-col gap-3">
-                {[0, 1, 2].map((index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col gap-2 rounded-xl border border-separator-border p-3"
-                  >
-                    <Skeleton className="h-4 w-44 rounded-md" />
-                    <Skeleton className="h-3 w-28 rounded-md" />
-                    <Skeleton className="h-6 w-full rounded-md" />
-                  </div>
-                ))}
-              </div>
-            ) : nearbyError ? (
-              <div className="flex flex-col items-start gap-3 rounded-xl border border-separator-border bg-background-secondary-default p-4">
-                <div className="flex items-center gap-2 text-body-medium text-text-primary">
-                  <RiNavigationLine className="size-4 text-status-yellow-text" aria-hidden />
-                  Localisation indisponible
-                </div>
-                <p className="text-body-2-regular text-text-secondary">{nearbyError}</p>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    leadingIcon={RiRefreshLine}
-                    onClick={() => handlers.onRequestNearby?.()}
-                  >
-                    Réessayer
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="small"
-                    onClick={() => {
-                      close();
-                      uiStore.setSearchOpen(true);
-                    }}
-                  >
-                    Rechercher une station
-                  </Button>
-                </div>
-              </div>
-            ) : nearbyStations.length === 0 ? (
-              <div className="rounded-xl border border-separator-border bg-background-secondary-default p-4 text-center text-body-2-regular text-text-secondary">
-                Aucune station détectée à proximité de votre position.
-              </div>
-            ) : (
-              <ul className="flex flex-col gap-2.5">
-                {nearbyStations.map(({ station, distanceM, walkMinutes }) => {
-                  const deps = (nearbyDepartures[station.name] ?? []).slice(0, 2);
-                  const serving = station.lines
-                    .map((lineId) => lineById.get(lineId))
-                    .filter((l): l is (typeof lines)[number] => Boolean(l));
-
-                  return (
-                    <li key={station.id}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          handlers.onStationSelect?.(station);
-                        }}
-                        className="flex w-full cursor-pointer flex-col gap-2 rounded-xl border border-separator-border bg-background-secondary-default/65 p-3 text-start transition-colors hover:border-border-button-hover hover:bg-background-secondary-hover outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5 text-body-medium text-text-primary">
-                              <RiMapPinLine
-                                className="size-4 shrink-0 text-foreground-icon-secondary"
-                                aria-hidden
-                              />
-                              <span className="truncate">{station.name}</span>
-                            </div>
-                            <div className="mt-0.5 flex items-center gap-1 text-caption-1-medium text-text-tertiary">
-                              <RiWalkLine className="size-3.5 shrink-0" aria-hidden />
-                              <span className="truncate">
-                                {formatDistance(distanceM, walkMinutes)}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="flex shrink-0 flex-wrap justify-end gap-1">
-                            {serving.slice(0, 4).map((line) => (
-                              <LineBadgeChip
-                                key={line.id}
-                                shortName={line.short_name}
-                                color={line.color}
-                                textColor={line.text_color}
-                                size="xs"
-                              />
-                            ))}
-                          </div>
-                        </div>
-
-                        {deps.length > 0 ? (
-                          <div className="flex flex-col gap-1 border-t border-separator-border pt-2">
-                            {deps.map((dep) => (
-                              <div
-                                key={`${dep.tripId}-${dep.lineId}`}
-                                className="flex items-center justify-between gap-2 text-caption-1-medium"
-                              >
-                                <span className="flex min-w-0 items-center gap-1.5 text-text-secondary">
-                                  <LineBadgeChip
-                                    shortName={dep.lineShortName}
-                                    color={dep.colorHex}
-                                    textColor={dep.textColorHex}
-                                    size="xs"
-                                  />
-                                  <span className="truncate">{dep.destName}</span>
-                                </span>
-                                <Chip
-                                  color={dep.atStop || dep.waitMinutes <= 1 ? 'lime' : 'soft'}
-                                  variant="caption"
-                                  className="shrink-0 tabular-nums"
-                                >
-                                  {dep.atStop || dep.waitMinutes <= 0
-                                    ? 'À quai'
-                                    : `${dep.waitMinutes} min`}
-                                </Chip>
-                              </div>
-                            ))}
-                          </div>
-                        ) : null}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </DrawerBody>
-
-          <DrawerFooter>
-            <Button variant="secondary" size="small" onClick={close}>
-              Fermer
-            </Button>
-          </DrawerFooter>
-        </>
+      {basse && (
+        <div onTouchStart={swipe.onTouchStart} onTouchEnd={swipe.onTouchEnd} className="flex shrink-0 justify-center pt-2 pb-1">
+          <span aria-hidden className="h-1 w-9 rounded-full bg-bord-fort" />
+        </div>
       )}
-    </Drawer>
+      <div onTouchStart={swipe.onTouchStart} onTouchEnd={swipe.onTouchEnd} className={cx('flex items-start justify-between gap-2', pad, basse ? 'pt-2' : 'pt-5')}>
+        <div>
+          <h2 id="autour-titre" className="text-titre text-encre">Autour de moi</h2>
+          {p.etat === 'pret' && p.precision != null && (
+            <p className="mt-0.5 text-[13px] text-encre-2">Position à {p.precision} m près, temps à pied estimés.</p>
+          )}
+        </div>
+        <IconButton size="sm" label="Fermer" icon={<RiCloseLine aria-hidden />} onClick={p.onClose} />
+      </div>
+
+      <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4', pad, basse ? 'pb-[max(16px,env(safe-area-inset-bottom))]' : 'pb-5')}>
+        {p.etat === 'chargement' && (
+          <p className="carrelage flex items-center justify-center gap-2 rounded-[12px] px-4 py-8 text-[14px] text-encre-2">
+            <RiFocus3Line aria-hidden className="size-5 animate-pulse text-icone-2" />
+            Recherche de votre position…
+          </p>
+        )}
+
+        {p.etat === 'erreur' && p.erreur && <Erreur type={p.erreur} onReessayer={p.onReessayer} onRechercher={p.onRechercher} />}
+
+        {p.etat === 'pret' && p.stations.length === 0 && (
+          <div className="carrelage rounded-[12px] px-4 py-7 text-center">
+            <p className="text-[14px] text-encre-2">Aucune station à moins de 15 minutes à pied.</p>
+            <Button className="mt-3" onClick={p.onRechercher}>Rechercher une station</Button>
+          </div>
+        )}
+
+        {p.etat === 'pret' && p.stations.length > 0 && (
+          <ul className="divide-y divide-joint border-y border-joint">
+            {p.stations.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  onClick={() => p.onStation(s.id)}
+                  className="-mx-2 grid w-[calc(100%+16px)] grid-cols-[48px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-3 text-start outline-none transition-colors duration-150 ease-signal hover:bg-encart focus-visible:outline-2 focus-visible:outline-focus"
+                >
+                  <span className="text-center">
+                    <span className="chiffres block text-[22px] font-bold leading-none text-encre">{s.minutes}</span>
+                    <span className="mt-0.5 block text-[11px] font-semibold leading-[13px] text-encre-3">min<br />à pied</span>
+                  </span>
+                  <span className="min-w-0">
+                    <span className="signaletique block truncate text-[16px] font-semibold leading-[20px] text-encre">{s.nom}</span>
+                    <span className="mt-1 flex flex-wrap items-center gap-1">
+                      {s.lignes.map((l) => <LineBadgeChip key={l.shortName} {...l} size="xs" />)}
+                      <span className="chiffres ml-1 text-legende text-encre-3">{formatNombre(s.metres)} m</span>
+                    </span>
+                  </span>
+                  <Afficheur passages={s.passages} size="sm" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Panneau>
+  );
+}
+
+function Erreur({ type, onReessayer, onRechercher }: { type: ErreurPosition; onReessayer: () => void; onRechercher: () => void }) {
+  const e = ERREURS[type];
+  const reessayer = (v: 'primaire' | 'secondaire') => <Button key="r" variant={v} onClick={onReessayer}>Réessayer</Button>;
+  const rechercher = (v: 'primaire' | 'secondaire') => <Button key="s" variant={v} onClick={onRechercher}>Rechercher une station</Button>;
+  return (
+    <div className="rounded-[12px] bg-encart p-4">
+      <p className="text-[14px] leading-[20px] text-encre">{e.texte}</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {e.principal === 'reessayer' ? [reessayer('primaire'), rechercher('secondaire')] : [rechercher('primaire'), reessayer('secondaire')]}
+      </div>
+    </div>
   );
 }

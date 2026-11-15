@@ -1,0 +1,26 @@
+/* ==========================================================================
+   Faïence v2 — typefaces
+   Asap by Omnibus-Type (SIL Open Font License 1.1), self-hosted through
+   Fontsource so the PWA keeps its typography offline (cached by /sw.js).
+
+     npm i @fontsource-variable/asap
+
+   `wdth.css` ships the weight (100–900) AND width (75–125 %) axes.
+   Unicode ranges keep downloads to latin + latin-ext for French.
+   ========================================================================== */
+@import '@fontsource-variable/asap/wdth.css';
+
+/* Optional: italics, used only for district names on the map.
+@import '@fontsource-variable/asap/wdth-italic.css'; */
+
+/* Metric-matched fallback: Arial scaled to Asap's average advance (0.4895 em
+   vs 0.4817 em) with Asap's vertical metrics (934 / 212 / 0 on 1000 UPM).
+   Prevents layout shift while the variable font loads. */
+@font-face {
+  font-family: 'Asap Fallback';
+  src: local('Arial'), local('ArialMT'), local('Helvetica');
+  size-adjust: 101.6%;
+  ascent-override: 91.9%;
+  descent-override: 20.9%;
+  line-gap-override: 0%;
+}

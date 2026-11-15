@@ -1,4 +1,6 @@
-import type { LineMetadata, StationMetadata } from '@core/types';
+import type { LineMetadata, LineTrafficReport, StationMetadata } from '@core/types';
+import type { Confidence } from '@core/rt/rt_matching';
+import type { StationDeparture } from '@core/sim/browser_engine';
 import type { LineLadderData, StationLadderNode } from '@core/ui/components/station_ladder';
 import { findNearbyStations, haversineDistanceM } from './nearby_stations';
 
@@ -16,6 +18,8 @@ export interface RouteStopRef {
   coordinates: [number, number];
 }
 
+export type CarPositionHint = 'Avant' | 'Milieu' | 'Arrière';
+
 export interface ItineraryLeg {
   kind: 'walk' | 'ride' | 'transfer';
   durationSec: number;
@@ -32,6 +36,10 @@ export interface ItineraryLeg {
   terminusName?: string;
   stops?: RouteStopRef[];
   path?: [number, number][];
+  waitSec?: number;
+  departureConfidence?: Confidence;
+  trafficAlert?: LineTrafficReport;
+  carPositionHint?: CarPositionHint;
 }
 
 export interface TransitItinerary {
@@ -49,6 +57,8 @@ export interface RouterNetworkInput {
   stations: StationMetadata[];
   lines: LineMetadata[];
   ladders: Record<string, LineLadderData>;
+  trafficByLine?: Record<string, LineTrafficReport>;
+  getNextDepartures?: (stationName: string) => StationDeparture[];
 }
 
 interface GraphEdge {
@@ -90,9 +100,85 @@ function estimateWalkSec(straightMeters: number): { distanceM: number; durationS
   };
 }
 
+function resolveLineTraffic(
+  trafficByLine: Record<string, LineTrafficReport> | undefined,
+  lineId: string
+): LineTrafficReport | undefined {
+  if (!trafficByLine) return undefined;
+  return trafficByLine[lineId];
+}
+
+function isStationClosedOnLine(
+  report: LineTrafficReport | undefined,
+  stationName: string
+): boolean {
+  if (!report?.closedStations?.length) return false;
+  const target = normalizeName(stationName);
+  return report.closedStations.some((closed) => {
+    const normClosed = normalizeName(closed);
+    return (
+      normClosed === target ||
+      (normClosed.length >= 4 && (target.includes(normClosed) || normClosed.includes(target)))
+    );
+  });
+}
+
+function resolveWaitInfo(
+  input: RouterNetworkInput,
+  lineId: string,
+  stationName: string,
+  directionId?: string,
+  terminusName?: string
+): { waitSec: number; confidence?: Confidence } {
+  if (!input.getNextDepartures) {
+    return { waitSec: BOARD_WAIT_SEC };
+  }
+  const deps = input.getNextDepartures(stationName);
+  if (!deps || deps.length === 0) {
+    return { waitSec: BOARD_WAIT_SEC };
+  }
+  const normTerminus = terminusName ? normalizeName(terminusName) : '';
+  const dirMatches = deps.filter((d) => {
+    if (d.lineId !== lineId) return false;
+    if (directionId !== undefined && String(d.direction) === String(directionId)) return true;
+    if (normTerminus && normalizeName(d.destName).includes(normTerminus)) return true;
+    return false;
+  });
+  const candidates = dirMatches.length > 0 ? dirMatches : deps.filter((d) => d.lineId === lineId);
+  if (candidates.length === 0) {
+    return { waitSec: BOARD_WAIT_SEC };
+  }
+  const sorted = [...candidates].sort((a, b) => a.waitSeconds - b.waitSeconds);
+  const chosen = sorted[0];
+  const clamped = Math.max(30, Math.min(900, Math.round(chosen.waitSeconds)));
+  return { waitSec: clamped, confidence: chosen.confidence };
+}
+
+function computeCarPositionHint(
+  stops: RouteStopRef[],
+  nextTargetCoords: [number, number] | undefined
+): CarPositionHint | undefined {
+  if (!nextTargetCoords || stops.length < 2) return undefined;
+  const last = stops[stops.length - 1];
+  const prev = stops[stops.length - 2];
+  const cosLat = Math.cos((last.coordinates[1] * Math.PI) / 180);
+  const trainDx = (last.coordinates[0] - prev.coordinates[0]) * cosLat;
+  const trainDy = last.coordinates[1] - prev.coordinates[1];
+  const trainLen = Math.hypot(trainDx, trainDy);
+  const targetDx = (nextTargetCoords[0] - last.coordinates[0]) * cosLat;
+  const targetDy = nextTargetCoords[1] - last.coordinates[1];
+  const targetLen = Math.hypot(targetDx, targetDy);
+  if (trainLen < 1e-6 || targetLen < 1e-5) return 'Milieu';
+  const dot = (trainDx * targetDx + trainDy * targetDy) / (trainLen * targetLen);
+  if (dot > 0.35) return 'Avant';
+  if (dot < -0.35) return 'Arrière';
+  return 'Milieu';
+}
+
 function buildGraph(
   input: RouterNetworkInput,
-  transferPenaltyExtraSec: number
+  transferPenaltyExtraSec: number,
+  allowInterruptedFallback = false
 ): {
   edges: Map<string, GraphEdge[]>;
   hubStatesByStationId: Map<string, string[]>;
@@ -143,6 +229,10 @@ function buildGraph(
 
   for (const [lineId, ladder] of Object.entries(input.ladders)) {
     const line = lineById.get(lineId);
+    const report = resolveLineTraffic(input.trafficByLine, lineId);
+    const isInterrupted = report?.status === 'interrupted';
+    if (isInterrupted && !allowInterruptedFallback) continue;
+    const isDisrupted = report?.status === 'disrupted';
     const speedMps = line?.mode === 'rail' ? 14.5 : 8.8;
     if (!ladder?.directions) continue;
 
@@ -164,6 +254,12 @@ function buildGraph(
         for (let i = 0; i < seq.stations.length - 1; i += 1) {
           const a = seq.stations[i];
           const b = seq.stations[i + 1];
+          if (
+            !allowInterruptedFallback &&
+            (isStationClosedOnLine(report, a.name) || isStationClosedOnLine(report, b.name))
+          ) {
+            continue;
+          }
           const regA = registerNode(a, lineId, dirId, seq.terminus);
           const regB = registerNode(b, lineId, dirId, seq.terminus);
           const deltaDist = Math.max(
@@ -173,10 +269,11 @@ function buildGraph(
               : haversineDistanceM(a.coordinates, b.coordinates) * 1.15
           );
           const rideSec = Math.round(deltaDist / speedMps) + STOP_DWELL_SEC;
+          const trafficPenaltySec = isInterrupted ? 1800 : isDisrupted ? 20 : 0;
           addEdge(regA.stateKey, {
             toState: regB.stateKey,
             costSec: rideSec,
-            weightSec: rideSec,
+            weightSec: rideSec + trafficPenaltySec,
             distanceM: deltaDist,
             kind: 'ride',
             lineId,
@@ -301,11 +398,13 @@ function runSingleDijkstra(
   destination: RoutePoint,
   input: RouterNetworkInput,
   transferPenaltyExtraSec: number,
-  tag: 'fast' | 'few_transfers'
+  tag: 'fast' | 'few_transfers',
+  allowInterruptedFallback = false
 ): TransitItinerary | null {
   const { edges, hubStatesByStationId, stationByState, lineById } = buildGraph(
     input,
-    transferPenaltyExtraSec
+    transferPenaltyExtraSec,
+    allowInterruptedFallback
   );
 
   const entryCandidates =
@@ -320,7 +419,13 @@ function runSingleDijkstra(
 
   const entryStarts = new Map<
     string,
-    { walkSec: number; walkDistM: number; station: StationMetadata; entryCoords: [number, number] }
+    {
+      walkSec: number;
+      walkDistM: number;
+      waitSec: number;
+      station: StationMetadata;
+      entryCoords: [number, number];
+    }
   >();
   for (const entry of entryCandidates) {
     if (entry.distanceM > 2200 && entryStarts.size > 0) continue;
@@ -331,12 +436,15 @@ function runSingleDijkstra(
     const stateIds = hubStatesByStationId.get(entry.station.id) ?? [];
     for (const stateId of stateIds) {
       const stop = stationByState.get(stateId);
+      const lineId = stateId.split('::')[0] ?? '';
+      const { waitSec } = resolveWaitInfo(input, lineId, stop?.name ?? entry.station.name);
       const existing = entryStarts.get(stateId);
-      const candidateCost = durationSec + BOARD_WAIT_SEC;
-      if (!existing || candidateCost < existing.walkSec + BOARD_WAIT_SEC) {
+      const candidateCost = durationSec + waitSec;
+      if (!existing || candidateCost < existing.walkSec + existing.waitSec) {
         entryStarts.set(stateId, {
           walkSec: durationSec,
           walkDistM: distanceM,
+          waitSec,
           station: entry.station,
           entryCoords: stop?.coordinates ?? entry.station.coordinates,
         });
@@ -380,7 +488,7 @@ function runSingleDijkstra(
   const queue: string[] = [];
 
   for (const [stateId, startInfo] of entryStarts.entries()) {
-    const initial = startInfo.walkSec + BOARD_WAIT_SEC;
+    const initial = startInfo.walkSec + startInfo.waitSec;
     distWeight.set(stateId, initial);
     realSec.set(stateId, initial);
     prevState.set(stateId, null);
@@ -480,9 +588,18 @@ function runSingleDijkstra(
     const line = lineById.get(rideAcc.lineId);
     const first = rideAcc.stops[0];
     const last = rideAcc.stops[rideAcc.stops.length - 1];
+    const isInitialBoarding = !legs.some((l) => l.kind === 'ride');
+    const waitInfo = resolveWaitInfo(
+      input,
+      rideAcc.lineId,
+      first.name,
+      rideAcc.directionId,
+      rideAcc.terminusName
+    );
+    const trafficAlert = resolveLineTraffic(input.trafficByLine, rideAcc.lineId);
     legs.push({
       kind: 'ride',
-      durationSec: rideAcc.durationSec + BOARD_WAIT_SEC,
+      durationSec: rideAcc.durationSec + (isInitialBoarding ? waitInfo.waitSec : 0),
       distanceM: Math.round(rideAcc.distanceM),
       fromLabel: first.name,
       toLabel: last.name,
@@ -496,6 +613,9 @@ function runSingleDijkstra(
       terminusName: rideAcc.terminusName,
       stops: rideAcc.stops,
       path: rideAcc.stops.map((s) => s.coordinates),
+      waitSec: waitInfo.waitSec,
+      departureConfidence: waitInfo.confidence,
+      trafficAlert,
     });
     rideAcc = null;
   };
@@ -553,6 +673,14 @@ function runSingleDijkstra(
     });
   }
 
+  for (let i = 0; i < legs.length; i += 1) {
+    const leg = legs[i];
+    if (leg.kind !== 'ride' || !leg.stops || leg.stops.length < 2) continue;
+    const nextLeg = legs[i + 1];
+    const nextCoords = nextLeg?.toCoords ?? destination.coordinates;
+    leg.carPositionHint = computeCarPositionHint(leg.stops, nextCoords);
+  }
+
   const totalDurationSec = legs.reduce((acc, leg) => acc + leg.durationSec, 0);
   const signature = legs
     .filter((l) => l.kind === 'ride')
@@ -607,13 +735,25 @@ export function computeTransitItineraries(
     });
   }
 
-  const fastest = runSingleDijkstra(origin, destination, input, 0, 'fast');
+  let fastest = runSingleDijkstra(origin, destination, input, 0, 'fast', false);
+  let usedInterruptedFallback = false;
+  if (!fastest) {
+    fastest = runSingleDijkstra(origin, destination, input, 0, 'fast', true);
+    usedInterruptedFallback = Boolean(fastest);
+  }
   if (fastest && (straightM > 320 || fastest.totalDurationSec < walkOnly.durationSec + 180)) {
     candidates.push(fastest);
   }
 
   if (fastest && fastest.transferCount > 0) {
-    const fewerTransfers = runSingleDijkstra(origin, destination, input, 900, 'few_transfers');
+    const fewerTransfers = runSingleDijkstra(
+      origin,
+      destination,
+      input,
+      900,
+      'few_transfers',
+      usedInterruptedFallback
+    );
     if (
       fewerTransfers &&
       fewerTransfers.transferCount < fastest.transferCount &&

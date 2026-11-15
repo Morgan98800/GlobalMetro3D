@@ -1,0 +1,30 @@
+{
+  "name": "Métro de Paris 3D",
+  "short_name": "Paris 3D",
+  "description": "Visualiseur cartographique 3D temps réel et itinéraires du métro et RER parisien",
+  "start_url": "/paris",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F2F0EB",
+  "theme_color": "#F2F0EB",
+  "lang": "fr-FR",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

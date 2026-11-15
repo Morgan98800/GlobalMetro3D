@@ -517,13 +517,17 @@ def paint_atlas(length: float, height: float, doors_per_side: int,
     d.rectangle([x0, y1 - 6, x1 - 1, y1 - 1], fill=(28, 30, 34))
     wb0 = y1 - int(h * WINDOW_BAND[1])
     wb1 = y1 - int(h * WINDOW_BAND[0])
-    # Dark window surround frieze, then glossy dark glass panes
+    # Dark window surround frieze, satin aluminum mullions, then glossy dark glass panes
     d.rectangle([x0, wb0 - 2, x1 - 1, wb1 + 2], fill=(38, 42, 46))
     for wx0, wy0, wx1, wy1 in _iter_side_windows(x0, x1, wb0, wb1, doors_per_side, length):
+        d.rectangle([wx0 - 1, wy0 - 1, wx1 + 1, wy1 + 1], outline=(168, 174, 182))
         d.rectangle([wx0, wy0, wx1, wy1], fill=GLASS_COLOR)
-    # Subtle off-white upper header border & crisp teal beltline rule
+    # Subtle off-white upper header border & crisp teal/metallic beltline rule
     d.rectangle([x0, y0, x1 - 1, y0 + 4], fill=ROOF_COLOR)
     d.line([x0, y1 - skirt_px, x1 - 1, y1 - skirt_px], fill=(215, 224, 224), width=1)
+    # Inter-car end gasket bevel
+    d.rectangle([x0, y0, x0 + 2, y1 - 1], fill=(34, 36, 40))
+    d.rectangle([x1 - 3, y0, x1 - 1, y1 - 1], fill=(34, 36, 40))
 
     dw = max(6, int((x1 - x0) * DOOR_WIDTH_M / length))
     for i in range(doors_per_side):
@@ -536,6 +540,8 @@ def paint_atlas(length: float, height: float, doors_per_side: int,
         d.rectangle([dl + 2, wb0 + 1, cx - 2, wb1 - 1], fill=GLASS_COLOR)
         d.rectangle([cx + 2, wb0 + 1, dr - 2, wb1 - 1], fill=GLASS_COLOR)
         d.line([cx, y0 + int(h * 0.12), cx, y1 - 7], fill=(18, 20, 22), width=2)
+        # Overhead orange/red door status pilot dot
+        d.rectangle([cx - 2, y0 + int(h * 0.06), cx + 2, y0 + int(h * 0.10)], fill=(235, 118, 38))
 
     # ---- roof
     x0, y0, x1, y1 = R_ROOF
@@ -574,29 +580,37 @@ def paint_atlas(length: float, height: float, doors_per_side: int,
             d.rectangle([gx0, y0 + int(eh * 0.14), gx1, y1 - 4], fill=(32, 34, 38))
             d.rectangle([gx0 + 5, y0 + int(eh * 0.22), gx1 - 5, y0 + int(eh * 0.50)], fill=GLASS_COLOR)
         else:
-            # Iconic MF 67 off-white brow + full RATP teal lower front mask + dark panoramic windshield
+            # Modern Paris Metro / MP 14 / MF 01 style dark panoramic face mask over body shell + bumper
             d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=body_color)
             d.rectangle([x0 + 2, y0 + int(eh * 0.24), x1 - 3, y1 - 5], fill=band)
-            d.rectangle([x0, y1 - 6, x1 - 1, y1 - 1], fill=(24, 26, 28))
+            # Lower anti-climber skirt + Scharfenberg coupler pocket
+            d.rectangle([x0, y1 - 8, x1 - 1, y1 - 1], fill=(24, 26, 28))
+            d.rectangle([x0 + int(ew * 0.36), y1 - 7, x0 + int(ew * 0.64), y1 - 2], fill=(48, 52, 58))
+            # Dark wraparound cab face surround + wraparound panoramic windshield + center wiper seam
+            d.rectangle([x0 + 4, y0 + int(eh * 0.15), x1 - 5, y0 + int(eh * 0.60)], fill=(22, 25, 29))
             d.rectangle([x0 + 6, y0 + int(eh * 0.18), x1 - 7, y0 + int(eh * 0.54)], fill=GLASS_COLOR)
+            d.line([(x0 + x1) // 2, y0 + int(eh * 0.20), (x0 + x1) // 2 + 2, y0 + int(eh * 0.52)],
+                   fill=(46, 52, 58), width=2)
             if kind == "head":
-                # Green/amber LED destination header box at brow top + white fleet plate below
-                d.rectangle([x0 + int(ew * 0.20), y0 + int(eh * 0.05), x0 + int(ew * 0.80), y0 + int(eh * 0.15)],
+                # Warm amber LED destination header box at brow top
+                d.rectangle([x0 + int(ew * 0.18), y0 + int(eh * 0.04), x0 + int(ew * 0.82), y0 + int(eh * 0.14)],
                             fill=(12, 16, 14))
-                d.rectangle([x0 + int(ew * 0.25), y0 + int(eh * 0.08), x0 + int(ew * 0.75), y0 + int(eh * 0.12)],
-                            fill=(85, 235, 115))
-                light_color = (255, 252, 196)
+                d.rectangle([x0 + int(ew * 0.23), y0 + int(eh * 0.07), x0 + int(ew * 0.77), y0 + int(eh * 0.11)],
+                            fill=(255, 185, 58))
+                light_color = (255, 252, 212)
             else:
-                d.rectangle([x0 + int(ew * 0.20), y0 + int(eh * 0.05), x0 + int(ew * 0.80), y0 + int(eh * 0.15)],
+                d.rectangle([x0 + int(ew * 0.18), y0 + int(eh * 0.04), x0 + int(ew * 0.82), y0 + int(eh * 0.14)],
                             fill=(26, 28, 30))
-                light_color = (240, 48, 42)
-            # Crisp circular dual headlights / taillights + subtle RATP ring accent + fleet number block
-            lr = max(4, int(ew * 0.085))
-            ly = y0 + int(eh * 0.67)
-            lx_l, lx_r = x0 + int(ew * 0.24), x0 + int(ew * 0.76)
+                light_color = (242, 46, 40)
+            # Crisp circular dual headlights / taillights with metallic bezel + white RATP fleet plate
+            lr = max(4, int(ew * 0.09))
+            ly = y0 + int(eh * 0.68)
+            lx_l, lx_r = x0 + int(ew * 0.23), x0 + int(ew * 0.77)
+            d.ellipse([lx_l - lr - 1, ly - lr - 1, lx_l + lr + 1, ly + lr + 1], fill=(175, 182, 190))
+            d.ellipse([lx_r - lr - 1, ly - lr - 1, lx_r + lr + 1, ly + lr + 1], fill=(175, 182, 190))
             d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=light_color, outline=(36, 38, 42))
             d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=light_color, outline=(36, 38, 42))
-            d.rectangle([x0 + int(ew * 0.40), y0 + int(eh * 0.78), x0 + int(ew * 0.60), y0 + int(eh * 0.88)],
+            d.rectangle([x0 + int(ew * 0.38), y0 + int(eh * 0.77), x0 + int(ew * 0.62), y0 + int(eh * 0.87)],
                         fill=(248, 248, 248), outline=(36, 38, 42))
 
     # ---- underframe (bottom half) + HVAC fan louvres (top half) in R_UNDER
@@ -682,15 +696,15 @@ def paint_emissive_atlas(length: float, doors_per_side: int, end_mode: str = "ga
     for region, kind in end_configs:
         ex0, ey0, ex1, ey1 = region
         ew, eh = ex1 - ex0, ey1 - ey0
-        lr = max(4, int(ew * 0.085))
-        ly = ey0 + int(eh * 0.67)
-        lx_l, lx_r = ex0 + int(ew * 0.24), ex0 + int(ew * 0.76)
-        light_color = (255, 248, 185) if kind == "head" else (255, 42, 36)
+        lr = max(4, int(ew * 0.09))
+        ly = ey0 + int(eh * 0.68)
+        lx_l, lx_r = ex0 + int(ew * 0.23), ex0 + int(ew * 0.77)
+        light_color = (255, 248, 200) if kind == "head" else (255, 42, 36)
         d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=light_color)
         d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=light_color)
         if kind == "head":
-            d.rectangle([ex0 + int(ew * 0.25), ey0 + int(eh * 0.08), ex0 + int(ew * 0.75), ey0 + int(eh * 0.12)],
-                        fill=(55, 215, 92))
+            d.rectangle([ex0 + int(ew * 0.23), ey0 + int(eh * 0.07), ex0 + int(ew * 0.77), ey0 + int(eh * 0.11)],
+                        fill=(255, 185, 58))
             d.rectangle([ex0 + 8, ey0 + int(eh * 0.22), ex1 - 9, ey0 + int(eh * 0.48)], fill=(24, 21, 16))
 
     return _encode_png(im)

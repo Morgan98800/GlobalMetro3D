@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import '../../web/styles/fonts.css';
+@import '../../web/styles/theme.css';
+
+@source '../../web/src';
+@source './';
+
+body { margin: 0; }

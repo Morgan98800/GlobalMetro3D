@@ -175,6 +175,12 @@ export class SubwayDeckOverlay {
   private staticLayersDirty = true;
   private hubRegistry: HubRegistry | null = null;
   private activeItinerary: TransitItinerary | null = null;
+  private userLocation: {
+    lng: number;
+    lat: number;
+    accuracyM: number;
+    headingDeg: number | null;
+  } | null = null;
   private theme: 'dark' | 'light' =
     typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light'
       ? 'light'
@@ -345,6 +351,19 @@ export class SubwayDeckOverlay {
 
   public setActiveItinerary(itinerary: TransitItinerary | null) {
     this.activeItinerary = itinerary;
+    this.staticLayersDirty = true;
+    this.updateLayers();
+  }
+
+  public setUserLocation(
+    loc: {
+      lng: number;
+      lat: number;
+      accuracyM: number;
+      headingDeg: number | null;
+    } | null
+  ) {
+    this.userLocation = loc;
     this.staticLayersDirty = true;
     this.updateLayers();
   }
@@ -975,6 +994,73 @@ export class SubwayDeckOverlay {
       );
     }
 
+    const gpsLayers: any[] = [];
+    if (this.userLocation) {
+      const { lng, lat, accuracyM, headingDeg } = this.userLocation;
+      gpsLayers.push(
+        new ScatterplotLayer({
+          id: 'user-gps-accuracy-halo',
+          data: [{ position: [lng, lat, 1.5], radius: Math.max(18, Math.min(250, accuracyM)) }],
+          pickable: false,
+          filled: true,
+          stroked: true,
+          radiusUnits: 'meters',
+          lineWidthUnits: 'pixels',
+          getPosition: (d: any) => d.position,
+          getRadius: (d: any) => d.radius,
+          getFillColor: [59, 130, 246, 36],
+          getLineColor: [59, 130, 246, 125],
+          getLineWidth: 1,
+          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+        })
+      );
+      if (headingDeg !== null && Number.isFinite(headingDeg)) {
+        const rad = (headingDeg * Math.PI) / 180;
+        const mPerDegLat = 111320;
+        const mPerDegLng = mPerDegLat * Math.cos((lat * Math.PI) / 180);
+        const tipLng = lng + (Math.sin(rad) * 38) / mPerDegLng;
+        const tipLat = lat + (Math.cos(rad) * 38) / mPerDegLat;
+        gpsLayers.push(
+          new PathLayer({
+            id: 'user-gps-heading-beam',
+            data: [
+              {
+                path: [
+                  [lng, lat, 2],
+                  [tipLng, tipLat, 2],
+                ],
+              },
+            ],
+            pickable: false,
+            widthUnits: 'pixels',
+            getPath: (d: any) => d.path,
+            getColor: [37, 99, 235, 195],
+            getWidth: 5,
+            capRounded: true,
+            parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          })
+        );
+      }
+      gpsLayers.push(
+        new ScatterplotLayer({
+          id: 'user-gps-dot',
+          data: [{ position: [lng, lat, 2.5] }],
+          pickable: false,
+          billboard: true,
+          filled: true,
+          stroked: true,
+          radiusUnits: 'pixels',
+          lineWidthUnits: 'pixels',
+          getPosition: (d: any) => d.position,
+          getRadius: 7,
+          getFillColor: [37, 99, 235, 255],
+          getLineColor: [255, 255, 255, 255],
+          getLineWidth: 2.5,
+          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+        })
+      );
+    }
+
     this.cachedPreTrainLayers = [
       ...(rerLayer ? [rerLayer] : []),
       ...(viaductShadowLayer ? [viaductShadowLayer] : []),
@@ -983,6 +1069,7 @@ export class SubwayDeckOverlay {
       ...(platformsLayer ? [platformsLayer] : []),
       ...itineraryLayers,
       stationsLayer,
+      ...gpsLayers,
       terminusLayer,
     ];
     this.cachedPostTrainLayers = labelsLayer ? [labelsLayer] : [];

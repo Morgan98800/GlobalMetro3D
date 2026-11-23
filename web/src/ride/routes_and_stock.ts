@@ -7,6 +7,7 @@ export interface ParisRideOptions {
   initialStation?: string;
   initialTrainId?: string;
   initialView?: 'ride' | 'vault' | 'passenger';
+  initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   getStationDepartures?: (stationName: string) => StationDeparture[];
   onExit?: () => void;
   onRouteChange?: (routeKey: string) => void;
@@ -1020,7 +1021,6 @@ export function getLibraryGlbUrlsForLine(lineNumOrKey: string): {
       return { cab: '/models/train/library/mp14_ca_cab.glb', car: '/models/train/library/mp14_car.glb' };
     case 'A':
     case 'B':
-      return { cab: '/models/train/library/ms61_cab.glb', car: '/models/train/library/ms61_car.glb' };
     case 'C':
     case 'D':
     case 'E':

@@ -2460,7 +2460,9 @@ export function mountParisRideView(
 
   let badgeMat: THREE.MeshStandardMaterial | null = null;
   let route: RouteDef = ROUTES[0];
-  let spragueMode = false;
+  let spragueMode = Boolean(options.initialStockGlb?.sprague);
+  let customStockGlb: { cab: string; car: string; label?: string } | null =
+    options.initialStockGlb && !options.initialStockGlb.sprague ? options.initialStockGlb : null;
   let activeStock: ParisRollingStockSpec = resolveParisStockSpec('6', false);
   const stationPsds = new Set<{
     sc: number;
@@ -3568,6 +3570,11 @@ export function mountParisRideView(
         const std = mat as THREE.MeshStandardMaterial;
         if (std.map) {
           std.map.colorSpace = THREE.SRGBColorSpace;
+          if (std.name?.startsWith('PaletteMaterial')) {
+            std.map.magFilter = THREE.NearestFilter;
+            std.map.minFilter = THREE.NearestFilter;
+            std.map.generateMipmaps = false;
+          }
           std.map.needsUpdate = true;
         }
         if (std.name?.toLowerCase().includes('vitre')) {
@@ -3587,9 +3594,10 @@ export function mountParisRideView(
   }
 
   function loadSingleRideGlb(url: string): Promise<THREE.Group> {
+    const sep = url.includes('?') ? '&' : '?';
     return new Promise((resolve, reject) => {
       rideGlbLoader.load(
-        url,
+        `${url}${sep}v=5`,
         (gltf) => {
           normalizeRideGlb(gltf.scene);
           resolve(gltf.scene);
@@ -3601,7 +3609,7 @@ export function mountParisRideView(
   }
 
   function loadLineGlbsIntoSlots(lineNum: string) {
-    const { cab, car } = getLibraryGlbUrlsForLine(lineNum);
+    const { cab, car } = customStockGlb ?? getLibraryGlbUrlsForLine(lineNum);
     const key = `${cab}|${car}`;
     if (activeGlbKey === key && activeGlbReady) {
       syncCarVisibility(view);
@@ -4335,6 +4343,7 @@ export function mountParisRideView(
 
   let badgeTex: THREE.CanvasTexture | null = null;
   function setRoute(key: string, stationName?: string, destName?: string) {
+    if (route && route.key !== key) customStockGlb = null;
     route = ROUTES.find((r) => r.key === key) || ROUTES[0];
     clearAll();
     if (badgeTex) badgeTex.dispose();

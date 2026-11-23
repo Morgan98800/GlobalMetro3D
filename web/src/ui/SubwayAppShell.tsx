@@ -1126,6 +1126,12 @@ export function SubwayAppShell() {
                     handlers.onOpenParisRide?.({
                       initialLine: stock.defaultLineForRide,
                       initialView: 'ride',
+                      initialStockGlb: {
+                        cab: stock.cabGlb,
+                        car: stock.carGlb,
+                        label: stock.name,
+                        sprague: stock.sprague,
+                      },
                     });
                   }
                 : undefined

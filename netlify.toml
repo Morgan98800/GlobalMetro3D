@@ -66,6 +66,16 @@
   to = "/.netlify/functions/berlin_relay"
   status = 200
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(self)"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://api.fontshare.com; font-src 'self' https://cdn.fontshare.com https://tiles.openfreemap.org data:; img-src 'self' data: blob: https:; worker-src 'self' blob:; connect-src 'self' blob: data: https://photon.komoot.io https://api-adresse.data.gouv.fr https://tiles.openfreemap.org https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

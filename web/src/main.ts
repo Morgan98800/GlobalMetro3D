@@ -422,6 +422,7 @@ async function bootstrap() {
     initialStation?: string;
     initialTrainId?: string;
     initialView?: 'ride' | 'vault';
+    initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   }) => {
     if (cityConfig.id !== 'paris' || parisRideHandle || parisRideOpening) return;
     parisRideOpening = true;

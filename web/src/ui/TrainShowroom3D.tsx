@@ -6,8 +6,6 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import {
-  RiPauseLine,
-  RiPlayLine,
   RiVolumeMuteLine,
   RiVolumeUpLine,
 } from '@remixicon/react';
@@ -63,14 +61,11 @@ function playRealMotorAudio(
 
 export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom3DProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
-  const [autoRotate, setAutoRotate] = useState(true);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
   const [loadError, setLoadError] = useState(false);
 
-  const autoRotateRef = useRef(autoRotate);
-  autoRotateRef.current = autoRotate;
   const audioStopRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -103,7 +98,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
     renderer.setSize(width, height);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.88;
+    renderer.toneMappingExposure = 0.76;
     renderer.domElement.className = 'block h-full w-full touch-none';
     host.appendChild(renderer.domElement);
 
@@ -113,7 +108,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
     envScene.dispose();
     pmrem.dispose();
     scene.environment = envTarget.texture;
-    scene.environmentIntensity = 0.42;
+    scene.environmentIntensity = 0.3;
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -126,10 +121,10 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
     controls.target.set(0, 1.4, 0);
     controls.update();
 
-    const hemi = new THREE.HemisphereLight('#d8e6ff', '#252a34', 0.62);
+    const hemi = new THREE.HemisphereLight('#d8e6ff', '#252a34', 0.48);
     scene.add(hemi);
 
-    const keyLight = new THREE.DirectionalLight('#fff5e6', 1.05);
+    const keyLight = new THREE.DirectionalLight('#fff5e6', 0.85);
     keyLight.position.set(8, 12, 10);
     scene.add(keyLight);
 
@@ -193,7 +188,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
       new Promise<THREE.Group>((resolve, reject) => {
         const sep = url.includes('?') ? '&' : '?';
         loader.load(
-          `${url}${sep}v=4`,
+          `${url}${sep}v=5`,
           (gltf) => {
             progressParts[part] = 1;
             updateProgress();
@@ -206,6 +201,11 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
                 const std = mat as THREE.MeshStandardMaterial;
                 if (std.map) {
                   std.map.colorSpace = THREE.SRGBColorSpace;
+                  if (std.name?.startsWith('PaletteMaterial')) {
+                    std.map.magFilter = THREE.NearestFilter;
+                    std.map.minFilter = THREE.NearestFilter;
+                    std.map.generateMipmaps = false;
+                  }
                   std.map.needsUpdate = true;
                 }
                 if (std.emissiveMap) {
@@ -272,11 +272,24 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
         }
         trainGroup.add(cabScene);
 
+        // Recentrer l'ensemble (certains modèles comme MS 61 ont un décalage latéral après rotation)
+        const preCenterBox = new THREE.Box3().setFromObject(trainGroup);
+        const preCenter = new THREE.Vector3();
+        preCenterBox.getCenter(preCenter);
+        trainGroup.position.x -= preCenter.x;
+        trainGroup.position.z -= preCenter.z;
+
         const finalBox = new THREE.Box3().setFromObject(trainGroup);
+        const finalSize = new THREE.Vector3();
+        finalBox.getSize(finalSize);
         const frontZ = finalBox.max.z;
         const targetZ = frontZ - Math.min(4.2, cabLen * 0.28);
-        controls.target.set(0, 1.55, targetZ);
-        camera.position.set(7.6, 3.2, frontZ + 5.2);
+        controls.target.set(0, Math.max(1.2, finalSize.y * 0.45), targetZ);
+        camera.position.set(
+          Math.max(6.8, finalSize.x * 2.4),
+          Math.max(2.8, finalSize.y * 0.95),
+          frontZ + Math.max(4.8, cabLen * 0.28),
+        );
         controls.update();
 
         if (isDetailedLibraryModel) {
@@ -285,9 +298,9 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
           headlightGroup.visible = true;
           headlightGroup.position.set(0, 0, frontZ - 0.05);
         }
-        renderer.render(scene, camera);
         setLoadProgress(100);
         setLoading(false);
+        renderer.render(scene, camera);
       })
       .catch(() => {
         if (!disposed) {
@@ -298,7 +311,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
 
     renderer.setAnimationLoop(() => {
       if (disposed) return;
-      controls.autoRotate = autoRotateRef.current;
+      controls.autoRotate = true;
       controls.autoRotateSpeed = 1.1;
       controls.update();
       renderer.render(scene, camera);
@@ -416,7 +429,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
         </div>
       )}
 
-      {/* Contrôles Plan Lumineux : Son & Rotation */}
+      {/* Contrôle Plan Lumineux : Son moteur */}
       {!loading && !loadError && (
         <div className="pointer-events-none absolute inset-x-2.5 bottom-2.5 flex items-center justify-end gap-1.5">
           <div className="pointer-events-auto flex items-center gap-1.5">
@@ -430,19 +443,6 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
               icon={
                 <span key={audioPlaying ? 'on' : 'off'} className="pl-icon-swap">
                   {audioPlaying ? <RiVolumeUpLine aria-hidden /> : <RiVolumeMuteLine aria-hidden />}
-                </span>
-              }
-            />
-            <IconButton
-              size="sm"
-              variant="secondaire"
-              label={autoRotate ? 'Mettre en pause la rotation' : 'Reprendre la rotation'}
-              pressed={autoRotate}
-              onClick={() => setAutoRotate((v) => !v)}
-              className="max-md:min-h-[44px] max-md:min-w-[44px]"
-              icon={
-                <span key={autoRotate ? 'pause' : 'play'} className="pl-icon-swap">
-                  {autoRotate ? <RiPauseLine aria-hidden /> : <RiPlayLine aria-hidden />}
                 </span>
               }
             />

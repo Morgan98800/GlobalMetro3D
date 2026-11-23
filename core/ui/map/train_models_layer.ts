@@ -19,7 +19,7 @@ import type { LineMetadata } from '@core/types';
 export { resolveTrainRenderLayers } from './train_render_fallback';
 
 export const TRAIN_MODEL_ZOOM_THRESHOLD = 13.0;
-const LOAD_TIMEOUT_MS = 5000;
+const LOAD_TIMEOUT_MS = 20000;
 const FAMILY_URLS = {
   pneumatic_generic: '/models/train/pneumatic_generic__neutral.glb',
   steel_classic: '/models/train/steel_classic__neutral.glb',
@@ -408,13 +408,17 @@ function beginAssetLoad(key: string, url: string, cabUrl?: string, tailUrl?: str
 
   const controller = new AbortController();
   const timeout = globalThis.setTimeout(() => controller.abort(), LOAD_TIMEOUT_MS);
-  const fetchGlb = (targetUrl: string) =>
-    fetch(targetUrl, { signal: controller.signal })
+  const fetchGlb = (targetUrl: string) => {
+    const versionedUrl = targetUrl.includes('/map_hd/')
+      ? `${targetUrl}${targetUrl.includes('?') ? '&' : '?'}v=5`
+      : targetUrl;
+    return fetch(versionedUrl, { signal: controller.signal })
       .then((response) => {
         if (!response.ok) throw new Error(`train model ${key}: HTTP ${response.status}`);
         return response.arrayBuffer();
       })
       .then((buffer) => parse(buffer, GLTFLoader));
+  };
 
   Promise.all([
     fetchGlb(url),

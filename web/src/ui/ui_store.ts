@@ -76,6 +76,7 @@ export interface UiHandlers {
     initialStation?: string;
     initialTrainId?: string;
     initialView?: 'ride' | 'vault';
+    initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   }) => void;
   onRequestNearby?: () => void;
   onSelectPlace?: (place: PlaceCandidate, routeFromUser?: boolean) => void;

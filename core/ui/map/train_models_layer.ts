@@ -1,12 +1,21 @@
+import { PolygonLayer } from '@deck.gl/layers';
 import { ScenegraphLayer } from '@deck.gl/mesh-layers';
 import { parse } from '@loaders.gl/core';
 import { GLTFLoader } from '@loaders.gl/gltf';
 import type { ShapeEntry } from '@core/sim/shapes';
-import { coordAtDistance, splitIntoCars } from '@core/sim/shapes_loader';
+import { splitIntoCars } from '@core/sim/shapes_loader';
 import type { RollingStockDatabase } from '@core/sim/rolling_stock';
 import { getRollingStockForLine, getBogieCentresM } from '@core/sim/rolling_stock';
+import {
+  distanceMeters,
+  dualTrackOffsetForZoom,
+  sampleShapeFrame,
+  smoothShapeForRender,
+} from './rounded_path';
+import { type HubRegistry, resolveLineElevationAt } from './station_levels';
 import type { TrainMarker } from './trains_layer';
 import { carCenterSpacingM, compassBearingToDeckYaw } from './train_model_geometry';
+import type { LineMetadata } from '@core/types';
 export { resolveTrainRenderLayers } from './train_render_fallback';
 
 export const TRAIN_MODEL_ZOOM_THRESHOLD = 13.0;
@@ -87,6 +96,14 @@ interface ModelCar {
   orientation: readonly [number, number, number];
   train: TrainMarker;
   role: 'cab' | 'tail' | 'neutral';
+  forwardRad: number;
+  halfLengthM: number;
+}
+
+interface TrainLightBeamDatum {
+  polygon: [number, number, number][];
+  color: [number, number, number, number];
+  isUnderground: boolean;
 }
 
 interface ModelLayerParams {
@@ -97,6 +114,10 @@ interface ModelLayerParams {
   bounds?: [[number, number], [number, number]] | null;
   selectedTrainId?: string | null;
   elevationOffset?: { lineId: string; offset: number };
+  zoom?: number;
+  lineMap?: Map<string, LineMetadata>;
+  hubRegistry?: HubRegistry | null;
+  undergroundBeforeId?: string;
   onClick?: (train: TrainMarker) => void;
   onHover?: (info: any) => void;
 }
@@ -165,6 +186,153 @@ export function familyForStock(stock: {
   return stock.drive_type === 'tire' ? 'pneumatic_generic' : 'steel_classic';
 }
 
+export type TrainModelPreset = 'detailed' | 'base';
+
+let currentTrainModelPreset: TrainModelPreset =
+  typeof window !== 'undefined' && window.localStorage?.getItem('train_model_preset') === 'base'
+    ? 'base'
+    : 'detailed';
+
+export function getTrainModelPreset(): TrainModelPreset {
+  return currentTrainModelPreset;
+}
+
+export function setTrainModelPreset(preset: TrainModelPreset): void {
+  currentTrainModelPreset = preset;
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage?.setItem('train_model_preset', preset);
+    } catch {
+      // ignore storage errors
+    }
+  }
+  notifyAssetListeners();
+}
+
+/** Modèle de base (low-poly texturé d'origine, conservé pour pouvoir y revenir à tout moment) */
+const BASE_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; tail: string }> = {
+  paris_idfm_pneu: {
+    neutral: '/models/train/paris_idfm_pneu__neutral.glb',
+    cab: '/models/train/paris_idfm_pneu__neutral__cab.glb',
+    tail: '/models/train/paris_idfm_pneu__neutral__tail.glb',
+  },
+  paris_idfm_steel: {
+    neutral: '/models/train/paris_idfm_steel__neutral.glb',
+    cab: '/models/train/paris_idfm_steel__neutral__cab.glb',
+    tail: '/models/train/paris_idfm_steel__neutral__tail.glb',
+  },
+  paris_mf77: {
+    neutral: '/models/train/paris_mf77__neutral.glb',
+    cab: '/models/train/paris_mf77__neutral__cab.glb',
+    tail: '/models/train/paris_mf77__neutral__tail.glb',
+  },
+};
+
+/** Modèles détaillés par ligne (1 mesh fusionné, centré (0,0,0), couleurs cuites en vertex-colors) */
+const DETAILED_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; tail: string }> = {
+  paris_mp14_ca: {
+    neutral: '/models/train/map_hd/mp14_car.glb',
+    cab: '/models/train/map_hd/mp14_ca__cab.glb',
+    tail: '/models/train/map_hd/mp14_ca__cab.glb',
+  },
+  paris_mp14_cc: {
+    neutral: '/models/train/map_hd/mp14_car.glb',
+    cab: '/models/train/map_hd/mp14_cc__cab.glb',
+    tail: '/models/train/map_hd/mp14_cc__cab.glb',
+  },
+  paris_mp05: {
+    neutral: '/models/train/map_hd/mp05_car.glb',
+    cab: '/models/train/map_hd/mp05__cab.glb',
+    tail: '/models/train/map_hd/mp05__cab.glb',
+  },
+  paris_mp89_ca: {
+    neutral: '/models/train/map_hd/mp89_car.glb',
+    cab: '/models/train/map_hd/mp89_ca__cab.glb',
+    tail: '/models/train/map_hd/mp89_ca__cab.glb',
+  },
+  paris_mp89_cc: {
+    neutral: '/models/train/map_hd/mp89_car.glb',
+    cab: '/models/train/map_hd/mp89_cc__cab.glb',
+    tail: '/models/train/map_hd/mp89_cc__cab.glb',
+  },
+  paris_mf01: {
+    neutral: '/models/train/map_hd/mf01_car.glb',
+    cab: '/models/train/map_hd/mf01__cab.glb',
+    tail: '/models/train/map_hd/mf01__cab.glb',
+  },
+  paris_mf88: {
+    neutral: '/models/train/map_hd/mf88_car.glb',
+    cab: '/models/train/map_hd/mf88__cab.glb',
+    tail: '/models/train/map_hd/mf88__cab.glb',
+  },
+  paris_mf77: {
+    neutral: '/models/train/map_hd/mf77_car.glb',
+    cab: '/models/train/map_hd/mf77__cab.glb',
+    tail: '/models/train/map_hd/mf77__cab.glb',
+  },
+  paris_mf67: {
+    neutral: '/models/train/map_hd/mf67_car.glb',
+    cab: '/models/train/map_hd/mf67__cab.glb',
+    tail: '/models/train/map_hd/mf67__cab.glb',
+  },
+  paris_mp73: {
+    neutral: '/models/train/map_hd/mp73_car.glb',
+    cab: '/models/train/map_hd/mp73__cab.glb',
+    tail: '/models/train/map_hd/mp73__cab.glb',
+  },
+  paris_mp59: {
+    neutral: '/models/train/map_hd/mp59_car.glb',
+    cab: '/models/train/map_hd/mp59__cab.glb',
+    tail: '/models/train/map_hd/mp59__cab.glb',
+  },
+  paris_mf19: {
+    neutral: '/models/train/map_hd/mf19_car.glb',
+    cab: '/models/train/map_hd/mf19__cab.glb',
+    tail: '/models/train/map_hd/mf19__cab.glb',
+  },
+};
+
+function resolveBaseParisLiveryVariant(stock: {
+  drive_type: string;
+  short_name: string;
+  model_id?: string;
+}): string | null {
+  const sn = stock.short_name?.trim();
+  const mid = (stock.model_id ?? '').toUpperCase();
+  if (sn === '4' || sn === '11' || sn === '14' || mid.startsWith('MP14')) {
+    return 'paris_idfm_pneu';
+  }
+  if (sn === '2' || sn === '5' || sn === '9' || sn === '7bis' || mid.startsWith('MF01') || mid === 'MF88') {
+    return 'paris_idfm_steel';
+  }
+  if (sn === '7' || sn === '8' || sn === '13' || mid.startsWith('MF77')) {
+    return 'paris_mf77';
+  }
+  return null;
+}
+
+function resolveDetailedParisLiveryVariant(stock: {
+  drive_type: string;
+  short_name: string;
+  model_id?: string;
+}): string | null {
+  const sn = stock.short_name?.trim();
+  const mid = (stock.model_id ?? '').toUpperCase();
+  if (mid === 'MP14_5V' || sn === '11') return 'paris_mp14_cc';
+  if (mid.startsWith('MP14') || sn === '14') return 'paris_mp14_ca';
+  if (mid.startsWith('MP05') || sn === '1') return 'paris_mp05';
+  if (mid === 'MP89_CA' || sn === '4') return 'paris_mp89_ca';
+  if (mid.startsWith('MP89') || sn === '6') return 'paris_mp89_cc';
+  if (mid === 'MP73') return 'paris_mp73';
+  if (mid === 'MP59') return 'paris_mp59';
+  if (mid.startsWith('MF19')) return 'paris_mf19';
+  if (mid.startsWith('MF01') || sn === '2' || sn === '5' || sn === '9') return 'paris_mf01';
+  if (mid === 'MF88' || sn === '7bis') return 'paris_mf88';
+  if (mid.startsWith('MF77') || sn === '7' || sn === '8' || sn === '13') return 'paris_mf77';
+  if (mid.startsWith('MF67') || sn === '3' || sn === '3bis' || sn === '10' || sn === '12') return 'paris_mf67';
+  return null;
+}
+
 function assetKeyForStock(stock: {
   drive_type: string;
   short_name: string;
@@ -178,6 +346,32 @@ function assetKeyForStock(stock: {
   tailUrl?: string;
 } {
   const family = familyForStock(stock);
+  if (family === 'pneumatic_generic' || family === 'steel_classic') {
+    if (currentTrainModelPreset === 'detailed') {
+      const variant = resolveDetailedParisLiveryVariant(stock);
+      if (variant && DETAILED_LIVERY_VARIANT_URLS[variant]) {
+        const urls = DETAILED_LIVERY_VARIANT_URLS[variant];
+        return {
+          family,
+          key: `hd_${variant}`,
+          url: urls.neutral,
+          cabUrl: urls.cab,
+          tailUrl: urls.tail,
+        };
+      }
+    }
+    const variant = resolveBaseParisLiveryVariant(stock);
+    if (variant && BASE_LIVERY_VARIANT_URLS[variant]) {
+      const urls = BASE_LIVERY_VARIANT_URLS[variant];
+      return {
+        family,
+        key: variant,
+        url: urls.neutral,
+        cabUrl: urls.cab,
+        tailUrl: urls.tail,
+      };
+    }
+  }
   return {
     family,
     key: family,
@@ -265,39 +459,75 @@ export function trainModelsReady(): boolean {
   return [...assetStatus.values()].some((status) => status === 'ready');
 }
 
-function modelPosition(
-  shape: ShapeEntry,
-  tailDistance: number,
-  headDistance: number,
-  elevation: number
-): [number, number, number] {
-  const midpoint = (tailDistance + headDistance) / 2;
-  const [longitude, latitude] = coordAtDistance(shape, midpoint);
-  return [longitude, latitude, elevation];
-}
+export function computeCarModelPose(opts: {
+  shape: ShapeEntry;
+  centerDistance: number;
+  bogieSpanM: number;
+  trackOffsetM: number;
+  elevation: number;
+  elevationShift?: number;
+  line?: LineMetadata;
+  hubRegistry?: HubRegistry | null;
+  isTailCar: boolean;
+}): { position: [number, number, number]; orientation: readonly [number, number, number] } {
+  const { shape, centerDistance, bogieSpanM, trackOffsetM, elevation, isTailCar } = opts;
+  const clampedCenter = Math.max(0, Math.min(shape.length, centerDistance));
+  let bogieTailDistance = Math.max(0, clampedCenter - bogieSpanM / 2);
+  let bogieHeadDistance = Math.min(shape.length, clampedCenter + bogieSpanM / 2);
+  if (bogieHeadDistance - bogieTailDistance < 1 && shape.length > 1) {
+    bogieTailDistance = Math.max(0, clampedCenter - 0.5);
+    bogieHeadDistance = Math.min(shape.length, bogieTailDistance + 1);
+  }
 
-function modelOrientation(
-  shape: ShapeEntry,
-  tailDistance: number,
-  headDistance: number
-): readonly [number, number, number] {
-  const tail = coordAtDistance(shape, tailDistance);
-  const head = coordAtDistance(shape, headDistance);
-  const latitude = (((tail[1] + head[1]) / 2) * Math.PI) / 180;
+  const midFrame = sampleShapeFrame(shape, clampedCenter, trackOffsetM);
+  const tailFrame = sampleShapeFrame(shape, bogieTailDistance, trackOffsetM);
+  const headFrame = sampleShapeFrame(shape, bogieHeadDistance, trackOffsetM);
+
+  const chordDist = distanceMeters(tailFrame.pos, headFrame.pos);
+  const latitudeRad = (((tailFrame.pos[1] + headFrame.pos[1]) * 0.5) * Math.PI) / 180;
   const compassBearing =
-    (Math.atan2((head[0] - tail[0]) * Math.cos(latitude), head[1] - tail[1]) * 180) / Math.PI;
-  const yaw = compassBearingToDeckYaw(compassBearing);
-  // deck.gl 9.4.0 expects [pitch, yaw, roll]. The source cap is a compass
-  // bearing; converting with 90 - cap puts it in deck.gl's mathematical yaw.
-  return [0, yaw, 90];
+    chordDist > 0.25
+      ? (Math.atan2(
+          (headFrame.pos[0] - tailFrame.pos[0]) * Math.cos(latitudeRad),
+          headFrame.pos[1] - tailFrame.pos[1]
+        ) *
+          180) /
+        Math.PI
+      : midFrame.compassBearing;
+  const baseYaw = compassBearingToDeckYaw(compassBearing);
+
+  const tailZ = opts.line
+    ? resolveLineElevationAt(tailFrame.pos, opts.line, opts.hubRegistry)
+    : elevation;
+  const headZ = opts.line
+    ? resolveLineElevationAt(headFrame.pos, opts.line, opts.hubRegistry)
+    : elevation;
+  const carZ = 0.5 * (tailZ + headZ) + (opts.elevationShift ?? 0);
+
+  const horizDist = Math.max(0.5, chordDist, bogieHeadDistance - bogieTailDistance);
+  const rawSlopeDeg = (Math.atan2(headZ - tailZ, horizDist) * 180) / Math.PI;
+  const slopeDeg = Math.max(-18, Math.min(18, rawSlopeDeg));
+
+  // matrix.js col0.z = -sin(pitch): negative pitch tilts local +X (cab nose) UP;
+  // reversed tail cars rotate yaw +180° so their pitch flips sign to stay coplanar on ramps.
+  const orientation: readonly [number, number, number] = isTailCar
+    ? [slopeDeg, (baseYaw + 180) % 360, 90]
+    : [-slopeDeg, baseYaw, 90];
+
+  return {
+    position: [midFrame.pos[0], midFrame.pos[1], carZ],
+    orientation,
+  };
 }
 
 function buildAssetCars(params: ModelLayerParams, assetKey: string): ModelCar[] {
   const cars: ModelCar[] = [];
+  const trackOffsetM = dualTrackOffsetForZoom(params.zoom ?? 13);
+
   for (const train of params.trains) {
     if (!train.shapeId) continue;
-    const shape = params.shapes.get(train.shapeId);
-    if (!shape) continue;
+    const rawShape = params.shapes.get(train.shapeId);
+    if (!rawShape) continue;
     const stock = getRollingStockForLine(params.rollingStockDb, train.line || train.lineName);
     if (assetKeyForStock(stock).key !== assetKey) continue;
     if (params.bounds && (!params.selectedTrainId || train.id !== params.selectedTrainId)) {
@@ -310,58 +540,87 @@ function buildAssetCars(params: ModelLayerParams, assetKey: string): ModelCar[] 
       )
         continue;
     }
-    const trainDirection = (train.direction ?? 1) as 0 | 1;
-    const referenceDistance =
-      (train.currentDistM ?? 0) +
-      (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
-    const trainDir = (train.direction ?? 1) as 0 | 1;
+
+    // Both direction === 0 and direction === 1 advance monotonically from 0 -> shape.length.
+    const renderShape = smoothShapeForRender(rawShape);
+    const headDistance = Math.max(
+      0,
+      Math.min(renderShape.length, (train.currentDistM ?? 0) + stock.total_length_m / 2)
+    );
     const carsForTrain = splitIntoCars(
-      shape,
-      referenceDistance,
+      renderShape,
+      headDistance,
       stock.cars_count,
       stock.car_length_m,
       stock.inter_car_gap_m,
-      trainDir
+      1
     );
     const bogieSpanM = getBogieCentresM(stock);
+    const spacingM = carCenterSpacingM(stock.car_length_m, stock.inter_car_gap_m);
+    const line = params.lineMap?.get(train.line);
+    const elevationShift =
+      0.35 + (params.elevationOffset?.lineId === train.line ? params.elevationOffset.offset : 0);
+
     for (let index = 0; index < carsForTrain.length; index++) {
       const car = carsForTrain[index];
       if (car.length < 2) continue;
-      const spacingM = carCenterSpacingM(stock.car_length_m, stock.inter_car_gap_m);
-      const centerDistance =
-        trainDir === 1
-          ? referenceDistance - index * spacingM - stock.car_length_m / 2
-          : referenceDistance + index * spacingM + stock.car_length_m / 2;
-      const bogieTailDistance =
-        trainDir === 1
-          ? Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2))
-          : Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2));
-      const bogieHeadDistance =
-        trainDir === 1
-          ? Math.max(0, Math.min(shape.length, centerDistance + bogieSpanM / 2))
-          : Math.max(0, Math.min(shape.length, centerDistance - bogieSpanM / 2));
+      const centerDistance = headDistance - index * spacingM - stock.car_length_m / 2;
       const isLeadCar = index === 0;
       const isTailCar = index === carsForTrain.length - 1 && carsForTrain.length > 1;
-      const baseOrientation = modelOrientation(shape, bogieTailDistance, bogieHeadDistance);
-      const orientation: readonly [number, number, number] = isTailCar
-        ? [baseOrientation[0], (baseOrientation[1] + 180) % 360, baseOrientation[2]]
-        : baseOrientation;
+      const pose = computeCarModelPose({
+        shape: renderShape,
+        centerDistance,
+        bogieSpanM,
+        trackOffsetM,
+        elevation: train.elevation || 0,
+        elevationShift,
+        line,
+        hubRegistry: params.hubRegistry,
+        isTailCar,
+      });
+      const yawDeg = pose.orientation[1];
+      // Deck yaw = 90 - compassBearing, so local +X direction in ENU radians is yawDeg * PI/180
+      const forwardRad = (yawDeg * Math.PI) / 180;
       cars.push({
-        position: modelPosition(
-          shape,
-          bogieTailDistance,
-          bogieHeadDistance,
-          (train.elevation || 0) +
-            0.35 +
-            (params.elevationOffset?.lineId === train.line ? params.elevationOffset.offset : 0)
-        ),
-        orientation,
+        position: pose.position,
+        orientation: pose.orientation,
         train,
         role: isLeadCar ? 'cab' : isTailCar ? 'tail' : 'neutral',
+        forwardRad,
+        halfLengthM: stock.car_length_m * 0.5,
       });
     }
   }
   return cars;
+}
+
+function buildLightBeamPolygon(
+  car: ModelCar,
+  lengthM: number,
+  nearHalfW: number,
+  farHalfW: number,
+  zLiftM: number
+): [number, number, number][] {
+  const [lng, lat, z] = car.position;
+  const latScale = 111_320;
+  const lonScale = latScale * Math.max(0.1, Math.cos((lat * Math.PI) / 180));
+  const fx = Math.cos(car.forwardRad);
+  const fy = Math.sin(car.forwardRad);
+  const rx = -fy;
+  const ry = fx;
+  const start = car.halfLengthM + 0.15;
+  const end = start + lengthM;
+  const toPt = (along: number, across: number): [number, number, number] => [
+    lng + (fx * along + rx * across) / lonScale,
+    lat + (fy * along + ry * across) / latScale,
+    z + zLiftM,
+  ];
+  return [
+    toPt(start, -nearHalfW),
+    toPt(start, nearHalfW),
+    toPt(end, farHalfW),
+    toPt(end, -farHalfW),
+  ];
 }
 
 export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLayer<ModelCar>[] {
@@ -383,7 +642,9 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
     if (!requestedAssets.has(key)) continue;
     usedAssets.set(key, family);
   }
-  const layers: ScenegraphLayer<ModelCar>[] = [];
+  const layers: any[] = [];
+  const beamData: TrainLightBeamDatum[] = [];
+  const emitBeams = (params.zoom ?? 13) >= 14.5;
 
   for (const [assetKey, family] of usedAssets.entries()) {
     if (params.grazingCamera && !MODEL_RENDER_POLICY[family].grazingCameraApproved) continue;
@@ -393,6 +654,24 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
 
     const cars = buildAssetCars(params, assetKey);
     if (cars.length === 0) continue;
+
+    if (emitBeams) {
+      for (const car of cars) {
+        if (car.role === 'cab') {
+          beamData.push({
+            polygon: buildLightBeamPolygon(car, 14.5, 0.95, 2.35, 0.35),
+            color: [255, 244, 198, car.position[2] < 0 ? 115 : 85],
+            isUnderground: car.position[2] < 0,
+          });
+        } else if (car.role === 'tail') {
+          beamData.push({
+            polygon: buildLightBeamPolygon(car, 4.5, 0.85, 1.45, 0.35),
+            color: [255, 58, 52, car.position[2] < 0 ? 95 : 70],
+            isUnderground: car.position[2] < 0,
+          });
+        }
+      }
+    }
 
     const cabGltf = parsedCabScenegraphs.get(assetKey);
     const tailGltf = parsedTailScenegraphs.get(assetKey) ?? cabGltf;
@@ -413,13 +692,19 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
         ? cars.filter((car) => car.role === 'cab' || car.role === 'tail')
         : cabCars;
 
-    const makeLayer = (id: string, scenegraph: any, data: ModelCar[]) =>
+    const makeLayer = (
+      id: string,
+      scenegraph: any,
+      data: ModelCar[],
+      beforeId?: string
+    ) =>
       new ScenegraphLayer<ModelCar>({
         id,
         data,
+        ...(beforeId ? { beforeId } : {}),
         scenegraph,
-        getPosition: (car) => car.position,
-        getOrientation: (car) => car.orientation,
+        getPosition: (car: ModelCar) => car.position,
+        getOrientation: (car: ModelCar) => car.orientation,
         sizeScale: 1,
         _lighting: 'pbr',
         pickable: true,
@@ -435,17 +720,66 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
           }
         },
         onFirstDraw: () => undefined,
-      });
+      } as any);
 
-    if (neutralCars.length > 0) {
-      layers.push(makeLayer(`subway-train-model-${assetKey}`, gltf, neutralCars));
+    const pushSplitLayers = (baseId: string, scenegraph: any, subset: ModelCar[]) => {
+      if (subset.length === 0) return;
+      if (!params.undergroundBeforeId) {
+        layers.push(makeLayer(baseId, scenegraph, subset));
+        return;
+      }
+      const isAlwaysVisible = (c: ModelCar) =>
+        c.position[2] >= 0 || (Boolean(params.selectedTrainId) && c.train.id === params.selectedTrainId);
+      const underground = subset.filter((c) => !isAlwaysVisible(c));
+      const surface = subset.filter(isAlwaysVisible);
+      if (underground.length > 0) {
+        layers.push(makeLayer(`${baseId}-ug`, scenegraph, underground, params.undergroundBeforeId));
+      }
+      if (surface.length > 0) {
+        layers.push(makeLayer(baseId, scenegraph, surface));
+      }
+    };
+
+    pushSplitLayers(`subway-train-model-${assetKey}`, gltf, neutralCars);
+    if (cabGltf) {
+      pushSplitLayers(`subway-train-model-${assetKey}-cab`, cabGltf, combinedCabCars);
     }
-    if (combinedCabCars.length > 0 && cabGltf) {
-      layers.push(makeLayer(`subway-train-model-${assetKey}-cab`, cabGltf, combinedCabCars));
-    }
-    if (tailCars.length > 0 && tailGltf) {
-      layers.push(makeLayer(`subway-train-model-${assetKey}-tail`, tailGltf, tailCars));
+    if (tailGltf) {
+      pushSplitLayers(`subway-train-model-${assetKey}-tail`, tailGltf, tailCars);
     }
   }
+
+  // Projected 3D headlight cones + red tail glows (1 lightweight layer per depth band)
+  if (beamData.length > 0) {
+    const makeBeamLayer = (id: string, subset: TrainLightBeamDatum[], beforeId?: string) =>
+      new PolygonLayer<TrainLightBeamDatum>({
+        id,
+        data: subset,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        extruded: false,
+        filled: true,
+        stroked: false,
+        getPolygon: (d: TrainLightBeamDatum) => d.polygon,
+        getFillColor: (d: TrainLightBeamDatum) => d.color,
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
+      } as any);
+
+    if (!params.undergroundBeforeId) {
+      layers.push(makeBeamLayer('subway-train-headlight-beams', beamData));
+    } else {
+      const ug = beamData.filter((b) => b.isUnderground);
+      const surf = beamData.filter((b) => !b.isUnderground);
+      if (ug.length > 0) {
+        layers.push(
+          makeBeamLayer('subway-train-headlight-beams-ug', ug, params.undergroundBeforeId)
+        );
+      }
+      if (surf.length > 0) {
+        layers.push(makeBeamLayer('subway-train-headlight-beams', surf));
+      }
+    }
+  }
+
   return layers;
 }

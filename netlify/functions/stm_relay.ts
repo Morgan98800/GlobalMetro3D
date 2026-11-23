@@ -2,9 +2,13 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 import type { LineTrafficReport } from '../../core/types';
+import { checkRateLimit, getCorsHeaders, rateLimitedResponse } from './_shared/cors';
 
 export function getStmApiKey(): string {
   if (process.env.STM_API_KEY) return process.env.STM_API_KEY.trim();
+  if (process.env.NETLIFY === 'true' || process.env.NODE_ENV === 'production') {
+    return '';
+  }
   for (const file of ['.env.local', '.env']) {
     try {
       const p = path.resolve(process.cwd(), file);
@@ -399,6 +403,14 @@ export async function fetchStmEtatService(
 }
 
 export const handler = async (event: any, context: any) => {
+  if (event?.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: getCorsHeaders(event), body: '' };
+  }
+  const rl = checkRateLimit(event);
+  if (!rl.allowed) {
+    return rateLimitedResponse(event, rl.retryAfterSec);
+  }
+
   const now = Date.now();
   const apiKey = getStmApiKey();
   const origin = (process.env.STM_ORIGIN || 'https://parisian3dsubway.netlify.app').trim();

@@ -48,11 +48,11 @@ UNDER_COLOR = (26, 28, 32)
 PANTO_SILVER = (200, 204, 210)
 
 RER_COLORS: dict[str, tuple[int, int, int]] = {
-    "A": (235, 33, 50),
-    "B": (80, 145, 203),
-    "C": (255, 204, 48),
-    "D": (0, 139, 91),
-    "E": (185, 78, 154),
+    "A": (227, 5, 28),
+    "B": (82, 145, 206),
+    "C": (255, 206, 0),
+    "D": (0, 129, 79),
+    "E": (192, 65, 145),
 }
 
 DOOR_COUNT = 3
@@ -504,19 +504,27 @@ def paint_rer_emissive_atlas(length: float, end_mode: str) -> bytes:
     glass_bot = y0 + int(h * 0.51)
     gx0 = x0 + int(w * 0.05)
     gx1 = x1 - (int(w * 0.11) if end_mode in ("head", "tail") else int(w * 0.05))
-    d.rectangle([gx0, glass_top + 2, gx1, glass_bot - 2], fill=(32, 28, 22))
+    gh = max(4, glass_bot - glass_top)
+    # Warm illuminated RER saloon interior with bright overhead LED band + seat silhouettes
+    d.rectangle([gx0, glass_top + 1, gx1, glass_bot - 1], fill=(208, 184, 138))
+    d.rectangle([gx0, glass_top + 1, gx1, glass_top + max(3, gh // 4)], fill=(252, 238, 198))
+    d.rectangle([gx0, glass_top + (gh * 2) // 3, gx1, glass_bot - 1], fill=(138, 116, 82))
+    # Subtle window pillar dividers along the continuous RER ribbon
+    for px in range(gx0 + 18, gx1 - 12, 22):
+        d.line([px, glass_top + 1, px, glass_bot - 1], fill=(38, 34, 30), width=2)
 
     if end_mode in ("head", "tail"):
         ex0, ey0, ex1, ey1 = R_END_FRONT
         ew, eh = ex1 - ex0, ey1 - ey0
-        lr = max(4, int(ew * 0.085))
+        lr = max(4, int(ew * 0.095))
         ly = ey0 + int(eh * 0.72)
         lx_l, lx_r = ex0 + int(ew * 0.24), ex0 + int(ew * 0.76)
-        glow = (255, 248, 210) if end_mode == "head" else (245, 36, 30)
+        glow = (255, 252, 224) if end_mode == "head" else (255, 40, 34)
         d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=glow)
         d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=glow)
         if end_mode == "head":
-            d.rectangle([ex0 + int(ew * 0.18), ey0 + int(eh * 0.05), ex0 + int(ew * 0.82), ey0 + int(eh * 0.14)], fill=(210, 225, 235))
+            d.rectangle([ex0 + int(ew * 0.16), ey0 + int(eh * 0.05), ex0 + int(ew * 0.84), ey0 + int(eh * 0.14)], fill=(255, 214, 108))
+            d.rectangle([ex0 + 8, ey0 + int(eh * 0.24), ex1 - 9, ey0 + int(eh * 0.50)], fill=(66, 56, 40))
 
     return _encode_png(im)
 

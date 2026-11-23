@@ -1,9 +1,11 @@
 import {
-  RiArrowRightSLine, RiArrowUpDownLine, RiBriefcase4Line, RiCloseCircleFill, RiCloseLine,
+  RiArrowDownSLine, RiArrowRightSLine, RiArrowUpDownLine, RiBox3Line, RiBriefcase4Line, RiCloseCircleFill, RiCloseLine,
   RiFocus3Line, RiHome5Line, RiShareForwardLine, RiStarFill, RiWalkLine,
 } from '@remixicon/react';
-import { Fragment, useId } from 'react';
+import { Fragment, useId, useState } from 'react';
+import { motion } from 'motion/react';
 import { Afficheur, type Passage } from './Afficheur';
+import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button, IconButton } from './Button';
 import { cx } from './cx';
 import { LineBadgeChip } from './LineBadgeChip';
@@ -12,7 +14,6 @@ import { Panneau } from './Panneau';
 import { PlanDeLigne } from './PlanDeLigne';
 import { VoitureConseillee, type PositionRame } from './VoitureConseillee';
 import { useIsDesktop } from './useMediaQuery';
-import { useSheetSwipe } from './useSheetSwipe';
 
 /**
  * Itinéraire A → B. The fields read like a line (A ring, B plate), results
@@ -43,6 +44,7 @@ export interface Itineraire {
 
 export interface RoutePlannerDrawerProps {
   depart: string;
+  departPlaceholder?: string;
   arrivee: string;
   onDepart: (v: string) => void;
   onArrivee: (v: string) => void;
@@ -57,6 +59,7 @@ export interface RoutePlannerDrawerProps {
   selection?: number;
   onSelection?: (index: number) => void;
   onPartager: () => void;
+  onVoirEn3D?: (segment: Extract<Segment, { type: 'ligne' }>) => void;
   onClose: () => void;
   presentation?: 'cote' | 'basse';
   className?: string;
@@ -65,74 +68,156 @@ export interface RoutePlannerDrawerProps {
 export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
   const desktop = useIsDesktop();
   const basse = (props.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
-  const swipe = useSheetSwipe({ enabled: basse, onSwipeDown: props.onClose });
+  const [cran, setCran] = useState<DetentSheet>('haut');
+  const [autresOuverts, setAutresOuverts] = useState(false);
+  const routeKey = `${props.depart}|${props.arrivee}|${props.itineraires.length}`;
+  const [prevRouteKey, setPrevRouteKey] = useState(routeKey);
+  if (prevRouteKey !== routeKey) {
+    setPrevRouteKey(routeKey);
+    setAutresOuverts(false);
+  }
   const sel = props.selection ?? 0;
   const pad = basse ? 'px-4' : 'px-5';
-  return (
-    <Panneau
-      matiere="feuille"
-      as="section"
-      role="dialog"
-      aria-labelledby="itineraire-titre"
-      className={cx('flex min-h-0 flex-col overflow-hidden animate-feuille', basse ? 'max-h-[90dvh] rounded-b-none' : 'max-h-full', props.className)}
-    >
-      {basse && (
-        <div onTouchStart={swipe.onTouchStart} onTouchEnd={swipe.onTouchEnd} className="flex shrink-0 justify-center pt-2 pb-1">
-          <span aria-hidden className="h-1 w-9 rounded-full bg-bord-fort" />
-        </div>
-      )}
-      <div onTouchStart={swipe.onTouchStart} onTouchEnd={swipe.onTouchEnd} className={cx('flex items-center justify-between', pad, basse ? 'pt-2' : 'pt-5')}>
+
+  const autres = props.itineraires.filter((_, i) => i !== sel);
+  const actif = props.itineraires[sel];
+
+  const body = (
+    <>
+      <div className={cx('flex items-center justify-between', pad, basse ? 'pt-1' : 'pt-5')}>
         <h2 id="itineraire-titre" className="text-titre text-encre">Itinéraire</h2>
-        <IconButton size="sm" label="Fermer l’itinéraire" icon={<RiCloseLine aria-hidden />} onClick={props.onClose} />
+        <IconButton size="sm" variant="secondaire" label="Fermer l’itinéraire" icon={<RiCloseLine aria-hidden />} onClick={props.onClose} />
       </div>
 
-      <div className={cx('pt-3', pad)}>
-        <div className="relative rounded-[14px] bg-encart p-1">
-          <Champ lettre="A" label="Départ" placeholder="D’où partez-vous ?" value={props.depart} onChange={props.onDepart} onMaPosition={props.onMaPosition} />
-          <span aria-hidden className="absolute left-[21px] top-[34px] h-[28px] border-l-2 border-dotted border-bord-fort" />
-          <span aria-hidden className="mx-3 ml-11 mr-14 block h-px bg-joint" />
-          <Champ lettre="B" label="Arrivée" placeholder="Où allez-vous ?" value={props.arrivee} onChange={props.onArrivee} />
+      <div className={cx('pt-2.5', pad)}>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <div className="relative space-y-1.5">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-[18px] top-[31px] bottom-[31px] w-0 border-l-2 border-dashed border-encre-3/45"
+            />
+            <Champ lettre="A" label="Départ" placeholder={props.departPlaceholder || 'Ma position'} value={props.depart} onChange={props.onDepart} onMaPosition={props.onMaPosition} />
+            <Champ lettre="B" label="Arrivée" placeholder="Où allez-vous ?" value={props.arrivee} onChange={props.onArrivee} />
+          </div>
           <IconButton
             size="sm"
             variant="secondaire"
             label="Inverser départ et arrivée"
             icon={<RiArrowUpDownLine aria-hidden />}
             onClick={props.onInverser}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2"
           />
         </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          <Button size="sm" icon={<RiHome5Line aria-hidden />} onClick={() => props.onRaccourci('domicile')}>
-            {props.domicile ? 'Domicile' : 'Définir le domicile'}
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          <Button size="sm" variant="secondaire" icon={<RiHome5Line aria-hidden />} onClick={() => props.onRaccourci('domicile')}>
+            Domicile
           </Button>
-          <Button size="sm" icon={<RiBriefcase4Line aria-hidden />} onClick={() => props.onRaccourci('travail')}>
-            {props.travail ? 'Travail' : 'Définir le travail'}
+          <Button size="sm" variant="secondaire" icon={<RiBriefcase4Line aria-hidden />} onClick={() => props.onRaccourci('travail')}>
+            Travail
           </Button>
           {props.favoris?.slice(0, 4).map((f) => (
-            <Button key={f.nom} size="sm" icon={<RiStarFill aria-hidden />} onClick={f.onClick} className="signaletique">
+            <Button key={f.nom} size="sm" variant="secondaire" icon={<RiStarFill aria-hidden />} onClick={f.onClick} className="signaletique">
               {f.nom}
             </Button>
           ))}
         </div>
       </div>
 
-      <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4 pt-5', pad)}>
-        <h3 className="pb-2 text-[13px] font-semibold text-encre-2">
-          {props.itineraires.length > 1 ? `${props.itineraires.length} itinéraires` : 'Itinéraire conseillé'}
-        </h3>
-        <ul className="space-y-2">
-          {props.itineraires.map((it, i) => (
-            <CarteItineraire key={i} it={it} ouverte={i === sel} onOuvrir={() => props.onSelection?.(i)} />
-          ))}
-        </ul>
+      <div className={cx('pl-scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4 pt-3', pad)}>
+        {basse && actif ? (
+          <div className="space-y-2">
+            <ul className="space-y-2">
+              <CarteItineraire it={actif} ouverte onOuvrir={() => props.onSelection?.(sel)} onVoirEn3D={props.onVoirEn3D} />
+            </ul>
+            {autres.length > 0 && (
+              <div className="rounded-[12px] border border-bord bg-encart/55">
+                <button
+                  type="button"
+                  aria-expanded={autresOuverts}
+                  onClick={() => setAutresOuverts((v) => !v)}
+                  className="flex min-h-[44px] w-full items-center justify-between gap-2 px-3 py-2 text-start text-[13px] font-semibold text-encre transition-colors hover:bg-encart"
+                >
+                  <span>
+                    {autresOuverts
+                      ? 'Masquer'
+                      : `${autres.length} autre${autres.length > 1 ? 's' : ''} · dès ${Math.min(...autres.map((a) => a.minutes))} min`}
+                  </span>
+                  <RiArrowDownSLine aria-hidden className={cx('size-4 text-icone-2 transition-transform', autresOuverts && 'rotate-180')} />
+                </button>
+                {autresOuverts && (
+                  <ul className="space-y-2 border-t border-joint p-2">
+                    {props.itineraires.map((it, i) =>
+                      i === sel ? null : (
+                        <CarteItineraire
+                          key={`${it.arrivee}-${it.minutes}-${it.segments.length}`}
+                          it={it}
+                          ouverte={false}
+                          onOuvrir={() => {
+                            props.onSelection?.(i);
+                            setAutresOuverts(false);
+                          }}
+                          onVoirEn3D={props.onVoirEn3D}
+                        />
+                      ),
+                    )}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {props.itineraires.map((it, i) => (
+              <motion.div
+                key={`${it.arrivee}-${it.minutes}-${it.segments.length}-${i}`}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.2,
+                  delay: Math.min(i * 0.035, 0.14),
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <CarteItineraire it={it} ouverte={i === sel} onOuvrir={() => props.onSelection?.(i)} onVoirEn3D={props.onVoirEn3D} />
+              </motion.div>
+            ))}
+          </ul>
+        )}
       </div>
 
-      {/* v2.1 : plus de « Effacer » (les ⊗ des champs suffisent) ni de « Fermer » (× en en-tête) */}
-      <footer className={cx('flex shrink-0 items-center justify-end gap-2 border-t border-joint pt-3', pad, basse ? 'pb-[max(16px,env(safe-area-inset-bottom))]' : 'pb-5')}>
-        <Button size={basse ? 'lg' : 'md'} icon={<RiShareForwardLine aria-hidden />} onClick={props.onPartager}>
-          Partager l’itinéraire
-        </Button>
-      </footer>
+      {props.itineraires.length > 0 && (
+        <footer className={cx('flex shrink-0 items-center justify-end gap-2 border-t border-joint bg-surface pt-2.5', pad, basse ? 'pb-[max(14px,env(safe-area-inset-bottom))]' : 'pb-4 pt-3')}>
+          <Button variant="secondaire" size="sm" className={basse ? 'min-h-[44px]' : undefined} icon={<RiShareForwardLine aria-hidden />} onClick={props.onPartager}>
+            Partager
+          </Button>
+        </footer>
+      )}
+    </>
+  );
+
+  if (basse) {
+    return (
+      <BottomSheet
+        cran={cran}
+        onCran={setCran}
+        onDismiss={props.onClose}
+        onSwipeBack={props.onClose}
+        ariaLabel="Calculateur d’itinéraire"
+        className={props.className}
+      >
+        {body}
+      </BottomSheet>
+    );
+  }
+
+  return (
+    <Panneau
+      matiere="feuille"
+      as="section"
+      role="dialog"
+      aria-labelledby="itineraire-titre"
+      className={cx('flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille', props.className)}
+    >
+      {body}
     </Panneau>
   );
 }
@@ -142,7 +227,7 @@ function Champ({ lettre, label, placeholder, value, onChange, onMaPosition }: {
 }) {
   const id = useId();
   return (
-    <div className="flex h-12 items-center gap-3 rounded-[10px] pl-3 pr-14 transition-[background-color,box-shadow] duration-150 focus-within:bg-surface focus-within:[box-shadow:inset_0_0_0_2px_var(--color-focus)]">
+    <div className="flex min-h-[46px] items-center gap-3 rounded-[12px] border border-bord/80 bg-encart/75 pl-3 pr-2 transition-[background-color,box-shadow,border-color] duration-150 focus-within:border-transparent focus-within:bg-surface focus-within:[box-shadow:inset_0_0_0_2px_var(--color-focus)]">
       <span
         aria-hidden
         className={cx(
@@ -158,65 +243,73 @@ function Champ({ lettre, label, placeholder, value, onChange, onMaPosition }: {
         placeholder={placeholder}
         autoComplete="off"
         enterKeyHint={lettre === 'A' ? 'next' : 'search'}
-        className="min-w-0 flex-1 bg-transparent text-[16px] font-medium text-encre outline-none placeholder:font-normal placeholder:text-encre-3"
+        className="pl-saisie min-w-0 flex-1 text-[16px] max-md:min-h-[44px] !outline-none !ring-0 !shadow-none"
       />
       {!value && onMaPosition && (
-        <IconButton size="sm" label="Partir de ma position" icon={<RiFocus3Line aria-hidden />} onClick={onMaPosition} className="-mr-1" />
+        <IconButton size="sm" label="Partir de ma position" icon={<RiFocus3Line aria-hidden />} onClick={onMaPosition} className="shrink-0" />
       )}
       {value && (
-        <button
-          type="button"
-          aria-label={`Effacer ${label.toLowerCase()}`}
+        <IconButton
+          size="sm"
+          label={`Effacer ${label.toLowerCase()}`}
+          icon={<RiCloseCircleFill aria-hidden />}
           onClick={() => onChange('')}
-          className="shrink-0 rounded-full text-icone-2 hover:text-encre outline-none focus-visible:outline-2 focus-visible:outline-focus"
-        >
-          <RiCloseCircleFill aria-hidden className="size-[18px]" />
-        </button>
+        />
       )}
     </div>
   );
 }
 
-function CarteItineraire({ it, ouverte, onOuvrir }: { it: Itineraire; ouverte: boolean; onOuvrir: () => void }) {
+function CarteItineraire({
+  it,
+  ouverte,
+  onOuvrir,
+  onVoirEn3D,
+}: {
+  it: Itineraire;
+  ouverte: boolean;
+  onOuvrir: () => void;
+  onVoirEn3D?: (segment: Extract<Segment, { type: 'ligne' }>) => void;
+}) {
   const premier = it.segments.find((s) => s.type === 'ligne');
   const attente = premier && premier.type === 'ligne' ? premier.attente : undefined;
   return (
-    <li
-      className={cx(
-        'overflow-hidden rounded-[14px] bg-surface transition-[box-shadow] duration-150 ease-signal',
-        ouverte
-          ? '[box-shadow:inset_0_0_0_1.5px_var(--color-encre),0_1px_2px_rgb(var(--fx-ombre-teinte)/0.08)]'
-          : '[box-shadow:inset_0_0_0_1px_var(--color-bord)] hover:[box-shadow:inset_0_0_0_1px_var(--color-bord-fort)]',
-      )}
-    >
+    <li className="list-none">
       <button
         type="button"
         onClick={onOuvrir}
         aria-expanded={ouverte}
-        className="block w-full p-3.5 text-start outline-none focus-visible:[box-shadow:inset_0_0_0_2px_var(--color-focus)]"
+        className="pl-carte-trajet"
       >
-        <span className="flex items-start justify-between gap-3">
-          <span>
-            <span className="flex items-baseline gap-1">
-              <span className="chiffres text-[30px] font-bold leading-none text-encre">{it.minutes}</span>
-              <span className="text-[14px] font-semibold text-encre-2">min</span>
-            </span>
+      <span className="flex items-start justify-between gap-3">
+        <span>
+          <span className="flex items-baseline gap-1">
+            <span className="pl-duree text-encre">{it.minutes}</span>
+            <span className="text-[14px] font-semibold text-encre-2">min</span>
+          </span>
             <span className="mt-1.5 block text-[13px] text-encre-2">
               Arrivée à <span className="chiffres font-semibold text-encre">{it.arrivee}</span>
             </span>
           </span>
           {attente && (
-            <span className="flex flex-col items-end gap-1">
-              <Afficheur passages={[attente]} max={1} size="sm" />
-              <span className="text-[11px] font-medium text-encre-3">prochain départ</span>
-            </span>
+            <Afficheur passages={[attente]} max={1} size="sm" />
           )}
         </span>
         <Sequence segments={it.segments} />
       </button>
       {ouverte && (
         <div className="border-t border-joint px-3.5 pb-4 pt-4">
-          {it.segments.map((s, i) => (s.type === 'marche' ? <Marche key={i} s={s} /> : <Troncon key={i} s={s} />))}
+          {it.segments.map((s) => {
+            const segKey =
+              s.type === 'marche'
+                ? `walk-${s.minutes}-${s.metres ?? 0}-${s.consigne ?? ''}`
+                : `ride-${s.ligne.shortName}-${s.de}-${s.a}`;
+            return s.type === 'marche' ? (
+              <Marche key={segKey} s={s} />
+            ) : (
+              <Troncon key={segKey} s={s} onVoirEn3D={onVoirEn3D} />
+            );
+          })}
         </div>
       )}
     </li>
@@ -226,20 +319,26 @@ function CarteItineraire({ it, ouverte, onOuvrir }: { it: Itineraire; ouverte: b
 function Sequence({ segments }: { segments: Segment[] }) {
   return (
     <span className="mt-3 flex flex-wrap items-center gap-1">
-      {segments.map((s, i) => (
-        <Fragment key={i}>
-          {i > 0 && <RiArrowRightSLine aria-hidden className="size-3.5 text-encre-3" />}
-          {s.type === 'marche' ? (
-            <span className="inline-flex h-6 items-center gap-0.5 rounded-[6px] bg-encart px-1.5 text-[12px] font-semibold text-encre-2">
-              <RiWalkLine aria-hidden className="size-3.5" />
-              <span className="chiffres">{s.minutes}</span>
-              <span className="sr-only"> minutes à pied</span>
-            </span>
-          ) : (
-            <LineBadgeChip {...s.ligne} size="sm" />
-          )}
-        </Fragment>
-      ))}
+      {segments.map((s, i) => {
+        const segKey =
+          s.type === 'marche'
+            ? `seq-walk-${s.minutes}-${s.metres ?? 0}-${s.consigne ?? ''}`
+            : `seq-ride-${s.ligne.shortName}-${s.de}-${s.a}`;
+        return (
+          <Fragment key={segKey}>
+            {i > 0 && <RiArrowRightSLine aria-hidden className="size-3.5 text-encre-3" />}
+            {s.type === 'marche' ? (
+              <span className="inline-flex h-6 items-center gap-0.5 rounded-[6px] bg-encart px-1.5 text-[12px] font-semibold text-encre-2">
+                <RiWalkLine aria-hidden className="size-3.5" />
+                <span className="chiffres">{s.minutes}</span>
+                <span className="sr-only"> minutes à pied</span>
+              </span>
+            ) : (
+              <LineBadgeChip {...s.ligne} size="sm" />
+            )}
+          </Fragment>
+        );
+      })}
     </span>
   );
 }
@@ -257,7 +356,13 @@ function Marche({ s }: { s: Extract<Segment, { type: 'marche' }> }) {
   );
 }
 
-function Troncon({ s }: { s: Extract<Segment, { type: 'ligne' }> }) {
+function Troncon({
+  s,
+  onVoirEn3D,
+}: {
+  s: Extract<Segment, { type: 'ligne' }>;
+  onVoirEn3D?: (segment: Extract<Segment, { type: 'ligne' }>) => void;
+}) {
   const { color } = resolveLine(s.ligne);
   const n = s.arrets.length + 1;
   return (
@@ -281,6 +386,16 @@ function Troncon({ s }: { s: Extract<Segment, { type: 'ligne' }> }) {
                 <span>{n} {n > 1 ? 'arrêts' : 'arrêt'}, {s.minutes} min</span>
               </p>
               {s.voiture && <VoitureConseillee position={s.voiture} raison={s.raisonVoiture} />}
+              {onVoirEn3D && (
+                <Button
+                  size="sm"
+                  variant="afficheur"
+                  icon={<RiBox3Line aria-hidden />}
+                  onClick={() => onVoirEn3D(s)}
+                >
+                  Aperçu 3D
+                </Button>
+              )}
             </div>
           ),
         },

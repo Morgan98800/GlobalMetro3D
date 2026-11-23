@@ -1,53 +1,125 @@
 import * as maplibregl from 'maplibre-gl';
 import { Protocol } from 'pmtiles';
-import { getOvertureBuildingThemeColors, type MapTheme } from './vector_style';
+import { isMobileGpuDevice } from './device_perf';
+import {
+  getOvertureBuildingThemeColors,
+  HERO_LANDMARK_OVERTURE_IDS,
+  type MapTheme,
+} from './vector_style';
 
 const OVERTURE_INDEX_URL =
   'https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/?list-type=2&prefix=tiles/&delimiter=/';
-const FALLBACK_OVERTURE_RELEASE = '2026-10-21.0';
+const FALLBACK_OVERTURE_RELEASE = '2026-11-18.0';
 const LOCAL_RELEASE_KEY = 'overture-pmtiles-release-v2';
 const RELEASE_TTL_MS = 24 * 60 * 60 * 1000;
+const LOCAL_PARIS_PMTILES_PATH = '/data/paris-buildings-bdtopo.pmtiles';
+const PARIS_PMTILES_BBOX = { minLng: 2.18, minLat: 48.74, maxLng: 2.52, maxLat: 48.96 } as const;
+
+function isInParisPmtilesBounds(map: maplibregl.Map): boolean {
+  try {
+    const center = map.getCenter?.();
+    if (!center) return false;
+    return (
+      center.lng >= PARIS_PMTILES_BBOX.minLng &&
+      center.lng <= PARIS_PMTILES_BBOX.maxLng &&
+      center.lat >= PARIS_PMTILES_BBOX.minLat &&
+      center.lat <= PARIS_PMTILES_BBOX.maxLat
+    );
+  } catch {
+    return false;
+  }
+}
 
 export const OVERTURE_SOURCE_ID = 'overture-buildings';
 export const OVERTURE_BUILDING_LAYER_ID = 'overture-building-3d';
+export const OVERTURE_ROOF_LAYER_ID = 'overture-building-roof-3d';
 export const OVERTURE_PART_LAYER_ID = 'overture-building-part-3d';
+export const OVERTURE_OUTLINE_LAYER_ID = 'overture-building-outline';
 
 let pmtilesProtocolRegistered = false;
 let backgroundRefreshStarted = false;
 const mapDesiredVisibility = new WeakMap<maplibregl.Map, boolean>();
 const mapXrayState = new WeakMap<maplibregl.Map, boolean>();
+const mapThemeState = new WeakMap<maplibregl.Map, MapTheme>();
+const mapCutoutKey = new WeakMap<maplibregl.Map, string>();
+const mapBaseBuildingFilters = new WeakMap<maplibregl.Map, Map<string, any>>();
 
-const DEFAULT_OPACITY_EXPR: any = [
-  'interpolate',
-  ['linear'],
-  ['zoom'],
-  13.5,
-  0,
-  14.3,
-  0.42,
-  15.5,
-  0.74,
-  16.8,
-  0.9,
+// Opaque Haussmannian buildings by default to eliminate alpha overdraw on the GPU.
+// Semi-transparency is reserved for explicit Subsurface X-Ray mode.
+const DEFAULT_OPACITY_EXPR: any = 1.0;
+
+// Explicit opt-in Blueprint X-ray mode (only when user manually enables Subsurface X-Ray)
+const XRAY_OPACITY_EXPR: any = 0.18;
+
+const RESOLVED_HEIGHT_EXPR: any = [
+  'coalesce',
+  ['get', 'height'],
+  ['*', ['coalesce', ['get', 'num_floors'], 5], 3.2],
+  16,
 ];
 
-const XRAY_OPACITY_EXPR: any = [
-  'interpolate',
-  ['linear'],
-  ['zoom'],
-  13.5,
-  0,
-  14.5,
-  0.46,
-  16.5,
-  0.42,
+// Clean 2-tier Parisian Haussmann silhouette (100% static solid colors, zero pattern shimmer):
+// - 10–38 m Paris blocks: Lutetian limestone/slate body + 2.65 m Parisian zinc mansard crown
+// - Taller towers (> 38 m): clean 0.6 m slate roof cap
+const FACADE_HEIGHT_EXPR: any = [
+  'case',
+  ['all', ['>=', RESOLVED_HEIGHT_EXPR, 10], ['<=', RESOLVED_HEIGHT_EXPR, 38]],
+  ['-', RESOLVED_HEIGHT_EXPR, 2.65],
+  ['>', RESOLVED_HEIGHT_EXPR, 38],
+  ['-', RESOLVED_HEIGHT_EXPR, 0.65],
+  RESOLVED_HEIGHT_EXPR,
 ];
+
+const ROOF_BASE_EXPR: any = [
+  'case',
+  ['all', ['>=', RESOLVED_HEIGHT_EXPR, 10], ['<=', RESOLVED_HEIGHT_EXPR, 38]],
+  ['-', RESOLVED_HEIGHT_EXPR, 2.65],
+  ['-', RESOLVED_HEIGHT_EXPR, 0.65],
+];
+
+function getRoofColorExpr(theme: MapTheme): any {
+  return [
+    'match',
+    ['coalesce', ['get', 'roof_mat'], 'zinc'],
+    'slate',
+    theme === 'light' ? '#586778' : '#35465b',
+    'tile',
+    theme === 'light' ? '#9c7364' : '#654a42',
+    theme === 'light' ? '#6d7e90' : '#445a74',
+  ];
+}
+
+export function applyBuildingsHaussmannStyle(
+  map: maplibregl.Map,
+  theme: MapTheme,
+  xrayActive = mapXrayState.get(map) === true
+): void {
+  mapThemeState.set(map, theme);
+  const zincColor = getRoofColorExpr(theme);
+  const outlineColor = theme === 'light' ? 'rgba(92, 84, 72, 0.16)' : 'rgba(154, 184, 224, 0.16)';
+  const desiredVisible = mapDesiredVisibility.get(map) ?? true;
+  const roofVisibility = desiredVisible && !xrayActive ? 'visible' : 'none';
+
+  try {
+    if (map.getLayer(OVERTURE_ROOF_LAYER_ID)) {
+      map.setPaintProperty(OVERTURE_ROOF_LAYER_ID, 'fill-extrusion-color', zincColor);
+      map.setLayoutProperty(OVERTURE_ROOF_LAYER_ID, 'visibility', roofVisibility);
+    }
+    if (map.getLayer(OVERTURE_OUTLINE_LAYER_ID)) {
+      map.setPaintProperty(OVERTURE_OUTLINE_LAYER_ID, 'line-color', outlineColor);
+      map.setLayoutProperty(OVERTURE_OUTLINE_LAYER_ID, 'visibility', roofVisibility);
+    }
+  } catch {
+    // Graceful no-op in stubbed/headless maps
+  }
+}
 
 export function setBuildingsXrayMode(map: maplibregl.Map, xrayActive: boolean): void {
   if (mapXrayState.get(map) === xrayActive) return;
   mapXrayState.set(map, xrayActive);
   const expr = xrayActive ? XRAY_OPACITY_EXPR : DEFAULT_OPACITY_EXPR;
-  const fallbackOpacity = xrayActive ? 0.44 : 0.82;
+  const fallbackOpacity = xrayActive ? 0.18 : 1.0;
+  const theme = mapThemeState.get(map) ?? 'dark';
   try {
     if (map.getLayer(OVERTURE_BUILDING_LAYER_ID)) {
       map.setPaintProperty(OVERTURE_BUILDING_LAYER_ID, 'fill-extrusion-opacity', expr);
@@ -55,8 +127,76 @@ export function setBuildingsXrayMode(map: maplibregl.Map, xrayActive: boolean): 
     if (map.getLayer(OVERTURE_PART_LAYER_ID)) {
       map.setPaintProperty(OVERTURE_PART_LAYER_ID, 'fill-extrusion-opacity', expr);
     }
+    if (map.getLayer(OVERTURE_ROOF_LAYER_ID)) {
+      map.setPaintProperty(OVERTURE_ROOF_LAYER_ID, 'fill-extrusion-opacity', expr);
+    }
     if (map.getLayer('building-3d')) {
       map.setPaintProperty('building-3d', 'fill-extrusion-opacity', fallbackOpacity as any);
+    }
+    applyBuildingsHaussmannStyle(map, theme, xrayActive);
+  } catch {
+    // Graceful no-op in headless/stubbed maps
+  }
+}
+
+const BUILDING_CUTOUT_LAYERS = [
+  OVERTURE_BUILDING_LAYER_ID,
+  OVERTURE_ROOF_LAYER_ID,
+  OVERTURE_PART_LAYER_ID,
+  'building-3d',
+] as const;
+
+function buildCirclePolygon(center: [number, number], radiusM: number) {
+  const [lng, lat] = center;
+  const latRad = (lat * Math.PI) / 180;
+  const dLat = radiusM / 111320;
+  const dLng = radiusM / (111320 * Math.max(0.2, Math.cos(latRad)));
+  const coords: [number, number][] = [];
+  const steps = 12;
+  for (let i = 0; i <= steps; i += 1) {
+    const a = (i / steps) * Math.PI * 2;
+    coords.push([lng + Math.cos(a) * dLng, lat + Math.sin(a) * dLat]);
+  }
+  return {
+    type: 'Polygon' as const,
+    coordinates: [coords],
+  };
+}
+
+/**
+ * Temporarily hides 3D buildings immediately surrounding a zoomed-in station
+ * so the underground station architecture is unobstructed; restores them
+ * automatically when zooming out or panning away.
+ */
+export function setStationBuildingCutout(
+  map: maplibregl.Map,
+  center: [number, number] | null,
+  radiusM = 70
+): void {
+  const key = center ? `${center[0].toFixed(4)},${center[1].toFixed(4)},${radiusM}` : 'none';
+  if (mapCutoutKey.get(map) === key) return;
+  mapCutoutKey.set(map, key);
+
+  let baseFilters = mapBaseBuildingFilters.get(map);
+  if (!baseFilters) {
+    baseFilters = new Map<string, any>();
+    mapBaseBuildingFilters.set(map, baseFilters);
+  }
+
+  const pointGeom = center ? ({ type: 'Point', coordinates: center } as const) : null;
+  try {
+    for (const layerId of BUILDING_CUTOUT_LAYERS) {
+      if (!map.getLayer(layerId)) continue;
+      if (!baseFilters.has(layerId)) {
+        baseFilters.set(layerId, map.getFilter(layerId) ?? null);
+      }
+      const base = baseFilters.get(layerId);
+      if (pointGeom) {
+        const excludeExpr: any = ['>', ['distance', pointGeom], radiusM];
+        map.setFilter(layerId, base ? ['all', base, excludeExpr] : excludeExpr);
+      } else {
+        map.setFilter(layerId, base ?? null);
+      }
     }
   } catch {
     // Graceful no-op in headless/stubbed maps
@@ -137,12 +277,27 @@ export function setBuildingsVisible(map: maplibregl.Map, visible: boolean): void
   mapDesiredVisibility.set(map, visible);
   const value = visible ? 'visible' : 'none';
   const hasOverture = Boolean(map.getLayer(OVERTURE_BUILDING_LAYER_ID));
+  const xrayActive = mapXrayState.get(map) === true;
 
   if (hasOverture) {
     try {
       map.setLayoutProperty(OVERTURE_BUILDING_LAYER_ID, 'visibility', value);
+      if (map.getLayer(OVERTURE_ROOF_LAYER_ID)) {
+        map.setLayoutProperty(
+          OVERTURE_ROOF_LAYER_ID,
+          'visibility',
+          visible && !xrayActive ? 'visible' : 'none'
+        );
+      }
       if (map.getLayer(OVERTURE_PART_LAYER_ID)) {
         map.setLayoutProperty(OVERTURE_PART_LAYER_ID, 'visibility', value);
+      }
+      if (map.getLayer(OVERTURE_OUTLINE_LAYER_ID)) {
+        map.setLayoutProperty(
+          OVERTURE_OUTLINE_LAYER_ID,
+          'visibility',
+          visible && !xrayActive ? 'visible' : 'none'
+        );
       }
       if (map.getLayer('building-3d')) {
         map.setLayoutProperty('building-3d', 'visibility', 'none');
@@ -175,12 +330,22 @@ export function areBuildingsVisible(map: maplibregl.Map): boolean {
 
 export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): void {
   ensurePmtilesProtocol();
+  mapThemeState.set(map, theme);
   if (!map.getStyle() || map.getSource(OVERTURE_SOURCE_ID)) return;
 
-  const { release, stale } = getCachedOvertureReleaseSync();
-  if (stale) refreshOvertureReleaseInBackground();
+  const useLocalParisArchive =
+    typeof window !== 'undefined' &&
+    Boolean(window.location?.origin) &&
+    isInParisPmtilesBounds(map);
 
-  const pmtilesUrl = `pmtiles://https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/${release}/buildings.pmtiles`;
+  let pmtilesUrl: string;
+  if (useLocalParisArchive) {
+    pmtilesUrl = `pmtiles://${window.location.origin}${LOCAL_PARIS_PMTILES_PATH}`;
+  } else {
+    const { release, stale } = getCachedOvertureReleaseSync();
+    if (stale) refreshOvertureReleaseInBackground();
+    pmtilesUrl = `pmtiles://https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/${release}/buildings.pmtiles`;
+  }
   const colors = getOvertureBuildingThemeColors(theme);
   const desiredVisible = mapDesiredVisibility.get(map) ?? true;
   const visibility = desiredVisible ? 'visible' : 'none';
@@ -191,36 +356,37 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
       url: pmtilesUrl,
       minzoom: 13,
       maxzoom: 14,
-      attribution:
-        '<a href="https://docs.overturemaps.org/attribution" target="_blank">© Overture Maps</a>',
+      attribution: useLocalParisArchive
+        ? '<a href="https://geoservices.ign.fr/bdtopo" target="_blank">© IGN BD TOPO®</a>'
+        : '<a href="https://docs.overturemaps.org/attribution" target="_blank">© Overture Maps</a>',
     });
 
     const xrayActive = mapXrayState.get(map) === true;
     const opacityExpr: any = xrayActive ? XRAY_OPACITY_EXPR : DEFAULT_OPACITY_EXPR;
+    const zincColor = getRoofColorExpr(theme);
+    const outlineColor = theme === 'light' ? 'rgba(92, 84, 72, 0.16)' : 'rgba(154, 184, 224, 0.16)';
 
     const beforeId = map.getLayer('building-3d') ? 'building-3d' : undefined;
 
+    // 1. Haussmann limestone / slate facade body (starts fetching at z=13.0 for faster load)
     map.addLayer(
       {
         id: OVERTURE_BUILDING_LAYER_ID,
         type: 'fill-extrusion',
         source: OVERTURE_SOURCE_ID,
         'source-layer': 'building',
-        minzoom: 13.5,
+        minzoom: 13.0,
         filter: [
           'all',
           ['!=', ['get', 'is_underground'], true],
           ['!=', ['get', 'has_parts'], true],
-        ],
+          ['<', ['coalesce', ['get', 'height'], 0], 290],
+          ['!', ['in', ['get', 'id'], ['literal', HERO_LANDMARK_OVERTURE_IDS]]],
+        ] as any,
         layout: { visibility },
         paint: {
           'fill-extrusion-base': ['coalesce', ['get', 'min_height'], 0],
-          'fill-extrusion-height': [
-            'coalesce',
-            ['get', 'height'],
-            ['*', ['coalesce', ['get', 'num_floors'], 4], 3.4],
-            14,
-          ],
+          'fill-extrusion-height': FACADE_HEIGHT_EXPR,
           'fill-extrusion-color': colors.buildingColor as any,
           'fill-extrusion-vertical-gradient': true,
           'fill-extrusion-opacity': opacityExpr,
@@ -229,24 +395,35 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
       beforeId
     );
 
+    const mobileGpu = isMobileGpuDevice();
+
+    // 2. Inset Parisian Mansart roof crown (BD TOPO inset layer for Paris, fallback to building crown elsewhere)
     map.addLayer(
       {
-        id: OVERTURE_PART_LAYER_ID,
+        id: OVERTURE_ROOF_LAYER_ID,
         type: 'fill-extrusion',
         source: OVERTURE_SOURCE_ID,
-        'source-layer': 'building_part',
-        minzoom: 13.5,
-        filter: ['!=', ['get', 'is_underground'], true],
-        layout: { visibility },
+        'source-layer': useLocalParisArchive ? 'mansard_roof' : 'building',
+        minzoom: useLocalParisArchive ? (mobileGpu ? 14.6 : 13.8) : (mobileGpu ? 15.4 : 14.8),
+        filter: useLocalParisArchive
+          ? (['>=', ['coalesce', ['get', 'height'], 0], 10] as any)
+          : ([
+              'all',
+              ['!=', ['get', 'is_underground'], true],
+              ['!=', ['get', 'has_parts'], true],
+              ['>=', RESOLVED_HEIGHT_EXPR, 10],
+              ['<', ['coalesce', ['get', 'height'], 0], 290],
+              ['!', ['in', ['get', 'id'], ['literal', HERO_LANDMARK_OVERTURE_IDS]]],
+            ] as any),
+        layout: { visibility: desiredVisible && !xrayActive ? 'visible' : 'none' },
         paint: {
-          'fill-extrusion-base': ['coalesce', ['get', 'min_height'], 0],
-          'fill-extrusion-height': [
-            'coalesce',
-            ['get', 'height'],
-            ['*', ['coalesce', ['get', 'num_floors'], 4], 3.4],
-            14,
-          ],
-          'fill-extrusion-color': colors.partColor as any,
+          'fill-extrusion-base': useLocalParisArchive
+            ? ['coalesce', ['get', 'min_height'], 0]
+            : ROOF_BASE_EXPR,
+          'fill-extrusion-height': useLocalParisArchive
+            ? ['coalesce', ['get', 'height'], 14]
+            : RESOLVED_HEIGHT_EXPR,
+          'fill-extrusion-color': zincColor,
           'fill-extrusion-vertical-gradient': true,
           'fill-extrusion-opacity': opacityExpr,
         },
@@ -254,28 +431,104 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
       beforeId
     );
 
-    // Keep OpenFreeMap building-3d visible until Overture tiles in the active viewport settle,
-    // avoiding a visual flash or missing buildings while Overture PMTiles streams in.
+    // 3. Detailed multi-part architectural monuments (Overture fallback outside local Paris BD TOPO)
+    if (!useLocalParisArchive) {
+      map.addLayer(
+        {
+          id: OVERTURE_PART_LAYER_ID,
+          type: 'fill-extrusion',
+          source: OVERTURE_SOURCE_ID,
+          'source-layer': 'building_part',
+          minzoom: mobileGpu ? 15.0 : 14.6,
+          filter: [
+            'all',
+            ['!=', ['get', 'is_underground'], true],
+            ['<', ['coalesce', ['get', 'height'], 0], 290],
+            [
+              '!',
+              [
+                'in',
+                ['coalesce', ['get', 'building_id'], ['get', 'id']],
+                ['literal', HERO_LANDMARK_OVERTURE_IDS],
+              ],
+            ],
+          ] as any,
+          layout: { visibility },
+          paint: {
+            'fill-extrusion-base': ['coalesce', ['get', 'min_height'], 0],
+            'fill-extrusion-height': RESOLVED_HEIGHT_EXPR,
+            'fill-extrusion-color': colors.partColor as any,
+            'fill-extrusion-vertical-gradient': true,
+            'fill-extrusion-opacity': opacityExpr,
+          },
+        },
+        beforeId
+      );
+    }
+
+    // 4. Crisp architectural footprint / courtyard outline (Mapbox Standard Night/Day feel)
+    map.addLayer(
+      {
+        id: OVERTURE_OUTLINE_LAYER_ID,
+        type: 'line',
+        source: OVERTURE_SOURCE_ID,
+        'source-layer': 'building',
+        minzoom: mobileGpu ? 15.0 : 14.4,
+        filter: [
+          'all',
+          ['!=', ['get', 'is_underground'], true],
+          ['<', ['coalesce', ['get', 'height'], 0], 290],
+          ['!', ['in', ['get', 'id'], ['literal', HERO_LANDMARK_OVERTURE_IDS]]],
+        ] as any,
+        layout: { visibility: desiredVisible && !xrayActive ? 'visible' : 'none' },
+        paint: {
+          'line-color': outlineColor,
+          'line-width': ['interpolate', ['linear'], ['zoom'], 14.4, 0.55, 17, 1.05],
+        },
+      },
+      OVERTURE_BUILDING_LAYER_ID
+    );
+
+    // Keep OpenFreeMap building-3d visible only until Overture actually renders its first
+    // 3D building in the viewport (at z >= 13.0), then hide building-3d immediately to prevent z-fighting.
+    let lastSwapCheckMs = 0;
+    const trySwapToOverture = () => {
+      if (!map.getLayer(OVERTURE_BUILDING_LAYER_ID) || !map.getLayer('building-3d')) return;
+      if (map.getZoom() < 13.0) return;
+      try {
+        const rendered = map.queryRenderedFeatures({
+          layers: [OVERTURE_BUILDING_LAYER_ID],
+        });
+        if (rendered.length > 0) {
+          map.setLayoutProperty('building-3d', 'visibility', 'none');
+          map.off('idle', trySwapToOverture);
+          map.off('render', onRenderCheck);
+          map.off('sourcedata', onSourceData);
+        }
+      } catch {
+        // Ignore in stubbed/headless maps
+      }
+    };
+    const onRenderCheck = () => {
+      const now = performance.now();
+      if (now - lastSwapCheckMs < 200) return;
+      lastSwapCheckMs = now;
+      trySwapToOverture();
+    };
     const onSourceData = (e: any) => {
       if (e.sourceId !== OVERTURE_SOURCE_ID || !e.isSourceLoaded) return;
-      map.off('sourcedata', onSourceData);
-      const hideFallback = () => {
-        if (map.getLayer('building-3d') && map.getLayer(OVERTURE_BUILDING_LAYER_ID)) {
-          map.setLayoutProperty('building-3d', 'visibility', 'none');
-        }
-      };
-      if (typeof map.once === 'function') {
-        map.once('idle', hideFallback);
-      } else {
-        hideFallback();
-      }
+      trySwapToOverture();
     };
     const onSourceError = (e: any) => {
       if (e.sourceId !== OVERTURE_SOURCE_ID) return;
       map.off('sourcedata', onSourceData);
+      map.off('render', onRenderCheck);
+      map.off('idle', trySwapToOverture);
       map.off('error', onSourceError);
       try {
+        if (map.getLayer(OVERTURE_OUTLINE_LAYER_ID)) map.removeLayer(OVERTURE_OUTLINE_LAYER_ID);
         if (map.getLayer(OVERTURE_PART_LAYER_ID)) map.removeLayer(OVERTURE_PART_LAYER_ID);
+        if (map.getLayer(OVERTURE_ROOF_LAYER_ID)) map.removeLayer(OVERTURE_ROOF_LAYER_ID);
         if (map.getLayer(OVERTURE_BUILDING_LAYER_ID)) map.removeLayer(OVERTURE_BUILDING_LAYER_ID);
         if (map.getSource(OVERTURE_SOURCE_ID)) map.removeSource(OVERTURE_SOURCE_ID);
       } catch {
@@ -286,6 +539,8 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
       }
     };
     map.on('sourcedata', onSourceData);
+    map.on('render', onRenderCheck);
+    map.on('idle', trySwapToOverture);
     map.on('error', onSourceError);
   } catch (err) {
     console.warn('[map] Overture 3D buildings unavailable, keeping OpenFreeMap extrusion:', err);

@@ -153,6 +153,8 @@ async function queryFrenchBan(query: string, opts: PlaceSearchOptions): Promise<
     const p = f.properties;
     if (!coords || coords.length < 2 || !p?.name) continue;
     const coordinates: [number, number] = [coords[0], coords[1]];
+    const distanceM = opts.center ? haversineDistanceM(opts.center, coordinates) : undefined;
+    if (distanceM !== undefined && distanceM > 65_000) continue;
     const subtitle = [p.postcode, p.city].filter(Boolean).join(' ').trim() || p.label || '';
     results.push({
       id: `ban:${p.id ?? i}`,
@@ -161,7 +163,7 @@ async function queryFrenchBan(query: string, opts: PlaceSearchOptions): Promise<
       category: p.type === 'housenumber' || p.type === 'street' ? 'Adresse' : 'Lieu',
       coordinates,
       source: 'ban',
-      distanceM: opts.center ? haversineDistanceM(opts.center, coordinates) : undefined,
+      distanceM,
     });
   }
   return results;

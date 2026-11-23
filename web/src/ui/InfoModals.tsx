@@ -22,11 +22,10 @@ export interface Source {
 }
 
 export const SOURCES_PAR_DEFAUT: Source[] = [
-  { usage: 'Horaires et temps réel', credit: 'Île-de-France Mobilités : horaires GTFS et API Prochains passages (PRIM)' },
-  { usage: 'Couleurs des lignes', credit: 'Île-de-France Mobilités, open data' },
-  { usage: 'Fond de carte', credit: '© contributeurs OpenStreetMap' },
-  { usage: 'Typographie', credit: 'Asap, Omnibus-Type, SIL Open Font License 1.1' },
-  { usage: 'Icônes', credit: 'Remix Icon, licence Apache 2.0' },
+  { usage: 'Horaires & temps réel', credit: 'Île-de-France Mobilités (GTFS & PRIM)' },
+  { usage: 'Fond de carte & 3D', credit: '© OpenStreetMap · OpenFreeMap · Overture Maps · Parchment Landmarks (CC0)' },
+  { usage: 'Audio réel métro', credit: 'Wikimedia Commons : Litlok (CC BY-SA 4.0), Thesupermat (CC BY-SA 3.0)' },
+  { usage: 'Typographie & icônes', credit: 'Asap (SIL OFL 1.1) · Remix Icon (Apache 2.0)' },
 ];
 
 export function AProposModale({

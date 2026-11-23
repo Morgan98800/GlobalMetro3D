@@ -1,21 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { RiWifiOffLine } from '@remixicon/react';
+import { RiMenuLine, RiWifiOffLine } from '@remixicon/react';
 import { cityClock } from '@core/sim/paris_time';
 import { searchPlaces, type PlaceCandidate } from '@core/ui/utils/geocoding';
 import type { RoutePoint } from '@core/ui/utils/transit_router';
 import { BandeauTelemetrie } from './BandeauTelemetrie';
+import type { DetentSheet } from './BottomSheet';
 import { FollowTrainHud } from './FollowTrainHud';
-import { AProposModale, RecordsModale, type JourType } from './InfoModals';
+import { AProposModale } from './InfoModals';
+import { LibraryDrawer } from './LibraryDrawer';
 import { LinesDock } from './LinesDock';
 import { MapControls } from './MapControls';
+import { Marque } from './Marque';
 import { MenuPrincipal, type ThemeChoix } from './MenuPrincipal';
+import { MobileHomeSheet } from './MobileHomeSheet';
 import { NearbyDrawer, type ErreurPosition } from './NearbyDrawer';
 import { Panneau } from './Panneau';
+import { PlanLumineuxRacine, Poussoir } from './plan-lumineux/PlanLumineux';
 import { RoutePlannerDrawer } from './RoutePlannerDrawer';
+import { ShareItineraryModal } from './ShareItineraryModal';
 import {
   buildLigneDetail,
   buildNearbyStations,
-  buildRecordsLists,
   grouperPassages,
   mapItineraires,
   mapLineToEtat,
@@ -24,7 +29,7 @@ import {
 } from './shell_mappers';
 import { StationDrawer } from './StationDrawer';
 import { StationSearchPalette, type ResultatRecherche } from './StationSearchPalette';
-import { BarreMobile, TopNavBar, type Rubrique } from './TopNavBar';
+import { TopNavBar, type Rubrique } from './TopNavBar';
 import { cx } from './cx';
 import { uiStore, useUiStore, type EdinburghPreset, type ThemePreference } from './ui_store';
 import { useIsDesktop } from './useMediaQuery';
@@ -75,7 +80,13 @@ function inferNearbyError(msg: string | null): ErreurPosition {
   return 'indisponible';
 }
 
-function copyShareUrl(url: string) {
+function copyShareUrl(url: string, title?: string) {
+  if (typeof navigator !== 'undefined' && typeof navigator.share === 'function' && title) {
+    void navigator.share({ title, url }).catch(() => {
+      void navigator.clipboard?.writeText(url).catch(() => {});
+    });
+    return;
+  }
   void navigator.clipboard?.writeText(url).catch(() => {});
 }
 
@@ -83,6 +94,7 @@ export function SubwayAppShell() {
   const snap = useUiStore();
   const desktop = useIsDesktop();
 
+  const [shareModalUrl, setShareModalUrl] = useState<string | null>(null);
   const {
     cityConfig,
     cities,
@@ -90,7 +102,6 @@ export function SubwayAppShell() {
     stations,
     ladders,
     rollingStockDb,
-    stationRankings,
     trafficByLine,
     trains,
     totalTrainCount,
@@ -105,6 +116,8 @@ export function SubwayAppShell() {
     nearbyStations,
     nearbyDepartures,
     lineDrawerOpen,
+    libraryOpen,
+    libraryTab,
     routePlannerOpen,
     routeOrigin,
     routeDestination,
@@ -117,21 +130,19 @@ export function SubwayAppShell() {
     pitch3D,
     bearingDeg,
     buildingsVisible,
-    recenterVisible,
-    recenterLabel,
+    xrayMode,
     realtimeEnabled,
     userLocation,
     gpsWatchActive,
     savedPlaces,
     searchOpen,
     activeModal,
-    stalenessWarning,
     handlers,
   } = snap;
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [homeCran, setHomeCran] = useState<DetentSheet>('bas');
   const [dockCollapsed, setDockCollapsed] = useState(false);
-  const [recordsJour, setRecordsJour] = useState<JourType>('semaine');
   const [isOffline, setIsOffline] = useState(() =>
     typeof navigator !== 'undefined' ? !navigator.onLine : false
   );
@@ -143,8 +154,19 @@ export function SubwayAppShell() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchPlacesRes, setSearchPlacesRes] = useState<PlaceCandidate[]>([]);
 
+  const isImplicitOrigin = (o?: RoutePoint | null) =>
+    Boolean(
+      o &&
+        (o.kind === 'user' ||
+          o.label === 'Ma position' ||
+          o.label === 'Centre (paris)' ||
+          o.label === 'Centre (Paris)')
+    );
+
   // Route planner text state
-  const [departText, setDepartText] = useState(routeOrigin?.label ?? '');
+  const [departText, setDepartText] = useState(
+    isImplicitOrigin(routeOrigin) ? '' : (routeOrigin?.label ?? '')
+  );
   const [arriveeText, setArriveeText] = useState(routeDestination?.label ?? '');
   const [activeRouteField, setActiveRouteField] = useState<'depart' | 'arrivee' | null>(null);
   const [routeSuggestions, setRouteSuggestions] = useState<
@@ -165,8 +187,8 @@ export function SubwayAppShell() {
   }, []);
 
   useEffect(() => {
-    setDepartText(routeOrigin?.label ?? '');
-  }, [routeOrigin?.label]);
+    setDepartText(isImplicitOrigin(routeOrigin) ? '' : (routeOrigin?.label ?? ''));
+  }, [routeOrigin]);
 
   useEffect(() => {
     setArriveeText(routeDestination?.label ?? '');
@@ -321,7 +343,10 @@ export function SubwayAppShell() {
   const isParis = cityConfig?.id === 'paris';
 
   const lignesEtat = useMemo(
-    () => lines.map((line) => mapLineToEtat(line, trafficByLine[line.id])),
+    () =>
+      lines
+        .map((line) => mapLineToEtat(line, trafficByLine[line.id]))
+        .sort((a, b) => a.shortName.localeCompare(b.shortName, 'fr', { numeric: true })),
     [lines, trafficByLine]
   );
 
@@ -375,24 +400,33 @@ export function SubwayAppShell() {
 
   const itinerairesProps = useMemo(() => mapItineraires(routeCandidates), [routeCandidates]);
 
-  const recordsLists = useMemo(
-    () =>
-      buildRecordsLists({
-        stationRankings,
-        jour: recordsJour,
-        stations,
-        linesById,
-      }),
-    [stationRankings, recordsJour, stations, linesById]
-  );
-
   const searchResults = useMemo(() => {
     const q = normalizeText(searchQuery);
-    const matchedStations = (
-      q
-        ? stations.filter((s) => normalizeText(s.name).includes(q))
-        : stations
-    )
+    const POPULAR_DESTINATIONS = [
+      'chatelet',
+      'gare du nord',
+      'gare de lyon',
+      'saint lazare',
+      'montparnasse bienvenue',
+      'republique',
+      'nation',
+      'charles de gaulle etoile',
+      'opera',
+      'bastille',
+      'la defense',
+      'gare de l est',
+      'place d italie',
+      'denfert rochereau',
+    ];
+    const rankStation = (name: string, lineCount: number) => {
+      const norm = normalizeText(name).replace(/[^a-z0-9]+/g, ' ').trim();
+      const idx = POPULAR_DESTINATIONS.findIndex((p) => norm === p || norm.startsWith(p));
+      return idx >= 0 ? idx : 1000 - lineCount * 10;
+    };
+    const baseStations = q
+      ? stations.filter((s) => normalizeText(s.name).includes(q))
+      : [...stations].sort((a, b) => rankStation(a.name, a.lines.length) - rankStation(b.name, b.lines.length));
+    const matchedStations = baseStations
       .slice(0, 10)
       .map((s) => ({
         type: 'station' as const,
@@ -436,25 +470,42 @@ export function SubwayAppShell() {
 
   const actifRubrique: Rubrique | null = routePlannerOpen
     ? 'itineraire'
-    : nearbyOpen
-      ? 'autour'
+    : libraryOpen
+      ? 'bibliotheque'
       : lineDrawerOpen
         ? 'lignes'
         : null;
 
   const handleRubrique = (r: Rubrique) => {
     if (r === 'itineraire') {
-      handlers.onOpenRoutePlanner?.();
-    } else if (r === 'autour') {
-      handlers.onRequestNearby?.();
+      uiStore.setLibraryOpen(false);
+      if (routePlannerOpen) {
+        uiStore.setRoutePlannerOpen(false);
+        setActiveRouteField(null);
+        setRouteSuggestions([]);
+        handlers.onComputeItinerary?.(null, null);
+      } else {
+        handlers.onOpenRoutePlanner?.();
+      }
+    } else if (r === 'bibliotheque') {
+      const next = !libraryOpen;
+      if (next) {
+        uiStore.setRoutePlannerOpen(false);
+        uiStore.setSelectedStation(null);
+        uiStore.setNearbyOpen(false);
+      }
+      uiStore.setLibraryOpen(next);
     } else {
+      uiStore.setLibraryOpen(false);
       uiStore.setLineDrawerOpen(!lineDrawerOpen);
     }
   };
 
   const rtSource =
     cityConfig.realtime.provider === 'prim'
-      ? 'PRIM'
+      ? realtimeEnabled
+        ? 'PRIM'
+        : undefined
       : cityConfig.realtime.provider === 'tfl-unified'
         ? 'TfL'
         : cityConfig.id === 'washington'
@@ -463,116 +514,140 @@ export function SubwayAppShell() {
             ? 'VBB'
             : undefined;
 
-  const dockVisible = (expertMode || lineDrawerOpen) && !isFollowing;
-  const anyDrawerOpen = Boolean(selectedStation || nearbyOpen || routePlannerOpen);
+  const dockVisible = lineDrawerOpen && !isFollowing;
+  const anyDrawerOpen = Boolean(selectedStation || nearbyOpen || routePlannerOpen || libraryOpen);
+
+  const menuProps = {
+    experience: (expertMode ? 'passionne' : 'simple') as 'passionne' | 'simple',
+    onExperience: (exp: 'passionne' | 'simple') => uiStore.setExpertMode(exp === 'passionne'),
+    theme: THEME_TO_CHOIX[themePreference],
+    onTheme: (t: ThemeChoix) => handlers.onSetThemePreference?.(CHOIX_TO_THEME[t]),
+    batiments3d: buildingsVisible,
+    onBatiments3d: (visible: boolean) => {
+      if (visible !== buildingsVisible) handlers.onToggleBuildings?.();
+    },
+    reseaux: cities.map((c) => ({
+      id: c.id,
+      nom: c.displayName,
+      actif: c.id === cityConfig.id,
+      onSelect: () => {
+        setMenuOpen(false);
+        if (c.id !== cityConfig.id) handlers.onCitySelect?.(c.id);
+      },
+    })),
+    onAPropos: () => {
+      setMenuOpen(false);
+      uiStore.setActiveModal('about');
+    },
+  };
 
   return (
     <div className="pointer-events-none fixed inset-0 z-10">
-      {/* Barre supérieure */}
-      <div className="fixed inset-x-0 top-0 z-30 flex flex-col items-stretch px-3 pt-[max(12px,env(safe-area-inset-top))] md:px-4">
-        <div ref={menuContainerRef} className="relative">
-          <TopNavBar
-            reseau={cityConfig.displayName}
-            onSearch={() => uiStore.setSearchOpen(true)}
-            onRubrique={handleRubrique}
-            actif={actifRubrique}
-            experience={expertMode ? 'passionne' : 'simple'}
-            onExperience={(exp) => uiStore.setExpertMode(exp === 'passionne')}
-            onMenu={() => setMenuOpen((v) => !v)}
-            menuOuvert={menuOpen}
-            ligneActive={activeLine ? toLineRef(activeLine) : null}
-            horloge={clockDate}
-            compact
-          />
+      <PlanLumineuxRacine />
+      {/* Barre supérieure : bureau (TopNavBar unifiée) vs mobile (pastille unique) */}
+      {desktop ? (
+        <div className="fixed inset-x-0 top-0 z-30 flex items-start justify-between gap-3 px-4 pt-3.5">
+          <div ref={menuContainerRef} className="relative inline-flex max-w-full flex-col items-start">
+            <TopNavBar
+              reseau={cityConfig.displayName}
+              onSearch={() => {
+                setMenuOpen(false);
+                uiStore.setSearchOpen(true);
+              }}
+              onRubrique={(r) => {
+                setMenuOpen(false);
+                handleRubrique(r);
+              }}
+              actif={actifRubrique}
+              experience={expertMode ? 'passionne' : 'simple'}
+              onExperience={(exp) => uiStore.setExpertMode(exp === 'passionne')}
+              onMenu={() => {
+                const next = !menuOpen;
+                setMenuOpen(next);
+                if (next && desktop) {
+                  uiStore.setLineDrawerOpen(false);
+                  uiStore.setLibraryOpen(false);
+                  uiStore.setRoutePlannerOpen(false);
+                  uiStore.setSelectedStation(null);
+                  uiStore.setNearbyOpen(false);
+                }
+              }}
+              menuOuvert={menuOpen}
+              ligneActive={activeLine ? toLineRef(activeLine) : null}
+              horloge={clockDate}
+              compact
+              className="px-0 pt-0 md:px-0 md:pt-0"
+            />
+
+            {menuOpen && (
+              <MenuPrincipal
+                {...menuProps}
+                className="pointer-events-auto absolute right-0 top-[calc(100%+8px)]"
+              />
+            )}
+          </div>
+
+          <div className="flex flex-col items-end gap-2">
+            {/* État hors ligne */}
+            {isOffline && (
+              <Panneau
+                role="status"
+                className="pointer-events-auto flex items-center gap-2 rounded-pill px-3 py-1.5 text-[12px] text-encre"
+              >
+                <RiWifiOffLine aria-hidden className="size-3.5 shrink-0 text-vigilance" />
+                <span>Hors ligne</span>
+              </Panneau>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div
+          ref={menuContainerRef}
+          className="fixed left-3 top-[max(12px,env(safe-area-inset-top))] z-30 flex max-w-[calc(100vw-80px)] flex-col items-start gap-2"
+        >
+          <Poussoir
+            onClick={() => setMenuOpen((v) => !v)}
+            expanded={menuOpen}
+            aria-label={`${cityConfig.displayName} — Menu`}
+            icone={<Marque size={20} />}
+            className="pointer-events-auto max-md:min-h-[44px]"
+          >
+            <span className="signaletique capitalize truncate">{cityConfig.displayName}</span>
+            {rtSource && (
+              <span
+                aria-hidden
+                className={cx('size-1.5 shrink-0 rounded-full', realtimeEnabled ? 'bg-normal' : 'bg-encre-3')}
+              />
+            )}
+            <RiMenuLine aria-hidden className="size-4 shrink-0 text-icone-2" />
+          </Poussoir>
 
           {menuOpen && (
             <MenuPrincipal
-              experience={expertMode ? 'passionne' : 'simple'}
-              onExperience={(exp) => uiStore.setExpertMode(exp === 'passionne')}
-              theme={THEME_TO_CHOIX[themePreference]}
-              onTheme={(t) => handlers.onSetThemePreference?.(CHOIX_TO_THEME[t])}
-              reseaux={cities.map((c) => ({
-                id: c.id,
-                nom: c.displayName,
-                actif: c.id === cityConfig.id,
-                onSelect: () => {
-                  setMenuOpen(false);
-                  if (c.id !== cityConfig.id) handlers.onCitySelect?.(c.id);
-                },
-              }))}
-              onRecords={() => {
-                setMenuOpen(false);
-                uiStore.setActiveModal('records');
-              }}
-              onAPropos={() => {
-                setMenuOpen(false);
-                uiStore.setActiveModal('about');
-              }}
-              className="pointer-events-auto absolute right-0 top-[calc(100%+8px)]"
+              {...menuProps}
+              className="pointer-events-auto"
             />
           )}
-        </div>
 
-        {/* Bandeau télémétrie en mode Passionné */}
-        {expertMode && (
-          <div className="mt-2 flex justify-center md:justify-end">
-            <BandeauTelemetrie
-              rames={totalTrainCount}
-              kilometres={Math.round(dailyKm)}
-              direct={realtimeEnabled}
-              onDirect={() => handlers.onToggleRealtime?.()}
-              source={rtSource}
-              disponible={cityConfig.realtime.provider !== 'none'}
-              className="pointer-events-auto max-w-full overflow-x-auto"
-            />
-          </div>
-        )}
-
-        {/* État hors ligne (ex. en tunnel) */}
-        {isOffline && (
-          <div className="mt-2 flex justify-center">
+          {isOffline && (
             <Panneau
               role="status"
-              className="pointer-events-auto flex items-center gap-2 px-3.5 py-2 text-corps-sm text-encre"
+              className="pointer-events-auto flex items-center gap-1.5 rounded-pill px-3 py-1 text-[12px] text-encre"
             >
-              <RiWifiOffLine aria-hidden className="size-4 shrink-0 text-vigilance" />
-              <span>Hors ligne · horaires théoriques</span>
+              <RiWifiOffLine aria-hidden className="size-3.5 shrink-0 text-vigilance" />
+              <span>Hors ligne</span>
             </Panneau>
-          </div>
-        )}
+          )}
+        </div>
+      )}
 
-        {/* Alerte fraîcheur des données (§ 3.7) */}
-        {stalenessWarning && !isOffline && (
-          <div className="mt-2 flex justify-center">
-            <Panneau
-              role="alert"
-              className="pointer-events-auto flex items-center gap-2 px-3.5 py-2 text-corps-sm text-encre"
-            >
-              <span aria-hidden className="size-2 shrink-0 rounded-full bg-vigilance" />
-              <span>{stalenessWarning}</span>
-            </Panneau>
-          </div>
-        )}
-      </div>
-
-      {/* Contrôles de carte */}
+      {/* Contrôles de carte (toujours fixes en bas à droite) */}
       <MapControls
         vue3d={pitch3D}
         onVue3d={() => handlers.onTogglePitch?.()}
-        batiments={expertMode ? buildingsVisible : undefined}
-        onBatiments={expertMode ? () => handlers.onToggleBuildings?.() : undefined}
         gps={gpsWatchActive}
         onGps={() => handlers.onToggleGpsFollow?.()}
-        recentrer={
-          recenterVisible
-            ? { label: recenterLabel, onClick: () => handlers.onRecenter?.() }
-            : null
-        }
-        onZoomIn={() => handlers.onZoomIn?.()}
-        onZoomOut={() => handlers.onZoomOut?.()}
-        zoom={expertMode}
-        cap={bearingDeg}
-        onNord={() => handlers.onResetNorth?.()}
+        recentrer={null}
         pointsDeVue={
           cityConfig.id === 'edinburgh'
             ? EDINBURGH_PRESETS.map((pr) => ({
@@ -581,26 +656,46 @@ export function SubwayAppShell() {
               }))
             : undefined
         }
-        className={cx(
-          'fixed right-3 z-20 md:right-4 md:bottom-4 md:top-auto',
-          expertMode ? 'top-[132px]' : 'top-[78px]'
-        )}
+        className="fixed right-3 top-[max(12px,env(safe-area-inset-top))] z-20 md:right-4 md:bottom-12 md:top-auto"
       />
 
-      {/* Panneau des lignes */}
-      {dockVisible && (
-        <div
-          id="dock"
-          className={cx(
-            'pointer-events-auto fixed z-20',
-            desktop
-              ? cx('left-4 bottom-4 w-[372px]', expertMode ? 'top-[132px]' : 'top-[84px]')
-              : cx(
-                  'inset-x-0 bottom-[122px] px-3',
-                  dockCollapsed ? 'max-h-[56px]' : 'max-h-[48dvh]'
-                )
-          )}
-        >
+      {/* Panneau des lignes : bureau latéral (repliable) ou feuille 3 crans mobile */}
+      {dockVisible && (desktop || !anyDrawerOpen) && (
+        desktop ? (
+          <div
+            id="dock"
+            className={cx(
+              'pointer-events-auto fixed left-4 top-[84px] z-20 w-[348px] transition-[transform,opacity] duration-200 ease-portes will-change-[transform,opacity]',
+              activeLine ? 'bottom-4' : 'max-h-[calc(100dvh-90px)]',
+            )}
+          >
+            <LinesDock
+              lignes={lignesEtat}
+              selection={activeLine?.short_name ?? null}
+              onSelect={(shortName) => {
+                if (!shortName) {
+                  handlers.onLineSelect?.(null, '0');
+                  return;
+                }
+                const target = linesByShort.get(shortName);
+                if (target) handlers.onLineSelect?.(target.id, '0');
+              }}
+              onClose={() => uiStore.setLineDrawerOpen(false)}
+              detail={ligneDetail}
+              onMonter={
+                isParis
+                  ? (shortName) =>
+                      handlers.onOpenParisRide?.({
+                        initialLine: shortName,
+                        initialView: expertMode ? 'ride' : 'vault',
+                      })
+                  : undefined
+              }
+              presentation="cote"
+              className={activeLine ? 'h-full' : undefined}
+            />
+          </div>
+        ) : (
           <LinesDock
             lignes={lignesEtat}
             selection={activeLine?.short_name ?? null}
@@ -612,7 +707,7 @@ export function SubwayAppShell() {
               const target = linesByShort.get(shortName);
               if (target) handlers.onLineSelect?.(target.id, '0');
             }}
-            onClose={!expertMode ? () => uiStore.setLineDrawerOpen(false) : undefined}
+            onClose={() => uiStore.setLineDrawerOpen(false)}
             detail={ligneDetail}
             onMonter={
               isParis
@@ -623,12 +718,11 @@ export function SubwayAppShell() {
                     })
                 : undefined
             }
-            presentation={desktop ? 'cote' : 'basse'}
-            replie={!desktop && dockCollapsed}
+            presentation="basse"
+            replie={dockCollapsed}
             onReplier={() => setDockCollapsed((v) => !v)}
-            className="h-full"
           />
-        </div>
+        )
       )}
 
       {/* Suivi de rame */}
@@ -647,13 +741,9 @@ export function SubwayAppShell() {
             const isLive =
               trackedTrain.conf === 'measured' || trackedTrain.conf === 'bracketed';
             const confLabel =
-              trackedTrain.conf === 'measured'
-                ? 'Position mesurée'
-                : trackedTrain.conf === 'bracketed'
-                  ? 'Encadrée en direct'
-                  : trackedTrain.conf === 'extrapolated'
-                    ? 'Position extrapolée'
-                    : 'Horaire théorique';
+              trackedTrain.conf === 'measured' || trackedTrain.conf === 'bracketed'
+                ? 'Direct'
+                : 'Théorique';
 
             return (
               <FollowTrainHud
@@ -714,103 +804,95 @@ export function SubwayAppShell() {
           kind: 'station',
           station: selectedStation,
         };
-        const isFav = savedPlaces.favorites.some(
-          (f) => f.kind === 'station' && f.label === selectedStation.name
-        );
         const isHome = savedPlaces.home?.label === selectedStation.name;
         const isWork = savedPlaces.work?.label === selectedStation.name;
 
-        return (
-          <div
-            className={cx(
-              'pointer-events-auto fixed z-30',
-              desktop ? 'right-4 top-[84px] bottom-4 w-[400px]' : 'inset-x-0 bottom-0'
-            )}
-          >
-            <StationDrawer
-              station={{
-                nom: selectedStation.name,
-                lignes: stLines.map((l) => ({
-                  ...toLineRef(l),
-                  alert: mapTrafficAlert(trafficByLine[l.id]),
-                })),
-                accessible: selectedStation.wheelchair_boarding === 1,
-                alerte: firstAlert
-                  ? {
-                      niveau: mapTrafficAlert(firstAlert) ?? 'vigilance',
-                      texte: firstAlert.message || firstAlert.title,
-                    }
-                  : null,
-              }}
-              groupes={stationPassages.groupes}
-              direct={realtimeEnabled}
-              favori={isFav}
-              domicile={isHome}
-              travail={isWork}
-              onFavori={() => uiStore.toggleFavoritePlace(stPoint)}
-              onDomicile={() => uiStore.setPresetPlace('home', isHome ? null : stPoint)}
-              onTravail={() => uiStore.setPresetPlace('work', isWork ? null : stPoint)}
-              onPartager={() => {
-                const slug = cityConfig.slug || 'paris';
-                copyShareUrl(
-                  `${window.location.origin}/${encodeURIComponent(slug)}?station=${encodeURIComponent(selectedStation.name)}`
-                );
-              }}
-              onYAller={() => {
-                handlers.onOpenRoutePlanner?.({ destination: stPoint });
+        const drawerNode = (
+          <StationDrawer
+            station={{
+              nom: selectedStation.name,
+              lignes: stLines.map((l) => ({
+                ...toLineRef(l),
+                alert: mapTrafficAlert(trafficByLine[l.id]),
+              })),
+              accessible: selectedStation.wheelchair_boarding === 1,
+              alerte: firstAlert
+                ? {
+                    niveau: mapTrafficAlert(firstAlert) ?? 'vigilance',
+                    texte: firstAlert.message || firstAlert.title,
+                  }
+                : null,
+            }}
+            groupes={stationPassages.groupes}
+            direct={realtimeEnabled}
+            passionne={expertMode}
+            domicile={isHome}
+            travail={isWork}
+            onDomicile={() => uiStore.setPresetPlace('home', isHome ? null : stPoint)}
+            onTravail={() => uiStore.setPresetPlace('work', isWork ? null : stPoint)}
+            onPartager={() => {
+              const slug = cityConfig.slug || 'paris';
+              copyShareUrl(
+                `${window.location.origin}/${encodeURIComponent(slug)}?station=${encodeURIComponent(selectedStation.name)}`
+              );
+            }}
+            onYAller={() => {
+              handlers.onOpenRoutePlanner?.({ destination: stPoint });
+              uiStore.setSelectedStation(null);
+            }}
+            onPartir={() => {
+              handlers.onOpenRoutePlanner?.({ origin: stPoint });
+              uiStore.setSelectedStation(null);
+            }}
+            onQuai3D={
+              isParis && primaryLine
+                ? () => {
+                    const name = selectedStation.name;
+                    uiStore.setSelectedStation(null);
+                    handlers.onOpenParisRide?.({
+                      initialLine: primaryLine.short_name,
+                      initialStation: name,
+                      initialView: 'vault',
+                    });
+                  }
+                : undefined
+            }
+            onLigne={(shortName) => {
+              const target = linesByShort.get(shortName);
+              if (target) {
+                handlers.onLineSelect?.(target.id, '0');
+                uiStore.setLineDrawerOpen(true);
                 uiStore.setSelectedStation(null);
-              }}
-              onPartir={() => {
-                handlers.onOpenRoutePlanner?.({ origin: stPoint });
-                uiStore.setSelectedStation(null);
-              }}
-              onQuai3D={
-                isParis && primaryLine
-                  ? () => {
-                      const name = selectedStation.name;
+              }
+            }}
+            onSuivre={
+              expertMode
+                ? (gIdx, pIdx) => {
+                    const ref = stationPassages.refs[gIdx]?.[pIdx];
+                    if (ref) {
+                      handlers.onTrainFollowById?.(ref.tripId, ref.lineId);
                       uiStore.setSelectedStation(null);
-                      handlers.onOpenParisRide?.({
-                        initialLine: primaryLine.short_name,
-                        initialStation: name,
-                        initialView: 'vault',
-                      });
                     }
-                  : undefined
-              }
-              onLigne={(shortName) => {
-                const target = linesByShort.get(shortName);
-                if (target) {
-                  handlers.onLineSelect?.(target.id, '0');
-                  uiStore.setLineDrawerOpen(true);
-                  uiStore.setSelectedStation(null);
-                }
-              }}
-              onSuivre={
-                expertMode
-                  ? (gIdx, pIdx) => {
-                      const ref = stationPassages.refs[gIdx]?.[pIdx];
-                      if (ref) {
-                        handlers.onTrainFollowById?.(ref.tripId, ref.lineId);
-                        uiStore.setSelectedStation(null);
-                      }
-                    }
-                  : undefined
-              }
-              onClose={() => uiStore.setSelectedStation(null)}
-              className="h-full"
-            />
+                  }
+                : undefined
+            }
+            onClose={() => uiStore.setSelectedStation(null)}
+            className={desktop ? 'h-full' : undefined}
+          />
+        );
+
+        return desktop ? (
+          <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[356px]">
+            {drawerNode}
           </div>
+        ) : (
+          drawerNode
         );
       })()}
 
       {/* Tiroir Autour de moi */}
-      {nearbyOpen && (
-        <div
-          className={cx(
-            'pointer-events-auto fixed z-30',
-            desktop ? 'right-4 top-[84px] bottom-4 w-[400px]' : 'inset-x-0 bottom-0'
-          )}
-        >
+      {nearbyOpen && (() => {
+        const nearbyNode = (
           <NearbyDrawer
             etat={nearbyLoading ? 'chargement' : nearbyError ? 'erreur' : 'pret'}
             erreur={nearbyError ? inferNearbyError(nearbyError) : undefined}
@@ -829,21 +911,34 @@ export function SubwayAppShell() {
               uiStore.setSearchOpen(true);
             }}
             onClose={() => uiStore.setNearbyOpen(false)}
-            className="h-full"
+            className={desktop ? 'h-full' : undefined}
           />
-        </div>
-      )}
+        );
+
+        return desktop ? (
+          <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[356px]">
+            {nearbyNode}
+          </div>
+        ) : (
+          nearbyNode
+        );
+      })()}
 
       {/* Tiroir Itinéraire */}
       {routePlannerOpen && (
         <div
           className={cx(
             'pointer-events-auto fixed z-30 flex flex-col gap-2',
-            desktop ? 'right-4 top-[84px] bottom-4 w-[416px]' : 'inset-x-0 bottom-0'
+            desktop
+              ? itinerairesProps.length > 0
+                ? 'right-4 top-[84px] bottom-[156px] w-[368px]'
+                : 'right-4 top-[84px] max-h-[calc(100dvh-240px)] w-[368px]'
+              : 'inset-x-0 bottom-0'
           )}
         >
           <RoutePlannerDrawer
             depart={departText}
+            departPlaceholder={isImplicitOrigin(routeOrigin) ? routeOrigin?.label : 'Ma position'}
             arrivee={arriveeText}
             onDepart={(v) => {
               setDepartText(v);
@@ -855,7 +950,14 @@ export function SubwayAppShell() {
               setActiveRouteField('arrivee');
               if (!v) handlers.onComputeItinerary?.(routeOrigin, null);
             }}
-            onInverser={() => handlers.onComputeItinerary?.(routeDestination, routeOrigin)}
+            onInverser={() => {
+              const prevDepart = departText;
+              const prevArrivee = arriveeText;
+              setDepartText(prevArrivee);
+              setArriveeText(prevDepart);
+              setActiveRouteField(null);
+              handlers.onComputeItinerary?.(routeDestination, routeOrigin);
+            }}
             onMaPosition={() =>
               handlers.onOpenRoutePlanner?.({ origin: null, destination: routeDestination })
             }
@@ -895,14 +997,50 @@ export function SubwayAppShell() {
                 from: enc(routeOrigin),
                 to: enc(routeDestination),
               });
-              copyShareUrl(`${window.location.origin}/${encodeURIComponent(slug)}?${sp}`);
+              setShareModalUrl(`${window.location.origin}/${encodeURIComponent(slug)}?${sp}`);
             }}
-            onClose={() => uiStore.setRoutePlannerOpen(false)}
-            className="h-full"
+            onVoirEn3D={
+              isParis
+                ? (seg) =>
+                    handlers.onOpenParisRide?.({
+                      initialLine: seg.ligne.shortName,
+                      initialDest: seg.direction,
+                      initialStation: seg.de,
+                      initialView: 'ride',
+                    })
+                : undefined
+            }
+            onClose={() => {
+              uiStore.setRoutePlannerOpen(false);
+              setActiveRouteField(null);
+              setRouteSuggestions([]);
+              handlers.onComputeItinerary?.(null, null);
+            }}
+            className={desktop && itinerairesProps.length > 0 ? 'h-full' : undefined}
+          />
+
+          <ShareItineraryModal
+            open={shareModalUrl !== null}
+            onClose={() => setShareModalUrl(null)}
+            depart={routeOrigin?.label ?? departText}
+            arrivee={routeDestination?.label ?? arriveeText}
+            itineraire={itinerairesProps[activeItineraryIndex] ?? itinerairesProps[0] ?? null}
+            shareUrl={shareModalUrl ?? ''}
+            reseau={
+              cityConfig.displayName
+                ? cityConfig.displayName.charAt(0).toUpperCase() + cityConfig.displayName.slice(1)
+                : 'Paris'
+            }
           />
 
           {routeSuggestions.length > 0 && activeRouteField && (
-            <Panneau className="absolute left-4 right-4 top-[176px] z-40 max-h-56 overflow-y-auto p-1.5">
+            <Panneau
+              matiere="feuille"
+              className={cx(
+                'z-40 max-h-56 overflow-y-auto p-1.5 shadow-xl',
+                desktop ? 'absolute left-4 right-4 top-[176px]' : 'fixed inset-x-4 top-[calc(14dvh+196px)]',
+              )}
+            >
               {routeSuggestions.map((s) => (
                 <button
                   key={s.id}
@@ -931,16 +1069,80 @@ export function SubwayAppShell() {
         </div>
       )}
 
-      {/* Barre mobile en bas (hors tiroirs et hors suivi) */}
-      {!desktop && !anyDrawerOpen && !isFollowing && (
-        <div className="pointer-events-auto fixed inset-x-0 bottom-0 z-20">
-          <BarreMobile
-            onSearch={() => uiStore.setSearchOpen(true)}
-            onRubrique={handleRubrique}
-            actif={actifRubrique}
-          />
-        </div>
+      {/* Feuille d'accueil mobile à 3 crans + repli (hors tiroirs et hors suivi) */}
+      {!desktop && !anyDrawerOpen && !dockVisible && !isFollowing && (
+        <MobileHomeSheet
+          cran={homeCran}
+          onCran={setHomeCran}
+          onSearch={() => uiStore.setSearchOpen(true)}
+          hasHome={Boolean(savedPlaces.home)}
+          hasWork={Boolean(savedPlaces.work)}
+          onDomicile={() => {
+            if (savedPlaces.home) {
+              handlers.onOpenRoutePlanner?.({ destination: savedPlaces.home });
+            } else {
+              handlers.onOpenRoutePlanner?.();
+            }
+          }}
+          onTravail={() => {
+            if (savedPlaces.work) {
+              handlers.onOpenRoutePlanner?.({ destination: savedPlaces.work });
+            } else {
+              handlers.onOpenRoutePlanner?.();
+            }
+          }}
+          onLignes={() => uiStore.setLineDrawerOpen(true)}
+          onItineraire={() => handlers.onOpenRoutePlanner?.()}
+          onBibliotheque={() => uiStore.setLibraryOpen(true)}
+          lignes={lignesEtat}
+          onSelectLine={(shortName) => {
+            const target = linesByShort.get(shortName);
+            if (target) {
+              handlers.onLineSelect?.(target.id, '0');
+              uiStore.setLineDrawerOpen(true);
+            }
+          }}
+          expertMode={expertMode}
+          totalTrains={totalTrainCount}
+          dailyKm={Math.round(dailyKm)}
+          direct={realtimeEnabled}
+          directDisponible={cityConfig.realtime.provider !== 'none'}
+          onDirect={() => handlers.onToggleRealtime?.()}
+          rtSource={rtSource}
+        />
       )}
+
+      {/* Tiroir Bibliothèque (Rames 3D & Histoire) */}
+      {libraryOpen && (() => {
+        const libNode = (
+          <LibraryDrawer
+            tab={libraryTab}
+            onTabChange={(t) => uiStore.setLibraryOpen(true, t)}
+            onClose={() => uiStore.setLibraryOpen(false)}
+            onDriveTrain={
+              isParis
+                ? (stock) => {
+                    uiStore.setLibraryOpen(false);
+                    handlers.onOpenParisRide?.({
+                      initialLine: stock.defaultLineForRide,
+                      initialView: 'ride',
+                    });
+                  }
+                : undefined
+            }
+            onFocusMapCamera={(opts) => handlers.onFocusMapCamera?.(opts)}
+            className={desktop ? 'h-full' : undefined}
+          />
+        );
+
+        return desktop ? (
+          <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[412px]">
+            {libNode}
+          </div>
+        ) : (
+          libNode
+        );
+      })()}
 
       {/* Palette de recherche ⌘K */}
       <StationSearchPalette
@@ -980,14 +1182,6 @@ export function SubwayAppShell() {
         ouverte={activeModal === 'about' || activeModal === 'method'}
         onClose={() => uiStore.setActiveModal(null)}
         methodeHref="/methode"
-      />
-      <RecordsModale
-        ouverte={activeModal === 'records'}
-        onClose={() => uiStore.setActiveModal(null)}
-        jour={recordsJour}
-        onJour={setRecordsJour}
-        plus={recordsLists.plus}
-        moins={recordsLists.moins}
       />
     </div>
   );

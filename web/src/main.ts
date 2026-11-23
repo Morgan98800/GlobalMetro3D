@@ -3,11 +3,12 @@ import { createRoot } from 'react-dom/client';
 import {
   applyMapTheme,
   areBuildingsVisible,
+  computeSubsurfaceMix,
   createMap,
   MapBounds,
   maxPitchForZoom,
   setBuildingsVisible,
-  setBuildingsXrayMode,
+  setSubsurfaceMapMode,
 } from '@core/ui/map/maplibre';
 import { SubwayDeckOverlay, TrackItem } from '@core/ui/map/deck_overlay';
 import { BrowserSubwayEngine } from '@core/sim/browser_engine';
@@ -20,11 +21,6 @@ import type { TrainMarker } from '@core/ui/map/trains_layer';
 import type { LineMetadata, StationMetadata } from '@core/types';
 import { DEFAULT_PITCH, DEFAULT_BEARING } from '@core/constants';
 import '@/styles/globals.css';
-import '@core/ui/styles/tokens.css';
-import '@core/ui/styles/typography.css';
-import '@core/ui/styles/motion.css';
-import '@core/ui/styles/main.css';
-import '@core/ui/styles/chrome.css';
 import { auditLineContrast, LineLike, lineBadge } from '@core/ui/components/line_badge';
 import { FollowCamera } from '@core/ui/map/follow_camera';
 import { escapeHtml } from '@core/ui/utils';
@@ -38,8 +34,11 @@ import {
 import { SubwayAppShell } from './ui/SubwayAppShell';
 import { applyFaienceBasemap } from './map/basemap_palette';
 import { uiStore, type EdinburghPreset, type ThemePreference } from './ui/ui_store';
+import { initMonitoring } from './monitoring/sentry';
 
-const DATA_REVISION = '20260910-07';
+initMonitoring();
+
+const DATA_REVISION = '20260910-08';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
 
 type Coordinate = [number, number];
@@ -95,7 +94,11 @@ async function bootstrap() {
     selectLine(null, '0');
   });
 
-  const cityConfig = getCityConfig(router.getCurrentCity());
+  const requestedCity = router.getCurrentCity();
+  const cityConfig = getCityConfig(requestedCity);
+  if (requestedCity.toLowerCase() !== cityConfig.slug.toLowerCase() && typeof window !== 'undefined') {
+    window.history.replaceState(null, '', `/${cityConfig.slug}${window.location.search}`);
+  }
   console.log(`[app] Initializing ${cityConfig.networkName} 3D (${cityConfig.displayName})...`);
 
   // Redirect train model requests to high-fidelity Scottish Class 385 EMU in Edinburgh
@@ -113,71 +116,14 @@ async function bootstrap() {
     };
   }
 
-  const loaderTextEl =
-    document.getElementById('app-loader-text') || document.querySelector('#app-loader p');
-  if (loaderTextEl) {
-    const cityLoaderNames: Record<string, string> = {
-      edinburgh: "Chargement du réseau ferroviaire d'Édimbourg",
-      berlin: 'Chargement du métro de Berlin (U-Bahn)',
-      washington: 'Chargement du métro de Washington',
-      london: 'Chargement du métro de Londres',
-      montreal: 'Chargement du métro de Montréal',
-      lille: 'Chargement du métro de Lille',
-      paris: 'Chargement du métro parisien',
-    };
-    loaderTextEl.textContent =
-      cityLoaderNames[cityConfig.id] || `Chargement du réseau (${cityConfig.displayName})`;
-  }
-
-  // 1. Fetch metadata in parallel (memoized loadShapes, deferred rer_lines)
+  // 1. Phase 1 (Critical Path, ~330 KB raw / ~70 KB compressed):
+  // Create the MapLibre instance immediately in parallel with lightweight metadata
+  // so the 3D map & UI become interactive in < 400 ms without waiting for schedule.json (8 MB).
   const dataDir = cityConfig.paths.dataDir;
   const rerLinesPath = cityConfig.paths.rer?.linesJson;
 
-  const [
-    linesRes,
-    stationsRes,
-    tracksRes,
-    laddersRes,
-    rerTracksRes,
-    rankingsRes,
-    shapesMap,
-    rollingStockDb,
-    fingerprintRes,
-  ] = await Promise.all([
-    fetch(dataUrl(`${dataDir}/lines.json`)),
-    fetch(dataUrl(`${dataDir}/stations.json`)),
-    fetch(dataUrl(`${dataDir}/tracks.json`)),
-    fetch(dataUrl(`${dataDir}/line_ladders.json`)),
-    rerLinesPath ? fetch(dataUrl(rerLinesPath)) : Promise.resolve({ json: async () => [] } as any),
-    fetch(dataUrl(`${dataDir}/station-rankings.json`)),
-    loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
-    loadRollingStock(dataUrl(`${dataDir}/rolling-stock.json`)),
-    fetch(dataUrl(`${dataDir}/feed_fingerprint.json`)).catch(() => null),
-  ]);
-
-  lines = await linesRes.json();
-  const stations: StationMetadata[] = await stationsRes.json();
-  const tracks: TrackItem[] = await tracksRes.json();
-  const laddersData = await laddersRes.json();
-  const rerTracks = await rerTracksRes.json();
-  const stationRankings = await rankingsRes.json();
-
-  // Contrôle de fraîcheur GTFS : tolérance en jours et avertissement visible
-  if (fingerprintRes && (fingerprintRes as Response).ok) {
-    (fingerprintRes as Response)
-      .json()
-      .then((fp: any) => {
-        if (!fp?.generated_at) return;
-        const d = Math.floor((Date.now() - new Date(fp.generated_at).getTime()) / 864e5);
-        const tol = cityConfig.modes[0]?.schedule.stalenessToleranceDays ?? 7;
-        if (d > tol) {
-          uiStore.patch({
-            stalenessWarning: `Horaires GTFS (${cityConfig.displayName}) datant de plus de ${d} jours (tolérance : ${tol} j).`,
-          });
-        }
-      })
-      .catch(() => {});
-  }
+  const mapEl = document.getElementById('map')!;
+  const tooltipEl = document.getElementById('tooltip')!;
 
   const configBounds = cityConfig.map.bounds
     ? Array.isArray(cityConfig.map.bounds[0])
@@ -187,30 +133,57 @@ async function bootstrap() {
           [cityConfig.map.bounds[2], cityConfig.map.bounds[3]],
         ] as [[number, number], [number, number]])
     : undefined;
-  const metroBounds = configBounds ?? boundsFromPolylines(tracks.map((track) => track.coordinates));
-  const networkBounds = boundsFromPolylines([
-    ...tracks.map((track) => track.coordinates),
-    ...rerTracks.map((track: any) => track.coordinates as Coordinate[]),
+
+  const map = createMap('map', {
+    initialBounds: configBounds,
+    center: cityConfig.map.center,
+    zoom: cityConfig.map.zoom,
+    pitch: cityConfig.map.pitch,
+    bearing: cityConfig.map.bearing,
+    attribution: `© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ${cityConfig.attribution.licenseText}`,
+  });
+  (window as any).__map = map;
+  (window as any).map = map;
+
+  const [linesRes, stationsRes, tracksRes, rollingStockDb] = await Promise.all([
+    fetch(dataUrl(`${dataDir}/lines.json`)),
+    fetch(dataUrl(`${dataDir}/stations.json`)),
+    fetch(dataUrl(`${dataDir}/tracks.json`)),
+    loadRollingStock(dataUrl(`${dataDir}/rolling-stock.json`)),
   ]);
-  const mapMaxBounds = networkBounds ? expandBounds(networkBounds) : undefined;
+
+  lines = await linesRes.json();
+  const stations: StationMetadata[] = await stationsRes.json();
+  const tracks: TrackItem[] = await tracksRes.json();
+  let laddersData: Record<string, any> = {};
+  let rerTracks: any[] = [];
+  let shapesMap = new Map<string, any>();
+  const stationRankings = null;
+
+  const metroBounds = configBounds ?? boundsFromPolylines(tracks.map((track) => track.coordinates));
+  let networkBounds = metroBounds;
+  const mapMaxBounds = networkBounds ? expandBounds(networkBounds, 40) : undefined;
+  if (mapMaxBounds) {
+    try {
+      map.setMaxBounds(mapMaxBounds);
+    } catch {
+      // Ignore in mocked maps
+    }
+  }
 
   console.log(
-    `[app] Loaded ${lines.length} lines, ${stations.length} stations, ${tracks.length} tracks`
+    `[app] Fast-boot loaded ${lines.length} lines, ${stations.length} stations, ${tracks.length} tracks`
   );
 
-  // DOM Elements
-  const mapEl = document.getElementById('map')!;
-  const tooltipEl = document.getElementById('tooltip')!;
-  // 2. Initialize Simulation Engine (pure theoretical by default, or reading server relay snapshot)
+  // 2. Instantiate Simulation Engine (heavy schedule.json & shapes.bin hydrate in Phase 2 off-thread)
   engine = new BrowserSubwayEngine(cityConfig, createRealtimeAdapter(cityConfig));
-  await engine.initialize(lines, shapesMap);
   const demoRer = new URLSearchParams(window.location.search).get('demo-rer');
   const demoRerColors: Record<string, { colorHex: string; textColorHex: string }> = {
-    A: { colorHex: '#EB2132', textColorHex: '#FFFFFF' },
-    B: { colorHex: '#5091CB', textColorHex: '#FFFFFF' },
-    C: { colorHex: '#FFCC30', textColorHex: '#000000' },
-    D: { colorHex: '#008B5B', textColorHex: '#FFFFFF' },
-    E: { colorHex: '#B94E9A', textColorHex: '#FFFFFF' },
+    A: { colorHex: '#E3051C', textColorHex: '#FFFFFF' },
+    B: { colorHex: '#5291CE', textColorHex: '#FFFFFF' },
+    C: { colorHex: '#FFCE00', textColorHex: '#25303B' },
+    D: { colorHex: '#00814F', textColorHex: '#FFFFFF' },
+    E: { colorHex: '#C04191', textColorHex: '#FFFFFF' },
   };
   const createDemoRerTrain = (line: string) => {
     const color = demoRerColors[line];
@@ -240,29 +213,6 @@ async function bootstrap() {
   };
   (window as any).__engine = engine;
   let isRealtimeEnabled = false;
-
-  // 3. Initialize MapLibre
-  const map = createMap('map', {
-    initialBounds:
-      metroBounds ||
-      networkBounds ||
-      (cityConfig.map.bounds
-        ? Array.isArray(cityConfig.map.bounds[0])
-          ? (cityConfig.map.bounds as [[number, number], [number, number]])
-          : ([
-              [cityConfig.map.bounds[0], cityConfig.map.bounds[1]],
-              [cityConfig.map.bounds[2], cityConfig.map.bounds[3]],
-            ] as [[number, number], [number, number]])
-        : undefined),
-    maxBounds: mapMaxBounds,
-    center: cityConfig.map.center,
-    zoom: cityConfig.map.zoom,
-    pitch: cityConfig.map.pitch,
-    bearing: cityConfig.map.bearing,
-    attribution: `© <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> · ${cityConfig.attribution.licenseText}`,
-  });
-  (window as any).__map = map;
-  (window as any).map = map;
 
   // --- Mention légale MapLibre (LOT 1, point 2) -----------------------------
   // Le contrôle d'attribution est posé dans le bas-droite de la carte (créé
@@ -296,10 +246,18 @@ async function bootstrap() {
     const dockEl = document.getElementById('dock');
     const dockRect = dockEl && dockEl.offsetWidth > 0 ? dockEl.getBoundingClientRect() : null;
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const top = (header?.height || 56) + 28;
-    const right = 40;
-    const bottom = isMobile ? (dockRect?.height || 0) + 40 : 40;
-    const left = isMobile ? 40 : (dockRect?.width || 0) + 40;
+    const sheetEl = isMobile
+      ? (document.querySelector('[data-mobile-sheet]') as HTMLElement | null)
+      : null;
+    const sheetAttrH = Number(sheetEl?.dataset.sheetHeight || 0);
+    const sheetRectH = sheetEl ? sheetEl.getBoundingClientRect().height : 0;
+    const mobileBottomH = Math.max(sheetAttrH, sheetRectH, dockRect?.height || 0);
+    const top = isMobile ? 64 : (header?.height || 56) + 28;
+    const right = isMobile ? 24 : 40;
+    const bottom = isMobile
+      ? Math.min(Math.round(window.innerHeight * 0.65), Math.round(mobileBottomH) + 24)
+      : 40;
+    const left = isMobile ? 24 : (dockRect?.width || 0) + 40;
     return { top, right, bottom, left };
   };
 
@@ -313,6 +271,17 @@ async function bootstrap() {
   let isRecenterVisible = false;
 
   const fitMetroNetwork = (duration = 750) => {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      map.flyTo({
+        center: cityConfig.map.center,
+        zoom: Math.max(11.8, (cityConfig.map.zoom ?? 12.2) - 0.3),
+        pitch: cityConfig.map.pitch ?? 30,
+        bearing: cityConfig.map.bearing ?? 0,
+        duration,
+      });
+      return;
+    }
     const initialBounds = metroBounds || networkBounds;
     if (!initialBounds) return;
     map.fitBounds(initialBounds, {
@@ -433,10 +402,19 @@ async function bootstrap() {
     if (!parisRideHandle) return;
     parisRideHandle.dispose();
     parisRideHandle = null;
+    const uiRoot = document.getElementById('ui-root');
+    if (uiRoot) uiRoot.style.display = '';
+    engine.setRenderContext({ suspended: document.hidden });
     if (latestRenderedTrains.size > 0) {
       deckOverlay.setTrains(Array.from(latestRenderedTrains.values()), true);
     }
   };
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      engine.setRenderContext({ suspended: document.hidden || Boolean(parisRideHandle) });
+    });
+  }
 
   const openParisRideMode = async (opts?: {
     initialLine?: string;
@@ -447,11 +425,16 @@ async function bootstrap() {
   }) => {
     if (cityConfig.id !== 'paris' || parisRideHandle || parisRideOpening) return;
     parisRideOpening = true;
+    uiStore.patch({ parisRideLoading: true });
     try {
       const { mountParisRideView } = await import('./paris_ride_view');
       if (parisRideHandle) return;
+      const uiRoot = document.getElementById('ui-root');
+      if (uiRoot) uiRoot.style.display = 'none';
+      engine.setRenderContext({ suspended: true });
       parisRideHandle = mountParisRideView(document.body, {
         ...opts,
+        getStationDepartures: (stationName: string) => engine.getStationDepartures(stationName, 2),
         onExit: () => {
           closeParisRideMode();
         },
@@ -461,6 +444,7 @@ async function bootstrap() {
       }
     } finally {
       parisRideOpening = false;
+      uiStore.patch({ parisRideLoading: false });
     }
   };
 
@@ -495,11 +479,25 @@ async function bootstrap() {
     followCamera?.stopFollow();
     deckOverlay.setSelectedTrain(null);
     edinburghHandle?.focusStation(station.name);
+    const isMobileVp = typeof window !== 'undefined' && window.innerWidth < 768;
+    const dockEl = !isMobileVp ? document.getElementById('dock') : null;
+    const leftDockW = dockEl && dockEl.offsetWidth > 0 ? Math.round(dockEl.getBoundingClientRect().width) : 0;
+    const mobileBottomPad = isMobileVp
+      ? Math.min(Math.round(window.innerHeight * 0.48), 408)
+      : 32;
+    const targetZoom = zoom20
+      ? isMobileVp
+        ? 17.6
+        : 18.8
+      : Math.max(map.getZoom(), isMobileVp ? 17.0 : 18.0);
     map.flyTo({
       center: station.coordinates,
-      zoom: zoom20 ? 19.2 : Math.max(map.getZoom(), 16.2),
-      pitch: zoom20 ? 52 : map.getPitch(),
-      duration: 900,
+      zoom: targetZoom,
+      pitch: zoom20 ? 54 : Math.max(map.getPitch(), 46),
+      padding: isMobileVp
+        ? { top: 72, bottom: mobileBottomPad, left: 16, right: 16 }
+        : { top: 76, bottom: 36, left: leftDockW > 0 ? leftDockW + 32 : 24, right: 380 },
+      duration: 850,
     });
     const departures = engine.getStationDepartures(station.name, 2);
     uiStore.setSelectedStation(station, departures);
@@ -586,7 +584,7 @@ async function bootstrap() {
           return;
         }
         const servedLines = (st.lines || [])
-          .map((lid) => lines.find((l) => l.id === lid))
+          .map((lid) => lines.find((l) => l.id === lid || l.short_name === lid))
           .filter((l): l is LineMetadata => !!l);
 
         const badgesHtml = servedLines
@@ -603,19 +601,9 @@ async function bootstrap() {
               ).outerHTML
           )
           .join('');
-        const dayKey =
-          new Date().getDay() === 0 ? 'sunday' : new Date().getDay() === 6 ? 'saturday' : 'weekday';
-        const serviceCount = st.service_counts?.[dayKey] ?? 0;
-        const serviceRank = st.service_rank?.[dayKey];
-        const serviceHtml =
-          serviceCount > 0
-            ? `<div class="tooltip-service" title="Passages planifiés dans le GTFS, tous sens et toutes lignes confondus."><span>Desserte théorique</span><strong>${serviceCount.toLocaleString('fr-FR')} passages/jour · rang ${serviceRank ?? '—'}</strong></div>`
-            : '';
-
         tooltipEl.innerHTML = `
           <div class="tooltip-name">${escapeHtml(st.name)}</div>
           <div class="tooltip-lines">${badgesHtml}</div>
-          ${serviceHtml}
         `;
         tooltipEl.style.left = `${info.x}px`;
         tooltipEl.style.top = `${info.y}px`;
@@ -649,18 +637,10 @@ async function bootstrap() {
         }
 
         let confBadge = '';
-        if (tr.conf === 'measured') {
-          confBadge =
-            '<span class="badge-conf badge-conf--measured" title="Passage mesuré au quai par PRIM">Arrêt mesuré (PRIM)</span>';
-        } else if (tr.conf === 'bracketed') {
-          confBadge =
-            '<span class="badge-conf badge-conf--bracketed" title="Encadré par deux passages mesurés">Encadré (2 mesures)</span>';
-        } else if (tr.conf === 'extrapolated') {
-          confBadge =
-            '<span class="badge-conf badge-conf--extrapolated" title="Extrapolation au-delà de la dernière mesure">Extrapolé</span>';
+        if (tr.conf === 'measured' || tr.conf === 'bracketed') {
+          confBadge = '<span class="badge-conf badge-conf--measured">Direct</span>';
         } else {
-          confBadge =
-            '<span class="badge-conf badge-conf--scheduled" title="Horaire théorique GTFS sans mesure directe">Théorique GTFS</span>';
+          confBadge = '<span class="badge-conf badge-conf--scheduled">Théorique</span>';
         }
 
         const trainBadge = lineBadge(
@@ -676,7 +656,7 @@ async function bootstrap() {
         const speedHtml =
           cityConfig.id === 'paris' && isParisMetroLine(tr.lineName)
             ? ''
-            : `<span>Vitesse : <strong>${Number(tr.spd || 0).toLocaleString('fr-FR')} km/h</strong></span>`;
+            : `<span><strong>${Number(tr.spd || 0).toLocaleString('fr-FR')} km/h</strong></span>`;
 
         tooltipEl.innerHTML = `
           <div class="train-tooltip-header">
@@ -684,14 +664,11 @@ async function bootstrap() {
             <span class="train-tooltip-dest">${escapeHtml(tr.dest)}</span>
           </div>
           <div class="train-tooltip-body">
-            <div>Prochain arrêt : <strong>${escapeHtml(tr.next || '—')}</strong></div>
+            <div>${escapeHtml(tr.next || '—')}</div>
             <div class="train-tooltip-meta">
               ${speedHtml}
-              <span>Écart : ${delayText}</span>
+              <span>${delayText}</span>
               ${confBadge}
-            </div>
-            <div class="train-tooltip-hint" style="margin-top: 0.35rem; font-size: 0.72rem; color: #94a3b8; display: flex; align-items: center; gap: 4px;">
-              <span>👆</span><span>Cliquer pour suivre en 3D</span>
             </div>
           </div>
         `;
@@ -707,19 +684,26 @@ async function bootstrap() {
     },
     onLineSelect: (lineId) => selectLine(lineId, '0'),
     onBackgroundClick: () => {
-      uiStore.setSelectedStation(null);
-      if (!activeLineId && !trackedTrain) return;
+      const hadSelectedStation = Boolean(uiStore.getSnapshot().selectedStation);
       const wasFollowingTrain = Boolean(trackedTrain && followCamera?.isFollowing());
+      const hadSelection = Boolean(hadSelectedStation || activeLineId || trackedTrain || wasFollowingTrain);
+      const wasZoomedIn = map.getZoom() > 13.2;
       hideTooltip();
-      followCamera?.stopFollow();
-      activeLineId = null;
-      trackedTrain = null;
-      deckOverlay.setSelectedLine(null);
-      deckOverlay.setSelectedTrain(null);
-      engine.setFocusedLine(null);
-      router.setRoute(null, '0', cityConfig.slug);
-      uiStore.patch({ activeLineId: null, activeDir: '0', isFollowing: false, trackedTrain: null });
-      if (!wasFollowingTrain) fitMetroNetwork();
+      if (hadSelection) {
+        uiStore.setSelectedStation(null);
+        followCamera?.stopFollow();
+        activeLineId = null;
+        trackedTrain = null;
+        deckOverlay.setSelectedLine(null);
+        deckOverlay.setSelectedTrain(null);
+        engine.setFocusedLine(null);
+        router.setRoute(null, '0', cityConfig.slug);
+        uiStore.patch({ activeLineId: null, activeDir: '0', isFollowing: false, trackedTrain: null });
+        updateRecenterState();
+        return;
+      }
+      if (!wasZoomedIn) return;
+      fitMetroNetwork();
       updateRecenterState();
     },
   });
@@ -761,13 +745,27 @@ async function bootstrap() {
       if (lineStations.length > 0) {
         const lngs = lineStations.map((s) => s.coordinates[0]);
         const lats = lineStations.map((s) => s.coordinates[1]);
-        map.fitBounds(
-          [
-            [Math.min(...lngs), Math.min(...lats)],
-            [Math.max(...lngs), Math.max(...lats)],
-          ],
-          { padding: mapPadding(), maxZoom: 14.5, duration: 900 }
-        );
+        const bounds: [[number, number], [number, number]] = [
+          [Math.min(...lngs), Math.min(...lats)],
+          [Math.max(...lngs), Math.max(...lats)],
+        ];
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (activeLineId !== lineId) return;
+            const cam = map.cameraForBounds(bounds, { padding: mapPadding(), maxZoom: 14.5 });
+            if (cam && typeof cam.zoom === 'number') {
+              map.flyTo({
+                center: cam.center,
+                zoom: Math.max(10.8, Math.min(14.5, cam.zoom)),
+                bearing: cam.bearing ?? map.getBearing(),
+                pitch: map.getPitch(),
+                duration: 750,
+              });
+            } else {
+              map.fitBounds(bounds, { padding: mapPadding(), maxZoom: 14.5, duration: 750 });
+            }
+          });
+        });
       }
     }
     updateRecenterState();
@@ -788,7 +786,13 @@ async function bootstrap() {
 
   function setBuildingsEnabled(active: boolean) {
     setBuildingsVisible(map, active);
+    deckOverlay.setBuildingsVisible(active);
     uiStore.patch({ buildingsVisible: active });
+  }
+
+  function setXrayEnabled(active: boolean) {
+    deckOverlay.setXrayMode(active);
+    uiStore.patch({ xrayMode: active });
   }
 
   const THEME_PREF_KEY = 'paris-subway-theme-pref';
@@ -803,12 +807,21 @@ async function bootstrap() {
   }
 
   function applyResolvedTheme(theme: 'dark' | 'light') {
+    document.documentElement.dataset.themeSwitching = 'true';
     document.documentElement.dataset.theme = theme;
     document.documentElement.classList.toggle('dark', theme === 'dark');
     uiStore.patch({ theme });
     applyMapTheme(map, theme);
     applyFaienceBasemap(map, theme === 'dark' ? 'nuit' : 'jour');
+    const xray = uiStore.getSnapshot().xrayMode;
+    const baseMix = computeSubsurfaceMix(map.getPitch(), Boolean(followCamera?.isFollowing()));
+    setSubsurfaceMapMode(map, xray ? Math.max(baseMix, 1) : baseMix, theme, true, xray);
     deckOverlay.setTheme(theme);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        delete document.documentElement.dataset.themeSwitching;
+      });
+    });
   }
 
   function applyThemePreference(pref: ThemePreference) {
@@ -837,8 +850,11 @@ async function bootstrap() {
         kind: 'user',
       });
     }
+    const displayCity = cityConfig.displayName
+      ? cityConfig.displayName.charAt(0).toUpperCase() + cityConfig.displayName.slice(1)
+      : 'Paris';
     const fallbackPoint: RoutePoint = {
-      label: `Centre (${cityConfig.displayName})`,
+      label: `Centre (${displayCity})`,
       subtitle: 'Position par défaut (géolocalisation indisponible)',
       coordinates: cityConfig.map.center,
       kind: 'place',
@@ -1037,7 +1053,17 @@ async function bootstrap() {
   document.documentElement.classList.toggle('dark', initialTheme === 'dark');
 
   const onStyleLoadFaience = () => {
-    applyFaienceBasemap(map, uiStore.getSnapshot().theme === 'dark' ? 'nuit' : 'jour');
+    const snap = uiStore.getSnapshot();
+    const activeTheme = snap.theme;
+    applyFaienceBasemap(map, activeTheme === 'dark' ? 'nuit' : 'jour');
+    const baseMix = computeSubsurfaceMix(map.getPitch(), Boolean(followCamera?.isFollowing()));
+    setSubsurfaceMapMode(
+      map,
+      snap.xrayMode ? Math.max(baseMix, 1) : baseMix,
+      activeTheme,
+      true,
+      snap.xrayMode
+    );
   };
   if (map.isStyleLoaded()) onStyleLoadFaience();
   map.on('style.load', onStyleLoadFaience);
@@ -1050,7 +1076,11 @@ async function bootstrap() {
 
   uiStore.patch({
     cityConfig,
-    cities: CITIES.map((c) => ({ id: c.id, slug: c.slug, displayName: c.displayName })),
+    cities: CITIES.filter((c) => c.id === 'paris').map((c) => ({
+      id: c.id,
+      slug: c.slug,
+      displayName: c.displayName,
+    })),
     lines,
     stations,
     ladders: laddersData,
@@ -1066,7 +1096,7 @@ async function bootstrap() {
   uiStore.setHandlers({
     onCitySelect: (cityId: string) => {
       router.setCity(cityId);
-      window.location.href = `/${cityId}`;
+      window.location.href = `/${encodeURIComponent(cityId)}`;
     },
     onLineSelect: (lineId, dir = '0') => selectLine(lineId, dir),
     onLineDirChange: (lineId, dir) => {
@@ -1118,6 +1148,31 @@ async function bootstrap() {
     },
     onToggleBuildings: () => {
       setBuildingsEnabled(!uiStore.getSnapshot().buildingsVisible);
+    },
+    onToggleXray: () => {
+      setXrayEnabled(!uiStore.getSnapshot().xrayMode);
+    },
+    onFocusMapCamera: ({ center, zoom, pitch, bearing, highlightLineId }) => {
+      followCamera?.stopFollow();
+      if (highlightLineId !== undefined) {
+        const lineObj = highlightLineId
+          ? lines.find(
+              (l) =>
+                l.id === highlightLineId ||
+                l.short_name.toLowerCase() === highlightLineId.toLowerCase()
+            )
+          : null;
+        deckOverlay.setSelectedLine(lineObj ? lineObj.id : null);
+        engine.setFocusedLine(lineObj ? lineObj.id : null);
+        uiStore.patch({ activeLineId: lineObj ? lineObj.id : null });
+      }
+      map.flyTo({
+        center,
+        zoom,
+        pitch: pitch ?? map.getPitch(),
+        bearing: bearing ?? map.getBearing(),
+        duration: 950,
+      });
     },
     onZoomIn: () => map.zoomIn({ duration: 240 }),
     onZoomOut: () => map.zoomOut({ duration: 240 }),
@@ -1212,8 +1267,13 @@ async function bootstrap() {
 
   const loader = document.getElementById('app-loader');
   const hideLoader = () => loader?.classList.add('is-hidden');
-  if (map.loaded()) hideLoader();
-  else map.once('load', hideLoader);
+  // Hide loader as soon as map style loads OR after 450 ms max so UI is immediately interactive
+  if (map.loaded() || map.isStyleLoaded()) hideLoader();
+  else {
+    map.once('style.load', hideLoader);
+    map.once('load', hideLoader);
+    setTimeout(hideLoader, 450);
+  }
 
   if (import.meta.env.DEV) {
     const lineLikes: LineLike[] = lines.map((l) => ({
@@ -1336,31 +1396,20 @@ async function bootstrap() {
     ctxMenuEl = menu;
   });
 
-  // Daytime PRIM Live auto-start for Paris service hours (05:30 - 01:15 Europe/Paris) unless ?rt=0
+  // PRIM disabled by default for now (explicit ?rt=1 only)
   const rtOverride = new URLSearchParams(window.location.search).get('rt');
   if (
     cityConfig.id === 'paris' &&
     cityConfig.realtime.provider === 'prim' &&
     !demoRer &&
-    rtOverride !== '0'
+    rtOverride === '1'
   ) {
-    const parisHourStr = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Europe/Paris',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }).format(new Date());
-    const [hh, mm] = parisHourStr.split(':').map(Number);
-    const mins = (hh || 0) * 60 + (mm || 0);
-    const inDaytimeService = mins >= 5 * 60 + 30 || mins <= 75;
-    if (inDaytimeService || rtOverride === '1') {
-      isRealtimeEnabled = true;
-      engine.startRealtime();
-      uiStore.patch({
-        realtimeEnabled: true,
-        realtimeState: { active: true, delays: {} },
-      });
-    }
+    isRealtimeEnabled = true;
+    engine.startRealtime();
+    uiStore.patch({
+      realtimeEnabled: true,
+      realtimeState: { active: true, delays: {} },
+    });
   }
 
   // Register offline PWA service worker in production
@@ -1380,6 +1429,9 @@ async function bootstrap() {
     updateRecenterState();
 
     map.addControl(deckOverlay.getOverlay() as any);
+    deckOverlay.setCityId(cityConfig.id);
+    deckOverlay.setBuildingsVisible(areBuildingsVisible(map));
+    deckOverlay.setMap(map);
     deckOverlay.setData({
       lines,
       stations,
@@ -1388,7 +1440,9 @@ async function bootstrap() {
       shapes: shapesMap,
       rollingStockDb,
     });
-    deckOverlay.setRerData(rerTracks);
+    if (rerTracks.length > 0) {
+      deckOverlay.setRerData(rerTracks);
+    }
     const initialDemoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
     if (initialDemoTrain) {
       latestRenderedTrains = new Map([[initialDemoTrain.id, initialDemoTrain]]);
@@ -1398,7 +1452,7 @@ async function bootstrap() {
         totalTrainCount: 1,
       });
     }
-    deckOverlay.startTrackReveal(1200);
+    deckOverlay.startTrackReveal(420);
 
     const syncOverlayView = () => {
       const b = map.getBounds();
@@ -1411,9 +1465,10 @@ async function bootstrap() {
           ]
         : null;
       deckOverlay.setViewState(zoom, center, boundsTuple, map.getPitch());
-      if (!followCamera?.isFollowing()) {
-        setBuildingsXrayMode(map, false);
-      }
+      engine.setRenderContext({
+        zoom,
+        isFollowing: Boolean(followCamera?.isFollowing()),
+      });
     };
     map.on('move', syncOverlayView);
     syncOverlayView();
@@ -1459,80 +1514,142 @@ async function bootstrap() {
     }
   });
 
-  // 10. Start Autonomous Subway Simulation Engine Loop
-  let lastDomUpdateTime = 0;
-  let lastDistanceDomUpdate = 0;
-  let lastServiceStatusKey = '';
-  engine.start({
-    onTick: (trains, activeCount) => {
-      const demoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
-      if (demoTrain) {
-        trains = [demoTrain];
-        activeCount = 1;
-      }
-      const serviceStatus = engine.getServiceStatus();
-      const serviceStatusKey = `${serviceStatus.state}:${Math.floor(serviceStatus.secondsUntilFirst / 60)}`;
-      const now = performance.now();
-
-      if (now - lastDistanceDomUpdate >= 1000) {
-        lastDistanceDomUpdate = now;
-        uiStore.patch({
-          totalTrainCount: activeCount,
-          dailyKm: engine.getServiceDistanceKm(),
-          ...(serviceStatusKey !== lastServiceStatusKey ? { serviceStatus } : {}),
-        });
-        lastServiceStatusKey = serviceStatusKey;
-      }
-
-      if (now - lastDomUpdateTime >= 1000) {
-        lastDomUpdateTime = now;
-        uiStore.patch({ trains });
-        refreshSelectedStationDepartures();
-        if (followCamera?.isFollowing() && trackedTrain) {
-          const freshTrain = latestRenderedTrains.get(trackedTrain.id) ?? trackedTrain;
-          trackedTrain = freshTrain;
-          updateFollowHud(freshTrain);
+  // Phase 2 (Non-blocking background hydration): fetch ladders, RER lines, shapes, and schedule.json
+  // off the main thread via Web Worker, then start live simulation seamlessly.
+  const startSimulationLoop = () => {
+    let lastDomUpdateTime = 0;
+    let lastDistanceDomUpdate = 0;
+    let lastServiceStatusKey = '';
+    engine.start({
+      onTick: (trains, activeCount) => {
+        if (parisRideHandle) return;
+        const demoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
+        if (demoTrain) {
+          trains = [demoTrain];
+          activeCount = 1;
         }
-      }
-    },
-    onRender: (trains) => {
-      const demoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
-      if (demoTrain) {
-        trains = [demoTrain];
-      }
-      latestRenderedTrains.clear();
-      for (const train of trains) {
-        latestRenderedTrains.set(train.id, train);
-      }
-      if (parisRideHandle) {
-        parisRideHandle.syncFromSimulation(trains);
-        return;
-      }
-      followCamera?.onSimulationFrame();
-      deckOverlay.setTrains(trains, Boolean(followCamera?.isFollowing()));
-      edinburghHandle?.updateSimulationTrains(trains);
-    },
-    onPrimStatus: (status) => {
-      const nextTraffic =
-        status && typeof status === 'object' && 'trafficByLine' in status && status.trafficByLine
-          ? status.trafficByLine
-          : engine.getRealtimeAdapter()?.getTrafficByLine?.();
-      uiStore.patch({
-        ...(nextTraffic ? { trafficByLine: nextTraffic } : {}),
-        ...(isRealtimeEnabled ? { realtimeState: status } : {}),
+        const serviceStatus = engine.getServiceStatus();
+        const serviceStatusKey = `${serviceStatus.state}:${Math.floor(serviceStatus.secondsUntilFirst / 60)}`;
+        const now = performance.now();
+
+        if (now - lastDistanceDomUpdate >= 1000) {
+          lastDistanceDomUpdate = now;
+          uiStore.patch({
+            totalTrainCount: activeCount,
+            dailyKm: engine.getServiceDistanceKm(),
+            ...(serviceStatusKey !== lastServiceStatusKey ? { serviceStatus } : {}),
+          });
+          lastServiceStatusKey = serviceStatusKey;
+        }
+
+        if (now - lastDomUpdateTime >= 1000) {
+          lastDomUpdateTime = now;
+          if (
+            latestRenderedTrains.size === 0 ||
+            window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+          ) {
+            latestRenderedTrains.clear();
+            for (const train of trains) {
+              latestRenderedTrains.set(train.id, train);
+            }
+            deckOverlay.setTrains(trains, Boolean(followCamera?.isFollowing()));
+          }
+          uiStore.patch({ trains });
+          refreshSelectedStationDepartures();
+          if (followCamera?.isFollowing() && trackedTrain) {
+            const freshTrain = latestRenderedTrains.get(trackedTrain.id) ?? trackedTrain;
+            trackedTrain = freshTrain;
+            updateFollowHud(freshTrain);
+          }
+        }
+      },
+      onRender: (trains) => {
+        const demoTrain = demoRer ? createDemoRerTrain(demoRer) : null;
+        if (demoTrain) {
+          trains = [demoTrain];
+        }
+        latestRenderedTrains.clear();
+        for (const train of trains) {
+          latestRenderedTrains.set(train.id, train);
+        }
+        if (parisRideHandle) {
+          parisRideHandle.syncFromSimulation(trains);
+          return;
+        }
+        followCamera?.onSimulationFrame();
+        deckOverlay.setTrains(trains, Boolean(followCamera?.isFollowing()));
+        edinburghHandle?.updateSimulationTrains(trains);
+      },
+      onPrimStatus: (status) => {
+        const nextTraffic =
+          status && typeof status === 'object' && 'trafficByLine' in status && status.trafficByLine
+            ? status.trafficByLine
+            : engine.getRealtimeAdapter()?.getTrafficByLine?.();
+        uiStore.patch({
+          ...(nextTraffic ? { trafficByLine: nextTraffic } : {}),
+          ...(isRealtimeEnabled ? { realtimeState: status } : {}),
+        });
+      },
+      onRealtimeStatus: (status) => {
+        const nextTraffic =
+          status && typeof status === 'object' && 'trafficByLine' in status && status.trafficByLine
+            ? status.trafficByLine
+            : engine.getRealtimeAdapter()?.getTrafficByLine?.();
+        uiStore.patch({
+          ...(nextTraffic ? { trafficByLine: nextTraffic } : {}),
+          ...(isRealtimeEnabled ? { realtimeState: status } : {}),
+        });
+      },
+    });
+  };
+
+  void (async () => {
+    // Load line_ladders.json & rer_lines.json in parallel with shapes + schedule worker
+    const laddersPromise = fetch(dataUrl(`${dataDir}/line_ladders.json`))
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((ld) => {
+        laddersData = ld;
+        uiStore.patch({ ladders: ld });
+        deckOverlay.setLineLadders(ld);
+      })
+      .catch(() => {});
+
+    const rerLinesPromise = rerLinesPath
+      ? fetch(dataUrl(rerLinesPath))
+          .then((r) => (r.ok ? r.json() : []))
+          .then((rt) => {
+            rerTracks = rt;
+            deckOverlay.setRerData(rt);
+            networkBounds = boundsFromPolylines([
+              ...tracks.map((track) => track.coordinates),
+              ...rt.map((track: any) => track.coordinates as Coordinate[]),
+            ]);
+            if (networkBounds) {
+              try {
+                map.setMaxBounds(expandBounds(networkBounds));
+              } catch {
+                // Ignore in mocked maps
+              }
+            }
+          })
+          .catch(() => {})
+      : Promise.resolve();
+
+    const shapesAndEnginePromise = loadShapes(dataUrl(`${dataDir}/shapes.bin`))
+      .then(async (loadedShapes) => {
+        shapesMap = loadedShapes;
+        deckOverlay.setShapes(loadedShapes);
+        await engine.initialize(lines, loadedShapes);
+        uiStore.patch({ serviceStatus: engine.getServiceStatus() });
+        refreshSelectedStationDepartures();
+        startSimulationLoop();
+      })
+      .catch((err) => {
+        console.error('[app] Background simulation hydration failed:', err);
       });
-    },
-    onRealtimeStatus: (status) => {
-      const nextTraffic =
-        status && typeof status === 'object' && 'trafficByLine' in status && status.trafficByLine
-          ? status.trafficByLine
-          : engine.getRealtimeAdapter()?.getTrafficByLine?.();
-      uiStore.patch({
-        ...(nextTraffic ? { trafficByLine: nextTraffic } : {}),
-        ...(isRealtimeEnabled ? { realtimeState: status } : {}),
-      });
-    },
-  });
+
+    await Promise.all([laddersPromise, rerLinesPromise, shapesAndEnginePromise]);
+  })();
 
   // 11. Edinburgh 3D View (City 3D + Regional Scotland Landscape + Trains)
   if (cityConfig.id === 'edinburgh') {

@@ -7,9 +7,9 @@ import { cx } from './cx';
 export type PositionRame = 'tete' | 'milieu' | 'queue';
 
 const LABEL: Record<PositionRame, string> = {
-  tete: 'Montez en tête de train',
-  milieu: 'Montez au milieu du train',
-  queue: 'Montez en queue de train',
+  tete: 'En tête',
+  milieu: 'Au milieu',
+  queue: 'En queue',
 };
 
 export function VoitureConseillee({
@@ -39,13 +39,24 @@ export function VoitureConseillee({
             ? `M${x + 2.5} 1h${w - 6}q3 0 5 3l2.5 4.5q.5 1.5-.5 2.5l-1 1.5q-1 1-2.5 1H${x + 2.5}q-2 0-2-2V3q0-2 2-2z`
             : `M${x + 2.5} 1h${w - 5}q2 0 2 2v8q0 2-2 2h-${w - 5}q-2 0-2-2V3q0-2 2-2z`;
           return (
-            <path
-              key={i}
-              d={d}
-              fill={on ? 'var(--color-action)' : 'none'}
-              stroke={on ? 'var(--color-action)' : 'var(--color-bord-fort)'}
-              strokeWidth="1.5"
-            />
+            <g key={i}>
+              <path
+                d={d}
+                fill={on ? 'var(--color-action)' : 'var(--color-encart)'}
+                stroke={on ? 'var(--color-action)' : 'var(--color-bord-fort)'}
+                strokeWidth="1.5"
+              />
+              {/* Repère vitre / bandeau émail */}
+              <rect
+                x={x + 4}
+                y={4}
+                width={head ? w - 10 : w - 8}
+                height={3.2}
+                rx={1}
+                fill={on ? 'var(--color-ambre-400)' : 'var(--color-bord-fort)'}
+                opacity={on ? 0.95 : 0.45}
+              />
+            </g>
           );
         })}
       </svg>

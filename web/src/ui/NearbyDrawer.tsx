@@ -1,5 +1,7 @@
 import { RiCloseLine, RiFocus3Line } from '@remixicon/react';
+import { useState } from 'react';
 import { Afficheur, type Passage } from './Afficheur';
+import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button, IconButton } from './Button';
 import { cx } from './cx';
 import { formatNombre } from './format';
@@ -7,7 +9,6 @@ import { LineBadgeChip } from './LineBadgeChip';
 import type { LineRef } from './lines';
 import { Panneau } from './Panneau';
 import { useIsDesktop } from './useMediaQuery';
-import { useSheetSwipe } from './useSheetSwipe';
 
 /**
  * Autour de moi (v2.1). Des rangées, pas des cartes : temps à pied d’abord
@@ -42,59 +43,44 @@ export interface NearbyDrawerProps {
 
 const ERREURS: Record<ErreurPosition, { texte: string; principal: 'reessayer' | 'rechercher' }> = {
   refus: {
-    texte: 'La localisation est bloquée pour ce site. Autorisez-la dans les réglages du navigateur, ou cherchez une station.',
+    texte: 'Localisation refusée.',
     principal: 'rechercher',
   },
   indisponible: {
-    texte: 'Votre position n’a pas pu être déterminée. Vérifiez que la localisation de l’appareil est activée.',
+    texte: 'Position indisponible.',
     principal: 'reessayer',
   },
-  delai: { texte: 'La localisation met trop de temps à répondre. Réessayez, de préférence à découvert.', principal: 'reessayer' },
+  delai: { texte: 'Délai de localisation dépassé.', principal: 'reessayer' },
 };
 
 
 export function NearbyDrawer(p: NearbyDrawerProps) {
   const desktop = useIsDesktop();
   const basse = (p.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
-  const swipe = useSheetSwipe({ enabled: basse, onSwipeDown: p.onClose });
+  const [cran, setCran] = useState<DetentSheet>('moyen');
   const pad = basse ? 'px-4' : 'px-5';
-  return (
-    <Panneau
-      matiere="feuille"
-      as="section"
-      role="dialog"
-      aria-labelledby="autour-titre"
-      className={cx('flex min-h-0 flex-col animate-feuille', basse ? 'max-h-[80dvh] rounded-b-none' : 'max-h-full', p.className)}
-    >
-      {basse && (
-        <div onTouchStart={swipe.onTouchStart} onTouchEnd={swipe.onTouchEnd} className="flex shrink-0 justify-center pt-2 pb-1">
-          <span aria-hidden className="h-1 w-9 rounded-full bg-bord-fort" />
-        </div>
-      )}
-      <div onTouchStart={swipe.onTouchStart} onTouchEnd={swipe.onTouchEnd} className={cx('flex items-start justify-between gap-2', pad, basse ? 'pt-2' : 'pt-5')}>
-        <div>
-          <h2 id="autour-titre" className="text-titre text-encre">Autour de moi</h2>
-          {p.etat === 'pret' && p.precision != null && (
-            <p className="mt-0.5 text-[13px] text-encre-2">Position à {p.precision} m près, temps à pied estimés.</p>
-          )}
-        </div>
+
+  const body = (
+    <>
+      <div className={cx('flex items-center justify-between gap-2', pad, basse ? 'pt-1' : 'pt-4')}>
+        <h2 id="autour-titre" className="text-titre text-encre">Autour</h2>
         <IconButton size="sm" label="Fermer" icon={<RiCloseLine aria-hidden />} onClick={p.onClose} />
       </div>
 
-      <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4', pad, basse ? 'pb-[max(16px,env(safe-area-inset-bottom))]' : 'pb-5')}>
+      <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain pt-3', pad, basse ? 'pb-[max(16px,env(safe-area-inset-bottom))]' : 'pb-5')}>
         {p.etat === 'chargement' && (
-          <p className="carrelage flex items-center justify-center gap-2 rounded-[12px] px-4 py-8 text-[14px] text-encre-2">
-            <RiFocus3Line aria-hidden className="size-5 animate-pulse text-icone-2" />
-            Recherche de votre position…
+          <p className="flex items-center justify-center gap-2 rounded-[12px] bg-encart/60 px-4 py-7 text-[13px] text-encre-2">
+            <RiFocus3Line aria-hidden className="size-4 animate-pulse text-icone-2" />
+            Localisation…
           </p>
         )}
 
         {p.etat === 'erreur' && p.erreur && <Erreur type={p.erreur} onReessayer={p.onReessayer} onRechercher={p.onRechercher} />}
 
         {p.etat === 'pret' && p.stations.length === 0 && (
-          <div className="carrelage rounded-[12px] px-4 py-7 text-center">
-            <p className="text-[14px] text-encre-2">Aucune station à moins de 15 minutes à pied.</p>
-            <Button className="mt-3" onClick={p.onRechercher}>Rechercher une station</Button>
+          <div className="rounded-[12px] bg-encart/60 px-4 py-6 text-center">
+            <p className="text-[13px] text-encre-2">Aucune station proche.</p>
+            <Button className="mt-3" size="sm" onClick={p.onRechercher}>Rechercher</Button>
           </div>
         )}
 
@@ -105,7 +91,7 @@ export function NearbyDrawer(p: NearbyDrawerProps) {
                 <button
                   type="button"
                   onClick={() => p.onStation(s.id)}
-                  className="-mx-2 grid w-[calc(100%+16px)] grid-cols-[48px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-3 text-start outline-none transition-colors duration-150 ease-signal hover:bg-encart focus-visible:outline-2 focus-visible:outline-focus"
+                  className="-mx-2 grid min-h-[56px] w-[calc(100%+16px)] grid-cols-[48px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-3 text-start outline-none transition-colors duration-150 ease-signal hover:bg-encart focus-visible:outline-2 focus-visible:outline-focus"
                 >
                   <span className="text-center">
                     <span className="chiffres block text-[22px] font-bold leading-none text-encre">{s.minutes}</span>
@@ -125,6 +111,32 @@ export function NearbyDrawer(p: NearbyDrawerProps) {
           </ul>
         )}
       </div>
+    </>
+  );
+
+  if (basse) {
+    return (
+      <BottomSheet
+        cran={cran}
+        onCran={setCran}
+        onDismiss={p.onClose}
+        ariaLabel="Stations autour de moi"
+        className={p.className}
+      >
+        {body}
+      </BottomSheet>
+    );
+  }
+
+  return (
+    <Panneau
+      matiere="feuille"
+      as="section"
+      role="dialog"
+      aria-labelledby="autour-titre"
+      className={cx('flex max-h-full min-h-0 flex-col animate-feuille', p.className)}
+    >
+      {body}
     </Panneau>
   );
 }

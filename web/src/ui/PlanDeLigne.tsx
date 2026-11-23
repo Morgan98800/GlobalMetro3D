@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { cx } from './cx';
 import { LineBadgeChip } from './LineBadgeChip';
+import { Poussoir } from './plan-lumineux/PlanLumineux';
 import type { LineRef } from './lines';
 
 /**
@@ -40,13 +41,11 @@ export function PlanDeLigne({ couleur, arrets, replier = true, className }: Plan
           return (
             <li key="replie" className="relative grid grid-cols-[28px_minmax(0,1fr)]">
               <Rail couleur={couleur} pointille />
-              <button
-                type="button"
-                onClick={() => setOuvert(true)}
-                className="col-start-2 my-1 justify-self-start rounded-[6px] px-1.5 py-1 text-[13px] font-semibold text-encre-2 hover:bg-encart hover:text-encre outline-none focus-visible:outline-2 focus-visible:outline-focus"
-              >
-                {middle.length} arrêts
-              </button>
+              <div className="col-start-2 my-1 justify-self-start">
+                <Poussoir variante="discret" taille="sm" onClick={() => setOuvert(true)}>
+                  {middle.length} arrêts
+                </Poussoir>
+              </div>
             </li>
           );
         }
@@ -113,75 +112,114 @@ export interface PlanHorizontalProps {
 }
 
 export function PlanDeLigneHorizontal({ couleur, arrets, index, progression = 0, onSelectStop, className }: PlanHorizontalProps) {
-  // Thème-agnostique : jetons d’encre et de surface, donc lisible sur faïence comme sur verre.
+  // Fenêtre glissante façon bandeau DILIDAM : max 5 arrêts lisibles en entier autour de la rame.
   const n = arrets.length;
-  const pos = n > 1 ? ((index + Math.min(1, Math.max(0, progression))) / (n - 1)) * 100 : 0;
+  const maxVisible = 5;
+  const clampedIdx = Math.max(0, Math.min(Math.max(0, n - 1), index));
+  const clampedProg = Math.min(1, Math.max(0, progression));
+
+  let start = 0;
+  let end = n;
+  if (n > maxVisible) {
+    start = Math.max(0, Math.min(n - maxVisible, clampedIdx - 1));
+    end = start + maxVisible;
+  }
+  const visible = arrets.slice(start, end);
+  const vCount = visible.length;
+  const localPos =
+    vCount > 1
+      ? Math.max(0, Math.min(100, ((clampedIdx - start + clampedProg) / (vCount - 1)) * 100))
+      : 0;
+
   return (
     <div className={cx('relative pt-1', className)}>
+      {n > maxVisible && (
+        <div className="mb-1 flex items-center justify-between text-[11px] leading-[14px] text-encre-3">
+          <span>{start > 0 ? `← ${start} avant` : 'Origine'}</span>
+          <span className="chiffres font-semibold text-encre-2">
+            Arrêt {clampedIdx + 1} / {n}
+          </span>
+          <span>{end < n ? `${n - end} après →` : 'Terminus'}</span>
+        </div>
+      )}
       <div className="relative mx-2 h-[14px]">
         <span className="absolute inset-x-0 top-[5px] h-[4px] rounded-full bg-encre/15" />
-        <span className="absolute left-0 top-[5px] h-[4px] rounded-full" style={{ width: `${pos}%`, backgroundColor: couleur }} />
-        {arrets.map((a, i) =>
-          onSelectStop ? (
+        <span
+          className="absolute inset-x-0 top-[5px] h-[4px] origin-left rounded-full transition-transform duration-500 ease-rame"
+          style={{ transform: `scaleX(${localPos / 100})`, backgroundColor: couleur }}
+        />
+        {visible.map((a, vi) => {
+          const gi = start + vi;
+          const passed = gi <= clampedIdx;
+          const isNext = gi === clampedIdx + 1;
+          const leftPct = `${(vi / Math.max(1, vCount - 1)) * 100}%`;
+          return onSelectStop ? (
             <button
-              key={a + i}
+              key={`${a}-${gi}`}
               type="button"
               onClick={() => onSelectStop(a)}
               aria-label={`Aller à ${a}`}
               title={a}
-              className="pointer-events-auto absolute top-[2px] size-[10px] -translate-x-1/2 cursor-pointer rounded-full border-[2.5px] bg-surface transition-transform hover:scale-125 focus-visible:outline-2 focus-visible:outline-focus"
+              className={cx(
+                'pointer-events-auto absolute top-[2px] -translate-x-1/2 cursor-pointer rounded-full border-[2.5px] bg-surface transition-transform hover:scale-125 focus-visible:outline-2 focus-visible:outline-focus',
+                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]',
+              )}
               style={{
-                left: `${(i / Math.max(1, n - 1)) * 100}%`,
-                borderColor: i <= index ? couleur : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
-                backgroundColor: i <= index ? couleur : undefined,
+                left: leftPct,
+                borderColor: passed || isNext ? couleur : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
+                backgroundColor: passed ? couleur : undefined,
               }}
             />
           ) : (
             <span
-              key={a + i}
-              className="absolute top-[2px] size-[10px] -translate-x-1/2 rounded-full border-[2.5px] bg-surface"
+              key={`${a}-${gi}`}
+              className={cx(
+                'absolute top-[2px] -translate-x-1/2 rounded-full border-[2.5px] bg-surface',
+                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]',
+              )}
               style={{
-                left: `${(i / Math.max(1, n - 1)) * 100}%`,
-                borderColor: i <= index ? couleur : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
-                backgroundColor: i <= index ? couleur : undefined,
+                left: leftPct,
+                borderColor: passed || isNext ? couleur : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
+                backgroundColor: passed ? couleur : undefined,
               }}
             />
-          )
-        )}
+          );
+        })}
         <span
           aria-hidden
-          className="absolute -top-[3px] size-0 -translate-x-1/2 border-x-[6px] border-t-[7px] border-x-transparent border-t-encre transition-[left] duration-700 ease-rame"
-          style={{ left: `${pos}%` }}
+          className="absolute -top-[3px] size-0 -translate-x-1/2 border-x-[6px] border-t-[7px] border-x-transparent border-t-encre transition-[left] duration-500 ease-rame"
+          style={{ left: `${localPos}%` }}
         />
       </div>
-      <div className="mt-1.5 grid text-[12px] leading-[15px]" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
-        {arrets.map((a, i) =>
-          onSelectStop ? (
+      <div
+        className="mt-1.5 grid gap-1 text-[11px] leading-[14px]"
+        style={{ gridTemplateColumns: `repeat(${Math.max(1, vCount)}, minmax(0, 1fr))` }}
+      >
+        {visible.map((a, vi) => {
+          const gi = start + vi;
+          const isCurrentOrNext = gi === clampedIdx || gi === clampedIdx + 1;
+          const alignCls = vi === 0 ? 'text-start' : vi === vCount - 1 ? 'text-end' : 'text-center';
+          const cls = cx(
+            'signaletique truncate px-0.5',
+            alignCls,
+            isCurrentOrNext ? 'font-[650] text-encre' : 'text-encre-2',
+          );
+          return onSelectStop ? (
             <button
-              key={a + i}
+              key={`${a}-${gi}`}
               type="button"
               onClick={() => onSelectStop(a)}
-              className={cx(
-                'signaletique pointer-events-auto cursor-pointer truncate px-0.5 hover:text-encre focus-visible:outline-2 focus-visible:outline-focus',
-                i === 0 ? 'text-start' : i === n - 1 ? 'text-end' : 'text-center',
-                i === index + 1 ? 'font-[650] text-encre' : 'text-encre-2',
-              )}
+              title={a}
+              className={cx(cls, 'pointer-events-auto cursor-pointer hover:text-encre focus-visible:outline-2 focus-visible:outline-focus')}
             >
               {a}
             </button>
           ) : (
-            <span
-              key={a + i}
-              className={cx(
-                'signaletique truncate px-0.5',
-                i === 0 ? 'text-start' : i === n - 1 ? 'text-end' : 'text-center',
-                i === index + 1 ? 'font-[650] text-encre' : 'text-encre-2',
-              )}
-            >
+            <span key={`${a}-${gi}`} title={a} className={cls}>
               {a}
             </span>
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );

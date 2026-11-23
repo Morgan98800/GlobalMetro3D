@@ -7,6 +7,7 @@ import {
   elevateTrackPath,
   HUB_LEVEL_STEP_M,
   resolveLineElevationAt,
+  VIADUCT_Z_M,
 } from '@core/ui/map/station_levels';
 
 const DATA_DIR = path.resolve(process.cwd(), 'web/public/data');
@@ -57,6 +58,22 @@ describe('station_levels multi-level architectural stacking', () => {
       registry
     );
     expect(elevated.length).toBeGreaterThanOrEqual(2);
-    expect(elevated[0][2]).toBeGreaterThan(0);
+    expect(elevated[0][2]).toBeLessThan(0);
+  });
+
+  it('places underground metro strata beneath street level while keeping L2/L6 viaducts elevated and RER deep', () => {
+    const registry = buildHubRegistry(STATIONS, LINES);
+    const line6 = LINES.find((l) => l.short_name === '6')!;
+    const birHakeim = STATIONS.find((s) => s.name === 'Bir-Hakeim')!;
+    const placeItalie = STATIONS.find((s) => s.name === "Place d'Italie")!;
+    const rerA = LINES.find((l) => l.short_name === 'A')!;
+    const chatelet = STATIONS.find((s) => s.name === 'Châtelet')!;
+
+    expect(resolveLineElevationAt(birHakeim.coordinates, line6, registry)).toBeCloseTo(
+      VIADUCT_Z_M,
+      1
+    );
+    expect(resolveLineElevationAt(placeItalie.coordinates, line6, registry)).toBeLessThan(0);
+    expect(resolveLineElevationAt(chatelet.coordinates, rerA, registry)).toBeLessThan(-15);
   });
 });

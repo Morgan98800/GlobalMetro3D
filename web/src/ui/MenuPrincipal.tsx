@@ -1,15 +1,15 @@
-import { RiBarChartHorizontalLine, RiInformationLine } from '@remixicon/react';
+import { RiInformationLine } from '@remixicon/react';
 import type { ReactNode } from 'react';
 import { cx } from './cx';
 import { Joint, Panneau } from './Panneau';
+import { Poussoir } from './plan-lumineux/PlanLumineux';
 import { Segmented } from './Segmented';
 import type { Experience } from './TopNavBar';
 
 /**
  * Menu ⋮ (v2.1). Remplace la modale « Réglages » : chaque réglage n’a plus qu’un endroit.
  *  - Niveau de détail : ici sur mobile seulement (sur bureau, il est dans la barre).
- *  - Thème : ici, partout.
- *  - Bâtiments en relief : dans MapControls, plus ici.
+ *  - Thème & Bâtiments 3D : ici, partout.
  * Les réglages s’appliquent immédiatement : pas de bouton « Terminer ».
  * C’est un dialogue non modal (il contient des groupes radio), pas un role="menu".
  */
@@ -21,20 +21,24 @@ export interface MenuPrincipalProps {
   onExperience?: (e: Experience) => void;
   theme: ThemeChoix;
   onTheme: (t: ThemeChoix) => void;
+  batiments3d?: boolean;
+  onBatiments3d?: (visible: boolean) => void;
   reseaux?: { id: string; nom: string; actif: boolean; onSelect: () => void }[];
-  onRecords: () => void;
   onAPropos: () => void;
   className?: string;
 }
 
-export function MenuPrincipal({ experience, onExperience, theme, onTheme, reseaux, onRecords, onAPropos, className }: MenuPrincipalProps) {
+export function MenuPrincipal({
+  theme,
+  onTheme,
+  batiments3d,
+  onBatiments3d,
+  reseaux,
+  onAPropos,
+  className,
+}: MenuPrincipalProps) {
   return (
-    <Panneau as="section" role="dialog" aria-label="Menu et réglages" className={cx('w-[320px] max-w-[calc(100vw-24px)] p-3 animate-feuille', className)}>
-      {experience && onExperience && (
-        <Reglage titre="Niveau de détail" aide="Passionné ajoute la télémétrie, les indicateurs de ligne et le suivi des rames.">
-          <Segmented size="sm" label="Niveau de détail" value={experience} onChange={onExperience} options={[{ value: 'simple', label: 'Simple' }, { value: 'passionne', label: 'Passionné' }]} />
-        </Reglage>
-      )}
+    <Panneau as="section" role="dialog" aria-label="Menu et réglages" className={cx('w-[320px] max-w-[calc(100vw-84px)] md:max-w-[calc(100vw-24px)] p-3 animate-feuille', className)}>
       <Reglage titre="Thème">
         <Segmented
           size="sm"
@@ -44,30 +48,37 @@ export function MenuPrincipal({ experience, onExperience, theme, onTheme, reseau
           options={[{ value: 'systeme', label: 'Système' }, { value: 'clair', label: 'Clair' }, { value: 'sombre', label: 'Sombre' }]}
         />
       </Reglage>
+      {typeof batiments3d === 'boolean' && onBatiments3d && (
+        <Reglage titre="Bâtiments 3D">
+          <Segmented
+            size="sm"
+            label="Bâtiments 3D"
+            value={batiments3d ? 'oui' : 'non'}
+            onChange={(v) => onBatiments3d(v === 'oui')}
+            options={[{ value: 'oui', label: 'Oui' }, { value: 'non', label: 'Non' }]}
+          />
+        </Reglage>
+      )}
       {reseaux && reseaux.length > 1 && (
         <div className="px-1 pb-2">
           <p className="mb-1.5 text-[12px] font-semibold text-encre-3">Réseau</p>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5">
             {reseaux.map((r) => (
-              <button
+              <Poussoir
                 key={r.id}
-                type="button"
-                aria-pressed={r.actif}
+                taille="sm"
+                lampe
+                pressed={r.actif}
                 onClick={r.onSelect}
-                className={cx(
-                  'h-8 rounded-controle px-2.5 text-[12px] font-semibold transition-colors duration-150 ease-signal outline-none focus-visible:outline-2 focus-visible:outline-focus',
-                  r.actif ? 'bg-selection text-selection-encre' : 'bg-encart text-encre hover:bg-joint',
-                )}
               >
                 {r.nom}
-              </button>
+              </Poussoir>
             ))}
           </div>
         </div>
       )}
       <Joint className="mb-1.5 mt-1" />
-      <Ligne icon={<RiBarChartHorizontalLine aria-hidden />} onClick={onRecords}>Records de fréquentation</Ligne>
-      <Ligne icon={<RiInformationLine aria-hidden />} onClick={onAPropos}>À propos et méthode</Ligne>
+      <Ligne icon={<RiInformationLine aria-hidden />} onClick={onAPropos}>À propos</Ligne>
     </Panneau>
   );
 }
@@ -87,7 +98,7 @@ function Ligne({ icon, children, onClick }: { icon: ReactNode; children: ReactNo
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 w-full items-center gap-2.5 rounded-[10px] px-2.5 text-start text-[14px] font-medium text-encre outline-none transition-colors duration-150 ease-signal hover:bg-encart focus-visible:outline-2 focus-visible:outline-focus [&_svg]:size-[18px] [&_svg]:text-icone-2"
+      className="pl-menu-entree"
     >
       {icon}
       {children}

@@ -23,16 +23,28 @@ import {
   trainModelsEnabled,
   TRAIN_MODEL_ZOOM_THRESHOLD,
 } from './train_models_layer';
+import type * as maplibregl from 'maplibre-gl';
 import { resolveTrainRenderLayers } from './train_render_fallback';
-import { createPlatformsLayer } from './platforms_layer';
+import { createPlatformsLayers } from './platforms_layer';
 import { getOptimalPixelRatio } from './device_perf';
-import { createLocalStationDetailLayers, STATION_DETAIL_ZOOM_MIN } from './station_detail_lod';
+import { setStationBuildingCutout } from './overture_buildings';
+import {
+  createLocalStationDetailBundle,
+  createStationSielTextLayers,
+  type SielBoardAnchor,
+  STATION_DETAIL_ZOOM_MIN,
+} from './station_detail_lod';
 import {
   buildHubRegistry,
   elevateTrackPath,
+  hasViaductZones,
   type HubRegistry,
   resolveLineElevationAt,
+  viaductFactorAt,
 } from './station_levels';
+import { computeSubsurfaceMix, setSubsurfaceMapMode } from './maplibre';
+import { createLandmarksLayers } from './landmarks_layer';
+import { createSeineRiverLayers } from './seine_river_layer';
 
 export interface TrackItem {
   line_id: string;
@@ -143,18 +155,67 @@ function deduplicateStations(stations: StationMetadata[]): StationMetadata[] {
 
 const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
 
+function splitTrackByViaduct(
+  track: TrackItem,
+  rounded: [number, number][],
+  shortName: string,
+  cache: WeakMap<TrackItem, [number, number][]>
+): { underground: TrackItem[]; viaduct: TrackItem[] } {
+  if (!hasViaductZones(shortName) || rounded.length < 2) {
+    return { underground: [track], viaduct: [] };
+  }
+  const underground: TrackItem[] = [];
+  const viaduct: TrackItem[] = [];
+  let currentCoords: [number, number][] = [rounded[0]];
+  let currentElevated = viaductFactorAt(shortName, rounded[0]) > 0.18;
+
+  const flush = (coords: [number, number][], elevated: boolean) => {
+    if (coords.length < 2) return;
+    const slice: TrackItem = { ...track, coordinates: coords };
+    cache.set(slice, coords);
+    if (elevated) {
+      viaduct.push(slice);
+    } else {
+      underground.push(slice);
+    }
+  };
+
+  for (let i = 1; i < rounded.length; i += 1) {
+    const prev = rounded[i - 1];
+    const next = rounded[i];
+    const mid: [number, number] = [(prev[0] + next[0]) * 0.5, (prev[1] + next[1]) * 0.5];
+    const segElevated =
+      Math.max(viaductFactorAt(shortName, mid), viaductFactorAt(shortName, next)) > 0.18;
+    if (segElevated === currentElevated) {
+      currentCoords.push(next);
+    } else {
+      flush(currentCoords, currentElevated);
+      currentCoords = [prev, next];
+      currentElevated = segElevated;
+    }
+  }
+  flush(currentCoords, currentElevated);
+  return { underground, viaduct };
+}
+
 export class SubwayDeckOverlay {
   private overlay: MapLibreOverlay;
+  private map: maplibregl.Map | null = null;
   private data: SubwayMapData | null = null;
+  private lineMap = new Map<string, LineMetadata>();
   private selectedLineId: string | null = null;
   private selectedTrainId: string | null = null;
   private trains: TrainMarker[] = [];
   private rerTracks: RerTrackSegment[] = [];
   private showRer: boolean = false;
+  private xrayMode: boolean = false;
+  private buildingsVisible: boolean = true;
+  private cityId: string = 'paris';
   private zoom: number = 13;
   private pitch: number = 0;
   private followElevationLineId: string | null = null;
   private followElevationOffset = 0;
+  private undergroundBeforeId: string | undefined = undefined;
   private mapCenter: [number, number] = [2.3488, 48.8534];
   private bounds: [[number, number], [number, number]] | null = null;
   private trackRevealProgress = 1;
@@ -167,11 +228,14 @@ export class SubwayDeckOverlay {
   private cachedTracksCoordsByLine = new Map<string, [number, number][][]>();
   private cachedPreTrainLayers: any[] = [];
   private cachedLocalDetailLayers: any[] = [];
+  private cachedSielAnchors: SielBoardAnchor[] = [];
+  private cachedLandmarkLayers: any[] = [];
   private cachedPostTrainLayers: any[] = [];
   private localDetailAnchor: [number, number] | null = null;
   private localDetailZoomBucket = -1;
   private localDetailFollowOffset = 0;
   private localDetailDirty = true;
+  private landmarksDirty = true;
   private staticLayersDirty = true;
   private hubRegistry: HubRegistry | null = null;
   private activeItinerary: TransitItinerary | null = null;
@@ -212,8 +276,7 @@ export class SubwayDeckOverlay {
       interleaved: true,
       useDevicePixels: getOptimalPixelRatio(2, 1.5),
       layers: [],
-      effects:
-        isTrainModelSpikeEnabled() || trainModelsEnabled() ? [createTrainModelSpikeLighting()] : [],
+      effects: [createTrainModelSpikeLighting()],
     });
   }
 
@@ -281,6 +344,89 @@ export class SubwayDeckOverlay {
     this.updateLayers();
   }
 
+  public setXrayMode(active: boolean) {
+    if (this.xrayMode === active) return;
+    this.xrayMode = active;
+    this.landmarksDirty = true;
+    this.syncSubsurfaceMode(true);
+    this.staticLayersDirty = true;
+    this.localDetailDirty = true;
+    this.landmarksDirty = true;
+    this.updateLayers();
+  }
+
+  public setBuildingsVisible(visible: boolean) {
+    if (this.buildingsVisible === visible) return;
+    this.buildingsVisible = visible;
+    this.landmarksDirty = true;
+    this.updateLayers();
+  }
+
+  public setCityId(cityId: string) {
+    if (this.cityId === cityId) return;
+    this.cityId = cityId;
+    this.landmarksDirty = true;
+    this.updateLayers();
+  }
+
+  public setShapes(shapes: Map<string, ShapeEntry>) {
+    if (!this.data) return;
+    this.data = { ...this.data, shapes };
+    this.updateLayers();
+  }
+
+  public setLineLadders(lineLadders: Record<string, any>) {
+    if (!this.data) return;
+    this.data = { ...this.data, lineLadders };
+    const displayStations = deduplicateStations(this.data.stations);
+    this.cachedTerminusMarkers = this.resolveTerminusMarkers(this.data.lines, displayStations);
+    this.staticLayersDirty = true;
+    this.updateLayers();
+  }
+
+  public setMap(map: maplibregl.Map): void {
+    this.map = map;
+    this.syncSubsurfaceMode(true);
+    if (typeof (map as { once?: unknown }).once === 'function') {
+      try {
+        map.once('load', () => {
+          const prevBeforeId = this.undergroundBeforeId;
+          this.syncSubsurfaceMode(true);
+          if (prevBeforeId !== this.undergroundBeforeId) {
+            this.updateLayers();
+          }
+        });
+      } catch {
+        // Ignore in minimal mock maps
+      }
+    }
+  }
+
+  private syncSubsurfaceMode(force = false): void {
+    const isFollowing = Boolean(this.followElevationLineId);
+    // Render underground tracks, stations, platforms, and trains beneath the street surface
+    // whenever pitched in 3D or following a train, while keeping 3D buildings 100% opaque
+    // unless the user explicitly enables X-Ray mode.
+    const isSubsurface = this.pitch >= 12 || isFollowing || this.xrayMode;
+    let hasLanduseLayer = false;
+    try {
+      hasLanduseLayer = Boolean(this.map?.getLayer?.('landuse-urban'));
+    } catch {
+      hasLanduseLayer = false;
+    }
+    const nextBeforeId = isSubsurface && hasLanduseLayer ? 'landuse-urban' : undefined;
+    if (nextBeforeId !== this.undergroundBeforeId) {
+      this.undergroundBeforeId = nextBeforeId;
+      this.staticLayersDirty = true;
+      this.localDetailDirty = true;
+    }
+    if (this.map) {
+      const baseMix = computeSubsurfaceMix(this.pitch, isFollowing);
+      const mix = this.xrayMode ? Math.max(baseMix, 1) : baseMix;
+      setSubsurfaceMapMode(this.map, mix, this.theme, force, this.xrayMode);
+    }
+  }
+
   public setViewState(
     zoom: number,
     mapCenter: [number, number],
@@ -291,9 +437,15 @@ export class SubwayDeckOverlay {
     const centerChanged =
       Math.abs(this.mapCenter[0] - mapCenter[0]) > 0.004 ||
       Math.abs(this.mapCenter[1] - mapCenter[1]) > 0.004;
-    const pitchBandChanged = this.pitch >= 45 !== pitch >= 45;
+    const subsurfaceBandChanged = this.pitch >= 12 !== pitch >= 12;
+    const pitchBandChanged = this.pitch >= 45 !== pitch >= 45 || subsurfaceBandChanged;
     this.zoom = zoom;
     this.pitch = pitch;
+    this.syncSubsurfaceMode();
+    if (subsurfaceBandChanged) {
+      this.staticLayersDirty = true;
+      this.localDetailDirty = true;
+    }
     if (
       typeof window !== 'undefined' &&
       new URLSearchParams(window.location.search).get('debug') === 'trains'
@@ -320,15 +472,39 @@ export class SubwayDeckOverlay {
       this.mapCenter = mapCenter;
       this.staticLayersDirty = true;
       this.localDetailDirty = true;
+      this.landmarksDirty = true;
       this.updateLayers();
     } else if (pitchBandChanged || detailMoved || detailZoomChanged) {
       this.mapCenter = mapCenter;
+      this.landmarksDirty = true;
       this.updateLayers();
     }
+    this.syncStationBuildingCutout(zoom, mapCenter);
+  }
+
+  private syncStationBuildingCutout(zoom: number, center: [number, number]) {
+    if (!this.map) return;
+    let cutoutCenter: [number, number] | null = null;
+    if (zoom >= 16.0 && this.buildingsVisible && !this.xrayMode) {
+      const [cLng, cLat] = center;
+      const cosLat = Math.max(0.2, Math.cos((cLat * Math.PI) / 180));
+      let bestDistSq = (140 / 111320) ** 2;
+      for (const st of this.cachedDisplayStations) {
+        const dLat = st.coordinates[1] - cLat;
+        const dLng = (st.coordinates[0] - cLng) * cosLat;
+        const dSq = dLat * dLat + dLng * dLng;
+        if (dSq < bestDistSq) {
+          bestDistSq = dSq;
+          cutoutCenter = st.coordinates;
+        }
+      }
+    }
+    setStationBuildingCutout(this.map, cutoutCenter, 70);
   }
 
   public setData(data: SubwayMapData) {
     this.data = data;
+    this.lineMap = new Map(data.lines.map((l) => [l.id, l]));
     this.showRer = true;
     this.hubRegistry = buildHubRegistry(data.stations, data.lines);
     this.roundedTrackPaths = new WeakMap();
@@ -346,6 +522,7 @@ export class SubwayDeckOverlay {
     this.selectedLineId = lineId;
     this.staticLayersDirty = true;
     this.localDetailDirty = true;
+    this.landmarksDirty = true;
     this.updateLayers();
   }
 
@@ -371,8 +548,10 @@ export class SubwayDeckOverlay {
   public setTheme(theme: 'dark' | 'light') {
     if (this.theme === theme) return;
     this.theme = theme;
+    this.syncSubsurfaceMode(true);
     this.staticLayersDirty = true;
     this.localDetailDirty = true;
+    this.landmarksDirty = true;
     this.updateLayers();
   }
 
@@ -389,6 +568,7 @@ export class SubwayDeckOverlay {
     const lineChanged = this.followElevationLineId !== lineId;
     this.followElevationLineId = lineId;
     this.followElevationOffset = offset;
+    this.syncSubsurfaceMode(lineChanged);
     if (
       lineChanged ||
       Math.abs(offset - this.localDetailFollowOffset) >= 0.8 ||
@@ -453,7 +633,7 @@ export class SubwayDeckOverlay {
               : this.zoom < 17.5
                 ? 3
                 : 4;
-      this.cachedLocalDetailLayers = createLocalStationDetailLayers({
+      const lodBundle = createLocalStationDetailBundle({
         lines: this.data.lines,
         stations: this.cachedDisplayStations,
         tracksByLine: this.cachedTracksCoordsByLine,
@@ -465,15 +645,45 @@ export class SubwayDeckOverlay {
           ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
           : undefined,
         hubRegistry: this.hubRegistry,
+        undergroundBeforeId: this.undergroundBeforeId,
+        xrayMode: this.xrayMode,
       });
+
+      this.cachedLocalDetailLayers = lodBundle.layers;
+      this.cachedSielAnchors = lodBundle.sielAnchors;
       this.localDetailDirty = false;
     }
+
+    this.syncStationBuildingCutout(this.zoom, this.mapCenter);
+
+    if (this.landmarksDirty) {
+      this.cachedLandmarkLayers = createLandmarksLayers({
+        zoom: this.zoom,
+        pitch: this.pitch,
+        mapCenter: this.mapCenter,
+        visible: this.buildingsVisible && !this.xrayMode,
+        cityId: this.cityId,
+        theme: this.theme,
+      });
+      this.landmarksDirty = false;
+    }
+
+    const seineLayers = createSeineRiverLayers({
+      zoom: this.zoom,
+      pitch: this.pitch,
+      theme: this.theme,
+      cityId: this.cityId,
+      xrayMode: this.xrayMode,
+      bounds: this.bounds,
+    });
 
     const trainLayers = this.buildTrainLayers();
     const layers: any[] = [
       ...this.cachedPreTrainLayers,
       ...this.cachedLocalDetailLayers,
+      ...seineLayers,
       ...trainLayers,
+      ...this.cachedLandmarkLayers,
     ];
     const trainModelSpikeLayer = createTrainModelSpikeLayer();
     if (trainModelSpikeLayer) {
@@ -560,10 +770,10 @@ export class SubwayDeckOverlay {
     };
 
     const trackWidthAtZoom = (selected: boolean): number => {
-      const z = Math.max(9, Math.min(16, this.zoom));
-      const t = (z - 9) / 7;
-      const baseWidth = 1.6 + t * (4.5 - 1.6);
-      return selected ? baseWidth + 0.6 : baseWidth;
+      const z = Math.max(9, Math.min(17.5, this.zoom));
+      const t = (z - 9) / 8.5;
+      const baseWidth = 1.8 + t * (7.2 - 1.8);
+      return selected ? baseWidth + 1.0 : baseWidth;
     };
 
     const pathForTrack = (d: TrackItem): [number, number, number][] => {
@@ -585,39 +795,55 @@ export class SubwayDeckOverlay {
     const visibleLineOrder = this.selectedLineId
       ? lineOrder.filter((line) => line.id === this.selectedLineId)
       : lineOrder;
-    const elevatedTracks =
-      this.zoom >= 13.5
-        ? visibleLineOrder
-            .filter((line) => line.elevation_offset > 0)
-            .flatMap((line) => tracksByLine.get(line.id) || [])
-        : [];
-    const viaductShadowLayer =
-      elevatedTracks.length > 0
-        ? new PathLayer<TrackItem>({
-            id: 'subway-viaduct-shadows',
-            data: elevatedTracks,
+    const isSubsurface = Boolean(this.undergroundBeforeId);
+    const ugBeforeId = this.undergroundBeforeId;
+    const trackDepthParams = {
+      depthTest: isSubsurface,
+      depthWriteEnabled: false,
+    } as any;
+    const viaductShadowTracks: TrackItem[] = [];
+
+    const pushTrackGroup = (
+      idPrefix: string,
+      dataSlice: TrackItem[],
+      line: LineMetadata,
+      isSelected: boolean,
+      beforeId?: string,
+      withTunnelEnvelope = false
+    ) => {
+      if (dataSlice.length === 0) return;
+      const beforeProps = beforeId ? { beforeId } : {};
+      if (withTunnelEnvelope && isSubsurface && this.zoom >= 11.2) {
+        const glowAlpha = this.xrayMode ? (isLight ? 95 : 135) : isLight ? 68 : 96;
+        const glowWidth = this.xrayMode ? 11.5 : 9.2;
+        pathLayers.push(
+          new PathLayer<TrackItem>({
+            id: `${idPrefix}-tunnel`,
+            data: dataSlice,
+            ...beforeProps,
             pickable: false,
             widthUnits: 'meters',
-            getWidth: 4.8,
-            getPath: ((d: TrackItem) => {
-              const rounded = this.roundedTrackPaths.get(d) ?? roundPathCorners(d.coordinates);
-              return rounded.map((pt: [number, number]) => [pt[0], pt[1], 0.15]);
-            }) as any,
-            getColor: isLight ? [20, 18, 16, 55] : [0, 0, 0, 110],
+            getWidth: glowWidth,
+            getPath: pathForTrack as any,
+            getColor: () => {
+              const colorHex = line.color || '#6B7280';
+              return hexToRgba(colorHex, glowAlpha);
+            },
+            opacity: revealOpacityFor(line.id),
             capRounded: true,
             jointRounded: true,
-            parameters: { depthTest: true, depthWriteEnabled: false } as any,
+            parameters: trackDepthParams,
+            updateTriggers: {
+              getColor: [this.theme, this.selectedLineId, this.xrayMode],
+            },
           })
-        : null;
-    for (const line of visibleLineOrder) {
-      const lineTracks = tracksByLine.get(line.id) || [];
-      const isSelected = !this.selectedLineId || line.id === this.selectedLineId;
-      const safeId = line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-');
-
+        );
+      }
       pathLayers.push(
         new PathLayer<any>({
-          id: `subway-track-${safeId}-casing`,
-          data: lineTracks,
+          id: `${idPrefix}-casing`,
+          data: dataSlice,
+          ...beforeProps,
           pickable: false,
           widthUnits: 'pixels',
           getWidth: () => trackWidthAtZoom(isSelected) + 3,
@@ -626,19 +852,17 @@ export class SubwayDeckOverlay {
           opacity: revealOpacityFor(line.id),
           capRounded: true,
           jointRounded: true,
-          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          parameters: trackDepthParams,
           transitions: { opacity: { duration: 140, easing: easeOut } } as any,
           updateTriggers: {
             getWidth: [this.zoom, this.selectedLineId],
             getColor: [this.theme],
           },
-        })
-      );
-
-      pathLayers.push(
+        }),
         new PathLayer<any>({
-          id: `subway-track-${safeId}-fill`,
-          data: lineTracks,
+          id: `${idPrefix}-fill`,
+          data: dataSlice,
+          ...beforeProps,
           pickable: true,
           widthUnits: 'pixels',
           getWidth: () => trackWidthAtZoom(isSelected),
@@ -652,7 +876,7 @@ export class SubwayDeckOverlay {
           highlightColor: [255, 255, 255, 55],
           capRounded: true,
           jointRounded: true,
-          parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          parameters: trackDepthParams,
           transitions: {
             getColor: { duration: 200, easing: easeOut },
             opacity: { duration: 140, easing: easeOut },
@@ -663,7 +887,45 @@ export class SubwayDeckOverlay {
           },
         })
       );
+    };
+
+    for (const line of visibleLineOrder) {
+      const lineTracks = tracksByLine.get(line.id) || [];
+      const isSelected = !this.selectedLineId || line.id === this.selectedLineId;
+      const safeId = line.short_name.replace(/[^a-zA-Z0-9_-]/g, '-');
+      const undergroundTracks: TrackItem[] = [];
+      const viaductTracks: TrackItem[] = [];
+      for (const track of lineTracks) {
+        const rounded = this.roundedTrackPaths.get(track) ?? roundPathCorners(track.coordinates);
+        const split = splitTrackByViaduct(track, rounded, line.short_name, this.roundedTrackPaths);
+        undergroundTracks.push(...split.underground);
+        viaductTracks.push(...split.viaduct);
+      }
+      if (this.zoom >= 13.5 && viaductTracks.length > 0) {
+        viaductShadowTracks.push(...viaductTracks);
+      }
+      pushTrackGroup(`subway-track-${safeId}`, undergroundTracks, line, isSelected, ugBeforeId, true);
+      pushTrackGroup(`subway-track-${safeId}-viaduct`, viaductTracks, line, isSelected);
     }
+
+    const viaductShadowLayer =
+      viaductShadowTracks.length > 0
+        ? new PathLayer<TrackItem>({
+            id: 'subway-viaduct-shadows',
+            data: viaductShadowTracks,
+            pickable: false,
+            widthUnits: 'meters',
+            getWidth: 4.8,
+            getPath: ((d: TrackItem) => {
+              const rounded = this.roundedTrackPaths.get(d) ?? roundPathCorners(d.coordinates);
+              return rounded.map((pt: [number, number]) => [pt[0], pt[1], 0.15]);
+            }) as any,
+            getColor: isLight ? [20, 18, 16, 55] : [0, 0, 0, 110],
+            capRounded: true,
+            jointRounded: true,
+            parameters: { depthTest: true, depthWriteEnabled: false } as any,
+          })
+        : null;
 
     // 2. ScatterplotLayer for Stations (Hiérarchisation stricte par niveau de zoom)
     const isUltraHub = (st: StationMetadata) =>
@@ -802,13 +1064,13 @@ export class SubwayDeckOverlay {
     for (const [lineId, lineTracks] of tracksByLine.entries()) {
       tracksCoordsByLine.set(
         lineId,
-        lineTracks.map((t) => t.coordinates)
+        lineTracks.map((t) => this.roundedTrackPaths.get(t) ?? roundPathCorners(t.coordinates))
       );
     }
     this.cachedDisplayStations = displayStations;
     this.cachedTracksCoordsByLine = tracksCoordsByLine;
     const isPlatformEligible = selectedLine?.mode === 'metro' || selectedLine?.mode === 'tube';
-    const platformsLayer = createPlatformsLayer(
+    const platformsLayers = createPlatformsLayers(
       displayStations,
       isPlatformEligible ? selectedLine : null,
       isPlatformEligible ? selectedLinePaths : [],
@@ -818,8 +1080,17 @@ export class SubwayDeckOverlay {
       this.followElevationLineId
         ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
         : undefined,
-      this.hubRegistry
+      this.hubRegistry,
+      this.undergroundBeforeId
     );
+
+    const railLineByShortName = new Map<string, LineMetadata>();
+    for (const candidate of lines) {
+      if (candidate.mode !== 'rail') continue;
+      const key = candidate.short_name.replace(/^RER\s*/i, '').trim().toUpperCase();
+      railLineByShortName.set(key, candidate);
+      railLineByShortName.set(candidate.short_name.trim().toUpperCase(), candidate);
+    }
 
     let rerLayer: any = null;
     if (this.showRer && this.rerTracks.length > 0) {
@@ -830,13 +1101,21 @@ export class SubwayDeckOverlay {
           : this.selectedLineId
             ? []
             : this.rerTracks,
+        ...(this.undergroundBeforeId ? { beforeId: this.undergroundBeforeId } : {}),
         pickable: false,
         widthUnits: 'pixels',
         getWidth: 3.5, // 3.5px vs 2.5px métro
         getPath: ((d: RerTrackSegment) => {
           const rounded = this.roundedRerPaths.get(d) ?? roundPathCorners(d.coordinates);
-          return rounded.map((pt) => [pt[0], pt[1], -1]);
-        }) as any, // Tracé sous les lignes de métro
+          const key = d.shortName.replace(/^RER\s*/i, '').trim().toUpperCase();
+          const railLine =
+            railLineByShortName.get(key) ??
+            railLineByShortName.get(d.shortName.trim().toUpperCase());
+          if (railLine) {
+            return elevateTrackPath(rounded, railLine, this.hubRegistry);
+          }
+          return rounded.map((pt) => [pt[0], pt[1], -22]);
+        }) as any,
         getColor: (d: RerTrackSegment) => {
           const baseAlpha = d.isBanlieue ? 130 : 230;
           return hexToRgba(d.color, baseAlpha);
@@ -846,7 +1125,7 @@ export class SubwayDeckOverlay {
         dashUnits: 'pixels',
         capRounded: true,
         jointRounded: true,
-        parameters: { depthTest: false, depthWriteEnabled: false } as any,
+        parameters: { depthTest: Boolean(this.undergroundBeforeId), depthWriteEnabled: false } as any,
       } as any);
     }
 
@@ -1066,7 +1345,7 @@ export class SubwayDeckOverlay {
       ...(viaductShadowLayer ? [viaductShadowLayer] : []),
       ...lineHitboxes,
       ...pathLayers,
-      ...(platformsLayer ? [platformsLayer] : []),
+      ...platformsLayers,
       ...itineraryLayers,
       stationsLayer,
       ...gpsLayers,
@@ -1077,12 +1356,31 @@ export class SubwayDeckOverlay {
 
   private buildTrainLayers(): readonly any[] {
     if (!this.data) return [];
+    // Hide moving train dots/capsules when zoomed out (z < 13.0) unless a specific
+    // line or train is selected — saves GPU & battery and keeps the city map clean.
+    if (this.zoom < TRAIN_MODEL_ZOOM_THRESHOLD && !this.selectedLineId && !this.selectedTrainId) {
+      return [];
+    }
     const { tracks } = this.data;
 
     const prefetchModels = trainModelsEnabled() && this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD - 1.0;
     const showTrainModels = trainModelsEnabled() && this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD;
     if (prefetchModels && this.data?.rollingStockDb) {
+      const b = this.bounds;
       for (const train of this.trains) {
+        if (b) {
+          const [[west, south], [east, north]] = b;
+          const marginLng = (east - west) * 0.15;
+          const marginLat = (north - south) * 0.15;
+          if (
+            train.pos[0] < west - marginLng ||
+            train.pos[0] > east + marginLng ||
+            train.pos[1] < south - marginLat ||
+            train.pos[1] > north + marginLat
+          ) {
+            continue;
+          }
+        }
         requestTrainModel(train, this.data.rollingStockDb);
       }
     }
@@ -1099,6 +1397,10 @@ export class SubwayDeckOverlay {
             elevationOffset: this.followElevationLineId
               ? { lineId: this.followElevationLineId, offset: this.followElevationOffset }
               : undefined,
+            zoom: this.zoom,
+            lineMap: this.lineMap,
+            hubRegistry: this.hubRegistry,
+            undergroundBeforeId: this.undergroundBeforeId,
             onClick: (train) => {
               if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
               this.selectedTrainId = train.id;
@@ -1128,6 +1430,8 @@ export class SubwayDeckOverlay {
               mapCenter: this.mapCenter,
               selectedLineId: this.selectedLineId,
               selectedTrainId: this.selectedTrainId,
+              zoom: this.zoom,
+              undergroundBeforeId: this.undergroundBeforeId,
               onHover: this.onTrainHover,
               onClick: (train) => {
                 if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
@@ -1144,7 +1448,76 @@ export class SubwayDeckOverlay {
               this.zoom
             );
 
-    return isTrainModelSpikeEnabled() ? [] : resolveTrainRenderLayers(modelLayers, capsuleLayers);
+    const resolved = isTrainModelSpikeEnabled()
+      ? []
+      : resolveTrainRenderLayers(modelLayers, capsuleLayers);
+
+    if (
+      typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('debug') === 'trains'
+    ) {
+      (window as any).__trainDebug = {
+        zoom: this.zoom,
+        pitch: this.pitch,
+        trainsCount: this.trains.length,
+        hasRollingStock: Boolean(this.data?.rollingStockDb),
+        hasShapes: Boolean(this.data?.shapes),
+        undergroundBeforeId: this.undergroundBeforeId,
+        modelLayersCount: modelLayers.length,
+        capsuleLayersCount: capsuleLayers.length,
+        resolvedCount: resolved.length,
+      };
+    }
+
+    // Subtle panoramic night comet trails only when a line is focused at mid-zoom (13.0..13.5)
+    if (
+      this.theme === 'dark' &&
+      this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD &&
+      this.zoom < 13.5 &&
+      this.trains.length > 0
+    ) {
+      const trailData: Array<{
+        path: [number, number, number][];
+        color: [number, number, number, number];
+      }> = [];
+      for (const train of this.trains) {
+        if (train.atStop || (train.speedMps ?? 0) < 1.5 || !Number.isFinite(train.brg)) continue;
+        const [lng, lat] = train.pos;
+        const latScale = 111_320;
+        const lonScale = latScale * Math.max(0.1, Math.cos((lat * Math.PI) / 180));
+        const rad = (train.brg * Math.PI) / 180;
+        const tailLenM = Math.min(180, Math.max(70, (train.speedMps ?? 10) * 9));
+        const tailLng = lng - (Math.sin(rad) * tailLenM) / lonScale;
+        const tailLat = lat - (Math.cos(rad) * tailLenM) / latScale;
+        const z = train.elevation ?? -7.5;
+        trailData.push({
+          path: [
+            [tailLng, tailLat, z],
+            [lng, lat, z],
+          ],
+          color: hexToRgba(train.colorHex || '#ffce00', 115),
+        });
+      }
+      if (trailData.length > 0) {
+        return [
+          new PathLayer({
+            id: 'subway-night-comet-trails',
+            data: trailData,
+            ...(this.undergroundBeforeId ? { beforeId: this.undergroundBeforeId } : {}),
+            pickable: false,
+            widthUnits: 'pixels',
+            getPath: (d: any) => d.path,
+            getColor: (d: any) => d.color,
+            getWidth: 4.5,
+            capRounded: true,
+            parameters: { depthTest: false, depthWriteEnabled: false } as any,
+          } as any),
+          ...resolved,
+        ];
+      }
+    }
+
+    return resolved;
   }
 
   /**
@@ -1217,8 +1590,9 @@ export class SubwayDeckOverlay {
   }
 
   public setTrains(trains: TrainMarker[], immediate: boolean = false) {
-    if (this.data && this.hubRegistry && this.hubRegistry.anchors.length > 0) {
-      const lineMap = new Map(this.data.lines.map((l) => [l.id, l]));
+    if (this.data) {
+      const lineMap =
+        this.lineMap.size > 0 ? this.lineMap : new Map(this.data.lines.map((l) => [l.id, l]));
       this.trains = trains.map((train) => {
         const line = lineMap.get(train.line);
         if (!line) return train;

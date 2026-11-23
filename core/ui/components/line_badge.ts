@@ -117,6 +117,9 @@ export function lineBadge(line: LineLike, options: BadgeOptions = {}): HTMLEleme
   el.textContent = label;
   el.dataset.lineId = line.line_id;
   el.dataset.len = String(label.length);
+  if (/^[A-E]$/i.test(line.short_name.trim())) {
+    el.dataset.mode = 'rer';
+  }
   el.style.background = bg;
   el.style.color = fg;
 

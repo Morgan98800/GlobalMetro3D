@@ -1,0 +1,435 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		044E34A802BAD00776AD4501 /* rolling-stock.json in Resources */ = {isa = PBXBuildFile; fileRef = AF9F341C58563CD18C671494 /* rolling-stock.json */; };
+		0E1B090276843102D280A62E /* DataSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3F2F78DFA5935329765ADE /* DataSyncService.swift */; };
+		11021A48B448491CCBCC90B3 /* rer_lines.json in Resources */ = {isa = PBXBuildFile; fileRef = FB6ED24957470C163204B1B9 /* rer_lines.json */; };
+		1931829345F502416C2BDA67 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC2E97976EBAE4686B4E9FE /* LocationService.swift */; };
+		1FCB4B5F255721DBB30CB503 /* rer_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = 0250B72BA359AE8C1529EBCD /* rer_schedule.json */; };
+		225660B89CDB6DD3C36008D5 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5265588F4D3F7BD5B4247E10 /* MapScreen.swift */; };
+		3D3CFAB84B91F6EDA521138F /* AboutOpenDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3146ED823FDB1C1DA3A9D860 /* AboutOpenDataView.swift */; };
+		55CCACE9B5B7C03C859973CE /* stations.json in Resources */ = {isa = PBXBuildFile; fileRef = 99D63B39CBB7EB6BE9DD05D7 /* stations.json */; };
+		56C4AFB3952F26E797451E27 /* VoitureConseilleeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06A1B68F3B0D743BA9CB01A /* VoitureConseilleeView.swift */; };
+		634602F87663C88BFB043434 /* Ride3DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B0E4D62939D09F973851CC /* Ride3DView.swift */; };
+		6DCCA01EA9C640CF53175F00 /* ElevationProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C45EFA4B3EDC7DC66BF5F72 /* ElevationProfileView.swift */; };
+		6E6C6A413F23B7B0E637934B /* rer_shapes.bin in Resources */ = {isa = PBXBuildFile; fileRef = F66C3EE5B2DCF56A184FCD65 /* rer_shapes.bin */; };
+		8ADBC9005C6E7EA9336B68F6 /* schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = 2836BF0FEE539AB9F0AFC5D0 /* schedule.json */; };
+		8B7ABB2BEBC937447FC13988 /* tracks.json in Resources */ = {isa = PBXBuildFile; fileRef = 9B9C4540FC54FEDA389C31C1 /* tracks.json */; };
+		A5B1DCDF63A99CC6A136A20C /* ParisSubwayCore in Frameworks */ = {isa = PBXBuildFile; productRef = B964B7422B84DBC800FDFEA5 /* ParisSubwayCore */; };
+		AD5D88F5C598B1D4247F1491 /* TrainModelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824963088079BB6B3D26C6C9 /* TrainModelLoader.swift */; };
+		B0AA602B8A7319DE0BACEE15 /* ParisSubway3DApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94264D9ECB4F0969EF8B4A84 /* ParisSubway3DApp.swift */; };
+		C305C0C2AEE0A6DA8A5E7465 /* LineThermometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0331B44823297E20F4A83FF8 /* LineThermometerView.swift */; };
+		C7A9CF2F3F69FB41B62A92EF /* shapes.bin in Resources */ = {isa = PBXBuildFile; fileRef = 9D921B8E53235580D9C1696F /* shapes.bin */; };
+		D71E5A48395DCA35B4B0C0F9 /* lines.json in Resources */ = {isa = PBXBuildFile; fileRef = 93059468D5452A1321249F21 /* lines.json */; };
+		E20E08DC2EDF99FEC47A1C20 /* Models in Resources */ = {isa = PBXBuildFile; fileRef = A3AA55454364D05B55DAC7D8 /* Models */; };
+		E30B7997F4FD7ACDBA90093E /* ParisSubwayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A34ACBC35ABF736DC451382 /* ParisSubwayViewModel.swift */; };
+		EB8EAAA625B341804A396012 /* FaienceTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46633B713C3AD699C4E5D4C6 /* FaienceTheme.swift */; };
+		F6219F1EA750C931536445C3 /* Subsurface3DMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53E06AF99525F7331E8FC46 /* Subsurface3DMapView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0250B72BA359AE8C1529EBCD /* rer_schedule.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rer_schedule.json; sourceTree = "<group>"; };
+		0331B44823297E20F4A83FF8 /* LineThermometerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineThermometerView.swift; sourceTree = "<group>"; };
+		0E3F2F78DFA5935329765ADE /* DataSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncService.swift; sourceTree = "<group>"; };
+		0FC2E97976EBAE4686B4E9FE /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		2836BF0FEE539AB9F0AFC5D0 /* schedule.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = schedule.json; sourceTree = "<group>"; };
+		3146ED823FDB1C1DA3A9D860 /* AboutOpenDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutOpenDataView.swift; sourceTree = "<group>"; };
+		32422E8BFA91AB05FB44ACA2 /* ParisSubwayCore */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ParisSubwayCore; sourceTree = SOURCE_ROOT; };
+		36A5E5000BED43E8456C87F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		46633B713C3AD699C4E5D4C6 /* FaienceTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaienceTheme.swift; sourceTree = "<group>"; };
+		4C45EFA4B3EDC7DC66BF5F72 /* ElevationProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevationProfileView.swift; sourceTree = "<group>"; };
+		5265588F4D3F7BD5B4247E10 /* MapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
+		824963088079BB6B3D26C6C9 /* TrainModelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainModelLoader.swift; sourceTree = "<group>"; };
+		93059468D5452A1321249F21 /* lines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = lines.json; sourceTree = "<group>"; };
+		94264D9ECB4F0969EF8B4A84 /* ParisSubway3DApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParisSubway3DApp.swift; sourceTree = "<group>"; };
+		99D63B39CBB7EB6BE9DD05D7 /* stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = stations.json; sourceTree = "<group>"; };
+		9A34ACBC35ABF736DC451382 /* ParisSubwayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParisSubwayViewModel.swift; sourceTree = "<group>"; };
+		9B9C4540FC54FEDA389C31C1 /* tracks.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tracks.json; sourceTree = "<group>"; };
+		9D921B8E53235580D9C1696F /* shapes.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = shapes.bin; sourceTree = "<group>"; };
+		A3AA55454364D05B55DAC7D8 /* Models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Models; path = Resources/Models; sourceTree = SOURCE_ROOT; };
+		A53E06AF99525F7331E8FC46 /* Subsurface3DMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subsurface3DMapView.swift; sourceTree = "<group>"; };
+		AF9F341C58563CD18C671494 /* rolling-stock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "rolling-stock.json"; sourceTree = "<group>"; };
+		D2A4C55343BD32597A45640A /* ParisSubway3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParisSubway3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F06A1B68F3B0D743BA9CB01A /* VoitureConseilleeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoitureConseilleeView.swift; sourceTree = "<group>"; };
+		F0B0E4D62939D09F973851CC /* Ride3DView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride3DView.swift; sourceTree = "<group>"; };
+		F66C3EE5B2DCF56A184FCD65 /* rer_shapes.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = rer_shapes.bin; sourceTree = "<group>"; };
+		FB6ED24957470C163204B1B9 /* rer_lines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rer_lines.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0DA492A9DB7DF322DE25FA5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5B1DCDF63A99CC6A136A20C /* ParisSubwayCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0BBF782F668BABDAC5157D7B /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				32422E8BFA91AB05FB44ACA2 /* ParisSubwayCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		6F6C94AD1A1ED85A2B3F83AD /* data */ = {
+			isa = PBXGroup;
+			children = (
+				93059468D5452A1321249F21 /* lines.json */,
+				FB6ED24957470C163204B1B9 /* rer_lines.json */,
+				0250B72BA359AE8C1529EBCD /* rer_schedule.json */,
+				F66C3EE5B2DCF56A184FCD65 /* rer_shapes.bin */,
+				AF9F341C58563CD18C671494 /* rolling-stock.json */,
+				2836BF0FEE539AB9F0AFC5D0 /* schedule.json */,
+				9D921B8E53235580D9C1696F /* shapes.bin */,
+				99D63B39CBB7EB6BE9DD05D7 /* stations.json */,
+				9B9C4540FC54FEDA389C31C1 /* tracks.json */,
+			);
+			name = data;
+			path = ../web/public/data;
+			sourceTree = "<group>";
+		};
+		B2C2D8F1462E76C42E8BE746 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3146ED823FDB1C1DA3A9D860 /* AboutOpenDataView.swift */,
+				0E3F2F78DFA5935329765ADE /* DataSyncService.swift */,
+				4C45EFA4B3EDC7DC66BF5F72 /* ElevationProfileView.swift */,
+				46633B713C3AD699C4E5D4C6 /* FaienceTheme.swift */,
+				36A5E5000BED43E8456C87F0 /* Info.plist */,
+				0331B44823297E20F4A83FF8 /* LineThermometerView.swift */,
+				0FC2E97976EBAE4686B4E9FE /* LocationService.swift */,
+				5265588F4D3F7BD5B4247E10 /* MapScreen.swift */,
+				94264D9ECB4F0969EF8B4A84 /* ParisSubway3DApp.swift */,
+				9A34ACBC35ABF736DC451382 /* ParisSubwayViewModel.swift */,
+				F0B0E4D62939D09F973851CC /* Ride3DView.swift */,
+				A53E06AF99525F7331E8FC46 /* Subsurface3DMapView.swift */,
+				824963088079BB6B3D26C6C9 /* TrainModelLoader.swift */,
+				F06A1B68F3B0D743BA9CB01A /* VoitureConseilleeView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C7C0F8584E8231F667F87A31 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2A4C55343BD32597A45640A /* ParisSubway3D.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F7116F4F62AAEA34DE4B831D = {
+			isa = PBXGroup;
+			children = (
+				A3AA55454364D05B55DAC7D8 /* Models */,
+				B2C2D8F1462E76C42E8BE746 /* App */,
+				6F6C94AD1A1ED85A2B3F83AD /* data */,
+				0BBF782F668BABDAC5157D7B /* Packages */,
+				C7C0F8584E8231F667F87A31 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FAEE14B254326AF397AB7137 /* ParisSubway3D */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD29FB7F26BF123C2B8619B6 /* Build configuration list for PBXNativeTarget "ParisSubway3D" */;
+			buildPhases = (
+				1A8D0F2368FCBD20A60D5AEF /* Sources */,
+				46A027BC185DA8690D5E89ED /* Resources */,
+				0DA492A9DB7DF322DE25FA5D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ParisSubway3D;
+			packageProductDependencies = (
+				B964B7422B84DBC800FDFEA5 /* ParisSubwayCore */,
+			);
+			productName = ParisSubway3D;
+			productReference = D2A4C55343BD32597A45640A /* ParisSubway3D.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		333AE4771958904C25D00217 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 2738E2DC3FD15693341B718A /* Build configuration list for PBXProject "ParisSubway3D" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F7116F4F62AAEA34DE4B831D;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				91D42CD241E777D87BC94024 /* XCLocalSwiftPackageReference "ParisSubwayCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C7C0F8584E8231F667F87A31 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FAEE14B254326AF397AB7137 /* ParisSubway3D */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		46A027BC185DA8690D5E89ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E20E08DC2EDF99FEC47A1C20 /* Models in Resources */,
+				D71E5A48395DCA35B4B0C0F9 /* lines.json in Resources */,
+				11021A48B448491CCBCC90B3 /* rer_lines.json in Resources */,
+				1FCB4B5F255721DBB30CB503 /* rer_schedule.json in Resources */,
+				6E6C6A413F23B7B0E637934B /* rer_shapes.bin in Resources */,
+				044E34A802BAD00776AD4501 /* rolling-stock.json in Resources */,
+				8ADBC9005C6E7EA9336B68F6 /* schedule.json in Resources */,
+				C7A9CF2F3F69FB41B62A92EF /* shapes.bin in Resources */,
+				55CCACE9B5B7C03C859973CE /* stations.json in Resources */,
+				8B7ABB2BEBC937447FC13988 /* tracks.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A8D0F2368FCBD20A60D5AEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D3CFAB84B91F6EDA521138F /* AboutOpenDataView.swift in Sources */,
+				0E1B090276843102D280A62E /* DataSyncService.swift in Sources */,
+				6DCCA01EA9C640CF53175F00 /* ElevationProfileView.swift in Sources */,
+				EB8EAAA625B341804A396012 /* FaienceTheme.swift in Sources */,
+				C305C0C2AEE0A6DA8A5E7465 /* LineThermometerView.swift in Sources */,
+				1931829345F502416C2BDA67 /* LocationService.swift in Sources */,
+				225660B89CDB6DD3C36008D5 /* MapScreen.swift in Sources */,
+				B0AA602B8A7319DE0BACEE15 /* ParisSubway3DApp.swift in Sources */,
+				E30B7997F4FD7ACDBA90093E /* ParisSubwayViewModel.swift in Sources */,
+				634602F87663C88BFB043434 /* Ride3DView.swift in Sources */,
+				F6219F1EA750C931536445C3 /* Subsurface3DMapView.swift in Sources */,
+				AD5D88F5C598B1D4247F1491 /* TrainModelLoader.swift in Sources */,
+				56C4AFB3952F26E797451E27 /* VoitureConseilleeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		03AF8B522FB3B2595FB0CE81 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5QW5T29SK4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.parissubway3d.app;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AA6A38E138C1C234C0A07983 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B882E969F5FA80BA6357FC3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5QW5T29SK4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.parissubway3d.app;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FF95516C3FE457026FF9514C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2738E2DC3FD15693341B718A /* Build configuration list for PBXProject "ParisSubway3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF95516C3FE457026FF9514C /* Debug */,
+				AA6A38E138C1C234C0A07983 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AD29FB7F26BF123C2B8619B6 /* Build configuration list for PBXNativeTarget "ParisSubway3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B882E969F5FA80BA6357FC3D /* Debug */,
+				03AF8B522FB3B2595FB0CE81 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		91D42CD241E777D87BC94024 /* XCLocalSwiftPackageReference "ParisSubwayCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ParisSubwayCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B964B7422B84DBC800FDFEA5 /* ParisSubwayCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ParisSubwayCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 333AE4771958904C25D00217 /* Project object */;
+}

@@ -2,9 +2,16 @@ import https from 'https';
 import zlib from 'zlib';
 import fs from 'node:fs';
 import path from 'node:path';
+import { checkRateLimit, getCorsHeaders, rateLimitedResponse } from './_shared/cors';
 
 function loadLocalEnvFallback(): void {
-  if (process.env.PRIM_API_KEY) return;
+  if (
+    process.env.PRIM_API_KEY ||
+    process.env.NETLIFY === 'true' ||
+    process.env.NODE_ENV === 'production'
+  ) {
+    return;
+  }
   try {
     const envPath = path.resolve(process.cwd(), '.env.local');
     if (fs.existsSync(envPath)) {
@@ -746,6 +753,14 @@ export async function buildOrGetSnapshot(
  * Netlify Function handler
  */
 export const handler = async (event: any) => {
+  if (event?.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: getCorsHeaders(event), body: '' };
+  }
+  const rl = checkRateLimit(event);
+  if (!rl.allowed) {
+    return rateLimitedResponse(event, rl.retryAfterSec);
+  }
+
   const apiKey = (process.env.PRIM_API_KEY || '').trim();
   const pollIntervalS = parseInt(process.env.PRIM_POLL_INTERVAL_SECONDS || '180', 10);
 
@@ -757,8 +772,7 @@ export const handler = async (event: any) => {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': `public, max-age=60, s-maxage=${pollIntervalS}, stale-while-revalidate=300`,
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      ...getCorsHeaders(event),
       'X-Prim-Produced-At': snapshot.producedAt,
       'X-Prim-Healthy': String(snapshot.feedHealthy),
     },

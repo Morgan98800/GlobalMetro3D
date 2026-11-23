@@ -1,0 +1,4 @@
+module ParisSubwayCore {
+header "ParisSubwayCore-Swift.h"
+export *
+}

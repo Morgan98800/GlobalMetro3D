@@ -2,10 +2,8 @@ import type { ButtonHTMLAttributes } from 'react';
 import { cx } from './cx';
 
 /**
- * Bascule temps réel / horaires théoriques. Un afficheur : noir, ambre quand
- * c’est en direct. Libellé constant (« Temps réel PRIM »), état porté par
- * role="switch" et par la couleur — le nom accessible ne change jamais.
- * Partagée par le bandeau télémétrie et le HUD de cabine ([data-ride-live]).
+ * Bascule temps réel / horaires théoriques — vrai interrupteur à glissière tactile
+ * (distinct visuellement des groupes radio Segmented).
  */
 export interface InterrupteurDirectProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   direct: boolean;
@@ -16,14 +14,12 @@ export interface InterrupteurDirectProps extends Omit<ButtonHTMLAttributes<HTMLB
   disponible?: boolean;
 }
 
-const BASE = 'afficheur inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap px-2.5 text-[12px] font-semibold';
-
 export function InterrupteurDirect({ direct, onChange, source, disponible = true, className, ...rest }: InterrupteurDirectProps) {
   if (!disponible) {
     return (
-      <span className={cx(BASE, className)}>
-        <span aria-hidden className="size-1.5 rounded-full bg-white/45" />
-        <span className="text-white/75">Horaires théoriques</span>
+      <span className={cx('inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-encart px-2.5 text-[12px] font-semibold text-encre-2', className)}>
+        <span aria-hidden className="size-1.5 rounded-full bg-encre-3" />
+        <span>Horaires théoriques</span>
       </span>
     );
   }
@@ -33,18 +29,32 @@ export function InterrupteurDirect({ direct, onChange, source, disponible = true
       type="button"
       role="switch"
       aria-checked={direct}
-      title={direct ? 'Afficher les horaires théoriques' : 'Afficher le temps réel'}
       onClick={() => onChange?.(!direct)}
+      title={direct ? 'Afficher les horaires théoriques' : 'Afficher le temps réel'}
       className={cx(
-        BASE,
-        'outline-none transition-[box-shadow] duration-150 ease-signal hover:[box-shadow:inset_0_0_0_1px_rgb(255_255_255/0.22)]',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-        className,
+        'group inline-flex h-8 max-md:min-h-[44px] shrink-0 items-center gap-2 rounded-full border px-2.5 text-[12px] font-semibold transition-[color,background-color,border-color] duration-200 outline-none focus-visible:outline-2 focus-visible:outline-focus',
+        direct
+          ? 'border-[#00a98f]/60 bg-[#00a98f]/14 text-encre'
+          : 'border-bord bg-encart/80 text-encre-2 hover:border-encre-3/50 hover:text-encre',
+        className
       )}
       {...rest}
     >
-      <span aria-hidden className={cx('size-1.5 rounded-full', direct ? 'bg-ambre-500' : 'border border-white/50')} />
-      <span className={direct ? 'text-afficheur-encre' : 'text-white/60'}>{libelle}</span>
+      <span className="whitespace-nowrap">{libelle}</span>
+      <span
+        aria-hidden
+        className={cx(
+          'relative inline-flex h-[18px] w-[32px] shrink-0 items-center rounded-full p-[2px] transition-colors duration-200 [box-shadow:inset_0_1px_2px_rgba(0,0,0,0.35)]',
+          direct ? 'bg-[#00a98f]' : 'bg-encre-3/35'
+        )}
+      >
+        <span
+          className={cx(
+            'size-[14px] rounded-full bg-white shadow-sm transition-transform duration-200 [transition-timing-function:var(--pl-ease-portes)]',
+            direct ? 'translate-x-[14px]' : 'translate-x-0'
+          )}
+        />
+      </span>
     </button>
   );
 }

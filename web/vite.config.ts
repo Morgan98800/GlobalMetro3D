@@ -1,10 +1,53 @@
-import { defineConfig } from 'vite';
+import fs from 'node:fs';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
+const NON_PARIS_MODEL_PREFIXES = [
+  'wmata_generic',
+  'bvg_',
+  'scotrail_class_385',
+  'val_208',
+  'val_52m',
+  'breda_vlc',
+];
+
+function parisDistTrimAndSwVersion(): Plugin {
+  return {
+    name: 'paris-dist-trim-and-sw-version',
+    apply: 'build',
+    closeBundle() {
+      const distDir = path.resolve(__dirname, 'dist');
+      if (!fs.existsSync(distDir)) return;
+
+      // 1. Prune inactive multi-city datasets (54 MB) & internal diagnostic reports from production bundle while keeping them in repo for tests
+      fs.rmSync(path.join(distDir, 'cities'), { recursive: true, force: true });
+      fs.rmSync(path.join(distDir, 'data', 'station-rankings.json'), { force: true });
+      fs.rmSync(path.join(distDir, 'sections-report.html'), { force: true });
+
+      const modelsDir = path.join(distDir, 'models', 'train');
+      if (fs.existsSync(modelsDir)) {
+        for (const file of fs.readdirSync(modelsDir)) {
+          if (NON_PARIS_MODEL_PREFIXES.some((prefix) => file.startsWith(prefix))) {
+            fs.rmSync(path.join(modelsDir, file), { force: true });
+          }
+        }
+      }
+
+      // 2. Version the built service worker with a unique build stamp
+      const swPath = path.join(distDir, 'sw.js');
+      if (fs.existsSync(swPath)) {
+        const hash = Date.now().toString(36);
+        const content = fs.readFileSync(swPath, 'utf8').replace(/__BUILD_HASH__/g, hash);
+        fs.writeFileSync(swPath, content, 'utf8');
+      }
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), parisDistTrimAndSwVersion()],
   envDir: '../',
   resolve: {
     alias: {

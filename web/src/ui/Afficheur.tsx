@@ -1,6 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import NumberFlow from '@number-flow/react';
+import { cityClock } from '@core/sim/paris_time';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { cx } from './cx';
-import { lineName, resolveLine, type LineRef } from './lines';
+import { type LineRef, lineName, resolveLine } from './lines';
 
 /**
  * Afficheur — the platform display. Black glass, amber numerals.
@@ -34,10 +36,10 @@ const UNIT: Record<AfficheurSize, string> = {
   xl: 'text-[18px] ml-1.5',
 };
 const CELL: Record<AfficheurSize, string> = {
-  sm: 'h-7 min-w-[3.25rem] px-2',
-  md: 'h-9 min-w-[4rem] px-2.5',
-  lg: 'h-14 min-w-[6rem] px-3.5',
-  xl: 'h-20 min-w-[8.5rem] px-5',
+  sm: 'h-7 min-w-[4.75rem] px-2.5',
+  md: 'h-9 min-w-[5.6rem] px-3',
+  lg: 'h-14 min-w-[7.8rem] px-3.5',
+  xl: 'h-20 min-w-[10.5rem] px-5',
 };
 const TEXT: Record<AfficheurSize, string> = {
   sm: 'text-[12px]',
@@ -129,17 +131,125 @@ function PassageGlyph({ p, size }: { p: Passage; size: AfficheurSize }) {
   if (p.statut === 'supprime')
     return <span className={cx('signaletique font-semibold text-signal-300', TEXT[size])}>supprimé</span>;
   if (p.statut === 'termine') return <Muted size={size}>terminé</Muted>;
-  if (p.statut === 'quai') return <span className={cx('signaletique font-bold', TEXT[size])}>à quai</span>;
+  if (p.statut === 'quai') return <LedDotMatrix text="A QUAI" size={size} />;
   if (p.statut === 'approche' || m === 0) return <Approche size={size} />;
   if (m == null) return <Muted size={size}>—</Muted>;
   const { n, u } = formatLong(m);
   const tone = p.source === 'theorique' ? 'text-afficheur-theorique' : 'text-afficheur-encre';
+  if (m < 60) {
+    return (
+      <span className={cx('flex items-baseline gap-1', tone)}>
+        <LedDotMatrix text={`${m} MIN`} size={size} />
+        {p.statut === 'retard' && <span className="ml-1 size-1.5 self-start rounded-full bg-vigilance" />}
+      </span>
+    );
+  }
   return (
     <span className={cx('flex items-baseline', tone)}>
-      <span key={n} className={cx('chiffres font-bold animate-rafraichir', NUM[size])}>{n}</span>
+      {m < 60 ? (
+        <NumberFlow value={m} trend={-1} className={cx('chiffres font-bold', NUM[size])} />
+      ) : (
+        <span key={n} className={cx('chiffres font-bold animate-rafraichir', NUM[size])}>{n}</span>
+      )}
       {u && <span className={cx('signaletique font-semibold', UNIT[size])}>{u}</span>}
       {p.statut === 'retard' && <span className="ml-1 size-1.5 self-start rounded-full bg-vigilance" />}
     </span>
+  );
+}
+
+const FONT_5X7: Record<string, readonly string[]> = {
+  ' ': ['00000', '00000', '00000', '00000', '00000', '00000', '00000'],
+  '0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
+  '1': ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
+  '2': ['01110', '10001', '00001', '00110', '01000', '10000', '11111'],
+  '3': ['11110', '00001', '00001', '01110', '00001', '00001', '11110'],
+  '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
+  '5': ['11111', '10000', '11110', '00001', '00001', '10001', '01110'],
+  '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
+  '7': ['11111', '00001', '00010', '00100', '01000', '01000', '01000'],
+  '8': ['01110', '10001', '10001', '01110', '10001', '10001', '01110'],
+  '9': ['01110', '10001', '10001', '01111', '00001', '00010', '01100'],
+  ':': ['00000', '00100', '00100', '00000', '00100', '00100', '00000'],
+  A: ['01110', '10001', '10001', '11111', '10001', '10001', '10001'],
+  I: ['01110', '00100', '00100', '00100', '00100', '00100', '01110'],
+  M: ['10001', '11011', '10101', '10101', '10001', '10001', '10001'],
+  N: ['10001', '11001', '10101', '10011', '10001', '10001', '10001'],
+  Q: ['01110', '10001', '10001', '10001', '10101', '10010', '01101'],
+  U: ['10001', '10001', '10001', '10001', '10001', '10001', '01110'],
+};
+
+const LED_METRICS: Record<AfficheurSize, { pitch: number; r: number }> = {
+  sm: { pitch: 1.85, r: 0.78 },
+  md: { pitch: 2.5, r: 1.0 },
+  lg: { pitch: 3.5, r: 1.25 },
+  xl: { pitch: 5.2, r: 1.85 },
+};
+
+function LedDotMatrix({
+  text,
+  size,
+}: {
+  text: string;
+  size: AfficheurSize;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const { pitch, r } = LED_METRICS[size];
+  const cols = text.length * 6 - 1;
+  const rows = 7;
+  const w = Math.ceil(cols * pitch + 2);
+  const h = Math.ceil(rows * pitch + 2);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const litColor = '#ffb81c';
+    const coreColor = '#fff3cf';
+    const offColor = 'rgba(92, 68, 12, 0.45)';
+
+    const drawFrame = (revealCols: number) => {
+      ctx.clearRect(0, 0, w, h);
+      let cursor = 0;
+      for (const ch of text) {
+        const glyph = FONT_5X7[ch];
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < 5; col++) {
+            const cIdx = cursor + col;
+            const x = 1 + cIdx * pitch + pitch / 2;
+            const y = 1 + row * pitch + pitch / 2;
+            const lit = !!glyph && glyph[row][col] === '1' && cIdx <= revealCols;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fillStyle = lit ? litColor : offColor;
+            ctx.fill();
+            if (lit) {
+              ctx.beginPath();
+              ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
+              ctx.fillStyle = coreColor;
+              ctx.fill();
+            }
+          }
+        }
+        cursor += 6;
+      }
+    };
+
+    drawFrame(cols);
+  }, [cols, h, pitch, r, rows, size, text, w]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden
+      style={{ width: w, height: h }}
+      className="block shrink-0 self-center"
+    />
   );
 }
 
@@ -172,38 +282,50 @@ export function Approche({ size = 'sm' }: { size?: AfficheurSize }) {
  */
 export interface HorlogeProps {
   date?: Date;
+  timezone?: string;
   /** Re-render every 15 s when no date is given */
   live?: boolean;
   size?: 'sm' | 'md';
   className?: string;
 }
 
-export function Horloge({ date, live = true, size = 'sm', className }: HorlogeProps) {
-  const [now, setNow] = useState(() => date ?? new Date());
+function cityTimeDate(timezone: string): Date {
+  const clock = cityClock(new Date(), timezone);
+  const d = new Date();
+  const h = Math.floor(clock.secondsSinceMidnight / 3600);
+  const m = Math.floor((clock.secondsSinceMidnight % 3600) / 60);
+  const s = Math.floor(clock.secondsSinceMidnight % 60);
+  d.setHours(h, m, s, 0);
+  return d;
+}
+
+export function Horloge({ date, timezone = 'Europe/Paris', live = true, size = 'sm', className }: HorlogeProps) {
+  const [now, setNow] = useState(() => date ?? cityTimeDate(timezone));
   useEffect(() => {
     if (date) {
       setNow(date);
       return;
     }
+    setNow(cityTimeDate(timezone));
     if (!live) return;
-    const id = window.setInterval(() => setNow(new Date()), 15_000);
+    const id = window.setInterval(() => setNow(cityTimeDate(timezone)), 15_000);
     return () => window.clearInterval(id);
-  }, [date, live]);
+  }, [date, timezone, live]);
   const hh = String(now.getHours()).padStart(2, '0');
   const mm = String(now.getMinutes()).padStart(2, '0');
   return (
     <time
       dateTime={`${hh}:${mm}`}
-      aria-label={`Heure : ${Number(hh)} h ${mm}`}
       className={cx(
-        'afficheur chiffres inline-flex items-center font-bold',
-        size === 'sm' ? 'h-7 px-2 text-[15px]' : 'h-9 px-2.5 text-[19px]',
+        'afficheur inline-flex items-center justify-center',
+        size === 'sm' ? 'h-7 px-2.5' : 'h-9 px-3',
         className,
       )}
     >
-      {hh}
-      <span className="mx-[1px] -translate-y-[0.06em] opacity-70">:</span>
-      {mm}
+      <span className="pl-sr">{`Heure : ${Number(hh)} h ${mm}`}</span>
+      <span aria-hidden="true" className="inline-flex items-center">
+        <LedDotMatrix text={`${hh}:${mm}`} size={size} />
+      </span>
     </time>
   );
 }

@@ -1,0 +1,11 @@
+Target dependency graph (4 targets)
+Target 'AllIncludingTests' in project 'Aggregate'
+➜ Explicit dependency on target 'ParisSubwayCoreTests-product' in project 'ParisSubwayCore'
+➜ Dependency on target 'ParisSubwayCoreTests-product' in project 'ParisSubwayCore' via transitive dependency through 'ParisSubwayCoreTests-test-runner'
+➜ Explicit dependency on target 'ParisSubwayCore-product' in project 'ParisSubwayCore'
+➜ Explicit dependency on target 'ParisSubwayCore' in project 'ParisSubwayCore'
+Target 'ParisSubwayCore-product' in project 'ParisSubwayCore'
+➜ Explicit dependency on target 'ParisSubwayCore' in project 'ParisSubwayCore'
+Target 'ParisSubwayCoreTests-product' in project 'ParisSubwayCore'
+➜ Explicit dependency on target 'ParisSubwayCore' in project 'ParisSubwayCore'
+Target 'ParisSubwayCore' in project 'ParisSubwayCore' (no dependencies)

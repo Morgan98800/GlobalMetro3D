@@ -3,56 +3,89 @@ import { createRoot } from 'react-dom/client';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
+import {
+  BloomEffect,
+  EffectComposer,
+  EffectPass,
+  RenderPass,
+  VignetteEffect,
+} from 'postprocessing';
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla';
 import { getOptimalPixelRatio, isMobileGpuDevice } from '@core/ui/map/device_perf';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
+import type { StationDeparture } from '@core/sim/browser_engine';
 import { CabHud } from './ui/CabHud';
 import { drawAfficheurVitesse, MATERIAUX } from './three/paris_palette';
+import {
+  createAsphaltPbrMaps,
+  createBallastPbrMaps,
+  createBrushedMetalNormalMap,
+  createConcretePbrMaps,
+  createContactShadowTexture,
+} from './three/pbr_textures';
+import {
+  createFriezeCeramiqueTexture,
+  createHaussmannFacadeMaps,
+  createSortieSignTexture,
+  createZincRoofMaps,
+} from './three/haussmann_textures';
 
-export interface ParisRideOptions {
-  initialLine?: string;
-  initialDest?: string;
-  initialStation?: string;
-  initialTrainId?: string;
-  initialView?: 'ride' | 'vault';
-  onExit?: () => void;
-  onRouteChange?: (routeKey: string) => void;
-}
+import {
+  ROUTES,
+  computeLiveStepS,
+  formatSielWaitTime,
+  getGlbUrlsForFamily,
+  getLibraryGlbUrlsForLine,
+  isRerLineNum,
+  normalizeStr,
+  resolveParisStockSpec,
+  resolveRideRouteKey,
+  resolveTrainGlbFamily,
+  selectDualSielBoards,
+  shouldUseDetailedCarMesh,
+  type DualSielBoards,
+  type ParisGlbFamily,
+  type ParisRideHandle,
+  type ParisRideOptions,
+  type ParisRollingStockSpec,
+  type RouteDef,
+  type RouteStationDef,
+  type SielRow,
+} from './ride/routes_and_stock';
+import {
+  addArchetypeDecorations,
+  createArchetypeMaterials,
+  resolveStationArchetype,
+} from './ride/station_architectures';
+import { RideSynthAudio } from './ride/synth_audio';
 
-export interface ParisRideHandle {
-  setRoute: (key: string, stationName?: string, destName?: string) => void;
-  setView: (view: 'vault' | 'ride') => void;
-  syncFromSimulation: (trains: TrainMarker[]) => void;
-  dispose: () => void;
-}
-
-export type ParisGlbFamily =
-  | 'pneumatic_generic'
-  | 'steel_classic'
-  | 'rer_generic_A'
-  | 'rer_generic_B'
-  | 'rer_generic_C'
-  | 'rer_generic_D'
-  | 'rer_generic_E';
-
-interface RouteStationDef {
-  name: string;
-  flag: '' | 'f' | 'b';
-  air: boolean;
-}
-
-interface RouteDef {
-  key: string;
-  num: string;
-  bg: string;
-  fg: string;
-  branch?: string;
-  open: {
-    air?: string[];
-    seine?: [string, string][];
-    tower?: [string, string];
-  };
-  stations: RouteStationDef[];
-}
+export {
+  ROUTES,
+  computeLiveStepS,
+  formatSielWaitTime,
+  getGlbUrlsForFamily,
+  getLibraryGlbUrlsForLine,
+  isRerLineNum,
+  normalizeStr,
+  resolveParisStockSpec,
+  resolveRideRouteKey,
+  resolveTrainGlbFamily,
+  selectDualSielBoards,
+  shouldUseDetailedCarMesh,
+};
+export type {
+  DualSielBoards,
+  ParisGlbFamily,
+  ParisRideHandle,
+  ParisRideOptions,
+  ParisRollingStockSpec,
+  RouteDef,
+RouteStationDef,
+  SielRow,
+};
 
 interface TrackPiece {
   t: 'L' | 'A';
@@ -136,1005 +169,6 @@ const WINS: [number, number][] = [
 const WY: [number, number] = [1.0, 1.8];
 const DY: [number, number] = [0.08, 2.0];
 
-const T7 = [
-  'La Courneuve – 8 Mai 1945',
-  'Fort d’Aubervilliers',
-  'Aubervilliers – Pantin – Quatre Chemins',
-  'Porte de la Villette',
-  'Corentin Cariou',
-  'Crimée',
-  'Riquet',
-  'Stalingrad',
-  'Louis Blanc',
-  'Château-Landon',
-  'Gare de l’Est',
-  'Poissonnière',
-  'Cadet',
-  'Le Peletier',
-  'Chaussée d’Antin – La Fayette',
-  'Opéra',
-  'Pyramides',
-  'Palais Royal – Musée du Louvre',
-  'Pont Neuf',
-  'Châtelet',
-  'Pont Marie',
-  'Sully – Morland',
-  'Jussieu',
-  'Place Monge',
-  'Censier – Daubenton',
-  'Les Gobelins',
-  'Place d’Italie',
-  'Tolbiac',
-  'Maison Blanche',
-];
-
-const T13 = [
-  'Châtillon – Montrouge',
-  'Malakoff – Étienne Dolet',
-  'Malakoff – Plateau de Vanves',
-  'Porte de Vanves',
-  'Plaisance',
-  'Pernety',
-  'Gaîté',
-  'Montparnasse – Bienvenüe',
-  'Duroc',
-  'Saint-François-Xavier',
-  'Varenne',
-  'Invalides',
-  'Champs-Élysées – Clemenceau',
-  'Miromesnil',
-  'Saint-Lazare',
-  'Liège',
-  'Place de Clichy',
-  'La Fourche',
-];
-
-const RAW_ROUTES: Array<{
-  key: string;
-  num: string;
-  bg: string;
-  fg: string;
-  branch?: string;
-  st: string[];
-}> = [
-  {
-    key: '1',
-    num: '1',
-    bg: '#FFCD00',
-    fg: '#1a1a1a',
-    st: [
-      'La Défense',
-      'Esplanade de La Défense',
-      'Pont de Neuilly',
-      'Les Sablons',
-      'Porte Maillot',
-      'Argentine',
-      'Charles de Gaulle – Étoile',
-      'George V',
-      'Franklin D. Roosevelt',
-      'Champs-Élysées – Clemenceau',
-      'Concorde',
-      'Tuileries',
-      'Palais Royal – Musée du Louvre',
-      'Louvre – Rivoli',
-      'Châtelet',
-      'Hôtel de Ville',
-      'Saint-Paul',
-      'Bastille',
-      'Gare de Lyon',
-      'Reuilly – Diderot',
-      'Nation',
-      'Porte de Vincennes',
-      'Saint-Mandé',
-      'Bérault',
-      'Château de Vincennes',
-    ],
-  },
-  {
-    key: '2',
-    num: '2',
-    bg: '#003CA6',
-    fg: '#ffffff',
-    st: [
-      'Porte Dauphine',
-      'Victor Hugo',
-      'Charles de Gaulle – Étoile',
-      'Ternes',
-      'Courcelles',
-      'Monceau',
-      'Villiers',
-      'Rome',
-      'Place de Clichy',
-      'Blanche',
-      'Pigalle',
-      'Anvers',
-      'Barbès – Rochechouart',
-      'La Chapelle',
-      'Stalingrad',
-      'Jaurès',
-      'Colonel Fabien',
-      'Belleville',
-      'Couronnes',
-      'Ménilmontant',
-      'Père Lachaise',
-      'Philippe Auguste',
-      'Alexandre Dumas',
-      'Avron',
-      'Nation',
-    ],
-  },
-  {
-    key: '3',
-    num: '3',
-    bg: '#837902',
-    fg: '#ffffff',
-    st: [
-      'Pont de Levallois – Bécon',
-      'Anatole France',
-      'Louise Michel',
-      'Porte de Champerret',
-      'Pereire',
-      'Wagram',
-      'Malesherbes',
-      'Villiers',
-      'Europe',
-      'Saint-Lazare',
-      'Havre – Caumartin',
-      'Opéra',
-      'Quatre-Septembre',
-      'Bourse',
-      'Sentier',
-      'Réaumur – Sébastopol',
-      'Arts et Métiers',
-      'Temple',
-      'République',
-      'Parmentier',
-      'Rue Saint-Maur',
-      'Père Lachaise',
-      'Gambetta',
-      'Porte de Bagnolet',
-      'Gallieni',
-    ],
-  },
-  {
-    key: '3bis',
-    num: '3bis',
-    bg: '#6EC4E8',
-    fg: '#0d2340',
-    st: ['Gambetta', 'Pelleport', 'Saint-Fargeau', 'Porte des Lilas'],
-  },
-  {
-    key: '4',
-    num: '4',
-    bg: '#CF009E',
-    fg: '#ffffff',
-    st: [
-      'Porte de Clignancourt',
-      'Simplon',
-      'Marcadet – Poissonniers',
-      'Château Rouge',
-      'Barbès – Rochechouart',
-      'Gare du Nord',
-      'Gare de l’Est',
-      'Château d’Eau',
-      'Strasbourg – Saint-Denis',
-      'Réaumur – Sébastopol',
-      'Étienne Marcel',
-      'Les Halles',
-      'Châtelet',
-      'Cité',
-      'Saint-Michel',
-      'Odéon',
-      'Saint-Germain-des-Prés',
-      'Saint-Sulpice',
-      'Saint-Placide',
-      'Montparnasse – Bienvenüe',
-      'Vavin',
-      'Raspail',
-      'Denfert-Rochereau',
-      'Mouton-Duvernet',
-      'Alésia',
-      'Porte d’Orléans',
-      'Mairie de Montrouge',
-      'Barbara',
-      'Bagneux – Lucie Aubrac',
-    ],
-  },
-  {
-    key: '5',
-    num: '5',
-    bg: '#FF7E2E',
-    fg: '#1a1a1a',
-    st: [
-      'Bobigny – Pablo Picasso',
-      'Bobigny – Pantin – Raymond Queneau',
-      'Église de Pantin',
-      'Hoche',
-      'Porte de Pantin',
-      'Ourcq',
-      'Laumière',
-      'Jaurès',
-      'Stalingrad',
-      'Gare du Nord',
-      'Gare de l’Est',
-      'Jacques Bonsergent',
-      'République',
-      'Oberkampf',
-      'Richard-Lenoir',
-      'Bréguet-Sabin',
-      'Bastille',
-      'Quai de la Rapée',
-      'Gare d’Austerlitz',
-      'Saint-Marcel',
-      'Campo-Formio',
-      'Place d’Italie',
-    ],
-  },
-  {
-    key: '6',
-    num: '6',
-    bg: '#6ECA97',
-    fg: '#0f2a1c',
-    st: [
-      'Charles de Gaulle – Étoile',
-      'Kléber',
-      'Boissière',
-      'Trocadéro',
-      'Passy',
-      'Bir-Hakeim',
-      'Dupleix',
-      'La Motte-Picquet – Grenelle',
-      'Cambronne',
-      'Sèvres – Lecourbe',
-      'Pasteur',
-      'Montparnasse – Bienvenüe',
-      'Edgar Quinet',
-      'Raspail',
-      'Denfert-Rochereau',
-      'Saint-Jacques',
-      'Glacière',
-      'Corvisart',
-      'Place d’Italie',
-      'Nationale',
-      'Chevaleret',
-      'Quai de la Gare',
-      'Bercy',
-      'Dugommier',
-      'Daumesnil',
-      'Bel-Air',
-      'Picpus',
-      'Nation',
-    ],
-  },
-  {
-    key: '7v',
-    num: '7',
-    bg: '#FA9ABA',
-    fg: '#3a0d1f',
-    branch: 'Branche Villejuif',
-    st: T7.concat([
-      'Porte d’Italie',
-      'Le Kremlin-Bicêtre',
-      'Villejuif – Léo Lagrange',
-      'Villejuif – Paul Vaillant-Couturier',
-      'Villejuif – Louis Aragon',
-    ]),
-  },
-  {
-    key: '7i',
-    num: '7',
-    bg: '#FA9ABA',
-    fg: '#3a0d1f',
-    branch: 'Branche Ivry',
-    st: T7.concat(['Porte de Choisy', 'Porte d’Ivry', 'Pierre et Marie Curie', 'Mairie d’Ivry']),
-  },
-  {
-    key: '7bis',
-    num: '7bis',
-    bg: '#6ECA97',
-    fg: '#0f2a1c',
-    st: [
-      'Louis Blanc',
-      'Jaurès',
-      'Bolivar',
-      'Buttes Chaumont',
-      'Botzaris',
-      'Place des Fêtes>',
-      '<Danube',
-      'Pré-Saint-Gervais',
-    ],
-  },
-  {
-    key: '8',
-    num: '8',
-    bg: '#E19BDF',
-    fg: '#2d0e2c',
-    st: [
-      'Balard',
-      'Lourmel',
-      'Boucicaut',
-      'Félix Faure',
-      'Commerce',
-      'La Motte-Picquet – Grenelle',
-      'École Militaire',
-      'La Tour-Maubourg',
-      'Invalides',
-      'Concorde',
-      'Madeleine',
-      'Opéra',
-      'Richelieu – Drouot',
-      'Grands Boulevards',
-      'Bonne Nouvelle',
-      'Strasbourg – Saint-Denis',
-      'République',
-      'Filles du Calvaire',
-      'Saint-Sébastien – Froissart',
-      'Chemin Vert',
-      'Bastille',
-      'Ledru-Rollin',
-      'Faidherbe – Chaligny',
-      'Reuilly – Diderot',
-      'Montgallet',
-      'Daumesnil',
-      'Michel Bizot',
-      'Porte Dorée',
-      'Porte de Charenton',
-      'Liberté',
-      'Charenton – Écoles',
-      'École Vétérinaire de Maisons-Alfort',
-      'Maisons-Alfort – Stade',
-      'Maisons-Alfort – Les Juilliottes',
-      'Créteil – L’Échat',
-      'Créteil – Université',
-      'Créteil – Préfecture',
-      'Pointe du Lac',
-    ],
-  },
-  {
-    key: '9',
-    num: '9',
-    bg: '#B6BD00',
-    fg: '#1f2200',
-    st: [
-      'Pont de Sèvres',
-      'Billancourt',
-      'Marcel Sembat',
-      'Porte de Saint-Cloud',
-      'Exelmans',
-      'Michel-Ange – Molitor',
-      'Michel-Ange – Auteuil',
-      'Jasmin',
-      'Ranelagh',
-      'La Muette',
-      'Rue de la Pompe',
-      'Trocadéro',
-      'Iéna',
-      'Alma – Marceau',
-      'Franklin D. Roosevelt',
-      'Saint-Philippe du Roule',
-      'Miromesnil',
-      'Saint-Augustin',
-      'Havre – Caumartin',
-      'Chaussée d’Antin – La Fayette',
-      'Richelieu – Drouot',
-      'Grands Boulevards',
-      'Bonne Nouvelle',
-      'Strasbourg – Saint-Denis',
-      'République',
-      'Oberkampf',
-      'Saint-Ambroise',
-      'Voltaire',
-      'Charonne',
-      'Rue des Boulets',
-      'Nation',
-      'Buzenval',
-      'Maraîchers',
-      'Porte de Montreuil',
-      'Robespierre',
-      'Croix de Chavaux',
-      'Mairie de Montreuil',
-    ],
-  },
-  {
-    key: '10',
-    num: '10',
-    bg: '#C9910D',
-    fg: '#1f1400',
-    st: [
-      'Gare d’Austerlitz',
-      'Jussieu',
-      'Cardinal Lemoine',
-      'Maubert – Mutualité',
-      'Cluny – La Sorbonne',
-      'Odéon',
-      'Mabillon',
-      'Sèvres – Babylone',
-      'Vaneau',
-      'Duroc',
-      'Ségur',
-      'La Motte-Picquet – Grenelle',
-      'Avenue Émile Zola',
-      'Charles Michels',
-      'Javel – André Citroën',
-      'Église d’Auteuil>',
-      '<Mirabeau',
-      'Michel-Ange – Auteuil>',
-      '<Chardon-Lagache',
-      'Porte d’Auteuil>',
-      '<Michel-Ange – Molitor',
-      'Boulogne – Jean Jaurès',
-      'Boulogne – Pont de Saint-Cloud',
-    ],
-  },
-  {
-    key: '11',
-    num: '11',
-    bg: '#704B1C',
-    fg: '#ffffff',
-    st: [
-      'Châtelet',
-      'Hôtel de Ville',
-      'Rambuteau',
-      'Arts et Métiers',
-      'République',
-      'Goncourt',
-      'Belleville',
-      'Pyrénées',
-      'Jourdain',
-      'Place des Fêtes',
-      'Télégraphe',
-      'Porte des Lilas',
-      'Mairie des Lilas',
-      'Serge Gainsbourg',
-      'Romainville – Carnot',
-      'Montreuil – Hôpital',
-      'La Dhuys',
-      'Coteaux Beauclair',
-      'Rosny – Bois-Perrier',
-    ],
-  },
-  {
-    key: '12',
-    num: '12',
-    bg: '#007852',
-    fg: '#ffffff',
-    st: [
-      'Mairie d’Aubervilliers',
-      'Aimé Césaire',
-      'Front Populaire',
-      'Porte de la Chapelle',
-      'Marx Dormoy',
-      'Marcadet – Poissonniers',
-      'Jules Joffrin',
-      'Lamarck – Caulaincourt',
-      'Abbesses',
-      'Pigalle',
-      'Saint-Georges',
-      'Notre-Dame-de-Lorette',
-      'Trinité – d’Estienne d’Orves',
-      'Saint-Lazare',
-      'Madeleine',
-      'Concorde',
-      'Assemblée Nationale',
-      'Solférino',
-      'Rue du Bac',
-      'Sèvres – Babylone',
-      'Rennes',
-      'Notre-Dame-des-Champs',
-      'Montparnasse – Bienvenüe',
-      'Falguière',
-      'Pasteur',
-      'Volontaires',
-      'Vaugirard',
-      'Convention',
-      'Porte de Versailles',
-      'Corentin Celton',
-      'Mairie d’Issy',
-    ],
-  },
-  {
-    key: '13s',
-    num: '13',
-    bg: '#6EC4E8',
-    fg: '#0d2340',
-    branch: 'Branche Saint-Denis',
-    st: T13.concat([
-      'Guy Môquet',
-      'Porte de Saint-Ouen',
-      'Garibaldi',
-      'Mairie de Saint-Ouen',
-      'Carrefour Pleyel',
-      'Saint-Denis – Porte de Paris',
-      'Basilique de Saint-Denis',
-      'Saint-Denis – Université',
-    ]),
-  },
-  {
-    key: '13a',
-    num: '13',
-    bg: '#6EC4E8',
-    fg: '#0d2340',
-    branch: 'Branche Asnières',
-    st: T13.concat([
-      'Brochant',
-      'Porte de Clichy',
-      'Mairie de Clichy',
-      'Gabriel Péri',
-      'Les Agnettes',
-      'Les Courtilles',
-    ]),
-  },
-  {
-    key: '14',
-    num: '14',
-    bg: '#62259D',
-    fg: '#ffffff',
-    st: [
-      'Saint-Denis Pleyel',
-      'Mairie de Saint-Ouen',
-      'Porte de Clichy',
-      'Pont Cardinet',
-      'Saint-Lazare',
-      'Madeleine',
-      'Pyramides',
-      'Châtelet',
-      'Gare de Lyon',
-      'Bercy',
-      'Cour Saint-Émilion',
-      'Bibliothèque François Mitterrand',
-      'Olympiades',
-      'Maison Blanche',
-      'Hôpital Bicêtre',
-      'Villejuif – Gustave Roussy',
-      'L’Haÿ-les-Roses',
-      'Chevilly-Larue',
-      'Thiais – Orly',
-      'Aéroport d’Orly',
-    ],
-  },
-  {
-    key: 'A',
-    num: 'A',
-    bg: '#EB2132',
-    fg: '#ffffff',
-    st: [
-      'Cergy / Poissy',
-      'Nanterre-Préfecture',
-      'La Défense',
-      'Charles de Gaulle – Étoile',
-      'Auber',
-      'Châtelet – Les Halles',
-      'Gare de Lyon',
-      'Nation',
-      'Vincennes',
-      'Val de Fontenay',
-      'Marne-la-Vallée / Boissy',
-    ],
-  },
-  {
-    key: 'B',
-    num: 'B',
-    bg: '#5091CB',
-    fg: '#ffffff',
-    st: [
-      'Aéroport CDG 2 / Mitry',
-      'Aulnay-sous-Bois',
-      'Gare du Nord',
-      'Châtelet – Les Halles',
-      'Saint-Michel Notre-Dame',
-      'Luxembourg',
-      'Port-Royal',
-      'Denfert-Rochereau',
-      'Cité Universitaire',
-      'Bourg-la-Reine',
-      'Antony / Saint-Rémy',
-    ],
-  },
-  {
-    key: 'C',
-    num: 'C',
-    bg: '#FFCC30',
-    fg: '#000000',
-    st: [
-      'Pontoise / Versailles-Château',
-      'Javel',
-      'Champ de Mars – Tour Eiffel',
-      'Pont de l’Alma',
-      'Invalides',
-      'Musée d’Orsay',
-      'Saint-Michel Notre-Dame',
-      'Gare d’Austerlitz',
-      'Bibliothèque François Mitterrand',
-      'Choisy-le-Roi',
-      'Juvisy',
-    ],
-  },
-  {
-    key: 'D',
-    num: 'D',
-    bg: '#008B5B',
-    fg: '#ffffff',
-    st: [
-      'Orry-la-Ville – Creil',
-      'Saint-Denis',
-      'Stade de France – Saint-Denis',
-      'Gare du Nord',
-      'Châtelet – Les Halles',
-      'Gare de Lyon',
-      'Maisons-Alfort – Alfortville',
-      'Villeneuve-Saint-Georges',
-      'Juvisy / Melun',
-    ],
-  },
-  {
-    key: 'E',
-    num: 'E',
-    bg: '#B94E9A',
-    fg: '#ffffff',
-    st: [
-      'Nanterre-la-Folie',
-      'La Défense',
-      'Neuilly – Porte Maillot',
-      'Haussmann – Saint-Lazare',
-      'Magenta',
-      'Rosa Parks',
-      'Pantin',
-      'Noisy-le-Sec',
-      'Chelles / Tournan',
-    ],
-  },
-];
-
-const OPEN: Record<
-  string,
-  { air?: string[]; seine?: [string, string][]; tower?: [string, string] }
-> = {
-  '1': { air: ['Bastille'] },
-  '2': { air: ['Barbès – Rochechouart', 'La Chapelle', 'Stalingrad', 'Jaurès'] },
-  '5': {
-    air: ['Quai de la Rapée', 'Gare d’Austerlitz'],
-    seine: [['Quai de la Rapée', 'Gare d’Austerlitz']],
-  },
-  '6': {
-    air: [
-      'Passy',
-      'Bir-Hakeim',
-      'Dupleix',
-      'La Motte-Picquet – Grenelle',
-      'Cambronne',
-      'Sèvres – Lecourbe',
-      'Saint-Jacques',
-      'Glacière',
-      'Corvisart',
-      'Nationale',
-      'Chevaleret',
-      'Quai de la Gare',
-      'Bel-Air',
-    ],
-    seine: [
-      ['Passy', 'Bir-Hakeim'],
-      ['Quai de la Gare', 'Bercy'],
-    ],
-    tower: ['Passy', 'Bir-Hakeim'],
-  },
-  '8': {
-    air: ['Créteil – L’Échat', 'Créteil – Université', 'Créteil – Préfecture', 'Pointe du Lac'],
-  },
-  '11': { air: ['Coteaux Beauclair'] },
-  '13s': { air: ['Châtillon – Montrouge', 'Malakoff – Étienne Dolet'] },
-  '13a': { air: ['Châtillon – Montrouge', 'Malakoff – Étienne Dolet'] },
-  A: { air: ['Nanterre-Préfecture', 'Vincennes', 'Val de Fontenay'] },
-  B: { air: ['Aulnay-sous-Bois', 'Cité Universitaire', 'Bourg-la-Reine', 'Antony / Saint-Rémy'] },
-  C: {
-    air: ['Javel', 'Champ de Mars – Tour Eiffel', 'Pont de l’Alma', 'Invalides', 'Choisy-le-Roi'],
-    seine: [['Javel', 'Champ de Mars – Tour Eiffel']],
-    tower: ['Javel', 'Champ de Mars – Tour Eiffel'],
-  },
-  D: { air: ['Saint-Denis', 'Stade de France – Saint-Denis', 'Maisons-Alfort – Alfortville'] },
-  E: { air: ['Rosa Parks', 'Pantin', 'Noisy-le-Sec'] },
-};
-
-export const ROUTES: RouteDef[] = RAW_ROUTES.map((r) => {
-  const open = OPEN[r.key] ?? {};
-  return {
-    key: r.key,
-    num: r.num,
-    bg: r.bg,
-    fg: r.fg,
-    branch: r.branch,
-    open,
-    stations: r.st.map((rawName) => {
-      let name = rawName;
-      let flag: '' | 'f' | 'b' = '';
-      if (name.endsWith('>')) {
-        flag = 'f';
-        name = name.slice(0, -1);
-      } else if (name.startsWith('<')) {
-        flag = 'b';
-        name = name.slice(1);
-      }
-      return {
-        name,
-        flag,
-        air: (open.air ?? []).includes(name),
-      };
-    }),
-  };
-});
-
-export interface ParisRollingStockSpec {
-  id: string;
-  label: string;
-  driverless: boolean;
-  hasPsd: boolean;
-  boa: boolean;
-  bodyHex: number;
-  firstClassBodyHex?: number;
-  stripeHex: number;
-  roofHex: number;
-  floorHex: number;
-  seatHex: number;
-  liningHex: number;
-  ceilingTint: [number, number, number];
-}
-
-export function resolveParisStockSpec(
-  lineNumOrKey: string,
-  spragueMode = false
-): ParisRollingStockSpec {
-  if (spragueMode) {
-    return {
-      id: 'sprague_1930',
-      label: 'Sprague 1930',
-      driverless: false,
-      hasPsd: false,
-      boa: false,
-      bodyHex: 0x24513c,
-      firstClassBodyHex: 0x7e1f1d,
-      stripeHex: 0xd8c38a,
-      roofHex: 0x3b3d3f,
-      floorHex: 0x3a2a1f,
-      seatHex: 0x6e4426,
-      liningHex: 0x6e4426,
-      ceilingTint: [1.9, 1.65, 1.2],
-    };
-  }
-  const up = lineNumOrKey
-    .trim()
-    .toUpperCase()
-    .replace(/^RER\s+/, '');
-  if (up === 'A' || up === 'B' || up === 'C' || up === 'D' || up === 'E') {
-    return {
-      id: `rer_${up}`,
-      label: up === 'A' ? 'MI 09' : up === 'B' ? 'MI 79' : up === 'E' ? 'RER NG' : 'Z 2N / RER',
-      driverless: false,
-      hasPsd: false,
-      boa: up === 'E',
-      bodyHex: 0xf2f3f5,
-      stripeHex: up === 'E' ? 0x00a3a6 : 0x18294b,
-      roofHex: 0x454a52,
-      floorHex: 0x2a2f36,
-      seatHex: 0x1e4d92,
-      liningHex: 0xd9dde2,
-      ceilingTint: [1.65, 1.72, 1.82],
-    };
-  }
-  if (up === '14' || up === '4') {
-    return {
-      id: 'mp14_ca',
-      label: 'MP 14 CA',
-      driverless: true,
-      hasPsd: true,
-      boa: true,
-      bodyHex: 0xf4f4f2,
-      stripeHex: 0x00a3a6,
-      roofHex: 0x4b5158,
-      floorHex: 0x31363c,
-      seatHex: 0x008b8d,
-      liningHex: 0xe6e7e9,
-      ceilingTint: [1.7, 1.76, 1.82],
-    };
-  }
-  if (up === '11') {
-    return {
-      id: 'mp14_cc',
-      label: 'MP 14 CC',
-      driverless: false,
-      hasPsd: false,
-      boa: true,
-      bodyHex: 0xf4f4f2,
-      stripeHex: 0x00a3a6,
-      roofHex: 0x4b5158,
-      floorHex: 0x31363c,
-      seatHex: 0x008b8d,
-      liningHex: 0xe6e7e9,
-      ceilingTint: [1.7, 1.76, 1.82],
-    };
-  }
-  if (up === '1') {
-    return {
-      id: 'mp05_ca',
-      label: 'MP 05 CA',
-      driverless: true,
-      hasPsd: true,
-      boa: true,
-      bodyHex: 0xf2efe9,
-      stripeHex: 0x008a8a,
-      roofHex: 0x464a4e,
-      floorHex: 0x383a3d,
-      seatHex: 0x1f7a6e,
-      liningHex: 0xe3e2dc,
-      ceilingTint: [1.78, 1.78, 1.74],
-    };
-  }
-  if (up === '6') {
-    return {
-      id: 'mp89_cc',
-      label: 'MP 89 CC',
-      driverless: false,
-      hasPsd: false,
-      boa: true,
-      bodyHex: 0xf0eee8,
-      stripeHex: 0x008a8a,
-      roofHex: 0x45494e,
-      floorHex: 0x36393d,
-      seatHex: 0x2d5fa0,
-      liningHex: 0xdeddd8,
-      ceilingTint: [1.72, 1.72, 1.66],
-    };
-  }
-  if (up === '2' || up === '5' || up === '9') {
-    return {
-      id: 'mf01',
-      label: 'MF 01',
-      driverless: false,
-      hasPsd: false,
-      boa: true,
-      bodyHex: 0xf1f1ee,
-      stripeHex: up === '9' ? 0x00a3a6 : 0x008a8a,
-      roofHex: 0x4d5257,
-      floorHex: 0x35393e,
-      seatHex: 0x007e82,
-      liningHex: 0xe0e1e4,
-      ceilingTint: [1.74, 1.76, 1.78],
-    };
-  }
-  if (up === '7' || up === '7B' || up === '8' || up === '13') {
-    return {
-      id: 'mf77',
-      label: 'MF 77',
-      driverless: false,
-      hasPsd: false,
-      boa: false,
-      bodyHex: 0xf3f1ec,
-      stripeHex: 0x1e4d92,
-      roofHex: 0x52565c,
-      floorHex: 0x3c3b39,
-      seatHex: 0x2d5fa0,
-      liningHex: 0xd9d8d2,
-      ceilingTint: [1.82, 1.75, 1.62],
-    };
-  }
-  return {
-    id: 'mf67',
-    label: 'MF 67',
-    driverless: false,
-    hasPsd: false,
-    boa: false,
-    bodyHex: 0x2c5b94,
-    stripeHex: 0xf2efe6,
-    roofHex: 0x4d5054,
-    floorHex: 0x383430,
-    seatHex: 0xc8352b,
-    liningHex: 0xdad5c7,
-    ceilingTint: [1.85, 1.72, 1.48],
-  };
-}
-
-export function isRerLineNum(num: string): boolean {
-  const up = num.trim().toUpperCase();
-  return up === 'A' || up === 'B' || up === 'C' || up === 'D' || up === 'E';
-}
-
-const PNEUMATIC_LINES = new Set(['1', '4', '6', '11', '14']);
-
-export function resolveTrainGlbFamily(lineNumOrKey: string): ParisGlbFamily {
-  const upper = lineNumOrKey
-    .trim()
-    .toUpperCase()
-    .replace(/^RER\s+/, '');
-  if (upper === 'A' || upper === 'B' || upper === 'C' || upper === 'D' || upper === 'E') {
-    return `rer_generic_${upper}` as ParisGlbFamily;
-  }
-  if (PNEUMATIC_LINES.has(upper)) {
-    return 'pneumatic_generic';
-  }
-  return 'steel_classic';
-}
-
-export function getGlbUrlsForFamily(family: ParisGlbFamily): {
-  neutral: string;
-  cab: string;
-  tail: string;
-} {
-  if (family.startsWith('rer_generic_')) {
-    return {
-      neutral: `/models/train/${family}__neutral.glb`,
-      cab: `/models/train/${family}__cab.glb`,
-      tail: `/models/train/${family}__tail.glb`,
-    };
-  }
-  return {
-    neutral: `/models/train/${family}__neutral.glb`,
-    cab: `/models/train/${family}__neutral__cab.glb`,
-    tail: `/models/train/${family}__neutral__tail.glb`,
-  };
-}
-
-export function computeLiveStepS(params: {
-  prevFront: number;
-  targetFront: number;
-  curS: number;
-  dir: 1 | -1;
-  atStop: boolean;
-  speedMps: number;
-  dt: number;
-}): number {
-  const { prevFront, targetFront, curS, dir, atStop, speedMps, dt } = params;
-  if (atStop) {
-    const gap = targetFront - curS;
-    if (Math.abs(gap) < 0.05) return targetFront;
-    return curS + gap * Math.min(1, dt * 4.5);
-  }
-  const minBound =
-    dir > 0 ? Math.min(prevFront, targetFront - 4) : Math.max(prevFront, targetFront + 4);
-  const stopHoldBound = targetFront - dir * 5.5;
-  const maxAdvance = Math.max(0.5, speedMps) * dt;
-  const candidate = curS + dir * maxAdvance;
-  if (dir > 0) {
-    return Math.min(stopHoldBound, Math.max(minBound, candidate));
-  }
-  return Math.max(stopHoldBound, Math.min(minBound, candidate));
-}
-
-function normalizeStr(v: string): string {
-  return v
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[’']/g, ' ')
-    .replace(/[–—-]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-export function resolveRideRouteKey(line?: string, dest?: string): string {
-  if (!line) return '6';
-  const cleaned = line
-    .trim()
-    .toLowerCase()
-    .replace(/^rer\s+/, '');
-  if (cleaned === '7') {
-    const destNorm = normalizeStr(dest ?? '');
-    if (destNorm.includes('ivry')) return '7i';
-    return '7v';
-  }
-  if (cleaned === '13') {
-    const destNorm = normalizeStr(dest ?? '');
-    if (
-      destNorm.includes('asnieres') ||
-      destNorm.includes('courtilles') ||
-      destNorm.includes('gennevilliers')
-    ) {
-      return '13a';
-    }
-    return '13s';
-  }
-  const found = ROUTES.find(
-    (r) => r.key.toLowerCase() === cleaned || r.num.toLowerCase() === cleaned
-  );
-  return found ? found.key : '6';
-}
 
 function pairIs(p: [string, string], a: string, b: string): boolean {
   return (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a);
@@ -1154,63 +188,6 @@ function rnd(seed: number): number {
   t = Math.imul(t ^ (t >>> 15), t | 1);
   t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-}
-
-interface GlbFamilyScenes {
-  neutral: THREE.Group;
-  cab: THREE.Group;
-  tail: THREE.Group;
-}
-
-const gltfLoader = new GLTFLoader();
-const glbFamilyCache = new Map<ParisGlbFamily, Promise<GlbFamilyScenes | null>>();
-
-function normalizeGlbCarScene(raw: THREE.Group, rotateTail: boolean): THREE.Group {
-  const wrapper = new THREE.Group();
-  const model = raw.clone(true);
-  model.updateMatrixWorld(true);
-  const box = new THREE.Box3().setFromObject(model);
-  const size = new THREE.Vector3();
-  const center = new THREE.Vector3();
-  box.getSize(size);
-  box.getCenter(center);
-
-  const scale = size.x > 0.1 ? L / size.x : 1;
-  model.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
-  model.scale.setScalar(scale);
-  if (rotateTail) {
-    const rotGroup = new THREE.Group();
-    rotGroup.rotation.y = PI;
-    rotGroup.add(model);
-    wrapper.add(rotGroup);
-  } else {
-    wrapper.add(model);
-  }
-  return wrapper;
-}
-
-function loadGlbFamily(family: ParisGlbFamily): Promise<GlbFamilyScenes | null> {
-  const existing = glbFamilyCache.get(family);
-  if (existing) return existing;
-  const urls = getGlbUrlsForFamily(family);
-  const loadOne = (url: string) => gltfLoader.loadAsync(url).then((gltf) => gltf.scene);
-  const promise = Promise.all([
-    loadOne(urls.neutral),
-    loadOne(urls.cab).catch(() => null),
-    loadOne(urls.tail).catch(() => null),
-  ])
-    .then(([neutral, cab, tail]) => ({
-      neutral,
-      cab: cab ?? neutral,
-      tail: tail ?? cab ?? neutral,
-    }))
-    .catch((err) => {
-      console.warn(`[paris-ride] Failed to load 3D train model ${family}:`, err);
-      glbFamilyCache.delete(family);
-      return null;
-    });
-  glbFamilyCache.set(family, promise);
-  return promise;
 }
 
 export function mountParisRideView(
@@ -1240,7 +217,7 @@ export function mountParisRideView(
   try {
     renderer = new THREE.WebGLRenderer({
       antialias: !isMobileGpu,
-      powerPreference: 'high-performance',
+      powerPreference: 'default',
     });
   } catch {
     root.remove();
@@ -1265,8 +242,33 @@ export function mountParisRideView(
     materials.push(m);
     return m;
   };
+  const createEnamelMaterial = (
+    params: THREE.MeshPhysicalMaterialParameters
+  ): THREE.MeshPhysicalMaterial =>
+    new CustomShaderMaterial({
+      baseMaterial: THREE.MeshPhysicalMaterial,
+      ...params,
+      vertexShader: /* glsl */ `
+        varying vec3 vEnamelPos;
+        void main() {
+          vEnamelPos = (modelMatrix * vec4(position, 1.0)).xyz;
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        varying vec3 vEnamelPos;
+        void main() {
+          float ripple = sin(vEnamelPos.x * 14.0 + vEnamelPos.z * 9.0) * cos(vEnamelPos.y * 16.0);
+          csm_Roughness = clamp(csm_Roughness + ripple * 0.032, 0.04, 0.9);
+        }
+      `,
+    }) as unknown as THREE.MeshPhysicalMaterial;
 
-  renderer.setPixelRatio(getOptimalPixelRatio(1.75, 1.4));
+  const archMats = createArchetypeMaterials(trackMat);
+  const synthAudio = new RideSynthAudio();
+  let audioEnabled = false;
+  let doorWarnPlayed = false;
+
+  renderer.setPixelRatio(getOptimalPixelRatio(1.25, 1.0));
   renderer.setSize(
     container.clientWidth || window.innerWidth,
     container.clientHeight || window.innerHeight
@@ -1275,7 +277,7 @@ export function mountParisRideView(
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
   stage.appendChild(renderer.domElement);
-  const maxAniso = Math.min(isMobileGpu ? 4 : 8, renderer.capabilities.getMaxAnisotropy());
+  const maxAniso = Math.min(isMobileGpu ? 2 : 4, renderer.capabilities.getMaxAnisotropy());
 
   const makeCanvas = (w: number, h: number) => {
     const c = document.createElement('canvas');
@@ -1775,91 +777,100 @@ export function mountParisRideView(
     lineNum: string,
     lineBg: string,
     lineFg: string,
-    dest: string,
-    etaText: string
+    headingDest: string,
+    rows: SielRow[]
   ) {
     const W = 512;
-    const H = 192;
+    const H = 204;
     const c = makeCanvas(W, H);
     const g = c.getContext('2d')!;
-    g.fillStyle = '#0d1424';
+    // Boîtier noir-ardoise RATP + reflet de vitre supérieur
+    g.fillStyle = '#091020';
     g.fillRect(0, 0, W, H);
-    g.fillStyle = '#18243d';
-    g.fillRect(10, 10, W - 20, 62);
-    // Line circle pill
+    g.fillStyle = '#1c2d6c';
+    g.fillRect(10, 8, W - 20, 56);
+    g.strokeStyle = 'rgba(255,255,255,0.22)';
+    g.lineWidth = 1.5;
+    g.strokeRect(10, 8, W - 20, 56);
+
+    // Pastille de ligne
     g.fillStyle = lineBg;
     g.beginPath();
-    g.arc(46, 41, 22, 0, 2 * PI);
+    g.arc(42, 36, 20, 0, 2 * PI);
     g.fill();
-    fitText(g, lineNum, 46, 51, 34, 28, '700', 'Switzer,Arial,sans-serif', lineFg);
-    fitText(g, dest, 84, 50, W - 110, 30, '600', 'Switzer,Arial,sans-serif', '#ffffff', 'left');
-    // LED time display row
-    g.fillStyle = '#070a12';
-    g.fillRect(14, 84, W - 28, 92);
-    fitText(g, etaText, 30, 146, W - 120, 54, '700', 'Switzer,monospace', '#ffb547', 'left');
+    fitText(g, lineNum, 42, 44, 32, 23, '700', "'Asap Variable',Asap,Arial,sans-serif", lineFg);
+    fitText(g, `→ ${headingDest}`, 74, 44, W - 186, 23, '600', "'Asap Variable',Asap,Arial,sans-serif", '#ffffff', 'left');
     fitText(
       g,
-      'RATP · IDFM',
-      W - 28,
-      160,
-      140,
-      18,
-      '500',
-      'Switzer,sans-serif',
-      '#7d92b5',
+      'TEMPS RÉEL',
+      W - 20,
+      42,
+      96,
+      13,
+      '600',
+      "'Asap Variable',Asap,sans-serif",
+      '#c9d7fb',
       'right'
     );
-    return c;
-  }
 
-  function drawSpeedoCanvas(
-    c: HTMLCanvasElement,
-    lineNum: string,
-    lineBg: string,
-    lineFg: string,
-    stockLabel: string,
-    kmh: number,
-    inStation: boolean
-  ) {
-    const W = c.width;
-    const H = c.height;
-    const g = c.getContext('2d')!;
-    g.fillStyle = '#0d1118';
-    g.fillRect(0, 0, W, H);
-    g.strokeStyle = '#303b4d';
-    g.lineWidth = 4;
-    g.strokeRect(4, 4, W - 8, H - 8);
-    // Line badge
-    g.fillStyle = lineBg;
-    g.beginPath();
-    g.arc(44, 44, 24, 0, 2 * PI);
-    g.fill();
-    fitText(g, lineNum, 44, 54, 38, 28, '700', 'Switzer,sans-serif', lineFg);
-    fitText(g, stockLabel, 82, 52, 230, 26, '600', 'Switzer,sans-serif', '#c9d3e0', 'left');
-    // Speed readout
-    fitText(g, `${kmh}`, 185, 168, 200, 96, '700', 'Switzer,monospace', '#e8f1ff', 'right');
-    fitText(g, 'km/h', 200, 165, 90, 28, '500', 'Switzer,sans-serif', '#8ca0ba', 'left');
-    // Signal / traction bar + KVB status
-    const sigCol = inStation ? '#f59e0b' : '#22c55e';
-    g.fillStyle = sigCol;
-    g.fillRect(360, 26, 128, 36);
-    fitText(
-      g,
-      inStation ? 'AV / QUAI' : 'VL / KVB',
-      424,
-      52,
-      118,
-      20,
-      '700',
-      'Switzer,monospace',
-      '#0a0d12'
-    );
-    // Speed bar
-    g.fillStyle = '#1b2434';
-    g.fillRect(28, 198, W - 56, 28);
-    const fillW = Math.min(W - 56, Math.max(0, (kmh / 80) * (W - 56)));
-    g.fillStyle = kmh > 65 ? '#f59e0b' : '#00a3a6';
-    g.fillRect(28, 198, fillW, 28);
+    // Écran verre noir + grille de LEDs éteintes (#4d3906)
+    g.fillStyle = '#04070e';
+    g.fillRect(12, 72, W - 24, 122);
+    g.fillStyle = 'rgba(77, 57, 6, 0.28)';
+    for (let y = 80; y < 188; y += 7) {
+      for (let x = 20; x < W - 20; x += 7) {
+        g.beginPath();
+        g.arc(x, y, 1.4, 0, 2 * PI);
+        g.fill();
+      }
+    }
+
+    const row1 = rows[0] ?? { dest: headingDest, eta: 'À quai' };
+    const row2 = rows[1] ?? { dest: headingDest, eta: '4 min' };
+    const drawRow = (row: SielRow, baselineY: number, isFirst: boolean) => {
+      const isAtPlatform = row.eta === 'À quai' || row.eta === '0 min';
+      const etaColor = isAtPlatform ? '#ffe4a6' : '#ffb81c';
+      g.save();
+      g.shadowColor = isAtPlatform ? 'rgba(255, 228, 166, 0.7)' : 'rgba(255, 184, 28, 0.65)';
+      g.shadowBlur = isFirst ? 9 : 6;
+      fitText(
+        g,
+        row.dest,
+        24,
+        baselineY,
+        W - 190,
+        isFirst ? 21 : 18,
+        '600',
+        "'Asap Variable',Asap,Arial,sans-serif",
+        isFirst ? '#f2f5ff' : '#94a8d6',
+        'left'
+      );
+      fitText(
+        g,
+        row.eta,
+        W - 24,
+        baselineY + 2,
+        146,
+        isFirst ? 31 : 26,
+        '700',
+        "'Asap Variable',Asap,monospace",
+        etaColor,
+        'right'
+      );
+      g.restore();
+    };
+    drawRow(row1, 114, true);
+    g.fillStyle = 'rgba(255,255,255,0.14)';
+    g.fillRect(22, 132, W - 44, 1);
+    drawRow(row2, 174, false);
+
+    // Reflet de vitre en biais
+    const glaze = g.createLinearGradient(0, 72, 0, 118);
+    glaze.addColorStop(0, 'rgba(255,255,255,0.08)');
+    glaze.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = glaze;
+    g.fillRect(12, 72, W - 24, 46);
+    return c;
   }
 
   function woodCanvas() {
@@ -1932,45 +943,127 @@ export function mountParisRideView(
   const groundTex = toTex(concreteCanvas('#77716a', 60, false), 1 / 6, 1 / 6);
   const classTex = toTex(classCanvas());
 
+  const concretePbr = createConcretePbrMaps(maxAniso);
+  const asphaltPbr = createAsphaltPbrMaps(maxAniso);
+  const ballastPbr = createBallastPbrMaps(maxAniso);
+  const steelNormal = createBrushedMetalNormalMap(maxAniso);
+  const contactShadowTex = createContactShadowTexture();
+  const haussmannMaps = createHaussmannFacadeMaps(maxAniso);
+  const zincRoofMaps = createZincRoofMaps(maxAniso);
+  const friezeCeramiqueTex = createFriezeCeramiqueTexture(maxAniso);
+  const sortieSignTex = createSortieSignTexture(maxAniso);
+  textures.push(
+    concretePbr.normalMap,
+    concretePbr.roughnessMap,
+    asphaltPbr.normalMap,
+    asphaltPbr.roughnessMap,
+    ballastPbr.normalMap,
+    ballastPbr.roughnessMap,
+    steelNormal,
+    contactShadowTex,
+    haussmannMaps.map,
+    haussmannMaps.roughnessMap,
+    zincRoofMaps.map,
+    zincRoofMaps.roughnessMap,
+    friezeCeramiqueTex,
+    sortieSignTex
+  );
+
   /* ---------- Materials ---------- */
   const M = {
     tile: trackMat(
-      new THREE.MeshStandardMaterial({
+      new CustomShaderMaterial({
+        baseMaterial: THREE.MeshPhysicalMaterial,
         map: tileMap,
         bumpMap: tileBump,
-        bumpScale: 0.35,
-        roughness: 0.2,
+        bumpScale: 0.42,
+        roughness: 0.16,
         metalness: 0,
-        envMapIntensity: 0.9,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.08,
+        envMapIntensity: 1.05,
         side: THREE.DoubleSide,
-      })
+        vertexShader: /* glsl */ `
+          varying vec2 vTileUv;
+          varying vec3 vTileWorld;
+          void main() {
+            vTileUv = uv;
+            vTileWorld = (modelMatrix * vec4(position, 1.0)).xyz;
+          }
+        `,
+        fragmentShader: /* glsl */ `
+          varying vec2 vTileUv;
+          varying vec3 vTileWorld;
+          float hashTile(vec2 p) {
+            return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+          }
+          void main() {
+            // Pose quinconce 2:1 (carreaux 15 × 7.5 cm)
+            vec2 grid = vTileUv * vec2(1.0 / 0.15, 1.0 / 0.075);
+            float row = floor(grid.y);
+            grid.x += mod(row, 2.0) * 0.5;
+            vec2 cell = floor(grid);
+            vec2 f = fract(grid);
+
+            // Joint de ciment mat vs glaçure céramique brillante
+            float gx = smoothstep(0.0, 0.045, f.x) * smoothstep(0.0, 0.045, 1.0 - f.x);
+            float gy = smoothstep(0.0, 0.075, f.y) * smoothstep(0.0, 0.075, 1.0 - f.y);
+            float glazeMask = gx * gy;
+
+            // Variation déterministe ±3 % par carreau + légère patine en pied de paroi
+            float jitter = (hashTile(cell) - 0.5) * 0.06;
+            float basePatina = smoothstep(0.6, 2.2, vTileWorld.y);
+            vec3 tint = vec3(1.0 + jitter, 1.0 + jitter * 0.9, 1.0 + jitter * 0.75);
+            tint *= mix(0.92, 1.0, basePatina);
+
+            csm_DiffuseColor.rgb *= mix(vec3(0.76, 0.77, 0.79), tint, glazeMask);
+            csm_Roughness = mix(0.94, clamp(0.14 + jitter * 0.8, 0.08, 0.28), glazeMask);
+          }
+        `,
+      }) as unknown as THREE.MeshPhysicalMaterial
     ),
     tunnel: trackMat(
       new THREE.MeshStandardMaterial({
         map: tunnelTex,
+        normalMap: concretePbr.normalMap,
+        normalScale: new THREE.Vector2(0.85, 0.85),
+        roughnessMap: concretePbr.roughnessMap,
         roughness: 0.95,
-        metalness: 0,
-        envMapIntensity: 0.04,
+        metalness: 0.04,
+        envMapIntensity: 0.22,
         side: THREE.BackSide,
       })
     ),
     bed: trackMat(
       new THREE.MeshStandardMaterial({
         map: bedTex,
+        normalMap: ballastPbr.normalMap,
+        normalScale: new THREE.Vector2(1.2, 1.2),
+        roughnessMap: ballastPbr.roughnessMap,
         roughness: 0.95,
-        envMapIntensity: 0.12,
+        envMapIntensity: 0.14,
         side: THREE.DoubleSide,
       })
     ),
     slab: trackMat(
       new THREE.MeshStandardMaterial({
         map: slabTex,
-        roughness: 0.55,
+        normalMap: asphaltPbr.normalMap,
+        normalScale: new THREE.Vector2(0.45, 0.45),
+        roughnessMap: asphaltPbr.roughnessMap,
+        roughness: 0.78,
         envMapIntensity: 0.35,
       })
     ),
     platformFace: trackMat(
-      new THREE.MeshStandardMaterial({ color: MATERIAUX.quai.color, roughness: MATERIAUX.quai.roughness, envMapIntensity: 0.15 })
+      new THREE.MeshStandardMaterial({
+        color: MATERIAUX.quai.color,
+        normalMap: asphaltPbr.normalMap,
+        normalScale: new THREE.Vector2(0.4, 0.4),
+        roughnessMap: asphaltPbr.roughnessMap,
+        roughness: MATERIAUX.quai.roughness,
+        envMapIntensity: 0.18,
+      })
     ),
     edge: trackMat(
       new THREE.MeshStandardMaterial({ color: MATERIAUX.bordureQuai.color, roughness: MATERIAUX.bordureQuai.roughness, envMapIntensity: 0.4 })
@@ -1978,12 +1071,46 @@ export function mountParisRideView(
     steel: trackMat(
       new THREE.MeshStandardMaterial({
         color: MATERIAUX.rail.color,
+        normalMap: steelNormal,
+        normalScale: new THREE.Vector2(0.28, 0.28),
         roughness: MATERIAUX.rail.roughness,
         metalness: MATERIAUX.rail.metalness,
-        envMapIntensity: 1,
+        envMapIntensity: 1.15,
         side: THREE.DoubleSide,
       })
     ),
+    contactShadow: trackMat(
+      new THREE.MeshBasicMaterial({
+        map: contactShadowTex,
+        transparent: true,
+        opacity: 0.74,
+        depthWrite: false,
+      })
+    ),
+    headlightBeam: trackMat(
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color(1.0, 0.93, 0.78),
+        transparent: true,
+        opacity: 0.068,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      })
+    ),
+    signalGreen: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(0.25, 2.9, 0.95) })),
+    signalRed: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(3.1, 0.24, 0.2) })),
+    cabMask: trackMat(
+      new THREE.MeshPhysicalMaterial({
+        color: 0x0e1117,
+        roughness: 0.16,
+        metalness: 0.15,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.06,
+        envMapIntensity: 1.2,
+      })
+    ),
+    headlightLed: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(3.4, 3.2, 2.7) })),
+    taillightLed: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(3.2, 0.2, 0.18) })),
     third: trackMat(
       new THREE.MeshStandardMaterial({
         color: 0x5b5148,
@@ -2006,7 +1133,7 @@ export function mountParisRideView(
       })
     ),
     cream: trackMat(
-      new THREE.MeshPhysicalMaterial({
+      createEnamelMaterial({
         color: MATERIAUX.faience.color,
         roughness: MATERIAUX.faience.roughness,
         clearcoat: MATERIAUX.faience.clearcoat ?? 0.65,
@@ -2026,7 +1153,7 @@ export function mountParisRideView(
     lamp: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(3.2, 2.95, 2.5) })),
     tunnelLamp: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(3, 2.2, 1.3) })),
     paintGreen: trackMat(
-      new THREE.MeshPhysicalMaterial({
+      createEnamelMaterial({
         color: 0x24513c,
         roughness: 0.42,
         metalness: 0.05,
@@ -2036,7 +1163,7 @@ export function mountParisRideView(
       })
     ),
     paintRed: trackMat(
-      new THREE.MeshPhysicalMaterial({
+      createEnamelMaterial({
         color: 0x7e1f1d,
         roughness: 0.42,
         metalness: 0.05,
@@ -2146,23 +1273,66 @@ export function mountParisRideView(
     ),
     water: trackMat(
       new THREE.MeshStandardMaterial({
-        color: 0x3c5a5e,
-        roughness: 0.12,
-        metalness: 0.3,
-        envMapIntensity: 1.2,
+        color: 0x2d4e5c,
+        roughness: 0.06,
+        metalness: 0.62,
+        envMapIntensity: 1.85,
         side: THREE.DoubleSide,
       })
     ),
     building: trackMat(
-      new THREE.MeshStandardMaterial({ color: 0xd8cdb6, roughness: 0.85, envMapIntensity: 0.3 })
+      new THREE.MeshStandardMaterial({
+        map: haussmannMaps.map,
+        roughnessMap: haussmannMaps.roughnessMap,
+        roughness: 1.0,
+        metalness: 0.04,
+        envMapIntensity: 0.45,
+      })
     ),
     zinc: trackMat(
       new THREE.MeshStandardMaterial({
-        color: 0x5f666d,
-        roughness: 0.5,
-        metalness: 0.4,
-        envMapIntensity: 0.4,
+        map: zincRoofMaps.map,
+        roughnessMap: zincRoofMaps.roughnessMap,
+        roughness: 0.85,
+        metalness: 0.48,
+        envMapIntensity: 0.55,
       })
+    ),
+    cornice: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0xe6decb, roughness: 0.82, envMapIntensity: 0.25 })
+    ),
+    ironRail: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0x181c22, roughness: 0.45, metalness: 0.72, envMapIntensity: 0.6 })
+    ),
+    chimney: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0xa45d45, roughness: 0.88, envMapIntensity: 0.2 })
+    ),
+    foliage: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0x3b5c36, roughness: 0.92, envMapIntensity: 0.18 })
+    ),
+    trunk: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0x4c3a2c, roughness: 0.95, envMapIntensity: 0.12 })
+    ),
+    friezeCeramique: trackMat(
+      new THREE.MeshPhysicalMaterial({
+        map: friezeCeramiqueTex,
+        roughness: 0.18,
+        metalness: 0,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.08,
+        envMapIntensity: 0.95,
+        side: THREE.DoubleSide,
+      })
+    ),
+    sortieSign: trackMat(
+      new THREE.MeshBasicMaterial({
+        map: sortieSignTex,
+        color: new THREE.Color(1.35, 1.4, 1.55),
+        side: THREE.DoubleSide,
+      })
+    ),
+    tactileBand: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0xebe6d8, roughness: 0.65, envMapIntensity: 0.3 })
     ),
     mound: trackMat(
       new THREE.MeshStandardMaterial({ color: 0x56603f, roughness: 1, envMapIntensity: 0.15 })
@@ -2170,16 +1340,16 @@ export function mountParisRideView(
     plug: trackMat(new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide })),
     tower: trackMat(
       new THREE.MeshStandardMaterial({
-        color: 0x6b5642,
-        roughness: 0.58,
-        metalness: 0.45,
-        envMapIntensity: 0.55,
+        color: 0x6f5a46,
+        roughness: 0.48,
+        metalness: 0.62,
+        envMapIntensity: 0.75,
         side: THREE.DoubleSide,
       })
     ),
     towerBeacon: trackMat(
       new THREE.MeshBasicMaterial({
-        color: 0xffdf99,
+        color: new THREE.Color(3.2, 2.45, 1.15),
       })
     ),
     interiorLining: trackMat(
@@ -2195,6 +1365,33 @@ export function mountParisRideView(
         color: 0x008b8d,
         roughness: 0.55,
         envMapIntensity: 0.45,
+        side: THREE.DoubleSide,
+      })
+    ),
+    cabinLed: trackMat(
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color(1.42, 1.34, 1.16),
+      })
+    ),
+    passengerCoat: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x262e3a,
+        roughness: 0.82,
+        metalness: 0.04,
+        envMapIntensity: 0.3,
+      })
+    ),
+    passengerHead: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0xc9a58c,
+        roughness: 0.72,
+        metalness: 0.02,
+        envMapIntensity: 0.25,
+      })
+    ),
+    doorLineMap: trackMat(
+      new THREE.MeshBasicMaterial({
+        color: 0xffffff,
         side: THREE.DoubleSide,
       })
     ),
@@ -2426,7 +1623,88 @@ export function mountParisRideView(
         return g;
       })()
     ),
-    vents: trackGeo(mergeGeos([2.2, 6.8, 11.4].map((x) => box(0.9, 0.12, 0.6, x, 0.43, 0)))),
+    vents: trackGeo(
+      mergeGeos(
+        [2.6, 6.8, 11.0].flatMap((x) => [
+          // Caisson principal climatisation / ventilation
+          box(2.15, 0.2, 1.38, x, 0.44, 0),
+          // Carénage supérieur biseauté
+          box(1.75, 0.06, 1.12, x, 0.56, 0),
+          // Grilles latérales en relief
+          box(1.5, 0.12, 0.04, x, 0.45, 0.7),
+          box(1.5, 0.12, 0.04, x, 0.45, -0.7),
+        ])
+      )
+    ),
+    coupler: trackGeo(
+      mergeGeos([
+        // Barre d'attelage Scharfenberg
+        box(0.46, 0.11, 0.14, 0.16, 0, 0),
+        // Tête d'accouplement octogonale
+        box(0.18, 0.22, 0.34, 0.42, 0.01, 0),
+        // Cône de centrage
+        box(0.14, 0.12, 0.14, 0.54, 0.02, 0.07),
+        // Coffret de connexions électriques inférieur
+        box(0.16, 0.11, 0.24, 0.4, -0.14, 0),
+      ])
+    ),
+    pneuBogie: trackGeo(
+      mergeGeos([
+        // Pneus porteurs caoutchouc (essieux avant & arrière)
+        ...[-0.95, 0.95].flatMap((ox) =>
+          [-0.96, 0.96].map((z) => {
+            const tyre = new THREE.CylinderGeometry(WR + 0.055, WR + 0.055, 0.22, 20);
+            tyre.rotateX(PI / 2);
+            tyre.translate(ox, WR + 0.02, z);
+            return tyre;
+          })
+        ),
+        // 4 roues horizontales de guidage latéral (spécifique métro sur pneus)
+        ...[-1.32, 1.32].flatMap((ox) =>
+          [-1.14, 1.14].map((z) => {
+            const guide = new THREE.CylinderGeometry(0.24, 0.24, 0.11, 16);
+            guide.translate(ox, 0.34, z);
+            return guide;
+          })
+        ),
+      ])
+    ),
+    windowTrim: trackGeo(
+      mergeGeos(
+        WINS.flatMap(([x0, x1]) => {
+          const w = x1 - x0;
+          const cx = (x0 + x1) / 2;
+          const h = WY[1] - WY[0];
+          const cy = (WY[0] + WY[1]) / 2;
+          const t = 0.032;
+          return [
+            box(w + t * 2, t, 0.018, cx, WY[1] + t / 2, 0),
+            box(w + t * 2, t, 0.018, cx, WY[0] - t / 2, 0),
+            box(t, h, 0.018, x0 - t / 2, cy, 0),
+            box(t, h, 0.018, x1 + t / 2, cy, 0),
+          ];
+        })
+      )
+    ),
+    doorGasket: trackGeo(box(0.026, 1.94, 0.042, 0.65, 1.0, 0.018)),
+    frontMask: trackGeo(
+      mergeGeos([
+        // Bandeau noir brillant encadrant le pare-brise (MP14 / MF01 / MP89)
+        box(0.04, 0.14, CW - 0.16, 0.045, 1.98, 0),
+        box(0.04, 0.14, CW - 0.16, 0.045, 0.86, 0),
+        box(0.04, 1.24, 0.12, 0.045, 1.42, CW / 2 - 0.14),
+        box(0.04, 1.24, 0.12, 0.045, 1.42, -(CW / 2 - 0.14)),
+        // Boîtiers d'optiques avant bas
+        box(0.05, 0.18, 0.34, 0.045, 0.44, 0.72),
+        box(0.05, 0.18, 0.34, 0.045, 0.44, -0.72),
+      ])
+    ),
+    headlightCluster: trackGeo(
+      mergeGeos([
+        box(0.025, 0.09, 0.22, 0.072, 0.45, 0.72),
+        box(0.025, 0.09, 0.22, 0.072, 0.45, -0.72),
+      ])
+    ),
     floor: trackGeo(box(L, 0.06, CW - 0.1, L / 2, BY + 0.03, 0)),
     ceil: trackGeo(
       (() => {
@@ -2462,6 +1740,73 @@ export function mountParisRideView(
           const c = new THREE.CylinderGeometry(0.022, 0.022, SH - 0.1, 10);
           c.translate((d[0] + d[1]) / 2, BY + SH / 2, 0);
           return c;
+        })
+      )
+    ),
+    handrails: trackGeo(
+      mergeGeos([
+        // Twin longitudinal stainless steel ceiling grab rails along passenger aisle
+        ...[-0.52, 0.52].flatMap((z) => {
+          const rail = new THREE.CylinderGeometry(0.015, 0.015, L - 1.4, 8);
+          rail.rotateZ(PI / 2);
+          rail.translate(L / 2, BY + SH - 0.28, z);
+          // Ceiling stanchion drops & grab handles terminating cleanly inside the cabin roof
+          const drops = [2.2, 4.5, 6.8, 9.1, 11.4].flatMap((hx) => {
+            const st = new THREE.CylinderGeometry(0.012, 0.012, 0.24, 6);
+            st.translate(hx, BY + SH - 0.16, z);
+            const loop = box(0.022, 0.15, 0.09, hx + 0.55, BY + SH - 0.36, z);
+            return [st, loop];
+          });
+          return [rail, ...drops];
+        }),
+      ])
+    ),
+    cabinLedStrips: trackGeo(
+      mergeGeos([
+        box(L - 0.9, 0.03, 0.12, L / 2, BY + SH - 0.03, -0.44),
+        box(L - 0.9, 0.03, 0.12, L / 2, BY + SH - 0.03, 0.44),
+      ])
+    ),
+    doorMaps: trackGeo(
+      mergeGeos(
+        [-1, 1].flatMap((side) =>
+          DOORS.map((d) => {
+            const g = new THREE.PlaneGeometry(1.18, 0.17);
+            if (side > 0) g.rotateY(PI);
+            g.translate((d[0] + d[1]) / 2, BY + SH - 0.17, side * (CW / 2 - 0.09));
+            return g;
+          })
+        )
+      )
+    ),
+    seatedBody: trackGeo(
+      mergeGeos([
+        // 4 minimalist seated Parisian passengers in transverse bays
+        ...[
+          [3.38, 0.72, 1],
+          [5.62, -0.72, -1],
+          [7.98, -0.68, 1],
+          [10.22, 0.70, -1],
+        ].flatMap(([px, pz, facing]) => [
+          // Torso
+          box(0.24, 0.52, 0.38, px, BY + 0.76, pz),
+          // Lap / legs
+          box(0.36, 0.16, 0.34, px + facing * 0.18, BY + 0.56, pz),
+          box(0.14, 0.42, 0.30, px + facing * 0.32, BY + 0.28, pz),
+        ]),
+      ])
+    ),
+    seatedHead: trackGeo(
+      mergeGeos(
+        [
+          [3.38, 0.72],
+          [5.62, -0.72],
+          [7.98, -0.68],
+          [10.22, 0.70],
+        ].map(([px, pz]) => {
+          const sp = new THREE.SphereGeometry(0.115, 10, 8);
+          sp.translate(px, BY + 1.13, pz);
+          return sp;
         })
       )
     ),
@@ -2504,6 +1849,8 @@ export function mountParisRideView(
     add(G.lining, M.interiorLining, 0, BY, -CW / 2 + 0.055);
     add(G.sideGlass, M.glass, 0, BY, CW / 2 - 0.0525);
     add(G.sideGlass, M.glass, 0, BY, -CW / 2 + 0.0525);
+    add(G.windowTrim, M.rubber, 0, BY, CW / 2 + 0.005);
+    add(G.windowTrim, M.rubber, 0, BY, -CW / 2 - 0.005);
     add(G.stripe, M.stripe, 0, BY + 0.9, CW / 2 + 0.006);
     add(G.stripe, M.stripe, 0, BY + 0.9, -CW / 2 - 0.006);
     add(G.roof, M.roof, 0, BY + SH, 0);
@@ -2513,6 +1860,11 @@ export function mountParisRideView(
     add(G.under, M.under);
     add(G.seats, M.interiorSeat);
     add(G.poles, M.chrome);
+    add(G.handrails, M.chrome);
+    add(G.cabinLedStrips, M.cabinLed);
+    add(G.doorMaps, M.doorLineMap);
+    add(G.seatedBody, M.passengerCoat);
+    add(G.seatedHead, M.passengerHead);
     const rearClassic = add(rearCab ? G.endCab : G.endMid, paint, 0, BY, 0);
     const rearAuto = rearCab ? add(G.endAuto, paint, 0, BY, 0) : null;
     const frontClassic = add(frontCab ? G.endCab : G.endMid, paint, L - 0.05, BY, 0);
@@ -2526,11 +1878,41 @@ export function mountParisRideView(
     if (rearGlassAuto) rearGlassAuto.visible = false;
     if (frontGlassAuto) frontGlassAuto.visible = false;
 
+    // Masque frontal moderne, optiques LED HDR et attelage Scharfenberg
+    const frontMasks: THREE.Mesh[] = [];
+    if (frontCab) {
+      frontMasks.push(add(G.frontMask, M.cabMask, L - 0.05, BY, 0));
+      add(G.headlightCluster, M.headlightLed, L - 0.05, BY, 0);
+      add(G.coupler, M.housing, L, BY - 0.16, 0);
+    }
+    if (rearCab) {
+      const rm = add(G.frontMask, M.cabMask, 0.05, BY, 0);
+      rm.rotation.y = PI;
+      frontMasks.push(rm);
+      const rl = add(G.headlightCluster, M.taillightLed, 0.05, BY, 0);
+      rl.rotation.y = PI;
+      const rc = add(G.coupler, M.housing, 0, BY - 0.16, 0);
+      rc.rotation.y = PI;
+    }
+
     const axles: THREE.Mesh[] = [];
+    const pneuBogies: THREE.Mesh[] = [];
     [2.4, L - 2.4].forEach((bx) => {
       add(G.bogie, M.under, bx, 0, 0);
+      const pb = add(G.pneuBogie, M.rubber, bx, 0, 0);
+      pb.visible = false;
+      pneuBogies.push(pb);
       [-0.95, 0.95].forEach((o) => axles.push(add(G.axle, M.under, bx + o, WR, 0)));
     });
+
+    // Ombre de contact douce sous la caisse pour ancrer la rame sur la voie
+    const shadowPlane = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(L * 1.06, CW * 1.38)),
+      M.contactShadow
+    );
+    shadowPlane.rotation.x = -PI / 2;
+    shadowPlane.position.set(L / 2, 0.025, 0);
+    car.add(shadowPlane);
 
     const leaves: Array<{ obj: THREE.Group; base: number; dir: number }> = [];
     [1, -1].forEach((s) =>
@@ -2543,6 +1925,9 @@ export function mountParisRideView(
           const lg = new THREE.Group();
           lg.add(new THREE.Mesh(G.leaf, paint));
           lg.add(new THREE.Mesh(G.leafGlass, M.glass));
+          const gasket = new THREE.Mesh(G.doorGasket, M.rubber);
+          if (dir > 0) gasket.position.x = -0.64;
+          lg.add(gasket);
           lg.position.set(base, BY + 0.08, s > 0 ? CW / 2 + 0.004 : -CW / 2 - 0.039);
           car.add(lg);
           if (s > 0) leaves.push({ obj: lg, base, dir });
@@ -2570,6 +1955,8 @@ export function mountParisRideView(
     car.userData = {
       axles,
       leaves,
+      pneuBogies,
+      frontMasks,
       rearClassic,
       rearAuto,
       frontClassic,
@@ -2600,23 +1987,50 @@ export function mountParisRideView(
   controls.minDistance = 0.4;
   controls.screenSpacePanning = true;
 
+  // Battery-conscious rendering: direct WebGL MSAA on mobile/iPhone (zero FBO copy overhead),
+  // lightweight Bloom-only EffectComposer on desktop without heavy N8AO screen-space raymarching.
+  const composer = !isMobileGpu
+    ? new EffectComposer(renderer, { frameBufferType: THREE.HalfFloatType })
+    : null;
+  if (composer) {
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(
+      new EffectPass(
+        camera,
+        new BloomEffect({ luminanceThreshold: 1.12, mipmapBlur: true, intensity: 0.32 }),
+        new VignetteEffect({ offset: 0.38, darkness: 0.28 }),
+      ),
+    );
+  }
+
   let envTarget: THREE.WebGLRenderTarget | null = null;
   {
     const pm = new THREE.PMREMGenerator(renderer);
     const es = new THREE.Scene();
     const envBoxGeo = new THREE.BoxGeometry(30, 12, 30);
     const envBoxMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(0.08, 0.066, 0.052),
+      color: new THREE.Color(0.14, 0.13, 0.12),
       side: THREE.BackSide,
     });
-    const envStripGeo = new THREE.BoxGeometry(26, 0.2, 0.5);
-    const sm = new THREE.MeshBasicMaterial({ color: new THREE.Color(5, 4.5, 3.8) });
+    const envWallGeo = new THREE.PlaneGeometry(30, 8);
+    const envWallMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(0.42, 0.41, 0.39),
+      side: THREE.DoubleSide,
+    });
+    const envStripGeo = new THREE.BoxGeometry(26, 0.22, 0.55);
+    const warmStripMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(5.2, 4.4, 3.4) });
+    const coolStripMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(4.0, 4.4, 5.0) });
     const envFloorGeo = new THREE.PlaneGeometry(30, 30);
-    const envFloorMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.22, 0.2, 0.17) });
+    const envFloorMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.12, 0.11, 0.1) });
 
     es.add(new THREE.Mesh(envBoxGeo, envBoxMat));
+    [-14.8, 14.8].forEach((z) => {
+      const wMesh = new THREE.Mesh(envWallGeo, envWallMat);
+      wMesh.position.set(0, 0.4, z);
+      es.add(wMesh);
+    });
     for (let i = -2; i <= 2; i++) {
-      const m = new THREE.Mesh(envStripGeo, sm);
+      const m = new THREE.Mesh(envStripGeo, i % 2 === 0 ? warmStripMat : coolStripMat);
       m.position.set(0, 5.6, i * 2.6);
       es.add(m);
     }
@@ -2624,12 +2038,15 @@ export function mountParisRideView(
     fl.rotation.x = -PI / 2;
     fl.position.y = -5.5;
     es.add(fl);
-    envTarget = pm.fromScene(es, 0.035);
+    envTarget = pm.fromScene(es, 0.03);
     scene.environment = envTarget.texture;
     envBoxGeo.dispose();
     envBoxMat.dispose();
+    envWallGeo.dispose();
+    envWallMat.dispose();
     envStripGeo.dispose();
-    sm.dispose();
+    warmStripMat.dispose();
+    coolStripMat.dispose();
     envFloorGeo.dispose();
     envFloorMat.dispose();
     pm.dispose();
@@ -2864,18 +2281,20 @@ export function mountParisRideView(
     wallPatch(0, 3.68, 3.9, HALF - 0.4, s, 0.025)
   );
 
-  // Suspended SIEL / PANAM live departure boxes on both platforms
+  // Suspended SIEL live departure boxes on both platforms (+Z dir=+1, -Z dir=-1)
   const sielBodyStn: THREE.BufferGeometry[] = [];
-  const sielScreenStn: THREE.BufferGeometry[] = [];
+  const sielScreenPosStn: THREE.BufferGeometry[] = [];
+  const sielScreenNegStn: THREE.BufferGeometry[] = [];
   [
     [-32, 4.95],
     [10, 4.95],
     [-10, -4.95],
     [32, -4.95],
   ].forEach(([x, z]) => {
-    sielBodyStn.push(box(0.14, 0.54, 1.48, x, 3.55, z));
-    sielScreenStn.push(plane(1.38, 0.46, PI / 2, x + 0.074, 3.55, z));
-    sielScreenStn.push(plane(1.38, 0.46, -PI / 2, x - 0.074, 3.55, z));
+    sielBodyStn.push(box(0.14, 0.62, 1.52, x, 3.55, z));
+    const target = z > 0 ? sielScreenPosStn : sielScreenNegStn;
+    target.push(plane(1.42, 0.56, PI / 2, x + 0.074, 3.55, z));
+    target.push(plane(1.42, 0.56, -PI / 2, x - 0.074, 3.55, z));
     [-0.55, 0.55].forEach((o) => {
       const rod = new THREE.CylinderGeometry(0.012, 0.012, 1.4, 6);
       rod.translate(x, 4.5, z + o);
@@ -2961,7 +2380,8 @@ export function mountParisRideView(
     sframes: trackGeo(mergeGeos(sframesStn)),
     frieze: trackGeo(mergeGeos(friezeStn)),
     sielBody: trackGeo(mergeGeos(sielBodyStn)),
-    sielScreens: trackGeo(mergeGeos(sielScreenStn)),
+    sielScreensPos: trackGeo(mergeGeos(sielScreenPosStn)),
+    sielScreensNeg: trackGeo(mergeGeos(sielScreenNegStn)),
     psdPosts: trackGeo(mergeGeos(psdPostsStn)),
     psdFixedGlass: trackGeo(mergeGeos(psdFixedGlassStn)),
     psdLeaf: trackGeo(box(0.66, 1.88, 0.03, 0, AY + 0.96, 0)),
@@ -3005,20 +2425,37 @@ export function mountParisRideView(
       side: THREE.DoubleSide,
     })
   );
-  let sielTex: THREE.CanvasTexture | null = null;
-  const sielMat = trackMat(
+  let sielTexPos: THREE.CanvasTexture | null = null;
+  let sielTexNeg: THREE.CanvasTexture | null = null;
+  const sielMatPos = trackMat(
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
       side: THREE.DoubleSide,
     })
   );
-  function refreshSielTexture(destText: string, etaText: string) {
-    if (sielTex) sielTex.dispose();
-    sielTex = new THREE.CanvasTexture(sielCanvas(route.num, route.bg, route.fg, destText, etaText));
-    sielTex.colorSpace = THREE.SRGBColorSpace;
-    sielTex.anisotropy = maxAniso;
-    sielMat.map = sielTex;
-    sielMat.needsUpdate = true;
+  const sielMatNeg = trackMat(
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      side: THREE.DoubleSide,
+    })
+  );
+  function applySielTex(
+    mat: THREE.MeshBasicMaterial,
+    prevTex: THREE.CanvasTexture | null,
+    heading: string,
+    rows: SielRow[]
+  ): THREE.CanvasTexture {
+    if (prevTex) prevTex.dispose();
+    const tex = new THREE.CanvasTexture(sielCanvas(route.num, route.bg, route.fg, heading, rows));
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = maxAniso;
+    mat.map = tex;
+    mat.needsUpdate = true;
+    return tex;
+  }
+  function refreshDualSielTextures(boards: DualSielBoards) {
+    sielTexPos = applySielTex(sielMatPos, sielTexPos, boards.pos.heading, boards.pos.rows);
+    sielTexNeg = applySielTex(sielMatNeg, sielTexNeg, boards.neg.heading, boards.neg.rows);
   }
 
   let badgeMat: THREE.MeshStandardMaterial | null = null;
@@ -3026,8 +2463,9 @@ export function mountParisRideView(
   let spragueMode = false;
   let activeStock: ParisRollingStockSpec = resolveParisStockSpec('6', false);
   const stationPsds = new Set<{
+    sc: number;
     group: THREE.Group;
-    leaves: Array<{ mesh: THREE.Mesh; base: number; dir: number }>;
+    leaves: Array<{ mesh: THREE.Mesh; base: number; dir: number; side: number }>;
   }>();
   let pieces: TrackPiece[] = [];
   let stations: StationPos[] = [];
@@ -3313,6 +2751,40 @@ export function mountParisRideView(
       lm.instanceMatrix.needsUpdate = true;
       g.add(lm);
     }
+    // Signaux lumineux latéraux HDR (déclenchent le BloomEffect en tunnel)
+    const signals: number[] = [];
+    for (let s = s0 + 36; s < s1 - 12; s += 72) signals.push(s);
+    if (signals.length) {
+      const boxGeo = new THREE.BoxGeometry(0.18, 0.72, 0.28);
+      const lensGeo = new THREE.SphereGeometry(0.065, 10, 8);
+      geos.push(boxGeo, lensGeo);
+      const sigBoxes = new THREE.InstancedMesh(boxGeo, M.housing, signals.length);
+      const sigGreens = new THREE.InstancedMesh(lensGeo, M.signalGreen, signals.length);
+      const sigReds = new THREE.InstancedMesh(lensGeo, M.signalRed, signals.length);
+      signals.forEach((s, idx) => {
+        pose(s, P);
+        const lat = TW - 0.16;
+        const bx = P.x - Math.sin(P.h) * lat;
+        const bz = P.z + Math.cos(P.h) * lat;
+        m4.makeRotationY(-P.h);
+        m4.setPosition(bx, 2.05, bz);
+        sigBoxes.setMatrixAt(idx, m4);
+
+        const fx = bx - Math.cos(P.h) * 0.1;
+        const fz = bz - Math.sin(P.h) * 0.1;
+        m4.makeRotationY(-P.h);
+        m4.setPosition(fx, 2.22, fz);
+        sigGreens.setMatrixAt(idx, m4);
+
+        m4.makeRotationY(-P.h);
+        m4.setPosition(fx, 1.92, fz);
+        sigReds.setMatrixAt(idx, m4);
+      });
+      sigBoxes.instanceMatrix.needsUpdate = true;
+      sigGreens.instanceMatrix.needsUpdate = true;
+      sigReds.instanceMatrix.needsUpdate = true;
+      g.add(sigBoxes, sigGreens, sigReds);
+    }
     return g;
   }
 
@@ -3340,6 +2812,15 @@ export function mountParisRideView(
     );
   }
 
+  // Géométrie de toit mansardé biseauté réutilisable pour les immeubles haussmanniens
+  const mansardUnitGeo = trackGeo(
+    (() => {
+      const geo = new THREE.CylinderGeometry(0.56, 0.72, 1, 4, 1);
+      geo.rotateY(PI / 4);
+      return geo;
+    })()
+  );
+
   function cityBlocks(
     g: THREE.Group,
     list: Array<{
@@ -3353,95 +2834,172 @@ export function mountParisRideView(
   ) {
     if (!list.length) return;
     const b = new THREE.InstancedMesh(unitBox, M.building, list.length);
-    const r = new THREE.InstancedMesh(unitBox, M.zinc, list.length);
+    const roof = new THREE.InstancedMesh(mansardUnitGeo, M.zinc, list.length);
+    const cornices = new THREE.InstancedMesh(unitBox, M.cornice, list.length * 2);
+    const balconies = new THREE.InstancedMesh(unitBox, M.ironRail, list.length * 2);
+    const chimneys = new THREE.InstancedMesh(unitBox, M.chimney, list.length * 2);
     list.forEach((o, i) => {
+      // Corps en pierre de taille avec façade haussmannienne texturée
       placeBox(b, i, o.P, o.along, o.lat, GY + o.h / 2, o.w, o.h, o.d);
-      placeBox(r, i, o.P, o.along, o.lat, GY + o.h + 1.6, o.w - 1.2, 3.2, o.d - 1.2);
+      // Toit mansardé en zinc biseauté
+      placeBox(roof, i, o.P, o.along, o.lat, GY + o.h + 1.9, o.w * 1.01, 3.8, o.d * 1.01);
+      // Grande corniche sommitale + corniche intermédiaire (2e étage)
+      placeBox(cornices, i * 2, o.P, o.along, o.lat, GY + o.h + 0.12, o.w + 0.7, 0.45, o.d + 0.7);
+      placeBox(cornices, i * 2 + 1, o.P, o.along, o.lat, GY + o.h * 0.42, o.w + 0.45, 0.28, o.d + 0.45);
+      // Balcons filants en fer forgé (2e & 5e étages)
+      placeBox(balconies, i * 2, o.P, o.along, o.lat, GY + o.h * 0.42 + 0.55, o.w + 0.58, 0.16, o.d + 0.58);
+      placeBox(balconies, i * 2 + 1, o.P, o.along, o.lat, GY + o.h * 0.84 + 0.55, o.w + 0.58, 0.16, o.d + 0.58);
+      // Cheminées parisiennes en terre cuite sur le faîtage
+      placeBox(chimneys, i * 2, o.P, o.along - o.w * 0.24, o.lat, GY + o.h + 4.1, 1.3, 1.4, 0.85);
+      placeBox(chimneys, i * 2 + 1, o.P, o.along + o.w * 0.24, o.lat, GY + o.h + 4.1, 1.3, 1.4, 0.85);
     });
     b.instanceMatrix.needsUpdate = true;
-    r.instanceMatrix.needsUpdate = true;
-    g.add(b);
-    g.add(r);
+    roof.instanceMatrix.needsUpdate = true;
+    cornices.instanceMatrix.needsUpdate = true;
+    balconies.instanceMatrix.needsUpdate = true;
+    chimneys.instanceMatrix.needsUpdate = true;
+    g.add(b, roof, cornices, balconies, chimneys);
   }
 
   let towerWorldPos: THREE.Vector3 | null = null;
 
   function eiffel(geos: THREE.BufferGeometry[]) {
     const grp = new THREE.Group();
-    // Quatre piliers évasés de la base (y = 0) jusqu'au 2e étage (y = 115)
-    const legGeo = new THREE.CylinderGeometry(3.2, 11.5, 62, 6);
-    const upperLegGeo = new THREE.CylinderGeometry(2.2, 4.4, 60, 6);
-    geos.push(legGeo, upperLegGeo);
-    const lowerR = 45;
-    const midR = 23;
-    [
+    const parts: THREE.BufferGeometry[] = [];
+    const upAxis = new THREE.Vector3(0, 1, 0);
+
+    // Ajoute une poutrelle métallique orientée entre deux points 3D
+    const addStrut = (a: THREE.Vector3, b: THREE.Vector3, radius: number, radialSegs = 4) => {
+      const dir = new THREE.Vector3().subVectors(b, a);
+      const len = dir.length();
+      if (len < 0.05) return;
+      const geo = new THREE.CylinderGeometry(radius, radius, len, radialSegs, 1);
+      const quat = new THREE.Quaternion().setFromUnitVectors(upAxis, dir.normalize());
+      geo.applyQuaternion(quat);
+      geo.translate((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+      parts.push(geo);
+    };
+
+    // Profil exponentiel réaliste de la demi-largeur de la Tour Eiffel (m) selon l'altitude y
+    const tiers: Array<[number, number, number]> = [
+      [0, 56, 3.8],
+      [28, 44, 3.1],
+      [57, 33, 2.5],
+      [86, 25, 2.0],
+      [115, 18.5, 1.65],
+      [152, 13.2, 1.25],
+      [192, 9.2, 1.0],
+      [234, 6.6, 0.82],
+      [276, 4.8, 0.68],
+      [302, 2.4, 0.45],
+    ];
+    const corners: Array<[number, number]> = [
       [1, 1],
       [-1, 1],
       [-1, -1],
       [1, -1],
-    ].forEach(([sx, sz]) => {
-      const leg = new THREE.Mesh(legGeo, M.tower);
-      leg.position.set(sx * lowerR, 28, sz * lowerR);
-      leg.rotation.z = sx * 0.34;
-      leg.rotation.x = -sz * 0.34;
-      grp.add(leg);
+    ];
 
-      const upper = new THREE.Mesh(upperLegGeo, M.tower);
-      upper.position.set(sx * midR, 86, sz * midR);
-      upper.rotation.z = sx * 0.16;
-      upper.rotation.x = -sz * 0.16;
-      grp.add(upper);
-    });
+    for (let t = 0; t < tiers.length - 1; t++) {
+      const [y0, r0, thick] = tiers[t];
+      const [y1, r1] = tiers[t + 1];
+      const ring0 = corners.map(([sx, sz]) => new THREE.Vector3(sx * r0, y0, sz * r0));
+      const ring1 = corners.map(([sx, sz]) => new THREE.Vector3(sx * r1, y1, sz * r1));
 
-    // Fût supérieur (y = 115 -> 324) + antenne
-    const shaftPts = [
-      [19, 115],
-      [13, 158],
-      [8.5, 205],
-      [5.5, 250],
-      [3.4, 280],
-      [1.6, 305],
-      [0.4, 324],
-    ].map((p) => new THREE.Vector2(p[0], p[1]));
-    const shaftGeo = new THREE.LatheGeometry(shaftPts, 4);
-    shaftGeo.rotateY(PI / 4);
-    geos.push(shaftGeo);
-    grp.add(new THREE.Mesh(shaftGeo, M.tower));
+      // 4 piliers d'arête inclinés + contreventements en X sur chaque face (treillis ajouré)
+      for (let i = 0; i < 4; i++) {
+        const next = (i + 1) % 4;
+        addStrut(ring0[i], ring1[i], thick, 6);
+        // Entretoise horizontale au palier supérieur
+        addStrut(ring1[i], ring1[next], thick * 0.45, 4);
+        // Croisillons en X dès le dessus de l'arche du 1er étage
+        if (t >= 1) {
+          addStrut(ring0[i], ring1[next], thick * 0.34, 4);
+          addStrut(ring0[next], ring1[i], thick * 0.34, 4);
+        } else {
+          // Jambes évasées de base : double arête intérieure pour donner l'épaisseur des piliers
+          const in0 = ring0[i].clone().multiplyScalar(0.76);
+          in0.y = y0;
+          const in1 = ring1[i].clone().multiplyScalar(0.78);
+          in1.y = y1;
+          addStrut(in0, in1, thick * 0.65, 5);
+          addStrut(ring0[i], in1, thick * 0.36, 4);
+          addStrut(in0, ring1[i], thick * 0.36, 4);
+        }
+      }
+    }
 
-    // Ceinture ajourée des 4 faces sous le 1er étage
-    const archGeo = new THREE.TorusGeometry(26, 2.2, 6, 18, PI);
+    // Antenne télédiffusion fine (302 m -> 324 m)
+    addStrut(new THREE.Vector3(0, 300, 0), new THREE.Vector3(0, 324, 0), 0.55, 6);
+
+    const latticeGeo = mergeGeos(parts);
+    parts.forEach((p) => p.dispose());
+    geos.push(latticeGeo);
+    grp.add(new THREE.Mesh(latticeGeo, M.tower));
+
+    // 4 grandes arches ouvragées sous le 1er étage
+    const archGeo = new THREE.TorusGeometry(30, 2.3, 6, 24, PI);
     geos.push(archGeo);
     [0, PI / 2, PI, -PI / 2].forEach((rotY) => {
       const arch = new THREE.Mesh(archGeo, M.tower);
-      arch.position.set(Math.sin(rotY) * 32, 24, Math.cos(rotY) * 32);
+      arch.position.set(Math.sin(rotY) * 38, 22, Math.cos(rotY) * 38);
       arch.rotation.y = rotY;
       grp.add(arch);
     });
 
-    // 3 plateformes emblématiques + liseré doré
+    // 3 plateformes emblématiques avec colonnade + liseré doré HDR
     [
-      [57, 6.2, 68],
-      [115, 4.5, 41],
-      [276, 3.4, 13],
+      [57, 6.2, 70],
+      [115, 4.6, 41],
+      [276, 3.6, 13.5],
     ].forEach(([y, h, w]) => {
       const bg = new THREE.BoxGeometry(w, h, w);
       geos.push(bg);
       const m = new THREE.Mesh(bg, M.tower);
       m.position.y = y;
       grp.add(m);
-      const glowGeo = new THREE.BoxGeometry(w + 0.6, 0.9, w + 0.6);
+      const glowGeo = new THREE.BoxGeometry(w + 0.8, 1.0, w + 0.8);
       geos.push(glowGeo);
       const glowMesh = new THREE.Mesh(glowGeo, M.towerBeacon);
       glowMesh.position.y = y - h / 2 - 0.35;
       grp.add(glowMesh);
     });
 
-    // Phare lumineux au sommet (324 m)
-    const beaconGeo = new THREE.SphereGeometry(2.6, 10, 8);
+    // Phare lumineux HDR au sommet (324 m)
+    const beaconGeo = new THREE.SphereGeometry(2.6, 12, 10);
     geos.push(beaconGeo);
     const beacon = new THREE.Mesh(beaconGeo, M.towerBeacon);
     beacon.position.y = 325;
     grp.add(beacon);
+
+    // Champ-de-Mars : bouquets d'arbres instanciés autour de la base
+    const trunkGeo = new THREE.CylinderGeometry(0.45, 0.65, 5.5, 6);
+    const crownGeo = new THREE.DodecahedronGeometry(4.2, 1);
+    geos.push(trunkGeo, crownGeo);
+    const treeCoords: Array<[number, number]> = [];
+    for (let a = 0; a < 28; a++) {
+      const ang = (a / 28) * PI * 2;
+      const dist = 78 + (a % 3) * 24;
+      treeCoords.push([Math.cos(ang) * dist, Math.sin(ang) * dist]);
+    }
+    const trunks = new THREE.InstancedMesh(trunkGeo, M.trunk, treeCoords.length);
+    const crowns = new THREE.InstancedMesh(crownGeo, M.foliage, treeCoords.length);
+    const tm = new THREE.Matrix4();
+    treeCoords.forEach(([tx, tz], i) => {
+      tm.makeTranslation(tx, 2.75, tz);
+      trunks.setMatrixAt(i, tm);
+      const s = 0.85 + (i % 4) * 0.16;
+      tm.compose(
+        new THREE.Vector3(tx, 7.6, tz),
+        new THREE.Quaternion(),
+        new THREE.Vector3(s, s * 1.1, s)
+      );
+      crowns.setMatrixAt(i, tm);
+    });
+    trunks.instanceMatrix.needsUpdate = true;
+    crowns.instanceMatrix.needsUpdate = true;
+    grp.add(trunks, crowns);
+
     return grp;
   }
 
@@ -3493,11 +3051,22 @@ export function mountParisRideView(
       const P = pose(mid, { x: 0, z: 0, h: 0 });
       const wg = new THREE.PlaneGeometry(150, 1600);
       geos.push(wg);
-      const w = new THREE.Mesh(wg, M.water);
-      w.rotation.x = -PI / 2;
-      w.rotation.z = P.h;
-      w.position.set(P.x, GY + 0.4, P.z);
-      g.add(w);
+      let waterMesh: THREE.Object3D;
+      if (!isMobileGpu) {
+        const reflector = new Reflector(wg, {
+          textureWidth: 256,
+          textureHeight: 256,
+          color: 0x5c7d88,
+          clipBias: 0.005,
+        });
+        waterMesh = reflector;
+      } else {
+        waterMesh = new THREE.Mesh(wg, M.water);
+      }
+      waterMesh.rotation.x = -PI / 2;
+      waterMesh.rotation.z = P.h;
+      waterMesh.position.set(P.x, GY + 0.4, P.z);
+      g.add(waterMesh);
     } else {
       add(
         sweep(
@@ -3626,26 +3195,30 @@ export function mountParisRideView(
   function buildSegment(
     t: { out: [number, number] | null; seine?: boolean; tower?: boolean },
     s0: number,
-    s1: number
+    s1: number,
+    tunnelIndex?: number
   ): BuiltSegment {
     const geos: THREE.BufferGeometry[] = [];
     const parts: BuiltPart[] = [];
+    const disposables: Array<() => void> = [];
     if (!t.out) parts.push({ g: tunnelGroup(s0, s1, geos), env: 'in' });
     else if (t.out[0] <= s0 + 0.01 && t.out[1] >= s1 - 0.01)
       parts.push({ g: viaductGroup(s0, s1, t, geos), env: 'out' });
     else if (t.out[0] <= s0 + 0.01) {
       parts.push({ g: viaductGroup(s0, t.out[1], t, geos), env: 'out' });
       parts.push({ g: tunnelGroup(t.out[1], s1, geos), env: 'in' });
-      portalParts(t.out[1], -1, geos).forEach((p) => parts.push(p));
+      for (const p of portalParts(t.out[1], -1, geos)) parts.push(p);
     } else {
       parts.push({ g: tunnelGroup(s0, t.out[0], geos), env: 'in' });
       parts.push({ g: viaductGroup(t.out[0], s1, t, geos), env: 'out' });
-      portalParts(t.out[0], 1, geos).forEach((p) => parts.push(p));
+      for (const p of portalParts(t.out[0], 1, geos)) parts.push(p);
     }
+
     return {
       parts,
       dispose() {
-        geos.forEach((x) => x.dispose());
+        for (const d of disposables) d();
+        for (const x of geos) x.dispose();
       },
     };
   }
@@ -3681,6 +3254,14 @@ export function mountParisRideView(
     STN.seats.forEach((p, i) => add(p, seatMats[i]));
     add(STN.airPiers, M.viaduct);
     add(STN.airGround, M.ground);
+    const airSiel = new THREE.Group();
+    airSiel.position.y = -0.35;
+    airSiel.add(
+      new THREE.Mesh(STN.sielBody, M.sielBody),
+      new THREE.Mesh(STN.sielScreensPos, sielMatPos),
+      new THREE.Mesh(STN.sielScreensNeg, sielMatNeg)
+    );
+    g.add(airSiel);
     const list: Array<{
       P: { x: number; z: number; h: number };
       along: number;
@@ -3714,7 +3295,7 @@ export function mountParisRideView(
     };
   }
 
-  function buildStation(name: string): { group: THREE.Group; dispose: () => void } {
+  function buildStation(name: string, stationSc: number): { group: THREE.Group; dispose: () => void } {
     const g = new THREE.Group();
     const plaqueTex = new THREE.CanvasTexture(plaqueCanvas(name));
     plaqueTex.wrapS = THREE.RepeatWrapping;
@@ -3728,8 +3309,19 @@ export function mountParisRideView(
       side: THREE.DoubleSide,
     });
     const add = (geo: THREE.BufferGeometry, mat: THREE.Material) => g.add(new THREE.Mesh(geo, mat));
-    add(STN.vault, M.tile);
-    add(STN.portal, M.tile);
+    const archetype = resolveStationArchetype(name, route.num);
+    const vaultMat =
+      archetype === 'arts_et_metiers'
+        ? archMats.copperVault
+        : archetype === 'louvre_rivoli'
+          ? archMats.stoneVault
+          : archetype === 'cathedral'
+            ? archMats.cathedralVault
+            : M.tile;
+    const archGeos: THREE.BufferGeometry[] = [];
+    add(STN.vault, vaultMat);
+    add(STN.portal, vaultMat);
+    addArchetypeDecorations(g, archetype, archMats, archGeos);
     add(STN.platBody, M.platformFace);
     add(STN.platTop, M.slab);
     add(STN.edge, M.edge);
@@ -3739,7 +3331,8 @@ export function mountParisRideView(
     add(STN.sleepers, M.sleeper);
     add(STN.frames, M.frame);
     STN.posters.forEach((p, i) => add(p, posterMats[i]));
-    add(STN.pframes, M.cream);
+    // Cadres d'affiches en faïence céramique moulurée
+    add(STN.pframes, archetype === 'faience' ? M.friezeCeramique : M.cream);
     add(STN.plaques, plaqueMat);
     if (badgeMat) add(STN.badges, badgeMat);
     add(STN.plinths, M.cream);
@@ -3751,13 +3344,41 @@ export function mountParisRideView(
     add(STN.sframes, M.housing);
     add(STN.frieze, M.frieze);
     add(STN.sielBody, M.sielBody);
-    add(STN.sielScreens, sielMat);
+    add(STN.sielScreensPos, sielMatPos);
+    add(STN.sielScreensNeg, sielMatNeg);
+
+    // Frise céramique 1900 à losanges sur les voûtes en faïence
+    if (archetype === 'faience') {
+      const friezeGeo = new THREE.PlaneGeometry(82, 0.28);
+      archGeos.push(friezeGeo);
+      [-1, 1].forEach((side) => {
+        const strip = new THREE.Mesh(friezeGeo, M.friezeCeramique);
+        strip.position.set(0, 3.65, side * 6.58);
+        if (side > 0) strip.rotation.y = PI;
+        g.add(strip);
+      });
+    }
+
+    // Bande d'éveil podotactile en relief le long des deux quais + caissons « SORTIE » lumineux
+    const tactileGeo = new THREE.BoxGeometry(84, 0.016, 0.24);
+    const sortieGeo = new THREE.BoxGeometry(0.14, 0.44, 1.15);
+    archGeos.push(tactileGeo, sortieGeo);
+    [-1, 1].forEach((side) => {
+      const band = new THREE.Mesh(tactileGeo, M.tactileBand);
+      band.position.set(0, 1.072, side * 3.34);
+      g.add(band);
+      [-34, 34].forEach((sx) => {
+        const sign = new THREE.Mesh(sortieGeo, M.sortieSign);
+        sign.position.set(sx, 3.42, side * 4.75);
+        g.add(sign);
+      });
+    });
 
     const psdGroup = new THREE.Group();
     psdGroup.add(new THREE.Mesh(STN.psdPosts, M.psdFrame));
     psdGroup.add(new THREE.Mesh(STN.psdFixedGlass, M.psdGlass));
-    const psdLeaves: Array<{ mesh: THREE.Mesh; base: number; dir: number }> = [];
-    psdDoorCenters.forEach(({ x, z }) => {
+    const psdLeaves: Array<{ mesh: THREE.Mesh; base: number; dir: number; side: number }> = [];
+    psdDoorCenters.forEach(({ x, z, side }) => {
       [
         [x - 0.33, -1],
         [x + 0.33, 1],
@@ -3765,12 +3386,12 @@ export function mountParisRideView(
         const m = new THREE.Mesh(STN.psdLeaf, M.psdGlass);
         m.position.set(base, 0, z);
         psdGroup.add(m);
-        psdLeaves.push({ mesh: m, base, dir });
+        psdLeaves.push({ mesh: m, base, dir, side });
       });
     });
     psdGroup.visible = activeStock.hasPsd && !spragueMode;
     g.add(psdGroup);
-    const psdEntry = { group: psdGroup, leaves: psdLeaves };
+    const psdEntry = { sc: stationSc, group: psdGroup, leaves: psdLeaves };
     stationPsds.add(psdEntry);
 
     return {
@@ -3779,6 +3400,7 @@ export function mountParisRideView(
         stationPsds.delete(psdEntry);
         plaqueTex.dispose();
         plaqueMat.dispose();
+        for (const ag of archGeos) ag.dispose();
       },
     };
   }
@@ -3797,7 +3419,7 @@ export function mountParisRideView(
     if (key[0] === 's') {
       const k = +key.slice(1);
       const st = stations[k];
-      const o = st.air ? buildAirStation(st.name, k) : buildStation(st.name);
+      const o = st.air ? buildAirStation(st.name, k) : buildStation(st.name, st.sc);
       const P = pose(st.sc, { x: 0, z: 0, h: 0 });
       o.group.position.set(P.x, 0, P.z);
       o.group.rotation.y = -P.h;
@@ -3805,11 +3427,12 @@ export function mountParisRideView(
     }
     if (key === 'ta') return buildSegment(tailA, tailA.s0, tailA.s1);
     if (key === 'tb') return buildSegment(tailB, tailB.s0, tailB.s1);
-    const t = tunnels[+key.slice(1)];
-    return buildSegment(t, t.s0, t.s1);
+    const tunnelIdx = +key.slice(1);
+    const t = tunnels[tunnelIdx];
+    return buildSegment(t, t.s0, t.s1, tunnelIdx);
   }
 
-  function stream(lo: number, hi: number, limit: number) {
+  function stream(lo: number, hi: number, limit: number): boolean {
     const keys = want(lo, hi);
     built.forEach((o, k) => {
       if (!keys.has(k)) {
@@ -3819,14 +3442,20 @@ export function mountParisRideView(
       }
     });
     let n = 0;
+    let remaining = 0;
     keys.forEach((k) => {
-      if (!built.has(k) && n < limit) {
-        const o = makePiece(k);
-        o.parts.forEach((p) => scene.add(p.g));
-        built.set(k, o);
-        n++;
+      if (!built.has(k)) {
+        if (n < limit) {
+          const o = makePiece(k);
+          o.parts.forEach((p) => scene.add(p.g));
+          built.set(k, o);
+          n++;
+        } else {
+          remaining++;
+        }
       }
     });
+    return remaining > 0;
   }
 
   function clearAll() {
@@ -3858,7 +3487,7 @@ export function mountParisRideView(
     const o = openMix;
     if (scene.fog instanceof THREE.FogExp2) {
       scene.fog.color.copy(FOG_IN).lerp(FOG_OUT, o);
-      scene.fog.density = 0.0085 + (0.00105 - 0.0085) * o;
+      scene.fog.density = 0.0085 + (0.00055 - 0.0085) * o;
     }
     sun.intensity = 1.9 * o;
     hemi.intensity = 0.42 + 0.6 * o;
@@ -3879,69 +3508,159 @@ export function mountParisRideView(
     lightPool.forEach((o) => toWorld(P, o.x, 5.2, 0, o.l.position));
   }
 
-  /* ---------- The Train ---------- */
+  /* ---------- The Trains (Primary + Crossing Opposite-Direction Consist) ---------- */
   type TrainCarEntry = { outer: THREE.Group; inner: THREE.Group; glbSlot: THREE.Group };
-  const tr = {
-    cars: [] as TrainCarEntry[],
-    s: 0,
-    dir: 1 as 1 | -1,
-    v: 0,
-    state: 'dwell' as 'dwell' | 'run',
-    dwell: 0,
-    door: 0,
-    wheel: 0,
-    time: 0,
-    cur: 0,
-    target: null as { type: 'stn' | 'turn'; k?: number; front: number } | null,
-    destMat: trackMat(new THREE.MeshBasicMaterial({})),
-  };
-
-  let glbLoadToken = 0;
-  let glbStatus: 'loading' | 'ready' | 'failed' = 'loading';
-  let loadedGlbFamily: ParisGlbFamily | null = null;
-  let disposed = false;
-
-  function syncCarVisibility(v: 'vault' | 'ride') {
-    const showGlb = v === 'vault' && glbStatus === 'ready';
-    const showInner = v === 'ride' || (v === 'vault' && glbStatus === 'failed');
-    for (const c of tr.cars) {
-      c.glbSlot.visible = showGlb;
-      c.inner.visible = showInner;
-    }
+  interface SimTrainUnit {
+    cars: TrainCarEntry[];
+    gangways: THREE.Mesh[];
+    s: number;
+    dir: 1 | -1;
+    v: number;
+    state: 'dwell' | 'run';
+    dwell: number;
+    door: number;
+    wheel: number;
+    time: number;
+    cur: number;
+    target: { type: 'stn' | 'turn'; k?: number; front: number } | null;
+    destMat: THREE.MeshBasicMaterial;
   }
 
-  function applyTrainGlbForRoute(r: RouteDef) {
-    const family = resolveTrainGlbFamily(r.num);
-    if (loadedGlbFamily === family && glbStatus === 'ready') {
-      syncCarVisibility(view);
-      return;
-    }
-    const token = ++glbLoadToken;
-    glbStatus = 'loading';
-    syncCarVisibility(view);
-    void loadGlbFamily(family).then((scenes) => {
-      if (disposed || token !== glbLoadToken) return;
-      if (!scenes) {
-        glbStatus = 'failed';
-        loadedGlbFamily = null;
-        syncCarVisibility(view);
-        return;
+  const headlightBeams: THREE.Mesh[] = [];
+
+  function makeTrainUnitState(): SimTrainUnit {
+    return {
+      cars: [],
+      gangways: [],
+      s: 0,
+      dir: 1,
+      v: 0,
+      state: 'dwell',
+      dwell: 0,
+      door: 0,
+      wheel: 0,
+      time: 0,
+      cur: 0,
+      target: null,
+      destMat: trackMat(new THREE.MeshBasicMaterial({})),
+    };
+  }
+
+  const tr = makeTrainUnitState();
+  const counterTr = makeTrainUnitState();
+
+  let disposed = false;
+  let activeGlbKey = '';
+  let activeGlbReady = false;
+  const rideKtx2Loader = new KTX2Loader().setTranscoderPath('/basis/').detectSupport(renderer);
+  const rideGlbLoader = new GLTFLoader();
+  rideGlbLoader.setMeshoptDecoder(MeshoptDecoder);
+  rideGlbLoader.setKTX2Loader(rideKtx2Loader);
+  const rideGlbCache = new Map<string, Promise<{ cab: THREE.Group; car: THREE.Group }>>();
+
+  function normalizeRideGlb(group: THREE.Group) {
+    group.traverse((obj) => {
+      const mesh = obj as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      for (const mat of mats) {
+        if (!mat) continue;
+        const std = mat as THREE.MeshStandardMaterial;
+        if (std.map) {
+          std.map.colorSpace = THREE.SRGBColorSpace;
+          std.map.needsUpdate = true;
+        }
+        if (std.name?.toLowerCase().includes('vitre')) {
+          std.transparent = true;
+          std.opacity = std.opacity < 1 ? std.opacity : 0.32;
+          std.depthWrite = false;
+        }
+        std.needsUpdate = true;
       }
-      tr.cars.forEach((carEntry, idx) => {
-        carEntry.glbSlot.clear();
-        const isCab = idx === 0;
-        const isTail = idx === tr.cars.length - 1 && tr.cars.length > 1;
-        const source = isCab ? scenes.cab : isTail ? scenes.tail : scenes.neutral;
-        const mesh = normalizeGlbCarScene(source, isTail);
-        carEntry.glbSlot.add(mesh);
-      });
-      loadedGlbFamily = family;
-      glbStatus = 'ready';
-      syncCarVisibility(view);
+    });
+    const box = new THREE.Box3().setFromObject(group);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    group.position.x -= center.x;
+    group.position.z -= center.z;
+    group.position.y -= box.min.y;
+  }
+
+  function loadSingleRideGlb(url: string): Promise<THREE.Group> {
+    return new Promise((resolve, reject) => {
+      rideGlbLoader.load(
+        url,
+        (gltf) => {
+          normalizeRideGlb(gltf.scene);
+          resolve(gltf.scene);
+        },
+        undefined,
+        reject
+      );
     });
   }
 
-  const gangways: THREE.Mesh[] = [];
+  function loadLineGlbsIntoSlots(lineNum: string) {
+    const { cab, car } = getLibraryGlbUrlsForLine(lineNum);
+    const key = `${cab}|${car}`;
+    if (activeGlbKey === key && activeGlbReady) {
+      syncCarVisibility(view);
+      return;
+    }
+    activeGlbKey = key;
+    activeGlbReady = false;
+    syncCarVisibility(view);
+
+    let promise = rideGlbCache.get(key);
+    if (!promise) {
+      promise = Promise.all([loadSingleRideGlb(cab), loadSingleRideGlb(car)]).then(
+        ([cabScene, carScene]) => ({ cab: cabScene, car: carScene })
+      );
+      rideGlbCache.set(key, promise);
+    }
+
+    promise
+      .then(({ cab: cabScene, car: carScene }) => {
+        if (disposed || activeGlbKey !== key) return;
+        for (const unit of [tr, counterTr]) {
+          unit.cars.forEach((c, idx) => {
+            while (c.glbSlot.children.length > 0) {
+              c.glbSlot.remove(c.glbSlot.children[0]);
+            }
+            if (idx === 0) {
+              c.glbSlot.add(cabScene.clone());
+            } else if (idx === unit.cars.length - 1) {
+              const tail = cabScene.clone();
+              tail.rotation.y = Math.PI;
+              c.glbSlot.add(tail);
+            } else {
+              c.glbSlot.add(carScene.clone());
+            }
+          });
+        }
+        activeGlbReady = true;
+        syncCarVisibility(view);
+      })
+      .catch(() => {
+        if (!disposed && activeGlbKey === key) {
+          activeGlbReady = false;
+          syncCarVisibility(view);
+        }
+      });
+  }
+
+  function syncCarVisibility(v: 'vault' | 'ride' | 'passenger') {
+    const useGlb = activeGlbReady && !spragueMode && tr.door <= 0.02;
+    for (const unit of [tr, counterTr]) {
+      unit.cars.forEach((c, idx) => {
+        const keepInnerForCab = v === 'ride' && unit === tr && idx === 0;
+        const showGlb = useGlb && !keepInnerForCab;
+        c.glbSlot.visible = showGlb;
+        c.inner.visible = !showGlb;
+      });
+    }
+  }
+
   const cabPupitreGroup = new THREE.Group();
   const vueVoieGroup = new THREE.Group();
   const leverPivot = new THREE.Group();
@@ -3953,7 +3672,7 @@ export function mountParisRideView(
   const camLocal = new THREE.Vector3(L / 2 - 1.0, BY + 1.62, 0.5);
   const lookLocal = new THREE.Vector3(L / 2 + 30, BY + 1.2, 0.5);
 
-  {
+  function populateTrainConsist(unit: SimTrainUnit, withCabInterior: boolean) {
     const cls = [0, 0, 1, 0, 0];
     for (let i = 0; i < NC; i++) {
       const inner = buildCar(
@@ -3974,13 +3693,13 @@ export function mountParisRideView(
         const gw = new THREE.Mesh(G.gangway, M.rubber);
         gw.position.x = -L / 2 - GAP / 2;
         outer.add(gw);
-        gangways.push(gw);
+        unit.gangways.push(gw);
       }
       scene.add(outer);
-      tr.cars.push({ outer, inner, glbSlot });
+      unit.cars.push({ outer, inner, glbSlot });
     }
-    const front = tr.cars[0].inner;
-    const rear = tr.cars[NC - 1].inner;
+    const front = unit.cars[0].inner;
+    const rear = unit.cars[NC - 1].inner;
     const headGeo = trackGeo(new THREE.SphereGeometry(0.085, 16, 10));
     const ringGeo = trackGeo(new THREE.TorusGeometry(0.1, 0.018, 8, 20));
     const tailGeo = trackGeo(new THREE.SphereGeometry(0.07, 14, 8));
@@ -3997,10 +3716,17 @@ export function mountParisRideView(
       rear.add(t);
     });
     const dpGeo = trackGeo(new THREE.PlaneGeometry(1.0, 0.19));
-    const dp = new THREE.Mesh(dpGeo, tr.destMat);
+    const dp = new THREE.Mesh(dpGeo, unit.destMat);
     dp.rotation.y = PI / 2;
     dp.position.set(L + 0.003, BY + 1.97, 0);
     front.add(dp);
+
+    if (!withCabInterior) {
+      const counterGlow = new THREE.PointLight(0xffe0b0, 0.6, 10, 1.6);
+      counterGlow.position.set(0, 2.3, 0);
+      unit.cars[2].outer.add(counterGlow);
+      return;
+    }
 
     // Driver pupitre console (for driven RATP/IDFM rolling stock & Sprague 1930)
     const deskBase = new THREE.Mesh(
@@ -4053,6 +3779,46 @@ export function mountParisRideView(
     wiper.position.set(L - 0.04, BY + 1.38, -0.52);
     wiper.rotation.x = -0.18;
     cabPupitreGroup.add(wiper);
+
+    // Enrichissement tableau de bord 3D : écran auxiliaire, rampe LED HDR, manomètre frein et montants
+    const auxScreen = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(0.28, 0.16)),
+      sielMatPos
+    );
+    auxScreen.position.set(L - 0.44, BY + 0.99, 0.42);
+    auxScreen.rotation.order = 'YXZ';
+    auxScreen.rotation.y = -PI / 2;
+    auxScreen.rotation.x = -0.34;
+    cabPupitreGroup.add(auxScreen);
+
+    const ledGeo = trackGeo(new THREE.SphereGeometry(0.014, 8, 6));
+    [
+      { z: -0.22, mat: M.signalGreen },
+      { z: -0.17, mat: M.signalGreen },
+      { z: -0.12, mat: M.headlightLed },
+      { z: -0.07, mat: M.headlightLed },
+      { z: -0.02, mat: M.signalRed },
+    ].forEach(({ z, mat }) => {
+      const led = new THREE.Mesh(ledGeo, mat);
+      led.position.set(L - 0.34, BY + 1.03, z);
+      cabPupitreGroup.add(led);
+    });
+
+    const gaugeRim = new THREE.Mesh(
+      trackGeo(new THREE.CylinderGeometry(0.055, 0.055, 0.02, 16)),
+      M.chrome
+    );
+    gaugeRim.rotation.z = PI / 2 - 0.34;
+    gaugeRim.position.set(L - 0.42, BY + 0.97, -0.74);
+    cabPupitreGroup.add(gaugeRim);
+
+    const pillarGeo = trackGeo(new THREE.BoxGeometry(0.08, 1.15, 0.07));
+    [-1.08, 1.08].forEach((pz) => {
+      const pillar = new THREE.Mesh(pillarGeo, M.housing);
+      pillar.position.set(L - 0.08, BY + 1.46, pz);
+      cabPupitreGroup.add(pillar);
+    });
+
     front.add(cabPupitreGroup);
 
     // Panoramic stainless hand-rail + compact telemetry pod for automatic driverless trains (L1/L4/L14)
@@ -4075,21 +3841,39 @@ export function mountParisRideView(
     vueVoieGroup.visible = false;
     front.add(vueVoieGroup);
 
-    const fo = tr.cars[0].outer;
-    const spot = new THREE.SpotLight(0xfff0d2, 2.6, 85, 0.5, 0.6, 1);
+    const fo = unit.cars[0].outer;
+    const spot = new THREE.SpotLight(0xfff0d2, isMobileGpu ? 3.0 : 5.2, 110, 0.56, 0.58, 1);
     spot.position.set(L / 2 + 0.2, BY + 0.6, 0);
     const tgt = new THREE.Object3D();
-    tgt.position.set(L / 2 + 35, 0.4, 0);
+    tgt.position.set(L / 2 + 38, 0.4, 0);
     fo.add(spot);
     fo.add(tgt);
     spot.target = tgt;
+
+    // Cônes volumétriques légers devant les deux phares avant (visibles en tunnel)
+    if (withCabInterior) {
+      const beamGeo = trackGeo(new THREE.ConeGeometry(1.55, 16, 16, 1, true));
+      beamGeo.rotateZ(PI / 2);
+      beamGeo.translate(8, 0, 0);
+      [-0.72, 0.72].forEach((zOff) => {
+        const beam = new THREE.Mesh(beamGeo, M.headlightBeam);
+        beam.position.set(L / 2 + 0.15, BY + 0.42, zOff);
+        fo.add(beam);
+        headlightBeams.push(beam);
+      });
+    }
+
     const glow = new THREE.PointLight(0xffd9a0, 0.75, 12, 1.6);
     glow.position.set(0, 2.4, 2.0);
-    tr.cars[2].outer.add(glow);
+    unit.cars[2].outer.add(glow);
   }
+
+  populateTrainConsist(tr, true);
+  populateTrainConsist(counterTr, false);
 
   function applyStockVisuals() {
     activeStock = resolveParisStockSpec(route.num, spragueMode);
+    loadLineGlbsIntoSlots(route.num);
     M.paintGreen.color.setHex(activeStock.bodyHex);
     M.paintRed.color.setHex(spragueMode ? 0x7e1f1d : activeStock.bodyHex);
     M.stripe.color.setHex(activeStock.stripeHex);
@@ -4105,35 +3889,45 @@ export function mountParisRideView(
     M.frieze.color.set(route.bg);
 
     const autoMode = activeStock.driverless && !spragueMode;
-    tr.cars.forEach((c) => {
-      const ud = c.inner.userData as {
-        rearClassic?: THREE.Mesh | null;
-        rearAuto?: THREE.Mesh | null;
-        frontClassic?: THREE.Mesh | null;
-        frontAuto?: THREE.Mesh | null;
-        rearGlass?: THREE.Mesh | null;
-        rearGlassAuto?: THREE.Mesh | null;
-        frontGlass?: THREE.Mesh | null;
-        frontGlassAuto?: THREE.Mesh | null;
-        classBadges?: THREE.Mesh[];
-      };
-      if (ud.rearClassic) ud.rearClassic.visible = !autoMode;
-      if (ud.rearAuto) ud.rearAuto.visible = autoMode;
-      if (ud.frontClassic) ud.frontClassic.visible = !autoMode;
-      if (ud.frontAuto) ud.frontAuto.visible = autoMode;
-      if (ud.rearGlass) ud.rearGlass.visible = !autoMode;
-      if (ud.rearGlassAuto) ud.rearGlassAuto.visible = autoMode;
-      if (ud.frontGlass) ud.frontGlass.visible = !autoMode;
-      if (ud.frontGlassAuto) ud.frontGlassAuto.visible = autoMode;
-      ud.classBadges?.forEach((b) => {
-        b.visible = spragueMode;
-      });
-    });
-
     const showBoa = activeStock.boa && !spragueMode;
-    gangways.forEach((gw) => {
-      gw.visible = showBoa;
-    });
+    const isPneuLine = ['1', '4', '6', '11', '14'].includes(route.num) && !spragueMode;
+    for (const unit of [tr, counterTr]) {
+      unit.cars.forEach((c) => {
+        const ud = c.inner.userData as {
+          rearClassic?: THREE.Mesh | null;
+          rearAuto?: THREE.Mesh | null;
+          frontClassic?: THREE.Mesh | null;
+          frontAuto?: THREE.Mesh | null;
+          rearGlass?: THREE.Mesh | null;
+          rearGlassAuto?: THREE.Mesh | null;
+          frontGlass?: THREE.Mesh | null;
+          frontGlassAuto?: THREE.Mesh | null;
+          pneuBogies?: THREE.Mesh[];
+          frontMasks?: THREE.Mesh[];
+          classBadges?: THREE.Mesh[];
+        };
+        if (ud.rearClassic) ud.rearClassic.visible = !autoMode;
+        if (ud.rearAuto) ud.rearAuto.visible = autoMode;
+        if (ud.frontClassic) ud.frontClassic.visible = !autoMode;
+        if (ud.frontAuto) ud.frontAuto.visible = autoMode;
+        if (ud.rearGlass) ud.rearGlass.visible = !autoMode;
+        if (ud.rearGlassAuto) ud.rearGlassAuto.visible = autoMode;
+        if (ud.frontGlass) ud.frontGlass.visible = !autoMode;
+        if (ud.frontGlassAuto) ud.frontGlassAuto.visible = autoMode;
+        ud.pneuBogies?.forEach((pb) => {
+          pb.visible = isPneuLine;
+        });
+        ud.frontMasks?.forEach((fm) => {
+          fm.visible = !spragueMode;
+        });
+        ud.classBadges?.forEach((b) => {
+          b.visible = spragueMode;
+        });
+      });
+      unit.gangways.forEach((gw) => {
+        gw.visible = showBoa;
+      });
+    }
     cabPupitreGroup.visible = !autoMode;
     vueVoieGroup.visible = autoMode;
 
@@ -4151,19 +3945,29 @@ export function mountParisRideView(
     stationPsds.forEach((psd) => {
       psd.group.visible = activeStock.hasPsd && !spragueMode;
     });
+    syncCarVisibility(view);
   }
 
   let destTex: THREE.CanvasTexture | null = null;
+  let counterDestTex: THREE.CanvasTexture | null = null;
+  function updateDestTexFor(
+    unit: SimTrainUnit,
+    prevTex: THREE.CanvasTexture | null
+  ): THREE.CanvasTexture {
+    const name = unit.dir > 0 ? stations[stations.length - 1].name : stations[0].name;
+    if (prevTex) prevTex.dispose();
+    const tex = new THREE.CanvasTexture(destCanvas(name.toUpperCase()));
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = maxAniso;
+    unit.destMat.map = tex;
+    unit.destMat.needsUpdate = true;
+    return tex;
+  }
   function setDest() {
-    const name = tr.dir > 0 ? stations[stations.length - 1].name : stations[0].name;
-    if (destTex) destTex.dispose();
-    destTex = new THREE.CanvasTexture(destCanvas(name.toUpperCase()));
-    destTex.wrapS = THREE.RepeatWrapping;
-    destTex.wrapT = THREE.RepeatWrapping;
-    destTex.colorSpace = THREE.SRGBColorSpace;
-    destTex.anisotropy = maxAniso;
-    tr.destMat.map = destTex;
-    tr.destMat.needsUpdate = true;
+    destTex = updateDestTexFor(tr, destTex);
+    counterDestTex = updateDestTexFor(counterTr, counterDestTex);
   }
 
   const A_BRAKE = 1.55;
@@ -4190,11 +3994,15 @@ export function mountParisRideView(
     return { type: 'turn', front: tailA.s1 - TAIL + 20 };
   }
 
-  function planNext() {
-    tr.target = nextFrom(tr.cur, tr.dir);
+  function planNextFor(unit: SimTrainUnit) {
+    unit.target = nextFrom(unit.cur, unit.dir);
   }
 
-  let view: 'vault' | 'ride' = options.initialView ?? 'ride';
+  function planNext() {
+    planNextFor(tr);
+  }
+
+  let view: 'vault' | 'ride' | 'passenger' = options.initialView ?? 'ride';
   let paused = false;
   let speed = 1;
   let focusKey = '';
@@ -4203,7 +4011,7 @@ export function mountParisRideView(
   let cabPitch = 0;
   let eiffelGlance = false;
 
-  let liveMode = true;
+  let liveMode = false;
   let liveActive = false;
   let liveTargetTrainId: string | null = options.initialTrainId ?? null;
   let latestLiveTrain: TrainMarker | null = null;
@@ -4213,20 +4021,20 @@ export function mountParisRideView(
     updateHud();
   }
 
-  function turnBack() {
-    tr.dir = tr.dir > 0 ? -1 : 1;
-    if (tr.dir < 0) {
-      tr.s = tailB.s0 + 180;
-      tr.cur = stations.length;
+  function turnBackFor(unit: SimTrainUnit, isPrimary: boolean) {
+    unit.dir = unit.dir > 0 ? -1 : 1;
+    if (unit.dir < 0) {
+      unit.s = tailB.s0 + 180;
+      unit.cur = stations.length;
     } else {
-      tr.s = tailA.s1 - 180;
-      tr.cur = -1;
+      unit.s = tailA.s1 - 180;
+      unit.cur = -1;
     }
-    tr.v = 0;
-    tr.state = 'run';
-    planNext();
+    unit.v = 0;
+    unit.state = 'run';
+    planNextFor(unit);
     setDest();
-    if (view === 'ride') {
+    if (isPrimary && (view === 'ride' || view === 'passenger')) {
       veil.style.opacity = '1';
       if (veilTimeout) clearTimeout(veilTimeout);
       veilTimeout = setTimeout(() => {
@@ -4235,39 +4043,49 @@ export function mountParisRideView(
     }
   }
 
-  function stepTrain(dt: number) {
-    tr.time += dt;
-    if (tr.state === 'dwell') {
-      tr.dwell += dt;
-      if (tr.dwell > DWELL) {
-        tr.state = 'run';
-        planNext();
+  function stepAutonomousUnit(
+    unit: SimTrainUnit,
+    dt: number,
+    dwellDuration: number,
+    isPrimary: boolean
+  ) {
+    unit.time += dt;
+    if (unit.state === 'dwell') {
+      unit.dwell += dt;
+      if (unit.dwell > dwellDuration) {
+        unit.state = 'run';
+        planNextFor(unit);
       }
-    } else if (tr.target) {
-      const tg = tr.target;
-      const rem = (tg.front - tr.s) * tr.dir;
-      tr.v = Math.min(VMAX, tr.v + ACC * dt);
-      if (rem <= (tr.v * tr.v) / (2 * A_BRAKE)) {
-        tr.v = Math.min(tr.v, Math.sqrt(Math.max(0, 2 * A_BRAKE * rem)));
+    } else if (unit.target) {
+      const tg = unit.target;
+      const rem = (tg.front - unit.s) * unit.dir;
+      unit.v = Math.min(VMAX, unit.v + ACC * dt);
+      if (rem <= (unit.v * unit.v) / (2 * A_BRAKE)) {
+        unit.v = Math.min(unit.v, Math.sqrt(Math.max(0, 2 * A_BRAKE * rem)));
       }
-      const st = Math.min(rem, Math.max(tr.v, 0.05) * dt);
-      tr.s += tr.dir * st;
+      const st = Math.min(rem, Math.max(unit.v, 0.05) * dt);
+      unit.s += unit.dir * st;
       if (rem - st < 0.01) {
-        tr.s = tg.front;
-        tr.v = 0;
+        unit.s = tg.front;
+        unit.v = 0;
         if (tg.type === 'stn' && tg.k !== undefined) {
-          tr.cur = tg.k;
-          tr.state = 'dwell';
-          tr.dwell = 0;
+          unit.cur = tg.k;
+          unit.state = 'dwell';
+          unit.dwell = 0;
         } else {
-          turnBack();
+          turnBackFor(unit, isPrimary);
         }
       }
     }
-    const targetDoor = tr.state === 'dwell' && tr.dwell > 1.3 && tr.dwell < DWELL - 2.4 ? 1 : 0;
-    const sp = dt / 1.3;
-    tr.door += Math.max(-sp, Math.min(sp, targetDoor - tr.door));
-    tr.wheel += (tr.v * dt) / WR;
+    const targetDoor =
+      unit.state === 'dwell' && unit.dwell > 1.1 && unit.dwell < dwellDuration - 2.0 ? 1 : 0;
+    const sp = dt / 1.15;
+    unit.door += Math.max(-sp, Math.min(sp, targetDoor - unit.door));
+    unit.wheel += (unit.v * dt) / WR;
+  }
+
+  function stepTrain(dt: number) {
+    stepAutonomousUnit(tr, dt, DWELL, true);
   }
 
   function stepLiveTrain(train: TrainMarker, dt: number) {
@@ -4373,17 +4191,19 @@ export function mountParisRideView(
   }
 
   const PC = { x: 0, z: 0, h: 0 };
-  function poseTrain() {
-    const e = tr.door < 0.5 ? 2 * tr.door * tr.door : 1 - Math.pow(-2 * tr.door + 2, 2) / 2;
-    const sway = Math.min(1, tr.v / 10);
-    tr.cars.forEach((c, i) => {
-      pose(tr.s - tr.dir * (i * (L + GAP) + L / 2), PC);
-      const lat = tr.dir * 1.8;
+  const easeDoor = (d: number) => (d < 0.5 ? 2 * d * d : 1 - Math.pow(-2 * d + 2, 2) / 2);
+
+  function poseTrainUnit(unit: SimTrainUnit) {
+    const e = easeDoor(unit.door);
+    const sway = Math.min(1, unit.v / 10);
+    unit.cars.forEach((c, i) => {
+      pose(unit.s - unit.dir * (i * (L + GAP) + L / 2), PC);
+      const lat = unit.dir * 1.8;
       c.outer.position.set(PC.x - Math.sin(PC.h) * lat, 0.22, PC.z + Math.cos(PC.h) * lat);
-      c.outer.rotation.y = -(PC.h + (tr.dir < 0 ? PI : 0));
+      c.outer.rotation.y = -(PC.h + (unit.dir < 0 ? PI : 0));
       c.inner.rotation.x =
-        Math.sin(tr.time * 2.7 + i * 1.3) * 0.006 * sway +
-        Math.sin(tr.time * 7.1 + i) * 0.0015 * sway;
+        Math.sin(unit.time * 2.7 + i * 1.3) * 0.006 * sway +
+        Math.sin(unit.time * 7.1 + i) * 0.0015 * sway;
       const axles = c.inner.userData.axles as THREE.Mesh[];
       const leaves = c.inner.userData.leaves as Array<{
         obj: THREE.Group;
@@ -4391,20 +4211,39 @@ export function mountParisRideView(
         dir: number;
       }>;
       axles.forEach((a) => {
-        a.rotation.z = -tr.wheel;
+        a.rotation.z = -unit.wheel;
       });
       leaves.forEach((l) => {
         l.obj.position.x = l.base + l.dir * 0.64 * e;
       });
     });
+  }
+
+  function doorForStationSide(stationSc: number, trackDir: 1 | -1): number {
+    let open = 0;
+    for (const unit of [tr, counterTr]) {
+      if (unit.dir !== trackDir) continue;
+      const dockedFront = stationSc + (trackDir * TRAIN_LEN) / 2;
+      if (Math.abs(unit.s - dockedFront) < 4.5) {
+        open = Math.max(open, unit.door);
+      }
+    }
+    return easeDoor(open);
+  }
+
+  function poseTrain() {
+    poseTrainUnit(tr);
+    poseTrainUnit(counterTr);
     if (cabPupitreGroup.visible) {
       const targetTilt = tr.state === 'dwell' ? 0.32 : tr.v > 0.5 ? -0.34 : 0;
       leverPivot.rotation.z += (targetTilt - leverPivot.rotation.z) * 0.14;
     }
     if (activeStock.hasPsd && !spragueMode) {
       stationPsds.forEach((psd) => {
+        const ePos = doorForStationSide(psd.sc, 1);
+        const eNeg = doorForStationSide(psd.sc, -1);
         psd.leaves.forEach((l) => {
-          l.mesh.position.x = l.base + l.dir * 0.64 * e;
+          l.mesh.position.x = l.base + l.dir * 0.64 * (l.side > 0 ? ePos : eNeg);
         });
       });
     }
@@ -4441,11 +4280,20 @@ export function mountParisRideView(
     controls.update();
   }
 
-  function setView(v: 'vault' | 'ride') {
+  let prevTrainV = 0;
+  let smoothPitchNod = 0;
+  let smoothEffort = 0;
+  let cabVibPhase = 0;
+  const passCamLocal = new THREE.Vector3(0.4, BY + 1.28, 0.56);
+  const passLookLocal = new THREE.Vector3(3.6, BY + 1.18, -3.4);
+
+  function setView(v: 'vault' | 'ride' | 'passenger') {
     view = v;
     focusKey = '';
     controls.enabled = v === 'vault';
-    camera.fov = v === 'ride' ? 66 : 52;
+    cabYaw = 0;
+    cabPitch = 0;
+    camera.fov = v === 'ride' ? 62 : v === 'passenger' ? 68 : 52;
     camera.updateProjectionMatrix();
     syncCarVisibility(v);
     updateHud();
@@ -4530,17 +4378,88 @@ export function mountParisRideView(
     cabPitch = 0;
 
     planNext();
+    const cDir: 1 | -1 = dir > 0 ? -1 : 1;
+    if (stations.length >= 2) {
+      const altIdx = Math.max(0, Math.min(stations.length - 1, startIdx + dir));
+      const fromIdx = altIdx === startIdx ? (startIdx > 0 ? startIdx - 1 : 1) : altIdx;
+      const aheadOfTarget = (stations[fromIdx].sc - startSt.sc) * cDir < 0;
+      if (aheadOfTarget) {
+        const span = Math.abs(stations[fromIdx].sc - startSt.sc);
+        const cStartS = startSt.sc - cDir * Math.min(115, span * 0.45 + 35);
+        Object.assign(counterTr, {
+          dir: cDir,
+          cur: fromIdx,
+          v: 11.5,
+          state: 'run' as const,
+          dwell: 0,
+          door: 0,
+          s: cStartS,
+          target: { type: 'stn' as const, k: startIdx, front: startSt.sc + (cDir * TRAIN_LEN) / 2 },
+        });
+      } else {
+        Object.assign(counterTr, {
+          dir: cDir,
+          cur: fromIdx,
+          v: 0,
+          state: 'dwell' as const,
+          dwell: 2,
+          door: 0,
+          s: stations[fromIdx].sc + (cDir * TRAIN_LEN) / 2,
+          target: null,
+        });
+        planNextFor(counterTr);
+      }
+    } else {
+      Object.assign(counterTr, {
+        dir: cDir,
+        cur: startIdx,
+        v: 0,
+        state: 'dwell' as const,
+        dwell: 0,
+        door: 0,
+        s: startSt.sc + (cDir * TRAIN_LEN) / 2,
+        target: null,
+      });
+    }
     setDest();
     applyStockVisuals();
-    refreshSielTexture(
-      (tr.dir > 0 ? stations[stations.length - 1].name : stations[0].name).toUpperCase(),
-      tr.state === 'dwell' ? 'À quai' : '1 min'
-    );
-    applyTrainGlbForRoute(route);
+    refreshDualSielTextures(buildDualSielSnapshot(startIdx));
     focusKey = '';
     stream(startIdx - 2, startIdx + 2, 99);
     updateHud();
     options.onRouteChange?.(route.key);
+  }
+
+  function counterSielEta(focusIdx: number): string {
+    const st = stations[focusIdx];
+    if (!st) return '3 min';
+    const dockedFront = st.sc + (counterTr.dir * TRAIN_LEN) / 2;
+    if (counterTr.state === 'dwell' && Math.abs(counterTr.s - dockedFront) < 4.5) {
+      return 'À quai';
+    }
+    if (counterTr.target?.type === 'stn' && counterTr.target.k === focusIdx) {
+      const rem = Math.max(0, (counterTr.target.front - counterTr.s) * counterTr.dir);
+      const sec = rem / Math.max(8, counterTr.v || 10);
+      return sec <= 25 ? '< 1 min' : `${Math.max(1, Math.round(sec / 60))} min`;
+    }
+    return '3 min';
+  }
+
+  function buildDualSielSnapshot(focusIdx: number): DualSielBoards {
+    const stName = stations[focusIdx]?.name ?? '';
+    const kmh = Math.round(
+      liveMode && liveActive && latestLiveTrain ? latestLiveTrain.spd || 0 : tr.v * 3.6
+    );
+    return selectDualSielBoards({
+      departures: options.getStationDepartures?.(stName) ?? [],
+      lineNum: route.num,
+      posDest: stations[stations.length - 1]?.name ?? '',
+      negDest: stations[0]?.name ?? '',
+      simDir: tr.dir,
+      simState: tr.state,
+      simKmh: kmh,
+      counterEtaText: counterSielEta(focusIdx),
+    });
   }
 
   function trackText(s: number) {
@@ -4568,6 +4487,89 @@ export function mountParisRideView(
 
   let lastSpeedoKey = '';
   let lastSielKey = '';
+  // Live interior plan thermomètre CanvasTexture mounted above every car door
+  let doorMapCanvas: HTMLCanvasElement | null = null;
+  let doorMapTex: THREE.CanvasTexture | null = null;
+  let lastDoorMapKey = '';
+  function refreshDoorLineMap(arrets: string[], curIdx: number, isDwell: boolean) {
+    if (typeof document === 'undefined' || !route) return;
+    const key = `${route.key}:${curIdx}:${isDwell ? 1 : 0}`;
+    if (key === lastDoorMapKey) return;
+    lastDoorMapKey = key;
+    if (!doorMapCanvas) {
+      doorMapCanvas = document.createElement('canvas');
+      doorMapCanvas.width = 512;
+      doorMapCanvas.height = 72;
+      doorMapTex = new THREE.CanvasTexture(doorMapCanvas);
+      doorMapTex.colorSpace = THREE.SRGBColorSpace;
+      M.doorLineMap.map = doorMapTex;
+      M.doorLineMap.needsUpdate = true;
+    }
+    const ctx = doorMapCanvas.getContext('2d');
+    if (!ctx || !doorMapTex) return;
+
+    // Clean RATP/IDFM white enamel interior header strip
+    ctx.fillStyle = '#f5f4f0';
+    ctx.fillRect(0, 0, 512, 72);
+    ctx.strokeStyle = '#d4d2cb';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, 1, 510, 70);
+
+    // Official line badge on left
+    ctx.fillStyle = route.bg;
+    if (isRerLineNum(route.num)) {
+      ctx.beginPath();
+      ctx.roundRect(12, 14, 44, 44, 11);
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.arc(34, 36, 22, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = route.fg;
+    ctx.font = 'bold 22px system-ui, -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(route.num, 34, 37);
+
+    // Slice 7 stops centered around current stop for legible in-world thermometer
+    const start = Math.max(0, Math.min(Math.max(0, arrets.length - 7), curIdx - 1));
+    const slice = arrets.slice(start, start + 7);
+    const x0 = 84;
+    const x1 = 486;
+    const yLine = 32;
+    ctx.strokeStyle = route.bg;
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x0, yLine);
+    ctx.lineTo(x1, yLine);
+    ctx.stroke();
+
+    const step = slice.length > 1 ? (x1 - x0) / (slice.length - 1) : 0;
+    slice.forEach((name, i) => {
+      const absIdx = start + i;
+      const sx = x0 + step * i;
+      const isPast = absIdx < curIdx;
+      const isTarget = absIdx === (isDwell ? curIdx : Math.min(arrets.length - 1, curIdx + 1));
+      ctx.beginPath();
+      ctx.arc(sx, yLine, isTarget ? 7.5 : 5, 0, Math.PI * 2);
+      ctx.fillStyle = isTarget ? '#ffbe00' : isPast ? '#b8bcc4' : '#ffffff';
+      ctx.fill();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = isTarget ? '#1c2430' : isPast ? '#8f949e' : route.bg;
+      ctx.stroke();
+
+      ctx.fillStyle = isPast ? '#8b909a' : '#181c22';
+      ctx.font = isTarget
+        ? 'bold 11px system-ui, -apple-system, sans-serif'
+        : '600 10px system-ui, -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(name.length > 13 ? `${name.slice(0, 12)}…` : name, sx, 54);
+    });
+    doorMapTex.needsUpdate = true;
+  }
+
   function updateHud() {
     const N = stations.length;
     const toward =
@@ -4613,6 +4615,7 @@ export function mountParisRideView(
         : [...stations].reverse().map((s) => s.name);
     const curIndex =
       tr.dir > 0 ? tr.cur : Math.max(0, stations.length - 1 - tr.cur);
+    refreshDoorLineMap(arrets, curIndex, tr.state === 'dwell');
     const voieText = trackText(tr.s - (tr.dir * TRAIN_LEN) / 2);
 
     hudRoot.render(
@@ -4630,15 +4633,17 @@ export function mountParisRideView(
         stations: stations.map((s) => s.name),
         onSelectStation: (stationName: string) => jumpToStation(stationName),
         aQuai: tr.state === 'dwell',
-        prochaine: tr.state === 'dwell' ? next : now,
+        prochaine: now,
         direction: toward,
         voie: voieText,
         vitesse: kmh,
+        effort: smoothEffort,
         arrets,
         index: curIndex,
         progression: tr.state === 'dwell' ? 0 : 0.45,
-        vue: view === 'vault' ? 'quai' : 'cabine',
-        onVue: (v: 'quai' | 'cabine') => setView(v === 'quai' ? 'vault' : 'ride'),
+        vue: view === 'vault' ? 'quai' : view === 'passenger' ? 'passager' : 'cabine',
+        onVue: (v: 'quai' | 'cabine' | 'passager') =>
+          setView(v === 'quai' ? 'vault' : v === 'passager' ? 'passenger' : 'ride'),
         materiel: stockTag,
         onMateriel: () => {
           spragueMode = !spragueMode;
@@ -4657,6 +4662,11 @@ export function mountParisRideView(
           paused = !paused;
           updateHud();
         },
+        son: audioEnabled,
+        onSon: () => {
+          audioEnabled = synthAudio.setEnabled(!audioEnabled);
+          updateHud();
+        },
         direct: liveMode && liveActive,
         onDirect: () => {
           liveMode = !liveMode;
@@ -4664,7 +4674,7 @@ export function mountParisRideView(
         },
         onQuitter: () => options.onExit?.(),
         pointDeVue:
-          view === 'ride' && route.open.tower && camEnv === 'out'
+          (view === 'ride' || view === 'passenger') && route.open.tower && camEnv === 'out'
             ? {
                 label: eiffelGlance ? 'Recentrer la vue' : 'Regarder la tour Eiffel',
                 onClick: () => {
@@ -4696,11 +4706,16 @@ export function mountParisRideView(
       speedoTex.needsUpdate = true;
     }
 
-    const etaStr = tr.state === 'dwell' ? 'À quai' : kmh > 0 ? '1 min' : 'À l’approche';
-    const sielKey = `${route.key}|${toward}|${etaStr}`;
+    const sielBoards = buildDualSielSnapshot(k);
+    const sielKey = [
+      route.key,
+      stations[k]?.name ?? '',
+      ...sielBoards.pos.rows.map((r) => `${r.dest}:${r.eta}`),
+      ...sielBoards.neg.rows.map((r) => `${r.dest}:${r.eta}`),
+    ].join('|');
     if (sielKey !== lastSielKey) {
       lastSielKey = sielKey;
-      refreshSielTexture(toward.toUpperCase(), etaStr);
+      refreshDualSielTextures(sielBoards);
     }
   }
 
@@ -4709,20 +4724,21 @@ export function mountParisRideView(
   let lastPtrX = 0;
   let lastPtrY = 0;
   const onCanvasPointerDown = (e: PointerEvent) => {
-    if (view !== 'ride') return;
+    if (view === 'vault') return;
     draggingCab = true;
     lastPtrX = e.clientX;
     lastPtrY = e.clientY;
     renderer.domElement.setPointerCapture?.(e.pointerId);
   };
   const onCanvasPointerMove = (e: PointerEvent) => {
-    if (!draggingCab || view !== 'ride') return;
+    if (!draggingCab || view === 'vault') return;
     const dx = e.clientX - lastPtrX;
     const dy = e.clientY - lastPtrY;
     lastPtrX = e.clientX;
     lastPtrY = e.clientY;
     eiffelGlance = false;
-    cabYaw = Math.max(-1.85, Math.min(1.85, cabYaw - dx * 0.0045));
+    const maxYaw = view === 'passenger' ? 3.1 : 1.85;
+    cabYaw = Math.max(-maxYaw, Math.min(maxYaw, cabYaw - dx * 0.0045));
     cabPitch = Math.max(-0.25, Math.min(0.75, cabPitch + dy * 0.0035));
   };
   const onCanvasPointerUp = (e: PointerEvent) => {
@@ -4730,7 +4746,7 @@ export function mountParisRideView(
     renderer.domElement.releasePointerCapture?.(e.pointerId);
   };
   const onCanvasDblClick = () => {
-    if (view !== 'ride') return;
+    if (view === 'vault') return;
     cabYaw = 0;
     cabPitch = 0;
     eiffelGlance = false;
@@ -4758,6 +4774,7 @@ export function mountParisRideView(
     camera.aspect = w / Math.max(1, h);
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
+    composer?.setSize(w, h);
   };
   window.addEventListener('resize', onResize);
 
@@ -4774,48 +4791,96 @@ export function mountParisRideView(
   const tmpD = new THREE.Vector3();
   const clock = new THREE.Clock();
   let hudT = 0;
+  let lastStreamLo = Number.NaN;
+  let lastStreamHi = Number.NaN;
+  let streamPending = true;
+  let lastLightStation = -1;
+  let lastCamEnv: 'in' | 'out' | 'edge' | null = null;
 
-  renderer.setAnimationLoop(() => {
-    if (disposed) return;
+  let lastRenderMs = 0;
+  const minFrameMs = isMobileGpu ? 33 : 16.5; // Cap ProMotion 120Hz -> 30fps iPhone / 60fps Mac
+
+  renderer.setAnimationLoop((nowMs) => {
+    if (disposed || document.hidden) return;
+    if (nowMs - lastRenderMs < minFrameMs) return;
+    lastRenderMs = nowMs;
     const dt = Math.min(0.05, clock.getDelta());
     if (!paused) {
       if (liveMode && latestLiveTrain) {
         stepLiveTrain(latestLiveTrain, dt);
+        stepAutonomousUnit(counterTr, dt, 6, false);
       } else {
-        for (let i = 0; i < speed; i++) stepTrain(dt);
+        for (let i = 0; i < speed; i++) {
+          stepTrain(dt);
+          stepAutonomousUnit(counterTr, dt, 6, false);
+        }
       }
     }
     poseTrain();
     const near = nearestStation();
     const fk = focusStation();
     const streamRadius = isMobileGpu ? 1 : 2;
-    stream(
-      Math.min(near, fk) - streamRadius,
-      Math.max(near, fk) + streamRadius,
-      isMobileGpu ? 1 : 2
-    );
+    const streamLo = Math.min(near, fk) - streamRadius;
+    const streamHi = Math.max(near, fk) + streamRadius;
+    if (streamLo !== lastStreamLo || streamHi !== lastStreamHi || streamPending) {
+      lastStreamLo = streamLo;
+      lastStreamHi = streamHi;
+      streamPending = stream(streamLo, streamHi, isMobileGpu ? 2 : 3);
+      lastCamEnv = null;
+    }
     if (view === 'vault') {
       const key = `${fk}:${tr.dir}`;
       if (key !== focusKey) {
         focusKey = key;
         aimVault(fk);
       }
-      placeLights(fk);
+      if (fk !== lastLightStation) {
+        lastLightStation = fk;
+        placeLights(fk);
+      }
       controls.update();
       applyEnv(stations[fk].sc, dt);
     } else {
-      placeLights(near);
-      const car = tr.cars[0].outer;
-      car.updateMatrixWorld(true);
-      car.localToWorld(tmpA.copy(camLocal));
-      car.localToWorld(tmpB.copy(lookLocal));
+      if (near !== lastLightStation) {
+        lastLightStation = near;
+        placeLights(near);
+      }
+      const isPassenger = view === 'passenger';
+      const car = (isPassenger && tr.cars[1] ? tr.cars[1] : tr.cars[0]).outer;
+      car.updateWorldMatrix(true, false);
+      car.localToWorld(tmpA.copy(isPassenger ? passCamLocal : camLocal));
+      car.localToWorld(tmpB.copy(isPassenger ? passLookLocal : lookLocal));
+
+      // Physique caméra cabine / passager : micro-vibrations rails, tangage freinage et FOV dynamique
+      const curV = paused ? 0 : tr.v;
+      const accel = dt > 0.0001 ? (curV - prevTrainV) / dt : 0;
+      prevTrainV = curV;
+      const targetEffort = Math.max(-1, Math.min(1, accel / 1.4));
+      smoothEffort += (targetEffort - smoothEffort) * Math.min(1, dt * 6);
+      const targetNod = Math.max(-0.012, Math.min(0.012, accel * 0.0045));
+      smoothPitchNod += (targetNod - smoothPitchNod) * Math.min(1, dt * 6.5);
+
+      const isPneu = ['1', '4', '6', '11', '14'].includes(route.num);
+      const speedRatio = Math.min(1, curV / 20);
+      cabVibPhase += dt * (12 + speedRatio * 24);
+      const vibAmp = (isPneu ? 0.0022 : 0.0046) * speedRatio;
+      tmpA.y += Math.sin(cabVibPhase) * vibAmp + Math.sin(cabVibPhase * 2.3) * vibAmp * 0.35;
+
+      const baseFov = isPassenger ? 68 : 62;
+      const targetFov = baseFov + speedRatio * 2.5;
+      if (Math.abs(camera.fov - targetFov) > 0.02) {
+        camera.fov += (targetFov - camera.fov) * Math.min(1, dt * 4);
+        camera.updateProjectionMatrix();
+      }
+
       const fwdDir = tmpC.copy(tmpB).sub(tmpA).normalize();
       if (eiffelGlance && towerWorldPos) {
         fwdDir.copy(towerWorldPos).sub(tmpA).normalize();
       } else {
         if (Math.abs(cabYaw) > 0.0001) fwdDir.applyAxisAngle(WORLD_UP, cabYaw);
-        if (Math.abs(cabPitch) > 0.0001) {
-          fwdDir.y = Math.max(-0.55, Math.min(0.88, fwdDir.y + cabPitch));
+        const totalPitch = cabPitch + smoothPitchNod;
+        if (Math.abs(totalPitch) > 0.0001) {
+          fwdDir.y = Math.max(-0.55, Math.min(0.88, fwdDir.y + totalPitch));
           fwdDir.normalize();
         }
       }
@@ -4823,12 +4888,39 @@ export function mountParisRideView(
       camera.lookAt(tmpD.copy(tmpA).addScaledVector(fwdDir, 30));
       applyEnv(tr.s - tr.dir * 1.5, dt);
     }
+    if (camEnv !== lastCamEnv) {
+      lastCamEnv = camEnv;
+      const showBeams = camEnv !== 'out';
+      for (const b of headlightBeams) b.visible = showBeams;
+    }
+    if (tr.state === 'dwell') {
+      const warnPhase = !paused && tr.dwell > DWELL - 2.3 && tr.dwell < DWELL - 0.5;
+      if (warnPhase && !doorWarnPlayed) {
+        doorWarnPlayed = true;
+        synthAudio.triggerDoorChime();
+      }
+    } else {
+      doorWarnPlayed = false;
+    }
+    synthAudio.updateTelemetry({
+      speedKmh: liveMode && liveActive && latestLiveTrain ? latestLiveTrain.spd || 0 : tr.v * 3.6,
+      isOpenAir: camEnv === 'out',
+      stockId: activeStock.id,
+      isPneumatic: ['1', '4', '6', '11', '14'].includes(route.num),
+      atStop: tr.state === 'dwell',
+      paused,
+      view,
+    });
     hudT -= dt;
     if (hudT <= 0) {
       hudT = 0.25;
       updateHud();
     }
-    renderer.render(scene, camera);
+    if (composer) {
+      composer.render();
+    } else {
+      renderer.render(scene, camera);
+    }
   });
 
   return {
@@ -4838,6 +4930,8 @@ export function mountParisRideView(
     dispose() {
       if (disposed) return;
       disposed = true;
+      synthAudio.dispose();
+      composer?.dispose();
       if (veilTimeout) clearTimeout(veilTimeout);
       renderer.setAnimationLoop(null);
       window.removeEventListener('keydown', onKeyDown, true);
@@ -4853,7 +4947,10 @@ export function mountParisRideView(
       if (badgeTex) badgeTex.dispose();
       if (badgeMat) badgeMat.dispose();
       if (destTex) destTex.dispose();
-      if (sielTex) sielTex.dispose();
+      if (counterDestTex) counterDestTex.dispose();
+      if (sielTexPos) sielTexPos.dispose();
+      if (sielTexNeg) sielTexNeg.dispose();
+      if (doorMapTex) doorMapTex.dispose();
       speedoTex.dispose();
       textures.forEach((t) => t.dispose());
       geometries.forEach((g) => g.dispose());

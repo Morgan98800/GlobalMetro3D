@@ -1,4 +1,6 @@
 import { loadShapes, Shape } from './shapes_loader';
+import { getAdaptiveFrameIntervalMs } from '@core/ui/map/device_perf';
+import type { ScheduleWorkerResponse } from './schedule_worker';
 
 const DATA_REVISION = '20260910-09';
 const dataUrl = (path: string) => `${path}?v=${DATA_REVISION}`;
@@ -52,6 +54,51 @@ export interface StationDeparture {
   confidence: Confidence;
 }
 
+export interface StopTripRef {
+  tripIndex: number;
+  stopIndex: number;
+}
+
+function stopNamesMatch(stopNorm: string, targetNorm: string): boolean {
+  if (!stopNorm || !targetNorm) return false;
+  return (
+    stopNorm === targetNorm ||
+    (stopNorm.length >= 4 &&
+      targetNorm.length >= 4 &&
+      (stopNorm.includes(targetNorm) || targetNorm.includes(stopNorm)))
+  );
+}
+
+/**
+ * Builds an inverted index from normalized station name to `{ tripIndex, stopIndex }`
+ * (excluding terminal alighting-only stops) so station departure boards resolve in O(1)
+ * instead of scanning every stop of all 13,800+ trips on every click.
+ */
+export function buildStopTripsIndex(trips: readonly TripData[]): Map<string, StopTripRef[]> {
+  const index = new Map<string, StopTripRef[]>();
+  const normCache = new Map<string, string>();
+  for (let tripIndex = 0; tripIndex < trips.length; tripIndex++) {
+    const stops = trips[tripIndex].stops;
+    if (stops.length < 2) continue;
+    for (let stopIndex = 0; stopIndex < stops.length - 1; stopIndex++) {
+      const rawName = stops[stopIndex][3];
+      let norm = normCache.get(rawName);
+      if (norm === undefined) {
+        norm = normalizeStopName(rawName);
+        normCache.set(rawName, norm);
+      }
+      if (!norm) continue;
+      let list = index.get(norm);
+      if (!list) {
+        list = [];
+        index.set(norm, list);
+      }
+      list.push({ tripIndex, stopIndex });
+    }
+  }
+  return index;
+}
+
 export function computeStationDepartures(params: {
   stationName: string;
   trips: readonly TripData[];
@@ -62,6 +109,7 @@ export function computeStationDepartures(params: {
   serviceSecondsCandidates: readonly number[];
   limitPerLineDir?: number;
   horizonSeconds?: number;
+  stopTripsIndex?: ReadonlyMap<string, readonly StopTripRef[]>;
 }): StationDeparture[] {
   const {
     stationName,
@@ -73,29 +121,18 @@ export function computeStationDepartures(params: {
     serviceSecondsCandidates,
     limitPerLineDir = 2,
     horizonSeconds = 2700,
+    stopTripsIndex,
   } = params;
 
   const targetNorm = normalizeStopName(stationName);
   if (!targetNorm) return [];
 
-  const matchesStop = (stopNorm: string) =>
-    stopNorm === targetNorm ||
-    (stopNorm.length >= 4 &&
-      targetNorm.length >= 4 &&
-      (stopNorm.includes(targetNorm) || targetNorm.includes(stopNorm)));
-
   const perGroup = new Map<string, StationDeparture[]>();
 
-  for (const trip of trips) {
-    if (suppressedTripIds?.has(trip.id)) continue;
-    if (closedLineIds?.has(trip.line)) continue;
-    if (trip.stops.length < 2) continue;
-
-    // On ignore le dernier arrêt (descente uniquement au terminus)
-    const stopIndex = trip.stops.findIndex(
-      (s, idx) => idx < trip.stops.length - 1 && matchesStop(normalizeStopName(s[3]))
-    );
-    if (stopIndex < 0) continue;
+  const considerTripStop = (trip: TripData, stopIndex: number) => {
+    if (suppressedTripIds?.has(trip.id)) return;
+    if (closedLineIds?.has(trip.line)) return;
+    if (trip.stops.length < 2 || stopIndex < 0 || stopIndex >= trip.stops.length - 1) return;
 
     const schedStop = trip.stops[stopIndex];
     const timeline = timelines?.get(trip.id);
@@ -116,7 +153,7 @@ export function computeStationDepartures(params: {
         if (bestWait === null || delta < bestWait) bestWait = delta;
       }
     }
-    if (bestWait === null) continue;
+    if (bestWait === null) return;
 
     const line = linesMap.get(trip.line);
     const groupKey = `${trip.line}|${trip.dir}`;
@@ -142,6 +179,40 @@ export function computeStationDepartures(params: {
       confidence,
     });
     perGroup.set(groupKey, list);
+  };
+
+  if (stopTripsIndex) {
+    const matchedTripIds = new Set<number>();
+    const exactRefs = stopTripsIndex.get(targetNorm);
+    if (exactRefs) {
+      for (const ref of exactRefs) {
+        if (matchedTripIds.has(ref.tripIndex)) continue;
+        matchedTripIds.add(ref.tripIndex);
+        const trip = trips[ref.tripIndex];
+        if (trip) considerTripStop(trip, ref.stopIndex);
+      }
+    }
+    for (const [normKey, refs] of stopTripsIndex.entries()) {
+      if (normKey === targetNorm || !stopNamesMatch(normKey, targetNorm)) continue;
+      for (const ref of refs) {
+        if (matchedTripIds.has(ref.tripIndex)) continue;
+        matchedTripIds.add(ref.tripIndex);
+        const trip = trips[ref.tripIndex];
+        if (trip) considerTripStop(trip, ref.stopIndex);
+      }
+    }
+  } else {
+    for (const trip of trips) {
+      if (suppressedTripIds?.has(trip.id)) continue;
+      if (closedLineIds?.has(trip.line)) continue;
+      if (trip.stops.length < 2) continue;
+
+      // On ignore le dernier arrêt (descente uniquement au terminus)
+      const stopIndex = trip.stops.findIndex(
+        (s, idx) => idx < trip.stops.length - 1 && stopNamesMatch(normalizeStopName(s[3]), targetNorm)
+      );
+      if (stopIndex >= 0) considerTripStop(trip, stopIndex);
+    }
   }
 
   const out: StationDeparture[] = [];
@@ -163,6 +234,8 @@ function formatClock(seconds: number): string {
 interface TrainInterpolationState {
   train: TrainMarker;
   shape: Shape;
+  timeline: Timeline;
+  serviceSecondsAtTick: number;
   dTick: number;
   speedMps: number;
   tTick: number;
@@ -180,6 +253,7 @@ interface GhostFadeState {
 export class BrowserSubwayEngine {
   private shapes = new Map<string, Shape>();
   private trips: TripData[] = [];
+  private stopTripsIndex = new Map<string, StopTripRef[]>();
   private schedTripsMap = new Map<string, SchedTrip>();
   private stationNames: string[] = [];
   private linesMap = new Map<string, LineMetadata>();
@@ -214,6 +288,67 @@ export class BrowserSubwayEngine {
 
   private externalShapesMap?: Map<string, Shape>;
   private config: CityConfig;
+  private renderZoom = 12.5;
+  private renderFollowing = false;
+  private renderSuspended = false;
+  private lastRafRenderMs = 0;
+  private visibilityHandler: (() => void) | null = null;
+  private onTickFn: (() => void) | null = null;
+  private rafLoopFn: (() => void) | null = null;
+
+  /**
+   * Updates adaptive FPS budget so battery usage stays minimal at overview zooms
+   * and pauses map interpolation when the 3D ride view covers the map.
+   */
+  public setRenderContext(ctx: { zoom?: number; isFollowing?: boolean; suspended?: boolean }) {
+    if (ctx.zoom !== undefined) this.renderZoom = ctx.zoom;
+    if (ctx.isFollowing !== undefined) this.renderFollowing = ctx.isFollowing;
+    if (ctx.suspended !== undefined) this.renderSuspended = ctx.suspended;
+  }
+
+  private async loadScheduleViaWorker(url: string): Promise<{
+    stationNames: string[];
+    trips: TripData[];
+    schedTrips: SchedTrip[];
+    stopTripsIndex: Map<string, StopTripRef[]>;
+  } | null> {
+    if (typeof Worker === 'undefined' || typeof window === 'undefined') return null;
+    try {
+      const absUrl = new URL(url, window.location.origin).href;
+      const worker = new Worker(new URL('./schedule_worker.ts', import.meta.url), {
+        type: 'module',
+      });
+      return await new Promise((resolve) => {
+        const timer = window.setTimeout(() => {
+          worker.terminate();
+          resolve(null);
+        }, 15000);
+        worker.onmessage = (ev: MessageEvent<ScheduleWorkerResponse>) => {
+          window.clearTimeout(timer);
+          worker.terminate();
+          const data = ev.data;
+          if (!data?.ok || !data.trips || !data.schedTrips || !data.stationNames) {
+            resolve(null);
+            return;
+          }
+          resolve({
+            stationNames: data.stationNames,
+            trips: data.trips,
+            schedTrips: data.schedTrips,
+            stopTripsIndex: new Map(data.stopTripsEntries || []),
+          });
+        };
+        worker.onerror = () => {
+          window.clearTimeout(timer);
+          worker.terminate();
+          resolve(null);
+        };
+        worker.postMessage({ id: 1, url: absUrl });
+      });
+    } catch {
+      return null;
+    }
+  }
 
   /**
    * Le moteur reçoit un adaptateur temps réel déjà construit. Il ignore de quelle
@@ -230,6 +365,10 @@ export class BrowserSubwayEngine {
 
   public getShapes(): Map<string, Shape> {
     return this.shapes;
+  }
+
+  public getTrips(): readonly TripData[] {
+    return this.trips;
   }
 
   public getStationDepartures(
@@ -256,6 +395,7 @@ export class BrowserSubwayEngine {
       closedLineIds,
       serviceSecondsCandidates: candidates,
       limitPerLineDir,
+      stopTripsIndex: this.stopTripsIndex,
     });
   }
 
@@ -269,59 +409,77 @@ export class BrowserSubwayEngine {
       this.linesMap.set(l.id, l);
     }
 
-    // 1. Fetch shapes.bin & schedule.json in parallel
+    // 1. Fetch shapes.bin & schedule.json in parallel (parsing schedule.json in a Web Worker when available)
     const dataDir = this.config.paths.dataDir;
+    const scheduleUrl = dataUrl(`${dataDir}/schedule.json`);
     console.log('[engine] Loading shapes and schedule in browser...');
-    const [shapesMap, scheduleRes] = await Promise.all([
-      loadShapes(dataUrl(`${dataDir}/shapes.bin`)),
-      fetch(dataUrl(`${dataDir}/schedule.json`)),
+    const shapesPromise =
+      externalShapesMap && externalShapesMap.size > 0
+        ? Promise.resolve(externalShapesMap)
+        : loadShapes(dataUrl(`${dataDir}/shapes.bin`));
+
+    const [shapesMap, workerResult] = await Promise.all([
+      shapesPromise,
+      this.loadScheduleViaWorker(scheduleUrl),
     ]);
 
     this.shapes = shapesMap;
 
-    const scheduleData = await scheduleRes.json();
-    this.stationNames = scheduleData.stations;
+    if (workerResult) {
+      this.stationNames = workerResult.stationNames;
+      this.trips = workerResult.trips;
+      for (const st of workerResult.schedTrips) {
+        this.schedTripsMap.set(st.tripId, st);
+      }
+      this.stopTripsIndex = workerResult.stopTripsIndex;
+    } else {
+      const scheduleRes = await fetch(scheduleUrl);
+      const scheduleData = await scheduleRes.json();
+      this.stationNames = scheduleData.stations;
+      const normalizedStations = this.stationNames.map((n) => normalizeStopName(n || 'Station'));
 
-    // Convert trips into TripData & SchedTrip
-    this.trips = scheduleData.trips.map((t: any): TripData => {
-      const destName = this.stationNames[t[6]] || 'Terminus';
-      const stops: Array<[number, number, number, string]> = t[7].map((s: any) => [
-        s[0], // arr
-        s[1], // dep
-        s[2], // distM
-        this.stationNames[s[3]] || 'Station',
-      ]);
+      // Convert trips into TripData & SchedTrip without re-normalizing 300k stop strings
+      this.trips = scheduleData.trips.map((t: any): TripData => {
+        const destName = this.stationNames[t[6]] || 'Terminus';
+        const rawStops: any[] = t[7];
+        const stops: Array<[number, number, number, string]> = new Array(rawStops.length);
+        const schedStops: SchedTrip['stops'] = new Array(rawStops.length);
+        for (let i = 0; i < rawStops.length; i++) {
+          const s = rawStops[i];
+          const stationIdx = s[3] as number;
+          const name = this.stationNames[stationIdx] || 'Station';
+          const stopId = normalizedStations[stationIdx] || 'station';
+          stops[i] = [s[0], s[1], s[2], name];
+          schedStops[i] = { stopId, arr: s[0], dep: s[1], dist: s[2] };
+        }
 
-      const tripId = t[0];
-      const lineId = t[1];
-      const dir = (t[2] === 0 ? 0 : 1) as 0 | 1;
-      const shapeId = t[3];
+        const tripId = t[0];
+        const lineId = t[1];
+        const dir = (t[2] === 0 ? 0 : 1) as 0 | 1;
+        const shapeId = t[3];
 
-      this.schedTripsMap.set(tripId, {
-        tripId,
-        lineId,
-        dir,
-        shapeId,
-        stops: stops.map((s) => ({
-          stopId: normalizeStopName(s[3]),
-          arr: s[0],
-          dep: s[1],
-          dist: s[2],
-        })),
+        this.schedTripsMap.set(tripId, {
+          tripId,
+          lineId,
+          dir,
+          shapeId,
+          stops: schedStops,
+        });
+
+        return {
+          id: tripId,
+          line: lineId,
+          dir,
+          shapeId,
+          t0: t[4],
+          t1: t[5],
+          destName,
+          stops,
+        };
       });
 
-      return {
-        id: tripId,
-        line: lineId,
-        dir,
-        shapeId,
-        t0: t[4],
-        t1: t[5],
-        destName,
-        stops,
-      };
-    });
-
+      this.stopTripsIndex = buildStopTripsIndex(this.trips);
+    }
     console.log(
       `[engine] Loaded ${this.shapes.size} shapes and ${this.trips.length} scheduled trips.`
     );
@@ -369,14 +527,20 @@ export class BrowserSubwayEngine {
         }
       }
 
+      const rerNormStations = this.stationNames.map((n) => (n ? normalizeStopName(n) : 'station'));
       const rerTrips: TripData[] = rerScheduleData.trips.map((t: any): TripData => {
         const destName = this.stationNames[t[6]] || 'Terminus';
-        const stops: Array<[number, number, number, string]> = t[7].map((s: any) => [
-          s[0], // arr
-          s[1], // dep
-          s[2], // distM
-          this.stationNames[s[3]] || 'Station',
-        ]);
+        const rawStops: any[] = t[7];
+        const stops: Array<[number, number, number, string]> = new Array(rawStops.length);
+        const schedStops: SchedTrip['stops'] = new Array(rawStops.length);
+        for (let i = 0; i < rawStops.length; i++) {
+          const s = rawStops[i];
+          const stationIdx = s[3] as number;
+          const name = this.stationNames[stationIdx] || 'Station';
+          const stopId = rerNormStations[stationIdx] || 'station';
+          stops[i] = [s[0], s[1], s[2], name];
+          schedStops[i] = { stopId, arr: s[0], dep: s[1], dist: s[2] };
+        }
 
         const tripId = t[0];
         const lineId = t[1];
@@ -388,12 +552,7 @@ export class BrowserSubwayEngine {
           lineId,
           dir,
           shapeId,
-          stops: stops.map((s) => ({
-            stopId: normalizeStopName(s[3]),
-            arr: s[0],
-            dep: s[1],
-            dist: s[2],
-          })),
+          stops: schedStops,
         });
 
         return {
@@ -409,6 +568,7 @@ export class BrowserSubwayEngine {
       });
 
       this.trips.push(...rerTrips);
+      this.stopTripsIndex = buildStopTripsIndex(this.trips);
       this.recomputeTripTimeBounds();
       console.log(
         `[engine] Loaded ${rerShapesMap.size} RER shapes and ${rerTrips.length} RER scheduled trips.`
@@ -441,6 +601,18 @@ export class BrowserSubwayEngine {
   public setVirtualTimeSeconds(secondsSinceMidnight: number) {
     const nowSeconds = cityClock(new Date(), this.config.timezone).secondsSinceMidnight;
     this.virtualTimeOffsetS = secondsSinceMidnight - nowSeconds;
+  }
+
+  public getVirtualTimeOffsetSeconds(): number {
+    return this.virtualTimeOffsetS;
+  }
+
+  public getCurrentServiceClockSeconds(): number {
+    const now =
+      this.virtualTimeOffsetS !== 0
+        ? new Date(Date.now() + this.virtualTimeOffsetS * 1000)
+        : new Date();
+    return cityClock(now, this.config.timezone).secondsSinceMidnight;
   }
 
   public resetVirtualTime() {
@@ -813,6 +985,8 @@ export class BrowserSubwayEngine {
         nextTrackedTrains.set(train.id, {
           train,
           shape,
+          timeline,
+          serviceSecondsAtTick: serviceSeconds,
           dTick,
           speedMps: vMps,
           tTick: tickTimestamp,
@@ -831,23 +1005,53 @@ export class BrowserSubwayEngine {
     };
 
     // First tick immediately
+    this.onTickFn = onTick;
     onTick();
 
-    // 1 Hz simulation tick
-    this.timerId = setInterval(onTick, 1000);
+    // 1 Hz simulation tick (pauses automatically when document is hidden)
+    const startInterval = () => {
+      if (this.timerId) return;
+      this.timerId = setInterval(() => {
+        if (typeof document !== 'undefined' && document.hidden) return;
+        onTick();
+      }, 1000);
+    };
+    startInterval();
 
-    // 60 fps requestAnimationFrame interpolation loop
+    // Adaptive FPS requestAnimationFrame interpolation loop (battery-friendly on iPhone & Mac ProMotion)
     const rafLoop = () => {
       if (!this.isRunning) return;
+      if (typeof document !== 'undefined' && document.hidden) {
+        this.rafId = null;
+        return;
+      }
 
-      if (!this.reduceMotion) {
-        const now = performance.now();
+      const now = performance.now();
+      const minIntervalMs = this.renderSuspended
+        ? 500
+        : getAdaptiveFrameIntervalMs({
+            zoom: this.renderZoom,
+            isFollowing: this.renderFollowing,
+            reduceMotion: this.reduceMotion,
+          });
+
+      if (!this.reduceMotion && now - this.lastRafRenderMs >= minIntervalMs) {
+        this.lastRafRenderMs = now;
         const renderedTrains: TrainMarker[] = [];
 
-        // Active tracked trains
+        // Active tracked trains — evaluate continuous trapezoidal kinematics
         for (const state of this.trackedTrains.values()) {
-          const { train, shape, dTick, speedMps, tTick, reconcileOffset, reconcileStartTime } =
-            state;
+          const {
+            train,
+            shape,
+            timeline,
+            serviceSecondsAtTick,
+            dTick,
+            speedMps,
+            tTick,
+            reconcileOffset,
+            reconcileStartTime,
+          } = state;
 
           const dt = Math.max(0, (now - tTick) / 1000);
           const profile = getKinematicProfile(train.line);
@@ -861,7 +1065,22 @@ export class BrowserSubwayEngine {
             }
           }
 
-          let dHat = train.atStop ? dTick : dTick + speedMps * dt + currentError;
+          const liveEval = positionAt(timeline, serviceSecondsAtTick + dt);
+          const baseDist = liveEval
+            ? liveEval.dist
+            : train.atStop
+              ? dTick
+              : dTick + speedMps * dt;
+          if (liveEval) {
+            const liveV = clampSpeed(liveEval.speed);
+            train.speedMps = liveV;
+            train.spd = Math.round(
+              Math.min(this.getLineMaxDisplaySpeed(train.line), liveV * 3.6)
+            );
+            train.atStop = liveEval.atStop;
+          }
+
+          let dHat = baseDist + currentError;
           dHat = Math.max(0, Math.min(shape.length, dHat));
           state.extrapolatedD = dHat;
 
@@ -894,13 +1113,44 @@ export class BrowserSubwayEngine {
       this.rafId = requestAnimationFrame(rafLoop);
     };
 
-    if (typeof requestAnimationFrame !== 'undefined') {
+    this.rafLoopFn = rafLoop;
+    if (typeof requestAnimationFrame !== 'undefined' && !(typeof document !== 'undefined' && document.hidden)) {
       this.rafId = requestAnimationFrame(rafLoop);
+    }
+
+    if (typeof document !== 'undefined') {
+      this.visibilityHandler = () => {
+        if (!this.isRunning) return;
+        if (document.hidden) {
+          if (this.rafId !== null && typeof cancelAnimationFrame !== 'undefined') {
+            cancelAnimationFrame(this.rafId);
+            this.rafId = null;
+          }
+          if (this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = null;
+          }
+        } else {
+          this.lastRafRenderMs = 0;
+          this.onTickFn?.();
+          startInterval();
+          if (this.rafId === null && this.rafLoopFn && typeof requestAnimationFrame !== 'undefined') {
+            this.rafId = requestAnimationFrame(this.rafLoopFn);
+          }
+        }
+      };
+      document.addEventListener('visibilitychange', this.visibilityHandler);
     }
   }
 
   public stop() {
     this.isRunning = false;
+    if (this.visibilityHandler && typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', this.visibilityHandler);
+      this.visibilityHandler = null;
+    }
+    this.onTickFn = null;
+    this.rafLoopFn = null;
     if (this.timerId) {
       clearInterval(this.timerId);
       this.timerId = null;

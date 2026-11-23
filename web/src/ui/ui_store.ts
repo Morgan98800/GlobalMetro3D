@@ -50,6 +50,7 @@ export type RealtimeUiState =
 
 export type ActiveInfoModal = 'about' | 'records' | 'method' | 'settings' | null;
 export type EdinburghPreset = 'waverley' | 'castle' | 'calton' | 'scotland' | 'overview';
+export type LibraryTab = 'rames' | 'histoire';
 
 export interface UiHandlers {
   onCitySelect?: (cityId: string) => void;
@@ -64,6 +65,7 @@ export interface UiHandlers {
   onSetThemePreference?: (pref: ThemePreference) => void;
   onTogglePitch?: () => void;
   onToggleBuildings?: () => void;
+  onToggleXray?: () => void;
   onRecenter?: () => void;
   onZoomIn?: () => void;
   onZoomOut?: () => void;
@@ -85,6 +87,13 @@ export interface UiHandlers {
   onSelectItineraryIndex?: (index: number) => void;
   onClearItinerary?: () => void;
   onToggleGpsFollow?: () => void;
+  onFocusMapCamera?: (opts: {
+    center: [number, number];
+    zoom: number;
+    pitch?: number;
+    bearing?: number;
+    highlightLineId?: string | null;
+  }) => void;
   onEdinburghPreset?: (preset: EdinburghPreset) => void;
   onEdinburghFollow?: () => void;
 }
@@ -111,6 +120,9 @@ export interface UiSnapshot {
   nearbyStations: NearbyStationResult[];
   nearbyDepartures: Record<string, StationDeparture[]>;
   lineDrawerOpen: boolean;
+  libraryOpen: boolean;
+  libraryTab: LibraryTab;
+  parisRideLoading: boolean;
   routePlannerOpen: boolean;
   routeOrigin: RoutePoint | null;
   routeDestination: RoutePoint | null;
@@ -126,6 +138,7 @@ export interface UiSnapshot {
   pitch3D: boolean;
   bearingDeg: number;
   buildingsVisible: boolean;
+  xrayMode: boolean;
   recenterVisible: boolean;
   recenterLabel: string;
   serviceStatus: ServiceStatus | null;
@@ -220,6 +233,9 @@ let state: UiSnapshot = {
   nearbyStations: [],
   nearbyDepartures: {},
   lineDrawerOpen: false,
+  libraryOpen: false,
+  libraryTab: 'rames',
+  parisRideLoading: false,
   routePlannerOpen: false,
   routeOrigin: null,
   routeDestination: null,
@@ -229,12 +245,13 @@ let state: UiSnapshot = {
   routeError: null,
   trackedTrain: null,
   isFollowing: false,
-  expertMode: readInitialExpertMode(),
+  expertMode: true,
   themePreference: readInitialThemePreference(),
   theme: readInitialTheme(),
   pitch3D: true,
   bearingDeg: 0,
-  buildingsVisible: false,
+  buildingsVisible: true,
+  xrayMode: false,
   recenterVisible: false,
   recenterLabel: 'Recadrer sur le réseau de métro',
   serviceStatus: null,
@@ -286,7 +303,6 @@ export const uiStore = {
     state = {
       ...state,
       expertMode: enabled,
-      lineDrawerOpen: enabled ? true : state.lineDrawerOpen,
     };
     emitChange();
   },
@@ -298,6 +314,15 @@ export const uiStore = {
 
   setLineDrawerOpen(open: boolean) {
     state = { ...state, lineDrawerOpen: open };
+    emitChange();
+  },
+
+  setLibraryOpen(open: boolean, tab?: LibraryTab) {
+    state = {
+      ...state,
+      libraryOpen: open,
+      libraryTab: tab ?? state.libraryTab,
+    };
     emitChange();
   },
 

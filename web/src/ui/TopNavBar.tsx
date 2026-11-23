@@ -1,4 +1,4 @@
-import { RiArrowDownSLine, RiGitCommitLine, RiMapPinUserLine, RiMenuLine, RiRouteLine } from '@remixicon/react';
+import { RiArrowDownSLine, RiMenuLine } from '@remixicon/react';
 import type { ReactNode } from 'react';
 import { Horloge } from './Afficheur';
 import { LineBadgeChip } from './LineBadgeChip';
@@ -7,17 +7,19 @@ import { Button, IconButton } from './Button';
 import { cx } from './cx';
 import { Marque } from './Marque';
 import { Panneau } from './Panneau';
+import { Plaque } from './Plaque';
+import { Poussoir } from './plan-lumineux/PlanLumineux';
 import { SearchTrigger } from './SearchTrigger';
 import { Segmented } from './Segmented';
+import { IconBibliotheque, IconItineraire, IconLignes } from './TransitIcons';
 import { useIsDesktop, useMediaQuery } from './useMediaQuery';
 
 /**
- * Top bar. Desktop: one plate on the left (network, search, the three ways
- * in), one on the right (time, mode, menu). Mobile: the search and the three
- * ways in move to the bottom, under the thumb (see BarreMobile).
+ * Top bar. Desktop: one unified plate (network, search, the three ways in,
+ * clock, and menu/settings grouped cleanly together).
  */
 export type Experience = 'simple' | 'passionne';
-export type Rubrique = 'itineraire' | 'autour' | 'lignes';
+export type Rubrique = 'itineraire' | 'lignes' | 'bibliotheque';
 
 export interface TopNavBarProps {
   reseau: string;
@@ -28,7 +30,7 @@ export interface TopNavBarProps {
   experience: Experience;
   onExperience: (e: Experience) => void;
   onMenu: () => void;
-  /** Le menu ⋮ est ouvert (aria-expanded) */
+  /** Le menu est ouvert (aria-expanded) */
   menuOuvert?: boolean;
   /** Ligne sélectionnée : sa pastille remplace l’icône du bouton Lignes */
   ligneActive?: LineRef | null;
@@ -39,10 +41,10 @@ export interface TopNavBarProps {
 }
 
 const RUBRIQUES: { id: Rubrique; label: string; icon: ReactNode; aria?: string }[] = [
-  { id: 'itineraire', label: 'Itinéraire', icon: <RiRouteLine aria-hidden /> },
-  { id: 'autour', label: 'Autour de moi', icon: <RiMapPinUserLine aria-hidden /> },
+  { id: 'itineraire', label: 'Itinéraire', icon: <IconItineraire className="size-4 shrink-0" /> },
   // Accessible name contains the visible label (WCAG 2.5.3)
-  { id: 'lignes', label: 'Lignes', icon: <RiGitCommitLine aria-hidden />, aria: 'Lignes, choisir une ligne' },
+  { id: 'lignes', label: 'Lignes', icon: <IconLignes className="size-4 shrink-0" />, aria: 'Lignes, choisir une ligne' },
+  { id: 'bibliotheque', label: 'Bibliothèque', icon: <IconBibliotheque className="size-4 shrink-0" />, aria: 'Bibliothèque, rames 3D et histoire' },
 ];
 
 export function TopNavBar(props: TopNavBarProps) {
@@ -50,37 +52,42 @@ export function TopNavBar(props: TopNavBarProps) {
   const large = useMediaQuery('(min-width: 1024px)', true);
   const { reseau, onReseau, onSearch, onRubrique, actif, experience, onExperience, onMenu, horloge, className, ligneActive } = props;
   const icone = (r: (typeof RUBRIQUES)[number]) =>
-    r.id === 'lignes' && ligneActive ? <LineBadgeChip {...ligneActive} size="xs" /> : r.icon;
+    r.id === 'lignes' && ligneActive ? (
+      <span className="inline-flex h-4 items-center gap-1 leading-none">
+        {r.icon}
+        <LineBadgeChip {...ligneActive} size="xs" className="!h-[18px] !w-[18px] !text-[10px]" />
+      </span>
+    ) : (
+      r.icon
+    );
   return (
     <header
+      id="topbar"
       className={cx(
-        'pointer-events-none flex items-start justify-between gap-3 px-3 pt-[max(12px,env(safe-area-inset-top))] md:px-4 md:pt-4',
+        'pointer-events-none flex items-center gap-3 px-3 pt-[max(12px,env(safe-area-inset-top))] md:px-4 md:pt-3.5',
         className,
       )}
     >
-      <Panneau className="flex h-14 min-w-0 items-center gap-1.5 px-2">
+      <div className="pl-barre pointer-events-auto max-w-[calc(100vw-1.5rem)] min-w-0 !gap-1.5 md:max-w-[calc(100vw-2rem)]">
         <ReseauButton reseau={reseau} onClick={onReseau} />
         {desktop && (
           <>
-            <span aria-hidden className="mx-1 h-6 w-px bg-joint" />
-            <SearchTrigger onOpen={onSearch} className="w-[300px] flex-none" />
-            <span aria-hidden className="mx-1 h-6 w-px bg-joint" />
-            <nav aria-label="Rubriques" className="flex items-center gap-0.5">
+            <SearchTrigger onOpen={onSearch} size="sm" shortcut={false} className="w-[144px] xl:w-[172px] flex-none" />
+            <nav aria-label="Rubriques" className="flex items-center gap-1">
               {RUBRIQUES.map((r) =>
                 large ? (
-                  <Button key={r.id} variant="discret" icon={icone(r)} aria-label={r.aria} pressed={actif === r.id} onClick={() => onRubrique(r.id)}>
+                  <Button key={r.id} size="sm" variant="discret" icon={icone(r)} lampe pressed={actif === r.id} onClick={() => onRubrique(r.id)}>
                     {r.label}
+                    {r.id === 'lignes' && <span className="pl-sr">, choisir une ligne</span>}
+                    {r.id === 'bibliotheque' && <span className="pl-sr">, rames 3D et histoire</span>}
                   </Button>
                 ) : (
-                  <IconButton key={r.id} label={r.aria ?? r.label} icon={icone(r)} pressed={actif === r.id} onClick={() => onRubrique(r.id)} />
+                  <IconButton key={r.id} size="sm" label={r.aria ?? r.label} icon={icone(r)} pressed={actif === r.id} onClick={() => onRubrique(r.id)} />
                 ),
               )}
             </nav>
           </>
         )}
-      </Panneau>
-
-      <Panneau className="flex h-14 shrink-0 items-center gap-2 px-2">
         {(!props.compact || experience === 'passionne') && <Horloge date={horloge} />}
         {desktop && !props.compact && (
           <Segmented
@@ -92,35 +99,37 @@ export function TopNavBar(props: TopNavBarProps) {
               { value: 'simple', label: 'Simple' },
               { value: 'passionne', label: 'Passionné' },
             ]}
-            className="w-[188px]"
+            className="w-[176px]"
           />
         )}
-        <IconButton label="Menu et réglages" icon={<RiMenuLine aria-hidden />} expanded={props.menuOuvert} onClick={onMenu} />
-      </Panneau>
+        <IconButton size="sm" variant="secondaire" label="Menu et réglages" icon={<RiMenuLine aria-hidden />} expanded={props.menuOuvert} onClick={onMenu} className="shrink-0" />
+      </div>
     </header>
   );
 }
 
 function ReseauButton({ reseau, onClick }: { reseau: string; onClick?: () => void }) {
+  const label = reseau ? reseau.charAt(0).toUpperCase() + reseau.slice(1) : '';
   if (!onClick) {
     return (
-      <div className="flex h-10 items-center gap-2 pl-1.5 pr-2 text-encre">
-        <Marque size={28} />
-        <span className="signaletique text-[17px] font-[650]">{reseau}</span>
-      </div>
+      <Plaque size="sm" className="shrink-0">
+        <Marque size={20} />
+        <span>{label}</span>
+      </Plaque>
     );
   }
   return (
-    <button
-      type="button"
+    <Poussoir
+      taille="sm"
+      variante="discret"
       onClick={onClick}
-      aria-label={`Réseau : ${reseau}. Changer de réseau`}
-      className="flex h-10 items-center gap-2 rounded-controle pl-1.5 pr-2 text-encre transition-colors duration-150 ease-signal hover:bg-encart outline-none focus-visible:outline-2 focus-visible:outline-focus"
+      aria-label={`Réseau : ${label}. Changer de réseau`}
+      icone={<Marque size={20} />}
+      className="max-md:min-h-[44px]"
     >
-      <Marque size={28} />
-      <span className="signaletique text-[17px] font-[650]">{reseau}</span>
+      <span className="signaletique text-[16px] font-[650]">{label}</span>
       <RiArrowDownSLine aria-hidden className="size-4 text-icone-2" />
-    </button>
+    </Poussoir>
   );
 }
 
@@ -138,23 +147,20 @@ export function BarreMobile({
       className={cx('mx-3 mb-[max(12px,env(safe-area-inset-bottom))] p-2', className)}
     >
       <SearchTrigger onOpen={onSearch} size="lg" shortcut={false} className="w-full" />
-      <div className="mt-1 grid grid-cols-3 gap-1">
+      <div className="mt-1.5 grid grid-cols-3 gap-1.5">
         {RUBRIQUES.map((r) => (
-          <button
+          <Poussoir
             key={r.id}
-            type="button"
+            tuile
+            lampe
+            pressed={actif === r.id}
             aria-label={r.aria}
-            aria-pressed={actif === r.id}
+            icone={r.icon}
+            className="!px-2 !text-[12px]"
             onClick={() => onRubrique(r.id)}
-            className={cx(
-              'flex h-[52px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-controle px-1 text-[12px] font-semibold',
-              'transition-colors duration-150 ease-signal outline-none focus-visible:outline-2 focus-visible:outline-focus [&_svg]:size-5 [&_svg]:shrink-0',
-              actif === r.id ? 'bg-selection text-selection-encre' : 'text-encre hover:bg-encart',
-            )}
           >
-            {r.icon}
             <span className="truncate">{r.label}</span>
-          </button>
+          </Poussoir>
         ))}
       </div>
     </Panneau>

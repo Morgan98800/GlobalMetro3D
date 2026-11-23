@@ -2,6 +2,21 @@ import type { LayerSpecification, StyleSpecification } from 'maplibre-gl';
 
 export type MapTheme = 'dark' | 'light';
 
+/**
+ * Overture Maps `id` / `building_id` values for our 6 hero 3D GLB landmarks
+ * (Tour Eiffel, Arc de Triomphe, Sacré-Cœur, Invalides, Tour Montparnasse, Panthéon)
+ * so Overture extrusions never render overlapping blocks on top of our GLBs.
+ */
+export const HERO_LANDMARK_OVERTURE_IDS: readonly string[] = [
+  '930b868b-1163-4f10-b7ee-d3e3bf82bf7a', // Tour Eiffel
+  '0b56b855-1a46-4415-97a8-a5dac4b11874', // Arc de Triomphe
+  'f37ff5b3-0277-4a36-aa41-e4f9fad6244b', // Sacré-Cœur
+  '842cd9ed-f546-4fea-a518-c0fa0233db28', // Hôtel des Invalides
+  '54387c0a-6cb3-4e6c-a607-342198dc81a2', // Tour Montparnasse
+  '74b3ba3c-91cd-47df-9112-959c3a130a97', // Ensemble Maine-Montparnasse
+  '1be3a05e-d464-4298-8612-5ada3442c735', // Panthéon
+];
+
 interface ThemePalette {
   background: string;
   landuseUrban: string;
@@ -39,72 +54,74 @@ interface ThemePalette {
 
 const PALETTES: Record<MapTheme, ThemePalette> = {
   dark: {
-    background: '#0d0f14',
-    landuseUrban: '#12151c',
-    landuseCivic: '#171b24',
-    landuseRail: '#15141a',
-    landuseCemetery: '#162119',
-    woods: '#1d3221',
-    parks: '#26422b',
-    water: '#163447',
-    waterLine: '#234c66',
-    canalCore: '#1c4057',
-    boundary: '#272a32',
-    tunnelRoad: '#181b22',
-    pedestrian: '#23262e',
-    roadMinorCasing: '#0c0e13',
-    roadMinor: '#1d2129',
-    roadSecondaryCasing: '#0a0c10',
-    roadSecondary: '#252a34',
-    roadMajorCasing: '#090b0f',
-    roadMajor: '#2d3340',
-    roadDivider: 'rgba(218, 212, 200, 0.16)',
-    rail: '#242329',
-    bridgeCasing: '#090b0f',
-    bridgeCore: '#323845',
-    labelWater: '#4f7a92',
-    labelPlace: 'rgba(222, 216, 204, 0.52)',
-    labelRoad: 'rgba(205, 199, 188, 0.42)',
-    labelHalo: 'rgba(11, 13, 18, 0.85)',
-    bldgLow: '#47413a',
-    bldgMid: '#5e5347',
-    bldgHigh: '#7a6b5b',
-    bldgPartLow: '#665a4d',
-    bldgPartHigh: '#8e7c67',
+    // Apple Maps Dark / Obsidian neutral graphite (zero electric cobalt wash)
+    background: '#131518',
+    landuseUrban: '#181b1f',
+    landuseCivic: '#1d2026',
+    landuseRail: '#181a1e',
+    landuseCemetery: '#17231c',
+    woods: '#142219',
+    parks: '#1a2d21',
+    water: '#12283d',
+    waterLine: '#1b3a57',
+    canalCore: '#16314a',
+    boundary: '#2c3038',
+    tunnelRoad: '#1b1e24',
+    pedestrian: '#22262e',
+    roadMinorCasing: '#0e1013',
+    roadMinor: '#23272f',
+    roadSecondaryCasing: '#0c0e11',
+    roadSecondary: '#2d323c',
+    roadMajorCasing: '#0a0c0e',
+    roadMajor: '#383f4c',
+    roadDivider: 'rgba(235, 237, 242, 0.16)',
+    rail: '#2a2d34',
+    bridgeCasing: '#0b0d10',
+    bridgeCore: '#3e4654',
+    labelWater: '#639ec9',
+    labelPlace: 'rgba(236, 238, 242, 0.72)',
+    labelRoad: 'rgba(205, 208, 216, 0.56)',
+    labelHalo: 'rgba(15, 17, 21, 0.92)',
+    bldgLow: '#1d222d',
+    bldgMid: '#2a3242',
+    bldgHigh: '#3c485e',
+    bldgPartLow: '#34323b',
+    bldgPartHigh: '#5e5447',
   },
   light: {
-    background: '#ece9e1',
-    landuseUrban: '#e5e1d8',
-    landuseCivic: '#dfd9ce',
-    landuseRail: '#dedad2',
-    landuseCemetery: '#d5dfcf',
-    woods: '#b4ccb0',
-    parks: '#c2dac0',
-    water: '#94bfd1',
-    waterLine: '#639bb0',
-    canalCore: '#74aac0',
-    boundary: '#bcb6ab',
-    tunnelRoad: '#d6d1c8',
-    pedestrian: '#dfd9ce',
-    roadMinorCasing: '#cfc9be',
-    roadMinor: '#f9f7f2',
-    roadSecondaryCasing: '#c2bbb0',
+    // Apple Maps Day / Parchment crisp architectural stone & soft greenery
+    background: '#f2f1ed',
+    landuseUrban: '#eae8e2',
+    landuseCivic: '#e5e2da',
+    landuseRail: '#e4e2dc',
+    landuseCemetery: '#d5e4cf',
+    woods: '#bed8b5',
+    parks: '#cde3c5',
+    water: '#a6cfee',
+    waterLine: '#84bce6',
+    canalCore: '#95c6ea',
+    boundary: '#c2bfb6',
+    tunnelRoad: '#dedcd5',
+    pedestrian: '#ebe7de',
+    roadMinorCasing: '#d9d6ce',
+    roadMinor: '#ffffff',
+    roadSecondaryCasing: '#cac6bc',
     roadSecondary: '#ffffff',
-    roadMajorCasing: '#b2aba0',
-    roadMajor: '#fffdf9',
-    roadDivider: 'rgba(140, 132, 120, 0.28)',
-    rail: '#b9b3a8',
-    bridgeCasing: '#a59e92',
+    roadMajorCasing: '#d1c6a5',
+    roadMajor: '#fffaf0',
+    roadDivider: 'rgba(140, 134, 122, 0.28)',
+    rail: '#c4c1b8',
+    bridgeCasing: '#c0bcb2',
     bridgeCore: '#ffffff',
-    labelWater: '#4b7a8c',
-    labelPlace: 'rgba(62, 58, 52, 0.62)',
-    labelRoad: 'rgba(84, 78, 70, 0.54)',
-    labelHalo: 'rgba(246, 243, 237, 0.9)',
-    bldgLow: '#e3dcd0',
-    bldgMid: '#dad0c0',
-    bldgHigh: '#cfc3b0',
-    bldgPartLow: '#d7cdbd',
-    bldgPartHigh: '#c7b8a2',
+    labelWater: '#2f6ea2',
+    labelPlace: 'rgba(42, 42, 46, 0.80)',
+    labelRoad: 'rgba(66, 66, 72, 0.72)',
+    labelHalo: 'rgba(255, 255, 255, 0.95)',
+    bldgLow: '#e6e2da',
+    bldgMid: '#ddd8ce',
+    bldgHigh: '#d1cbc0',
+    bldgPartLow: '#e0dbd1',
+    bldgPartHigh: '#c8c1b4',
   },
 };
 
@@ -140,8 +157,6 @@ export function getMapThemePaints(theme: MapTheme): Array<[string, string, unkno
     ['paris-water', 'fill-color', p.water],
     ['paris-waterways', 'line-color', p.waterLine],
     ['paris-canal-core', 'line-color', p.canalCore],
-    ['quiet-boundary', 'line-color', p.boundary],
-    ['roads-tunnel', 'line-color', p.tunnelRoad],
     ['roads-pedestrian', 'line-color', p.pedestrian],
     ['roads-pedestrian-area', 'fill-color', p.pedestrian],
     ['roads-minor-casing', 'line-color', p.roadMinorCasing],
@@ -150,8 +165,6 @@ export function getMapThemePaints(theme: MapTheme): Array<[string, string, unkno
     ['roads-secondary', 'line-color', p.roadSecondary],
     ['roads-major-casing', 'line-color', p.roadMajorCasing],
     ['roads-major', 'line-color', p.roadMajor],
-    ['roads-centerlines', 'line-color', p.roadDivider],
-    ['quiet-rail', 'line-color', p.rail],
     ['roads-bridge-casing', 'line-color', p.bridgeCasing],
     ['roads-bridge', 'line-color', p.bridgeCore],
     ['water-label', 'text-color', p.labelWater],
@@ -184,6 +197,92 @@ export function getOvertureBuildingThemeColors(theme: MapTheme) {
     buildingColor: buildingHeightColorExpr(p.bldgLow, p.bldgMid, p.bldgHigh, 'height'),
     partColor: buildingHeightColorExpr(p.bldgPartLow, p.bldgMid, p.bldgPartHigh, 'height'),
   };
+}
+
+/**
+ * Computes opacity paint overrides for smooth Metroskop-style subsurface transparency
+ * when pitched in 3D (`mix` in `[0..1]`), restoring crisp opaque surface styling at `mix === 0`.
+ */
+export function getSubsurfacePaints(mix: number, theme: MapTheme): Array<[string, string, unknown]> {
+  const m = Math.max(0, Math.min(1, mix));
+  const lerp = (a: number, b: number) => Number((a + (b - a) * m).toFixed(3));
+  const light = theme === 'light';
+  const restoreFull = m <= 0.01;
+
+  return [
+    ['landuse-urban', 'fill-opacity', restoreFull ? 0.68 : lerp(0.68, 0.28)],
+    ['landuse-civic', 'fill-opacity', restoreFull ? 0.78 : lerp(0.78, 0.30)],
+    ['landuse-rail', 'fill-opacity', restoreFull ? 0.84 : lerp(0.84, 0.28)],
+    ['landuse-cemetery', 'fill-opacity', restoreFull ? 0.78 : lerp(0.78, 0.34)],
+    [
+      'paris-woods',
+      'fill-opacity',
+      restoreFull
+        ? light
+          ? 0.82
+          : ['interpolate', ['linear'], ['zoom'], 10, 0.45, 14, 0.78, 17, 0.88]
+        : lerp(0.82, 0.48),
+    ],
+    [
+      'paris-parks',
+      'fill-opacity',
+      restoreFull
+        ? light
+          ? 0.80
+          : ['interpolate', ['linear'], ['zoom'], 10, 0.48, 14, 0.80, 17, 0.90]
+        : lerp(0.80, 0.50),
+    ],
+    ['paris-water', 'fill-opacity', lerp(light ? 0.90 : 0.94, 0.66)],
+    ['paris-waterways', 'line-opacity', lerp(0.82, 0.62)],
+    ['paris-canal-core', 'line-opacity', lerp(0.80, 0.62)],
+    ['roads-pedestrian-area', 'fill-opacity', lerp(0.74, 0.34)],
+    ['roads-pedestrian', 'line-opacity', lerp(0.88, 0.58)],
+    ['roads-minor-casing', 'line-opacity', lerp(0.88, 0.46)],
+    ['roads-secondary-casing', 'line-opacity', lerp(0.92, 0.52)],
+    ['roads-major-casing', 'line-opacity', lerp(0.96, 0.58)],
+    ['roads-minor', 'line-opacity', lerp(0.96, 0.64)],
+    ['roads-secondary', 'line-opacity', lerp(1.0, 0.72)],
+    ['roads-major', 'line-opacity', lerp(1.0, 0.80)],
+    ['roads-bridge-casing', 'line-opacity', lerp(1.0, 0.82)],
+    ['roads-bridge', 'line-opacity', lerp(1.0, 0.82)],
+  ];
+}
+
+/**
+ * Architectural Blueprint / Cutaway paints for explicit opt-in Subsurface X-Ray mode:
+ * crisp fine wireframe road grid over deep slate/blueprint ground so underground
+ * multi-level stations, transfer shafts, and glowing tunnels stand out effortlessly.
+ */
+export function getBlueprintXrayPaints(theme: MapTheme): Array<[string, string, unknown]> {
+  const light = theme === 'light';
+  const wireMinor = light ? '#7b93b2' : '#3a6b9e';
+  const wireMajor = light ? '#4a6b94' : '#58a6e8';
+  return [
+    ['background', 'background-color', light ? '#e7edf5' : '#060c18'],
+    ['landuse-urban', 'fill-opacity', 0.08],
+    ['landuse-civic', 'fill-opacity', 0.10],
+    ['landuse-rail', 'fill-opacity', 0.12],
+    ['landuse-cemetery', 'fill-opacity', 0.10],
+    ['paris-woods', 'fill-opacity', 0.16],
+    ['paris-parks', 'fill-opacity', 0.16],
+    ['paris-water', 'fill-opacity', light ? 0.36 : 0.42],
+    ['paris-waterways', 'line-opacity', 0.32],
+    ['paris-canal-core', 'line-opacity', 0.32],
+    ['roads-pedestrian-area', 'fill-opacity', 0.10],
+    ['roads-pedestrian', 'line-opacity', 0.30],
+    ['roads-minor-casing', 'line-opacity', 0.08],
+    ['roads-secondary-casing', 'line-opacity', 0.10],
+    ['roads-major-casing', 'line-opacity', 0.14],
+    ['roads-minor', 'line-color', wireMinor],
+    ['roads-minor', 'line-opacity', light ? 0.42 : 0.38],
+    ['roads-secondary', 'line-color', wireMajor],
+    ['roads-secondary', 'line-opacity', light ? 0.52 : 0.48],
+    ['roads-major', 'line-color', wireMajor],
+    ['roads-major', 'line-opacity', light ? 0.62 : 0.58],
+    ['roads-bridge-casing', 'line-opacity', 0.18],
+    ['roads-bridge', 'line-color', wireMajor],
+    ['roads-bridge', 'line-opacity', 0.62],
+  ];
 }
 
 /** Rich urban OpenFreeMap vector style with casings, bridges, plazas, labels, and light parity. */
@@ -292,35 +391,6 @@ export function createVectorDarkStyle(theme: MapTheme = 'dark'): StyleSpecificat
         'line-color': p.canalCore,
         'line-opacity': 0.72,
         'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.6, 15, 1.5, 17, 2.6],
-      },
-    },
-    {
-      id: 'quiet-boundary',
-      type: 'line',
-      source: 'openmaptiles',
-      'source-layer': 'boundary',
-      minzoom: 10,
-      filter: ['in', 'admin_level', 4, 6, 8],
-      paint: {
-        'line-color': p.boundary,
-        'line-opacity': 0.42,
-        'line-width': 1,
-        'line-dasharray': [4, 3],
-      },
-    },
-    {
-      id: 'roads-tunnel',
-      type: 'line',
-      source: 'openmaptiles',
-      'source-layer': 'transportation',
-      minzoom: 13,
-      filter: ['all', ['==', 'brunnel', 'tunnel'], ['!=', 'class', 'rail']],
-      layout: { 'line-cap': 'butt', 'line-join': 'round' },
-      paint: {
-        'line-color': p.tunnelRoad,
-        'line-opacity': 0.55,
-        'line-width': ['interpolate', ['exponential', 1.5], ['zoom'], 13, 1, 17, 6],
-        'line-dasharray': [2, 2],
       },
     },
     {
@@ -490,37 +560,6 @@ export function createVectorDarkStyle(theme: MapTheme = 'dark'): StyleSpecificat
       },
     },
     {
-      id: 'roads-centerlines',
-      type: 'line',
-      source: 'openmaptiles',
-      'source-layer': 'transportation',
-      minzoom: 15.5,
-      filter: [
-        'all',
-        ['!=', 'brunnel', 'tunnel'],
-        ['in', 'class', 'primary', 'trunk', 'motorway', 'secondary'],
-      ],
-      paint: {
-        'line-color': p.roadDivider,
-        'line-width': 1,
-        'line-dasharray': [4, 4],
-      },
-    },
-    {
-      id: 'quiet-rail',
-      type: 'line',
-      source: 'openmaptiles',
-      'source-layer': 'transportation',
-      minzoom: 11,
-      filter: ['all', ['==', 'class', 'rail'], ['!=', 'brunnel', 'tunnel']],
-      paint: {
-        'line-color': p.rail,
-        'line-opacity': 0.65,
-        'line-width': 1.2,
-        'line-dasharray': [3, 2],
-      },
-    },
-    {
       id: 'roads-bridge-casing',
       type: 'line',
       source: 'openmaptiles',
@@ -641,27 +680,19 @@ export function createVectorDarkStyle(theme: MapTheme = 'dark'): StyleSpecificat
       type: 'fill-extrusion',
       source: 'openmaptiles',
       'source-layer': 'building',
-      minzoom: 13.5,
+      minzoom: 13.0,
       layout: { visibility: 'visible' },
-      filter: ['!=', 'hide_3d', true] as any,
+      filter: [
+        'all',
+        ['!=', ['get', 'hide_3d'], true],
+        ['<', ['coalesce', ['get', 'render_height'], 0], 190],
+      ] as any,
       paint: {
         'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
-        'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 15],
+        'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 16],
         'fill-extrusion-color': buildingHeightColorExpr(p.bldgLow, p.bldgMid, p.bldgHigh),
         'fill-extrusion-vertical-gradient': true,
-        'fill-extrusion-opacity': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          13.5,
-          0,
-          14.3,
-          0.35,
-          15.5,
-          0.68,
-          16.8,
-          0.86,
-        ],
+        'fill-extrusion-opacity': 0.8,
       },
     },
   ];

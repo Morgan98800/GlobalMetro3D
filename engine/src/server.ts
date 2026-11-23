@@ -47,13 +47,21 @@ const lineIds = linesJson.map((l: any) => l.id);
 primClient.startPolling(lineIds);
 
 // 3. HTTP Server
+const HOST = process.env.HOST || '127.0.0.1';
 const PORT = parseInt(process.env.PORT || '4000', 10);
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://parisian3dsubway.netlify.app';
 let activeTrainsCount = 0;
 let lastTickDurationMs = 0;
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin;
+  const allowOrigin =
+    origin && (origin === ALLOWED_ORIGIN || origin.startsWith('http://localhost:'))
+      ? origin
+      : ALLOWED_ORIGIN;
+  res.setHeader('Access-Control-Allow-Origin', allowOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Vary', 'Origin');
 
   if (req.url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -74,7 +82,16 @@ const server = http.createServer((req, res) => {
 });
 
 // 4. WebSocket Server
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({
+  server,
+  verifyClient: ({ origin }, cb) => {
+    if (!origin || origin === ALLOWED_ORIGIN || origin.startsWith('http://localhost:')) {
+      cb(true);
+    } else {
+      cb(false, 403, 'Forbidden origin');
+    }
+  },
+});
 
 let previousTrainIds = new Set<string>();
 let currentSnapshot: any[] = [];
@@ -187,6 +204,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`[engine] Paris Subway 3D Simulation Engine listening on http://localhost:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.log(`[engine] Paris Subway 3D Simulation Engine listening on http://${HOST}:${PORT}`);
 });

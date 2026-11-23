@@ -667,25 +667,40 @@ def paint_mr_atlas(length: float, doors_per_side: int) -> bytes:
 
 
 def paint_emissive_atlas(length: float, doors_per_side: int, end_mode: str = "gangway") -> bytes:
-    """Paint emissive atlas: subtle warm interior windows + directional headlights/taillights."""
+    """Paint emissive atlas: warm illuminated passenger saloon windows + LED headlights/taillights."""
     im = Image.new("RGB", (ATLAS, ATLAS), (0, 0, 0))
     d = ImageDraw.Draw(im)
 
-    # Subtle warm interior saloon glow through passenger & door windows
+    # Warm illuminated passenger cabin interior visible through side & door windows
+    # (overhead LED strip at top of window pane + warm saloon glow + subtle seat/pole silhouettes)
     x0, y0, x1, y1 = R_SIDE
     h = y1 - y0
     wb0 = y1 - int(h * WINDOW_BAND[1])
     wb1 = y1 - int(h * WINDOW_BAND[0])
-    cabin_glow = (34, 29, 20)
+    led_strip = (252, 236, 188)
+    cabin_upper = (212, 184, 134)
+    cabin_lower = (146, 120, 82)
+    seat_sil = (56, 46, 36)
+
     for wx0, wy0, wx1, wy1 in _iter_side_windows(x0, x1, wb0, wb1, doors_per_side, length):
-        d.rectangle([wx0 + 1, wy0 + 1, wx1 - 1, wy1 - 1], fill=cabin_glow)
+        wh = max(4, wy1 - wy0)
+        d.rectangle([wx0 + 1, wy0 + 1, wx1 - 1, wy1 - 1], fill=cabin_upper)
+        # Bright overhead LED lighting strip at window top
+        d.rectangle([wx0 + 1, wy0 + 1, wx1 - 1, wy0 + max(2, wh // 5)], fill=led_strip)
+        # Deeper warm tone in lower half + subtle interior seat back / vertical grab pole silhouette
+        d.rectangle([wx0 + 1, wy0 + (wh * 2) // 3, wx1 - 1, wy1 - 1], fill=cabin_lower)
+        if wx1 - wx0 >= 10:
+            mid_x = (wx0 + wx1) // 2
+            d.line([mid_x, wy0 + 2, mid_x, wy1 - 1], fill=seat_sil, width=1)
     dw = max(6, int((x1 - x0) * DOOR_WIDTH_M / length))
     for i in range(doors_per_side):
         cx = x0 + int((x1 - x0) * (i + 0.5) / doors_per_side)
         dl, dr = cx - dw // 2, cx + dw // 2
         if cx - dl >= 5:
-            d.rectangle([dl + 3, wb0 + 2, cx - 2, wb1 - 2], fill=cabin_glow)
-            d.rectangle([cx + 2, wb0 + 2, dr - 3, wb1 - 2], fill=cabin_glow)
+            d.rectangle([dl + 2, wb0 + 2, cx - 2, wb1 - 2], fill=cabin_upper)
+            d.rectangle([cx + 2, wb0 + 2, dr - 2, wb1 - 2], fill=cabin_upper)
+            d.rectangle([dl + 2, wb0 + 2, cx - 2, wb0 + 5], fill=led_strip)
+            d.rectangle([cx + 2, wb0 + 2, dr - 2, wb0 + 5], fill=led_strip)
 
     end_configs = {
         "gangway": (),
@@ -696,16 +711,16 @@ def paint_emissive_atlas(length: float, doors_per_side: int, end_mode: str = "ga
     for region, kind in end_configs:
         ex0, ey0, ex1, ey1 = region
         ew, eh = ex1 - ex0, ey1 - ey0
-        lr = max(4, int(ew * 0.09))
+        lr = max(4, int(ew * 0.10))
         ly = ey0 + int(eh * 0.68)
         lx_l, lx_r = ex0 + int(ew * 0.23), ex0 + int(ew * 0.77)
-        light_color = (255, 248, 200) if kind == "head" else (255, 42, 36)
+        light_color = (255, 252, 224) if kind == "head" else (255, 44, 38)
         d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=light_color)
         d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=light_color)
         if kind == "head":
-            d.rectangle([ex0 + int(ew * 0.23), ey0 + int(eh * 0.07), ex0 + int(ew * 0.77), ey0 + int(eh * 0.11)],
-                        fill=(255, 185, 58))
-            d.rectangle([ex0 + 8, ey0 + int(eh * 0.22), ex1 - 9, ey0 + int(eh * 0.48)], fill=(24, 21, 16))
+            d.rectangle([ex0 + int(ew * 0.18), ey0 + int(eh * 0.06), ex0 + int(ew * 0.82), ey0 + int(eh * 0.12)],
+                        fill=(255, 198, 72))
+            d.rectangle([ex0 + 8, ey0 + int(eh * 0.22), ex1 - 9, ey0 + int(eh * 0.48)], fill=(68, 58, 42))
 
     return _encode_png(im)
 

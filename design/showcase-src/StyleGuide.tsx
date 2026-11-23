@@ -38,6 +38,7 @@ export function StyleGuide() {
       <Typographie />
       <Controles />
       <Information />
+      <RefonteMobile />
       <Ecrans />
       <Mouvement />
       <Redaction />
@@ -391,14 +392,51 @@ function Information() {
   );
 }
 
-function Ecrans() {
+function RefonteMobile() {
+  const ecrans = SCREENS.filter((s) => s.groupe === 'refonte-mobile');
   return (
-    <Section id="ecrans" titre="Écrans" intro="Les mêmes composants, assemblés. Chaque écran s’ouvre seul avec ?screen=… pour les captures.">
+    <Section
+      id="refonte-mobile"
+      titre="Refonte iPhone « Passionné » (proposition)"
+      intro="5 écrans 390 × 844 en grammaire Faïence : on retire l’empilement TopNavBar + BarreMobile au profit d’une feuille à 3 crans et d’un HUD cabine en 2 zones, tout en gardant l’ADN ferroviaire (rames live, confiance PRIM, vitesse, matériel, Plaques & Afficheurs). Cliquable et glissable directement dans chaque aperçu."
+    >
+      <div className="flex flex-wrap gap-8">
+        {ecrans.map((s) => (
+          <figure key={s.id} className="w-[273px]">
+            <div className="overflow-hidden rounded-[22px] [box-shadow:0_0_0_1px_var(--color-joint),var(--shadow-flotte)]" style={{ width: 390 * 0.7, height: 844 * 0.7 }}>
+              <iframe
+                title={s.titre}
+                src={`?screen=${s.id}`}
+                loading="eager"
+                className="origin-top-left border-0"
+                style={{ width: 390, height: 844, transform: 'scale(0.7)' }}
+              />
+            </div>
+            <figcaption className="mt-3">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-corps-sm font-semibold text-encre">{s.titre}</span>
+                <a href={`?screen=${s.id}`} target="_blank" rel="noreferrer" className="shrink-0 text-legende font-semibold text-selection-encre hover:underline">
+                  1:1 ↗
+                </a>
+              </div>
+              {s.note && <p className="mt-1 text-legende text-encre-2">{s.note}</p>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function Ecrans() {
+  const ecrans = SCREENS.filter((s) => s.groupe !== 'refonte-mobile');
+  return (
+    <Section id="ecrans" titre="Écrans v2.1 (actuels)" intro="Les écrans de référence actuels, assemblés. Chaque écran s’ouvre seul avec ?screen=… pour les captures.">
       <div className="grid gap-x-6 gap-y-10 md:grid-cols-2">
-        {SCREENS.filter((s) => s.width > 500).map((s) => <Vignette key={s.id} s={s} scale={0.37} />)}
+        {ecrans.filter((s) => s.width > 500).map((s) => <Vignette key={s.id} s={s} scale={0.37} />)}
       </div>
       <div className="mt-10 flex flex-wrap gap-6">
-        {SCREENS.filter((s) => s.width <= 500).map((s) => <Vignette key={s.id} s={s} scale={0.62} />)}
+        {ecrans.filter((s) => s.width <= 500).map((s) => <Vignette key={s.id} s={s} scale={0.62} />)}
       </div>
     </Section>
   );

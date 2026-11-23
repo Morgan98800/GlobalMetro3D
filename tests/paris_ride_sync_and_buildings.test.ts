@@ -2,12 +2,17 @@ import { describe, expect, it } from 'vitest';
 import {
   ROUTES,
   computeLiveStepS,
+  formatSielWaitTime,
   getGlbUrlsForFamily,
   isRerLineNum,
   resolveParisStockSpec,
   resolveRideRouteKey,
   resolveTrainGlbFamily,
+  selectDualSielBoards,
+  shouldUseDetailedCarMesh,
 } from '../web/src/paris_ride_view';
+import { computeSubsurfaceMix } from '@core/ui/map/maplibre';
+import { getSubsurfacePaints } from '@core/ui/map/vector_style';
 
 describe('paris_ride_view routes, GLB rolling stock mapping, and live sync helpers', () => {
   it('exposes Paris Metro 1-14 and RER A-E routes including Eiffel Tower zones', () => {
@@ -129,5 +134,91 @@ describe('paris_ride_view routes, GLB rolling stock mapping, and live sync helpe
     expect(sprague.driverless).toBe(false);
     expect(sprague.hasPsd).toBe(false);
     expect(sprague.boa).toBe(false);
+  });
+
+  it('formats live dual-direction SIEL boards, detailed Quai 3D doors, and subsurface map translucency', () => {
+    expect(formatSielWaitTime({ atStop: true, waitSeconds: 0 })).toBe('À quai');
+    expect(formatSielWaitTime({ atStop: false, waitSeconds: 18 })).toBe('À quai');
+    expect(formatSielWaitTime({ atStop: false, waitSeconds: 45 })).toBe('< 1 min');
+    expect(formatSielWaitTime({ atStop: false, waitSeconds: 230 })).toBe('4 min');
+
+    const boards = selectDualSielBoards({
+      departures: [
+        {
+          tripId: 't1',
+          lineId: 'L6',
+          lineShortName: '6',
+          colorHex: '#6ECA97',
+          textColorHex: '#111',
+          direction: 0,
+          destName: 'Nation',
+          arrivalSeconds: 300,
+          waitSeconds: 0,
+          waitMinutes: 0,
+          atStop: true,
+          confidence: 'measured',
+        },
+        {
+          tripId: 't2',
+          lineId: 'L6',
+          lineShortName: '6',
+          colorHex: '#6ECA97',
+          textColorHex: '#111',
+          direction: 0,
+          destName: 'Nation',
+          arrivalSeconds: 540,
+          waitSeconds: 240,
+          waitMinutes: 4,
+          atStop: false,
+          confidence: 'measured',
+        },
+        {
+          tripId: 't3',
+          lineId: 'L6',
+          lineShortName: '6',
+          colorHex: '#6ECA97',
+          textColorHex: '#111',
+          direction: 1,
+          destName: 'Charles de Gaulle – Étoile',
+          arrivalSeconds: 420,
+          waitSeconds: 120,
+          waitMinutes: 2,
+          atStop: false,
+          confidence: 'scheduled',
+        },
+      ],
+      lineNum: '6',
+      posDest: 'Nation',
+      negDest: 'Charles de Gaulle – Étoile',
+      simDir: 1,
+      simState: 'dwell',
+      simKmh: 0,
+      counterEtaText: '3 min',
+    });
+
+    expect(boards.pos.rows[0].eta).toBe('À quai');
+    expect(boards.pos.rows[1].eta).toBe('4 min');
+    expect(boards.neg.rows[0].eta).toBe('2 min');
+    expect(boards.neg.rows[1].eta).toBe('6 min');
+
+    expect(
+      shouldUseDetailedCarMesh({
+        view: 'vault',
+        glbStatus: 'ready',
+        doorOpen: 0.5,
+        spragueMode: false,
+      })
+    ).toBe(true);
+
+    expect(computeSubsurfaceMix(0, false)).toBe(0);
+    expect(computeSubsurfaceMix(26, false)).toBe(1);
+    expect(computeSubsurfaceMix(10, true)).toBeGreaterThanOrEqual(0.85);
+
+    const opaque = getSubsurfacePaints(0, 'dark');
+    const xray = getSubsurfacePaints(1, 'dark');
+    const urbanOpaque = opaque.find(([layer]) => layer === 'landuse-urban')?.[2];
+    const urbanXray = xray.find(([layer]) => layer === 'landuse-urban')?.[2];
+    expect(urbanOpaque).toBe(0.68);
+    expect(Number(urbanXray)).toBeLessThan(0.35);
   });
 });

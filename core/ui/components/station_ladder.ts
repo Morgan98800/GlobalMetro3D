@@ -393,7 +393,11 @@ export class StationLadder {
 
         // Réutiliser d'abord le curseur de même id, sinon le curseur du même
         // emplacement. Les ids GTFS peuvent changer entre deux ticks.
-        let cursor = slot.querySelector<HTMLElement>(`[data-train-id="${tr.id}"]`);
+        const escapedId =
+          typeof CSS !== 'undefined' && typeof CSS.escape === 'function'
+            ? CSS.escape(tr.id)
+            : tr.id.replace(/["\\]/g, '\\$&');
+        let cursor = slot.querySelector<HTMLElement>(`[data-train-id="${escapedId}"]`);
         if (cursor && usedCursors.has(cursor)) cursor = null;
         if (!cursor) {
           cursor =

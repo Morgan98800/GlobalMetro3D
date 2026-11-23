@@ -1,0 +1,89 @@
+{
+  "" : {
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisSubwayCore-primary.dia",
+    "emit-module-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisSubwayCore-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisSubwayCore-primary-emit-module.dia",
+    "pch" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisSubwayCore-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisSubwayCore-primary.swiftdeps"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/GhostStations.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/GhostStations~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/Kinematics.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Kinematics~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/Models.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/Models~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/ParisClock.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ParisClock~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/RoutePlanner.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/RoutePlanner~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/ShapesLoader.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/ShapesLoader~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/StationLevels.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/StationLevels~partial.swiftmodule"
+  },
+  "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/Sources/ParisSubwayCore/SubwayEngine.swift" : {
+    "const-values" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.swiftconstvalues",
+    "dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.d",
+    "diagnostics" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.dia",
+    "index-unit-output-path" : "/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.o",
+    "llvm-bc" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.bc",
+    "object" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.o",
+    "swift-dependencies" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine.swiftdeps",
+    "swiftmodule" : "/Users/morgancanteri/Documents/Paris subway 3D/ios/ParisSubwayCore/.build/out/Intermediates.noindex/ParisSubwayCore.build/Debug/ParisSubwayCore-t.build/Objects-normal/arm64/SubwayEngine~partial.swiftmodule"
+  }
+}

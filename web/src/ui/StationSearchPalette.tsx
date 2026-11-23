@@ -1,6 +1,6 @@
-import { RiGitCommitLine, RiMapPin2Line, RiRouteLine, RiSearchLine } from '@remixicon/react';
+import { RiCloseCircleFill, RiGitCommitLine, RiMapPin2Line, RiRouteLine, RiSearchLine } from '@remixicon/react';
 import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
-import { Button } from './Button';
+import { Button, IconButton } from './Button';
 import { cx } from './cx';
 import { Kbd } from './Kbd';
 import { LineBadgeChip } from './LineBadgeChip';
@@ -101,13 +101,13 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center md:items-start md:pt-[11vh]">
-      <div aria-hidden className="absolute inset-0 bg-nuit-950/45 backdrop-blur-[2px]" onClick={p.onClose} />
+    <div className="pointer-events-auto fixed inset-0 z-50 flex justify-center md:items-start md:pt-[11vh]">
+      <div aria-hidden className="absolute inset-0 bg-nuit-950/55" onClick={p.onClose} />
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Rechercher une station, une adresse ou une ligne"
-        className="relative flex h-full w-full flex-col overflow-hidden bg-surface animate-feuille md:h-auto md:max-h-[72dvh] md:w-[600px] md:rounded-feuille [box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),var(--shadow-flotte)]"
+        className="relative flex h-full w-full flex-col overflow-hidden bg-surface text-encre animate-feuille md:h-auto md:max-h-[72dvh] md:w-[600px] md:rounded-feuille [box-shadow:0_0_0_1px_var(--color-joint),var(--shadow-flotte)]"
       >
         <div className="flex h-16 shrink-0 items-center gap-3 border-b border-joint px-4 pt-[env(safe-area-inset-top)]">
           <RiSearchLine aria-hidden className="size-5 shrink-0 text-icone-2" />
@@ -124,11 +124,20 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
             placeholder="Station, adresse, lieu ou ligne"
             className="min-w-0 flex-1 bg-transparent text-[18px] text-encre outline-none placeholder:text-encre-3"
           />
+          {p.requete.length > 0 && (
+            <IconButton
+              size="sm"
+              variant="discret"
+              label="Effacer la recherche"
+              icon={<RiCloseCircleFill aria-hidden />}
+              onClick={() => p.onRequete('')}
+            />
+          )}
           {desktop ? <Kbd>Échap</Kbd> : <Button variant="discret" size="sm" onClick={p.onClose}>Annuler</Button>}
         </div>
 
         <div id={listId} role="listbox" aria-label="Résultats" className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
-          {option({ type: 'itineraire' }, <>{vignette(<RiRouteLine />)}{titre('Itinéraire entre deux points', 'De A à B, avec les correspondances')}<span /></>)}
+          {option({ type: 'itineraire' }, <>{vignette(<RiRouteLine />)}{titre('Itinéraire', 'A → B')}<span /></>)}
           <Groupe titre="Stations" vide={!p.stations.length}>
             {p.stations.map((s) =>
               option(s, <>{vignette(<RiGitCommitLine />)}{titre(surligner(s.nom, p.requete), s.detail, true)}<span className="flex gap-1">{s.lignes.map((l) => <LineBadgeChip key={l.shortName} {...l} size="xs" />)}</span></>),
@@ -139,17 +148,10 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
               option(l, <><span className="grid size-9 place-items-center"><LineBadgeChip {...l.ligne} size="sm" /></span>{titre(lineName(l.ligne.shortName), `${l.termini[0]} – ${l.termini[1]}`)}<span /></>),
             )}
           </Groupe>
-          <Groupe titre="Adresses et lieux" vide={!p.lieux.length}>
+          <Groupe titre="Lieux" vide={!p.lieux.length}>
             {p.lieux.map((l) => option(l, <>{vignette(<RiMapPin2Line />)}{titre(surligner(l.nom, p.requete), l.detail)}<span /></>))}
           </Groupe>
         </div>
-
-        {desktop && (
-          <footer className="flex shrink-0 items-center gap-5 border-t border-joint px-4 py-2.5 text-legende text-encre-3">
-            <span className="flex items-center gap-1"><Kbd>↑</Kbd><Kbd>↓</Kbd> pour choisir</span>
-            <span className="flex items-center gap-1"><Kbd>Entrée</Kbd> pour ouvrir</span>
-          </footer>
-        )}
       </div>
     </div>
   );
@@ -158,8 +160,8 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
 function Groupe({ titre, vide, children }: { titre: string; vide: boolean; children: ReactNode }) {
   if (vide) return null;
   return (
-    <div role="group" aria-label={titre} className="mt-2">
-      <p aria-hidden className="px-2 pb-1 pt-2 text-[12px] font-semibold text-encre-3">{titre}</p>
+    <div role="group" aria-label={titre} className="mt-2.5 border-t border-joint pt-1.5">
+      <p aria-hidden className="px-2 pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-encre-3">{titre}</p>
       {children}
     </div>
   );

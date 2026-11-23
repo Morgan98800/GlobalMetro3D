@@ -1,6 +1,7 @@
 import https from 'https';
 import Pbf from 'pbf';
 import type { LineTrafficReport } from '../../core/types';
+import { checkRateLimit, getCorsHeaders, rateLimitedResponse } from './_shared/cors';
 import type {
   BerlinStopTimeEvent,
   BerlinStopTimeUpdate,
@@ -387,7 +388,15 @@ export async function getOrFetchBerlinSnapshot(
   return { snapshot, fromCache: false };
 }
 
-export const handler = async () => {
+export const handler = async (event: any = {}) => {
+  if (event?.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: getCorsHeaders(event), body: '' };
+  }
+  const rl = checkRateLimit(event);
+  if (!rl.allowed) {
+    return rateLimitedResponse(event, rl.retryAfterSec);
+  }
+
   const now = Date.now();
   const { snapshot } = await getOrFetchBerlinSnapshot(now);
 
@@ -395,7 +404,7 @@ export const handler = async () => {
     'Content-Type': 'application/json',
     'Cache-Control': `public, max-age=10, s-maxage=${CACHE_TTL_SEC}, stale-while-revalidate=5`,
     'Netlify-CDN-Cache-Control': `public, s-maxage=${CACHE_TTL_SEC}`,
-    'Access-Control-Allow-Origin': '*',
+    ...getCorsHeaders(event),
   };
 
   return {

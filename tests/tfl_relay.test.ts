@@ -5,6 +5,7 @@ import {
   isLondonTubeServiceHours,
   normalizeStationId,
   cleanVehicleId,
+  sanitizeErrorMessage,
   TFL_TUBE_LINE_IDS,
 } from '../netlify/functions/tfl_relay';
 
@@ -216,6 +217,17 @@ describe('TfL Relay & Live Feed Unit Tests (Phase 4)', () => {
       expect(cleanVehicleId('')).toBe(null);
       expect(cleanVehicleId(null)).toBe(null);
       expect(cleanVehicleId('undefined')).toBe(null);
+    });
+  });
+
+  describe('Security & Secret Sanitization', () => {
+    it('redacts app_key and api_key query parameters from error messages', () => {
+      const leaked =
+        'HTTP 429 on https://api.tfl.gov.uk/Line/central/Arrivals?app_key=super_secret_123&foo=bar';
+      const sanitized = sanitizeErrorMessage(leaked);
+      expect(sanitized).not.toContain('super_secret_123');
+      expect(sanitized).toContain('app_key=***');
+      expect(sanitized).toContain('foo=bar');
     });
   });
 });

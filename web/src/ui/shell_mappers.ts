@@ -1,5 +1,6 @@
 import type { StationDeparture } from '@core/sim/browser_engine';
 import type { RollingStockDatabase } from '@core/sim/rolling_stock';
+import { buildHubRegistry, resolveLineElevationAt } from '@core/ui/map/station_levels';
 import type { LineMetadata, LineTrafficReport, StationMetadata } from '@core/types';
 import type { LineLadderData } from '@core/ui/components/station_ladder';
 import type { TrainMarker } from '@core/ui/map/trains_layer';
@@ -83,10 +84,10 @@ export function buildLigneDetail(params: {
   const lineTrains = trains.filter((t) => t.line === activeLine.id);
   const alert = mapTrafficAlert(traffic);
   const trafic = alert
-    ? { niveau: alert, texte: traffic?.message || traffic?.title || 'Trafic perturbé.' }
+    ? { niveau: alert, texte: traffic?.message || traffic?.title || 'Perturbé' }
     : {
         niveau: 'normal' as const,
-        texte: `Trafic normal, ${lineTrains.length} rame${lineTrains.length > 1 ? 's' : ''} en ligne.`,
+        texte: `Trafic normal · ${lineTrains.length} rame${lineTrains.length > 1 ? 's' : ''}`,
       };
 
   const stockInfo =
@@ -113,6 +114,7 @@ export function buildLigneDetail(params: {
     : undefined;
 
   const stationByName = new Map(stations.map((s) => [s.name, s]));
+  const hubRegistry = buildHubRegistry(stations, Array.from(linesById.values()));
   const ladderStations = ladderDir?.stations ?? [];
   const arrets = ladderStations.map((st, idx) => {
     const meta = stationByName.get(st.name);
@@ -123,11 +125,16 @@ export function buildLigneDetail(params: {
       .slice(0, 5)
       .map(toLineRef);
 
+    const elevationM = st.coordinates
+      ? resolveLineElevationAt(st.coordinates, activeLine, hubRegistry)
+      : activeLine.elevation_offset;
+
     return {
       id: st.name,
       nom: st.name,
       terminus: idx === 0 || idx === ladderStations.length - 1,
       correspondances,
+      elevationM,
     };
   });
 
@@ -265,12 +272,20 @@ function mapCarPosition(hint?: string): PositionRame | undefined {
   return undefined;
 }
 
-export function mapItineraires(candidates: TransitItinerary[], now = new Date()): Itineraire[] {
+export function mapItineraires(
+  candidates: TransitItinerary[],
+  now = new Date(),
+  timezone = 'Europe/Paris'
+): Itineraire[] {
+  const timeFmt = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: timezone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  });
   return candidates.map((cand) => {
     const arrivalDate = new Date(now.getTime() + cand.totalDurationSec * 1000);
-    const arrivee = `${String(arrivalDate.getHours()).padStart(2, '0')}:${String(
-      arrivalDate.getMinutes()
-    ).padStart(2, '0')}`;
+    const arrivee = timeFmt.format(arrivalDate);
 
     const rideLegs = cand.legs.filter((l) => l.kind === 'ride');
     const lastRideIdx = cand.legs.reduce((acc, l, i) => (l.kind === 'ride' ? i : acc), -1);

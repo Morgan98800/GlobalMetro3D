@@ -3,12 +3,18 @@ import { PathStyleExtension, CollisionFilterExtension } from '@deck.gl/extension
 import type { TrainMarker } from './trains_layer';
 import { createTrainsLayers } from './trains_layer';
 import type { ShapeEntry } from '@core/sim/shapes';
-import { sliceShape, splitIntoCars } from '@core/sim/shapes';
 import { coordAtDistance } from '@core/sim/shapes_loader';
 import type { RollingStockDatabase, LineRollingStock } from '@core/sim/rolling_stock';
 import { getRollingStockForLine } from '@core/sim/rolling_stock';
 import { hexToRgba } from './deck_overlay';
 import { LATIN_CHARACTER_SET } from './labels_layer';
+import {
+  dualTrackOffsetForZoom,
+  offsetGeoPointENU,
+  offsetShapeSlice,
+  sampleShapeFrame,
+  smoothShapeForRender,
+} from './rounded_path';
 
 const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
 const NEUTRAL_BODY_COLORS = [
@@ -83,6 +89,8 @@ export interface CapsuleLayerParams {
   mapCenter: [number, number];
   selectedLineId: string | null;
   selectedTrainId?: string | null;
+  zoom?: number;
+  undergroundBeforeId?: string;
   onHover: (info: any) => void;
   onClick: (train: TrainMarker) => void;
 }
@@ -187,12 +195,14 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     mapCenter,
     selectedLineId,
     selectedTrainId,
+    zoom: explicitZoom,
+    undergroundBeforeId,
     onHover,
     onClick,
   } = params;
 
   const map = typeof window !== 'undefined' ? (window as any).__map : null;
-  const zoom = typeof map?.getZoom === 'function' ? map.getZoom() : 13;
+  const zoom = explicitZoom ?? (typeof map?.getZoom === 'function' ? map.getZoom() : 13);
   if (
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('debug') === 'trains'
@@ -259,32 +269,30 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     widthM: number;
   }> = [];
   const debugShapeIds = new Set<string>();
+  const trackOffsetM = dualTrackOffsetForZoom(zoom);
   for (const train of activeTrains) {
     if (!train.shapeId) {
       fallbackTrains.push(train);
       continue;
     }
-    const shape = shapes.get(train.shapeId);
-    if (!shape) {
+    const rawShape = shapes.get(train.shapeId);
+    if (!rawShape) {
       fallbackTrains.push(train);
       continue;
     }
+    const shape = smoothShapeForRender(rawShape);
 
     const stock: LineRollingStock = getRollingStockForLine(
       rollingStockDb,
       train.line || train.lineName
     );
-    const trainDirection = (train.direction ?? 1) as 0 | 1;
-    const referenceDistance =
-      (train.currentDistM ?? 0) +
-      (trainDirection === 1 ? stock.total_length_m / 2 : -stock.total_length_m / 2);
-    const headD = referenceDistance;
-    const tailD =
-      trainDirection === 1 ? headD - stock.total_length_m : headD + stock.total_length_m;
+    // Both direction === 0 and direction === 1 advance monotonically from 0 -> shape.length.
+    const headD = Math.max(0, Math.min(shape.length, (train.currentDistM ?? 0) + stock.total_length_m / 2));
+    const tailD = Math.max(0, headD - stock.total_length_m);
     const elev = train.elevation || 0;
     const lodLevel = zoom < minCapsuleZoom ? 'dot' : zoom >= detailedZoom ? 'full' : 'capsule';
     const debugShape = shapes.get(train.shapeId);
-    const debugSlice = debugShape ? sliceShape(debugShape, tailD, headD) : [];
+    const debugSlice = debugShape ? offsetShapeSlice(shape, tailD, headD, trackOffsetM) : [];
     if (debugTrains) {
       debugShapeIds.add(train.shapeId);
       debugRows.push({
@@ -299,7 +307,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
         widthM: stock.width_m,
         lodLevel,
         confidence: train.conf,
-        coordAtD: debugShape ? coordAtDistance(debugShape, headD) : null,
+        coordAtD: coordAtDistance(shape, headD),
         zoom: Number(zoom.toFixed(2)),
         color: train.colorHex,
         model: stock.model_id,
@@ -318,7 +326,7 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
     }
 
     // 1. Full train slice (always continuous for outline halo)
-    const fullPath = sliceShape(shape, tailD, headD);
+    const fullPath = offsetShapeSlice(shape, tailD, headD, trackOffsetM);
     if (fullPath.length < 2) {
       fallbackTrains.push(train);
       continue;
@@ -384,21 +392,18 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       // Detailed 3D Model LOD (>= 13.5 desktop / 14.2 mobile):
       // Individual 3D extruded cars, gangways, and LED lighting
       // -----------------------------------------------------------------------
-      const cars = splitIntoCars(
-        shape,
-        headD,
-        stock.cars_count,
-        stock.car_length_m,
-        stock.inter_car_gap_m,
-        trainDirection
-      );
+      const spacingM = stock.car_length_m + stock.inter_car_gap_m;
 
-      // A. Car bodies are path slices, never screen-aligned polygons.
-      for (const carPath of cars) {
+      // A. Car bodies are offset-aware path slices matching the rounded display curve.
+      for (let i = 0; i < stock.cars_count; i++) {
+        const cHeadD = Math.min(shape.length, Math.max(0, headD - i * spacingM));
+        const cTailD = Math.min(shape.length, Math.max(0, cHeadD - stock.car_length_m));
+        const carPath =
+          cHeadD - cTailD >= 0.4 ? offsetShapeSlice(shape, cTailD, cHeadD, trackOffsetM) : [];
         if (carPath.length >= 2) {
           carBodies.push({
             path: carPath,
-            widthM: Math.max(stock.width_m, 3.2),
+            widthM: Math.max(stock.width_m, 2.85),
             color: bodyColor,
             elevation: elev + 1.0,
             train,
@@ -415,10 +420,12 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
 
       // C. Inter-car rubber gangways / soufflets
       for (let i = 0; i < stock.cars_count - 1; i++) {
-        const carTailD =
-          headD - i * (stock.car_length_m + stock.inter_car_gap_m) - stock.car_length_m;
-        const nextCarHeadD = headD - (i + 1) * (stock.car_length_m + stock.inter_car_gap_m);
-        const gangwayPath = sliceShape(shape, Math.max(0, nextCarHeadD), Math.max(0, carTailD));
+        const carTailD = Math.max(0, headD - i * spacingM - stock.car_length_m);
+        const nextCarHeadD = Math.max(0, headD - (i + 1) * spacingM);
+        const gangwayPath =
+          carTailD - nextCarHeadD >= 0.1
+            ? offsetShapeSlice(shape, nextCarHeadD, carTailD, trackOffsetM)
+            : [];
         if (gangwayPath.length >= 2) {
           gangwaySegments.push({
             path: gangwayPath,
@@ -432,11 +439,12 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
 
       // D. Front cab aerodynamic nose highlight
       const noseTailD = Math.max(0, headD - 2.5);
-      const nosePath = sliceShape(shape, noseTailD, headD);
+      const nosePath =
+        headD - noseTailD >= 0.3 ? offsetShapeSlice(shape, noseTailD, headD, trackOffsetM) : [];
       if (nosePath.length >= 2) {
         noseSegments.push({
           path: nosePath,
-          widthM: Math.max(stock.width_m * 0.9, 2.9),
+          widthM: Math.max(stock.width_m * 0.88, 2.7),
           color: noseColor,
           elevation: elev + 3.8,
           train,
@@ -445,13 +453,21 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
 
       // E. LED Headlights & Taillights
       const lights = computeTrainLights(shape, headD, tailD, stock.width_m, elev);
+      if (Math.abs(trackOffsetM) > 0.001 && lights.length > 0) {
+        const headFrame = sampleShapeFrame(shape, headD, 0);
+        const [rx, ry] = headFrame.rightNormal;
+        for (const pt of lights) {
+          pt.pos = offsetGeoPointENU(pt.pos, rx * trackOffsetM, ry * trackOffsetM);
+        }
+      }
       lightPoints.push(...lights);
     }
 
     // Layer: Labels
     if (showLabels) {
+      const labelHeadPos = sampleShapeFrame(shape, headD, trackOffsetM).pos;
       labelsData.push({
-        headPos: train.pos,
+        headPos: labelHeadPos,
         lineName: train.lineName,
         colorHex: train.colorHex,
         textColorHex: train.textColorHex,
@@ -463,6 +479,25 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   }
 
   const layers: any[] = [];
+  const pushWithSubsurfaceSplit = <T extends { elevation: number }>(
+    items: T[],
+    buildLayer: (idSuffix: string, subset: T[], beforeId?: string) => any
+  ) => {
+    if (items.length === 0) return;
+    if (!undergroundBeforeId) {
+      layers.push(buildLayer('', items));
+      return;
+    }
+    const underground = items.filter((item) => item.elevation < 0);
+    const surface = items.filter((item) => item.elevation >= 0);
+    if (underground.length > 0) {
+      layers.push(buildLayer('-ug', underground, undergroundBeforeId));
+    }
+    if (surface.length > 0) {
+      layers.push(buildLayer('', surface));
+    }
+  };
+
   const commonPathProps = {
     widthUnits: 'meters' as const,
     widthMinPixels: 3,
@@ -480,10 +515,11 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   // ---------------------------------------------------------------------------
   // Layer 1: Outline Halo (High contrast base on the tracks)
   // ---------------------------------------------------------------------------
-  layers.push(
+  pushWithSubsurfaceSplit(outlineSegments, (suffix, data, beforeId) =>
     new PathLayer<any>({
-      id: 'subway-trains-capsule-outline',
-      data: outlineSegments,
+      id: `subway-trains-capsule-outline${suffix}`,
+      data,
+      ...(beforeId ? { beforeId } : {}),
       ...commonPathProps,
       pickable: true,
       getWidth: (d: RenderOutlineSegment) => d.widthM,
@@ -509,118 +545,113 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   // ---------------------------------------------------------------------------
   // Layer 2: Car bodies as canonical shape slices.
   // ---------------------------------------------------------------------------
-  if (carBodies.length > 0) {
-    layers.push(
-      new PathLayer<RenderCarSegment>({
-        id: 'subway-trains-car-bodies',
-        data: carBodies,
-        ...commonPathProps,
-        getWidth: (d: RenderCarSegment) => d.widthM,
-        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-        getColor: (d: RenderCarSegment) => d.color,
-        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
-        onHover,
-        onClick: (info: any) => {
-          if (info.object && info.object.train) {
-            onClick(info.object.train);
-          }
-        },
-        updateTriggers: {
-          getPath: [trains],
-          getFillColor: [trains],
-          getWidth: [trains],
-        },
-      })
-    );
-  }
+  pushWithSubsurfaceSplit(carBodies, (suffix, data, beforeId) =>
+    new PathLayer<RenderCarSegment>({
+      id: `subway-trains-car-bodies${suffix}`,
+      data,
+      ...(beforeId ? { beforeId } : {}),
+      ...commonPathProps,
+      getWidth: (d: RenderCarSegment) => d.widthM,
+      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+      getColor: (d: RenderCarSegment) => d.color,
+      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+      onHover,
+      onClick: (info: any) => {
+        if (info.object && info.object.train) {
+          onClick(info.object.train);
+        }
+      },
+      updateTriggers: {
+        getPath: [trains],
+        getFillColor: [trains],
+        getWidth: [trains],
+      },
+    } as any)
+  );
 
   // ---------------------------------------------------------------------------
   // Layer 3: line identity on the same canonical path slices.
   // ---------------------------------------------------------------------------
-  if (carRoofs.length > 0) {
-    layers.push(
-      new PathLayer<RenderCarSegment>({
-        id: 'subway-trains-car-roofs',
-        data: carRoofs,
-        ...commonPathProps,
-        pickable: false,
-        getWidth: (d: RenderCarSegment) => d.widthM,
-        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-        getColor: (d: RenderCarSegment) => d.color,
-        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
-        updateTriggers: {
-          getPath: [trains],
-          getFillColor: [trains],
-          getWidth: [trains],
-        },
-      })
-    );
-  }
+  pushWithSubsurfaceSplit(carRoofs, (suffix, data, beforeId) =>
+    new PathLayer<RenderCarSegment>({
+      id: `subway-trains-car-roofs${suffix}`,
+      data,
+      ...(beforeId ? { beforeId } : {}),
+      ...commonPathProps,
+      pickable: false,
+      getWidth: (d: RenderCarSegment) => d.widthM,
+      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+      getColor: (d: RenderCarSegment) => d.color,
+      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+      updateTriggers: {
+        getPath: [trains],
+        getFillColor: [trains],
+        getWidth: [trains],
+      },
+    } as any)
+  );
 
   // ---------------------------------------------------------------------------
   // Layer 4: Intercirculations / Soufflets en caoutchouc
   // ---------------------------------------------------------------------------
-  if (gangwaySegments.length > 0) {
-    layers.push(
-      new PathLayer<any>({
-        id: 'subway-trains-capsule-gangways',
-        data: gangwaySegments,
-        ...commonPathProps,
-        pickable: false,
-        getWidth: (d: RenderCarSegment) => d.widthM,
-        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-        getColor: (d: RenderCarSegment) => d.color,
-        updateTriggers: {
-          getPath: [trains],
-          getColor: [trains],
-        },
-      })
-    );
-  }
+  pushWithSubsurfaceSplit(gangwaySegments, (suffix, data, beforeId) =>
+    new PathLayer<any>({
+      id: `subway-trains-capsule-gangways${suffix}`,
+      data,
+      ...(beforeId ? { beforeId } : {}),
+      ...commonPathProps,
+      pickable: false,
+      getWidth: (d: RenderCarSegment) => d.widthM,
+      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+      getColor: (d: RenderCarSegment) => d.color,
+      updateTriggers: {
+        getPath: [trains],
+        getColor: [trains],
+      },
+    } as any)
+  );
 
   // ---------------------------------------------------------------------------
   // Layer 5: Nez blanc éclatant
   // ---------------------------------------------------------------------------
-  if (noseSegments.length > 0) {
-    layers.push(
-      new PathLayer<any>({
-        id: 'subway-trains-capsule-nose',
-        data: noseSegments,
-        ...commonPathProps,
-        pickable: false,
-        getWidth: (d: RenderCarSegment) => d.widthM,
-        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-        getColor: (d: RenderCarSegment) => d.color,
-        updateTriggers: {
-          getPath: [trains],
-        },
-      })
-    );
-  }
+  pushWithSubsurfaceSplit(noseSegments, (suffix, data, beforeId) =>
+    new PathLayer<any>({
+      id: `subway-trains-capsule-nose${suffix}`,
+      data,
+      ...(beforeId ? { beforeId } : {}),
+      ...commonPathProps,
+      pickable: false,
+      getWidth: (d: RenderCarSegment) => d.widthM,
+      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+      getColor: (d: RenderCarSegment) => d.color,
+      updateTriggers: {
+        getPath: [trains],
+      },
+    } as any)
+  );
 
   // ---------------------------------------------------------------------------
   // Layer 6: Phares avant LED & feux arrière LED
   // ---------------------------------------------------------------------------
-  if (lightPoints.length > 0) {
-    layers.push(
-      new ScatterplotLayer<RenderLightPoint>({
-        id: 'subway-trains-capsule-lights',
-        data: lightPoints,
-        pickable: false,
-        radiusUnits: 'meters',
-        getRadius: (d: RenderLightPoint) => d.radiusM,
-        radiusMinPixels: 4,
-        radiusMaxPixels: 14,
-        getPosition: (d: RenderLightPoint) => [d.pos[0], d.pos[1], d.elevation],
-        getFillColor: (d: RenderLightPoint) => d.color,
-        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
-        updateTriggers: {
-          getPosition: [trains],
-          getFillColor: [trains],
-        },
-      })
-    );
-  }
+  pushWithSubsurfaceSplit(lightPoints, (suffix, data, beforeId) =>
+    new ScatterplotLayer<RenderLightPoint>({
+      id: `subway-trains-capsule-lights${suffix}`,
+      data,
+      ...(beforeId ? { beforeId } : {}),
+      pickable: false,
+      radiusUnits: 'meters',
+      getRadius: (d: RenderLightPoint) => d.radiusM,
+      radiusMinPixels: 4,
+      radiusMaxPixels: 14,
+      getPosition: (d: RenderLightPoint) => [d.pos[0], d.pos[1], d.elevation],
+      getFillColor: (d: RenderLightPoint) => d.color,
+      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+      updateTriggers: {
+        getPosition: [trains],
+        getFillColor: [trains],
+      },
+    } as any)
+  );
 
   // ---------------------------------------------------------------------------
   // Layer 7: Étiquettes de rame

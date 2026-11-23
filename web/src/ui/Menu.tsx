@@ -63,6 +63,7 @@ export function MenuBouton({ label, icon, entrees, align = 'end', size = 'sm', d
     <div ref={root} className={cx('relative', className)}>
       <IconButton
         size={size}
+        variant="secondaire"
         label={label}
         icon={icon}
         aria-haspopup="menu"
@@ -84,8 +85,7 @@ export function MenuBouton({ label, icon, entrees, align = 'end', size = 'sm', d
           aria-label={label}
           onKeyDown={move}
           className={cx(
-            'absolute z-30 min-w-[240px] rounded-[14px] bg-surface-elevee p-1.5 animate-feuille',
-            '[box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),var(--shadow-flotte)]',
+            'pl-menu absolute z-30 animate-feuille',
             align === 'gauche' ? 'right-full top-0 mr-2' : align === 'end' ? 'right-0 top-full mt-2' : 'left-0 top-full mt-2',
           )}
         >
@@ -95,18 +95,14 @@ export function MenuBouton({ label, icon, entrees, align = 'end', size = 'sm', d
               type="button"
               role="menuitem"
               tabIndex={-1}
+              data-variant={e.ton === 'alerte' ? 'alerte' : undefined}
               onClick={() => {
                 setOpen(false);
                 e.onSelect();
               }}
-              className={cx(
-                'flex h-10 w-full items-center gap-2.5 rounded-[9px] px-2.5 text-start text-[14px] font-medium',
-                'outline-none transition-colors duration-150 ease-signal hover:bg-encart focus-visible:bg-encart',
-                '[&_svg]:size-[18px] [&_svg]:shrink-0',
-                e.ton === 'alerte' ? 'text-signal-encre' : 'text-encre',
-              )}
+              className="pl-menu-entree"
             >
-              {e.icon && <span className={e.ton === 'alerte' ? '' : 'text-icone-2'}>{e.icon}</span>}
+              {e.icon}
               <span className="min-w-0 truncate">{e.label}</span>
             </button>
           ))}

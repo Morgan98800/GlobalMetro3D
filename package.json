@@ -44,11 +44,18 @@
     "test:engine-realtime": "vitest run tests/engine-realtime-adapter.test.ts"
   },
   "dependencies": {
-    "luxon": "^3.7.2"
+    "@sentry/react": "^11.16.0",
+    "@use-gesture/react": "^10.3.1",
+    "luxon": "^3.7.2",
+    "meshoptimizer": "^1.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@biomejs/biome": "2.6.6",
+    "@gltf-transform/cli": "^4.5.1",
     "@playwright/test": "^1.65.0",
+    "@sentry/vite-plugin": "^11.16.0",
+    "@turf/turf": "^7.4.0",
     "@types/luxon": "^3.7.5"
   }
 }

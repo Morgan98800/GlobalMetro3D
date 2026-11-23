@@ -29,4 +29,7 @@ export * from './FollowTrainHud';
 export * from './NearbyDrawer';
 export * from './StationSearchPalette';
 export * from './InfoModals';
+export * from './BottomSheet';
+export * from './HeritageDecor';
+export * from './MobileHomeSheet';
 export * from './format';

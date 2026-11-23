@@ -3,8 +3,8 @@
     "id": "IDFM:C01371",
     "short_name": "1",
     "long_name": "1",
-    "color": "#FFBE00",
-    "text_color": "#000000",
+    "color": "#FFCE00",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Château de Vincennes",
@@ -17,8 +17,8 @@
     "id": "IDFM:C01380",
     "short_name": "10",
     "long_name": "10",
-    "color": "#DC9600",
-    "text_color": "#000000",
+    "color": "#E3B32A",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Boulogne Pont de Saint-Cloud",
@@ -31,7 +31,7 @@
     "id": "IDFM:C01381",
     "short_name": "11",
     "long_name": "11",
-    "color": "#6E491E",
+    "color": "#8D5E2A",
     "text_color": "#FFFFFF",
     "mode": "metro",
     "destinations": {
@@ -45,7 +45,7 @@
     "id": "IDFM:C01382",
     "short_name": "12",
     "long_name": "12",
-    "color": "#00643C",
+    "color": "#00814F",
     "text_color": "#FFFFFF",
     "mode": "metro",
     "destinations": {
@@ -59,8 +59,8 @@
     "id": "IDFM:C01383",
     "short_name": "13",
     "long_name": "13",
-    "color": "#82C8E6",
-    "text_color": "#000000",
+    "color": "#98D4E2",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Châtillon - Montrouge",
@@ -73,7 +73,7 @@
     "id": "IDFM:C01384",
     "short_name": "14",
     "long_name": "14",
-    "color": "#640082",
+    "color": "#662483",
     "text_color": "#FFFFFF",
     "mode": "metro",
     "destinations": {
@@ -87,7 +87,7 @@
     "id": "IDFM:C01372",
     "short_name": "2",
     "long_name": "2",
-    "color": "#0055C8",
+    "color": "#0064B0",
     "text_color": "#FFFFFF",
     "mode": "metro",
     "destinations": {
@@ -101,7 +101,7 @@
     "id": "IDFM:C01373",
     "short_name": "3",
     "long_name": "3",
-    "color": "#6E6E00",
+    "color": "#9C9522",
     "text_color": "#FFFFFF",
     "mode": "metro",
     "destinations": {
@@ -115,8 +115,8 @@
     "id": "IDFM:C01386",
     "short_name": "3bis",
     "long_name": "3B",
-    "color": "#82C8E6",
-    "text_color": "#000000",
+    "color": "#98D4E2",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Porte des Lilas",
@@ -129,7 +129,7 @@
     "id": "IDFM:C01374",
     "short_name": "4",
     "long_name": "4",
-    "color": "#A0006E",
+    "color": "#C04191",
     "text_color": "#FFFFFF",
     "mode": "metro",
     "destinations": {
@@ -143,8 +143,8 @@
     "id": "IDFM:C01375",
     "short_name": "5",
     "long_name": "5",
-    "color": "#FF5A00",
-    "text_color": "#000000",
+    "color": "#F28E42",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Bobigny - Pablo Picasso",
@@ -157,8 +157,8 @@
     "id": "IDFM:C01376",
     "short_name": "6",
     "long_name": "6",
-    "color": "#82DC73",
-    "text_color": "#000000",
+    "color": "#83C491",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Nation",
@@ -171,8 +171,8 @@
     "id": "IDFM:C01377",
     "short_name": "7",
     "long_name": "7",
-    "color": "#FF82B4",
-    "text_color": "#000000",
+    "color": "#F3A4BA",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "La Courneuve - 8 Mai 1945",
@@ -185,8 +185,8 @@
     "id": "IDFM:C01387",
     "short_name": "7bis",
     "long_name": "7B",
-    "color": "#82DC73",
-    "text_color": "#000000",
+    "color": "#83C491",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Pré-Saint-Gervais",
@@ -199,8 +199,8 @@
     "id": "IDFM:C01378",
     "short_name": "8",
     "long_name": "8",
-    "color": "#D282BE",
-    "text_color": "#000000",
+    "color": "#CEADD2",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Balard",
@@ -213,8 +213,8 @@
     "id": "IDFM:C01379",
     "short_name": "9",
     "long_name": "9",
-    "color": "#D2D200",
-    "text_color": "#000000",
+    "color": "#D5C900",
+    "text_color": "#25303B",
     "mode": "metro",
     "destinations": {
       "0": "Pont de Sèvres",
@@ -227,7 +227,7 @@
     "id": "IDFM:C01742",
     "short_name": "A",
     "long_name": "A",
-    "color": "#EB2132",
+    "color": "#E3051C",
     "text_color": "#FFFFFF",
     "mode": "rail",
     "destinations": {
@@ -241,7 +241,7 @@
     "id": "IDFM:C01743",
     "short_name": "B",
     "long_name": "B",
-    "color": "#5091CB",
+    "color": "#5291CE",
     "text_color": "#FFFFFF",
     "mode": "rail",
     "destinations": {
@@ -255,8 +255,8 @@
     "id": "IDFM:C01727",
     "short_name": "C",
     "long_name": "C",
-    "color": "#FFCC30",
-    "text_color": "#000000",
+    "color": "#FFCE00",
+    "text_color": "#25303B",
     "mode": "rail",
     "destinations": {
       "0": "Pontoise · Versailles Château Rive Gauche · Saint-Quentin-en-Yvelines",
@@ -269,7 +269,7 @@
     "id": "IDFM:C01728",
     "short_name": "D",
     "long_name": "D",
-    "color": "#008B5B",
+    "color": "#00814F",
     "text_color": "#FFFFFF",
     "mode": "rail",
     "destinations": {
@@ -283,7 +283,7 @@
     "id": "IDFM:C01729",
     "short_name": "E",
     "long_name": "E",
-    "color": "#B94E9A",
+    "color": "#C04191",
     "text_color": "#FFFFFF",
     "mode": "rail",
     "destinations": {

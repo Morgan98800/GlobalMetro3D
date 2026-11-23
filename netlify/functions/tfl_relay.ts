@@ -2,9 +2,13 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 import type { LineTrafficReport } from '../../core/types';
+import { checkRateLimit, getCorsHeaders, rateLimitedResponse } from './_shared/cors';
 
 export function getTflApiKey(): string {
   if (process.env.TFL_APP_KEY) return process.env.TFL_APP_KEY.trim();
+  if (process.env.NETLIFY === 'true' || process.env.NODE_ENV === 'production') {
+    return '';
+  }
   for (const file of ['.env.local', '.env']) {
     try {
       const p = path.resolve(process.cwd(), file);
@@ -272,7 +276,24 @@ export function parseTflArrivals(data: any): TflArrivalPrediction[] {
 let cachedSnapshot: TflSnapshot | null = null;
 const CACHE_TTL_MS = 30000; // 30 secondes
 
+export function sanitizeErrorMessage(msg: string): string {
+  return msg.replace(/([?&](?:app_key|api_key|apikey)=)[^&\s]+/gi, '$1***');
+}
+
+function sanitizeUrlForLog(rawUrl: string): string {
+  try {
+    const u = new URL(rawUrl);
+    for (const param of ['app_key', 'api_key', 'apikey']) {
+      if (u.searchParams.has(param)) u.searchParams.set(param, '***');
+    }
+    return `${u.origin}${u.pathname}${u.search}`;
+  } catch {
+    return sanitizeErrorMessage(rawUrl);
+  }
+}
+
 function httpsGetJson(url: string, headers: Record<string, string> = {}): Promise<any> {
+  const safeUrl = sanitizeUrlForLog(url);
   return new Promise((resolve, reject) => {
     const req = https.get(url, { headers, timeout: 8000 }, (res) => {
       let body = '';
@@ -284,17 +305,21 @@ function httpsGetJson(url: string, headers: Record<string, string> = {}): Promis
           try {
             resolve(JSON.parse(body));
           } catch (err) {
-            reject(new Error(`JSON parse error on ${url}: ${err}`));
+            reject(new Error(`JSON parse error on ${safeUrl}: ${err}`));
           }
         } else {
-          reject(new Error(`HTTP ${res.statusCode} on ${url}: ${body.slice(0, 200)}`));
+          reject(
+            new Error(
+              `HTTP ${res.statusCode} on ${safeUrl}: ${sanitizeErrorMessage(body.slice(0, 200))}`
+            )
+          );
         }
       });
     });
-    req.on('error', reject);
+    req.on('error', (err) => reject(new Error(sanitizeErrorMessage(err.message || String(err)))));
     req.on('timeout', () => {
       req.destroy();
-      reject(new Error(`Timeout on ${url}`));
+      reject(new Error(`Timeout on ${safeUrl}`));
     });
   });
 }
@@ -321,7 +346,7 @@ export async function fetchTflData(): Promise<TflSnapshot> {
     rawArrivals = arr;
     rawStatus = st;
   } catch (err: any) {
-    errorMsg = err.message || String(err);
+    errorMsg = sanitizeErrorMessage(err.message || String(err));
     console.warn('[tfl_relay] Warning during TfL fetch:', errorMsg);
   }
 
@@ -354,6 +379,14 @@ export async function fetchTflData(): Promise<TflSnapshot> {
 }
 
 export const handler = async (event: any = {}, context: any = {}) => {
+  if (event?.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: getCorsHeaders(event), body: '' };
+  }
+  const rl = checkRateLimit(event);
+  if (!rl.allowed) {
+    return rateLimitedResponse(event, rl.retryAfterSec);
+  }
+
   const snapshot = await fetchTflData();
 
   return {
@@ -361,7 +394,7 @@ export const handler = async (event: any = {}, context: any = {}) => {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'public, max-age=15, stale-while-revalidate=30',
-      'Access-Control-Allow-Origin': '*',
+      ...getCorsHeaders(event),
     },
     body: JSON.stringify(snapshot),
   };

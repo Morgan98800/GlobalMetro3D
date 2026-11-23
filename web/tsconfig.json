@@ -25,6 +25,6 @@
       "@paris-subway/shared": ["../core/index.ts"]
     }
   },
-  "include": ["src", "components", "utils", "../core", "../cities"],
+  "include": ["src", "../core", "../cities"],
   "exclude": ["src/**/*.test.ts", "../core/**/*.test.ts"]
 }

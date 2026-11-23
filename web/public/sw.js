@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'paris-subway-3d-v1';
+const CACHE_VERSION = 'paris-subway-3d-__BUILD_HASH__';
 const APP_SHELL = ['/', '/paris', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -43,11 +43,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Heavy static transit datasets & GLB train models: stale-while-revalidate for tunnel resilience
+  // Heavy static transit datasets & GLB train models: stale-while-revalidate for tunnel resilience.
+  // Hashed Vite /assets/* rely on immutable HTTP caching so old JS/CSS chunks don't accumulate here.
   const isDataOrAsset =
     url.pathname.startsWith('/data/') ||
     url.pathname.startsWith('/models/') ||
-    url.pathname.startsWith('/assets/') ||
+    url.pathname.startsWith('/audio/') ||
     url.pathname.startsWith('/icons/');
 
   if (isDataOrAsset) {

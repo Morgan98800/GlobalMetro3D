@@ -6,23 +6,25 @@
 [functions]
   node_bundler = "esbuild"
 
+# Scheduled CRONs disabled while RT feeds are opt-in (?rt=1) to save serverless quota;
+# HTTP endpoints (/api/*) remain live on demand.
 [functions."prim_relay"]
-  schedule = "*/3 * * * *"
+  # schedule = "*/3 * * * *"
 
 [functions."stm_relay"]
-  schedule = "*/2 * * * *"
+  # schedule = "*/2 * * * *"
 
 [functions."tfl_relay"]
-  schedule = "* * * * *"
+  # schedule = "* * * * *"
 
 [functions."lille_relay"]
-  schedule = "* * * * *"
+  # schedule = "* * * * *"
 
 [functions."washington_relay"]
-  schedule = "* * * * *"
+  # schedule = "* * * * *"
 
 [functions."berlin_relay"]
-  schedule = "* * * * *"
+  # schedule = "* * * * *"
 
 [[redirects]]
   from = "/api/prim"

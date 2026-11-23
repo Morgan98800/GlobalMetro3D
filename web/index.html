@@ -5,31 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Métro de Paris 3D — Visualiseur cartographique</title>
 
-    <meta name="description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
-    <meta name="theme-color" content="#F2F0EB" />
+    <meta name="description" content="Explorez le métro et RER de Paris en 3D : rames animées, stations en faïence, ponts de la Seine, itinéraires et vue cabine." />
+    <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12151b" media="(prefers-color-scheme: dark)" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="canonical" href="https://parisian3dsubway.netlify.app/" />
 
-    <script>
-      (function () {
-        var pref = localStorage.getItem('paris-subway-theme-pref') || 'system';
-        var prefersDark =
-          typeof window.matchMedia === 'function' &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var resolved = pref === 'light' || pref === 'dark' ? pref : prefersDark ? 'dark' : 'light';
-        document.documentElement.dataset.theme = resolved;
-        document.documentElement.classList.toggle('dark', resolved === 'dark');
-      })();
-    </script>
+    <script src="/theme-init.js"></script>
 
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Métro de Paris 3D" />
     <meta property="og:title" content="Métro de Paris 3D — Visualiseur cartographique" />
-    <meta property="og:description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
+    <meta property="og:description" content="Explorez le métro et RER de Paris en 3D : rames animées, stations en faïence, ponts de la Seine, itinéraires et vue cabine." />
     <meta property="og:url" content="https://parisian3dsubway.netlify.app/" />
     <meta property="og:image" content="https://parisian3dsubway.netlify.app/og-image.png" />
     <meta property="og:locale" content="fr_FR" />
@@ -37,36 +28,74 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Métro de Paris 3D — Visualiseur cartographique" />
-    <meta name="twitter:description" content="Visualiseur cartographique 3D et simulation cinématique en temps réel du réseau de métro et RER parisien, propulsé par les données GTFS et PRIM d'Île-de-France Mobilités." />
+    <meta name="twitter:description" content="Explorez le métro et RER de Paris en 3D : rames animées, stations en faïence, ponts de la Seine, itinéraires et vue cabine." />
     <meta name="twitter:image" content="https://parisian3dsubway.netlify.app/og-image.png" />
     
     <!-- Typographie : Asap variable auto-hébergée via Fontsource (fonts.css). -->
     <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
-    <link rel="preconnect" href="https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com" crossorigin>
     <link rel="dns-prefetch" href="https://tiles.openfreemap.org">
-    <link rel="dns-prefetch" href="https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com">
     
     <!-- Ordre de dépendance des feuilles géré dans src/main.ts :
          jetons → typographie → mouvement → couche d'application → chrome. -->
-
-    <script>
-      // Cleanly suppress any injected Netlify HUD, drawer, or feedback widget
-      function suppressNetlifyElements() {
-        const sel = 'script[src*="netlify/scripts/hud"], [data-netlify-site-id], [data-nf-variant], netlify-drawer, #netlify-drawer, .netlify-drawer, div[id*="netlify"], div[class*="netlify"], iframe[src*="netlify"]';
-        document.querySelectorAll(sel).forEach(el => el.remove());
-      }
-      suppressNetlifyElements();
-      const obs = new MutationObserver(suppressNetlifyElements);
-      obs.observe(document.documentElement, { childList: true, subtree: true });
-      window.addEventListener('DOMContentLoaded', suppressNetlifyElements);
-      window.addEventListener('load', suppressNetlifyElements);
-    </script>
   </head>
   <body>
-    <div class="app-loader" id="app-loader" role="status" aria-live="polite">
-      <div class="app-loader__train" aria-hidden="true"><span></span><span></span><span></span></div>
-      <p id="app-loader-text">Chargement du métro parisien</p>
-      <script>(function(){var p=location.pathname.toLowerCase(),t=document.getElementById('app-loader-text');if(t)t.textContent=p.startsWith('/berlin')?'Chargement du métro de Berlin (U-Bahn)':p.startsWith('/washington')?'Chargement du métro de Washington':p.startsWith('/london')||p.startsWith('/londres')?'Chargement du métro de Londres':p.startsWith('/montreal')?'Chargement du métro de Montréal':p.startsWith('/lille')?'Chargement du métro de Lille':'Chargement du métro parisien';})();</script>
+    <div class="app-loader" id="app-loader" role="status" aria-label="Chargement du Métro de Paris 3D">
+      <div class="app-loader__stage" aria-hidden="true">
+        <div class="app-loader__track"></div>
+        <div class="app-loader__metro">
+          <svg viewBox="0 0 220 34" width="220" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Headlight beam -->
+            <polygon points="184,21 220,14 220,30 184,25" fill="url(#pl-beam)" />
+            <!-- Car 3 (rear) -->
+            <rect x="4" y="8" width="52" height="19" rx="4" fill="#e8edf3" />
+            <rect x="4" y="21" width="52" height="3.2" fill="#00b49d" />
+            <rect x="9" y="11" width="11" height="7" rx="1.5" fill="#18202c" />
+            <rect x="24" y="11" width="12" height="7" rx="1.5" fill="#18202c" />
+            <rect x="40" y="11" width="11" height="7" rx="1.5" fill="#18202c" />
+            <rect x="10" y="12" width="9" height="5" rx="1" fill="#ffd98a" opacity="0.28" />
+            <rect x="41" y="12" width="9" height="5" rx="1" fill="#ffd98a" opacity="0.22" />
+            <!-- Gangway 2-3 -->
+            <rect x="56" y="10" width="4" height="16" fill="#232a36" />
+            <!-- Car 2 (middle) -->
+            <rect x="60" y="8" width="54" height="19" rx="3" fill="#eef2f7" />
+            <rect x="60" y="21" width="54" height="3.2" fill="#00b49d" />
+            <rect x="65" y="11" width="12" height="7" rx="1.5" fill="#18202c" />
+            <rect x="81" y="11" width="12" height="7" rx="1.5" fill="#18202c" />
+            <rect x="97" y="11" width="12" height="7" rx="1.5" fill="#18202c" />
+            <rect x="66" y="12" width="10" height="5" rx="1" fill="#ffd98a" opacity="0.32" />
+            <rect x="82" y="12" width="10" height="5" rx="1" fill="#ffd98a" opacity="0.24" />
+            <!-- Gangway 1-2 -->
+            <rect x="114" y="10" width="4" height="16" fill="#232a36" />
+            <!-- Car 1 (front cab MP 14 / MF 01) -->
+            <path d="M118 8 H174 C179 8 183 11 185 16 L187 23 C187.5 25.5 186 27 183.5 27 H118 Z" fill="#f5f8fc" />
+            <path d="M118 21 H186.5 L187 24.2 H118 Z" fill="#00b49d" />
+            <rect x="123" y="11" width="12" height="7" rx="1.5" fill="#18202c" />
+            <rect x="139" y="11" width="12" height="7" rx="1.5" fill="#18202c" />
+            <rect x="155" y="11" width="11" height="7" rx="1.5" fill="#18202c" />
+            <!-- Cab windshield -->
+            <path d="M170 10.5 H176.5 C179.5 10.5 181.5 12.5 182.8 16.5 L183.5 18.5 H170 Z" fill="#141a24" />
+            <rect x="124" y="12" width="10" height="5" rx="1" fill="#ffd98a" opacity="0.34" />
+            <rect x="156" y="12" width="9" height="5" rx="1" fill="#ffd98a" opacity="0.28" />
+            <!-- LED Headlight + rear red tail light -->
+            <rect x="183.5" y="21.5" width="3.5" height="2.6" rx="1" fill="#ffe29a" />
+            <rect x="3.5" y="21.5" width="2.5" height="2.4" rx="1" fill="#ff5c5c" />
+            <!-- Bogies / wheels -->
+            <circle cx="16" cy="28.5" r="2.2" fill="#3a4354" />
+            <circle cx="44" cy="28.5" r="2.2" fill="#3a4354" />
+            <circle cx="72" cy="28.5" r="2.2" fill="#3a4354" />
+            <circle cx="102" cy="28.5" r="2.2" fill="#3a4354" />
+            <circle cx="132" cy="28.5" r="2.2" fill="#3a4354" />
+            <circle cx="168" cy="28.5" r="2.2" fill="#3a4354" />
+            <defs>
+              <linearGradient id="pl-beam" x1="184" y1="22" x2="220" y2="22" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#ffd98a" stop-opacity="0.55" />
+                <stop offset="1" stop-color="#ffd98a" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+      <div class="app-loader__label">Métro de Paris 3D</div>
     </div>
     <!-- Semantic header for robots & assistive technology -->
     <h1 class="sr-only">Métro de Paris 3D — Visualiseur cartographique et simulation en temps réel</h1>

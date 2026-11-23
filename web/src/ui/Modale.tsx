@@ -52,8 +52,8 @@ export function Modale({ ouverte, titre, onClose, children, bandeau, largeur = '
 
   if (!ouverte) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-6">
-      <div aria-hidden className="absolute inset-0 bg-nuit-950/45 backdrop-blur-[2px]" onClick={onClose} />
+    <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-6">
+      <div aria-hidden className="absolute inset-0 bg-nuit-950/55" onClick={onClose} />
       <div
         ref={panel}
         role="dialog"
@@ -61,7 +61,7 @@ export function Modale({ ouverte, titre, onClose, children, bandeau, largeur = '
         aria-labelledby={id}
         tabIndex={-1}
         className={cx(
-          'relative flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-feuille bg-surface outline-none animate-feuille md:rounded-feuille',
+          'relative flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-feuille bg-surface text-encre outline-none animate-feuille md:rounded-feuille',
           '[box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),var(--shadow-flotte)]',
           largeur === 'lg' ? 'md:max-w-[680px]' : 'md:max-w-[560px]',
           className,

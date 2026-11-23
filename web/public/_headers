@@ -2,17 +2,28 @@
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://api.fontshare.com; font-src 'self' https://cdn.fontshare.com https://tiles.openfreemap.org data:; img-src 'self' data: blob: https:; worker-src 'self' blob:; connect-src 'self' https://photon.komoot.io https://api-adresse.data.gouv.fr https://tiles.openfreemap.org https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/models/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/audio/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/data/paris-buildings.pmtiles
+  Cache-Control: public, max-age=31536000, immutable
 
 /data/*
-  # Les artefacts GTFS gardent leur nom entre deux publications. Ils doivent
-  # donc être revalidés pour ne jamais conserver un ancien réseau en cache.
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
 
 /cities/*/data/*
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
 
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
   Service-Worker-Allowed: /
-
-

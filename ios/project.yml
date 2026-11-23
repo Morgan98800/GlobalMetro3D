@@ -1,0 +1,44 @@
+name: ParisSubway3D
+options:
+  bundleIdPrefix: com.parissubway3d
+  deploymentTarget:
+    iOS: "17.0"
+packages:
+  ParisSubwayCore:
+    path: ParisSubwayCore
+targets:
+  ParisSubway3D:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: ../web/public/data/lines.json
+        buildPhase: resources
+      - path: ../web/public/data/stations.json
+        buildPhase: resources
+      - path: ../web/public/data/tracks.json
+        buildPhase: resources
+      - path: ../web/public/data/shapes.bin
+        buildPhase: resources
+      - path: ../web/public/data/schedule.json
+        buildPhase: resources
+      - path: ../web/public/data/rer_lines.json
+        buildPhase: resources
+      - path: ../web/public/data/rer_shapes.bin
+        buildPhase: resources
+      - path: ../web/public/data/rer_schedule.json
+        buildPhase: resources
+      - path: ../web/public/data/rolling-stock.json
+        buildPhase: resources
+      - path: Resources/Models
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        INFOPLIST_FILE: App/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.parissubway3d.app
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: NO
+    dependencies:
+      - package: ParisSubwayCore
+        product: ParisSubwayCore

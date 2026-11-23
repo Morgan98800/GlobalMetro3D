@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { cx } from './cx';
 
 /**
- * Segmented control (radio group). The thumb slides with the doors easing.
- * Segments share the width equally so the thumb can be a pure transform.
+ * Segmented control — rail encastré avec curseur glissant fluide (--pl-ease-portes).
  */
 export interface SegmentOption<T extends string> {
   value: T;
@@ -29,44 +28,49 @@ export function Segmented<T extends string>({
   size = 'md',
   className,
 }: SegmentedProps<T>) {
-  const index = Math.max(0, options.findIndex((o) => o.value === value));
-  const h = size === 'sm' ? 'h-8 text-[13px]' : 'h-10 text-[14px]';
+  const groupId = useId();
+  const activeIndex = Math.max(
+    0,
+    options.findIndex((o) => o.value === value)
+  );
+  const count = Math.max(1, options.length);
+
   return (
     <div
       role="radiogroup"
       aria-label={label}
-      className={cx('relative grid rounded-controle bg-encart p-[3px]', h, className)}
-      style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
-      onKeyDown={(e) => {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-        e.preventDefault();
-        const step = e.key === 'ArrowRight' ? 1 : -1;
-        onChange(options[(index + step + options.length) % options.length].value);
-      }}
+      className={cx(
+        'relative grid items-center rounded-full bg-encart/90 p-[3px] [box-shadow:inset_0_1px_2px_var(--pl-ombre),0_0_0_1px_var(--color-joint)]',
+        size === 'sm' ? 'min-h-[34px] max-md:min-h-[50px]' : 'min-h-[40px] max-md:min-h-[50px]',
+        className
+      )}
+      style={{ gridTemplateColumns: `repeat(${count}, minmax(0, 1fr))` }}
     >
+      {/* Curseur glissant */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-y-[3px] left-[3px] rounded-[7px] bg-surface transition-transform duration-300 ease-portes [box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),0_1px_3px_rgb(var(--fx-ombre-teinte)/0.12)]"
-        style={{ width: `calc((100% - 6px) / ${options.length})`, transform: `translateX(${index * 100}%)` }}
+        className="pointer-events-none absolute inset-y-[3px] left-[3px] rounded-full bg-surface transition-transform duration-300 [transition-timing-function:var(--pl-ease-portes)] [box-shadow:inset_0_1px_0_var(--pl-reflet),0_1px_3px_rgba(0,0,0,0.18),0_0_0_1px_var(--pl-laiton-2)]"
+        style={{
+          width: `calc((100% - 6px) / ${count})`,
+          transform: `translateX(${activeIndex * 100}%)`,
+        }}
       />
       {options.map((o) => {
-        const active = o.value === value;
+        const checked = o.value === value;
         return (
           <button
-            key={o.value}
+            key={`${groupId}-${o.value}`}
             type="button"
             role="radio"
-            aria-checked={active}
-            tabIndex={active ? 0 : -1}
+            aria-checked={checked}
             onClick={() => onChange(o.value)}
             className={cx(
-              'relative z-[1] inline-flex min-w-0 items-center justify-center gap-1.5 rounded-[7px] px-3 font-semibold',
-              'transition-colors duration-150 ease-signal outline-none focus-visible:outline-2 focus-visible:outline-focus',
-              '[&_svg]:size-4',
-              active ? 'text-encre' : 'text-encre-2 hover:text-encre',
+              'relative z-10 flex items-center justify-center gap-1.5 rounded-full px-2.5 font-semibold transition-colors duration-200 outline-none focus-visible:outline-2 focus-visible:outline-focus',
+              size === 'sm' ? 'h-[28px] max-md:min-h-[44px] text-[12.5px]' : 'h-[34px] max-md:min-h-[44px] text-[13.5px]',
+              checked ? 'text-encre' : 'text-encre-2 hover:text-encre'
             )}
           >
-            {o.icon}
+            {o.icon && <span className="shrink-0">{o.icon}</span>}
             <span className="truncate">{o.label}</span>
           </button>
         );

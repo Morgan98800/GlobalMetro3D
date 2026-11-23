@@ -11,6 +11,10 @@ import {
   RECORDS_PLUS, ROUTES_CABINE, STATIONS_PROCHES,
 } from './fixtures';
 import { ATTRIBUTION, ParisBackdrop, type BackdropProps } from './ParisBackdrop';
+import {
+  RefonteMobileAccueil, RefonteMobileCabine, RefonteMobileItineraire, RefonteMobileStation,
+  RefonteMobileSuivi,
+} from './mobile_refonte';
 
 const noop = () => {};
 const VUE_PARIS = { center: [2.3488, 48.8635] as [number, number], zoom: 11.95, offset: [190, 30] as [number, number] };
@@ -442,6 +446,8 @@ function MobileAutour() {
 export interface ScreenDef {
   id: string;
   titre: string;
+  note?: string;
+  groupe?: 'v2.1' | 'refonte-mobile';
   theme: 'jour' | 'nuit';
   width: number;
   height: number;
@@ -464,4 +470,59 @@ export const SCREENS: ScreenDef[] = [
   { id: 'desktop-records', titre: 'Records de fréquentation, de nuit', theme: 'nuit', width: 1440, height: 900, file: '12_bureau_nuit_records.png', Component: DesktopRecords },
   { id: 'mobile-autour', titre: 'Autour de moi', theme: 'jour', width: 390, height: 844, file: '13_mobile_autour.png', Component: MobileAutour },
   { id: 'mobile-menu', titre: 'Menu et réglages, mobile', theme: 'jour', width: 390, height: 844, file: '14_mobile_menu.png', Component: MobileMenu },
+  {
+    id: 'refonte-mobile-accueil',
+    titre: '1 · Accueil — carte vivante & feuille 3 crans',
+    note: 'Pastille unique « Paris · 312 rames · PRIM », 60 % de carte, recherche + pastilles réseau cliquables (tirer la poignée ou toucher une ligne).',
+    groupe: 'refonte-mobile',
+    theme: 'jour',
+    width: 390,
+    height: 844,
+    file: '15_refonte_mobile_accueil.png',
+    Component: RefonteMobileAccueil,
+  },
+  {
+    id: 'refonte-mobile-station',
+    titre: '2 · Station Bastille — cran moyen',
+    note: 'Plaque émail + ⋯ conservés, afficheurs cliquables avec source PRIM, pied compact sur 1 ligne.',
+    groupe: 'refonte-mobile',
+    theme: 'jour',
+    width: 390,
+    height: 844,
+    file: '16_refonte_mobile_station.png',
+    Component: RefonteMobileStation,
+  },
+  {
+    id: 'refonte-mobile-itineraire',
+    titre: '3 · Itinéraire — cran haut',
+    note: 'Bande carte avec tracé, voiture conseillée dans l’étape, alternative repliée en 1 ligne cliquable (sans faux Démarrer GPS).',
+    groupe: 'refonte-mobile',
+    theme: 'jour',
+    width: 390,
+    height: 844,
+    file: '17_refonte_mobile_itineraire.png',
+    Component: RefonteMobileItineraire,
+  },
+  {
+    id: 'refonte-mobile-suivi',
+    titre: '4 · Suivi d’une rame',
+    note: 'Carte flottante compacte avec vitesse en afficheur ambre, confiance PRIM, matériel et accès direct 3D.',
+    groupe: 'refonte-mobile',
+    theme: 'jour',
+    width: 390,
+    height: 844,
+    file: '18_refonte_mobile_suivi.png',
+    Component: RefonteMobileSuivi,
+  },
+  {
+    id: 'refonte-mobile-cabine',
+    titre: '5 · Vue 3D cabine mobile — 2 zones',
+    note: 'Zéro chevauchement sur 390 px : quitter × + Plaque émail + pastille en haut ; HUD verre unifié avec InterrupteurDirect et matériel en bas.',
+    groupe: 'refonte-mobile',
+    theme: 'nuit',
+    width: 390,
+    height: 844,
+    file: '19_refonte_mobile_cabine.png',
+    Component: RefonteMobileCabine,
+  },
 ];

@@ -203,7 +203,10 @@ export class FollowCamera {
     }
 
     this.updateElevation();
-    setBuildingsXrayMode(this.map, !isAerialViaductLocation(train.lineName, train.pos));
+    setBuildingsXrayMode(
+      this.map,
+      !isAerialViaductLocation(train.lineName, train.pos)
+    );
     if (!this.locked) return;
     const now = performance.now();
     const deltaMs = Math.min(100, Math.max(0, now - this.lastFrameAt));
@@ -251,7 +254,8 @@ export class FollowCamera {
     if (progress >= 1) {
       this.elevationSettled = true;
     }
-    this.setFollowElevation(this.elevationLineId, -this.elevationFrom * progress);
+    const offset = this.map.getPitch() >= 12 ? 0 : -this.elevationFrom * progress;
+    this.setFollowElevation(this.elevationLineId, offset);
   }
 
   private onKeyDown = (event: KeyboardEvent): void => {

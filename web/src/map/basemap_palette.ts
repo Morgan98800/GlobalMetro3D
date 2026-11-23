@@ -31,18 +31,18 @@ export interface BasemapPalette {
 
 export const BASEMAP: Record<'jour' | 'nuit', BasemapPalette> = {
   jour: {
-    fond: '#eef1f5', eau: '#c3d6e6', parc: '#dbe6d5', bois: '#d2dfcb',
-    bati: '#e3e7ed', bati3dBas: '#d9dee6', bati3dHaut: '#f3f5f8',
-    route: '#ffffff', routeMajeure: '#ffffff', ferre: '#cfd5de', limite: '#b7beca',
-    texte: '#4f5766', texteEau: '#5b7a96', halo: '#ffffff',
-    lisere: '#ffffff', station: '#ffffff', stationBord: '#111928',
+    fond: '#f2f1ed', eau: '#a6cfee', parc: '#cde3c5', bois: '#bed8b5',
+    bati: '#eae8e2', bati3dBas: '#e6e2da', bati3dHaut: '#d1cbc0',
+    route: '#ffffff', routeMajeure: '#fffaf0', ferre: '#c4c1b8', limite: '#c2bfb6',
+    texte: '#3c3c43', texteEau: '#2f6ea2', halo: '#ffffff',
+    lisere: '#ffffff', station: '#ffffff', stationBord: '#1d1d1f',
   },
   nuit: {
-    fond: '#0b1120', eau: '#0f213a', parc: '#0f1d1b', bois: '#0e1b19',
-    bati: '#121a2b', bati3dBas: '#111827', bati3dHaut: '#1e2840',
-    route: '#172036', routeMajeure: '#1d2843', ferre: '#202a40', limite: '#2a3144',
-    texte: '#9199a6', texteEau: '#5d7ea6', halo: '#0b1120',
-    lisere: '#0b1120', station: '#eef1f7', stationBord: '#0b1120',
+    fond: '#131518', eau: '#12283d', parc: '#1a2d21', bois: '#142219',
+    bati: '#181b1f', bati3dBas: '#23262d', bati3dHaut: '#3a404c',
+    route: '#23272f', routeMajeure: '#383f4c', ferre: '#2a2d34', limite: '#2c3038',
+    texte: '#d1d3da', texteEau: '#639ec9', halo: '#131518',
+    lisere: '#131518', station: '#f5f5f7', stationBord: '#131518',
   },
 };
 
@@ -84,8 +84,8 @@ export function applyFaienceBasemap(map: MapLike, theme: 'jour' | 'nuit') {
           c.bati3dHaut,
         ]);
       } else {
-        safe(map, l.id, 'fill-extrusion-color', ['interpolate', ['linear'], ['get', 'render_height'], 0, c.bati3dBas, 60, c.bati3dHaut]);
-        safe(map, l.id, 'fill-extrusion-opacity', theme === 'jour' ? 0.92 : 0.96);
+        safe(map, l.id, 'fill-extrusion-color', ['interpolate', ['linear'], ['get', 'render_height'], 6, c.bati3dBas, 45, c.bati3dHaut]);
+        safe(map, l.id, 'fill-extrusion-opacity', ['interpolate', ['linear'], ['zoom'], 13.4, 0, 14.0, 1.0]);
       }
     } else if (sl === 'transportation' && l.type === 'line') {
       const rail = /rail|transit/.test(l.id);

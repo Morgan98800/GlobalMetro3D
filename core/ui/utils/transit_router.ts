@@ -82,6 +82,26 @@ const BASE_TRANSFER_SEC = 210; // ~3m30 walk + wait between platforms
 const MAX_TRANSFER_DISTANCE_M = 160;
 const STATION_CLUSTER_DIST_M = 95;
 
+/**
+ * Major Paris multi-station interchange complexes whose platforms sit > 160m apart
+ * with realistic corridor walking times (seconds).
+ */
+export const PARIS_INTERCHANGE_CLUSTERS: readonly {
+  names: readonly string[];
+  walkSec: number;
+}[] = [
+  { names: ['chatelet', 'chatelet les halles', 'les halles'], walkSec: 270 },
+  {
+    names: ['saint lazare', 'havre caumartin', 'auber', 'opera', 'haussmann saint lazare'],
+    walkSec: 300,
+  },
+  { names: ['gare du nord', 'magenta', 'la chapelle'], walkSec: 255 },
+  { names: ['gare de l est', 'chateau landon'], walkSec: 225 },
+  { names: ['montparnasse bienvenue', 'montparnasse'], walkSec: 285 },
+  { names: ['gare de lyon', 'reilly diderot'], walkSec: 290 },
+  { names: ['saint michel', 'saint michel notre dame', 'cluny la sorbonne'], walkSec: 215 },
+];
+
 function normalizeName(value: string): string {
   return value
     .normalize('NFD')
@@ -359,6 +379,59 @@ function buildGraph(
             toStop: a.stop,
           });
         }
+      }
+    }
+  }
+
+  // Explicit Paris mega-hub complex transfers (e.g. Saint-Lazare <-> Auber <-> Opéra, Châtelet <-> Les Halles)
+  const clusterByNorm = new Map<string, number>();
+  for (let cIdx = 0; cIdx < PARIS_INTERCHANGE_CLUSTERS.length; cIdx += 1) {
+    for (const rawName of PARIS_INTERCHANGE_CLUSTERS[cIdx].names) {
+      clusterByNorm.set(rawName, cIdx);
+    }
+  }
+  const hubGroupsByCluster = new Map<number, (typeof allHubEntries)[number]>();
+  for (const group of allHubEntries) {
+    if (!group.length) continue;
+    const cIdx = clusterByNorm.get(group[0].hubKey);
+    if (cIdx === undefined) continue;
+    const list = hubGroupsByCluster.get(cIdx) ?? [];
+    list.push(...group);
+    hubGroupsByCluster.set(cIdx, list);
+  }
+  for (const [cIdx, entries] of hubGroupsByCluster.entries()) {
+    const baseWalkSec = PARIS_INTERCHANGE_CLUSTERS[cIdx].walkSec;
+    for (let i = 0; i < entries.length; i += 1) {
+      for (let j = i + 1; j < entries.length; j += 1) {
+        const a = entries[i];
+        const b = entries[j];
+        if (a.lineId === b.lineId || a.hubKey === b.hubKey) continue;
+        const dist = haversineDistanceM(a.stop.coordinates, b.stop.coordinates);
+        if (dist > 650) continue;
+        const fromStateA = `${a.lineId}::${a.hubKey}`;
+        const toStateB = `${b.lineId}::${b.hubKey}`;
+        const existingA = edges.get(fromStateA)?.some((e) => e.toState === toStateB);
+        if (existingA) continue;
+        const costSec = baseWalkSec;
+        const weightSec = costSec + transferPenaltyExtraSec;
+        addEdge(fromStateA, {
+          toState: toStateB,
+          costSec,
+          weightSec,
+          distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
+          kind: 'transfer',
+          fromStop: a.stop,
+          toStop: b.stop,
+        });
+        addEdge(toStateB, {
+          toState: fromStateA,
+          costSec,
+          weightSec,
+          distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
+          kind: 'transfer',
+          fromStop: b.stop,
+          toStop: a.stop,
+        });
       }
     }
   }

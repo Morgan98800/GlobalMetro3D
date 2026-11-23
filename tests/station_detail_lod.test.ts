@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { LineMetadata, StationMetadata } from '@core/types';
-import { createPlatformsLayer } from '@core/ui/map/platforms_layer';
+import { createPlatformsLayer, createPlatformsLayers } from '@core/ui/map/platforms_layer';
 import {
   createLocalStationDetailLayers,
   isAerialViaductLocation,
@@ -174,8 +174,63 @@ describe('station_detail_lod & platforms_layer', () => {
       'dark'
     );
     expect(layer).not.toBeNull();
-    // 6 stone tile bays + 1 trackside safety coping strip = 7 polygons per station
-    expect((layer as any).props.data).toHaveLength(7);
+    // 6 stone tile bays + 1 trackside safety coping strip on both platform sides = 14 polygons
+    expect((layer as any).props.data).toHaveLength(14);
+  });
+
+  it('splits underground layers below landuse-urban while keeping surface entrances and aerial viaducts above ground', () => {
+    const tracksByLine = new Map<string, [number, number][][]>([
+      [
+        'L1',
+        [
+          [
+            [2.3455, 48.8584],
+            [2.3485, 48.8584],
+          ],
+        ],
+      ],
+      [
+        'L6',
+        [
+          [
+            [2.288, 48.8539],
+            [2.291, 48.8539],
+          ],
+        ],
+      ],
+    ]);
+
+    const platformLayers = createPlatformsLayers(
+      STATIONS,
+      null,
+      [],
+      16.2,
+      'dark',
+      { lines: [METRO_LINE_1, METRO_LINE_6], tracksByLine },
+      undefined,
+      null,
+      'landuse-urban'
+    );
+    const ugPlat = platformLayers.find((l) => l.id === 'subway-platforms-ug') as any;
+    const surfPlat = platformLayers.find((l) => l.id === 'subway-platforms') as any;
+    expect(ugPlat?.props?.beforeId).toBe('landuse-urban');
+    expect(surfPlat?.props?.beforeId).toBeUndefined();
+
+    const lodLayers = createLocalStationDetailLayers({
+      lines: [METRO_LINE_1],
+      stations: [STATIONS[0]],
+      tracksByLine,
+      selectedLineId: 'L1',
+      zoom: 16.5,
+      mapCenter: STATIONS[0].coordinates,
+      theme: 'dark',
+      undergroundBeforeId: 'landuse-urban',
+    });
+    const railsLayer = lodLayers.find((l) => l.id.startsWith('station-lod-rails')) as any;
+    const escalatorsSurface = lodLayers.find((l) => l.id === 'station-lod-escalators-surface') as any;
+    expect(railsLayer?.props?.beforeId).toBe('landuse-urban');
+    expect(railsLayer?.props?.data?.length).toBeGreaterThanOrEqual(2);
+    expect(escalatorsSurface?.props?.beforeId).toBeUndefined();
   });
 
   it('separates co-located multi-level hubs vertically and adds transfer shafts without z-overlap', () => {
@@ -235,5 +290,53 @@ describe('station_detail_lod & platforms_layer', () => {
       (d: any) => d.fillColor[0] === 201 && d.fillColor[1] === 162 && d.fillColor[2] === 39
     );
     expect(shafts.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('projects station cutouts and wall structures strictly near Paris coordinates without invalid latitude', () => {
+    const tracksByLine = new Map<string, [number, number][][]>([
+      [
+        'L1',
+        [
+          [
+            [2.3455, 48.8584],
+            [2.3485, 48.8584],
+          ],
+        ],
+      ],
+    ]);
+    const mapCenter = STATIONS[0].coordinates;
+    const layers = createLocalStationDetailLayers({
+      lines: [METRO_LINE_1],
+      stations: [STATIONS[0]],
+      tracksByLine,
+      selectedLineId: 'L1',
+      zoom: 16.5,
+      mapCenter,
+      theme: 'light',
+      undergroundBeforeId: 'landuse-urban',
+    });
+
+    const cutoutsLayers = layers.filter((l) => l.id.startsWith('station-lod-cutouts')) as any[];
+    const archLayers = layers.filter((l) => l.id.startsWith('station-lod-architecture')) as any[];
+    const namesLayers = layers.filter((l) => l.id.startsWith('station-lod-names')) as any[];
+
+    const cutoutData = cutoutsLayers.flatMap((l) => l.props?.data ?? []);
+    const archData = archLayers.flatMap((l) => l.props?.data ?? []);
+    const namesData = namesLayers.flatMap((l) => l.props?.data ?? []);
+
+    expect(cutoutData.length).toBeGreaterThan(0);
+    expect(archData.length).toBeGreaterThan(0);
+    expect(namesData.length).toBeGreaterThan(0);
+
+    for (const d of [...cutoutData, ...archData]) {
+      for (const coord of d.polygon as [number, number, number][]) {
+        expect(Math.abs(coord[1] - mapCenter[1])).toBeLessThan(0.05);
+        expect(Math.abs(coord[0] - mapCenter[0])).toBeLessThan(0.05);
+      }
+    }
+    for (const n of namesData) {
+      expect(Math.abs(n.position[1] - mapCenter[1])).toBeLessThan(0.05);
+      expect(Math.abs(n.position[0] - mapCenter[0])).toBeLessThan(0.05);
+    }
   });
 });

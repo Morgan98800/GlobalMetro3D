@@ -39,13 +39,14 @@ export interface MobileHomeSheetProps {
 export function MobileHomeSheet(p: MobileHomeSheetProps) {
   const metro = p.lignes.filter((l) => lineMode(l.shortName) === 'metro');
   const rer = p.lignes.filter((l) => lineMode(l.shortName) === 'rer');
+  const hasPerturbations = p.lignes.some((l) => Boolean(l.alert));
 
   return (
     <BottomSheet
       cran={p.cran}
       onCran={p.onCran}
       repliable
-      hauteurs={{ repli: 70, bas: 152, moyen: 336 }}
+      hauteurs={{ repli: 68, bas: 156, moyen: 330 }}
       ariaLabel="Recherche et lignes du réseau"
       barreRepli={
         <div className="flex items-center gap-2">
@@ -69,11 +70,14 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
             icon={<RiHome5Line aria-hidden />}
             label="Domicile"
             actif={p.hasHome}
+            lampe={p.hasHome}
             onClick={p.onDomicile}
           />
           <RaccourciBouton
             icon={<IconLignes />}
             label="Lignes"
+            actif={hasPerturbations}
+            lampe={hasPerturbations}
             onClick={p.onLignes}
           />
           <RaccourciBouton
@@ -83,29 +87,29 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
           />
           <RaccourciBouton
             icon={<IconBibliotheque />}
-            label="Bibliothèque"
+            label="Rames 3D"
             onClick={p.onBibliotheque}
           />
         </div>
       </div>
 
       {p.cran !== 'bas' && (
-        <div className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain border-t border-joint pb-[max(6px,env(safe-area-inset-bottom))]">
+        <div className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain border-t border-joint pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="px-4 pt-2.5">
             <div className="space-y-3.5">
               {metro.length > 0 && (
                 <div>
-                  <h3 className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-encre-3">
+                  <h3 className="mb-1.5 text-xs font-medium tracking-[0.04em] text-encre-2">
                     Métro
                   </h3>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="grid grid-cols-7 gap-1.5">
                     {metro.map((l) => (
                       <LineBadgeChip
                         key={l.shortName}
                         {...l}
                         size="md"
                         onClick={() => p.onSelectLine(l.shortName)}
-                        className="min-h-[44px] min-w-[44px]"
+                        className="!h-[36px] !w-[36px] !text-[15px]"
                       />
                     ))}
                   </div>
@@ -114,17 +118,17 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
 
               {rer.length > 0 && (
                 <div>
-                  <h3 className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-encre-3">
+                  <h3 className="mb-1.5 text-xs font-medium tracking-[0.04em] text-encre-2">
                     RER
                   </h3>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {rer.map((l) => (
                       <LineBadgeChip
                         key={l.shortName}
                         {...l}
                         size="md"
                         onClick={() => p.onSelectLine(l.shortName)}
-                        className="min-h-[44px] min-w-[44px]"
+                        className="!h-[36px] !w-[36px] !text-[15px]"
                       />
                     ))}
                   </div>
@@ -142,22 +146,23 @@ function RaccourciBouton({
   icon,
   label,
   actif,
+  lampe = false,
   onClick,
 }: {
   icon: ReactNode;
   label: string;
   actif?: boolean;
+  lampe?: boolean;
   onClick: () => void;
 }) {
   return (
     <Poussoir
       tuile
-      variante={actif === false ? 'discret' : 'faience'}
-      lampe
+      variante="faience"
+      lampe={lampe}
       actif={Boolean(actif)}
       icone={icon}
       onClick={onClick}
-      className={actif === false ? 'opacity-80' : undefined}
     >
       <span className="max-w-full truncate">{label}</span>
     </Poussoir>

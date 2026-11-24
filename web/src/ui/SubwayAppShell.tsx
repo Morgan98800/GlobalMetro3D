@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import uFuzzy from '@leeoniya/ufuzzy';
 import { RiMenuLine, RiWifiOffLine } from '@remixicon/react';
 import { cityClock } from '@core/sim/paris_time';
 import { searchPlaces, type PlaceCandidate } from '@core/ui/utils/geocoding';
@@ -33,6 +34,14 @@ import { TopNavBar, type Rubrique } from './TopNavBar';
 import { cx } from './cx';
 import { uiStore, useUiStore, type EdinburghPreset, type ThemePreference } from './ui_store';
 import { useIsDesktop } from './useMediaQuery';
+
+const STATION_FUZZY = new uFuzzy({
+  intraMode: 1,
+  intraIns: 1,
+  intraSub: 1,
+  intraTrn: 1,
+  intraDel: 1,
+});
 
 const EDINBURGH_PRESETS: { id: EdinburghPreset; label: string }[] = [
   { id: 'waverley', label: 'Vallée de Waverley' },
@@ -400,8 +409,14 @@ export function SubwayAppShell() {
 
   const itinerairesProps = useMemo(() => mapItineraires(routeCandidates), [routeCandidates]);
 
+  const stationHaystack = useMemo(
+    () => stations.map((s) => normalizeText(s.name).replace(/[^a-z0-9]+/g, ' ').trim()),
+    [stations]
+  );
+
   const searchResults = useMemo(() => {
     const q = normalizeText(searchQuery);
+    const fq = q.replace(/[^a-z0-9]+/g, ' ').trim();
     const POPULAR_DESTINATIONS = [
       'chatelet',
       'gare du nord',
@@ -423,9 +438,21 @@ export function SubwayAppShell() {
       const idx = POPULAR_DESTINATIONS.findIndex((p) => norm === p || norm.startsWith(p));
       return idx >= 0 ? idx : 1000 - lineCount * 10;
     };
-    const baseStations = q
-      ? stations.filter((s) => normalizeText(s.name).includes(q))
-      : [...stations].sort((a, b) => rankStation(a.name, a.lines.length) - rankStation(b.name, b.lines.length));
+    let baseStations: typeof stations;
+    if (fq) {
+      const [idxs, info, order] = STATION_FUZZY.search(stationHaystack, fq);
+      if (order && info) {
+        baseStations = order.map((i) => stations[info.idx[i]]);
+      } else if (idxs && idxs.length > 0) {
+        baseStations = idxs.map((i) => stations[i]);
+      } else {
+        baseStations = stations.filter((s) => normalizeText(s.name).includes(q));
+      }
+    } else {
+      baseStations = [...stations].sort(
+        (a, b) => rankStation(a.name, a.lines.length) - rankStation(b.name, b.lines.length)
+      );
+    }
     const matchedStations = baseStations
       .slice(0, 10)
       .map((s) => ({
@@ -464,7 +491,7 @@ export function SubwayAppShell() {
     }));
 
     return { matchedStations, matchedLines, matchedPlaces };
-  }, [searchQuery, stations, lines, linesById, searchPlacesRes]);
+  }, [searchQuery, stations, stationHaystack, lines, linesById, searchPlacesRes]);
 
   if (!cityConfig) return null;
 
@@ -616,7 +643,7 @@ export function SubwayAppShell() {
             {rtSource && (
               <span
                 aria-hidden
-                className={cx('size-1.5 shrink-0 rounded-full', realtimeEnabled ? 'bg-normal' : 'bg-encre-3')}
+                className={cx('pl-lampe !h-[7.5px] !w-[7.5px] shrink-0', realtimeEnabled && 'is-on')}
               />
             )}
             <RiMenuLine aria-hidden className="size-4 shrink-0 text-icone-2" />

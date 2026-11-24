@@ -241,7 +241,7 @@ async function bootstrap() {
     new ResizeObserver(publishAttributionHeight).observe(attribEl);
   }
 
-  const mapPadding = (): { top: number; right: number; bottom: number; left: number } => {
+  const mapPadding = (overrideMobileBottom?: number): { top: number; right: number; bottom: number; left: number } => {
     const header = document.getElementById('topbar')?.getBoundingClientRect();
     const dockEl = document.getElementById('dock');
     const dockRect = dockEl && dockEl.offsetWidth > 0 ? dockEl.getBoundingClientRect() : null;
@@ -250,14 +250,17 @@ async function bootstrap() {
       ? (document.querySelector('[data-mobile-sheet]') as HTMLElement | null)
       : null;
     const sheetAttrH = Number(sheetEl?.dataset.sheetHeight || 0);
-    const sheetRectH = sheetEl ? sheetEl.getBoundingClientRect().height : 0;
-    const mobileBottomH = Math.max(sheetAttrH, sheetRectH, dockRect?.height || 0);
+    const sheetVisibleH = sheetEl
+      ? Math.max(0, Math.round(window.innerHeight - sheetEl.getBoundingClientRect().top))
+      : 0;
+    const mobileBottomH =
+      overrideMobileBottom ?? (sheetAttrH > 0 ? sheetAttrH : Math.max(sheetVisibleH, dockRect?.height || 0));
     const top = isMobile ? 64 : (header?.height || 56) + 28;
-    const right = isMobile ? 24 : 40;
+    const right = isMobile ? 20 : 40;
     const bottom = isMobile
-      ? Math.min(Math.round(window.innerHeight * 0.65), Math.round(mobileBottomH) + 24)
+      ? Math.min(Math.round(window.innerHeight * 0.62), Math.round(mobileBottomH) + 16)
       : 40;
-    const left = isMobile ? 24 : (dockRect?.width || 0) + 40;
+    const left = isMobile ? 20 : (dockRect?.width || 0) + 40;
     return { top, right, bottom, left };
   };
 
@@ -270,6 +273,19 @@ async function bootstrap() {
   let nominalMetroBearing: number = cityConfig.map.bearing ?? 0;
   let isRecenterVisible = false;
 
+  // Smoothly reframe the mobile map when the BottomSheet snaps to a new detent
+  window.addEventListener('pl-sheet-detent', (ev) => {
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
+    if (trackedTrain) return;
+    const detail = (ev as CustomEvent<{ height?: number; detent?: string }>).detail;
+    const h = typeof detail?.height === 'number' ? detail.height : undefined;
+    if (h === undefined) return;
+    map.easeTo({
+      padding: mapPadding(h),
+      duration: 280,
+    });
+  });
+
   const fitMetroNetwork = (duration = 750) => {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (isMobile) {
@@ -278,6 +294,7 @@ async function bootstrap() {
         zoom: Math.max(11.8, (cityConfig.map.zoom ?? 12.2) - 0.3),
         pitch: cityConfig.map.pitch ?? 30,
         bearing: cityConfig.map.bearing ?? 0,
+        padding: mapPadding(),
         duration,
       });
       return;

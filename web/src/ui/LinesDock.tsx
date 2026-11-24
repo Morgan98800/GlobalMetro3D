@@ -72,6 +72,11 @@ export function LinesDock(p: LinesDockProps) {
             p.onReplier?.();
           }
         }}
+        hauteurs={
+          choisie
+            ? { repli: 72, bas: 220, moyen: 460 }
+            : { repli: 68, bas: 200, moyen: 328 }
+        }
         repliable={!p.onClose}
         onDismiss={p.onClose}
         onSwipeBack={choisie ? () => p.onSelect(null) : p.onClose}
@@ -114,10 +119,10 @@ export function LinesDock(p: LinesDockProps) {
 function NiveauLignes({ lignes, selection, onSelect, onClose, replie }: LinesDockProps) {
   const alertes = lignes.filter((l) => l.alert);
   return (
-    <div className="min-h-0 overflow-y-auto p-4">
+    <div className="min-h-0 overflow-y-auto p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <header className="flex items-center justify-between">
         <h2 id="lignes-titre" className="text-titre-sm text-encre">Lignes</h2>
-        {onClose && <IconButton size="sm" label="Fermer les lignes" icon={<RiCloseLine aria-hidden />} onClick={onClose} />}
+        {onClose && <IconButton size="sm" label="Fermer les lignes" icon={<RiCloseLine aria-hidden />} onClick={onClose} className="pl-hit-44" />}
       </header>
       {!replie && (
         <>
@@ -126,10 +131,17 @@ function NiveauLignes({ lignes, selection, onSelect, onClose, replie }: LinesDoc
             if (!items.length) return null;
             return (
               <div key={g.mode} className="mt-3">
-                <h3 className="mb-2 text-[12px] font-semibold text-encre-3">{g.titre}</h3>
-                <div className="flex flex-wrap gap-[7px]">
+                <h3 className="mb-2 text-xs font-medium tracking-[0.04em] text-encre-2">{g.titre}</h3>
+                <div className={g.mode === 'metro' ? 'grid grid-cols-7 gap-1.5 md:flex md:flex-wrap md:gap-[7px]' : 'flex flex-wrap gap-2 md:gap-[7px]'}>
                   {items.map((l) => (
-                    <LineBadgeChip key={l.shortName} {...l} size="md" selected={selection === l.shortName} onClick={() => onSelect(l.shortName)} />
+                    <LineBadgeChip
+                      key={l.shortName}
+                      {...l}
+                      size="md"
+                      selected={selection === l.shortName}
+                      onClick={() => onSelect(l.shortName)}
+                      className="max-md:!h-[36px] max-md:!w-[36px] max-md:!text-[15px]"
+                    />
                   ))}
                 </div>
               </div>

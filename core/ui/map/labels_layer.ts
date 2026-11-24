@@ -114,6 +114,11 @@ export function createStationLabelsLayer(
     return true;
   });
 
+  const isDark =
+    typeof document !== 'undefined'
+      ? document.documentElement.classList.contains('dark')
+      : true;
+
   return new TextLayer<StationMetadata>({
     id: 'subway-station-labels',
     data: visible,
@@ -125,13 +130,13 @@ export function createStationLabelsLayer(
     sizeUnits: 'pixels',
     sizeMinPixels: 11,
     sizeMaxPixels: 13,
-    getColor: [241, 239, 234, 255], // --opale
-    fontFamily: "'Switzer', 'Inter', -apple-system, sans-serif",
-    fontWeight: 500,
+    getColor: isDark ? [242, 244, 247, 255] : [20, 25, 35, 255],
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Asap Variable', sans-serif",
+    fontWeight: 600,
     characterSet: LATIN_CHARACTER_SET,
     fontSettings: { sdf: true },
-    outlineWidth: 1.4,
-    outlineColor: [21, 14, 18, 255], // --laque
+    outlineWidth: isDark ? 1.5 : 1.6,
+    outlineColor: isDark ? [18, 22, 31, 255] : [242, 244, 247, 255],
     maxWidth: -1,
     wordBreak: 'break-word',
     getTextAnchor: 'start',
@@ -141,6 +146,7 @@ export function createStationLabelsLayer(
     updateTriggers: {
       getPosition: [selectedLineId, lineElevation, zoom, mapCenter],
       getText: [selectedLineId],
+      getColor: [isDark],
     },
   });
 }

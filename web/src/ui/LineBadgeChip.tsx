@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { cx } from './cx';
-import { badgeParts, lineMode, lineName, resolveLine, type LineMode } from './lines';
+import { badgeParts, lineMode, lineName, rerInkFor, resolveLine, type LineMode } from './lines';
 
 /**
  * Line badge ("indice de ligne") — Plan Lumineux `.pl-indice`.
@@ -61,10 +61,12 @@ export function LineBadgeChip({
   const style = {
     '--pl-ligne': bg,
     '--pl-ligne-texte': fg,
+    ...(m === 'rer' || m === 'train' ? { '--pl-ligne-rer-texte': rerInkFor(shortName, bg) } : {}),
   } as CSSProperties;
 
   const classes = cx(
     'pl-indice select-none',
+    (interactive || onClick) && 'pl-hit-44',
     shapeOverride,
     sizeOverride,
     dimmed && 'opacity-40 saturate-[0.35]',

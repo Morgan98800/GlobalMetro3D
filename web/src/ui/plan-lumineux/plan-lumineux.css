@@ -223,11 +223,29 @@
 .pl-poussoir[data-forme="rond"][data-size="lg"] .pl-calotte { min-width: 44px; width: 100%; }
 @media (pointer: coarse) { .pl-poussoir[data-forme="rond"] .pl-calotte { min-width: 40px; } }
 .pl-poussoir[data-largeur="pleine"] { display: flex; width: 100%; }
-/* tuile : carreau de métro 2:1 aux angles presque vifs (raccourcis mobiles) */
-.pl-poussoir[data-forme="tuile"] { border-radius: 12px; }
-.pl-poussoir[data-forme="tuile"] .pl-calotte { flex-direction: column; gap: 4px; height: 56px; padding: 6px 4px; font-size: 11.5px; }
-.pl-poussoir[data-forme="tuile"] .pl-calotte::after { border-radius: 8px; }
-.pl-poussoir[data-forme="tuile"] .pl-lampe { position: absolute; top: 6px; right: 6px; width: 7.5px; height: 7.5px; }
+/* tuile : carreau de métro calibré iPhone (anneau 1px fin, 52px de haut) */
+.pl-poussoir[data-forme="tuile"] { padding: 1px; border-radius: 13px; }
+.pl-poussoir[data-forme="tuile"] .pl-calotte { flex-direction: column; gap: 3px; height: 52px; padding: 5px 4px; font-size: 11.5px; }
+.pl-poussoir[data-forme="tuile"] .pl-calotte::after { border-radius: 10px; }
+.pl-poussoir[data-forme="tuile"] .pl-lampe { position: absolute; top: 5px; right: 5px; width: 6.5px; height: 6.5px; }
+
+/* Hitbox tactile invisible 44×44 px (WCAG 2.2 AA sans grossir le visuel fin) */
+@media (pointer: coarse) {
+  .pl-hit-44 {
+    position: relative;
+  }
+  .pl-hit-44::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    min-width: 44px;
+    min-height: 44px;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+  }
+}
 .pl-chevron { transition: transform var(--pl-duree-anneau) var(--pl-ease-portes); }
 [aria-expanded="true"] .pl-chevron { transform: rotate(180deg); }
 
@@ -264,7 +282,7 @@
 .pl-indice[data-mode="train"] {
   border-radius: 26%;
   background: #ffffff;
-  color: var(--pl-ligne);
+  color: var(--pl-ligne-rer-texte, var(--pl-ligne));
   border: 2.5px solid var(--pl-ligne);
   font-weight: 800;
 }

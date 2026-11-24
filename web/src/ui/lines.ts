@@ -114,6 +114,18 @@ export function inkFor(bg: string, preferred?: string | null): string {
 }
 
 /**
+ * Accessible ink for white-backed RER / Transilien badges (WCAG 1.4.3 ≥ 4.5:1 on #ffffff).
+ * Keeps official hue while darkening high-luminance lines such as RER C (#ffce00 → #8a6d00).
+ */
+export function rerInkFor(shortName: string, color: string): string {
+  const k = lineKey(shortName);
+  if (k === 'c') return '#8a6d00';
+  if (contrast('#ffffff', color) >= 4.5) return color;
+  if (k === 'b') return '#2b6cb0';
+  return '#141923';
+}
+
+/**
  * Which theme needs an edge around the badge so it does not dissolve into
  * the surface: pale colours on white, deep colours on night.
  */

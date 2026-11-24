@@ -1,66 +1,66 @@
-# DESIGN.md — Charte « Plan Lumineux » (Paris Subway 3D)
+# DESIGN.md : Charte « Plan Lumineux » (Paris Subway 3D)
 
-Document de référence non négociable pour toute modification UI/UX sur **Paris Subway 3D**.  
-Objectif : préserver l’identité physique **Plan Lumineux** (PILI 1937 + faïence RATP + afficheurs SIEL) avec une finition **Apple Plans / Flighty**, tout en garantissant **60 FPS WebGL sur Safari iOS** et **0 violation WCAG 2.2 AA**.
-
----
-
-## 1. Identité visuelle verrouillée
-
-Sources de vérité : [`web/src/design/tokens.ts`](web/src/design/tokens.ts) et [`web/src/ui/plan-lumineux/plan-lumineux.css`](web/src/ui/plan-lumineux/plan-lumineux.css).
-
-- **Surfaces & thèmes** :
-  - **Jour** : faïence claire (`--pl-surface: #f4f5f7`, `--pl-carte: rgba(255, 255, 255, .88)`, `--pl-calotte: #ffffff`, encre `#141923`).
-  - **Nuit** : faïence sombre (`--pl-surface: #12151b`, `--pl-carte: rgba(22, 26, 34, .86)`, `--pl-calotte: #1e232d`, encre `#f2f4f7`).
-  - **Îlot HUD cabine (`.pl-hud`)** : toujours sombre et opaque, sans `backdrop-filter`.
-- **Couleurs d’accent & signalisation** :
-  - **Vert Jade RATP** (`--pl-cobalt: #007a68`, `--pl-laiton-1: #00a98f` jour ; `#1fc7ac` nuit) : anneaux actifs et actions principales.
-  - **Diodes ASVA / ampoules PILI** (`--pl-asva: #ff6200`, `--pl-ambre: #ffb22e`) et **LED SIEL** (`--pl-led: #ff9d14`) : réservées exclusivement aux témoins actifs, horloges et temps d’attente temps réel.
-  - **Pastilles de lignes** : couleurs officielles RATP via `LineBadgeChip` (`lines.ts`), jamais de teintes inventées.
-- **Typographie** :
-  - UI : `--pl-font-ui` (`SF Pro Text` / `Asap Variable`).
-  - Signalétique : `--pl-font-signal` (`Asap Condensed`).
-  - Chiffres, horaires, vitesses, distances : **`font-variant-numeric: tabular-nums`** obligatoire.
+Document de référence pour toute modification UI/UX, cartographique ou 3D sur **Paris Subway 3D** (Desktop + iPhone Safari).
+Objectif : célébrer et raffiner l'identité physique **Plan Lumineux** (PILI 1937, faïence RATP, **diodes ASVA 605 nm**, **plaques émaillées Bleu Nuit**, **afficheurs SIEL**, **poussoirs en relief**) avec la fluidité, la netteté et les proportions natives d'**Apple Plans / Flighty** sur iPhone — à **60 FPS WebGL** et **0 violation WCAG 2.2 AA**.
 
 ---
 
-## 2. Surfaces, profondeur & contrainte WebGL 60 FPS (Safari iOS)
+## 1. Identité visuelle « Plan Lumineux » (à préserver et sublimer)
 
-- **Îlots flottants fixes** (`.pl-barre`, `.pl-carte`, `.pl-menu`, `MapControls`) :
-  - Bordure **hairline** `1px` (`--pl-hairline`).
-  - **Ombres multi-couches** : ombre de contact serrée + ombre ambiante douce + reflet supérieur `inset 0 1px 0 var(--pl-reflet)`.
-  - **`backdrop-filter: blur(14px) saturate(1.12)` strictement statique**.
-- **Interdictions absolues** :
-  - **Jamais** de `backdrop-filter` animé (ni pendant une transition d’ouverture/fermeture, ni sur le `BottomSheet` glissant).
-  - **Jamais** de transition sur `width`, `height`, `top`, `left`, `margin` ou `transition: all` — utiliser uniquement `transform` et `opacity`.
+Sources de vérité : `web/src/design/tokens.ts` et `web/src/ui/plan-lumineux/plan-lumineux.css`.
+Utiliser exclusivement les tokens CSS `--pl-*` ou `@theme inline` (aucune couleur hexadécimale arbitraire en dur).
 
----
+### Surfaces et matières
+- **Jour (Faïence claire)** : `--pl-surface: #f4f5f7`, `--pl-carte: rgba(255, 255, 255, .88)`, `--pl-calotte: #ffffff`, encre `#141923`.
+- **Nuit (Faïence sombre)** : `--pl-surface: #12151b`, `--pl-carte: rgba(22, 26, 34, .86)`, `--pl-calotte: #1e232d`, encre `#f2f4f7`.
+- **Îlot HUD cabine (`.pl-hud`)** : toujours sombre et opaque, sans `backdrop-filter`.
 
-## 3. Mouvement & physique tactile
+### Signatures tactiles protégées
+- **Diodes ASVA / PILI (`.pl-lampe`, 605 nm)** : signature centrale de l'application (`--pl-asva: #ff6200`, `--pl-ambre: #ffb22e`, lentille verre + filament + respiration subtile). Elles doivent rester **visibles et vivantes** sur desktop ET sur iPhone (navigation active, thermomètre PILI, cartes rames, états temps réel).
+- **Poussoirs en relief (`.pl-poussoir` + `.pl-calotte`)** : anneau métallique fonte/laiton + calotte faïence avec reflet supérieur subtil (`--pl-reflet`) et enfoncement tactile (`:active`). Sur iPhone, calibrer l'épaisseur d'anneau (`1px–1.5px`) et le padding pour rester fin et précis, jamais lourd ou massif.
+- **Plaque émaillée Bleu Nuit RATP (`.pl-plaque`)** & **Afficheur SIEL LED (`.pl-siel`)** : utilisés pour les en-têtes de station/ligne et les temps d'attente / horloge.
+- **Pastilles de lignes** : couleurs officielles RATP via `LineBadgeChip` (`lines.ts`).
+- **Vert Jade RATP (`--pl-cobalt`, `--pl-laiton-*`)** : accent signature pour les actions primaires, l'anneau actif et le focus clavier (`:focus-visible`).
 
-- **Courbes officielles « Plan Lumineux »** :
-  - Contact poussoir : `--pl-ease-contact` (`cubic-bezier(.2, 0, 0, 1)`, `90–120 ms`).
-  - Portes / tiroirs : `--pl-ease-portes` (`cubic-bezier(.22, 1, .36, 1)`, `300–380 ms`).
-  - Rames : `--pl-ease-rame` (`cubic-bezier(.65, 0, .35, 1)`, `560–640 ms`).
-- **Tiroir mobile (`BottomSheet.tsx`)** :
-  - Piloté par `@use-gesture/react` (`useDrag`) + `motion/react` (`useMotionValue` + ressort GPU).
-  - Relais propre scroll interne (`scrollTop <= 0`) ↔ glissement vers le bas.
-  - Respect systématique de `env(safe-area-inset-top)` / `env(safe-area-inset-bottom)` et de `prefers-reduced-motion: reduce`.
-
----
-
-## 4. Discipline anti-slop (structure & états)
-
-- **Pas de cartes partout** : structurer l’information par l’espacement, la typographie et les filets `<Joint />` plutôt que d’empiler des cartes dans des cartes.
-- **États complets obligatoires** sur tout composant interactif : repos, `hover` (`@media (hover: hover) and (pointer: fine)`), `focus-visible` (anneau `--pl-focus`), `active`, `disabled` et `loading` le cas échéant.
-- **Pas d’effets gratuits** : aucun dégradé décoratif sur les titres, aucun mot isolé stylisé artificiellement, aucune duplication de KPI entre barre, tiroir et carte.
-- **Passes ciblées** : travailler écran par écran et thème par thème (Clair puis Sombre).
+### Typographie
+- UI : `--pl-font-ui` (`SF Pro Text` / `Asap Variable`).
+- Signalétique : `--pl-font-signal` (`Asap Condensed`).
+- Chiffres, horaires, vitesses, capacités, distances : **`font-variant-numeric: tabular-nums`** obligatoire.
 
 ---
 
-## 5. Porte de qualité bloquante (avant validation)
+## 2. Proportions et ergonomie iPhone (Priorité mobile 390×844)
 
-1. **TypeScript & Build** : `npm run typecheck && npm --workspace=web run build` sans erreur.
-2. **Accessibilité WCAG 2.2 AA** : **0 violation** sous `@axe-core/playwright` sur PC (`1280×800`) et iPhone (`390×844`), thèmes clair et sombre (notamment `aria-prohibited-attr`, `label-content-name-mismatch` WCAG 2.5.3, `target-size`).
-3. **Cibles tactiles iPhone (`390×844`)** : **0 cible interactive `< 44×44 px`** (utiliser des hitbox CSS `::after` si l’élément visuel doit rester compact, ex. rames/correspondances du thermomètre).
-4. **Stabilité** : `overflowX = false` et `0` erreur console.
+L'iPhone est l'écran principal. Chaque proportion doit éviter le syndrome « trop gros / trop petit » :
+
+### Échelle de proportions iPhone
+- **Barre haute flottante** : 1 seule rangée compacte (`44px` de haut), dégagée de la Dynamic Island (`pt-[max(10px,env(safe-area-inset-top))]`). Pilule réseau + horloge SIEL compacte à gauche ; contrôles carte (3D / centrage / menu) regroupés en pilule verticale ou coin droit sans chevaucher la carte.
+- **Zone du pouce (BottomSheet)** :
+  - **Repos (`bas`)** : ~`156–170px` (~19 % de l'écran). Contient la barre de recherche (`44px`) + 4 tuiles « Plan Lumineux » calibrées (`54px` de haut, icône `18px`, libellé `11.5px`, diode ASVA en coin). Laisse **> 72 % de la carte 3D libre**.
+  - **Contexte (`moyen`)** :
+    - Vue `Lignes` : ajustée au contenu (`~340–380px`, ~42 % de l'écran) pour voir les tracés s'illuminer sur la carte au-dessus. Pastilles RATP en grille serrée à `44×44 px` (7 par ligne sur 390 px, gap `6px`).
+    - Vue `Ligne active` / `Bibliothèque` / `Itinéraire` : `~52 %` puis `~88 %` (`haut`) sous la safe-area haute.
+- **Safe-areas & Viewport** :
+  - Toujours `100dvh` (`h-dvh`), jamais `100vh`.
+  - Toujours `pb-[max(1rem,env(safe-area-inset-bottom))]` sur le contenu bas.
+- **Cibles tactiles** : minimum **`44×44 px`** sur tous les éléments interactifs mobiles (boutons, pastilles, poignée du sheet, boutons de fermeture).
+- **Physique tactile** :
+  - Glissement piloté par `@use-gesture/react` + `motion/react` (ressort GPU `transform: translateY()` uniquement).
+  - Scroll-handoff fluide (glisser vers le bas quand le scroll interne est à `0` descend le tiroir).
+
+---
+
+## 3. Performance WebGL 60 FPS & Safari iOS
+
+- **GPU-only animations** : animer exclusivement `transform` et `opacity`. Jamais `transition: all`, `width`, `height`, `top`, `left` ou `margin`.
+- **`backdrop-filter` statique uniquement** : `blur(14px) saturate(1.12)` (avec `-webkit-backdrop-filter`) uniquement sur les îlots fixes (`.pl-barre`, `.pl-carte`, `.pl-menu`), **jamais** sur le `BottomSheet` en mouvement ni animé.
+- **3D Showroom & Rames** : `setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))`, textures standard glTF 2.0 PNG, éclairage studio lisible.
+
+---
+
+## 4. Accessibilité (WCAG 2.2 AA)
+
+- **0 violation `@axe-core/playwright`** sur Desktop (`1280×800`) et iPhone (`390×844`), Jour et Nuit.
+- Contraste ≥ 4.5:1 (texte normal), ≥ 3:1 (grands titres & composants UI).
+- `aria-label` cohérents avec le texte visible (WCAG 2.5.3).
+- Support complet `prefers-reduced-motion: reduce`.

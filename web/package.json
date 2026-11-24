@@ -19,6 +19,7 @@
     "@deck.gl/maplibre": "^9.4.1",
     "@deck.gl/mesh-layers": "^9.4.1",
     "@fontsource-variable/asap": "^5.3.0",
+    "@leeoniya/ufuzzy": "^1.0.19",
     "@loaders.gl/gltf": "^4.5.1",
     "@luma.gl/gltf": "^9.4.0",
     "@number-flow/react": "^0.6.2",

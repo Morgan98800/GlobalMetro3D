@@ -140,6 +140,13 @@ export function BottomSheet({
 
   useEffect(() => {
     if (isDragging) return;
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('pl-sheet-detent', {
+          detail: { height: targetH, detent: cran },
+        }),
+      );
+    }
     const reduced =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -151,7 +158,7 @@ export function BottomSheet({
         : { type: 'spring', stiffness: 400, damping: 36, mass: 0.85 },
     );
     return () => ctrl.stop();
-  }, [isDragging, targetTranslateY, y]);
+  }, [cran, isDragging, targetH, targetTranslateY, y]);
 
   const cycleDetent = useCallback(() => {
     const cycle: DetentSheet =
@@ -312,7 +319,7 @@ export function BottomSheet({
       </div>
 
       {isCollapsed && barreRepli ? (
-        <div className="min-h-0 flex-1 overflow-hidden px-3.5 pb-[max(6px,env(safe-area-inset-bottom))]">
+        <div className="min-h-0 flex-1 overflow-hidden px-3.5 pb-[max(1rem,env(safe-area-inset-bottom))]">
           {barreRepli}
         </div>
       ) : (

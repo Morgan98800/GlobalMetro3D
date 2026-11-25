@@ -3,7 +3,6 @@
   "framework": null,
   "buildCommand": "npm run build:web",
   "outputDirectory": "web/dist",
-  "cleanUrls": true,
   "regions": ["cdg1"],
   "functions": {
     "api/*.ts": {
@@ -19,10 +18,8 @@
     { "source": "/api/lille-rt", "destination": "/api/lille_relay" },
     { "source": "/api/washington-rt", "destination": "/api/washington_relay" },
     { "source": "/api/berlin-rt", "destination": "/api/berlin_relay" },
-    {
-      "source": "/((?!api/|assets/|models/|audio/|data/|cities/|icons/|basis/|methode|sw\\.js|manifest\\.webmanifest|theme-init\\.js|favicon\\.ico|og-image\\.png).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/methode", "destination": "/methode.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {

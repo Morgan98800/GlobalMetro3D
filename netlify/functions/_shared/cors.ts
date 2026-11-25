@@ -1,7 +1,12 @@
-const PRIMARY_ORIGIN = 'https://parisian3dsubway.netlify.app';
+const PRIMARY_ORIGIN = 'https://parismetro3d.com';
+const LEGACY_NETLIFY_ORIGIN = 'https://parisian3dsubway.netlify.app';
 
 function getAllowedOrigins(): Set<string> {
-  const allowed = new Set<string>([PRIMARY_ORIGIN]);
+  const allowed = new Set<string>([
+    PRIMARY_ORIGIN,
+    'https://www.parismetro3d.com',
+    LEGACY_NETLIFY_ORIGIN,
+  ]);
 
   if (process.env.ALLOWED_ORIGIN) {
     for (const entry of process.env.ALLOWED_ORIGIN.split(',')) {
@@ -11,10 +16,17 @@ function getAllowedOrigins(): Set<string> {
   }
   if (process.env.URL) allowed.add(process.env.URL.trim());
   if (process.env.DEPLOY_PRIME_URL) allowed.add(process.env.DEPLOY_PRIME_URL.trim());
+  if (process.env.VERCEL_URL) allowed.add(`https://${process.env.VERCEL_URL.trim()}`);
+  if (process.env.VERCEL_BRANCH_URL) allowed.add(`https://${process.env.VERCEL_BRANCH_URL.trim()}`);
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    allowed.add(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim()}`);
+  }
 
   if (process.env.NODE_ENV !== 'production' || process.env.NETLIFY_DEV === 'true') {
     allowed.add('http://localhost:3000');
     allowed.add('http://127.0.0.1:3000');
+    allowed.add('http://localhost:5173');
+    allowed.add('http://127.0.0.1:5173');
     allowed.add('http://localhost:8888');
   }
 

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build:web",
+  "outputDirectory": "web/dist",
+  "cleanUrls": true,
+  "regions": ["cdg1"],
+  "functions": {
+    "api/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/api/prim", "destination": "/api/prim_relay" },
+    { "source": "/api/prim_delays", "destination": "/api/prim_relay" },
+    { "source": "/api/stm", "destination": "/api/stm_relay" },
+    { "source": "/api/tfl", "destination": "/api/tfl_relay" },
+    { "source": "/api/tfl_arrivals", "destination": "/api/tfl_relay" },
+    { "source": "/api/lille-rt", "destination": "/api/lille_relay" },
+    { "source": "/api/washington-rt", "destination": "/api/washington_relay" },
+    { "source": "/api/berlin-rt", "destination": "/api/berlin_relay" },
+    {
+      "source": "/((?!api/|assets/|models/|audio/|data/|cities/|icons/|basis/|methode|sw\\.js|manifest\\.webmanifest|theme-init\\.js|favicon\\.ico|og-image\\.png).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(self)" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://api.fontshare.com; font-src 'self' https://cdn.fontshare.com https://tiles.openfreemap.org data:; img-src 'self' data: blob: https:; worker-src 'self' blob:; connect-src 'self' blob: data: https://photon.komoot.io https://api-adresse.data.gouv.fr https://tiles.openfreemap.org https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/models/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/audio/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/data/paris-buildings.pmtiles",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/data/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/cities/(.*)/data/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Service-Worker-Allowed", "value": "/" }
+      ]
+    }
+  ]
+}

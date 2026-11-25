@@ -413,7 +413,7 @@ export const handler = async (event: any, context: any) => {
 
   const now = Date.now();
   const apiKey = getStmApiKey();
-  const origin = (process.env.STM_ORIGIN || 'https://parisian3dsubway.netlify.app').trim();
+  const origin = (process.env.STM_ORIGIN || 'https://parismetro3d.com').trim();
 
   // 1. Operating hours check (Dynamic GTFS Montreal)
   const isOperating = isMontrealMetroServiceHours(new Date());

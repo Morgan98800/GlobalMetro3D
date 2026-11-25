@@ -50,7 +50,7 @@ function useViewportHeight(): number {
 
 export function resolveDetentHeights(
   vh: number,
-  overrides?: Partial<Record<DetentSheet, number>>,
+  overrides?: Partial<Record<DetentSheet, number>>
 ): Record<DetentSheet, number> {
   return {
     repli: overrides?.repli ?? 78,
@@ -97,7 +97,10 @@ export function pickNextDetent(params: {
   return best;
 }
 
-function findScrollableParent(target: EventTarget | null, boundary: HTMLElement | null): HTMLElement | null {
+function findScrollableParent(
+  target: EventTarget | null,
+  boundary: HTMLElement | null
+): HTMLElement | null {
   let el = target instanceof HTMLElement ? target : null;
   while (el && el !== boundary) {
     const style = window.getComputedStyle(el);
@@ -126,7 +129,7 @@ export function BottomSheet({
   const heights = useMemo(() => resolveDetentHeights(vh, hauteurs), [vh, hauteurs]);
   const crans = useMemo<DetentSheet[]>(
     () => (repliable ? ['repli', 'bas', 'moyen', 'haut'] : ['bas', 'moyen', 'haut']),
-    [repliable],
+    [repliable]
   );
 
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -144,7 +147,7 @@ export function BottomSheet({
       window.dispatchEvent(
         new CustomEvent('pl-sheet-detent', {
           detail: { height: targetH, detent: cran },
-        }),
+        })
       );
     }
     const reduced =
@@ -153,9 +156,7 @@ export function BottomSheet({
     const ctrl = animate(
       y,
       targetTranslateY,
-      reduced
-        ? { duration: 0 }
-        : { type: 'spring', stiffness: 400, damping: 36, mass: 0.85 },
+      reduced ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 36, mass: 0.85 }
     );
     return () => ctrl.stop();
   }, [cran, isDragging, targetH, targetTranslateY, y]);
@@ -190,7 +191,7 @@ export function BottomSheet({
         onCran(result);
       }
     },
-    [cran, crans, heights, onCran, onDismiss],
+    [cran, crans, heights, onCran, onDismiss]
   );
 
   const bindHandle = useDrag(
@@ -200,7 +201,7 @@ export function BottomSheet({
         cycleDetent();
         return memo;
       }
-      const startH = first ? targetH : (memo as number) ?? targetH;
+      const startH = first ? targetH : ((memo as number) ?? targetH);
       if (first) setIsDragging(true);
 
       const minFloor = onDismiss && !repliable ? 72 : heights[crans[0]];
@@ -222,7 +223,7 @@ export function BottomSheet({
       axis: 'y',
       filterTaps: true,
       pointer: { touch: true },
-    },
+    }
   );
 
   const contentDragActiveRef = useRef(false);
@@ -259,7 +260,7 @@ export function BottomSheet({
       filterTaps: true,
       threshold: 8,
       pointer: { touch: true },
-    },
+    }
   );
 
   const isCollapsed = cran === 'repli' && !isDragging;
@@ -284,7 +285,7 @@ export function BottomSheet({
         onSwipeBack();
       }
     },
-    [onSwipeBack],
+    [onSwipeBack]
   );
 
   return (
@@ -303,7 +304,7 @@ export function BottomSheet({
       className={cx(
         'bg-surface text-encre pointer-events-auto fixed inset-x-0 bottom-0 z-30 flex flex-col overflow-hidden rounded-t-[20px] will-change-transform contain-[layout_style]',
         '[box-shadow:var(--fx-glacure),var(--shadow-feuille)]',
-        className,
+        className
       )}
     >
       {/* Poignée iOS sobre & compacte (cible tactile ≥ 44px, glisser ou toucher) */}

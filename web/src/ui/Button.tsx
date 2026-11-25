@@ -1,6 +1,11 @@
 import type { ButtonHTMLAttributes, MouseEvent, ReactNode, Ref } from 'react';
 import { cx } from './cx';
-import { BoutonEmbarquement, Poussoir, type Taille, type Variante } from './plan-lumineux/PlanLumineux';
+import {
+  BoutonEmbarquement,
+  Poussoir,
+  type Taille,
+  type Variante,
+} from './plan-lumineux/PlanLumineux';
 import { useUiStore } from './ui_store';
 
 /**
@@ -97,13 +102,16 @@ export function Button({
       className={cx('max-md:min-h-[44px] max-md:min-w-[44px]', className)}
       {...rest}
     >
-      {children != null && <span className="min-w-0 truncate py-[1px] leading-[1.35]">{children}</span>}
+      {children != null && (
+        <span className="min-w-0 truncate py-[1px] leading-[1.35]">{children}</span>
+      )}
       {iconEnd}
     </Poussoir>
   );
 }
 
-export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'iconEnd' | 'children' | 'fullWidth'> {
+export interface IconButtonProps
+  extends Omit<ButtonProps, 'icon' | 'iconEnd' | 'children' | 'fullWidth'> {
   /** Required: accessible name, also used as tooltip */
   label: string;
   icon: ReactNode;
@@ -146,8 +154,22 @@ export function IconButton({
 function Spinner() {
   return (
     <svg viewBox="0 0 24 24" className="animate-spin" aria-hidden>
-      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeOpacity="0.25" strokeWidth="3" />
-      <path d="M21 12a9 9 0 0 0-9-9" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      <circle
+        cx="12"
+        cy="12"
+        r="9"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.25"
+        strokeWidth="3"
+      />
+      <path
+        d="M21 12a9 9 0 0 0-9-9"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

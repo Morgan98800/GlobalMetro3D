@@ -127,7 +127,9 @@ export function LibraryDrawer({
 
   const content = (
     <>
-      <div className={cx('shrink-0 border-b border-joint', pad, basse ? 'pb-2.5 pt-0.5' : 'pb-3 pt-4')}>
+      <div
+        className={cx('shrink-0 border-b border-joint', pad, basse ? 'pb-2.5 pt-0.5' : 'pb-3 pt-4')}
+      >
         <div className="flex items-center justify-between gap-2">
           <h2 id="library-titre" className="text-titre text-encre">
             Bibliothèque
@@ -156,7 +158,13 @@ export function LibraryDrawer({
         />
       </div>
 
-      <div className={cx('pl-scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-contain', basse ? 'py-2.5' : 'py-3.5', pad)}>
+      <div
+        className={cx(
+          'pl-scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-contain',
+          basse ? 'py-2.5' : 'py-3.5',
+          pad
+        )}
+      >
         <AnimatePresence mode="wait">
           {tab === 'rames' ? (
             <motion.ul
@@ -187,10 +195,7 @@ export function LibraryDrawer({
                       className="pl-carte-trajet !flex min-h-[56px] items-center justify-between gap-2.5 !p-3"
                     >
                       <div className="flex min-w-0 items-center gap-2.5">
-                        <span
-                          aria-hidden
-                          className={cx('pl-lampe shrink-0', isOpen && 'is-on')}
-                        />
+                        <span aria-hidden className={cx('pl-lampe shrink-0', isOpen && 'is-on')} />
                         <div className="flex shrink-0 items-center gap-1">
                           {item.lines.slice(0, 2).map((ln) => (
                             <LineBadgeChip key={ln} shortName={ln} size="sm" />
@@ -201,7 +206,8 @@ export function LibraryDrawer({
                             {item.name}
                           </p>
                           <p className="truncate text-[12px] text-encre-2">
-                            {item.year} · {item.driveType === 'pneu' ? 'Pneu' : 'Fer'} · {item.maxSpeedKmh} km/h
+                            {item.year} · {item.driveType === 'pneu' ? 'Pneu' : 'Fer'} ·{' '}
+                            {item.maxSpeedKmh} km/h
                           </p>
                         </div>
                       </div>
@@ -285,7 +291,10 @@ export function LibraryDrawer({
                                       <span
                                         key={idx}
                                         aria-hidden
-                                        className={cx('pl-lampe relative z-10', idx === 0 && 'is-on')}
+                                        className={cx(
+                                          'pl-lampe relative z-10',
+                                          idx === 0 && 'is-on'
+                                        )}
                                       />
                                     ))}
                                   </div>
@@ -297,19 +306,25 @@ export function LibraryDrawer({
 
                               <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-bord bg-joint">
                                 <div className="bg-surface px-3 py-2">
-                                  <dt className="text-[11px] font-medium text-encre-3">Constructeur</dt>
+                                  <dt className="text-[11px] font-medium text-encre-3">
+                                    Constructeur
+                                  </dt>
                                   <dd className="chiffres text-[13.5px] font-semibold text-encre">
                                     {item.manufacturer}
                                   </dd>
                                 </div>
                                 <div className="bg-surface px-3 py-2">
-                                  <dt className="text-[11px] font-medium text-encre-3">Exploitation</dt>
+                                  <dt className="text-[11px] font-medium text-encre-3">
+                                    Exploitation
+                                  </dt>
                                   <dd className="text-[13.5px] font-semibold text-encre">
                                     {item.driverless ? 'Automatique' : 'Conducteur'}
                                   </dd>
                                 </div>
                                 <div className="bg-surface px-3 py-2">
-                                  <dt className="text-[11px] font-medium text-encre-3">Composition</dt>
+                                  <dt className="text-[11px] font-medium text-encre-3">
+                                    Composition
+                                  </dt>
                                   <dd className="chiffres text-[13.5px] font-semibold text-encre">
                                     {item.carsCount} voitures · {formatNombre(item.capacity)} pl.
                                   </dd>
@@ -324,7 +339,9 @@ export function LibraryDrawer({
                                 </div>
                               </dl>
 
-                              <p className="text-[13px] leading-[19px] text-encre-2">{item.summary}</p>
+                              <p className="text-[13px] leading-[19px] text-encre-2">
+                                {item.summary}
+                              </p>
 
                               <div
                                 className="rounded-[12px] border border-bord/80 bg-encart/75 p-3"
@@ -333,7 +350,9 @@ export function LibraryDrawer({
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.04em] text-encre-2">
                                   Le saviez-vous ?
                                 </p>
-                                <p className="mt-1 text-[12.5px] leading-[18px] text-encre">{item.anecdote}</p>
+                                <p className="mt-1 text-[12.5px] leading-[18px] text-encre">
+                                  {item.anecdote}
+                                </p>
                               </div>
 
                               {onDriveTrain && (
@@ -400,7 +419,11 @@ export function LibraryDrawer({
                         type="button"
                         role="tab"
                         aria-selected={isCurrent}
-                        aria-label={canJump ? `${chap.year} — ${chap.title}` : `Étape ${idx + 1} (à découvrir)`}
+                        aria-label={
+                          canJump
+                            ? `${chap.year} — ${chap.title}`
+                            : `Étape ${idx + 1} (à découvrir)`
+                        }
                         disabled={!canJump}
                         onClick={() => canJump && goToChapter(idx)}
                         className={cx(
@@ -515,7 +538,9 @@ export function LibraryDrawer({
                   size="sm"
                   iconEnd={<RiArrowRightSLine aria-hidden />}
                   disabled={chapterIdx >= METRO_HISTORY_CHAPTERS.length - 1}
-                  onClick={() => goToChapter(Math.min(METRO_HISTORY_CHAPTERS.length - 1, chapterIdx + 1))}
+                  onClick={() =>
+                    goToChapter(Math.min(METRO_HISTORY_CHAPTERS.length - 1, chapterIdx + 1))
+                  }
                 >
                   Suivant
                 </Button>
@@ -548,10 +573,7 @@ export function LibraryDrawer({
       as="section"
       role="dialog"
       aria-labelledby="library-titre"
-      className={cx(
-        'flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille',
-        className
-      )}
+      className={cx('flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille', className)}
     >
       {content}
     </Panneau>

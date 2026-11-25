@@ -40,7 +40,10 @@ const TRANSILIEN = new Set(['h', 'j', 'k', 'l', 'n', 'p', 'r', 'u', 'v']);
 
 /** "3B", "3bis", "3 bis", "RER A", "M14" → canonical key: "3b", "a", "14". */
 export function lineKey(shortName: string): string {
-  const s = shortName.trim().toLowerCase().replace(/^(rer|ligne|m|metro|métro)\s*/i, '');
+  const s = shortName
+    .trim()
+    .toLowerCase()
+    .replace(/^(rer|ligne|m|metro|métro)\s*/i, '');
   const bis = s.match(/^(\d+)\s*(b|bis)$/);
   if (bis) return `${bis[1]}b`;
   return s.replace(/\s+/g, '');
@@ -77,7 +80,11 @@ export function lineName(shortName: string): string {
 export function normalizeColor(input?: string | null): string | null {
   if (!input) return null;
   let h = input.trim().replace(/^#/, '');
-  if (/^[0-9a-f]{3}$/i.test(h)) h = h.split('').map((c) => c + c).join('');
+  if (/^[0-9a-f]{3}$/i.test(h))
+    h = h
+      .split('')
+      .map((c) => c + c)
+      .join('');
   return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toLowerCase()}` : null;
 }
 
@@ -95,7 +102,9 @@ function channel(v: number): number {
 
 export function luminance(hex: string): number {
   const n = Number.parseInt(hex.slice(1), 16);
-  return 0.2126 * channel((n >> 16) & 255) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255);
+  return (
+    0.2126 * channel((n >> 16) & 255) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255)
+  );
 }
 
 export function contrast(a: string, b: string): number {

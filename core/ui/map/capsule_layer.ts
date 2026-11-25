@@ -287,7 +287,10 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
       train.line || train.lineName
     );
     // Both direction === 0 and direction === 1 advance monotonically from 0 -> shape.length.
-    const headD = Math.max(0, Math.min(shape.length, (train.currentDistM ?? 0) + stock.total_length_m / 2));
+    const headD = Math.max(
+      0,
+      Math.min(shape.length, (train.currentDistM ?? 0) + stock.total_length_m / 2)
+    );
     const tailD = Math.max(0, headD - stock.total_length_m);
     const elev = train.elevation || 0;
     const lodLevel = zoom < minCapsuleZoom ? 'dot' : zoom >= detailedZoom ? 'full' : 'capsule';
@@ -515,142 +518,154 @@ export function createCapsuleLayers(params: CapsuleLayerParams): any[] {
   // ---------------------------------------------------------------------------
   // Layer 1: Outline Halo (High contrast base on the tracks)
   // ---------------------------------------------------------------------------
-  pushWithSubsurfaceSplit(outlineSegments, (suffix, data, beforeId) =>
-    new PathLayer<any>({
-      id: `subway-trains-capsule-outline${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      ...commonPathProps,
-      pickable: true,
-      getWidth: (d: RenderOutlineSegment) => d.widthM,
-      getPath: ((d: RenderOutlineSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-      getColor: (d: RenderOutlineSegment) => d.color,
-      extensions: [new PathStyleExtension({ dash: true })],
-      getDashArray: (d: RenderOutlineSegment) => (d.isSched ? [3, 2] : [0, 0]),
-      dashUnits: 'widths',
-      onHover,
-      onClick: (info: any) => {
-        if (info.object && info.object.train) {
-          onClick(info.object.train);
-        }
-      },
-      updateTriggers: {
-        getPath: [trains],
-        getColor: [trains],
-        getDashArray: [trains],
-      },
-    } as any)
+  pushWithSubsurfaceSplit(
+    outlineSegments,
+    (suffix, data, beforeId) =>
+      new PathLayer<any>({
+        id: `subway-trains-capsule-outline${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        ...commonPathProps,
+        pickable: true,
+        getWidth: (d: RenderOutlineSegment) => d.widthM,
+        getPath: ((d: RenderOutlineSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderOutlineSegment) => d.color,
+        extensions: [new PathStyleExtension({ dash: true })],
+        getDashArray: (d: RenderOutlineSegment) => (d.isSched ? [3, 2] : [0, 0]),
+        dashUnits: 'widths',
+        onHover,
+        onClick: (info: any) => {
+          if (info.object && info.object.train) {
+            onClick(info.object.train);
+          }
+        },
+        updateTriggers: {
+          getPath: [trains],
+          getColor: [trains],
+          getDashArray: [trains],
+        },
+      } as any)
   );
 
   // ---------------------------------------------------------------------------
   // Layer 2: Car bodies as canonical shape slices.
   // ---------------------------------------------------------------------------
-  pushWithSubsurfaceSplit(carBodies, (suffix, data, beforeId) =>
-    new PathLayer<RenderCarSegment>({
-      id: `subway-trains-car-bodies${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      ...commonPathProps,
-      getWidth: (d: RenderCarSegment) => d.widthM,
-      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-      getColor: (d: RenderCarSegment) => d.color,
-      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
-      onHover,
-      onClick: (info: any) => {
-        if (info.object && info.object.train) {
-          onClick(info.object.train);
-        }
-      },
-      updateTriggers: {
-        getPath: [trains],
-        getFillColor: [trains],
-        getWidth: [trains],
-      },
-    } as any)
+  pushWithSubsurfaceSplit(
+    carBodies,
+    (suffix, data, beforeId) =>
+      new PathLayer<RenderCarSegment>({
+        id: `subway-trains-car-bodies${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        ...commonPathProps,
+        getWidth: (d: RenderCarSegment) => d.widthM,
+        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderCarSegment) => d.color,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+        onHover,
+        onClick: (info: any) => {
+          if (info.object && info.object.train) {
+            onClick(info.object.train);
+          }
+        },
+        updateTriggers: {
+          getPath: [trains],
+          getFillColor: [trains],
+          getWidth: [trains],
+        },
+      } as any)
   );
 
   // ---------------------------------------------------------------------------
   // Layer 3: line identity on the same canonical path slices.
   // ---------------------------------------------------------------------------
-  pushWithSubsurfaceSplit(carRoofs, (suffix, data, beforeId) =>
-    new PathLayer<RenderCarSegment>({
-      id: `subway-trains-car-roofs${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      ...commonPathProps,
-      pickable: false,
-      getWidth: (d: RenderCarSegment) => d.widthM,
-      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-      getColor: (d: RenderCarSegment) => d.color,
-      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
-      updateTriggers: {
-        getPath: [trains],
-        getFillColor: [trains],
-        getWidth: [trains],
-      },
-    } as any)
+  pushWithSubsurfaceSplit(
+    carRoofs,
+    (suffix, data, beforeId) =>
+      new PathLayer<RenderCarSegment>({
+        id: `subway-trains-car-roofs${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        ...commonPathProps,
+        pickable: false,
+        getWidth: (d: RenderCarSegment) => d.widthM,
+        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderCarSegment) => d.color,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+        updateTriggers: {
+          getPath: [trains],
+          getFillColor: [trains],
+          getWidth: [trains],
+        },
+      } as any)
   );
 
   // ---------------------------------------------------------------------------
   // Layer 4: Intercirculations / Soufflets en caoutchouc
   // ---------------------------------------------------------------------------
-  pushWithSubsurfaceSplit(gangwaySegments, (suffix, data, beforeId) =>
-    new PathLayer<any>({
-      id: `subway-trains-capsule-gangways${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      ...commonPathProps,
-      pickable: false,
-      getWidth: (d: RenderCarSegment) => d.widthM,
-      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-      getColor: (d: RenderCarSegment) => d.color,
-      updateTriggers: {
-        getPath: [trains],
-        getColor: [trains],
-      },
-    } as any)
+  pushWithSubsurfaceSplit(
+    gangwaySegments,
+    (suffix, data, beforeId) =>
+      new PathLayer<any>({
+        id: `subway-trains-capsule-gangways${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        ...commonPathProps,
+        pickable: false,
+        getWidth: (d: RenderCarSegment) => d.widthM,
+        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderCarSegment) => d.color,
+        updateTriggers: {
+          getPath: [trains],
+          getColor: [trains],
+        },
+      } as any)
   );
 
   // ---------------------------------------------------------------------------
   // Layer 5: Nez blanc éclatant
   // ---------------------------------------------------------------------------
-  pushWithSubsurfaceSplit(noseSegments, (suffix, data, beforeId) =>
-    new PathLayer<any>({
-      id: `subway-trains-capsule-nose${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      ...commonPathProps,
-      pickable: false,
-      getWidth: (d: RenderCarSegment) => d.widthM,
-      getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
-      getColor: (d: RenderCarSegment) => d.color,
-      updateTriggers: {
-        getPath: [trains],
-      },
-    } as any)
+  pushWithSubsurfaceSplit(
+    noseSegments,
+    (suffix, data, beforeId) =>
+      new PathLayer<any>({
+        id: `subway-trains-capsule-nose${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        ...commonPathProps,
+        pickable: false,
+        getWidth: (d: RenderCarSegment) => d.widthM,
+        getPath: ((d: RenderCarSegment) => d.path.map((p) => [p[0], p[1], d.elevation])) as any,
+        getColor: (d: RenderCarSegment) => d.color,
+        updateTriggers: {
+          getPath: [trains],
+        },
+      } as any)
   );
 
   // ---------------------------------------------------------------------------
   // Layer 6: Phares avant LED & feux arrière LED
   // ---------------------------------------------------------------------------
-  pushWithSubsurfaceSplit(lightPoints, (suffix, data, beforeId) =>
-    new ScatterplotLayer<RenderLightPoint>({
-      id: `subway-trains-capsule-lights${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      pickable: false,
-      radiusUnits: 'meters',
-      getRadius: (d: RenderLightPoint) => d.radiusM,
-      radiusMinPixels: 4,
-      radiusMaxPixels: 14,
-      getPosition: (d: RenderLightPoint) => [d.pos[0], d.pos[1], d.elevation],
-      getFillColor: (d: RenderLightPoint) => d.color,
-      parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
-      updateTriggers: {
-        getPosition: [trains],
-        getFillColor: [trains],
-      },
-    } as any)
+  pushWithSubsurfaceSplit(
+    lightPoints,
+    (suffix, data, beforeId) =>
+      new ScatterplotLayer<RenderLightPoint>({
+        id: `subway-trains-capsule-lights${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        radiusUnits: 'meters',
+        getRadius: (d: RenderLightPoint) => d.radiusM,
+        radiusMinPixels: 4,
+        radiusMaxPixels: 14,
+        getPosition: (d: RenderLightPoint) => [d.pos[0], d.pos[1], d.elevation],
+        getFillColor: (d: RenderLightPoint) => d.color,
+        parameters: { depthTest: false, depthWriteEnabled: false, depthCompare: 'always' } as any,
+        updateTriggers: {
+          getPosition: [trains],
+          getFillColor: [trains],
+        },
+      } as any)
   );
 
   // ---------------------------------------------------------------------------

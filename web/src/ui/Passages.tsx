@@ -71,9 +71,13 @@ export function Passages({
         <ul className="divide-y divide-joint border-y border-joint">
           {groupes.map((g, i) => {
             const cadence = passionne ? cadenceTexte(g.passages) : null;
-            const sousTitre = g.detail && cadence ? `${g.detail} · ${cadence}` : (g.detail ?? cadence);
+            const sousTitre =
+              g.detail && cadence ? `${g.detail} · ${cadence}` : (g.detail ?? cadence);
             return (
-              <li key={`${g.ligne.shortName}-${g.direction}-${i}`} className="grid min-h-[52px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-2">
+              <li
+                key={`${g.ligne.shortName}-${g.direction}-${i}`}
+                className="grid min-h-[52px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 py-2"
+              >
                 <LineBadgeChip
                   {...g.ligne}
                   size="sm"
@@ -84,9 +88,17 @@ export function Passages({
                     <span className="sr-only">Direction </span>
                     {g.direction}
                   </span>
-                  {sousTitre && <span className="chiffres mt-0.5 block truncate text-legende text-encre-3">{sousTitre}</span>}
+                  {sousTitre && (
+                    <span className="chiffres mt-0.5 block truncate text-legende text-encre-3">
+                      {sousTitre}
+                    </span>
+                  )}
                 </span>
-                <Afficheur passages={g.passages} size="sm" onPassage={onSuivre ? (p) => onSuivre(i, p) : undefined} />
+                <Afficheur
+                  passages={g.passages}
+                  size="sm"
+                  onPassage={onSuivre ? (p) => onSuivre(i, p) : undefined}
+                />
               </li>
             );
           })}

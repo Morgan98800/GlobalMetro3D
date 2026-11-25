@@ -31,18 +31,42 @@ export interface BasemapPalette {
 
 export const BASEMAP: Record<'jour' | 'nuit', BasemapPalette> = {
   jour: {
-    fond: '#f2f1ed', eau: '#a6cfee', parc: '#cde3c5', bois: '#bed8b5',
-    bati: '#eae8e2', bati3dBas: '#e6e2da', bati3dHaut: '#d1cbc0',
-    route: '#ffffff', routeMajeure: '#fffaf0', ferre: '#c4c1b8', limite: '#c2bfb6',
-    texte: '#3c3c43', texteEau: '#2f6ea2', halo: '#ffffff',
-    lisere: '#ffffff', station: '#ffffff', stationBord: '#1d1d1f',
+    fond: '#f2f1ed',
+    eau: '#a6cfee',
+    parc: '#cde3c5',
+    bois: '#bed8b5',
+    bati: '#eae8e2',
+    bati3dBas: '#e6e2da',
+    bati3dHaut: '#d1cbc0',
+    route: '#ffffff',
+    routeMajeure: '#fffaf0',
+    ferre: '#c4c1b8',
+    limite: '#c2bfb6',
+    texte: '#3c3c43',
+    texteEau: '#2f6ea2',
+    halo: '#ffffff',
+    lisere: '#ffffff',
+    station: '#ffffff',
+    stationBord: '#1d1d1f',
   },
   nuit: {
-    fond: '#131518', eau: '#12283d', parc: '#1a2d21', bois: '#142219',
-    bati: '#181b1f', bati3dBas: '#23262d', bati3dHaut: '#3a404c',
-    route: '#23272f', routeMajeure: '#383f4c', ferre: '#2a2d34', limite: '#2c3038',
-    texte: '#d1d3da', texteEau: '#639ec9', halo: '#131518',
-    lisere: '#131518', station: '#f5f5f7', stationBord: '#131518',
+    fond: '#131518',
+    eau: '#12283d',
+    parc: '#1a2d21',
+    bois: '#142219',
+    bati: '#181b1f',
+    bati3dBas: '#23262d',
+    bati3dHaut: '#3a404c',
+    route: '#23272f',
+    routeMajeure: '#383f4c',
+    ferre: '#2a2d34',
+    limite: '#2c3038',
+    texte: '#d1d3da',
+    texteEau: '#639ec9',
+    halo: '#131518',
+    lisere: '#131518',
+    station: '#f5f5f7',
+    stationBord: '#131518',
   },
 };
 
@@ -84,8 +108,24 @@ export function applyFaienceBasemap(map: MapLike, theme: 'jour' | 'nuit') {
           c.bati3dHaut,
         ]);
       } else {
-        safe(map, l.id, 'fill-extrusion-color', ['interpolate', ['linear'], ['get', 'render_height'], 6, c.bati3dBas, 45, c.bati3dHaut]);
-        safe(map, l.id, 'fill-extrusion-opacity', ['interpolate', ['linear'], ['zoom'], 13.4, 0, 14.0, 1.0]);
+        safe(map, l.id, 'fill-extrusion-color', [
+          'interpolate',
+          ['linear'],
+          ['get', 'render_height'],
+          6,
+          c.bati3dBas,
+          45,
+          c.bati3dHaut,
+        ]);
+        safe(map, l.id, 'fill-extrusion-opacity', [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          13.4,
+          0,
+          14.0,
+          1.0,
+        ]);
       }
     } else if (sl === 'transportation' && l.type === 'line') {
       const rail = /rail|transit/.test(l.id);
@@ -101,8 +141,32 @@ export function applyFaienceBasemap(map: MapLike, theme: 'jour' | 'nuit') {
 }
 
 /** Width in px of a metro line by zoom: hairline at region scale, bold in town. */
-export const LINE_WIDTH = ['interpolate', ['exponential', 1.5], ['zoom'], 9, 1.4, 12, 3, 14, 5, 16, 9] as const;
-export const CASING_WIDTH = ['interpolate', ['exponential', 1.5], ['zoom'], 9, 2.6, 12, 5, 14, 8, 16, 13] as const;
+export const LINE_WIDTH = [
+  'interpolate',
+  ['exponential', 1.5],
+  ['zoom'],
+  9,
+  1.4,
+  12,
+  3,
+  14,
+  5,
+  16,
+  9,
+] as const;
+export const CASING_WIDTH = [
+  'interpolate',
+  ['exponential', 1.5],
+  ['zoom'],
+  9,
+  2.6,
+  12,
+  5,
+  14,
+  8,
+  16,
+  13,
+] as const;
 
 /** MapLibre paint for a metro line drawn over its casing. */
 export function metroLinePaint(color: string) {
@@ -118,7 +182,15 @@ export function stationPaint(theme: 'jour' | 'nuit') {
   return {
     'circle-color': c.station,
     'circle-stroke-color': c.stationBord,
-    'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, ['case', ['>', ['get', 'nbLignes'], 1], 3, 0], 15, ['case', ['>', ['get', 'nbLignes'], 1], 7, 4.5]],
+    'circle-radius': [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      11,
+      ['case', ['>', ['get', 'nbLignes'], 1], 3, 0],
+      15,
+      ['case', ['>', ['get', 'nbLignes'], 1], 7, 4.5],
+    ],
     'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, 1.2, 15, 2],
   };
 }

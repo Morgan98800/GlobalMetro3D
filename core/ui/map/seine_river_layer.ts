@@ -15,7 +15,7 @@ export const SEINE_CENTERLINE: readonly [number, number][] = [
   [2.3662, 48.8439], // Viaduc d'Austerlitz (L5)
   [2.3638, 48.8458], // Pont d'Austerlitz
   [2.3596, 48.8492], // Pont de Sully
-  [2.3550, 48.8529], // Pont Marie
+  [2.355, 48.8529], // Pont Marie
   [2.3506, 48.8548], // Pont d'Arcole
   [2.3468, 48.8562], // Pont au Change
   [2.3418, 48.8576], // Pont Neuf (Grand Bras)

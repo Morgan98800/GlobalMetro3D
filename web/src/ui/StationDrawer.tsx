@@ -1,5 +1,12 @@
 import {
-  RiBox3Line, RiBriefcase4Line, RiCloseLine, RiCompass3Line, RiHome5Line, RiMore2Line, RiRouteLine, RiShareForwardLine,
+  RiBox3Line,
+  RiBriefcase4Line,
+  RiCloseLine,
+  RiCompass3Line,
+  RiHome5Line,
+  RiMore2Line,
+  RiRouteLine,
+  RiShareForwardLine,
   RiWheelchairLine,
 } from '@remixicon/react';
 import { useState } from 'react';
@@ -74,24 +81,49 @@ export function StationDrawer(props: StationDrawerProps) {
       <div className={cx('border-b border-joint pb-3', basse ? 'pt-1' : 'pt-4')}>
         <div className={cx('flex items-center gap-1', pad)}>
           <div className="min-w-0 flex-1 pr-1">
-            <Plaque as="h2" id="station-titre" size="md">{station.nom}</Plaque>
+            <Plaque as="h2" id="station-titre" size="md">
+              {station.nom}
+            </Plaque>
           </div>
           <MenuBouton
             label="Plus d’actions"
             icon={<RiMore2Line aria-hidden />}
             defaultOpen={props.menuOuvert}
             entrees={[
-              { label: 'Partager', icon: <RiShareForwardLine aria-hidden />, onSelect: props.onPartager },
-              { label: domicile ? 'Retirer domicile' : 'Domicile', icon: <RiHome5Line aria-hidden />, onSelect: props.onDomicile },
-              { label: travail ? 'Retirer travail' : 'Travail', icon: <RiBriefcase4Line aria-hidden />, onSelect: props.onTravail },
+              {
+                label: 'Partager',
+                icon: <RiShareForwardLine aria-hidden />,
+                onSelect: props.onPartager,
+              },
+              {
+                label: domicile ? 'Retirer domicile' : 'Domicile',
+                icon: <RiHome5Line aria-hidden />,
+                onSelect: props.onDomicile,
+              },
+              {
+                label: travail ? 'Retirer travail' : 'Travail',
+                icon: <RiBriefcase4Line aria-hidden />,
+                onSelect: props.onTravail,
+              },
             ]}
           />
-          <IconButton size="sm" variant="secondaire" label="Fermer" icon={<RiCloseLine aria-hidden />} onClick={props.onClose} />
+          <IconButton
+            size="sm"
+            variant="secondaire"
+            label="Fermer"
+            icon={<RiCloseLine aria-hidden />}
+            onClick={props.onClose}
+          />
         </div>
 
         <div className={cx('flex flex-wrap items-center gap-1.5 pt-2.5', pad)}>
           {station.lignes.map((l) => (
-            <LineBadgeChip key={l.shortName} {...l} size="md" onClick={() => props.onLigne(l.shortName)} />
+            <LineBadgeChip
+              key={l.shortName}
+              {...l}
+              size="md"
+              onClick={() => props.onLigne(l.shortName)}
+            />
           ))}
           {station.accessible && (
             <span className="ml-1 inline-flex h-7 items-center gap-1 rounded-[7px] bg-encart/90 px-2 text-[12px] font-semibold text-encre-2">
@@ -105,12 +137,32 @@ export function StationDrawer(props: StationDrawerProps) {
             </span>
           )}
         </div>
-        {station.contexte && <p className={cx('pt-2 text-[13px] leading-[18px] text-encre-2', pad)}>{station.contexte}</p>}
+        {station.contexte && (
+          <p className={cx('pt-2 text-[13px] leading-[18px] text-encre-2', pad)}>
+            {station.contexte}
+          </p>
+        )}
         {station.alerte && (
-          <p className={cx('flex items-start gap-2 pt-2 text-[13px] leading-[18px] text-encre-2', pad)}>
-            <span aria-hidden className={cx('mt-[5px] size-2 shrink-0 rounded-full', station.alerte.niveau === 'signal' ? 'bg-signal' : 'bg-vigilance')} />
+          <p
+            className={cx(
+              'flex items-start gap-2 pt-2 text-[13px] leading-[18px] text-encre-2',
+              pad
+            )}
+          >
+            <span
+              aria-hidden
+              className={cx(
+                'mt-[5px] size-2 shrink-0 rounded-full',
+                station.alerte.niveau === 'signal' ? 'bg-signal' : 'bg-vigilance'
+              )}
+            />
             <span>
-              <span className={cx('font-semibold', station.alerte.niveau === 'signal' ? 'text-signal-encre' : 'text-vigilance-encre')}>
+              <span
+                className={cx(
+                  'font-semibold',
+                  station.alerte.niveau === 'signal' ? 'text-signal-encre' : 'text-vigilance-encre'
+                )}
+              >
                 {station.alerte.niveau === 'signal' ? 'Interrompu. ' : 'Perturbé. '}
               </span>
               {station.alerte.texte}
@@ -119,7 +171,13 @@ export function StationDrawer(props: StationDrawerProps) {
         )}
       </div>
 
-      <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4', pad, basse ? 'pb-3' : 'pb-4')}>
+      <div
+        className={cx(
+          'min-h-0 flex-1 overflow-y-auto overscroll-contain pt-4',
+          pad,
+          basse ? 'pb-3' : 'pb-4'
+        )}
+      >
         <Passages
           groupes={groupes}
           direct={direct}
@@ -129,18 +187,42 @@ export function StationDrawer(props: StationDrawerProps) {
         />
       </div>
 
-      <footer className={cx('shrink-0 border-t border-joint bg-surface pt-3', pad, basse ? 'pb-[max(14px,env(safe-area-inset-bottom))]' : 'pb-5')}>
+      <footer
+        className={cx(
+          'shrink-0 border-t border-joint bg-surface pt-3',
+          pad,
+          basse ? 'pb-[max(14px,env(safe-area-inset-bottom))]' : 'pb-5'
+        )}
+      >
         <div className="grid grid-cols-2 gap-2.5">
-          <Button variant="primaire" size={size} className={basse ? 'min-h-[44px] px-3' : undefined} icon={<RiRouteLine aria-hidden />} onClick={props.onYAller}>
+          <Button
+            variant="primaire"
+            size={size}
+            className={basse ? 'min-h-[44px] px-3' : undefined}
+            icon={<RiRouteLine aria-hidden />}
+            onClick={props.onYAller}
+          >
             Y aller
           </Button>
-          <Button variant="secondaire" size={size} className={basse ? 'min-h-[44px] px-3' : undefined} icon={<RiCompass3Line aria-hidden />} onClick={props.onPartir}>
+          <Button
+            variant="secondaire"
+            size={size}
+            className={basse ? 'min-h-[44px] px-3' : undefined}
+            icon={<RiCompass3Line aria-hidden />}
+            onClick={props.onPartir}
+          >
             Partir d’ici
           </Button>
         </div>
         {props.onQuai3D && (
           <div className="mt-3">
-            <Button variant="afficheur" size={size} fullWidth icon={<RiBox3Line aria-hidden />} onClick={props.onQuai3D}>
+            <Button
+              variant="afficheur"
+              size={size}
+              fullWidth
+              icon={<RiBox3Line aria-hidden />}
+              onClick={props.onQuai3D}
+            >
               Prendre le train en 3D
             </Button>
           </div>
@@ -171,7 +253,10 @@ export function StationDrawer(props: StationDrawerProps) {
       as="section"
       role="dialog"
       aria-labelledby="station-titre"
-      className={cx('flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille', props.className)}
+      className={cx(
+        'flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille',
+        props.className
+      )}
     >
       {body}
     </Panneau>

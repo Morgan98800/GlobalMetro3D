@@ -53,7 +53,6 @@ const ERREURS: Record<ErreurPosition, { texte: string; principal: 'reessayer' | 
   delai: { texte: 'Délai de localisation dépassé.', principal: 'reessayer' },
 };
 
-
 export function NearbyDrawer(p: NearbyDrawerProps) {
   const desktop = useIsDesktop();
   const basse = (p.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
@@ -63,11 +62,24 @@ export function NearbyDrawer(p: NearbyDrawerProps) {
   const body = (
     <>
       <div className={cx('flex items-center justify-between gap-2', pad, basse ? 'pt-1' : 'pt-4')}>
-        <h2 id="autour-titre" className="text-titre text-encre">Autour</h2>
-        <IconButton size="sm" label="Fermer" icon={<RiCloseLine aria-hidden />} onClick={p.onClose} />
+        <h2 id="autour-titre" className="text-titre text-encre">
+          Autour
+        </h2>
+        <IconButton
+          size="sm"
+          label="Fermer"
+          icon={<RiCloseLine aria-hidden />}
+          onClick={p.onClose}
+        />
       </div>
 
-      <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain pt-3', pad, basse ? 'pb-[max(16px,env(safe-area-inset-bottom))]' : 'pb-5')}>
+      <div
+        className={cx(
+          'min-h-0 flex-1 overflow-y-auto overscroll-contain pt-3',
+          pad,
+          basse ? 'pb-[max(16px,env(safe-area-inset-bottom))]' : 'pb-5'
+        )}
+      >
         {p.etat === 'chargement' && (
           <p className="flex items-center justify-center gap-2 rounded-[12px] bg-encart/60 px-4 py-7 text-[13px] text-encre-2">
             <RiFocus3Line aria-hidden className="size-4 animate-pulse text-icone-2" />
@@ -75,12 +87,16 @@ export function NearbyDrawer(p: NearbyDrawerProps) {
           </p>
         )}
 
-        {p.etat === 'erreur' && p.erreur && <Erreur type={p.erreur} onReessayer={p.onReessayer} onRechercher={p.onRechercher} />}
+        {p.etat === 'erreur' && p.erreur && (
+          <Erreur type={p.erreur} onReessayer={p.onReessayer} onRechercher={p.onRechercher} />
+        )}
 
         {p.etat === 'pret' && p.stations.length === 0 && (
           <div className="rounded-[12px] bg-encart/60 px-4 py-6 text-center">
             <p className="text-[13px] text-encre-2">Aucune station proche.</p>
-            <Button className="mt-3" size="sm" onClick={p.onRechercher}>Rechercher</Button>
+            <Button className="mt-3" size="sm" onClick={p.onRechercher}>
+              Rechercher
+            </Button>
           </div>
         )}
 
@@ -94,14 +110,25 @@ export function NearbyDrawer(p: NearbyDrawerProps) {
                   className="-mx-2 grid min-h-[56px] w-[calc(100%+16px)] grid-cols-[48px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-3 text-start outline-none transition-colors duration-150 ease-signal hover:bg-encart focus-visible:outline-2 focus-visible:outline-focus"
                 >
                   <span className="text-center">
-                    <span className="chiffres block text-[22px] font-bold leading-none text-encre">{s.minutes}</span>
-                    <span className="mt-0.5 block text-[11px] font-semibold leading-[13px] text-encre-3">min<br />à pied</span>
+                    <span className="chiffres block text-[22px] font-bold leading-none text-encre">
+                      {s.minutes}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] font-semibold leading-[13px] text-encre-3">
+                      min
+                      <br />à pied
+                    </span>
                   </span>
                   <span className="min-w-0">
-                    <span className="signaletique block truncate text-[16px] font-semibold leading-[20px] text-encre">{s.nom}</span>
+                    <span className="signaletique block truncate text-[16px] font-semibold leading-[20px] text-encre">
+                      {s.nom}
+                    </span>
                     <span className="mt-1 flex flex-wrap items-center gap-1">
-                      {s.lignes.map((l) => <LineBadgeChip key={l.shortName} {...l} size="xs" />)}
-                      <span className="chiffres ml-1 text-legende text-encre-3">{formatNombre(s.metres)} m</span>
+                      {s.lignes.map((l) => (
+                        <LineBadgeChip key={l.shortName} {...l} size="xs" />
+                      ))}
+                      <span className="chiffres ml-1 text-legende text-encre-3">
+                        {formatNombre(s.metres)} m
+                      </span>
                     </span>
                   </span>
                   <Afficheur passages={s.passages} size="sm" />
@@ -141,15 +168,33 @@ export function NearbyDrawer(p: NearbyDrawerProps) {
   );
 }
 
-function Erreur({ type, onReessayer, onRechercher }: { type: ErreurPosition; onReessayer: () => void; onRechercher: () => void }) {
+function Erreur({
+  type,
+  onReessayer,
+  onRechercher,
+}: {
+  type: ErreurPosition;
+  onReessayer: () => void;
+  onRechercher: () => void;
+}) {
   const e = ERREURS[type];
-  const reessayer = (v: 'primaire' | 'secondaire') => <Button key="r" variant={v} onClick={onReessayer}>Réessayer</Button>;
-  const rechercher = (v: 'primaire' | 'secondaire') => <Button key="s" variant={v} onClick={onRechercher}>Rechercher une station</Button>;
+  const reessayer = (v: 'primaire' | 'secondaire') => (
+    <Button key="r" variant={v} onClick={onReessayer}>
+      Réessayer
+    </Button>
+  );
+  const rechercher = (v: 'primaire' | 'secondaire') => (
+    <Button key="s" variant={v} onClick={onRechercher}>
+      Rechercher une station
+    </Button>
+  );
   return (
     <div className="rounded-[12px] bg-encart p-4">
       <p className="text-[14px] leading-[20px] text-encre">{e.texte}</p>
       <div className="mt-3 flex flex-wrap gap-2">
-        {e.principal === 'reessayer' ? [reessayer('primaire'), rechercher('secondaire')] : [rechercher('primaire'), reessayer('secondaire')]}
+        {e.principal === 'reessayer'
+          ? [reessayer('primaire'), rechercher('secondaire')]
+          : [rechercher('primaire'), reessayer('secondaire')]}
       </div>
     </div>
   );

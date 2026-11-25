@@ -101,14 +101,7 @@ export function IconXray(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export type RollingStockIconKind =
-  | 'mp14'
-  | 'mp05'
-  | 'mf01'
-  | 'mf77'
-  | 'mf67'
-  | 'mf88'
-  | 'rer';
+export type RollingStockIconKind = 'mp14' | 'mp05' | 'mf01' | 'mf77' | 'mf67' | 'mf88' | 'rer';
 
 const LINE_TO_ROLLING_STOCK_ICON: Record<string, RollingStockIconKind> = {
   '1': 'mp05',
@@ -159,9 +152,27 @@ export function IconRame({ kind, ...props }: IconRameProps) {
             stroke="currentColor"
             strokeWidth={1.35}
           />
-          <rect x="4.8" y="3.8" width="6.4" height="4.8" rx="1.6" fill="currentColor" opacity={0.9} />
-          <path d="M4.6 10.7h2.1M9.3 10.7h2.1" stroke="currentColor" strokeWidth={1.35} strokeLinecap="round" />
-          <path d="M5.4 13.8v.9M10.6 13.8v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <rect
+            x="4.8"
+            y="3.8"
+            width="6.4"
+            height="4.8"
+            rx="1.6"
+            fill="currentColor"
+            opacity={0.9}
+          />
+          <path
+            d="M4.6 10.7h2.1M9.3 10.7h2.1"
+            stroke="currentColor"
+            strokeWidth={1.35}
+            strokeLinecap="round"
+          />
+          <path
+            d="M5.4 13.8v.9M10.6 13.8v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
 
@@ -169,12 +180,31 @@ export function IconRame({ kind, ...props }: IconRameProps) {
       // MP 05 / MP 89 : pavillon arrondi, pare-brise incliné large, girouette fine
       return (
         <svg viewBox="0 0 16 16" fill="none" aria-hidden {...props}>
-          <rect x="3.1" y="2.2" width="9.8" height="11" rx="2.3" stroke="currentColor" strokeWidth={1.35} />
-          <path d="M5.6 3.6h4.8" stroke="currentColor" strokeWidth={1.1} strokeLinecap="round" opacity={0.8} />
+          <rect
+            x="3.1"
+            y="2.2"
+            width="9.8"
+            height="11"
+            rx="2.3"
+            stroke="currentColor"
+            strokeWidth={1.35}
+          />
+          <path
+            d="M5.6 3.6h4.8"
+            stroke="currentColor"
+            strokeWidth={1.1}
+            strokeLinecap="round"
+            opacity={0.8}
+          />
           <path d="M4.6 5.2h6.8l.4 3.4H4.2l.4-3.4Z" fill="currentColor" opacity={0.9} />
           <circle cx="5.2" cy="10.8" r="0.95" fill="currentColor" />
           <circle cx="10.8" cy="10.8" r="0.95" fill="currentColor" />
-          <path d="M5.2 13.8v.9M10.8 13.8v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <path
+            d="M5.2 13.8v.9M10.8 13.8v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
 
@@ -182,10 +212,28 @@ export function IconRame({ kind, ...props }: IconRameProps) {
       // MF 01 (MF 2000) : caisse moderne droite, grande baie frontale en U, feux écartés
       return (
         <svg viewBox="0 0 16 16" fill="none" aria-hidden {...props}>
-          <rect x="3" y="2.2" width="10" height="11" rx="1.9" stroke="currentColor" strokeWidth={1.35} />
+          <rect
+            x="3"
+            y="2.2"
+            width="10"
+            height="11"
+            rx="1.9"
+            stroke="currentColor"
+            strokeWidth={1.35}
+          />
           <rect x="4.4" y="4.1" width="7.2" height="4.6" rx="1" fill="currentColor" opacity={0.9} />
-          <path d="M4.5 10.8h1.8M9.7 10.8h1.8" stroke="currentColor" strokeWidth={1.4} strokeLinecap="round" />
-          <path d="M5.2 13.8v.9M10.8 13.8v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <path
+            d="M4.5 10.8h1.8M9.7 10.8h1.8"
+            stroke="currentColor"
+            strokeWidth={1.4}
+            strokeLinecap="round"
+          />
+          <path
+            d="M5.2 13.8v.9M10.8 13.8v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
 
@@ -199,11 +247,32 @@ export function IconRame({ kind, ...props }: IconRameProps) {
             strokeWidth={1.35}
             strokeLinejoin="round"
           />
-          <rect x="4.4" y="4.7" width="2.9" height="3.5" rx="0.6" fill="currentColor" opacity={0.9} />
-          <rect x="8.7" y="4.7" width="2.9" height="3.5" rx="0.6" fill="currentColor" opacity={0.9} />
+          <rect
+            x="4.4"
+            y="4.7"
+            width="2.9"
+            height="3.5"
+            rx="0.6"
+            fill="currentColor"
+            opacity={0.9}
+          />
+          <rect
+            x="8.7"
+            y="4.7"
+            width="2.9"
+            height="3.5"
+            rx="0.6"
+            fill="currentColor"
+            opacity={0.9}
+          />
           <circle cx="5.2" cy="10.8" r="0.95" fill="currentColor" />
           <circle cx="10.8" cy="10.8" r="0.95" fill="currentColor" />
-          <path d="M5.2 13.8v.9M10.8 13.8v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <path
+            d="M5.2 13.8v.9M10.8 13.8v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
 
@@ -211,13 +280,34 @@ export function IconRame({ kind, ...props }: IconRameProps) {
       // MF 67 : face classique à girouette centrale haute, double pare-brise, phares ronds
       return (
         <svg viewBox="0 0 16 16" fill="none" aria-hidden {...props}>
-          <rect x="3.2" y="2.3" width="9.6" height="10.9" rx="1.6" stroke="currentColor" strokeWidth={1.35} />
-          <rect x="5.8" y="3.2" width="4.4" height="1.1" rx="0.4" fill="currentColor" opacity={0.8} />
+          <rect
+            x="3.2"
+            y="2.3"
+            width="9.6"
+            height="10.9"
+            rx="1.6"
+            stroke="currentColor"
+            strokeWidth={1.35}
+          />
+          <rect
+            x="5.8"
+            y="3.2"
+            width="4.4"
+            height="1.1"
+            rx="0.4"
+            fill="currentColor"
+            opacity={0.8}
+          />
           <rect x="4.5" y="5.2" width="3" height="3.3" rx="0.5" fill="currentColor" opacity={0.9} />
           <rect x="8.5" y="5.2" width="3" height="3.3" rx="0.5" fill="currentColor" opacity={0.9} />
           <circle cx="5.1" cy="10.9" r="0.95" fill="currentColor" />
           <circle cx="10.9" cy="10.9" r="0.95" fill="currentColor" />
-          <path d="M5.3 13.8v.9M10.7 13.8v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <path
+            d="M5.3 13.8v.9M10.7 13.8v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
 
@@ -225,11 +315,32 @@ export function IconRame({ kind, ...props }: IconRameProps) {
       // MF 88 : gabarit compact, grande vitre trapézoïdale et phares rapprochés
       return (
         <svg viewBox="0 0 16 16" fill="none" aria-hidden {...props}>
-          <rect x="3.6" y="2.5" width="8.8" height="10.7" rx="1.8" stroke="currentColor" strokeWidth={1.35} />
-          <rect x="4.9" y="4.3" width="6.2" height="4.1" rx="0.8" fill="currentColor" opacity={0.9} />
+          <rect
+            x="3.6"
+            y="2.5"
+            width="8.8"
+            height="10.7"
+            rx="1.8"
+            stroke="currentColor"
+            strokeWidth={1.35}
+          />
+          <rect
+            x="4.9"
+            y="4.3"
+            width="6.2"
+            height="4.1"
+            rx="0.8"
+            fill="currentColor"
+            opacity={0.9}
+          />
           <circle cx="5.8" cy="10.8" r="0.9" fill="currentColor" />
           <circle cx="10.2" cy="10.8" r="0.9" fill="currentColor" />
-          <path d="M5.6 13.8v.9M10.4 13.8v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <path
+            d="M5.6 13.8v.9M10.4 13.8v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
 
@@ -237,13 +348,40 @@ export function IconRame({ kind, ...props }: IconRameProps) {
       // RER (MI 09 / MI 79 / RER NG) : pantographe en toiture et gabarit haut
       return (
         <svg viewBox="0 0 16 16" fill="none" aria-hidden {...props}>
-          <path d="M5.5 1.4h5M8 1.4l-1.8 1.8h3.6L8 1.4Z" stroke="currentColor" strokeWidth={1.15} strokeLinecap="round" strokeLinejoin="round" />
-          <rect x="3" y="3.3" width="10" height="10" rx="1.7" stroke="currentColor" strokeWidth={1.35} />
-          <rect x="4.5" y="4.8" width="7" height="2.4" rx="0.6" fill="currentColor" opacity={0.85} />
+          <path
+            d="M5.5 1.4h5M8 1.4l-1.8 1.8h3.6L8 1.4Z"
+            stroke="currentColor"
+            strokeWidth={1.15}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <rect
+            x="3"
+            y="3.3"
+            width="10"
+            height="10"
+            rx="1.7"
+            stroke="currentColor"
+            strokeWidth={1.35}
+          />
+          <rect
+            x="4.5"
+            y="4.8"
+            width="7"
+            height="2.4"
+            rx="0.6"
+            fill="currentColor"
+            opacity={0.85}
+          />
           <rect x="4.5" y="8" width="7" height="2" rx="0.5" fill="currentColor" opacity={0.75} />
           <circle cx="5.1" cy="11.6" r="0.85" fill="currentColor" />
           <circle cx="10.9" cy="11.6" r="0.85" fill="currentColor" />
-          <path d="M5.2 13.9v.9M10.8 13.9v.9" stroke="currentColor" strokeWidth={1.3} strokeLinecap="round" />
+          <path
+            d="M5.2 13.9v.9M10.8 13.9v.9"
+            stroke="currentColor"
+            strokeWidth={1.3}
+            strokeLinecap="round"
+          />
         </svg>
       );
   }

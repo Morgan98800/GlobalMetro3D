@@ -209,7 +209,8 @@ export function computeStationDepartures(params: {
 
       // On ignore le dernier arrêt (descente uniquement au terminus)
       const stopIndex = trip.stops.findIndex(
-        (s, idx) => idx < trip.stops.length - 1 && stopNamesMatch(normalizeStopName(s[3]), targetNorm)
+        (s, idx) =>
+          idx < trip.stops.length - 1 && stopNamesMatch(normalizeStopName(s[3]), targetNorm)
       );
       if (stopIndex >= 0) considerTripStop(trip, stopIndex);
     }
@@ -1066,17 +1067,11 @@ export class BrowserSubwayEngine {
           }
 
           const liveEval = positionAt(timeline, serviceSecondsAtTick + dt);
-          const baseDist = liveEval
-            ? liveEval.dist
-            : train.atStop
-              ? dTick
-              : dTick + speedMps * dt;
+          const baseDist = liveEval ? liveEval.dist : train.atStop ? dTick : dTick + speedMps * dt;
           if (liveEval) {
             const liveV = clampSpeed(liveEval.speed);
             train.speedMps = liveV;
-            train.spd = Math.round(
-              Math.min(this.getLineMaxDisplaySpeed(train.line), liveV * 3.6)
-            );
+            train.spd = Math.round(Math.min(this.getLineMaxDisplaySpeed(train.line), liveV * 3.6));
             train.atStop = liveEval.atStop;
           }
 
@@ -1114,7 +1109,10 @@ export class BrowserSubwayEngine {
     };
 
     this.rafLoopFn = rafLoop;
-    if (typeof requestAnimationFrame !== 'undefined' && !(typeof document !== 'undefined' && document.hidden)) {
+    if (
+      typeof requestAnimationFrame !== 'undefined' &&
+      !(typeof document !== 'undefined' && document.hidden)
+    ) {
       this.rafId = requestAnimationFrame(rafLoop);
     }
 
@@ -1134,7 +1132,11 @@ export class BrowserSubwayEngine {
           this.lastRafRenderMs = 0;
           this.onTickFn?.();
           startInterval();
-          if (this.rafId === null && this.rafLoopFn && typeof requestAnimationFrame !== 'undefined') {
+          if (
+            this.rafId === null &&
+            this.rafLoopFn &&
+            typeof requestAnimationFrame !== 'undefined'
+          ) {
             this.rafId = requestAnimationFrame(this.rafLoopFn);
           }
         }

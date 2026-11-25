@@ -24,7 +24,8 @@ export function VoitureConseillee({
   raison?: string;
   className?: string;
 }) {
-  const target = position === 'tete' ? voitures - 1 : position === 'queue' ? 0 : Math.floor(voitures / 2);
+  const target =
+    position === 'tete' ? voitures - 1 : position === 'queue' ? 0 : Math.floor(voitures / 2);
   const w = 20;
   const gap = 3;
   const width = voitures * w + (voitures - 1) * gap + 5;

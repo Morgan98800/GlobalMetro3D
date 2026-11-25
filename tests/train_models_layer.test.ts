@@ -165,7 +165,10 @@ describe('train_models_layer and RER specifications', () => {
     // Direction 0 and direction 1 must both traverse shapes forward along [0..length] without mirroring backward
     const shapes = new Map([[rawShape.id, rawShape]]);
     const rsDb = JSON.parse(
-      fs.readFileSync(path.resolve(import.meta.dirname, '../web/public/data/rolling-stock.json'), 'utf8')
+      fs.readFileSync(
+        path.resolve(import.meta.dirname, '../web/public/data/rolling-stock.json'),
+        'utf8'
+      )
     );
     const [firstCapsuleLayer] = createCapsuleLayers({
       trains: [

@@ -45,19 +45,23 @@ export function FriseCeramique({
 
 export function CandelabreDervaux({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox="0 0 28 28"
-      fill="none"
-      className={cx('size-5 shrink-0', className)}
-    >
+    <svg aria-hidden viewBox="0 0 28 28" fill="none" className={cx('size-5 shrink-0', className)}>
       {/* Fût fonte vert historique */}
       <path d="M13 15h2v11h-2z" fill="#3a5f47" />
       <path d="M10.5 25.5h7v1.5h-7z" fill="#2d4c38" />
       {/* Corniche et caisson rétroéclairé ambre (1922) */}
       <rect x="2.5" y="4.5" width="23" height="10.5" rx="2.5" fill="#2d4c38" />
       <rect x="4" y="6" width="20" height="7.5" rx="1.5" fill="#d97706" />
-      <rect x="4" y="6" width="20" height="7.5" rx="1.5" stroke="#fde68a" strokeOpacity="0.55" strokeWidth="0.75" />
+      <rect
+        x="4"
+        y="6"
+        width="20"
+        height="7.5"
+        rx="1.5"
+        stroke="#fde68a"
+        strokeOpacity="0.55"
+        strokeWidth="0.75"
+      />
       {/* Ornement sommital géométrique */}
       <circle cx="14" cy="3" r="1.6" fill="#4b765a" />
       {/* Lettrage géométrique générique façon panneau lumineux */}

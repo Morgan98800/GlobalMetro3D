@@ -26,7 +26,10 @@ export function BandeauTelemetrie({
     <Panneau
       as="section"
       aria-label="Télémétrie du réseau"
-      className={cx('inline-flex h-9 items-center gap-2.5 rounded-pill pl-3 pr-1.5 text-[12px] text-encre-2', className)}
+      className={cx(
+        'inline-flex h-9 items-center gap-2.5 rounded-pill pl-3 pr-1.5 text-[12px] text-encre-2',
+        className
+      )}
     >
       <span className="whitespace-nowrap">
         <span className="chiffres font-semibold text-encre">{formatNombre(rames)}</span> rames
@@ -36,7 +39,12 @@ export function BandeauTelemetrie({
         <span className="chiffres font-semibold text-encre">{formatNombre(kilometres)}</span> km
       </span>
       <span aria-hidden className="h-3.5 w-px bg-joint" />
-      <InterrupteurDirect direct={direct} onChange={onDirect} source={source} disponible={disponible} />
+      <InterrupteurDirect
+        direct={direct}
+        onChange={onDirect}
+        source={source}
+        disponible={disponible}
+      />
     </Panneau>
   );
 }

@@ -203,7 +203,10 @@ export function getOvertureBuildingThemeColors(theme: MapTheme) {
  * Computes opacity paint overrides for smooth Metroskop-style subsurface transparency
  * when pitched in 3D (`mix` in `[0..1]`), restoring crisp opaque surface styling at `mix === 0`.
  */
-export function getSubsurfacePaints(mix: number, theme: MapTheme): Array<[string, string, unknown]> {
+export function getSubsurfacePaints(
+  mix: number,
+  theme: MapTheme
+): Array<[string, string, unknown]> {
   const m = Math.max(0, Math.min(1, mix));
   const lerp = (a: number, b: number) => Number((a + (b - a) * m).toFixed(3));
   const light = theme === 'light';
@@ -211,7 +214,7 @@ export function getSubsurfacePaints(mix: number, theme: MapTheme): Array<[string
 
   return [
     ['landuse-urban', 'fill-opacity', restoreFull ? 0.68 : lerp(0.68, 0.28)],
-    ['landuse-civic', 'fill-opacity', restoreFull ? 0.78 : lerp(0.78, 0.30)],
+    ['landuse-civic', 'fill-opacity', restoreFull ? 0.78 : lerp(0.78, 0.3)],
     ['landuse-rail', 'fill-opacity', restoreFull ? 0.84 : lerp(0.84, 0.28)],
     ['landuse-cemetery', 'fill-opacity', restoreFull ? 0.78 : lerp(0.78, 0.34)],
     [
@@ -228,13 +231,13 @@ export function getSubsurfacePaints(mix: number, theme: MapTheme): Array<[string
       'fill-opacity',
       restoreFull
         ? light
-          ? 0.80
-          : ['interpolate', ['linear'], ['zoom'], 10, 0.48, 14, 0.80, 17, 0.90]
-        : lerp(0.80, 0.50),
+          ? 0.8
+          : ['interpolate', ['linear'], ['zoom'], 10, 0.48, 14, 0.8, 17, 0.9]
+        : lerp(0.8, 0.5),
     ],
-    ['paris-water', 'fill-opacity', lerp(light ? 0.90 : 0.94, 0.66)],
+    ['paris-water', 'fill-opacity', lerp(light ? 0.9 : 0.94, 0.66)],
     ['paris-waterways', 'line-opacity', lerp(0.82, 0.62)],
-    ['paris-canal-core', 'line-opacity', lerp(0.80, 0.62)],
+    ['paris-canal-core', 'line-opacity', lerp(0.8, 0.62)],
     ['roads-pedestrian-area', 'fill-opacity', lerp(0.74, 0.34)],
     ['roads-pedestrian', 'line-opacity', lerp(0.88, 0.58)],
     ['roads-minor-casing', 'line-opacity', lerp(0.88, 0.46)],
@@ -242,7 +245,7 @@ export function getSubsurfacePaints(mix: number, theme: MapTheme): Array<[string
     ['roads-major-casing', 'line-opacity', lerp(0.96, 0.58)],
     ['roads-minor', 'line-opacity', lerp(0.96, 0.64)],
     ['roads-secondary', 'line-opacity', lerp(1.0, 0.72)],
-    ['roads-major', 'line-opacity', lerp(1.0, 0.80)],
+    ['roads-major', 'line-opacity', lerp(1.0, 0.8)],
     ['roads-bridge-casing', 'line-opacity', lerp(1.0, 0.82)],
     ['roads-bridge', 'line-opacity', lerp(1.0, 0.82)],
   ];
@@ -260,18 +263,18 @@ export function getBlueprintXrayPaints(theme: MapTheme): Array<[string, string, 
   return [
     ['background', 'background-color', light ? '#e7edf5' : '#060c18'],
     ['landuse-urban', 'fill-opacity', 0.08],
-    ['landuse-civic', 'fill-opacity', 0.10],
+    ['landuse-civic', 'fill-opacity', 0.1],
     ['landuse-rail', 'fill-opacity', 0.12],
-    ['landuse-cemetery', 'fill-opacity', 0.10],
+    ['landuse-cemetery', 'fill-opacity', 0.1],
     ['paris-woods', 'fill-opacity', 0.16],
     ['paris-parks', 'fill-opacity', 0.16],
     ['paris-water', 'fill-opacity', light ? 0.36 : 0.42],
     ['paris-waterways', 'line-opacity', 0.32],
     ['paris-canal-core', 'line-opacity', 0.32],
-    ['roads-pedestrian-area', 'fill-opacity', 0.10],
-    ['roads-pedestrian', 'line-opacity', 0.30],
+    ['roads-pedestrian-area', 'fill-opacity', 0.1],
+    ['roads-pedestrian', 'line-opacity', 0.3],
     ['roads-minor-casing', 'line-opacity', 0.08],
-    ['roads-secondary-casing', 'line-opacity', 0.10],
+    ['roads-secondary-casing', 'line-opacity', 0.1],
     ['roads-major-casing', 'line-opacity', 0.14],
     ['roads-minor', 'line-color', wireMinor],
     ['roads-minor', 'line-opacity', light ? 0.42 : 0.38],

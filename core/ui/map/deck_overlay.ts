@@ -904,7 +904,14 @@ export class SubwayDeckOverlay {
       if (this.zoom >= 13.5 && viaductTracks.length > 0) {
         viaductShadowTracks.push(...viaductTracks);
       }
-      pushTrackGroup(`subway-track-${safeId}`, undergroundTracks, line, isSelected, ugBeforeId, true);
+      pushTrackGroup(
+        `subway-track-${safeId}`,
+        undergroundTracks,
+        line,
+        isSelected,
+        ugBeforeId,
+        true
+      );
       pushTrackGroup(`subway-track-${safeId}-viaduct`, viaductTracks, line, isSelected);
     }
 
@@ -1087,7 +1094,10 @@ export class SubwayDeckOverlay {
     const railLineByShortName = new Map<string, LineMetadata>();
     for (const candidate of lines) {
       if (candidate.mode !== 'rail') continue;
-      const key = candidate.short_name.replace(/^RER\s*/i, '').trim().toUpperCase();
+      const key = candidate.short_name
+        .replace(/^RER\s*/i, '')
+        .trim()
+        .toUpperCase();
       railLineByShortName.set(key, candidate);
       railLineByShortName.set(candidate.short_name.trim().toUpperCase(), candidate);
     }
@@ -1107,7 +1117,10 @@ export class SubwayDeckOverlay {
         getWidth: 3.5, // 3.5px vs 2.5px métro
         getPath: ((d: RerTrackSegment) => {
           const rounded = this.roundedRerPaths.get(d) ?? roundPathCorners(d.coordinates);
-          const key = d.shortName.replace(/^RER\s*/i, '').trim().toUpperCase();
+          const key = d.shortName
+            .replace(/^RER\s*/i, '')
+            .trim()
+            .toUpperCase();
           const railLine =
             railLineByShortName.get(key) ??
             railLineByShortName.get(d.shortName.trim().toUpperCase());
@@ -1125,7 +1138,10 @@ export class SubwayDeckOverlay {
         dashUnits: 'pixels',
         capRounded: true,
         jointRounded: true,
-        parameters: { depthTest: Boolean(this.undergroundBeforeId), depthWriteEnabled: false } as any,
+        parameters: {
+          depthTest: Boolean(this.undergroundBeforeId),
+          depthWriteEnabled: false,
+        } as any,
       } as any);
     }
 

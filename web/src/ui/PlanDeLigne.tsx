@@ -57,17 +57,23 @@ export function PlanDeLigne({ couleur, arrets, replier = true, className }: Plan
               aria-hidden
               className={cx(
                 'absolute z-[1] -translate-x-1/2 rounded-full bg-surface',
-                terminal ? 'left-[14px] top-[5px] size-[15px] border-[3.5px]' : 'left-[14px] top-[7px] size-[11px] border-[2.5px]',
+                terminal
+                  ? 'left-[14px] top-[5px] size-[15px] border-[3.5px]'
+                  : 'left-[14px] top-[7px] size-[11px] border-[2.5px]'
               )}
               style={{ borderColor: terminal ? 'var(--color-encre)' : couleur }}
             />
             {/* Rail and marker are absolutely positioned and leave the grid: pin the content to column 2 */}
-            <div className={cx('col-start-2 min-w-0', isLast ? 'pb-0' : terminal ? 'pb-3.5' : 'pb-2')}>
+            <div
+              className={cx('col-start-2 min-w-0', isLast ? 'pb-0' : terminal ? 'pb-3.5' : 'pb-2')}
+            >
               <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
                 <span
                   className={cx(
                     'signaletique min-w-0 leading-[24px]',
-                    terminal ? 'text-[17px] font-[650] text-encre' : 'text-[15px] font-medium text-encre-2',
+                    terminal
+                      ? 'text-[17px] font-[650] text-encre'
+                      : 'text-[15px] font-medium text-encre-2'
                   )}
                 >
                   {a.nom}
@@ -85,14 +91,31 @@ export function PlanDeLigne({ couleur, arrets, replier = true, className }: Plan
   );
 }
 
-function Rail({ couleur, debut, fin, pointille }: { couleur: string; debut?: boolean; fin?: boolean; pointille?: boolean }) {
+function Rail({
+  couleur,
+  debut,
+  fin,
+  pointille,
+}: {
+  couleur: string;
+  debut?: boolean;
+  fin?: boolean;
+  pointille?: boolean;
+}) {
   return (
     <span
       aria-hidden
-      className={cx('absolute left-[12px] w-[4px]', debut ? 'top-[12px]' : 'top-0', fin ? 'h-[12px]' : 'bottom-0')}
+      className={cx(
+        'absolute left-[12px] w-[4px]',
+        debut ? 'top-[12px]' : 'top-0',
+        fin ? 'h-[12px]' : 'bottom-0'
+      )}
       style={
         pointille
-          ? { backgroundImage: `linear-gradient(${couleur} 55%, transparent 0)`, backgroundSize: '4px 7px' }
+          ? {
+              backgroundImage: `linear-gradient(${couleur} 55%, transparent 0)`,
+              backgroundSize: '4px 7px',
+            }
           : { backgroundColor: couleur }
       }
     />
@@ -111,7 +134,14 @@ export interface PlanHorizontalProps {
   className?: string;
 }
 
-export function PlanDeLigneHorizontal({ couleur, arrets, index, progression = 0, onSelectStop, className }: PlanHorizontalProps) {
+export function PlanDeLigneHorizontal({
+  couleur,
+  arrets,
+  index,
+  progression = 0,
+  onSelectStop,
+  className,
+}: PlanHorizontalProps) {
   // Fenêtre glissante façon bandeau DILIDAM : max 5 arrêts lisibles en entier autour de la rame.
   const n = arrets.length;
   const maxVisible = 5;
@@ -162,11 +192,14 @@ export function PlanDeLigneHorizontal({ couleur, arrets, index, progression = 0,
               title={a}
               className={cx(
                 'pointer-events-auto absolute top-[2px] -translate-x-1/2 cursor-pointer rounded-full border-[2.5px] bg-surface transition-transform hover:scale-125 focus-visible:outline-2 focus-visible:outline-focus',
-                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]',
+                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]'
               )}
               style={{
                 left: leftPct,
-                borderColor: passed || isNext ? couleur : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
+                borderColor:
+                  passed || isNext
+                    ? couleur
+                    : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
                 backgroundColor: passed ? couleur : undefined,
               }}
             />
@@ -175,11 +208,14 @@ export function PlanDeLigneHorizontal({ couleur, arrets, index, progression = 0,
               key={`${a}-${gi}`}
               className={cx(
                 'absolute top-[2px] -translate-x-1/2 rounded-full border-[2.5px] bg-surface',
-                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]',
+                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]'
               )}
               style={{
                 left: leftPct,
-                borderColor: passed || isNext ? couleur : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
+                borderColor:
+                  passed || isNext
+                    ? couleur
+                    : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
                 backgroundColor: passed ? couleur : undefined,
               }}
             />
@@ -202,7 +238,7 @@ export function PlanDeLigneHorizontal({ couleur, arrets, index, progression = 0,
           const cls = cx(
             'signaletique truncate px-0.5',
             alignCls,
-            isCurrentOrNext ? 'font-[650] text-encre' : 'text-encre-2',
+            isCurrentOrNext ? 'font-[650] text-encre' : 'text-encre-2'
           );
           return onSelectStop ? (
             <button
@@ -210,7 +246,10 @@ export function PlanDeLigneHorizontal({ couleur, arrets, index, progression = 0,
               type="button"
               onClick={() => onSelectStop(a)}
               title={a}
-              className={cx(cls, 'pointer-events-auto cursor-pointer hover:text-encre focus-visible:outline-2 focus-visible:outline-focus')}
+              className={cx(
+                cls,
+                'pointer-events-auto cursor-pointer hover:text-encre focus-visible:outline-2 focus-visible:outline-focus'
+              )}
             >
               {a}
             </button>

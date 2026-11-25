@@ -1,4 +1,11 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from 'react';
 import { IconButton } from './Button';
 import { cx } from './cx';
 
@@ -26,7 +33,15 @@ export interface MenuBoutonProps {
   className?: string;
 }
 
-export function MenuBouton({ label, icon, entrees, align = 'end', size = 'sm', defaultOpen = false, className }: MenuBoutonProps) {
+export function MenuBouton({
+  label,
+  icon,
+  entrees,
+  align = 'end',
+  size = 'sm',
+  defaultOpen = false,
+  className,
+}: MenuBoutonProps) {
   const [open, setOpen] = useState(defaultOpen);
   const root = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -47,7 +62,8 @@ export function MenuBouton({ label, icon, entrees, align = 'end', size = 'sm', d
     };
   }, [open]);
 
-  const items = () => Array.from(root.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]') ?? []);
+  const items = () =>
+    Array.from(root.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]') ?? []);
   const move = (e: ReactKeyboardEvent) => {
     const list = items();
     const i = list.indexOf(document.activeElement as HTMLButtonElement);
@@ -86,7 +102,11 @@ export function MenuBouton({ label, icon, entrees, align = 'end', size = 'sm', d
           onKeyDown={move}
           className={cx(
             'pl-menu absolute z-30 animate-feuille',
-            align === 'gauche' ? 'right-full top-0 mr-2' : align === 'end' ? 'right-0 top-full mt-2' : 'left-0 top-full mt-2',
+            align === 'gauche'
+              ? 'right-full top-0 mr-2'
+              : align === 'end'
+                ? 'right-0 top-full mt-2'
+                : 'left-0 top-full mt-2'
           )}
         >
           {entrees.map((e) => (

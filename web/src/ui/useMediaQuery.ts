@@ -9,7 +9,7 @@ export function useMediaQuery(query: string, fallback = false): boolean {
       return () => mq.removeEventListener('change', notify);
     },
     () => window.matchMedia(query).matches,
-    () => fallback,
+    () => fallback
   );
 }
 

@@ -43,14 +43,36 @@ export interface TopNavBarProps {
 const RUBRIQUES: { id: Rubrique; label: string; icon: ReactNode; aria?: string }[] = [
   { id: 'itineraire', label: 'Itinéraire', icon: <IconItineraire className="size-4 shrink-0" /> },
   // Accessible name contains the visible label (WCAG 2.5.3)
-  { id: 'lignes', label: 'Lignes', icon: <IconLignes className="size-4 shrink-0" />, aria: 'Lignes, choisir une ligne' },
-  { id: 'bibliotheque', label: 'Bibliothèque', icon: <IconBibliotheque className="size-4 shrink-0" />, aria: 'Bibliothèque, rames 3D et histoire' },
+  {
+    id: 'lignes',
+    label: 'Lignes',
+    icon: <IconLignes className="size-4 shrink-0" />,
+    aria: 'Lignes, choisir une ligne',
+  },
+  {
+    id: 'bibliotheque',
+    label: 'Bibliothèque',
+    icon: <IconBibliotheque className="size-4 shrink-0" />,
+    aria: 'Bibliothèque, rames 3D et histoire',
+  },
 ];
 
 export function TopNavBar(props: TopNavBarProps) {
   const desktop = useIsDesktop();
   const large = useMediaQuery('(min-width: 1024px)', true);
-  const { reseau, onReseau, onSearch, onRubrique, actif, experience, onExperience, onMenu, horloge, className, ligneActive } = props;
+  const {
+    reseau,
+    onReseau,
+    onSearch,
+    onRubrique,
+    actif,
+    experience,
+    onExperience,
+    onMenu,
+    horloge,
+    className,
+    ligneActive,
+  } = props;
   const icone = (r: (typeof RUBRIQUES)[number]) =>
     r.id === 'lignes' && ligneActive ? (
       <span className="inline-flex h-4 items-center gap-1 leading-none">
@@ -65,25 +87,47 @@ export function TopNavBar(props: TopNavBarProps) {
       id="topbar"
       className={cx(
         'pointer-events-none flex items-center gap-3 px-3 pt-[max(12px,env(safe-area-inset-top))] md:px-4 md:pt-3.5',
-        className,
+        className
       )}
     >
       <div className="pl-barre pointer-events-auto max-w-[calc(100vw-1.5rem)] min-w-0 !gap-1.5 md:max-w-[calc(100vw-2rem)]">
         <ReseauButton reseau={reseau} onClick={onReseau} />
         {desktop && (
           <>
-            <SearchTrigger onOpen={onSearch} size="sm" shortcut={false} className="w-[144px] xl:w-[172px] flex-none" />
+            <SearchTrigger
+              onOpen={onSearch}
+              size="sm"
+              shortcut={false}
+              className="w-[144px] xl:w-[172px] flex-none"
+            />
             <nav aria-label="Rubriques" className="flex items-center gap-1">
               {RUBRIQUES.map((r) =>
                 large ? (
-                  <Button key={r.id} size="sm" variant="discret" icon={icone(r)} lampe pressed={actif === r.id} onClick={() => onRubrique(r.id)}>
+                  <Button
+                    key={r.id}
+                    size="sm"
+                    variant="discret"
+                    icon={icone(r)}
+                    lampe
+                    pressed={actif === r.id}
+                    onClick={() => onRubrique(r.id)}
+                  >
                     {r.label}
                     {r.id === 'lignes' && <span className="pl-sr">, choisir une ligne</span>}
-                    {r.id === 'bibliotheque' && <span className="pl-sr">, rames 3D et histoire</span>}
+                    {r.id === 'bibliotheque' && (
+                      <span className="pl-sr">, rames 3D et histoire</span>
+                    )}
                   </Button>
                 ) : (
-                  <IconButton key={r.id} size="sm" label={r.aria ?? r.label} icon={icone(r)} pressed={actif === r.id} onClick={() => onRubrique(r.id)} />
-                ),
+                  <IconButton
+                    key={r.id}
+                    size="sm"
+                    label={r.aria ?? r.label}
+                    icon={icone(r)}
+                    pressed={actif === r.id}
+                    onClick={() => onRubrique(r.id)}
+                  />
+                )
               )}
             </nav>
           </>
@@ -102,7 +146,15 @@ export function TopNavBar(props: TopNavBarProps) {
             className="w-[176px]"
           />
         )}
-        <IconButton size="sm" variant="secondaire" label="Menu et réglages" icon={<RiMenuLine aria-hidden />} expanded={props.menuOuvert} onClick={onMenu} className="shrink-0" />
+        <IconButton
+          size="sm"
+          variant="secondaire"
+          label="Menu et réglages"
+          icon={<RiMenuLine aria-hidden />}
+          expanded={props.menuOuvert}
+          onClick={onMenu}
+          className="shrink-0"
+        />
       </div>
     </header>
   );

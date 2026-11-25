@@ -635,7 +635,7 @@ export const REMARKABLE_STATIONS: RemarkableStationItem[] = [
     lines: ['10'],
     depthLabel: '-14 m',
     year: '1923 (Fermée 1939)',
-    coordinates: [2.3279, 48.8520],
+    coordinates: [2.3279, 48.852],
     highlightLineId: '10',
     summary:
       'Ancien premier terminus de la ligne 10, fermé à la mobilisation de 1939 et jugé trop proche de Sèvres–Babylone et Mabillon pour rouvrir.',

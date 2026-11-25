@@ -404,7 +404,7 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
         type: 'fill-extrusion',
         source: OVERTURE_SOURCE_ID,
         'source-layer': useLocalParisArchive ? 'mansard_roof' : 'building',
-        minzoom: useLocalParisArchive ? (mobileGpu ? 14.6 : 13.8) : (mobileGpu ? 15.4 : 14.8),
+        minzoom: useLocalParisArchive ? (mobileGpu ? 14.6 : 13.8) : mobileGpu ? 15.4 : 14.8,
         filter: useLocalParisArchive
           ? (['>=', ['coalesce', ['get', 'height'], 0], 10] as any)
           : ([

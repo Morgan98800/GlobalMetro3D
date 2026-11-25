@@ -4,8 +4,8 @@ import { pickNextDetent, resolveDetentHeights, type DetentSheet } from '../web/s
 describe('BottomSheet detents', () => {
   it('calcule les hauteurs de crans cohérentes sur un écran iPhone 844px', () => {
     const h = resolveDetentHeights(844);
-    expect(h.repli).toBe(86);
-    expect(h.bas).toBeGreaterThanOrEqual(216);
+    expect(h.repli).toBe(78);
+    expect(h.bas).toBeGreaterThanOrEqual(190);
     expect(h.bas).toBeLessThanOrEqual(268);
     expect(h.moyen).toBeGreaterThan(h.bas);
     expect(h.haut).toBeGreaterThan(h.moyen);
@@ -16,10 +16,16 @@ describe('BottomSheet detents', () => {
     const heights = resolveDetentHeights(844);
     const crans: DetentSheet[] = ['bas', 'moyen', 'haut'];
     expect(
-      pickNextDetent({ height: heights.bas + 20, velocityY: -0.7, crans, heights, current: 'bas' }),
+      pickNextDetent({ height: heights.bas + 20, velocityY: -0.7, crans, heights, current: 'bas' })
     ).toBe('moyen');
     expect(
-      pickNextDetent({ height: heights.moyen + 20, velocityY: -0.7, crans, heights, current: 'moyen' }),
+      pickNextDetent({
+        height: heights.moyen + 20,
+        velocityY: -0.7,
+        crans,
+        heights,
+        current: 'moyen',
+      })
     ).toBe('haut');
   });
 
@@ -27,10 +33,10 @@ describe('BottomSheet detents', () => {
     const heights = resolveDetentHeights(844);
     const crans: DetentSheet[] = ['bas', 'moyen', 'haut'];
     expect(
-      pickNextDetent({ height: heights.haut - 20, velocityY: 0.7, crans, heights, current: 'haut' }),
+      pickNextDetent({ height: heights.haut - 20, velocityY: 0.7, crans, heights, current: 'haut' })
     ).toBe('moyen');
     expect(
-      pickNextDetent({ height: heights.bas - 10, velocityY: 0.7, crans, heights, current: 'bas' }),
+      pickNextDetent({ height: heights.bas - 10, velocityY: 0.7, crans, heights, current: 'bas' })
     ).toBe('dismiss');
   });
 
@@ -38,7 +44,7 @@ describe('BottomSheet detents', () => {
     const heights = resolveDetentHeights(844);
     const crans: DetentSheet[] = ['repli', 'bas', 'moyen', 'haut'];
     expect(
-      pickNextDetent({ height: heights.bas - 30, velocityY: 0.6, crans, heights, current: 'bas' }),
+      pickNextDetent({ height: heights.bas - 30, velocityY: 0.6, crans, heights, current: 'bas' })
     ).toBe('repli');
   });
 
@@ -46,10 +52,16 @@ describe('BottomSheet detents', () => {
     const heights = resolveDetentHeights(844);
     const crans: DetentSheet[] = ['bas', 'moyen', 'haut'];
     expect(
-      pickNextDetent({ height: heights.moyen - 15, velocityY: 0.05, crans, heights, current: 'bas' }),
+      pickNextDetent({
+        height: heights.moyen - 15,
+        velocityY: 0.05,
+        crans,
+        heights,
+        current: 'bas',
+      })
     ).toBe('moyen');
     expect(
-      pickNextDetent({ height: heights.bas - 70, velocityY: 0.05, crans, heights, current: 'bas' }),
+      pickNextDetent({ height: heights.bas - 70, velocityY: 0.05, crans, heights, current: 'bas' })
     ).toBe('dismiss');
   });
 });

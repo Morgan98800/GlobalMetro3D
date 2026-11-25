@@ -96,7 +96,10 @@ async function bootstrap() {
 
   const requestedCity = router.getCurrentCity();
   const cityConfig = getCityConfig(requestedCity);
-  if (requestedCity.toLowerCase() !== cityConfig.slug.toLowerCase() && typeof window !== 'undefined') {
+  if (
+    requestedCity.toLowerCase() !== cityConfig.slug.toLowerCase() &&
+    typeof window !== 'undefined'
+  ) {
     window.history.replaceState(null, '', `/${cityConfig.slug}${window.location.search}`);
   }
   console.log(`[app] Initializing ${cityConfig.networkName} 3D (${cityConfig.displayName})...`);
@@ -241,7 +244,9 @@ async function bootstrap() {
     new ResizeObserver(publishAttributionHeight).observe(attribEl);
   }
 
-  const mapPadding = (overrideMobileBottom?: number): { top: number; right: number; bottom: number; left: number } => {
+  const mapPadding = (
+    overrideMobileBottom?: number
+  ): { top: number; right: number; bottom: number; left: number } => {
     const header = document.getElementById('topbar')?.getBoundingClientRect();
     const dockEl = document.getElementById('dock');
     const dockRect = dockEl && dockEl.offsetWidth > 0 ? dockEl.getBoundingClientRect() : null;
@@ -254,7 +259,8 @@ async function bootstrap() {
       ? Math.max(0, Math.round(window.innerHeight - sheetEl.getBoundingClientRect().top))
       : 0;
     const mobileBottomH =
-      overrideMobileBottom ?? (sheetAttrH > 0 ? sheetAttrH : Math.max(sheetVisibleH, dockRect?.height || 0));
+      overrideMobileBottom ??
+      (sheetAttrH > 0 ? sheetAttrH : Math.max(sheetVisibleH, dockRect?.height || 0));
     const top = isMobile ? 64 : (header?.height || 56) + 28;
     const right = isMobile ? 20 : 40;
     const bottom = isMobile
@@ -499,10 +505,9 @@ async function bootstrap() {
     edinburghHandle?.focusStation(station.name);
     const isMobileVp = typeof window !== 'undefined' && window.innerWidth < 768;
     const dockEl = !isMobileVp ? document.getElementById('dock') : null;
-    const leftDockW = dockEl && dockEl.offsetWidth > 0 ? Math.round(dockEl.getBoundingClientRect().width) : 0;
-    const mobileBottomPad = isMobileVp
-      ? Math.min(Math.round(window.innerHeight * 0.48), 408)
-      : 32;
+    const leftDockW =
+      dockEl && dockEl.offsetWidth > 0 ? Math.round(dockEl.getBoundingClientRect().width) : 0;
+    const mobileBottomPad = isMobileVp ? Math.min(Math.round(window.innerHeight * 0.48), 408) : 32;
     const targetZoom = zoom20
       ? isMobileVp
         ? 17.6
@@ -704,7 +709,9 @@ async function bootstrap() {
     onBackgroundClick: () => {
       const hadSelectedStation = Boolean(uiStore.getSnapshot().selectedStation);
       const wasFollowingTrain = Boolean(trackedTrain && followCamera?.isFollowing());
-      const hadSelection = Boolean(hadSelectedStation || activeLineId || trackedTrain || wasFollowingTrain);
+      const hadSelection = Boolean(
+        hadSelectedStation || activeLineId || trackedTrain || wasFollowingTrain
+      );
       const wasZoomedIn = map.getZoom() > 13.2;
       hideTooltip();
       if (hadSelection) {
@@ -716,7 +723,12 @@ async function bootstrap() {
         deckOverlay.setSelectedTrain(null);
         engine.setFocusedLine(null);
         router.setRoute(null, '0', cityConfig.slug);
-        uiStore.patch({ activeLineId: null, activeDir: '0', isFollowing: false, trackedTrain: null });
+        uiStore.patch({
+          activeLineId: null,
+          activeDir: '0',
+          isFollowing: false,
+          trackedTrain: null,
+        });
         updateRecenterState();
         return;
       }

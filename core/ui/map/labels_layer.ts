@@ -115,9 +115,7 @@ export function createStationLabelsLayer(
   });
 
   const isDark =
-    typeof document !== 'undefined'
-      ? document.documentElement.classList.contains('dark')
-      : true;
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : true;
 
   return new TextLayer<StationMetadata>({
     id: 'subway-station-labels',

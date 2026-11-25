@@ -88,10 +88,42 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="5" y="5.6" width="38.2" height="3.6" rx="1" fill="currentColor" fillOpacity="0.2" />
-          <rect x="6" y="5.8" width="9.5" height="3.2" rx="0.6" fill="currentColor" fillOpacity="0.55" />
-          <rect x="17" y="5.8" width="9.5" height="3.2" rx="0.6" fill="currentColor" fillOpacity="0.55" />
-          <rect x="28" y="5.8" width="9" height="3.2" rx="0.6" fill="currentColor" fillOpacity="0.55" />
+          <rect
+            x="5"
+            y="5.6"
+            width="38.2"
+            height="3.6"
+            rx="1"
+            fill="currentColor"
+            fillOpacity="0.2"
+          />
+          <rect
+            x="6"
+            y="5.8"
+            width="9.5"
+            height="3.2"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.55"
+          />
+          <rect
+            x="17"
+            y="5.8"
+            width="9.5"
+            height="3.2"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.55"
+          />
+          <rect
+            x="28"
+            y="5.8"
+            width="9"
+            height="3.2"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.55"
+          />
           <path d="M38.8 5.8H42.3L43 9H38.8V5.8Z" fill="currentColor" fillOpacity="0.65" />
           <path d="M4.2 10.9H43.6" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
@@ -108,10 +140,42 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="6" y="5.4" width="8.5" height="4.2" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="16.2" y="5.4" width="8.5" height="4.2" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="26.4" y="5.4" width="8.5" height="4.2" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="36.6" y="5.2" width="6.8" height="4.6" rx="0.8" fill="currentColor" fillOpacity="0.65" />
+          <rect
+            x="6"
+            y="5.4"
+            width="8.5"
+            height="4.2"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="16.2"
+            y="5.4"
+            width="8.5"
+            height="4.2"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="26.4"
+            y="5.4"
+            width="8.5"
+            height="4.2"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="36.6"
+            y="5.2"
+            width="6.8"
+            height="4.6"
+            rx="0.8"
+            fill="currentColor"
+            fillOpacity="0.65"
+          />
           <path d="M4.2 11.2H43.6" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
       )}
@@ -127,11 +191,51 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="6" y="5.4" width="8.5" height="4.2" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="16.2" y="5.4" width="8.5" height="4.2" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="26.4" y="5.4" width="8.5" height="4.2" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="37" y="5.4" width="3.2" height="3.8" rx="0.6" fill="currentColor" fillOpacity="0.55" />
-          <rect x="41" y="5.2" width="2.4" height="4.2" rx="0.5" fill="currentColor" fillOpacity="0.7" />
+          <rect
+            x="6"
+            y="5.4"
+            width="8.5"
+            height="4.2"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="16.2"
+            y="5.4"
+            width="8.5"
+            height="4.2"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="26.4"
+            y="5.4"
+            width="8.5"
+            height="4.2"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="37"
+            y="5.4"
+            width="3.2"
+            height="3.8"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.55"
+          />
+          <rect
+            x="41"
+            y="5.2"
+            width="2.4"
+            height="4.2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.7"
+          />
           <path d="M4.2 11.2H43.6" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
       )}
@@ -147,9 +251,33 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="6" y="5.6" width="8.2" height="3.8" rx="0.8" fill="currentColor" fillOpacity="0.52" />
-          <rect x="15.8" y="5.6" width="8.2" height="3.8" rx="0.8" fill="currentColor" fillOpacity="0.52" />
-          <rect x="25.6" y="5.6" width="8.2" height="3.8" rx="0.8" fill="currentColor" fillOpacity="0.52" />
+          <rect
+            x="6"
+            y="5.6"
+            width="8.2"
+            height="3.8"
+            rx="0.8"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="15.8"
+            y="5.6"
+            width="8.2"
+            height="3.8"
+            rx="0.8"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="25.6"
+            y="5.6"
+            width="8.2"
+            height="3.8"
+            rx="0.8"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
           <path d="M35.6 5.6H39.8L42.8 9.4H35.6V5.6Z" fill="currentColor" fillOpacity="0.68" />
           <path d="M4.5 11.1H43.5" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
@@ -166,9 +294,33 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="5.8" y="5.2" width="9.8" height="4.5" rx="0.9" fill="currentColor" fillOpacity="0.52" />
-          <rect x="17" y="5.2" width="9.8" height="4.5" rx="0.9" fill="currentColor" fillOpacity="0.52" />
-          <rect x="28.2" y="5.2" width="8.2" height="4.5" rx="0.9" fill="currentColor" fillOpacity="0.52" />
+          <rect
+            x="5.8"
+            y="5.2"
+            width="9.8"
+            height="4.5"
+            rx="0.9"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="17"
+            y="5.2"
+            width="9.8"
+            height="4.5"
+            rx="0.9"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="28.2"
+            y="5.2"
+            width="8.2"
+            height="4.5"
+            rx="0.9"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
           <path d="M38 5.2H41.4L43 9.4H38V5.2Z" fill="currentColor" fillOpacity="0.68" />
           <path d="M4.2 11.2H43.6" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
@@ -185,10 +337,42 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="6" y="5.8" width="6.2" height="3.4" rx="0.6" fill="currentColor" fillOpacity="0.5" />
-          <rect x="14.2" y="5.8" width="6.2" height="3.4" rx="0.6" fill="currentColor" fillOpacity="0.5" />
-          <rect x="22.4" y="5.8" width="6.2" height="3.4" rx="0.6" fill="currentColor" fillOpacity="0.5" />
-          <rect x="30.6" y="5.8" width="5.2" height="3.4" rx="0.6" fill="currentColor" fillOpacity="0.5" />
+          <rect
+            x="6"
+            y="5.8"
+            width="6.2"
+            height="3.4"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="14.2"
+            y="5.8"
+            width="6.2"
+            height="3.4"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="22.4"
+            y="5.8"
+            width="6.2"
+            height="3.4"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="30.6"
+            y="5.8"
+            width="5.2"
+            height="3.4"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
           <path d="M37.4 5.8L42.2 9.4H37.4V5.8Z" fill="currentColor" fillOpacity="0.68" />
           <path d="M4.2 10.9H43.5" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
@@ -205,9 +389,33 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="7" y="5.4" width="8.5" height="4" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="17.5" y="5.4" width="8.5" height="4" rx="0.7" fill="currentColor" fillOpacity="0.5" />
-          <rect x="28" y="5.4" width="8" height="4" rx="0.7" fill="currentColor" fillOpacity="0.5" />
+          <rect
+            x="7"
+            y="5.4"
+            width="8.5"
+            height="4"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="17.5"
+            y="5.4"
+            width="8.5"
+            height="4"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="28"
+            y="5.4"
+            width="8"
+            height="4"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
           <path d="M38 5.4H41.4L42.4 9.2H38V5.4Z" fill="currentColor" fillOpacity="0.65" />
           <path d="M5 11H43" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
@@ -227,11 +435,51 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             stroke="currentColor"
             strokeWidth="1.2"
           />
-          <rect x="5.8" y="5.8" width="5.6" height="3.4" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="13" y="5.8" width="5.6" height="3.4" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="20.2" y="5.8" width="5.6" height="3.4" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="27.4" y="5.8" width="5.6" height="3.4" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="35.2" y="5.6" width="6.4" height="3.6" rx="0.6" fill="currentColor" fillOpacity="0.65" />
+          <rect
+            x="5.8"
+            y="5.8"
+            width="5.6"
+            height="3.4"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="13"
+            y="5.8"
+            width="5.6"
+            height="3.4"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="20.2"
+            y="5.8"
+            width="5.6"
+            height="3.4"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="27.4"
+            y="5.8"
+            width="5.6"
+            height="3.4"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="35.2"
+            y="5.6"
+            width="6.4"
+            height="3.6"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.65"
+          />
           <path d="M4 10.8H43" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
       )}
@@ -239,7 +487,15 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
       {/* Sprague-Thomson (1930) : lanterneau de toiture + 6 petites fenêtres verticales rivetées */}
       {kind === 'sprague' && (
         <>
-          <rect x="8.5" y="2.5" width="29" height="1.9" rx="0.7" fill="currentColor" fillOpacity="0.32" />
+          <rect
+            x="8.5"
+            y="2.5"
+            width="29"
+            height="1.9"
+            rx="0.7"
+            fill="currentColor"
+            fillOpacity="0.32"
+          />
           <rect
             x="4"
             y="4.4"
@@ -251,12 +507,60 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             stroke="currentColor"
             strokeWidth="1.2"
           />
-          <rect x="6.5" y="5.8" width="3.6" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.52" />
-          <rect x="12" y="5.8" width="3.6" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.52" />
-          <rect x="17.5" y="5.8" width="3.6" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.52" />
-          <rect x="23" y="5.8" width="3.6" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.52" />
-          <rect x="28.5" y="5.8" width="3.6" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.52" />
-          <rect x="34.5" y="5.8" width="5.5" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.65" />
+          <rect
+            x="6.5"
+            y="5.8"
+            width="3.6"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="12"
+            y="5.8"
+            width="3.6"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="17.5"
+            y="5.8"
+            width="3.6"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="23"
+            y="5.8"
+            width="3.6"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="28.5"
+            y="5.8"
+            width="3.6"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="34.5"
+            y="5.8"
+            width="5.5"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.65"
+          />
           <path d="M5 10.9H42" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
       )}
@@ -281,15 +585,79 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeLinejoin="round"
           />
           {/* Niveau haut */}
-          <rect x="6" y="5.3" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="14.2" y="5.3" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="22.4" y="5.3" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="30.6" y="5.3" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
+          <rect
+            x="6"
+            y="5.3"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="14.2"
+            y="5.3"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="22.4"
+            y="5.3"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="30.6"
+            y="5.3"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
           {/* Niveau bas */}
-          <rect x="6" y="10.4" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="14.2" y="10.4" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="22.4" y="10.4" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="30.6" y="10.4" width="6.5" height="2" rx="0.5" fill="currentColor" fillOpacity="0.5" />
+          <rect
+            x="6"
+            y="10.4"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="14.2"
+            y="10.4"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="22.4"
+            y="10.4"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="30.6"
+            y="10.4"
+            width="6.5"
+            height="2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
           <path d="M39 5.5H41.6L43.2 8.8H39V5.5Z" fill="currentColor" fillOpacity="0.68" />
           <path d="M4.5 8.9H43.4" stroke={lineColor} strokeWidth="1.3" strokeLinecap="round" />
         </>
@@ -314,10 +682,42 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="5.8" y="5.6" width="6.8" height="3.8" rx="0.6" fill="currentColor" fillOpacity="0.5" />
-          <rect x="14.2" y="5.6" width="6.8" height="3.8" rx="0.6" fill="currentColor" fillOpacity="0.5" />
-          <rect x="22.6" y="5.6" width="6.8" height="3.8" rx="0.6" fill="currentColor" fillOpacity="0.5" />
-          <rect x="31" y="5.6" width="6.2" height="3.8" rx="0.6" fill="currentColor" fillOpacity="0.5" />
+          <rect
+            x="5.8"
+            y="5.6"
+            width="6.8"
+            height="3.8"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="14.2"
+            y="5.6"
+            width="6.8"
+            height="3.8"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="22.6"
+            y="5.6"
+            width="6.8"
+            height="3.8"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="31"
+            y="5.6"
+            width="6.2"
+            height="3.8"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
           <path d="M38.8 5.6H41.8L42.8 9.2H38.8V5.6Z" fill="currentColor" fillOpacity="0.68" />
           <path d="M4.2 11H43.4" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
@@ -342,11 +742,51 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <rect x="5.5" y="5.8" width="6.5" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="13.8" y="5.8" width="6.5" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="22.1" y="5.8" width="6.5" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="30.4" y="5.8" width="6.5" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.5" />
-          <rect x="38.5" y="5.8" width="4" height="3.6" rx="0.5" fill="currentColor" fillOpacity="0.68" />
+          <rect
+            x="5.5"
+            y="5.8"
+            width="6.5"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="13.8"
+            y="5.8"
+            width="6.5"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="22.1"
+            y="5.8"
+            width="6.5"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="30.4"
+            y="5.8"
+            width="6.5"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.5"
+          />
+          <rect
+            x="38.5"
+            y="5.8"
+            width="4"
+            height="3.6"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.68"
+          />
           <path d="M4 11H43.2" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
         </>
       )}

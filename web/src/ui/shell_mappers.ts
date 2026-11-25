@@ -22,7 +22,9 @@ export function mapTrafficAlert(report?: LineTrafficReport | null): LineAlert | 
   return 'vigilance';
 }
 
-export function toLineRef(line: Pick<LineMetadata, 'short_name' | 'color' | 'text_color'>): LineRef {
+export function toLineRef(
+  line: Pick<LineMetadata, 'short_name' | 'color' | 'text_color'>
+): LineRef {
   return {
     shortName: line.short_name,
     color: line.color,
@@ -30,10 +32,7 @@ export function toLineRef(line: Pick<LineMetadata, 'short_name' | 'color' | 'tex
   };
 }
 
-export function mapLineToEtat(
-  line: LineMetadata,
-  traffic?: LineTrafficReport | null
-): LigneEtat {
+export function mapLineToEtat(line: LineMetadata, traffic?: LineTrafficReport | null): LigneEtat {
   const termini: [string, string] | undefined =
     line.destinations?.['0'] && line.destinations?.['1']
       ? [line.destinations['0'], line.destinations['1']]
@@ -268,7 +267,8 @@ function mapCarPosition(hint?: string): PositionRame | undefined {
   const norm = hint.toLowerCase();
   if (norm.includes('avant') || norm.includes('tête') || norm.includes('tete')) return 'tete';
   if (norm.includes('milieu')) return 'milieu';
-  if (norm.includes('arrière') || norm.includes('arriere') || norm.includes('queue')) return 'queue';
+  if (norm.includes('arrière') || norm.includes('arriere') || norm.includes('queue'))
+    return 'queue';
   return undefined;
 }
 
@@ -361,13 +361,19 @@ export function buildRecordsLists(params: {
   const byStation =
     (
       params.stationRankings as {
-        by_station?: Record<string, Array<{ station_name: string; counts?: Record<string, number> }>>;
+        by_station?: Record<
+          string,
+          Array<{ station_name: string; counts?: Record<string, number> }>
+        >;
       } | null
     )?.by_station ?? {};
   const rows = byStation[key] ?? [];
   const stationByName = new Map(params.stations.map((s) => [s.name, s]));
 
-  const toRecord = (row: { station_name: string; counts?: Record<string, number> }): StationRecord => {
+  const toRecord = (row: {
+    station_name: string;
+    counts?: Record<string, number>;
+  }): StationRecord => {
     const st = stationByName.get(row.station_name);
     const lignes = (st?.lines ?? [])
       .map((id) => params.linesById.get(id))

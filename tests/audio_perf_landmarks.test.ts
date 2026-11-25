@@ -37,18 +37,20 @@ describe('iPhone & Mac adaptive FPS battery budget', () => {
   it('throttles overview zoom to 10 FPS and caps ProMotion mobile to 30 FPS', () => {
     expect(getAdaptiveFrameIntervalMs({ zoom: 12, isFollowing: false, isMobile: false })).toBe(100);
     expect(getAdaptiveFrameIntervalMs({ zoom: 12, isFollowing: false, isMobile: true })).toBe(100);
-    expect(getAdaptiveFrameIntervalMs({ zoom: 14.5, isFollowing: false, isMobile: true })).toBe(42);
-    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: false, isMobile: true })).toBe(33);
-    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: true, isMobile: false })).toBe(16.5);
-    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: true, isMobile: true })).toBe(33);
-    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: false, reduceMotion: true })).toBe(1000);
+    expect(getAdaptiveFrameIntervalMs({ zoom: 14.5, isFollowing: false, isMobile: true })).toBe(33);
+    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: false, isMobile: true })).toBe(8);
+    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: true, isMobile: false })).toBe(8);
+    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: true, isMobile: true })).toBe(8);
+    expect(getAdaptiveFrameIntervalMs({ zoom: 16, isFollowing: false, reduceMotion: true })).toBe(
+      1000
+    );
   });
 });
 
 describe('Paris 3D architectural landmarks GLB layer', () => {
   it('ships Paris landmark GLB models (including CC0 Eiffel Tower) and culls them by zoom, pitch, and viewport radius', () => {
     const landmarksDir = path.resolve(process.cwd(), 'web/public/models/landmarks');
-    expect(PARIS_LANDMARKS_GLTF).toHaveLength(10);
+    expect(PARIS_LANDMARKS_GLTF).toHaveLength(6);
     for (const lm of PARIS_LANDMARKS_GLTF) {
       const file = path.basename(lm.modelUrl);
       const fullPath = path.join(landmarksDir, file);

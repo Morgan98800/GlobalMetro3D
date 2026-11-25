@@ -445,7 +445,9 @@ export function createPlatformsLayers(
   );
   if (data.length === 0) return [];
   if (!undergroundBeforeId) {
-    return [buildPlatformPolygonLayer('subway-platforms', data, line, zoom, theme, followElevation)];
+    return [
+      buildPlatformPolygonLayer('subway-platforms', data, line, zoom, theme, followElevation),
+    ];
   }
   const underground = data.filter((d) => d.baseZ < 0);
   const surface = data.filter((d) => d.baseZ >= 0);

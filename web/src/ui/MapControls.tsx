@@ -48,7 +48,13 @@ export function MapControls(p: MapControlsProps) {
           />
         )}
         {p.pointsDeVue && p.pointsDeVue.length > 0 && (
-          <MenuBouton size="md" align="gauche" label="Points de vue" icon={<RiCameraLensLine aria-hidden />} entrees={p.pointsDeVue} />
+          <MenuBouton
+            size="md"
+            align="gauche"
+            label="Points de vue"
+            icon={<RiCameraLensLine aria-hidden />}
+            entrees={p.pointsDeVue}
+          />
         )}
       </Panneau>
     </div>

@@ -16,11 +16,7 @@ export interface ElevationProfileProps {
  * Compact dynamic longitudinal cross-section (altitude vs surface) for a Paris line.
  * Highlights aerial viaducts (L2, L5, L6, L8, L11) above 0m and underground/sub-Seine tunnels below 0m.
  */
-export function ElevationProfile({
-  couleur,
-  stops,
-  rames = [],
-}: ElevationProfileProps) {
+export function ElevationProfile({ couleur, stops, rames = [] }: ElevationProfileProps) {
   if (stops.length < 2) return null;
 
   const W = 320;
@@ -35,7 +31,8 @@ export function ElevationProfile({
   const spanZ = Math.max(10, maxZ - minZ);
 
   const xAt = (idxFloat: number) =>
-    padX + (Math.max(0, Math.min(stops.length - 1, idxFloat)) / (stops.length - 1)) * (W - padX * 2);
+    padX +
+    (Math.max(0, Math.min(stops.length - 1, idxFloat)) / (stops.length - 1)) * (W - padX * 2);
   const yAt = (z: number) => padTop + ((maxZ - z) / spanZ) * (H - padTop - padBot);
 
   const yGround = yAt(0);

@@ -5,10 +5,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import {
-  RiVolumeMuteLine,
-  RiVolumeUpLine,
-} from '@remixicon/react';
+import { RiVolumeMuteLine, RiVolumeUpLine } from '@remixicon/react';
 import type { RollingStockCatalogItem } from '../data/paris_library';
 import { IconButton } from './Button';
 import { cx } from './cx';
@@ -19,11 +16,7 @@ export interface TrainShowroom3DProps {
   className?: string;
 }
 
-function playRealMotorAudio(
-  src: string,
-  fallbackSrc: string,
-  onEnded: () => void
-): () => void {
+function playRealMotorAudio(src: string, fallbackSrc: string, onEnded: () => void): () => void {
   const audio = new Audio();
   audio.crossOrigin = 'anonymous';
   audio.preload = 'auto';
@@ -144,7 +137,11 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
     plinth.position.y = -0.14;
     pedestalGroup.add(plinth);
 
-    const railMat = new THREE.MeshStandardMaterial({ color: '#9aa4b4', roughness: 0.35, metalness: 0.85 });
+    const railMat = new THREE.MeshStandardMaterial({
+      color: '#9aa4b4',
+      roughness: 0.35,
+      metalness: 0.85,
+    });
     for (const x of [-0.72, 0.72]) {
       const rail = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.12, 55.5), railMat);
       rail.position.set(x, 0.06, 0);
@@ -288,7 +285,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
         camera.position.set(
           Math.max(6.8, finalSize.x * 2.4),
           Math.max(2.8, finalSize.y * 0.95),
-          frontZ + Math.max(4.8, cabLen * 0.28),
+          frontZ + Math.max(4.8, cabLen * 0.28)
         );
         controls.update();
 
@@ -365,14 +362,10 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
       stock.driveType === 'pneu'
         ? '/audio/metro/pneu_depart.m4a'
         : '/audio/metro/fer_roll_loop.m4a';
-    audioStopRef.current = playRealMotorAudio(
-      stock.audioSrc ?? fallbackSrc,
-      fallbackSrc,
-      () => {
-        setAudioPlaying(false);
-        audioStopRef.current = null;
-      }
-    );
+    audioStopRef.current = playRealMotorAudio(stock.audioSrc ?? fallbackSrc, fallbackSrc, () => {
+      setAudioPlaying(false);
+      audioStopRef.current = null;
+    });
   };
 
   return (

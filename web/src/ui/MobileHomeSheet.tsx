@@ -1,7 +1,4 @@
-import {
-  RiBriefcase4Line,
-  RiHome5Line,
-} from '@remixicon/react';
+import { RiBriefcase4Line, RiHome5Line } from '@remixicon/react';
 import type { ReactNode } from 'react';
 import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button } from './Button';
@@ -80,11 +77,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
             lampe={hasPerturbations}
             onClick={p.onLignes}
           />
-          <RaccourciBouton
-            icon={<IconItineraire />}
-            label="Itinéraire"
-            onClick={p.onItineraire}
-          />
+          <RaccourciBouton icon={<IconItineraire />} label="Itinéraire" onClick={p.onItineraire} />
           <RaccourciBouton
             icon={<IconBibliotheque />}
             label="Rames 3D"
@@ -118,9 +111,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
 
               {rer.length > 0 && (
                 <div>
-                  <h3 className="mb-1.5 text-xs font-medium tracking-[0.04em] text-encre-2">
-                    RER
-                  </h3>
+                  <h3 className="mb-1.5 text-xs font-medium tracking-[0.04em] text-encre-2">RER</h3>
                   <div className="flex flex-wrap gap-2">
                     {rer.map((l) => (
                       <LineBadgeChip

@@ -43,7 +43,11 @@ function finalizeDataTexture(
  * Convertit une heightmap Float32Array (0..1, tuilable) en normalMap tangentielle (RGB)
  * via un filtre Sobel 3×3.
  */
-function heightToNormalCanvas(height: Float32Array, size: number, strength: number): HTMLCanvasElement {
+function heightToNormalCanvas(
+  height: Float32Array,
+  size: number,
+  strength: number
+): HTMLCanvasElement {
   const [canvas, ctx] = createCanvas(size, size);
   const img = ctx.createImageData(size, size);
   const out = img.data;
@@ -66,9 +70,9 @@ function heightToNormalCanvas(height: Float32Array, size: number, strength: numb
       const invLen = 1 / Math.hypot(dx, dy, dz);
 
       const i = (y * size + x) * 4;
-      out[i] = Math.round(((-dx * invLen) * 0.5 + 0.5) * 255);
-      out[i + 1] = Math.round(((-dy * invLen) * 0.5 + 0.5) * 255);
-      out[i + 2] = Math.round(((dz * invLen) * 0.5 + 0.5) * 255);
+      out[i] = Math.round((-dx * invLen * 0.5 + 0.5) * 255);
+      out[i + 1] = Math.round((-dy * invLen * 0.5 + 0.5) * 255);
+      out[i + 2] = Math.round((dz * invLen * 0.5 + 0.5) * 255);
       out[i + 3] = 255;
     }
   }
@@ -166,7 +170,10 @@ export function createAsphaltPbrMaps(anisotropy: number): PbrMapPair {
   const rImg = rctx.createImageData(size, size);
   for (let i = 0; i < size * size; i++) {
     // Zones de passage légèrement lustrées (0.58..0.88)
-    const rVal = Math.max(0.48, Math.min(0.92, 0.78 - (wear[i] - 0.5) * 0.24 + (height[i] - 0.5) * 0.1));
+    const rVal = Math.max(
+      0.48,
+      Math.min(0.92, 0.78 - (wear[i] - 0.5) * 0.24 + (height[i] - 0.5) * 0.1)
+    );
     const byte = Math.round(rVal * 255);
     const idx = i * 4;
     rImg.data[idx] = byte;

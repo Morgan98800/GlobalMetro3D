@@ -12,7 +12,8 @@ export type PanneauMatiere = 'flottant' | 'feuille' | 'encart' | 'verre';
 
 const MATIERE: Record<PanneauMatiere, string> = {
   flottant: 'pl-carte rounded-panneau',
-  feuille: 'bg-surface text-encre rounded-feuille [box-shadow:0_0_0_1px_var(--color-joint),var(--shadow-flotte)]',
+  feuille:
+    'bg-surface text-encre rounded-feuille [box-shadow:0_0_0_1px_var(--color-joint),var(--shadow-flotte)]',
   encart: 'rounded-[10px] bg-encart',
   verre: 'pl-hud rounded-panneau text-encre',
 };
@@ -24,7 +25,13 @@ export interface PanneauProps extends HTMLAttributes<HTMLElement> {
   ref?: Ref<HTMLElement>;
 }
 
-export function Panneau({ matiere = 'flottant', as: Tag = 'div', className, children, ...rest }: PanneauProps) {
+export function Panneau({
+  matiere = 'flottant',
+  as: Tag = 'div',
+  className,
+  children,
+  ...rest
+}: PanneauProps) {
   return (
     <Tag className={cx('pointer-events-auto', MATIERE[matiere], className)} {...rest}>
       {children}

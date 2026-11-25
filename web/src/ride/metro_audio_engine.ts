@@ -283,7 +283,13 @@ export class MetroAudioEngine {
 
   private playOneShot(
     key: SampleKey,
-    opts: { gainDb?: number; rateMin?: number; rateMax?: number; duckDb?: number; duckSec?: number } = {}
+    opts: {
+      gainDb?: number;
+      rateMin?: number;
+      rateMax?: number;
+      duckDb?: number;
+      duckSec?: number;
+    } = {}
   ): void {
     if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
     const buf = this.buffers.get(key);
@@ -375,14 +381,13 @@ export class MetroAudioEngine {
     }
 
     // Enclosure / air acoustics filter
-    const cutoff =
-      t.isOpenAir
-        ? 3600 + vNorm * 2400
-        : view === 'vault'
-          ? 2400 + vNorm * 1600
-          : view === 'passenger'
-            ? 1450 + vNorm * 1250
-            : 1850 + vNorm * 1650;
+    const cutoff = t.isOpenAir
+      ? 3600 + vNorm * 2400
+      : view === 'vault'
+        ? 2400 + vNorm * 1600
+        : view === 'passenger'
+          ? 1450 + vNorm * 1250
+          : 1850 + vNorm * 1650;
     this.rollFilter?.frequency.setTargetAtTime(cutoff, now, 0.16);
 
     // 2. Tunnel airflow rush (strong underground at high speed, quiet on open-air viaduct)
@@ -391,14 +396,7 @@ export class MetroAudioEngine {
     this.tunnelFilter?.frequency.setTargetAtTime(280 + vNorm * 480, now, 0.2);
 
     // 3. Real Paris Metro station ambience (present at stops & in Quai view, dips smoothly in deep tunnel)
-    const stationDb =
-      view === 'vault'
-        ? t.atStop
-          ? -8
-          : -13
-        : t.atStop
-          ? -12
-          : -28;
+    const stationDb = view === 'vault' ? (t.atStop ? -8 : -13) : t.atStop ? -12 : -28;
     this.stationGain?.gain.setTargetAtTime(dbToGain(stationDb), now, 0.28);
 
     // 4. Vault reverb send: authentic station/tunnel resonance, dry on open-air viaducts

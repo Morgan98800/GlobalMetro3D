@@ -42,13 +42,26 @@ export interface ThermometreProps {
 
 const H = 40;
 
-export function Thermometre({ couleur, ligne, arrets, rames = [], onArret, onRame, onCorrespondance, className }: ThermometreProps) {
+export function Thermometre({
+  couleur,
+  ligne,
+  arrets,
+  rames = [],
+  onArret,
+  onRame,
+  onCorrespondance,
+  className,
+}: ThermometreProps) {
   const ref = useRef<HTMLDivElement>(null);
   const n = arrets.length;
   const encre = inkFor(couleur);
   const stockKind = resolveRollingStockIconKind(ligne);
   return (
-    <div ref={ref} className={cx('pl-thermo', className)} style={{ '--pl-ligne': couleur, minHeight: n * H } as CSSProperties}>
+    <div
+      ref={ref}
+      className={cx('pl-thermo', className)}
+      style={{ '--pl-ligne': couleur, minHeight: n * H } as CSSProperties}
+    >
       <ol className="pl-thermo-liste">
         {arrets.map((a, i) => {
           const terminus = i === 0 || i === n - 1;
@@ -96,7 +109,7 @@ export function Thermometre({ couleur, ligne, arrets, rames = [], onArret, onRam
               'group absolute left-[14px] top-0 z-[2] grid place-items-center rounded-[6px]',
               'after:absolute after:-inset-[8px] after:content-[""] max-md:after:-inset-[13px]',
               'outline-none transition-transform duration-500 ease-rame focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-              r.suivie ? 'h-[25px] w-[21px]' : 'h-[22px] w-[18px]',
+              r.suivie ? 'h-[25px] w-[21px]' : 'h-[22px] w-[18px]'
             )}
             style={{
               transform: `translate3d(-50%, ${yPx}px, 0)`,
@@ -108,7 +121,10 @@ export function Thermometre({ couleur, ligne, arrets, rames = [], onArret, onRam
           >
             <IconRame
               kind={r.stockKind ?? stockKind}
-              className={cx('transition-transform duration-150 group-hover:scale-110', r.suivie ? 'size-[15px]' : 'size-[13px]')}
+              className={cx(
+                'transition-transform duration-150 group-hover:scale-110',
+                r.suivie ? 'size-[15px]' : 'size-[13px]'
+              )}
               style={{ color: encre }}
             />
           </button>

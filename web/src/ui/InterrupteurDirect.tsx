@@ -5,7 +5,8 @@ import { cx } from './cx';
  * Bascule temps réel / horaires théoriques — vrai interrupteur à glissière tactile
  * (distinct visuellement des groupes radio Segmented).
  */
-export interface InterrupteurDirectProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+export interface InterrupteurDirectProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   direct: boolean;
   onChange?: (direct: boolean) => void;
   /** Nom du flux : « PRIM », « TfL », « WMATA », « VBB » */
@@ -14,10 +15,22 @@ export interface InterrupteurDirectProps extends Omit<ButtonHTMLAttributes<HTMLB
   disponible?: boolean;
 }
 
-export function InterrupteurDirect({ direct, onChange, source, disponible = true, className, ...rest }: InterrupteurDirectProps) {
+export function InterrupteurDirect({
+  direct,
+  onChange,
+  source,
+  disponible = true,
+  className,
+  ...rest
+}: InterrupteurDirectProps) {
   if (!disponible) {
     return (
-      <span className={cx('inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-encart px-2.5 text-[12px] font-semibold text-encre-2', className)}>
+      <span
+        className={cx(
+          'inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-encart px-2.5 text-[12px] font-semibold text-encre-2',
+          className
+        )}
+      >
         <span aria-hidden className="size-1.5 rounded-full bg-encre-3" />
         <span>Horaires théoriques</span>
       </span>

@@ -47,7 +47,9 @@ export function LineBadgeChip({
   const { main, bis } = badgeParts(shortName);
   const level: LineAlert | null = alert ?? (hasAlert ? 'vigilance' : null);
   const name = label ?? lineName(shortName);
-  const a11y = level ? `${name}, ${level === 'signal' ? 'trafic interrompu' : 'trafic perturbé'}` : name;
+  const a11y = level
+    ? `${name}, ${level === 'signal' ? 'trafic interrompu' : 'trafic perturbé'}`
+    : name;
   const wide = m === 'bus' || (m === 'metro' && main.length > 2);
 
   const shapeOverride = wide ? '!w-auto !rounded-[0.35em] !px-[0.4em]' : undefined;
@@ -56,7 +58,8 @@ export function LineBadgeChip({
 
   const dataSize = size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : undefined;
   const dataDigits = main.length === 2 && m === 'metro' ? '2' : undefined;
-  const dataTrafic = level === 'signal' ? 'alerte' : level === 'vigilance' ? 'vigilance' : undefined;
+  const dataTrafic =
+    level === 'signal' ? 'alerte' : level === 'vigilance' ? 'vigilance' : undefined;
 
   const style = {
     '--pl-ligne': bg,
@@ -70,7 +73,7 @@ export function LineBadgeChip({
     shapeOverride,
     sizeOverride,
     dimmed && 'opacity-40 saturate-[0.35]',
-    className,
+    className
   );
 
   const body = (

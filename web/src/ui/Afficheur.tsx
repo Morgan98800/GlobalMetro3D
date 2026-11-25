@@ -77,18 +77,34 @@ export interface AfficheurProps {
   className?: string;
 }
 
-const dire = (p: Passage) => (p.ligne ? `${lineName(p.ligne.shortName)}, ${describePassage(p)}` : describePassage(p));
+const dire = (p: Passage) =>
+  p.ligne ? `${lineName(p.ligne.shortName)}, ${describePassage(p)}` : describePassage(p);
 
-export function Afficheur({ passages, size = 'sm', max = 2, onPassage, libelleAction = 'Suivre la rame', className }: AfficheurProps) {
+export function Afficheur({
+  passages,
+  size = 'sm',
+  max = 2,
+  onPassage,
+  libelleAction = 'Suivre la rame',
+  className,
+}: AfficheurProps) {
   const shown = passages.slice(0, max);
   const sentence = shown.map(dire).join(', puis ');
   return (
     <span className={cx('afficheur inline-flex shrink-0 items-stretch overflow-hidden', className)}>
       {!onPassage && <span className="sr-only">{sentence || 'Aucun passage annoncé'}</span>}
-      {shown.length === 0 && <Cell size={size}><Muted size={size}>—</Muted></Cell>}
+      {shown.length === 0 && (
+        <Cell size={size}>
+          <Muted size={size}>—</Muted>
+        </Cell>
+      )}
       {shown.map((p, i) => {
         const notch = p.ligne ? (
-          <span aria-hidden className="absolute inset-y-[24%] left-[4px] w-[3px] rounded-full" style={{ backgroundColor: resolveLine(p.ligne).color }} />
+          <span
+            aria-hidden
+            className="absolute inset-y-[24%] left-[4px] w-[3px] rounded-full"
+            style={{ backgroundColor: resolveLine(p.ligne).color }}
+          />
         ) : null;
         const cls = cx('relative flex items-center justify-center', CELL[size], p.ligne && 'pl-4');
         return (
@@ -100,7 +116,10 @@ export function Afficheur({ passages, size = 'sm', max = 2, onPassage, libelleAc
                 onClick={() => onPassage(i)}
                 aria-label={`${libelleAction}, ${dire(p)}`}
                 title={libelleAction}
-                className={cx(cls, 'outline-none transition-colors duration-150 ease-signal hover:bg-white/10 focus-visible:bg-white/10 focus-visible:[box-shadow:inset_0_0_0_2px_var(--color-email-300)]')}
+                className={cx(
+                  cls,
+                  'outline-none transition-colors duration-150 ease-signal hover:bg-white/10 focus-visible:bg-white/10 focus-visible:[box-shadow:inset_0_0_0_2px_var(--color-email-300)]'
+                )}
               >
                 {notch}
                 <PassageGlyph p={p} size={size} />
@@ -123,13 +142,19 @@ function Cell({ size, children }: { size: AfficheurSize; children: ReactNode }) 
 }
 
 function Muted({ size, children }: { size: AfficheurSize; children: ReactNode }) {
-  return <span className={cx('signaletique font-semibold text-afficheur-theorique/70', TEXT[size])}>{children}</span>;
+  return (
+    <span className={cx('signaletique font-semibold text-afficheur-theorique/70', TEXT[size])}>
+      {children}
+    </span>
+  );
 }
 
 function PassageGlyph({ p, size }: { p: Passage; size: AfficheurSize }) {
   const m = p.minutes ?? null;
   if (p.statut === 'supprime')
-    return <span className={cx('signaletique font-semibold text-signal-300', TEXT[size])}>supprimé</span>;
+    return (
+      <span className={cx('signaletique font-semibold text-signal-300', TEXT[size])}>supprimé</span>
+    );
   if (p.statut === 'termine') return <Muted size={size}>terminé</Muted>;
   if (p.statut === 'quai') return <LedDotMatrix text="A QUAI" size={size} />;
   if (p.statut === 'approche' || m === 0) return <Approche size={size} />;
@@ -140,7 +165,9 @@ function PassageGlyph({ p, size }: { p: Passage; size: AfficheurSize }) {
     return (
       <span className={cx('flex items-baseline gap-1', tone)}>
         <LedDotMatrix text={`${m} MIN`} size={size} />
-        {p.statut === 'retard' && <span className="ml-1 size-1.5 self-start rounded-full bg-vigilance" />}
+        {p.statut === 'retard' && (
+          <span className="ml-1 size-1.5 self-start rounded-full bg-vigilance" />
+        )}
       </span>
     );
   }
@@ -149,10 +176,14 @@ function PassageGlyph({ p, size }: { p: Passage; size: AfficheurSize }) {
       {m < 60 ? (
         <NumberFlow value={m} trend={-1} className={cx('chiffres font-bold', NUM[size])} />
       ) : (
-        <span key={n} className={cx('chiffres font-bold animate-rafraichir', NUM[size])}>{n}</span>
+        <span key={n} className={cx('chiffres font-bold animate-rafraichir', NUM[size])}>
+          {n}
+        </span>
       )}
       {u && <span className={cx('signaletique font-semibold', UNIT[size])}>{u}</span>}
-      {p.statut === 'retard' && <span className="ml-1 size-1.5 self-start rounded-full bg-vigilance" />}
+      {p.statut === 'retard' && (
+        <span className="ml-1 size-1.5 self-start rounded-full bg-vigilance" />
+      )}
     </span>
   );
 }
@@ -185,13 +216,7 @@ const LED_METRICS: Record<AfficheurSize, { pitch: number; r: number }> = {
   xl: { pitch: 5.2, r: 1.85 },
 };
 
-function LedDotMatrix({
-  text,
-  size,
-}: {
-  text: string;
-  size: AfficheurSize;
-}) {
+function LedDotMatrix({ text, size }: { text: string; size: AfficheurSize }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { pitch, r } = LED_METRICS[size];
   const cols = text.length * 6 - 1;
@@ -299,7 +324,13 @@ function cityTimeDate(timezone: string): Date {
   return d;
 }
 
-export function Horloge({ date, timezone = 'Europe/Paris', live = true, size = 'sm', className }: HorlogeProps) {
+export function Horloge({
+  date,
+  timezone = 'Europe/Paris',
+  live = true,
+  size = 'sm',
+  className,
+}: HorlogeProps) {
   const [now, setNow] = useState(() => date ?? cityTimeDate(timezone));
   useEffect(() => {
     if (date) {
@@ -319,7 +350,7 @@ export function Horloge({ date, timezone = 'Europe/Paris', live = true, size = '
       className={cx(
         'afficheur inline-flex items-center justify-center',
         size === 'sm' ? 'h-7 px-2.5' : 'h-9 px-3',
-        className,
+        className
       )}
     >
       <span className="pl-sr">{`Heure : ${Number(hh)} h ${mm}`}</span>

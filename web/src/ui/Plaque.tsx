@@ -24,8 +24,17 @@ export interface PlaqueProps {
 
 export function Plaque({ children, size = 'md', as: Tag = 'span', id, className }: PlaqueProps) {
   return (
-    <Tag id={id} className={cx('pl-plaque inline-flex max-w-full', className)} data-size={size === 'sm' ? 'sm' : undefined}>
-      <span className={cx('pl-plaque-carreaux min-w-0 text-balance [overflow-wrap:anywhere]', CARREAUX_SIZE[size])}>
+    <Tag
+      id={id}
+      className={cx('pl-plaque inline-flex max-w-full', className)}
+      data-size={size === 'sm' ? 'sm' : undefined}
+    >
+      <span
+        className={cx(
+          'pl-plaque-carreaux min-w-0 text-balance [overflow-wrap:anywhere]',
+          CARREAUX_SIZE[size]
+        )}
+      >
         {children}
       </span>
     </Tag>

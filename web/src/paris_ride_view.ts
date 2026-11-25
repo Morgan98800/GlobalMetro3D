@@ -83,7 +83,7 @@ export type {
   ParisRideOptions,
   ParisRollingStockSpec,
   RouteDef,
-RouteStationDef,
+  RouteStationDef,
   SielRow,
 };
 
@@ -168,7 +168,6 @@ const WINS: [number, number][] = [
 ];
 const WY: [number, number] = [1.0, 1.8];
 const DY: [number, number] = [0.08, 2.0];
-
 
 function pairIs(p: [string, string], a: string, b: string): boolean {
   return (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a);
@@ -799,7 +798,18 @@ export function mountParisRideView(
     g.arc(42, 36, 20, 0, 2 * PI);
     g.fill();
     fitText(g, lineNum, 42, 44, 32, 23, '700', "'Asap Variable',Asap,Arial,sans-serif", lineFg);
-    fitText(g, `→ ${headingDest}`, 74, 44, W - 186, 23, '600', "'Asap Variable',Asap,Arial,sans-serif", '#ffffff', 'left');
+    fitText(
+      g,
+      `→ ${headingDest}`,
+      74,
+      44,
+      W - 186,
+      23,
+      '600',
+      "'Asap Variable',Asap,Arial,sans-serif",
+      '#ffffff',
+      'left'
+    );
     fitText(
       g,
       'TEMPS RÉEL',
@@ -1066,7 +1076,11 @@ export function mountParisRideView(
       })
     ),
     edge: trackMat(
-      new THREE.MeshStandardMaterial({ color: MATERIAUX.bordureQuai.color, roughness: MATERIAUX.bordureQuai.roughness, envMapIntensity: 0.4 })
+      new THREE.MeshStandardMaterial({
+        color: MATERIAUX.bordureQuai.color,
+        roughness: MATERIAUX.bordureQuai.roughness,
+        envMapIntensity: 0.4,
+      })
     ),
     steel: trackMat(
       new THREE.MeshStandardMaterial({
@@ -1121,7 +1135,11 @@ export function mountParisRideView(
       })
     ),
     sleeper: trackMat(
-      new THREE.MeshStandardMaterial({ color: MATERIAUX.tunnel.color, roughness: MATERIAUX.tunnel.roughness, envMapIntensity: 0.15 })
+      new THREE.MeshStandardMaterial({
+        color: MATERIAUX.tunnel.color,
+        roughness: MATERIAUX.tunnel.roughness,
+        envMapIntensity: 0.15,
+      })
     ),
     frame: trackMat(
       new THREE.MeshStandardMaterial({
@@ -1302,7 +1320,12 @@ export function mountParisRideView(
       new THREE.MeshStandardMaterial({ color: 0xe6decb, roughness: 0.82, envMapIntensity: 0.25 })
     ),
     ironRail: trackMat(
-      new THREE.MeshStandardMaterial({ color: 0x181c22, roughness: 0.45, metalness: 0.72, envMapIntensity: 0.6 })
+      new THREE.MeshStandardMaterial({
+        color: 0x181c22,
+        roughness: 0.45,
+        metalness: 0.72,
+        envMapIntensity: 0.6,
+      })
     ),
     chimney: trackMat(
       new THREE.MeshStandardMaterial({ color: 0xa45d45, roughness: 0.88, envMapIntensity: 0.2 })
@@ -1786,13 +1809,13 @@ export function mountParisRideView(
           [3.38, 0.72, 1],
           [5.62, -0.72, -1],
           [7.98, -0.68, 1],
-          [10.22, 0.70, -1],
+          [10.22, 0.7, -1],
         ].flatMap(([px, pz, facing]) => [
           // Torso
           box(0.24, 0.52, 0.38, px, BY + 0.76, pz),
           // Lap / legs
           box(0.36, 0.16, 0.34, px + facing * 0.18, BY + 0.56, pz),
-          box(0.14, 0.42, 0.30, px + facing * 0.32, BY + 0.28, pz),
+          box(0.14, 0.42, 0.3, px + facing * 0.32, BY + 0.28, pz),
         ]),
       ])
     ),
@@ -1802,7 +1825,7 @@ export function mountParisRideView(
           [3.38, 0.72],
           [5.62, -0.72],
           [7.98, -0.68],
-          [10.22, 0.70],
+          [10.22, 0.7],
         ].map(([px, pz]) => {
           const sp = new THREE.SphereGeometry(0.115, 10, 8);
           sp.translate(px, BY + 1.13, pz);
@@ -1998,8 +2021,8 @@ export function mountParisRideView(
       new EffectPass(
         camera,
         new BloomEffect({ luminanceThreshold: 1.12, mipmapBlur: true, intensity: 0.32 }),
-        new VignetteEffect({ offset: 0.38, darkness: 0.28 }),
-      ),
+        new VignetteEffect({ offset: 0.38, darkness: 0.28 })
+      )
     );
   }
 
@@ -2847,13 +2870,53 @@ export function mountParisRideView(
       placeBox(roof, i, o.P, o.along, o.lat, GY + o.h + 1.9, o.w * 1.01, 3.8, o.d * 1.01);
       // Grande corniche sommitale + corniche intermédiaire (2e étage)
       placeBox(cornices, i * 2, o.P, o.along, o.lat, GY + o.h + 0.12, o.w + 0.7, 0.45, o.d + 0.7);
-      placeBox(cornices, i * 2 + 1, o.P, o.along, o.lat, GY + o.h * 0.42, o.w + 0.45, 0.28, o.d + 0.45);
+      placeBox(
+        cornices,
+        i * 2 + 1,
+        o.P,
+        o.along,
+        o.lat,
+        GY + o.h * 0.42,
+        o.w + 0.45,
+        0.28,
+        o.d + 0.45
+      );
       // Balcons filants en fer forgé (2e & 5e étages)
-      placeBox(balconies, i * 2, o.P, o.along, o.lat, GY + o.h * 0.42 + 0.55, o.w + 0.58, 0.16, o.d + 0.58);
-      placeBox(balconies, i * 2 + 1, o.P, o.along, o.lat, GY + o.h * 0.84 + 0.55, o.w + 0.58, 0.16, o.d + 0.58);
+      placeBox(
+        balconies,
+        i * 2,
+        o.P,
+        o.along,
+        o.lat,
+        GY + o.h * 0.42 + 0.55,
+        o.w + 0.58,
+        0.16,
+        o.d + 0.58
+      );
+      placeBox(
+        balconies,
+        i * 2 + 1,
+        o.P,
+        o.along,
+        o.lat,
+        GY + o.h * 0.84 + 0.55,
+        o.w + 0.58,
+        0.16,
+        o.d + 0.58
+      );
       // Cheminées parisiennes en terre cuite sur le faîtage
       placeBox(chimneys, i * 2, o.P, o.along - o.w * 0.24, o.lat, GY + o.h + 4.1, 1.3, 1.4, 0.85);
-      placeBox(chimneys, i * 2 + 1, o.P, o.along + o.w * 0.24, o.lat, GY + o.h + 4.1, 1.3, 1.4, 0.85);
+      placeBox(
+        chimneys,
+        i * 2 + 1,
+        o.P,
+        o.along + o.w * 0.24,
+        o.lat,
+        GY + o.h + 4.1,
+        1.3,
+        1.4,
+        0.85
+      );
     });
     b.instanceMatrix.needsUpdate = true;
     roof.instanceMatrix.needsUpdate = true;
@@ -3297,7 +3360,10 @@ export function mountParisRideView(
     };
   }
 
-  function buildStation(name: string, stationSc: number): { group: THREE.Group; dispose: () => void } {
+  function buildStation(
+    name: string,
+    stationSc: number
+  ): { group: THREE.Group; dispose: () => void } {
     const g = new THREE.Group();
     const plaqueTex = new THREE.CanvasTexture(plaqueCanvas(name));
     plaqueTex.wrapS = THREE.RepeatWrapping;
@@ -3789,10 +3855,7 @@ export function mountParisRideView(
     cabPupitreGroup.add(wiper);
 
     // Enrichissement tableau de bord 3D : écran auxiliaire, rampe LED HDR, manomètre frein et montants
-    const auxScreen = new THREE.Mesh(
-      trackGeo(new THREE.PlaneGeometry(0.28, 0.16)),
-      sielMatPos
-    );
+    const auxScreen = new THREE.Mesh(trackGeo(new THREE.PlaneGeometry(0.28, 0.16)), sielMatPos);
     auxScreen.position.set(L - 0.44, BY + 0.99, 0.42);
     auxScreen.rotation.order = 'YXZ';
     auxScreen.rotation.y = -PI / 2;
@@ -4619,11 +4682,8 @@ export function mountParisRideView(
     );
     const stockTag = spragueMode ? 'Sprague 1930' : activeStock.label;
     const arrets =
-      tr.dir > 0
-        ? stations.map((s) => s.name)
-        : [...stations].reverse().map((s) => s.name);
-    const curIndex =
-      tr.dir > 0 ? tr.cur : Math.max(0, stations.length - 1 - tr.cur);
+      tr.dir > 0 ? stations.map((s) => s.name) : [...stations].reverse().map((s) => s.name);
+    const curIndex = tr.dir > 0 ? tr.cur : Math.max(0, stations.length - 1 - tr.cur);
     refreshDoorLineMap(arrets, curIndex, tr.state === 'dwell');
     const voieText = trackText(tr.s - (tr.dir * TRAIN_LEN) / 2);
 

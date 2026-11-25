@@ -184,11 +184,7 @@ export function smoothShapeForRender(shape: Shape): Shape {
  * Samples position, forward tangent, right-hand normal (ENU), and compass bearing
  * at `distM` along a shape, optionally shifted `offsetRightM` meters onto the right track.
  */
-export function sampleShapeFrame(
-  shape: Shape,
-  distM: number,
-  offsetRightM = 0
-): ShapeFrame {
+export function sampleShapeFrame(shape: Shape, distM: number, offsetRightM = 0): ShapeFrame {
   const clamped = Math.max(0, Math.min(shape.length, distM));
   const basePos = coordAtDistance(shape, clamped);
   const backD = Math.max(0, clamped - 1.5);

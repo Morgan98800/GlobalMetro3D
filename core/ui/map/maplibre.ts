@@ -86,7 +86,7 @@ export function computeParisDaylightProfile(
     return {
       phase: 'golden-evening',
       lightColor: '#ffd49b',
-      lightIntensity: 0.70,
+      lightIntensity: 0.7,
       lightPosition: [1.55, 268, 60],
       skyColor: '#bfd2ea',
       horizonColor: '#f5dec6',

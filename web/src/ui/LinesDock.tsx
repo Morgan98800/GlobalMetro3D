@@ -73,9 +73,7 @@ export function LinesDock(p: LinesDockProps) {
           }
         }}
         hauteurs={
-          choisie
-            ? { repli: 72, bas: 220, moyen: 460 }
-            : { repli: 68, bas: 200, moyen: 328 }
+          choisie ? { repli: 72, bas: 220, moyen: 460 } : { repli: 68, bas: 200, moyen: 328 }
         }
         repliable={!p.onClose}
         onDismiss={p.onClose}
@@ -100,7 +98,11 @@ export function LinesDock(p: LinesDockProps) {
         }
         className={p.className}
       >
-        {choisie && p.detail ? <NiveauLigne {...p} ligne={choisie} detail={p.detail} replie={false} /> : <NiveauLignes {...p} replie={false} />}
+        {choisie && p.detail ? (
+          <NiveauLigne {...p} ligne={choisie} detail={p.detail} replie={false} />
+        ) : (
+          <NiveauLignes {...p} replie={false} />
+        )}
       </BottomSheet>
     );
   }
@@ -111,7 +113,11 @@ export function LinesDock(p: LinesDockProps) {
       aria-labelledby={choisie ? 'ligne-titre' : 'lignes-titre'}
       className={cx('flex max-h-full w-[348px] max-w-full flex-col', p.className)}
     >
-      {choisie && p.detail ? <NiveauLigne {...p} ligne={choisie} detail={p.detail} /> : <NiveauLignes {...p} />}
+      {choisie && p.detail ? (
+        <NiveauLigne {...p} ligne={choisie} detail={p.detail} />
+      ) : (
+        <NiveauLignes {...p} />
+      )}
     </Panneau>
   );
 }
@@ -121,8 +127,18 @@ function NiveauLignes({ lignes, selection, onSelect, onClose, replie }: LinesDoc
   return (
     <div className="min-h-0 overflow-y-auto p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <header className="flex items-center justify-between">
-        <h2 id="lignes-titre" className="text-titre-sm text-encre">Lignes</h2>
-        {onClose && <IconButton size="sm" label="Fermer les lignes" icon={<RiCloseLine aria-hidden />} onClick={onClose} className="pl-hit-44" />}
+        <h2 id="lignes-titre" className="text-titre-sm text-encre">
+          Lignes
+        </h2>
+        {onClose && (
+          <IconButton
+            size="sm"
+            label="Fermer les lignes"
+            icon={<RiCloseLine aria-hidden />}
+            onClick={onClose}
+            className="pl-hit-44"
+          />
+        )}
       </header>
       {!replie && (
         <>
@@ -131,8 +147,16 @@ function NiveauLignes({ lignes, selection, onSelect, onClose, replie }: LinesDoc
             if (!items.length) return null;
             return (
               <div key={g.mode} className="mt-3">
-                <h3 className="mb-2 text-xs font-medium tracking-[0.04em] text-encre-2">{g.titre}</h3>
-                <div className={g.mode === 'metro' ? 'grid grid-cols-7 gap-1.5 md:flex md:flex-wrap md:gap-[7px]' : 'flex flex-wrap gap-2 md:gap-[7px]'}>
+                <h3 className="mb-2 text-xs font-medium tracking-[0.04em] text-encre-2">
+                  {g.titre}
+                </h3>
+                <div
+                  className={
+                    g.mode === 'metro'
+                      ? 'grid grid-cols-7 gap-1.5 md:flex md:flex-wrap md:gap-[7px]'
+                      : 'flex flex-wrap gap-2 md:gap-[7px]'
+                  }
+                >
                   {items.map((l) => (
                     <LineBadgeChip
                       key={l.shortName}
@@ -159,16 +183,29 @@ function EtatTrafic({ alertes, total }: { alertes: LigneEtat[]; total: number })
   return (
     <div>
       <p className="flex items-center gap-2 text-[13px] text-encre-2">
-        <span aria-hidden className={cx('size-2 rounded-full', alertes.length ? 'bg-vigilance' : 'bg-normal')} />
-        {alertes.length ? `${alertes.length} perturbation${alertes.length > 1 ? 's' : ''} (${total} lignes)` : 'Trafic normal'}
+        <span
+          aria-hidden
+          className={cx('size-2 rounded-full', alertes.length ? 'bg-vigilance' : 'bg-normal')}
+        />
+        {alertes.length
+          ? `${alertes.length} perturbation${alertes.length > 1 ? 's' : ''} (${total} lignes)`
+          : 'Trafic normal'}
       </p>
       {alertes.length > 0 && (
         <ul className="mt-3 space-y-2.5">
           {alertes.map((l) => (
-            <li key={l.shortName} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2.5">
+            <li
+              key={l.shortName}
+              className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-2.5"
+            >
               <LineBadgeChip {...l} size="xs" className="mt-px" />
               <p className="text-[13px] leading-[18px] text-encre-2">
-                <span className={cx('font-semibold', l.alert === 'signal' ? 'text-signal-encre' : 'text-vigilance-encre')}>
+                <span
+                  className={cx(
+                    'font-semibold',
+                    l.alert === 'signal' ? 'text-signal-encre' : 'text-vigilance-encre'
+                  )}
+                >
                   {l.alert === 'signal' ? 'Interrompu. ' : 'Perturbé. '}
                 </span>
                 {l.message}
@@ -181,26 +218,56 @@ function EtatTrafic({ alertes, total }: { alertes: LigneEtat[]; total: number })
   );
 }
 
-function NiveauLigne({ ligne, detail, onSelect, onClose, onMonter, replie }: LinesDockProps & { ligne: LigneEtat; detail: LigneDetail }) {
+function NiveauLigne({
+  ligne,
+  detail,
+  onSelect,
+  onClose,
+  onMonter,
+  replie,
+}: LinesDockProps & { ligne: LigneEtat; detail: LigneDetail }) {
   const { color } = resolveLine(ligne);
   const etat = detail.trafic.niveau;
   return (
     <>
       <div className="flex items-center justify-between gap-2 px-4 pt-0.5 md:pt-1">
-        <Button variant="secondaire" size="sm" icon={<RiArrowLeftSLine aria-hidden />} onClick={() => onSelect(null)}>
+        <Button
+          variant="secondaire"
+          size="sm"
+          icon={<RiArrowLeftSLine aria-hidden />}
+          onClick={() => onSelect(null)}
+        >
           Toutes les lignes
         </Button>
-        {onClose && <IconButton variant="secondaire" size="sm" label="Fermer les lignes" icon={<RiCloseLine aria-hidden />} onClick={onClose} />}
+        {onClose && (
+          <IconButton
+            variant="secondaire"
+            size="sm"
+            label="Fermer les lignes"
+            icon={<RiCloseLine aria-hidden />}
+            onClick={onClose}
+          />
+        )}
       </div>
       <div className="shrink-0 px-4 pt-1.5 md:pt-2">
         <div className="flex items-center gap-2.5 md:gap-3">
           <LineBadgeChip {...ligne} size="lg" />
           <div className="min-w-0">
-            <h2 id="ligne-titre" className="text-titre-sm text-encre">{lineName(ligne.shortName)}</h2>
-            {ligne.termini && <p className="signaletique truncate text-[14px] md:text-[15px] text-encre-2">{ligne.termini[0]} – {ligne.termini[1]}</p>}
+            <h2 id="ligne-titre" className="text-titre-sm text-encre">
+              {lineName(ligne.shortName)}
+            </h2>
+            {ligne.termini && (
+              <p className="signaletique truncate text-[14px] md:text-[15px] text-encre-2">
+                {ligne.termini[0]} – {ligne.termini[1]}
+              </p>
+            )}
           </div>
         </div>
-        <span aria-hidden className="mt-2 block h-[4px] md:mt-3 md:h-[5px] rounded-full" style={{ backgroundColor: color }} />
+        <span
+          aria-hidden
+          className="mt-2 block h-[4px] md:mt-3 md:h-[5px] rounded-full"
+          style={{ backgroundColor: color }}
+        />
         {!replie && (
           <>
             <div className="mt-2 flex items-center justify-between gap-2 md:mt-3">
@@ -209,11 +276,23 @@ function NiveauLigne({ ligne, detail, onSelect, onClose, onMonter, replie }: Lin
                   <b className="truncate">→ {detail.direction}</b>
                 </span>
               </div>
-              <IconButton size="sm" variant="secondaire" label="Inverser la direction" icon={<RiArrowUpDownLine aria-hidden />} onClick={detail.onInverser} />
+              <IconButton
+                size="sm"
+                variant="secondaire"
+                label="Inverser la direction"
+                icon={<RiArrowUpDownLine aria-hidden />}
+                onClick={detail.onInverser}
+              />
             </div>
             {etat !== 'normal' && (
               <p className="mt-2 flex items-start gap-2 text-[13px] leading-[18px] text-encre-2 md:mt-2.5">
-                <span aria-hidden className={cx('mt-[5px] size-2 shrink-0 rounded-full', etat === 'signal' ? 'bg-signal' : 'bg-vigilance')} />
+                <span
+                  aria-hidden
+                  className={cx(
+                    'mt-[5px] size-2 shrink-0 rounded-full',
+                    etat === 'signal' ? 'bg-signal' : 'bg-vigilance'
+                  )}
+                />
                 {detail.trafic.texte}
               </p>
             )}
@@ -235,7 +314,13 @@ function NiveauLigne({ ligne, detail, onSelect, onClose, onMonter, replie }: Lin
       )}
       {onMonter && (
         <footer className="shrink-0 border-t border-joint p-2.5 md:p-3">
-          <Button variant="afficheur" fullWidth icon={<RiBox3Line aria-hidden />} aria-label="Monter à bord d’une rame en 3D" onClick={() => onMonter(ligne.shortName)}>
+          <Button
+            variant="afficheur"
+            fullWidth
+            icon={<RiBox3Line aria-hidden />}
+            aria-label="Monter à bord d’une rame en 3D"
+            onClick={() => onMonter(ligne.shortName)}
+          >
             Monter à bord
           </Button>
         </footer>

@@ -88,7 +88,11 @@ export function CabHud(p: CabHudProps) {
           </Button>
 
           <div className="relative flex min-w-0 flex-1 justify-center">
-            <Plaque as="p" size="sm" className="!inline-flex max-w-full items-center gap-1 whitespace-nowrap px-3 py-1.5 text-[15px] leading-[20px] shadow-[0_8px_24px_-8px_rgb(0_0_0/0.6)]">
+            <Plaque
+              as="p"
+              size="sm"
+              className="!inline-flex max-w-full items-center gap-1 whitespace-nowrap px-3 py-1.5 text-[15px] leading-[20px] shadow-[0_8px_24px_-8px_rgb(0_0_0/0.6)]"
+            >
               <span className="truncate">{p.station}</span>
               {p.stations && p.stations.length > 1 && p.onSelectStation && (
                 <RiArrowDownSLine aria-hidden className="size-4 shrink-0 opacity-80" />
@@ -102,7 +106,9 @@ export function CabHud(p: CabHudProps) {
                 className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
               >
                 {p.stations.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
                 ))}
               </select>
             )}
@@ -119,7 +125,9 @@ export function CabHud(p: CabHudProps) {
               className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
             >
               {p.routes.map((r) => (
-                <option key={r.value} value={r.value}>{r.label}</option>
+                <option key={r.value} value={r.value}>
+                  {r.label}
+                </option>
               ))}
             </select>
           </label>
@@ -177,7 +185,12 @@ export function CabHud(p: CabHudProps) {
               ) : (
                 <span />
               )}
-              <InterrupteurDirect data-ride-live direct={p.direct} onChange={() => p.onDirect()} source="PRIM" />
+              <InterrupteurDirect
+                data-ride-live
+                direct={p.direct}
+                onChange={() => p.onDirect()}
+                source="PRIM"
+              />
             </div>
           )}
 
@@ -254,7 +267,11 @@ export function CabHud(p: CabHudProps) {
     <div className={cx('dark pointer-events-none absolute inset-0 text-encre', p.className)}>
       <div className="absolute left-4 top-4 max-w-[46%]">
         <div className="relative inline-flex max-w-full items-center">
-          <Plaque as="p" size="lg" className="pointer-events-auto !inline-flex items-center gap-1.5 shadow-[0_8px_24px_-8px_rgb(0_0_0/0.6)]">
+          <Plaque
+            as="p"
+            size="lg"
+            className="pointer-events-auto !inline-flex items-center gap-1.5 shadow-[0_8px_24px_-8px_rgb(0_0_0/0.6)]"
+          >
             <span className="truncate">{p.station}</span>
             {p.stations && p.stations.length > 1 && p.onSelectStation && (
               <RiArrowDownSLine aria-hidden className="size-4 shrink-0 opacity-75" />
@@ -268,14 +285,19 @@ export function CabHud(p: CabHudProps) {
               className="pointer-events-auto absolute inset-0 h-full w-full cursor-pointer opacity-0"
             >
               {p.stations.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>
+                  {s}
+                </option>
               ))}
             </select>
           )}
         </div>
       </div>
 
-      <Panneau matiere="verre" className="absolute right-4 top-4 flex h-14 items-center gap-2 pl-3 pr-2">
+      <Panneau
+        matiere="verre"
+        className="absolute right-4 top-4 flex h-14 items-center gap-2 pl-3 pr-2"
+      >
         <LineBadgeChip {...p.ligne} size="sm" />
         <label className="relative flex items-center">
           <span className="sr-only">Ligne et parcours</span>
@@ -286,13 +308,24 @@ export function CabHud(p: CabHudProps) {
             className="h-10 max-w-[360px] cursor-pointer appearance-none truncate rounded-controle bg-transparent pl-2 pr-8 text-[14px] font-semibold text-encre outline-none hover:bg-encart focus-visible:outline-2 focus-visible:outline-focus"
           >
             {p.routes.map((r) => (
-              <option key={r.value} value={r.value}>{r.label}</option>
+              <option key={r.value} value={r.value}>
+                {r.label}
+              </option>
             ))}
           </select>
-          <RiArrowDownSLine aria-hidden className="pointer-events-none absolute right-2 size-4 text-icone-2" />
+          <RiArrowDownSLine
+            aria-hidden
+            className="pointer-events-none absolute right-2 size-4 text-icone-2"
+          />
         </label>
         <span aria-hidden className="h-6 w-px bg-joint" />
-        <Button data-ride-exit variant="discret" icon={<RiLogoutBoxRLine aria-hidden />} iconEnd={<Kbd className="ml-0.5">Esc</Kbd>} onClick={p.onQuitter}>
+        <Button
+          data-ride-exit
+          variant="discret"
+          icon={<RiLogoutBoxRLine aria-hidden />}
+          iconEnd={<Kbd className="ml-0.5">Esc</Kbd>}
+          onClick={p.onQuitter}
+        >
           Carte
         </Button>
       </Panneau>
@@ -301,8 +334,12 @@ export function CabHud(p: CabHudProps) {
         <Panneau matiere="verre" className="pointer-events-auto w-[372px] max-w-full p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-encre-3">{p.aQuai ? 'À quai' : p.voie}</p>
-              <p className="signaletique truncate text-[22px] font-[650] leading-[26px] text-white">{p.prochaine}</p>
+              <p className="text-[11px] font-semibold text-encre-3">
+                {p.aQuai ? 'À quai' : p.voie}
+              </p>
+              <p className="signaletique truncate text-[22px] font-[650] leading-[26px] text-white">
+                {p.prochaine}
+              </p>
               <p className="mt-0.5 truncate text-[13px] text-encre-2">
                 → <span className="signaletique font-semibold text-encre">{p.direction}</span>
               </p>
@@ -326,17 +363,33 @@ export function CabHud(p: CabHudProps) {
             />
           )}
           {p.pointDeVue && (
-            <Button data-ride-eiffel variant="secondaire" size="sm" icon={<RiEyeLine aria-hidden />} onClick={p.pointDeVue.onClick} className="mt-3">
+            <Button
+              data-ride-eiffel
+              variant="secondaire"
+              size="sm"
+              icon={<RiEyeLine aria-hidden />}
+              onClick={p.pointDeVue.onClick}
+              className="mt-3"
+            >
               {p.pointDeVue.label}
             </Button>
           )}
           <div className="mt-3 flex items-center justify-between gap-2 text-[12px] text-encre-2">
             <span className="min-w-0 truncate">{p.voie}</span>
-            <InterrupteurDirect data-ride-live direct={p.direct} onChange={() => p.onDirect()} source="PRIM" className="pointer-events-auto" />
+            <InterrupteurDirect
+              data-ride-live
+              direct={p.direct}
+              onChange={() => p.onDirect()}
+              source="PRIM"
+              className="pointer-events-auto"
+            />
           </div>
         </Panneau>
 
-        <Panneau matiere="verre" className="pointer-events-auto flex h-14 shrink-0 items-center gap-1.5 px-2">
+        <Panneau
+          matiere="verre"
+          className="pointer-events-auto flex h-14 shrink-0 items-center gap-1.5 px-2"
+        >
           <div data-ride-view>
             <Segmented
               size="sm"
@@ -352,10 +405,26 @@ export function CabHud(p: CabHudProps) {
             />
           </div>
           <span aria-hidden className="mx-0.5 h-6 w-px bg-joint" />
-          <Button data-ride-stock variant="secondaire" size="sm" aria-label={`Matériel roulant : ${p.materiel}. Changer`} iconEnd={<RiArrowDownSLine aria-hidden className="size-3.5 text-encre-2" />} onClick={p.onMateriel} className="chiffres">
+          <Button
+            data-ride-stock
+            variant="secondaire"
+            size="sm"
+            aria-label={`Matériel roulant : ${p.materiel}. Changer`}
+            iconEnd={<RiArrowDownSLine aria-hidden className="size-3.5 text-encre-2" />}
+            onClick={p.onMateriel}
+            className="chiffres"
+          >
             {p.materiel}
           </Button>
-          <Button data-ride-speed variant="secondaire" size="sm" aria-label={`Vitesse de simulation : ${p.allure}`} iconEnd={<RiRefreshLine aria-hidden className="size-3.5 text-encre-2" />} onClick={p.onAllure} className="chiffres">
+          <Button
+            data-ride-speed
+            variant="secondaire"
+            size="sm"
+            aria-label={`Vitesse de simulation : ${p.allure}`}
+            iconEnd={<RiRefreshLine aria-hidden className="size-3.5 text-encre-2" />}
+            onClick={p.onAllure}
+            className="chiffres"
+          >
             {p.allure}
           </Button>
           {p.onSon && (

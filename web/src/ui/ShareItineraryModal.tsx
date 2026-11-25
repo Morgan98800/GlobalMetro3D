@@ -25,9 +25,7 @@ function buildShareSummary(
   reseau: string
 ): string {
   const lines = itineraire
-    ? itineraire.segments
-        .filter((s) => s.type === 'ligne')
-        .map((s) => s.ligne.shortName)
+    ? itineraire.segments.filter((s) => s.type === 'ligne').map((s) => s.ligne.shortName)
     : [];
   const via = lines.length > 0 ? ` via ${lines.join(' → ')}` : '';
   const timing = itineraire ? ` (${itineraire.minutes} min, arrivée ${itineraire.arrivee})` : '';
@@ -86,7 +84,9 @@ export function ShareItineraryModal({
           <div className="space-y-3 p-3.5">
             <div className="flex flex-wrap items-center gap-1.5">
               <Plaque size="sm">{depart}</Plaque>
-              <span aria-hidden className="text-[13px] font-bold text-encre-3">→</span>
+              <span aria-hidden className="text-[13px] font-bold text-encre-3">
+                →
+              </span>
               <Plaque size="sm">{arrivee}</Plaque>
             </div>
 
@@ -95,7 +95,11 @@ export function ShareItineraryModal({
                 <div className="flex flex-wrap items-center gap-1.5">
                   {ligneSegments.map((seg, idx) => (
                     <Fragment key={`${seg.ligne.shortName}-${seg.de}-${idx}`}>
-                      {idx > 0 && <span aria-hidden className="text-[11px] text-encre-3">›</span>}
+                      {idx > 0 && (
+                        <span aria-hidden className="text-[11px] text-encre-3">
+                          ›
+                        </span>
+                      )}
                       <LineBadgeChip {...seg.ligne} size="xs" />
                     </Fragment>
                   ))}
@@ -140,7 +144,9 @@ export function ShareItineraryModal({
               variant="secondaire"
               size="md"
               fullWidth
-              icon={copied === 'text' ? <RiCheckLine aria-hidden /> : <RiFileCopyLine aria-hidden />}
+              icon={
+                copied === 'text' ? <RiCheckLine aria-hidden /> : <RiFileCopyLine aria-hidden />
+              }
               onClick={() => handleCopy('text')}
             >
               {copied === 'text' ? 'Copié' : 'Copier le résumé'}

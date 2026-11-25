@@ -229,68 +229,69 @@ const BASE_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; t
 };
 
 /** Modèles détaillés par ligne (1 mesh fusionné, centré (0,0,0), couleurs cuites en vertex-colors) */
-const DETAILED_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; tail: string }> = {
-  paris_mp14_ca: {
-    neutral: '/models/train/map_hd/mp14_car.glb',
-    cab: '/models/train/map_hd/mp14_ca__cab.glb',
-    tail: '/models/train/map_hd/mp14_ca__cab.glb',
-  },
-  paris_mp14_cc: {
-    neutral: '/models/train/map_hd/mp14_car.glb',
-    cab: '/models/train/map_hd/mp14_cc__cab.glb',
-    tail: '/models/train/map_hd/mp14_cc__cab.glb',
-  },
-  paris_mp05: {
-    neutral: '/models/train/map_hd/mp05_car.glb',
-    cab: '/models/train/map_hd/mp05__cab.glb',
-    tail: '/models/train/map_hd/mp05__cab.glb',
-  },
-  paris_mp89_ca: {
-    neutral: '/models/train/map_hd/mp89_car.glb',
-    cab: '/models/train/map_hd/mp89_ca__cab.glb',
-    tail: '/models/train/map_hd/mp89_ca__cab.glb',
-  },
-  paris_mp89_cc: {
-    neutral: '/models/train/map_hd/mp89_car.glb',
-    cab: '/models/train/map_hd/mp89_cc__cab.glb',
-    tail: '/models/train/map_hd/mp89_cc__cab.glb',
-  },
-  paris_mf01: {
-    neutral: '/models/train/map_hd/mf01_car.glb',
-    cab: '/models/train/map_hd/mf01__cab.glb',
-    tail: '/models/train/map_hd/mf01__cab.glb',
-  },
-  paris_mf88: {
-    neutral: '/models/train/map_hd/mf88_car.glb',
-    cab: '/models/train/map_hd/mf88__cab.glb',
-    tail: '/models/train/map_hd/mf88__cab.glb',
-  },
-  paris_mf77: {
-    neutral: '/models/train/map_hd/mf77_car.glb',
-    cab: '/models/train/map_hd/mf77__cab.glb',
-    tail: '/models/train/map_hd/mf77__cab.glb',
-  },
-  paris_mf67: {
-    neutral: '/models/train/map_hd/mf67_car.glb',
-    cab: '/models/train/map_hd/mf67__cab.glb',
-    tail: '/models/train/map_hd/mf67__cab.glb',
-  },
-  paris_mp73: {
-    neutral: '/models/train/map_hd/mp73_car.glb',
-    cab: '/models/train/map_hd/mp73__cab.glb',
-    tail: '/models/train/map_hd/mp73__cab.glb',
-  },
-  paris_mp59: {
-    neutral: '/models/train/map_hd/mp59_car.glb',
-    cab: '/models/train/map_hd/mp59__cab.glb',
-    tail: '/models/train/map_hd/mp59__cab.glb',
-  },
-  paris_mf19: {
-    neutral: '/models/train/map_hd/mf19_car.glb',
-    cab: '/models/train/map_hd/mf19__cab.glb',
-    tail: '/models/train/map_hd/mf19__cab.glb',
-  },
-};
+const DETAILED_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; tail: string }> =
+  {
+    paris_mp14_ca: {
+      neutral: '/models/train/map_hd/mp14_car.glb',
+      cab: '/models/train/map_hd/mp14_ca__cab.glb',
+      tail: '/models/train/map_hd/mp14_ca__cab.glb',
+    },
+    paris_mp14_cc: {
+      neutral: '/models/train/map_hd/mp14_car.glb',
+      cab: '/models/train/map_hd/mp14_cc__cab.glb',
+      tail: '/models/train/map_hd/mp14_cc__cab.glb',
+    },
+    paris_mp05: {
+      neutral: '/models/train/map_hd/mp05_car.glb',
+      cab: '/models/train/map_hd/mp05__cab.glb',
+      tail: '/models/train/map_hd/mp05__cab.glb',
+    },
+    paris_mp89_ca: {
+      neutral: '/models/train/map_hd/mp89_car.glb',
+      cab: '/models/train/map_hd/mp89_ca__cab.glb',
+      tail: '/models/train/map_hd/mp89_ca__cab.glb',
+    },
+    paris_mp89_cc: {
+      neutral: '/models/train/map_hd/mp89_car.glb',
+      cab: '/models/train/map_hd/mp89_cc__cab.glb',
+      tail: '/models/train/map_hd/mp89_cc__cab.glb',
+    },
+    paris_mf01: {
+      neutral: '/models/train/map_hd/mf01_car.glb',
+      cab: '/models/train/map_hd/mf01__cab.glb',
+      tail: '/models/train/map_hd/mf01__cab.glb',
+    },
+    paris_mf88: {
+      neutral: '/models/train/map_hd/mf88_car.glb',
+      cab: '/models/train/map_hd/mf88__cab.glb',
+      tail: '/models/train/map_hd/mf88__cab.glb',
+    },
+    paris_mf77: {
+      neutral: '/models/train/map_hd/mf77_car.glb',
+      cab: '/models/train/map_hd/mf77__cab.glb',
+      tail: '/models/train/map_hd/mf77__cab.glb',
+    },
+    paris_mf67: {
+      neutral: '/models/train/map_hd/mf67_car.glb',
+      cab: '/models/train/map_hd/mf67__cab.glb',
+      tail: '/models/train/map_hd/mf67__cab.glb',
+    },
+    paris_mp73: {
+      neutral: '/models/train/map_hd/mp73_car.glb',
+      cab: '/models/train/map_hd/mp73__cab.glb',
+      tail: '/models/train/map_hd/mp73__cab.glb',
+    },
+    paris_mp59: {
+      neutral: '/models/train/map_hd/mp59_car.glb',
+      cab: '/models/train/map_hd/mp59__cab.glb',
+      tail: '/models/train/map_hd/mp59__cab.glb',
+    },
+    paris_mf19: {
+      neutral: '/models/train/map_hd/mf19_car.glb',
+      cab: '/models/train/map_hd/mf19__cab.glb',
+      tail: '/models/train/map_hd/mf19__cab.glb',
+    },
+  };
 
 function resolveBaseParisLiveryVariant(stock: {
   drive_type: string;
@@ -302,7 +303,14 @@ function resolveBaseParisLiveryVariant(stock: {
   if (sn === '4' || sn === '11' || sn === '14' || mid.startsWith('MP14')) {
     return 'paris_idfm_pneu';
   }
-  if (sn === '2' || sn === '5' || sn === '9' || sn === '7bis' || mid.startsWith('MF01') || mid === 'MF88') {
+  if (
+    sn === '2' ||
+    sn === '5' ||
+    sn === '9' ||
+    sn === '7bis' ||
+    mid.startsWith('MF01') ||
+    mid === 'MF88'
+  ) {
     return 'paris_idfm_steel';
   }
   if (sn === '7' || sn === '8' || sn === '13' || mid.startsWith('MF77')) {
@@ -329,7 +337,8 @@ function resolveDetailedParisLiveryVariant(stock: {
   if (mid.startsWith('MF01') || sn === '2' || sn === '5' || sn === '9') return 'paris_mf01';
   if (mid === 'MF88' || sn === '7bis') return 'paris_mf88';
   if (mid.startsWith('MF77') || sn === '7' || sn === '8' || sn === '13') return 'paris_mf77';
-  if (mid.startsWith('MF67') || sn === '3' || sn === '3bis' || sn === '10' || sn === '12') return 'paris_mf67';
+  if (mid.startsWith('MF67') || sn === '3' || sn === '3bis' || sn === '10' || sn === '12')
+    return 'paris_mf67';
   return null;
 }
 
@@ -488,7 +497,7 @@ export function computeCarModelPose(opts: {
   const headFrame = sampleShapeFrame(shape, bogieHeadDistance, trackOffsetM);
 
   const chordDist = distanceMeters(tailFrame.pos, headFrame.pos);
-  const latitudeRad = (((tailFrame.pos[1] + headFrame.pos[1]) * 0.5) * Math.PI) / 180;
+  const latitudeRad = ((tailFrame.pos[1] + headFrame.pos[1]) * 0.5 * Math.PI) / 180;
   const compassBearing =
     chordDist > 0.25
       ? (Math.atan2(
@@ -696,12 +705,7 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
         ? cars.filter((car) => car.role === 'cab' || car.role === 'tail')
         : cabCars;
 
-    const makeLayer = (
-      id: string,
-      scenegraph: any,
-      data: ModelCar[],
-      beforeId?: string
-    ) =>
+    const makeLayer = (id: string, scenegraph: any, data: ModelCar[], beforeId?: string) =>
       new ScenegraphLayer<ModelCar>({
         id,
         data,
@@ -733,7 +737,8 @@ export function createTrainModelLayers(params: ModelLayerParams): ScenegraphLaye
         return;
       }
       const isAlwaysVisible = (c: ModelCar) =>
-        c.position[2] >= 0 || (Boolean(params.selectedTrainId) && c.train.id === params.selectedTrainId);
+        c.position[2] >= 0 ||
+        (Boolean(params.selectedTrainId) && c.train.id === params.selectedTrainId);
       const underground = subset.filter((c) => !isAlwaysVisible(c));
       const surface = subset.filter(isAlwaysVisible);
       if (underground.length > 0) {

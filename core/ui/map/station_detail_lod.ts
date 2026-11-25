@@ -215,7 +215,9 @@ export function createLocalStationDetailLayers(input: LocalStationDetailInput): 
   return createLocalStationDetailBundle(input).layers;
 }
 
-export function createLocalStationDetailBundle(input: LocalStationDetailInput): StationDetailLodResult {
+export function createLocalStationDetailBundle(
+  input: LocalStationDetailInput
+): StationDetailLodResult {
   if (input.zoom < STATION_DETAIL_ZOOM_MIN) return { layers: [], sielAnchors: [] };
 
   const isMobile = isMobileGpuDevice();
@@ -549,7 +551,15 @@ export function createLocalStationDetailBundle(input: LocalStationDetailInput): 
       const fB = spine.frameAt(deckStart + (db + 1) * deckStep);
       if (!isViaduct) {
         cutouts.push({
-          polygon: makeCurvedQuad(fA, fB, 1, -(WALL_OUTER_M + 0.3), WALL_OUTER_M + 0.3, baseZ - 0.62, refLat),
+          polygon: makeCurvedQuad(
+            fA,
+            fB,
+            1,
+            -(WALL_OUTER_M + 0.3),
+            WALL_OUTER_M + 0.3,
+            baseZ - 0.62,
+            refLat
+          ),
           fillColor: isStackedUpper
             ? isLight
               ? [44, 48, 56, 72]
@@ -637,7 +647,7 @@ export function createLocalStationDetailBundle(input: LocalStationDetailInput): 
         const tileW = mobileGpu ? 4.2 : 2.1;
         const tileRows = mobileGpu ? 3 : 6;
         const rowH = mobileGpu ? 0.86 : 0.43;
-        const tileH = mobileGpu ? 0.80 : 0.39;
+        const tileH = mobileGpu ? 0.8 : 0.39;
         for (let row = 0; row < tileRows; row += 1) {
           const z0 = deckZ + 0.38 + row * rowH;
           const stagger = row % 2 === 1 ? tileW * 0.5 : 0;
@@ -908,7 +918,10 @@ export function createLocalStationDetailBundle(input: LocalStationDetailInput): 
         const plaqueText = normalizePlaqueText(station.name);
         const totalCols = plaqueText
           .split('')
-          .reduce((acc, ch, idx) => acc + (MOSAIC_GLYPHS[ch]?.[0]?.length ?? 2) + (idx > 0 ? 1 : 0), 0);
+          .reduce(
+            (acc, ch, idx) => acc + (MOSAIC_GLYPHS[ch]?.[0]?.length ?? 2) + (idx > 0 ? 1 : 0),
+            0
+          );
         const plaqueBaseZ = deckZ + (isViaduct ? 0.85 : 1.72);
         const plaqueH = isViaduct ? 0.85 : 1.28;
         const cellW = Math.min(0.18, Math.max(0.11, 7.6 / Math.max(1, totalCols)));
@@ -1383,22 +1396,24 @@ export function createLocalStationDetailBundle(input: LocalStationDetailInput): 
     }
   };
 
-  pushSplit(safeCutouts, (suffix, data, beforeId) =>
-    new PolygonLayer<CutawayPolygonDatum>({
-      id: `station-lod-cutouts${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      pickable: false,
-      extruded: false,
-      filled: true,
-      stroked: true,
-      lineWidthUnits: 'meters',
-      getLineWidth: 0.35,
-      getPolygon: (d: CutawayPolygonDatum) => d.polygon,
-      getFillColor: (d: CutawayPolygonDatum) => d.fillColor,
-      getLineColor: (d: CutawayPolygonDatum) => d.lineColor,
-      parameters: { depthTest: true, depthWriteEnabled: false } as any,
-    } as any)
+  pushSplit(
+    safeCutouts,
+    (suffix, data, beforeId) =>
+      new PolygonLayer<CutawayPolygonDatum>({
+        id: `station-lod-cutouts${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        extruded: false,
+        filled: true,
+        stroked: true,
+        lineWidthUnits: 'meters',
+        getLineWidth: 0.35,
+        getPolygon: (d: CutawayPolygonDatum) => d.polygon,
+        getFillColor: (d: CutawayPolygonDatum) => d.fillColor,
+        getLineColor: (d: CutawayPolygonDatum) => d.lineColor,
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
+      } as any)
   );
 
   if (safeViaductDecks.length > 0) {
@@ -1421,74 +1436,82 @@ export function createLocalStationDetailBundle(input: LocalStationDetailInput): 
     );
   }
 
-  pushSplit(safeSleepers, (suffix, data, beforeId) =>
-    new SolidPolygonLayer<SleeperDatum>({
-      id: `station-lod-sleepers${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      pickable: false,
-      extruded: false,
-      getPolygon: (d: SleeperDatum) => d.polygon,
-      getFillColor: (d: SleeperDatum) => d.color,
-      parameters: { depthTest: true, depthWriteEnabled: false } as any,
-    } as any)
+  pushSplit(
+    safeSleepers,
+    (suffix, data, beforeId) =>
+      new SolidPolygonLayer<SleeperDatum>({
+        id: `station-lod-sleepers${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        extruded: false,
+        getPolygon: (d: SleeperDatum) => d.polygon,
+        getFillColor: (d: SleeperDatum) => d.color,
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
+      } as any)
   );
 
-  pushSplit(safeRailPaths, (suffix, data, beforeId) =>
-    new PathLayer<RailPathDatum>({
-      id: `station-lod-rails${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      pickable: false,
-      widthUnits: 'meters',
-      getWidth: (d: RailPathDatum) => d.widthM,
-      getPath: (d: RailPathDatum) => d.path,
-      getColor: (d: RailPathDatum) => d.color,
-      capRounded: true,
-      jointRounded: true,
-      parameters: { depthTest: true, depthWriteEnabled: false } as any,
-    } as any)
+  pushSplit(
+    safeRailPaths,
+    (suffix, data, beforeId) =>
+      new PathLayer<RailPathDatum>({
+        id: `station-lod-rails${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        widthUnits: 'meters',
+        getWidth: (d: RailPathDatum) => d.widthM,
+        getPath: (d: RailPathDatum) => d.path,
+        getColor: (d: RailPathDatum) => d.color,
+        capRounded: true,
+        jointRounded: true,
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
+      } as any)
   );
 
-  pushSplit(safeStationStructures, (suffix, data, beforeId) =>
-    new PolygonLayer<CutawayPolygonDatum>({
-      id: `station-lod-architecture${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      pickable: false,
-      extruded: true,
-      filled: true,
-      stroked: true,
-      lineWidthUnits: 'meters',
-      getLineWidth: 0.08,
-      getPolygon: (d: CutawayPolygonDatum) => d.polygon,
-      getElevation: (d: CutawayPolygonDatum) => d.elevationM,
-      getFillColor: (d: CutawayPolygonDatum) => d.fillColor,
-      getLineColor: (d: CutawayPolygonDatum) => d.lineColor,
-      material: {
-        ambient: 0.72,
-        diffuse: 0.55,
-        shininess: 14,
-        specularColor: [110, 108, 104],
-      },
-      parameters: { depthTest: true, depthWriteEnabled: true } as any,
-    } as any)
+  pushSplit(
+    safeStationStructures,
+    (suffix, data, beforeId) =>
+      new PolygonLayer<CutawayPolygonDatum>({
+        id: `station-lod-architecture${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        extruded: true,
+        filled: true,
+        stroked: true,
+        lineWidthUnits: 'meters',
+        getLineWidth: 0.08,
+        getPolygon: (d: CutawayPolygonDatum) => d.polygon,
+        getElevation: (d: CutawayPolygonDatum) => d.elevationM,
+        getFillColor: (d: CutawayPolygonDatum) => d.fillColor,
+        getLineColor: (d: CutawayPolygonDatum) => d.lineColor,
+        material: {
+          ambient: 0.72,
+          diffuse: 0.55,
+          shininess: 14,
+          specularColor: [110, 108, 104],
+        },
+        parameters: { depthTest: true, depthWriteEnabled: true } as any,
+      } as any)
   );
 
-  pushSplit(safeVaultRibs, (suffix, data, beforeId) =>
-    new PathLayer<RailPathDatum>({
-      id: `station-lod-vault-ribs${suffix}`,
-      data,
-      ...(beforeId ? { beforeId } : {}),
-      pickable: false,
-      widthUnits: 'meters',
-      getWidth: (d: RailPathDatum) => d.widthM,
-      getPath: (d: RailPathDatum) => d.path,
-      getColor: (d: RailPathDatum) => d.color,
-      capRounded: true,
-      jointRounded: true,
-      parameters: { depthTest: true, depthWriteEnabled: false } as any,
-    } as any)
+  pushSplit(
+    safeVaultRibs,
+    (suffix, data, beforeId) =>
+      new PathLayer<RailPathDatum>({
+        id: `station-lod-vault-ribs${suffix}`,
+        data,
+        ...(beforeId ? { beforeId } : {}),
+        pickable: false,
+        widthUnits: 'meters',
+        getWidth: (d: RailPathDatum) => d.widthM,
+        getPath: (d: RailPathDatum) => d.path,
+        getColor: (d: RailPathDatum) => d.color,
+        capRounded: true,
+        jointRounded: true,
+        parameters: { depthTest: true, depthWriteEnabled: false } as any,
+      } as any)
   );
 
   return { layers, sielAnchors };

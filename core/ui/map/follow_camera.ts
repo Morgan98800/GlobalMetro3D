@@ -203,10 +203,7 @@ export class FollowCamera {
     }
 
     this.updateElevation();
-    setBuildingsXrayMode(
-      this.map,
-      !isAerialViaductLocation(train.lineName, train.pos)
-    );
+    setBuildingsXrayMode(this.map, !isAerialViaductLocation(train.lineName, train.pos));
     if (!this.locked) return;
     const now = performance.now();
     const deltaMs = Math.min(100, Math.max(0, now - this.lastFrameAt));

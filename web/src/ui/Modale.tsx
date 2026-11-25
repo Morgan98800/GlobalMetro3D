@@ -19,9 +19,18 @@ export interface ModaleProps {
   className?: string;
 }
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-export function Modale({ ouverte, titre, onClose, children, bandeau, largeur = 'md', className }: ModaleProps) {
+export function Modale({
+  ouverte,
+  titre,
+  onClose,
+  children,
+  bandeau,
+  largeur = 'md',
+  className,
+}: ModaleProps) {
   const id = useId();
   const panel = useRef<HTMLDivElement>(null);
 
@@ -64,13 +73,20 @@ export function Modale({ ouverte, titre, onClose, children, bandeau, largeur = '
           'relative flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-feuille bg-surface text-encre outline-none animate-feuille md:rounded-feuille',
           '[box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),var(--shadow-flotte)]',
           largeur === 'lg' ? 'md:max-w-[680px]' : 'md:max-w-[560px]',
-          className,
+          className
         )}
       >
         {bandeau}
         <div className="flex items-center justify-between gap-3 px-5 pb-1 pt-4 md:px-6">
-          <h2 id={id} className="text-titre text-encre">{titre}</h2>
-          <IconButton size="sm" label="Fermer" icon={<RiCloseLine aria-hidden />} onClick={onClose} />
+          <h2 id={id} className="text-titre text-encre">
+            {titre}
+          </h2>
+          <IconButton
+            size="sm"
+            label="Fermer"
+            icon={<RiCloseLine aria-hidden />}
+            onClick={onClose}
+          />
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(20px,env(safe-area-inset-bottom))] pt-2 md:px-6 md:pb-6">
           {children}

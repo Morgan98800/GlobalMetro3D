@@ -64,11 +64,7 @@ const CHOIX_TO_THEME: Record<ThemeChoix, ThemePreference> = {
 };
 
 function normalizeText(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .trim();
+  return value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 }
 
 function cityClockDate(timezone: string): Date {
@@ -343,10 +339,7 @@ export function SubwayAppShell() {
   ]);
 
   const linesById = useMemo(() => new Map(lines.map((l) => [l.id, l])), [lines]);
-  const linesByShort = useMemo(
-    () => new Map(lines.map((l) => [l.short_name, l])),
-    [lines]
-  );
+  const linesByShort = useMemo(() => new Map(lines.map((l) => [l.short_name, l])), [lines]);
 
   const activeLine = activeLineId ? (linesById.get(activeLineId) ?? null) : null;
   const isParis = cityConfig?.id === 'paris';
@@ -371,8 +364,7 @@ export function SubwayAppShell() {
       stations,
       linesById,
       expertMode,
-      onInverser: () =>
-        handlers.onLineDirChange?.(activeLine.id, activeDir === '1' ? '0' : '1'),
+      onInverser: () => handlers.onLineDirChange?.(activeLine.id, activeDir === '1' ? '0' : '1'),
       onArret: (stationName) => {
         const found = stations.find((s) => s.name === stationName);
         if (found) handlers.onStationSelect?.(found);
@@ -397,10 +389,7 @@ export function SubwayAppShell() {
     handlers,
   ]);
 
-  const stationPassages = useMemo(
-    () => grouperPassages(stationDepartures),
-    [stationDepartures]
-  );
+  const stationPassages = useMemo(() => grouperPassages(stationDepartures), [stationDepartures]);
 
   const nearbyProches = useMemo(
     () => buildNearbyStations(nearbyStations, nearbyDepartures, linesById),
@@ -410,7 +399,12 @@ export function SubwayAppShell() {
   const itinerairesProps = useMemo(() => mapItineraires(routeCandidates), [routeCandidates]);
 
   const stationHaystack = useMemo(
-    () => stations.map((s) => normalizeText(s.name).replace(/[^a-z0-9]+/g, ' ').trim()),
+    () =>
+      stations.map((s) =>
+        normalizeText(s.name)
+          .replace(/[^a-z0-9]+/g, ' ')
+          .trim()
+      ),
     [stations]
   );
 
@@ -434,7 +428,9 @@ export function SubwayAppShell() {
       'denfert rochereau',
     ];
     const rankStation = (name: string, lineCount: number) => {
-      const norm = normalizeText(name).replace(/[^a-z0-9]+/g, ' ').trim();
+      const norm = normalizeText(name)
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
       const idx = POPULAR_DESTINATIONS.findIndex((p) => norm === p || norm.startsWith(p));
       return idx >= 0 ? idx : 1000 - lineCount * 10;
     };
@@ -453,18 +449,16 @@ export function SubwayAppShell() {
         (a, b) => rankStation(a.name, a.lines.length) - rankStation(b.name, b.lines.length)
       );
     }
-    const matchedStations = baseStations
-      .slice(0, 10)
-      .map((s) => ({
-        type: 'station' as const,
-        id: s.id,
-        nom: s.name,
-        lignes: s.lines
-          .map((id) => linesById.get(id))
-          .filter((l): l is (typeof lines)[number] => Boolean(l))
-          .slice(0, 5)
-          .map(toLineRef),
-      }));
+    const matchedStations = baseStations.slice(0, 10).map((s) => ({
+      type: 'station' as const,
+      id: s.id,
+      nom: s.name,
+      lignes: s.lines
+        .map((id) => linesById.get(id))
+        .filter((l): l is (typeof lines)[number] => Boolean(l))
+        .slice(0, 5)
+        .map(toLineRef),
+    }));
 
     const matchedLines = (
       q
@@ -574,7 +568,10 @@ export function SubwayAppShell() {
       {/* Barre supérieure : bureau (TopNavBar unifiée) vs mobile (pastille unique) */}
       {desktop ? (
         <div className="fixed inset-x-0 top-0 z-30 flex items-start justify-between gap-3 px-4 pt-3.5">
-          <div ref={menuContainerRef} className="relative inline-flex max-w-full flex-col items-start">
+          <div
+            ref={menuContainerRef}
+            className="relative inline-flex max-w-full flex-col items-start"
+          >
             <TopNavBar
               reseau={cityConfig.displayName}
               onSearch={() => {
@@ -643,18 +640,16 @@ export function SubwayAppShell() {
             {rtSource && (
               <span
                 aria-hidden
-                className={cx('pl-lampe !h-[7.5px] !w-[7.5px] shrink-0', realtimeEnabled && 'is-on')}
+                className={cx(
+                  'pl-lampe !h-[7.5px] !w-[7.5px] shrink-0',
+                  realtimeEnabled && 'is-on'
+                )}
               />
             )}
             <RiMenuLine aria-hidden className="size-4 shrink-0 text-icone-2" />
           </Poussoir>
 
-          {menuOpen && (
-            <MenuPrincipal
-              {...menuProps}
-              className="pointer-events-auto"
-            />
-          )}
+          {menuOpen && <MenuPrincipal {...menuProps} className="pointer-events-auto" />}
 
           {isOffline && (
             <Panneau
@@ -687,13 +682,14 @@ export function SubwayAppShell() {
       />
 
       {/* Panneau des lignes : bureau latéral (repliable) ou feuille 3 crans mobile */}
-      {dockVisible && (desktop || !anyDrawerOpen) && (
-        desktop ? (
+      {dockVisible &&
+        (desktop || !anyDrawerOpen) &&
+        (desktop ? (
           <div
             id="dock"
             className={cx(
               'pointer-events-auto fixed left-4 top-[84px] z-20 w-[348px] transition-[transform,opacity] duration-200 ease-portes will-change-[transform,opacity]',
-              activeLine ? 'bottom-4' : 'max-h-[calc(100dvh-90px)]',
+              activeLine ? 'bottom-4' : 'max-h-[calc(100dvh-90px)]'
             )}
           >
             <LinesDock
@@ -749,8 +745,7 @@ export function SubwayAppShell() {
             replie={dockCollapsed}
             onReplier={() => setDockCollapsed((v) => !v)}
           />
-        )
-      )}
+        ))}
 
       {/* Suivi de rame */}
       {isFollowing && trackedTrain && (
@@ -760,13 +755,11 @@ export function SubwayAppShell() {
             const trLadder = ladders[trackedTrain.line];
             const d0 = trLadder?.directions?.['0'];
             const d1 = trLadder?.directions?.['1'];
-            const matchedDir =
-              d1 && d1.terminus === trackedTrain.dest ? d1 : (d0 ?? d1);
+            const matchedDir = d1 && d1.terminus === trackedTrain.dest ? d1 : (d0 ?? d1);
             const stops = (matchedDir?.stations ?? []).map((s) => s.name);
             const nextIdx = Math.max(0, stops.indexOf(trackedTrain.next));
             const speedKmh = Math.round(trackedTrain.spd || (trackedTrain.speedMps ?? 0) * 3.6);
-            const isLive =
-              trackedTrain.conf === 'measured' || trackedTrain.conf === 'bracketed';
+            const isLive = trackedTrain.conf === 'measured' || trackedTrain.conf === 'bracketed';
             const confLabel =
               trackedTrain.conf === 'measured' || trackedTrain.conf === 'bracketed'
                 ? 'Direct'
@@ -816,140 +809,142 @@ export function SubwayAppShell() {
       )}
 
       {/* Tiroir station */}
-      {selectedStation && (() => {
-        const stLines = selectedStation.lines
-          .map((id) => linesById.get(id))
-          .filter((l): l is (typeof lines)[number] => Boolean(l));
-        const primaryLine = stLines[0] ?? null;
-        const firstAlert = stLines
-          .map((l) => trafficByLine[l.id])
-          .find((r) => r && r.status !== 'normal');
-        const stPoint: RoutePoint = {
-          label: selectedStation.name,
-          subtitle: 'Station',
-          coordinates: selectedStation.coordinates,
-          kind: 'station',
-          station: selectedStation,
-        };
-        const isHome = savedPlaces.home?.label === selectedStation.name;
-        const isWork = savedPlaces.work?.label === selectedStation.name;
+      {selectedStation &&
+        (() => {
+          const stLines = selectedStation.lines
+            .map((id) => linesById.get(id))
+            .filter((l): l is (typeof lines)[number] => Boolean(l));
+          const primaryLine = stLines[0] ?? null;
+          const firstAlert = stLines
+            .map((l) => trafficByLine[l.id])
+            .find((r) => r && r.status !== 'normal');
+          const stPoint: RoutePoint = {
+            label: selectedStation.name,
+            subtitle: 'Station',
+            coordinates: selectedStation.coordinates,
+            kind: 'station',
+            station: selectedStation,
+          };
+          const isHome = savedPlaces.home?.label === selectedStation.name;
+          const isWork = savedPlaces.work?.label === selectedStation.name;
 
-        const drawerNode = (
-          <StationDrawer
-            station={{
-              nom: selectedStation.name,
-              lignes: stLines.map((l) => ({
-                ...toLineRef(l),
-                alert: mapTrafficAlert(trafficByLine[l.id]),
-              })),
-              accessible: selectedStation.wheelchair_boarding === 1,
-              alerte: firstAlert
-                ? {
-                    niveau: mapTrafficAlert(firstAlert) ?? 'vigilance',
-                    texte: firstAlert.message || firstAlert.title,
-                  }
-                : null,
-            }}
-            groupes={stationPassages.groupes}
-            direct={realtimeEnabled}
-            passionne={expertMode}
-            domicile={isHome}
-            travail={isWork}
-            onDomicile={() => uiStore.setPresetPlace('home', isHome ? null : stPoint)}
-            onTravail={() => uiStore.setPresetPlace('work', isWork ? null : stPoint)}
-            onPartager={() => {
-              const slug = cityConfig.slug || 'paris';
-              copyShareUrl(
-                `${window.location.origin}/${encodeURIComponent(slug)}?station=${encodeURIComponent(selectedStation.name)}`
-              );
-            }}
-            onYAller={() => {
-              handlers.onOpenRoutePlanner?.({ destination: stPoint });
-              uiStore.setSelectedStation(null);
-            }}
-            onPartir={() => {
-              handlers.onOpenRoutePlanner?.({ origin: stPoint });
-              uiStore.setSelectedStation(null);
-            }}
-            onQuai3D={
-              isParis && primaryLine
-                ? () => {
-                    const name = selectedStation.name;
-                    uiStore.setSelectedStation(null);
-                    handlers.onOpenParisRide?.({
-                      initialLine: primaryLine.short_name,
-                      initialStation: name,
-                      initialView: 'vault',
-                    });
-                  }
-                : undefined
-            }
-            onLigne={(shortName) => {
-              const target = linesByShort.get(shortName);
-              if (target) {
-                handlers.onLineSelect?.(target.id, '0');
-                uiStore.setLineDrawerOpen(true);
-                uiStore.setSelectedStation(null);
-              }
-            }}
-            onSuivre={
-              expertMode
-                ? (gIdx, pIdx) => {
-                    const ref = stationPassages.refs[gIdx]?.[pIdx];
-                    if (ref) {
-                      handlers.onTrainFollowById?.(ref.tripId, ref.lineId);
-                      uiStore.setSelectedStation(null);
+          const drawerNode = (
+            <StationDrawer
+              station={{
+                nom: selectedStation.name,
+                lignes: stLines.map((l) => ({
+                  ...toLineRef(l),
+                  alert: mapTrafficAlert(trafficByLine[l.id]),
+                })),
+                accessible: selectedStation.wheelchair_boarding === 1,
+                alerte: firstAlert
+                  ? {
+                      niveau: mapTrafficAlert(firstAlert) ?? 'vigilance',
+                      texte: firstAlert.message || firstAlert.title,
                     }
-                  }
-                : undefined
-            }
-            onClose={() => uiStore.setSelectedStation(null)}
-            className={desktop ? 'h-full' : undefined}
-          />
-        );
+                  : null,
+              }}
+              groupes={stationPassages.groupes}
+              direct={realtimeEnabled}
+              passionne={expertMode}
+              domicile={isHome}
+              travail={isWork}
+              onDomicile={() => uiStore.setPresetPlace('home', isHome ? null : stPoint)}
+              onTravail={() => uiStore.setPresetPlace('work', isWork ? null : stPoint)}
+              onPartager={() => {
+                const slug = cityConfig.slug || 'paris';
+                copyShareUrl(
+                  `${window.location.origin}/${encodeURIComponent(slug)}?station=${encodeURIComponent(selectedStation.name)}`
+                );
+              }}
+              onYAller={() => {
+                handlers.onOpenRoutePlanner?.({ destination: stPoint });
+                uiStore.setSelectedStation(null);
+              }}
+              onPartir={() => {
+                handlers.onOpenRoutePlanner?.({ origin: stPoint });
+                uiStore.setSelectedStation(null);
+              }}
+              onQuai3D={
+                isParis && primaryLine
+                  ? () => {
+                      const name = selectedStation.name;
+                      uiStore.setSelectedStation(null);
+                      handlers.onOpenParisRide?.({
+                        initialLine: primaryLine.short_name,
+                        initialStation: name,
+                        initialView: 'vault',
+                      });
+                    }
+                  : undefined
+              }
+              onLigne={(shortName) => {
+                const target = linesByShort.get(shortName);
+                if (target) {
+                  handlers.onLineSelect?.(target.id, '0');
+                  uiStore.setLineDrawerOpen(true);
+                  uiStore.setSelectedStation(null);
+                }
+              }}
+              onSuivre={
+                expertMode
+                  ? (gIdx, pIdx) => {
+                      const ref = stationPassages.refs[gIdx]?.[pIdx];
+                      if (ref) {
+                        handlers.onTrainFollowById?.(ref.tripId, ref.lineId);
+                        uiStore.setSelectedStation(null);
+                      }
+                    }
+                  : undefined
+              }
+              onClose={() => uiStore.setSelectedStation(null)}
+              className={desktop ? 'h-full' : undefined}
+            />
+          );
 
-        return desktop ? (
-          <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[356px]">
-            {drawerNode}
-          </div>
-        ) : (
-          drawerNode
-        );
-      })()}
+          return desktop ? (
+            <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[356px]">
+              {drawerNode}
+            </div>
+          ) : (
+            drawerNode
+          );
+        })()}
 
       {/* Tiroir Autour de moi */}
-      {nearbyOpen && (() => {
-        const nearbyNode = (
-          <NearbyDrawer
-            etat={nearbyLoading ? 'chargement' : nearbyError ? 'erreur' : 'pret'}
-            erreur={nearbyError ? inferNearbyError(nearbyError) : undefined}
-            stations={nearbyProches}
-            precision={userLocation ? Math.round(userLocation.accuracyM) : undefined}
-            onStation={(id) => {
-              const found = stations.find((s) => s.id === id);
-              if (found) {
+      {nearbyOpen &&
+        (() => {
+          const nearbyNode = (
+            <NearbyDrawer
+              etat={nearbyLoading ? 'chargement' : nearbyError ? 'erreur' : 'pret'}
+              erreur={nearbyError ? inferNearbyError(nearbyError) : undefined}
+              stations={nearbyProches}
+              precision={userLocation ? Math.round(userLocation.accuracyM) : undefined}
+              onStation={(id) => {
+                const found = stations.find((s) => s.id === id);
+                if (found) {
+                  uiStore.setNearbyOpen(false);
+                  handlers.onStationSelect?.(found);
+                }
+              }}
+              onReessayer={() => handlers.onRequestNearby?.()}
+              onRechercher={() => {
                 uiStore.setNearbyOpen(false);
-                handlers.onStationSelect?.(found);
-              }
-            }}
-            onReessayer={() => handlers.onRequestNearby?.()}
-            onRechercher={() => {
-              uiStore.setNearbyOpen(false);
-              uiStore.setSearchOpen(true);
-            }}
-            onClose={() => uiStore.setNearbyOpen(false)}
-            className={desktop ? 'h-full' : undefined}
-          />
-        );
+                uiStore.setSearchOpen(true);
+              }}
+              onClose={() => uiStore.setNearbyOpen(false)}
+              className={desktop ? 'h-full' : undefined}
+            />
+          );
 
-        return desktop ? (
-          <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[356px]">
-            {nearbyNode}
-          </div>
-        ) : (
-          nearbyNode
-        );
-      })()}
+          return desktop ? (
+            <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[356px]">
+              {nearbyNode}
+            </div>
+          ) : (
+            nearbyNode
+          );
+        })()}
 
       {/* Tiroir Itinéraire */}
       {routePlannerOpen && (
@@ -1065,7 +1060,9 @@ export function SubwayAppShell() {
               matiere="feuille"
               className={cx(
                 'z-40 max-h-56 overflow-y-auto p-1.5 shadow-xl',
-                desktop ? 'absolute left-4 right-4 top-[176px]' : 'fixed inset-x-4 top-[calc(14dvh+196px)]',
+                desktop
+                  ? 'absolute left-4 right-4 top-[176px]'
+                  : 'fixed inset-x-4 top-[calc(14dvh+196px)]'
               )}
             >
               {routeSuggestions.map((s) => (
@@ -1140,42 +1137,43 @@ export function SubwayAppShell() {
       )}
 
       {/* Tiroir Bibliothèque (Rames 3D & Histoire) */}
-      {libraryOpen && (() => {
-        const libNode = (
-          <LibraryDrawer
-            tab={libraryTab}
-            onTabChange={(t) => uiStore.setLibraryOpen(true, t)}
-            onClose={() => uiStore.setLibraryOpen(false)}
-            onDriveTrain={
-              isParis
-                ? (stock) => {
-                    uiStore.setLibraryOpen(false);
-                    handlers.onOpenParisRide?.({
-                      initialLine: stock.defaultLineForRide,
-                      initialView: 'ride',
-                      initialStockGlb: {
-                        cab: stock.cabGlb,
-                        car: stock.carGlb,
-                        label: stock.name,
-                        sprague: stock.sprague,
-                      },
-                    });
-                  }
-                : undefined
-            }
-            onFocusMapCamera={(opts) => handlers.onFocusMapCamera?.(opts)}
-            className={desktop ? 'h-full' : undefined}
-          />
-        );
+      {libraryOpen &&
+        (() => {
+          const libNode = (
+            <LibraryDrawer
+              tab={libraryTab}
+              onTabChange={(t) => uiStore.setLibraryOpen(true, t)}
+              onClose={() => uiStore.setLibraryOpen(false)}
+              onDriveTrain={
+                isParis
+                  ? (stock) => {
+                      uiStore.setLibraryOpen(false);
+                      handlers.onOpenParisRide?.({
+                        initialLine: stock.defaultLineForRide,
+                        initialView: 'ride',
+                        initialStockGlb: {
+                          cab: stock.cabGlb,
+                          car: stock.carGlb,
+                          label: stock.name,
+                          sprague: stock.sprague,
+                        },
+                      });
+                    }
+                  : undefined
+              }
+              onFocusMapCamera={(opts) => handlers.onFocusMapCamera?.(opts)}
+              className={desktop ? 'h-full' : undefined}
+            />
+          );
 
-        return desktop ? (
-          <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[412px]">
-            {libNode}
-          </div>
-        ) : (
-          libNode
-        );
-      })()}
+          return desktop ? (
+            <div className="pointer-events-auto fixed right-4 top-[84px] bottom-[156px] z-30 w-[412px]">
+              {libNode}
+            </div>
+          ) : (
+            libNode
+          );
+        })()}
 
       {/* Palette de recherche ⌘K */}
       <StationSearchPalette

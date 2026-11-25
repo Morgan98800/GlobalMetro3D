@@ -38,14 +38,26 @@ export function MenuPrincipal({
   className,
 }: MenuPrincipalProps) {
   return (
-    <Panneau as="section" role="dialog" aria-label="Menu et réglages" className={cx('w-[320px] max-w-[calc(100vw-84px)] md:max-w-[calc(100vw-24px)] p-3 animate-feuille', className)}>
+    <Panneau
+      as="section"
+      role="dialog"
+      aria-label="Menu et réglages"
+      className={cx(
+        'w-[320px] max-w-[calc(100vw-84px)] md:max-w-[calc(100vw-24px)] p-3 animate-feuille',
+        className
+      )}
+    >
       <Reglage titre="Thème">
         <Segmented
           size="sm"
           label="Thème"
           value={theme}
           onChange={onTheme}
-          options={[{ value: 'systeme', label: 'Système' }, { value: 'clair', label: 'Clair' }, { value: 'sombre', label: 'Sombre' }]}
+          options={[
+            { value: 'systeme', label: 'Système' },
+            { value: 'clair', label: 'Clair' },
+            { value: 'sombre', label: 'Sombre' },
+          ]}
         />
       </Reglage>
       {typeof batiments3d === 'boolean' && onBatiments3d && (
@@ -55,7 +67,10 @@ export function MenuPrincipal({
             label="Bâtiments 3D"
             value={batiments3d ? 'oui' : 'non'}
             onChange={(v) => onBatiments3d(v === 'oui')}
-            options={[{ value: 'oui', label: 'Oui' }, { value: 'non', label: 'Non' }]}
+            options={[
+              { value: 'oui', label: 'Oui' },
+              { value: 'non', label: 'Non' },
+            ]}
           />
         </Reglage>
       )}
@@ -64,13 +79,7 @@ export function MenuPrincipal({
           <p className="mb-1.5 text-[12px] font-semibold text-encre-3">Réseau</p>
           <div className="flex flex-wrap gap-1.5">
             {reseaux.map((r) => (
-              <Poussoir
-                key={r.id}
-                taille="sm"
-                lampe
-                pressed={r.actif}
-                onClick={r.onSelect}
-              >
+              <Poussoir key={r.id} taille="sm" lampe pressed={r.actif} onClick={r.onSelect}>
                 {r.nom}
               </Poussoir>
             ))}
@@ -78,7 +87,9 @@ export function MenuPrincipal({
         </div>
       )}
       <Joint className="mb-1.5 mt-1" />
-      <Ligne icon={<RiInformationLine aria-hidden />} onClick={onAPropos}>À propos</Ligne>
+      <Ligne icon={<RiInformationLine aria-hidden />} onClick={onAPropos}>
+        À propos
+      </Ligne>
     </Panneau>
   );
 }
@@ -93,13 +104,17 @@ function Reglage({ titre, aide, children }: { titre: string; aide?: string; chil
   );
 }
 
-function Ligne({ icon, children, onClick }: { icon: ReactNode; children: ReactNode; onClick: () => void }) {
+function Ligne({
+  icon,
+  children,
+  onClick,
+}: {
+  icon: ReactNode;
+  children: ReactNode;
+  onClick: () => void;
+}) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="pl-menu-entree"
-    >
+    <button type="button" onClick={onClick} className="pl-menu-entree">
       {icon}
       {children}
     </button>

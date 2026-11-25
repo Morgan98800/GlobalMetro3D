@@ -995,30 +995,57 @@ export function getLibraryGlbUrlsForLine(lineNumOrKey: string): {
     .replace(/^M/, '');
   switch (upper) {
     case '1':
-      return { cab: '/models/train/library/mp05_cab.glb', car: '/models/train/library/mp05_car.glb' };
+      return {
+        cab: '/models/train/library/mp05_cab.glb',
+        car: '/models/train/library/mp05_car.glb',
+      };
     case '2':
     case '5':
     case '9':
-      return { cab: '/models/train/library/mf01_cab.glb', car: '/models/train/library/mf01_car.glb' };
+      return {
+        cab: '/models/train/library/mf01_cab.glb',
+        car: '/models/train/library/mf01_car.glb',
+      };
     case '3':
     case '3BIS':
     case '10':
     case '12':
-      return { cab: '/models/train/library/mf67_cab.glb', car: '/models/train/library/mf67_car.glb' };
+      return {
+        cab: '/models/train/library/mf67_cab.glb',
+        car: '/models/train/library/mf67_car.glb',
+      };
     case '4':
-      return { cab: '/models/train/library/mp89_ca_cab.glb', car: '/models/train/library/mp89_car.glb' };
+      return {
+        cab: '/models/train/library/mp89_ca_cab.glb',
+        car: '/models/train/library/mp89_car.glb',
+      };
     case '6':
-      return { cab: '/models/train/library/mp89_cc_cab.glb', car: '/models/train/library/mp89_car.glb' };
+      return {
+        cab: '/models/train/library/mp89_cc_cab.glb',
+        car: '/models/train/library/mp89_car.glb',
+      };
     case '7':
     case '8':
     case '13':
-      return { cab: '/models/train/library/mf77_cab.glb', car: '/models/train/library/mf77_car.glb' };
+      return {
+        cab: '/models/train/library/mf77_cab.glb',
+        car: '/models/train/library/mf77_car.glb',
+      };
     case '7BIS':
-      return { cab: '/models/train/library/mf88_cab.glb', car: '/models/train/library/mf88_car.glb' };
+      return {
+        cab: '/models/train/library/mf88_cab.glb',
+        car: '/models/train/library/mf88_car.glb',
+      };
     case '11':
-      return { cab: '/models/train/library/mp14_cc_cab.glb', car: '/models/train/library/mp14_car.glb' };
+      return {
+        cab: '/models/train/library/mp14_cc_cab.glb',
+        car: '/models/train/library/mp14_car.glb',
+      };
     case '14':
-      return { cab: '/models/train/library/mp14_ca_cab.glb', car: '/models/train/library/mp14_car.glb' };
+      return {
+        cab: '/models/train/library/mp14_ca_cab.glb',
+        car: '/models/train/library/mp14_car.glb',
+      };
     case 'A':
     case 'B':
     case 'C':
@@ -1029,7 +1056,10 @@ export function getLibraryGlbUrlsForLine(lineNumOrKey: string): {
         car: `/models/train/rer_generic_${upper}__neutral.glb`,
       };
     default:
-      return { cab: '/models/train/library/mf01_cab.glb', car: '/models/train/library/mf01_car.glb' };
+      return {
+        cab: '/models/train/library/mf01_cab.glb',
+        car: '/models/train/library/mf01_car.glb',
+      };
   }
 }
 
@@ -1108,9 +1138,7 @@ export interface DualSielBoards {
   neg: { heading: string; rows: SielRow[] };
 }
 
-export function formatSielWaitTime(
-  dep: Pick<StationDeparture, 'atStop' | 'waitSeconds'>
-): string {
+export function formatSielWaitTime(dep: Pick<StationDeparture, 'atStop' | 'waitSeconds'>): string {
   if (dep.atStop || dep.waitSeconds <= 20) return 'À quai';
   if (dep.waitSeconds < 60) return '< 1 min';
   return `${Math.max(1, Math.round(dep.waitSeconds / 60))} min`;
@@ -1136,10 +1164,20 @@ export function selectDualSielBoards(params: {
   simKmh: number;
   counterEtaText: string;
 }): DualSielBoards {
-  const { departures, lineNum, posDest, negDest, simDir, simState, simKmh, counterEtaText } = params;
-  const normLine = lineNum.trim().toLowerCase().replace(/^rer\s+/, '');
+  const { departures, lineNum, posDest, negDest, simDir, simState, simKmh, counterEtaText } =
+    params;
+  const normLine = lineNum
+    .trim()
+    .toLowerCase()
+    .replace(/^rer\s+/, '');
   const matching = departures
-    .filter((d) => d.lineShortName.trim().toLowerCase().replace(/^rer\s+/, '') === normLine)
+    .filter(
+      (d) =>
+        d.lineShortName
+          .trim()
+          .toLowerCase()
+          .replace(/^rer\s+/, '') === normLine
+    )
     .slice()
     .sort((a, b) => a.waitSeconds - b.waitSeconds);
 
@@ -1167,7 +1205,11 @@ export function selectDualSielBoards(params: {
       negDeps.push(dep);
     } else {
       const target = dir0Side
-        ? (dep.direction === 0 ? dir0Side : dir0Side === 'pos' ? 'neg' : 'pos')
+        ? dep.direction === 0
+          ? dir0Side
+          : dir0Side === 'pos'
+            ? 'neg'
+            : 'pos'
         : dep.direction === 0
           ? 'pos'
           : 'neg';

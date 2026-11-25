@@ -1,6 +1,16 @@
 import {
-  RiArrowDownSLine, RiArrowRightSLine, RiArrowUpDownLine, RiBox3Line, RiBriefcase4Line, RiCloseCircleFill, RiCloseLine,
-  RiFocus3Line, RiHome5Line, RiShareForwardLine, RiStarFill, RiWalkLine,
+  RiArrowDownSLine,
+  RiArrowRightSLine,
+  RiArrowUpDownLine,
+  RiBox3Line,
+  RiBriefcase4Line,
+  RiCloseCircleFill,
+  RiCloseLine,
+  RiFocus3Line,
+  RiHome5Line,
+  RiShareForwardLine,
+  RiStarFill,
+  RiWalkLine,
 } from '@remixicon/react';
 import { Fragment, useId, useState } from 'react';
 import { motion } from 'motion/react';
@@ -85,8 +95,16 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
   const body = (
     <>
       <div className={cx('flex items-center justify-between', pad, basse ? 'pt-1' : 'pt-5')}>
-        <h2 id="itineraire-titre" className="text-titre text-encre">Itinéraire</h2>
-        <IconButton size="sm" variant="secondaire" label="Fermer l’itinéraire" icon={<RiCloseLine aria-hidden />} onClick={props.onClose} />
+        <h2 id="itineraire-titre" className="text-titre text-encre">
+          Itinéraire
+        </h2>
+        <IconButton
+          size="sm"
+          variant="secondaire"
+          label="Fermer l’itinéraire"
+          icon={<RiCloseLine aria-hidden />}
+          onClick={props.onClose}
+        />
       </div>
 
       <div className={cx('pt-2.5', pad)}>
@@ -96,8 +114,21 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
               aria-hidden
               className="pointer-events-none absolute left-[18px] top-[31px] bottom-[31px] w-0 border-l-2 border-dashed border-encre-3/45"
             />
-            <Champ lettre="A" label="Départ" placeholder={props.departPlaceholder || 'Ma position'} value={props.depart} onChange={props.onDepart} onMaPosition={props.onMaPosition} />
-            <Champ lettre="B" label="Arrivée" placeholder="Où allez-vous ?" value={props.arrivee} onChange={props.onArrivee} />
+            <Champ
+              lettre="A"
+              label="Départ"
+              placeholder={props.departPlaceholder || 'Ma position'}
+              value={props.depart}
+              onChange={props.onDepart}
+              onMaPosition={props.onMaPosition}
+            />
+            <Champ
+              lettre="B"
+              label="Arrivée"
+              placeholder="Où allez-vous ?"
+              value={props.arrivee}
+              onChange={props.onArrivee}
+            />
           </div>
           <IconButton
             size="sm"
@@ -108,25 +139,52 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
           />
         </div>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
-          <Button size="sm" variant="secondaire" icon={<RiHome5Line aria-hidden />} onClick={() => props.onRaccourci('domicile')}>
+          <Button
+            size="sm"
+            variant="secondaire"
+            icon={<RiHome5Line aria-hidden />}
+            onClick={() => props.onRaccourci('domicile')}
+          >
             Domicile
           </Button>
-          <Button size="sm" variant="secondaire" icon={<RiBriefcase4Line aria-hidden />} onClick={() => props.onRaccourci('travail')}>
+          <Button
+            size="sm"
+            variant="secondaire"
+            icon={<RiBriefcase4Line aria-hidden />}
+            onClick={() => props.onRaccourci('travail')}
+          >
             Travail
           </Button>
           {props.favoris?.slice(0, 4).map((f) => (
-            <Button key={f.nom} size="sm" variant="secondaire" icon={<RiStarFill aria-hidden />} onClick={f.onClick} className="signaletique">
+            <Button
+              key={f.nom}
+              size="sm"
+              variant="secondaire"
+              icon={<RiStarFill aria-hidden />}
+              onClick={f.onClick}
+              className="signaletique"
+            >
               {f.nom}
             </Button>
           ))}
         </div>
       </div>
 
-      <div className={cx('pl-scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4 pt-3', pad)}>
+      <div
+        className={cx(
+          'pl-scroll-fade min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4 pt-3',
+          pad
+        )}
+      >
         {basse && actif ? (
           <div className="space-y-2">
             <ul className="space-y-2">
-              <CarteItineraire it={actif} ouverte onOuvrir={() => props.onSelection?.(sel)} onVoirEn3D={props.onVoirEn3D} />
+              <CarteItineraire
+                it={actif}
+                ouverte
+                onOuvrir={() => props.onSelection?.(sel)}
+                onVoirEn3D={props.onVoirEn3D}
+              />
             </ul>
             {autres.length > 0 && (
               <div className="rounded-[12px] border border-bord bg-encart/55">
@@ -141,7 +199,13 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
                       ? 'Masquer'
                       : `${autres.length} autre${autres.length > 1 ? 's' : ''} · dès ${Math.min(...autres.map((a) => a.minutes))} min`}
                   </span>
-                  <RiArrowDownSLine aria-hidden className={cx('size-4 text-icone-2 transition-transform', autresOuverts && 'rotate-180')} />
+                  <RiArrowDownSLine
+                    aria-hidden
+                    className={cx(
+                      'size-4 text-icone-2 transition-transform',
+                      autresOuverts && 'rotate-180'
+                    )}
+                  />
                 </button>
                 {autresOuverts && (
                   <ul className="space-y-2 border-t border-joint p-2">
@@ -157,7 +221,7 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
                           }}
                           onVoirEn3D={props.onVoirEn3D}
                         />
-                      ),
+                      )
                     )}
                   </ul>
                 )}
@@ -177,7 +241,12 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <CarteItineraire it={it} ouverte={i === sel} onOuvrir={() => props.onSelection?.(i)} onVoirEn3D={props.onVoirEn3D} />
+                <CarteItineraire
+                  it={it}
+                  ouverte={i === sel}
+                  onOuvrir={() => props.onSelection?.(i)}
+                  onVoirEn3D={props.onVoirEn3D}
+                />
               </motion.div>
             ))}
           </ul>
@@ -185,8 +254,20 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
       </div>
 
       {props.itineraires.length > 0 && (
-        <footer className={cx('flex shrink-0 items-center justify-end gap-2 border-t border-joint bg-surface pt-2.5', pad, basse ? 'pb-[max(14px,env(safe-area-inset-bottom))]' : 'pb-4 pt-3')}>
-          <Button variant="secondaire" size="sm" className={basse ? 'min-h-[44px]' : undefined} icon={<RiShareForwardLine aria-hidden />} onClick={props.onPartager}>
+        <footer
+          className={cx(
+            'flex shrink-0 items-center justify-end gap-2 border-t border-joint bg-surface pt-2.5',
+            pad,
+            basse ? 'pb-[max(14px,env(safe-area-inset-bottom))]' : 'pb-4 pt-3'
+          )}
+        >
+          <Button
+            variant="secondaire"
+            size="sm"
+            className={basse ? 'min-h-[44px]' : undefined}
+            icon={<RiShareForwardLine aria-hidden />}
+            onClick={props.onPartager}
+          >
             Partager
           </Button>
         </footer>
@@ -215,15 +296,30 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
       as="section"
       role="dialog"
       aria-labelledby="itineraire-titre"
-      className={cx('flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille', props.className)}
+      className={cx(
+        'flex max-h-full min-h-0 flex-col overflow-hidden animate-feuille',
+        props.className
+      )}
     >
       {body}
     </Panneau>
   );
 }
 
-function Champ({ lettre, label, placeholder, value, onChange, onMaPosition }: {
-  lettre: 'A' | 'B'; label: string; placeholder: string; value: string; onChange: (v: string) => void; onMaPosition?: () => void;
+function Champ({
+  lettre,
+  label,
+  placeholder,
+  value,
+  onChange,
+  onMaPosition,
+}: {
+  lettre: 'A' | 'B';
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  onMaPosition?: () => void;
 }) {
   const id = useId();
   return (
@@ -232,10 +328,14 @@ function Champ({ lettre, label, placeholder, value, onChange, onMaPosition }: {
         aria-hidden
         className={cx(
           'size-[13px] shrink-0',
-          lettre === 'A' ? 'rounded-full border-[3px] border-encre-2 bg-surface' : 'rounded-[3px] bg-action',
+          lettre === 'A'
+            ? 'rounded-full border-[3px] border-encre-2 bg-surface'
+            : 'rounded-[3px] bg-action'
         )}
       />
-      <label htmlFor={id} className="sr-only">{label} ({lettre})</label>
+      <label htmlFor={id} className="sr-only">
+        {label} ({lettre})
+      </label>
       <input
         id={id}
         value={value}
@@ -246,7 +346,13 @@ function Champ({ lettre, label, placeholder, value, onChange, onMaPosition }: {
         className="pl-saisie min-w-0 flex-1 text-[16px] max-md:min-h-[44px] !outline-none !ring-0 !shadow-none"
       />
       {!value && onMaPosition && (
-        <IconButton size="sm" label="Partir de ma position" icon={<RiFocus3Line aria-hidden />} onClick={onMaPosition} className="shrink-0" />
+        <IconButton
+          size="sm"
+          label="Partir de ma position"
+          icon={<RiFocus3Line aria-hidden />}
+          onClick={onMaPosition}
+          className="shrink-0"
+        />
       )}
       {value && (
         <IconButton
@@ -275,25 +381,18 @@ function CarteItineraire({
   const attente = premier && premier.type === 'ligne' ? premier.attente : undefined;
   return (
     <li className="list-none">
-      <button
-        type="button"
-        onClick={onOuvrir}
-        aria-expanded={ouverte}
-        className="pl-carte-trajet"
-      >
-      <span className="flex items-start justify-between gap-3">
-        <span>
-          <span className="flex items-baseline gap-1">
-            <span className="pl-duree text-encre">{it.minutes}</span>
-            <span className="text-[14px] font-semibold text-encre-2">min</span>
-          </span>
+      <button type="button" onClick={onOuvrir} aria-expanded={ouverte} className="pl-carte-trajet">
+        <span className="flex items-start justify-between gap-3">
+          <span>
+            <span className="flex items-baseline gap-1">
+              <span className="pl-duree text-encre">{it.minutes}</span>
+              <span className="text-[14px] font-semibold text-encre-2">min</span>
+            </span>
             <span className="mt-1.5 block text-[13px] text-encre-2">
               Arrivée à <span className="chiffres font-semibold text-encre">{it.arrivee}</span>
             </span>
           </span>
-          {attente && (
-            <Afficheur passages={[attente]} max={1} size="sm" />
-          )}
+          {attente && <Afficheur passages={[attente]} max={1} size="sm" />}
         </span>
         <Sequence segments={it.segments} />
       </button>
@@ -383,7 +482,9 @@ function Troncon({
               </p>
               <p className="flex items-center gap-2 text-[12px] text-encre-3">
                 {s.attente && <Afficheur passages={[s.attente]} max={1} size="sm" />}
-                <span>{n} {n > 1 ? 'arrêts' : 'arrêt'}, {s.minutes} min</span>
+                <span>
+                  {n} {n > 1 ? 'arrêts' : 'arrêt'}, {s.minutes} min
+                </span>
               </p>
               {s.voiture && <VoitureConseillee position={s.voiture} raison={s.raisonVoiture} />}
               {onVoirEn3D && (

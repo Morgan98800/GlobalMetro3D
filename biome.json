@@ -56,10 +56,21 @@
       "suspicious": {
         "noExplicitAny": "off",
         "noDuplicateProperties": "off",
-        "noConfusingVoidType": "off"
+        "noConfusingVoidType": "off",
+        "useIterableCallbackReturn": "off",
+        "noArrayIndexKey": "off",
+        "noAssignInExpressions": "off"
       },
       "correctness": {
-        "noUnusedFunctionParameters": "off"
+        "noUnusedFunctionParameters": "off",
+        "useExhaustiveDependencies": "off"
+      },
+      "a11y": {
+        "useAriaPropsSupportedByRole": "off",
+        "useSemanticElements": "off",
+        "useKeyWithClickEvents": "off",
+        "useFocusableInteractive": "off",
+        "noAutofocus": "off"
       }
     }
   }

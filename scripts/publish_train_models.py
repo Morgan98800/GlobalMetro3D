@@ -36,7 +36,27 @@ def publish_train_models(destination_dir: Path = DESTINATION_DIR) -> list[Path]:
 
     for source in source_files:
         shutil.copy2(source, destination_dir / source.name)
-    return [destination_dir / source.name for source in source_files]
+    published = [destination_dir / source.name for source in source_files]
+
+    for subdir in ("library", "map_hd"):
+        sub_sources: list[Path] = []
+        for sdir in source_dirs:
+            candidate_dir = sdir / subdir
+            if candidate_dir.exists():
+                sub_sources.extend(sorted(p for p in candidate_dir.glob("*.glb") if p.is_file()))
+        if not sub_sources:
+            continue
+        sub_dest = destination_dir / subdir
+        sub_dest.mkdir(parents=True, exist_ok=True)
+        sub_names = {p.name for p in sub_sources}
+        for existing in sub_dest.glob("*.glb"):
+            if existing.name not in sub_names:
+                existing.unlink()
+        for src in sub_sources:
+            shutil.copy2(src, sub_dest / src.name)
+            published.append(sub_dest / src.name)
+
+    return published
 
 
 def main() -> None:

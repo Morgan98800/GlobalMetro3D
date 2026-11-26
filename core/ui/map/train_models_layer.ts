@@ -228,68 +228,93 @@ const BASE_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; t
   },
 };
 
-/** Modèles détaillés par ligne (1 mesh fusionné, centré (0,0,0), couleurs cuites en vertex-colors) */
+/** Modèles détaillés par ligne (centrés (0,0,0), glTF 2.0 pur sans extension, cab/tail séparés) */
 const DETAILED_LIVERY_VARIANT_URLS: Record<string, { neutral: string; cab: string; tail: string }> =
   {
     paris_mp14_ca: {
       neutral: '/models/train/map_hd/mp14_car.glb',
       cab: '/models/train/map_hd/mp14_ca__cab.glb',
-      tail: '/models/train/map_hd/mp14_ca__cab.glb',
+      tail: '/models/train/map_hd/mp14_ca__tail.glb',
     },
     paris_mp14_cc: {
       neutral: '/models/train/map_hd/mp14_car.glb',
       cab: '/models/train/map_hd/mp14_cc__cab.glb',
-      tail: '/models/train/map_hd/mp14_cc__cab.glb',
+      tail: '/models/train/map_hd/mp14_cc__tail.glb',
     },
     paris_mp05: {
       neutral: '/models/train/map_hd/mp05_car.glb',
       cab: '/models/train/map_hd/mp05__cab.glb',
-      tail: '/models/train/map_hd/mp05__cab.glb',
+      tail: '/models/train/map_hd/mp05__tail.glb',
     },
     paris_mp89_ca: {
       neutral: '/models/train/map_hd/mp89_car.glb',
       cab: '/models/train/map_hd/mp89_ca__cab.glb',
-      tail: '/models/train/map_hd/mp89_ca__cab.glb',
+      tail: '/models/train/map_hd/mp89_ca__tail.glb',
     },
     paris_mp89_cc: {
       neutral: '/models/train/map_hd/mp89_car.glb',
       cab: '/models/train/map_hd/mp89_cc__cab.glb',
-      tail: '/models/train/map_hd/mp89_cc__cab.glb',
+      tail: '/models/train/map_hd/mp89_cc__tail.glb',
     },
     paris_mf01: {
       neutral: '/models/train/map_hd/mf01_car.glb',
       cab: '/models/train/map_hd/mf01__cab.glb',
-      tail: '/models/train/map_hd/mf01__cab.glb',
+      tail: '/models/train/map_hd/mf01__tail.glb',
     },
     paris_mf88: {
       neutral: '/models/train/map_hd/mf88_car.glb',
       cab: '/models/train/map_hd/mf88__cab.glb',
-      tail: '/models/train/map_hd/mf88__cab.glb',
+      tail: '/models/train/map_hd/mf88__tail.glb',
     },
     paris_mf77: {
       neutral: '/models/train/map_hd/mf77_car.glb',
       cab: '/models/train/map_hd/mf77__cab.glb',
-      tail: '/models/train/map_hd/mf77__cab.glb',
+      tail: '/models/train/map_hd/mf77__tail.glb',
     },
     paris_mf67: {
       neutral: '/models/train/map_hd/mf67_car.glb',
       cab: '/models/train/map_hd/mf67__cab.glb',
-      tail: '/models/train/map_hd/mf67__cab.glb',
+      tail: '/models/train/map_hd/mf67__tail.glb',
     },
     paris_mp73: {
       neutral: '/models/train/map_hd/mp73_car.glb',
       cab: '/models/train/map_hd/mp73__cab.glb',
-      tail: '/models/train/map_hd/mp73__cab.glb',
+      tail: '/models/train/map_hd/mp73__tail.glb',
     },
     paris_mp59: {
       neutral: '/models/train/map_hd/mp59_car.glb',
       cab: '/models/train/map_hd/mp59__cab.glb',
-      tail: '/models/train/map_hd/mp59__cab.glb',
+      tail: '/models/train/map_hd/mp59__tail.glb',
     },
     paris_mf19: {
       neutral: '/models/train/map_hd/mf19_car.glb',
       cab: '/models/train/map_hd/mf19__cab.glb',
-      tail: '/models/train/map_hd/mf19__cab.glb',
+      tail: '/models/train/map_hd/mf19__tail.glb',
+    },
+    paris_rer_a: {
+      neutral: '/models/train/map_hd/rer_a_mi09_car.glb',
+      cab: '/models/train/map_hd/rer_a_mi09__cab.glb',
+      tail: '/models/train/map_hd/rer_a_mi09__tail.glb',
+    },
+    paris_rer_b: {
+      neutral: '/models/train/map_hd/rer_b_mi79_car.glb',
+      cab: '/models/train/map_hd/rer_b_mi79__cab.glb',
+      tail: '/models/train/map_hd/rer_b_mi79__tail.glb',
+    },
+    paris_rer_c: {
+      neutral: '/models/train/map_hd/rer_c_z2n_car.glb',
+      cab: '/models/train/map_hd/rer_c_z2n__cab.glb',
+      tail: '/models/train/map_hd/rer_c_z2n__tail.glb',
+    },
+    paris_rer_d: {
+      neutral: '/models/train/map_hd/rer_d_z20500_car.glb',
+      cab: '/models/train/map_hd/rer_d_z20500__cab.glb',
+      tail: '/models/train/map_hd/rer_d_z20500__tail.glb',
+    },
+    paris_rer_e: {
+      neutral: '/models/train/map_hd/rer_e_rerng_car.glb',
+      cab: '/models/train/map_hd/rer_e_rerng__cab.glb',
+      tail: '/models/train/map_hd/rer_e_rerng__tail.glb',
     },
   };
 
@@ -333,13 +358,29 @@ function resolveDetailedParisLiveryVariant(stock: {
   if (mid.startsWith('MP89') || sn === '6') return 'paris_mp89_cc';
   if (mid === 'MP73') return 'paris_mp73';
   if (mid === 'MP59') return 'paris_mp59';
-  if (mid.startsWith('MF19')) return 'paris_mf19';
+  if (mid.startsWith('MF19') || sn === '10') return 'paris_mf19';
   if (mid.startsWith('MF01') || sn === '2' || sn === '5' || sn === '9') return 'paris_mf01';
   if (mid === 'MF88' || sn === '7bis') return 'paris_mf88';
   if (mid.startsWith('MF77') || sn === '7' || sn === '8' || sn === '13') return 'paris_mf77';
-  if (mid.startsWith('MF67') || sn === '3' || sn === '3bis' || sn === '10' || sn === '12')
-    return 'paris_mf67';
+  if (mid.startsWith('MF67') || sn === '3' || sn === '3bis' || sn === '12') return 'paris_mf67';
   return null;
+}
+
+function resolveDetailedParisRerVariant(family: TrainModelFamily): string | null {
+  switch (family) {
+    case 'rer_generic_A':
+      return 'paris_rer_a';
+    case 'rer_generic_B':
+      return 'paris_rer_b';
+    case 'rer_generic_C':
+      return 'paris_rer_c';
+    case 'rer_generic_D':
+      return 'paris_rer_d';
+    case 'rer_generic_E':
+      return 'paris_rer_e';
+    default:
+      return null;
+  }
 }
 
 function assetKeyForStock(stock: {
@@ -355,6 +396,19 @@ function assetKeyForStock(stock: {
   tailUrl?: string;
 } {
   const family = familyForStock(stock);
+  if (currentTrainModelPreset === 'detailed' && family.startsWith('rer_generic_')) {
+    const rerVariant = resolveDetailedParisRerVariant(family);
+    if (rerVariant && DETAILED_LIVERY_VARIANT_URLS[rerVariant]) {
+      const urls = DETAILED_LIVERY_VARIANT_URLS[rerVariant];
+      return {
+        family,
+        key: `hd_${rerVariant}`,
+        url: urls.neutral,
+        cabUrl: urls.cab,
+        tailUrl: urls.tail,
+      };
+    }
+  }
   if (family === 'pneumatic_generic' || family === 'steel_classic') {
     if (currentTrainModelPreset === 'detailed') {
       const variant = resolveDetailedParisLiveryVariant(stock);
@@ -418,8 +472,8 @@ function beginAssetLoad(key: string, url: string, cabUrl?: string, tailUrl?: str
   const controller = new AbortController();
   const timeout = globalThis.setTimeout(() => controller.abort(), LOAD_TIMEOUT_MS);
   const fetchGlb = (targetUrl: string) => {
-    const versionedUrl = targetUrl.includes('/map_hd/')
-      ? `${targetUrl}${targetUrl.includes('?') ? '&' : '?'}v=5`
+    const versionedUrl = targetUrl.includes('/models/train/')
+      ? `${targetUrl}${targetUrl.includes('?') ? '&' : '?'}v=7`
       : targetUrl;
     return fetch(versionedUrl, { signal: controller.signal })
       .then((response) => {

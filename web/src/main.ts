@@ -34,6 +34,7 @@ import {
 import { SubwayAppShell } from './ui/SubwayAppShell';
 import { applyFaienceBasemap } from './map/basemap_palette';
 import { uiStore, type EdinburghPreset, type ThemePreference } from './ui/ui_store';
+import { parseAppUrlState, mergeAppUrlParams, type AppUrlState } from './ui/url_state';
 import { initMonitoring } from './monitoring/sentry';
 
 initMonitoring();
@@ -413,7 +414,7 @@ async function bootstrap() {
   let edinburghHandle: any = null;
   let parisRideHandle: {
     setRoute: (k: string, s?: string, d?: string) => void;
-    setView: (v: 'vault' | 'ride') => void;
+    setView: (v: 'vault' | 'ride' | 'passenger') => void;
     syncFromSimulation: (trains: TrainMarker[]) => void;
     dispose: () => void;
   } | null = null;
@@ -421,10 +422,19 @@ async function bootstrap() {
   const isParisMetroLine = (lineName?: string | null) =>
     Boolean(lineName && !['A', 'B', 'C', 'D', 'E'].includes(lineName.toUpperCase()));
 
+  const syncUrlQuery = (patch: Partial<AppUrlState>) => {
+    if (typeof window === 'undefined') return;
+    const nextUrl = window.location.pathname + mergeAppUrlParams(window.location.search, patch);
+    if (nextUrl !== window.location.pathname + window.location.search) {
+      window.history.replaceState(window.history.state, '', nextUrl);
+    }
+  };
+
   const closeParisRideMode = () => {
     if (!parisRideHandle) return;
     parisRideHandle.dispose();
     parisRideHandle = null;
+    syncUrlQuery({ ride: false, view: null });
     const uiRoot = document.getElementById('ui-root');
     if (uiRoot) uiRoot.style.display = '';
     engine.setRenderContext({ suspended: document.hidden });
@@ -444,7 +454,7 @@ async function bootstrap() {
     initialDest?: string;
     initialStation?: string;
     initialTrainId?: string;
-    initialView?: 'ride' | 'vault';
+    initialView?: 'ride' | 'vault' | 'passenger';
     initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   }) => {
     if (cityConfig.id !== 'paris' || parisRideHandle || parisRideOpening) return;
@@ -456,9 +466,16 @@ async function bootstrap() {
       const uiRoot = document.getElementById('ui-root');
       if (uiRoot) uiRoot.style.display = 'none';
       engine.setRenderContext({ suspended: true });
+      syncUrlQuery({
+        ride: true,
+        line: opts?.initialLine ?? null,
+        station: opts?.initialStation ?? null,
+        view: opts?.initialView ?? 'ride',
+      });
       parisRideHandle = mountParisRideView(document.body, {
         ...opts,
         getStationDepartures: (stationName: string) => engine.getStationDepartures(stationName, 2),
+        onRouteChange: (routeKey: string) => syncUrlQuery({ ride: true, line: routeKey }),
         onExit: () => {
           closeParisRideMode();
         },
@@ -524,6 +541,7 @@ async function bootstrap() {
     });
     const departures = engine.getStationDepartures(station.name, 2);
     uiStore.setSelectedStation(station, departures);
+    syncUrlQuery({ station: station.name });
     updateRecenterState();
   };
 
@@ -551,6 +569,7 @@ async function bootstrap() {
       nearbyLoading: true,
       nearbyError: null,
     });
+    syncUrlQuery({ station: null });
 
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
       uiStore.patch({
@@ -1361,26 +1380,45 @@ async function bootstrap() {
 
   const applyInitialRoute = () => {
     const initialRoute = router.getInitialRoute();
-    if (initialRoute.lineShortName) {
+    const urlState = parseAppUrlState(window.location.search);
+    const resolvedLineShortName = initialRoute.lineShortName ?? urlState.line ?? null;
+    let lineMatched = false;
+
+    if (resolvedLineShortName) {
       const line = lines.find(
-        (l) => l.short_name.toLowerCase() === initialRoute.lineShortName?.toLowerCase()
+        (l) => l.short_name.toLowerCase() === resolvedLineShortName.toLowerCase()
       );
       if (line) {
+        lineMatched = true;
         selectLine(line.id, initialRoute.dir || '0');
-        uiStore.setLineDrawerOpen(true);
+        if (!urlState.ride) {
+          uiStore.setLineDrawerOpen(true);
+        }
       }
-    } else if (initialRoute.from && initialRoute.to) {
-      const fromPt = parseEndpointParam(initialRoute.from);
-      const toPt = parseEndpointParam(initialRoute.to);
-      if (fromPt && toPt) {
-        uiStore.setRoutePlannerOpen(true);
-        runItineraryComputation(fromPt, toPt);
+    }
+
+    if (!lineMatched) {
+      if (initialRoute.from && initialRoute.to) {
+        const fromPt = parseEndpointParam(initialRoute.from);
+        const toPt = parseEndpointParam(initialRoute.to);
+        if (fromPt && toPt) {
+          uiStore.setRoutePlannerOpen(true);
+          runItineraryComputation(fromPt, toPt);
+        }
+      } else if (initialRoute.station) {
+        const targetStation = findStationByName(initialRoute.station);
+        if (targetStation) {
+          selectStation(targetStation, true);
+        }
       }
-    } else if (initialRoute.station) {
-      const targetStation = findStationByName(initialRoute.station);
-      if (targetStation) {
-        selectStation(targetStation, true);
-      }
+    }
+
+    if (cityConfig.id === 'paris' && urlState.ride) {
+      void openParisRideMode({
+        initialLine: urlState.line ?? initialRoute.lineShortName ?? undefined,
+        initialStation: urlState.station ?? initialRoute.station ?? undefined,
+        initialView: urlState.view ?? 'ride',
+      });
     }
   };
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-11-25",
+  "generated_on": "2026-11-26",
   "status": "awaiting_human_asset_approval",
   "policy": {
     "external_downloads": "blocked_until_human_source_and_license_approval",
@@ -49,28 +49,67 @@
       "train/library/mp89_cc_cab.glb",
       "train/library/ms61_cab.glb",
       "train/library/ms61_car.glb",
+      "train/library/rer_a_mi09_cab.glb",
+      "train/library/rer_a_mi09_car.glb",
+      "train/library/rer_b_mi79_cab.glb",
+      "train/library/rer_b_mi79_car.glb",
+      "train/library/rer_c_z2n_cab.glb",
+      "train/library/rer_c_z2n_car.glb",
+      "train/library/rer_d_z20500_cab.glb",
+      "train/library/rer_d_z20500_car.glb",
+      "train/library/rer_e_rerng_cab.glb",
+      "train/library/rer_e_rerng_car.glb",
+      "train/library/sprague_cab.glb",
+      "train/library/sprague_car.glb",
       "train/map_hd/mf01__cab.glb",
+      "train/map_hd/mf01__tail.glb",
       "train/map_hd/mf01_car.glb",
       "train/map_hd/mf19__cab.glb",
+      "train/map_hd/mf19__tail.glb",
       "train/map_hd/mf19_car.glb",
       "train/map_hd/mf67__cab.glb",
+      "train/map_hd/mf67__tail.glb",
       "train/map_hd/mf67_car.glb",
       "train/map_hd/mf77__cab.glb",
+      "train/map_hd/mf77__tail.glb",
       "train/map_hd/mf77_car.glb",
       "train/map_hd/mf88__cab.glb",
+      "train/map_hd/mf88__tail.glb",
       "train/map_hd/mf88_car.glb",
       "train/map_hd/mp05__cab.glb",
+      "train/map_hd/mp05__tail.glb",
       "train/map_hd/mp05_car.glb",
       "train/map_hd/mp14_ca__cab.glb",
+      "train/map_hd/mp14_ca__tail.glb",
       "train/map_hd/mp14_car.glb",
       "train/map_hd/mp14_cc__cab.glb",
+      "train/map_hd/mp14_cc__tail.glb",
       "train/map_hd/mp59__cab.glb",
+      "train/map_hd/mp59__tail.glb",
       "train/map_hd/mp59_car.glb",
       "train/map_hd/mp73__cab.glb",
+      "train/map_hd/mp73__tail.glb",
       "train/map_hd/mp73_car.glb",
       "train/map_hd/mp89_ca__cab.glb",
+      "train/map_hd/mp89_ca__tail.glb",
       "train/map_hd/mp89_car.glb",
       "train/map_hd/mp89_cc__cab.glb",
+      "train/map_hd/mp89_cc__tail.glb",
+      "train/map_hd/rer_a_mi09__cab.glb",
+      "train/map_hd/rer_a_mi09__tail.glb",
+      "train/map_hd/rer_a_mi09_car.glb",
+      "train/map_hd/rer_b_mi79__cab.glb",
+      "train/map_hd/rer_b_mi79__tail.glb",
+      "train/map_hd/rer_b_mi79_car.glb",
+      "train/map_hd/rer_c_z2n__cab.glb",
+      "train/map_hd/rer_c_z2n__tail.glb",
+      "train/map_hd/rer_c_z2n_car.glb",
+      "train/map_hd/rer_d_z20500__cab.glb",
+      "train/map_hd/rer_d_z20500__tail.glb",
+      "train/map_hd/rer_d_z20500_car.glb",
+      "train/map_hd/rer_e_rerng__cab.glb",
+      "train/map_hd/rer_e_rerng__tail.glb",
+      "train/map_hd/rer_e_rerng_car.glb",
       "train/paris_idfm_pneu__neutral.glb",
       "train/paris_idfm_pneu__neutral__cab.glb",
       "train/paris_idfm_pneu__neutral__tail.glb",
@@ -289,12 +328,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_A__neutral.glb",
-          "source_sha256": "7195fbce33928426c434a445da6cbda7c0e52a5aadbd7841520e1f831eccf982",
+          "source_sha256": "cb78e5e363934e8df2ccf64548980b182d1964f3a829e5eb2f9d4ead854e194b",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_A__neutral.glb",
-        "sha256": "7195fbce33928426c434a445da6cbda7c0e52a5aadbd7841520e1f831eccf982"
+        "sha256": "cb78e5e363934e8df2ccf64548980b182d1964f3a829e5eb2f9d4ead854e194b"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -329,12 +368,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_B__neutral.glb",
-          "source_sha256": "600973036926eaac253194859145dcf8f1af07d79e6e4724141c982ab799d45d",
+          "source_sha256": "1a7a2a5f078cb7ca04b586e737f7f77bc44567b742a16e5044eefcb7dbd45d6c",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_B__neutral.glb",
-        "sha256": "600973036926eaac253194859145dcf8f1af07d79e6e4724141c982ab799d45d"
+        "sha256": "1a7a2a5f078cb7ca04b586e737f7f77bc44567b742a16e5044eefcb7dbd45d6c"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -369,12 +408,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_C__neutral.glb",
-          "source_sha256": "22025ab849c355cf656ebeb0d45ea0389ac6a18b21ea4c7054407f8339303e38",
+          "source_sha256": "f8ed9fa4cde735ae610f8efada086ec4d150f75afe8d9d089fabf09145102d52",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_C__neutral.glb",
-        "sha256": "22025ab849c355cf656ebeb0d45ea0389ac6a18b21ea4c7054407f8339303e38"
+        "sha256": "f8ed9fa4cde735ae610f8efada086ec4d150f75afe8d9d089fabf09145102d52"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -409,12 +448,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_D__neutral.glb",
-          "source_sha256": "666294fd198ecb58859904ab8e1e36c6d23ba7f89219733a66750898a71144a4",
+          "source_sha256": "ea6411be70becc0e3f9fff1c793e0691ecf3eaacf91a19e286cc20468a8e424b",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_D__neutral.glb",
-        "sha256": "666294fd198ecb58859904ab8e1e36c6d23ba7f89219733a66750898a71144a4"
+        "sha256": "ea6411be70becc0e3f9fff1c793e0691ecf3eaacf91a19e286cc20468a8e424b"
       },
       "livery": {
         "status": "not_for_distribution",
@@ -449,12 +488,12 @@
         "provenance": {
           "source_kind": "clean_room_generated",
           "source_location": "assets-src/models/train/rer_generic_E__neutral.glb",
-          "source_sha256": "eb988783b9fb5b17c6eb7734ece3dfe3c6c5fca7855a8c45e032784217dc0427",
+          "source_sha256": "33c2b14e75d6772080802c3313197caf626850f4e04cc9fbf6655bd3ab60c630",
           "derivative_policy": "internal_reference_only_never_publish",
           "reference_directory": "assets-src/models/train"
         },
         "asset_file": "train/rer_generic_E__neutral.glb",
-        "sha256": "eb988783b9fb5b17c6eb7734ece3dfe3c6c5fca7855a8c45e032784217dc0427"
+        "sha256": "33c2b14e75d6772080802c3313197caf626850f4e04cc9fbf6655bd3ab60c630"
       },
       "livery": {
         "status": "not_for_distribution",

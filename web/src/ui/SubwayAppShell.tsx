@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 import uFuzzy from '@leeoniya/ufuzzy';
 import { RiMenuLine, RiWifiOffLine } from '@remixicon/react';
 import { cityClock } from '@core/sim/paris_time';
@@ -88,11 +89,21 @@ function inferNearbyError(msg: string | null): ErreurPosition {
 function copyShareUrl(url: string, title?: string) {
   if (typeof navigator !== 'undefined' && typeof navigator.share === 'function' && title) {
     void navigator.share({ title, url }).catch(() => {
-      void navigator.clipboard?.writeText(url).catch(() => {});
+      void navigator.clipboard
+        ?.writeText(url)
+        .then(() => {
+          toast.success('Lien copié dans le presse-papiers');
+        })
+        .catch(() => {});
     });
     return;
   }
-  void navigator.clipboard?.writeText(url).catch(() => {});
+  void navigator.clipboard
+    ?.writeText(url)
+    .then(() => {
+      toast.success('Lien copié dans le presse-papiers');
+    })
+    .catch(() => {});
 }
 
 export function SubwayAppShell() {
@@ -179,6 +190,7 @@ export function SubwayAppShell() {
   >([]);
 
   const menuContainerRef = useRef<HTMLDivElement | null>(null);
+  const prevOfflineRef = useRef(isOffline);
 
   useEffect(() => {
     const goOnline = () => setIsOffline(false);
@@ -190,6 +202,16 @@ export function SubwayAppShell() {
       window.removeEventListener('offline', goOffline);
     };
   }, []);
+
+  useEffect(() => {
+    if (prevOfflineRef.current === isOffline) return;
+    prevOfflineRef.current = isOffline;
+    if (isOffline) {
+      toast.warning('Hors ligne — horaires théoriques actifs');
+    } else {
+      toast.success('Connexion rétablie');
+    }
+  }, [isOffline]);
 
   useEffect(() => {
     setDepartText(isImplicitOrigin(routeOrigin) ? '' : (routeOrigin?.label ?? ''));
@@ -562,9 +584,32 @@ export function SubwayAppShell() {
     },
   };
 
+  const handleToggleRealtime = () => {
+    handlers.onToggleRealtime?.();
+    toast(
+      realtimeEnabled
+        ? 'Retour aux horaires théoriques'
+        : cityConfig.realtime.provider === 'prim'
+          ? 'Direct PRIM IDFM activé'
+          : `Direct ${rtSource ?? 'temps réel'} activé`
+    );
+  };
+
   return (
     <div className="pointer-events-none fixed inset-0 z-10">
       <PlanLumineuxRacine />
+      <Toaster
+        theme={
+          themePreference === 'dark' ? 'dark' : themePreference === 'light' ? 'light' : 'system'
+        }
+        position={desktop ? 'bottom-center' : 'top-center'}
+        offset={desktop ? 18 : 'max(12px, env(safe-area-inset-top))'}
+        toastOptions={{
+          className:
+            'pl-hud !rounded-[14px] !border !border-joint !bg-surface !text-encre !shadow-flotte',
+          descriptionClassName: '!text-encre-2',
+        }}
+      />
       {/* Barre supérieure : bureau (TopNavBar unifiée) vs mobile (pastille unique) */}
       {desktop ? (
         <div className="fixed inset-x-0 top-0 z-30 flex items-start justify-between gap-3 px-4 pt-3.5">
@@ -849,8 +894,14 @@ export function SubwayAppShell() {
               passionne={expertMode}
               domicile={isHome}
               travail={isWork}
-              onDomicile={() => uiStore.setPresetPlace('home', isHome ? null : stPoint)}
-              onTravail={() => uiStore.setPresetPlace('work', isWork ? null : stPoint)}
+              onDomicile={() => {
+                uiStore.setPresetPlace('home', isHome ? null : stPoint);
+                toast.success(isHome ? 'Domicile retiré' : 'Domicile enregistré');
+              }}
+              onTravail={() => {
+                uiStore.setPresetPlace('work', isWork ? null : stPoint);
+                toast.success(isWork ? 'Travail retiré' : 'Travail enregistré');
+              }}
               onPartager={() => {
                 const slug = cityConfig.slug || 'paris';
                 copyShareUrl(
@@ -1131,7 +1182,7 @@ export function SubwayAppShell() {
           dailyKm={Math.round(dailyKm)}
           direct={realtimeEnabled}
           directDisponible={cityConfig.realtime.provider !== 'none'}
-          onDirect={() => handlers.onToggleRealtime?.()}
+          onDirect={handleToggleRealtime}
           rtSource={rtSource}
         />
       )}

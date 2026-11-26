@@ -102,6 +102,11 @@ export function drawAfficheurVitesse(
     etat?: string;
     couleurLigne?: string;
     libelleLigne?: string;
+    notch?: string;
+    kvbStatus?: 'ok' | 'warn' | 'ebrake';
+    distToStopM?: number | null;
+    doorsOpen?: boolean;
+    manualMode?: boolean;
   }
 ) {
   const { width: w, height: h } = ctx.canvas;
@@ -110,7 +115,7 @@ export function drawAfficheurVitesse(
   ctx.fillStyle = PUPITRE.fond;
   ctx.fillRect(0, 0, w, h);
   const glaze = ctx.createLinearGradient(0, 0, 0, h * 0.4);
-  glaze.addColorStop(0, 'rgba(255,255,255,0.07)');
+  glaze.addColorStop(0, 'rgba(255,255,255,0.08)');
   glaze.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = glaze;
   ctx.fillRect(0, 0, w, h * 0.4);
@@ -122,7 +127,7 @@ export function drawAfficheurVitesse(
     ctx.arc(10 * u, 13 * u, 7 * u, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#000';
-    ctx.font = `700 ${8 * u}px ${PUPITRE.police}`;
+    ctx.font = `700 ${7.5 * u}px ${PUPITRE.police}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(o.libelleLigne, 10 * u, 13.5 * u);
@@ -131,37 +136,86 @@ export function drawAfficheurVitesse(
   ctx.textBaseline = 'alphabetic';
   if (o.materiel) {
     ctx.fillStyle = '#ffffff';
-    ctx.font = `600 ${9 * u}px ${PUPITRE.police}`;
-    ctx.fillText(o.materiel, 20 * u, 16.5 * u);
+    ctx.font = `600 ${8.5 * u}px ${PUPITRE.police}`;
+    ctx.fillText(o.materiel, 20 * u, 16 * u);
   }
-  if (o.etat) {
-    ctx.fillStyle = PUPITRE.chiffres;
-    ctx.font = `700 ${7.5 * u}px ${PUPITRE.police}`;
-    ctx.textAlign = 'right';
-    ctx.fillText(o.etat, w - 6 * u, 16 * u);
-  }
+
+  // KVB / Status pill at top right
+  const kvb = o.kvbStatus ?? 'ok';
+  const statusText =
+    kvb === 'ebrake' ? 'FU KVB' : kvb === 'warn' ? 'SURVITESSE' : (o.etat ?? 'KVB OK');
+  const statusColor =
+    kvb === 'ebrake' ? PUPITRE.alerte : kvb === 'warn' ? PUPITRE.chiffres : PUPITRE.ok;
+  ctx.fillStyle = statusColor;
+  ctx.font = `700 ${7.2 * u}px ${PUPITRE.police}`;
   ctx.textAlign = 'right';
-  ctx.fillStyle = PUPITRE.chiffres;
+  ctx.fillText(statusText, w - 6 * u, 16 * u);
+
+  // Speed readout
+  ctx.textAlign = 'right';
+  ctx.fillStyle = kvb === 'ebrake' ? PUPITRE.alerte : PUPITRE.chiffres;
   ctx.font = `700 ${46 * u}px ${PUPITRE.police}`;
-  ctx.fillText(String(Math.round(o.vitesse)), w * 0.62, 72 * u);
+  ctx.fillText(String(Math.round(o.vitesse)), w * 0.58, 69 * u);
   ctx.textAlign = 'left';
   ctx.fillStyle = PUPITRE.unite;
-  ctx.font = `600 ${10 * u}px ${PUPITRE.police}`;
-  ctx.fillText('km/h', w * 0.64, 72 * u);
+  ctx.font = `600 ${9.5 * u}px ${PUPITRE.police}`;
+  ctx.fillText('km/h', w * 0.6, 69 * u);
 
+  // Notch pill & Door lamp in manual/auto mode on right column
+  if (o.notch || o.manualMode) {
+    const notchTxt = o.notch ?? '0';
+    const isFu = notchTxt === 'FU';
+    const isBrake = notchTxt.startsWith('F') && !isFu;
+    const isTrac = notchTxt.startsWith('T');
+    ctx.fillStyle = isFu
+      ? 'rgba(255, 75, 75, 0.25)'
+      : isBrake
+        ? 'rgba(255, 184, 28, 0.22)'
+        : isTrac
+          ? 'rgba(76, 217, 123, 0.22)'
+          : 'rgba(255, 255, 255, 0.14)';
+    ctx.fillRect(w - 58 * u, 26 * u, 50 * u, 22 * u);
+    ctx.fillStyle = isFu ? '#ff6b6b' : isBrake ? PUPITRE.chiffres : isTrac ? PUPITRE.ok : '#f2f4f7';
+    ctx.textAlign = 'center';
+    ctx.font = `700 ${13 * u}px ${PUPITRE.police}`;
+    ctx.fillText(notchTxt, w - 33 * u, 41.5 * u);
+  }
+
+  // Door interlock indicator
+  const doorsOpen = Boolean(o.doorsOpen);
+  ctx.fillStyle = doorsOpen ? 'rgba(255, 184, 28, 0.2)' : 'rgba(76, 217, 123, 0.16)';
+  ctx.fillRect(w - 74 * u, 53 * u, 66 * u, 16 * u);
+  ctx.fillStyle = doorsOpen ? PUPITRE.chiffres : PUPITRE.ok;
+  ctx.textAlign = 'center';
+  ctx.font = `700 ${6.8 * u}px ${PUPITRE.police}`;
+  ctx.fillText(doorsOpen ? 'PORTES OUV.' : 'PORTES VER.', w - 41 * u, 63.5 * u);
+
+  ctx.textAlign = 'left';
   if (o.limite) {
     const x = 6 * u,
-      y = 84 * u,
+      y = 85 * u,
       bw = w - 12 * u,
       bh = 5 * u;
     ctx.fillStyle = 'rgba(255,255,255,0.12)';
     ctx.fillRect(x, y, bw, bh);
     const r = Math.min(1, o.vitesse / o.limite);
-    ctx.fillStyle = r > 0.97 ? PUPITRE.alerte : PUPITRE.ok;
+    ctx.fillStyle = kvb === 'ebrake' || r > 0.97 ? PUPITRE.alerte : PUPITRE.ok;
     ctx.fillRect(x, y, bw * r, bh);
     ctx.fillStyle = PUPITRE.graduation;
     ctx.font = `600 ${6 * u}px ${PUPITRE.police}`;
-    ctx.fillText(`Limite ${o.limite} km/h`, x, y - 2 * u);
+    ctx.fillText(`Limite ${o.limite} km/h`, x, y - 2.5 * u);
+  }
+
+  if (o.distToStopM !== undefined && o.distToStopM !== null && o.distToStopM < 280) {
+    const dist = Math.round(o.distToStopM);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = dist <= 3 && dist >= -3 ? PUPITRE.ok : PUPITRE.chiffres;
+    ctx.font = `700 ${6.8 * u}px ${PUPITRE.police}`;
+    ctx.fillText(
+      dist >= 0 ? `ARRÊT ${dist} m` : `DÉPASSÉ ${Math.abs(dist)} m`,
+      w - 6 * u,
+      82.5 * u
+    );
   }
   ctx.restore();
 }

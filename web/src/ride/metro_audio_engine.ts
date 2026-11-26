@@ -99,6 +99,7 @@ export class MetroAudioEngine {
   private prevSpeedKmh = 0;
   private arrivalPlayedForStop = false;
   private departPlayedForRun = false;
+  private lastKvbBeepMs = 0;
 
   private onVisibilityChange = () => {
     if (!this.ctx || this.disposed) return;
@@ -412,6 +413,98 @@ export class MetroAudioEngine {
       rateMax: 1.008,
       duckDb: -4.5,
       duckSec: 1.7,
+    });
+  }
+
+  /** Dual-tone RATP Metro or SNCF RER warning horn routed through the vaulted limiter bus. */
+  public triggerHorn(isRer: boolean): void {
+    if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
+    if (this.ctx.state === 'suspended') {
+      void this.ctx.resume().catch(() => {});
+    }
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const dur = isRer ? 0.6 : 0.45;
+    const freqs = isRer ? [370, 466] : [415, 523];
+    const cutoff = isRer ? 1400 : 1600;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(cutoff, now);
+
+    const env = ctx.createGain();
+    const peak = dbToGain(-6);
+    env.gain.setValueAtTime(0.0001, now);
+    env.gain.exponentialRampToValueAtTime(peak, now + 0.035);
+    env.gain.setValueAtTime(peak, now + dur - 0.12);
+    env.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+    filter.connect(env);
+    env.connect(this.oneShotGain);
+
+    freqs.forEach((f, idx) => {
+      const osc = ctx.createOscillator();
+      osc.type = isRer ? (idx === 0 ? 'sawtooth' : 'triangle') : idx === 0 ? 'triangle' : 'sine';
+      osc.frequency.setValueAtTime(f, now);
+      osc.connect(filter);
+      osc.start(now);
+      osc.stop(now + dur + 0.03);
+    });
+  }
+
+  /** Crisp mechanical manipulateur notch detent click (heavier thud on emergency brake). */
+  public triggerNotchClick(isEmergency: boolean): void {
+    if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
+    const env = ctx.createGain();
+
+    osc.type = isEmergency ? 'triangle' : 'square';
+    osc.frequency.setValueAtTime(isEmergency ? 260 : 950, now);
+    osc.frequency.exponentialRampToValueAtTime(isEmergency ? 110 : 420, now + 0.022);
+
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(isEmergency ? 280 : 950, now);
+    filter.Q.setValueAtTime(1.8, now);
+
+    const peak = dbToGain(isEmergency ? -11 : -15);
+    env.gain.setValueAtTime(peak, now);
+    env.gain.exponentialRampToValueAtTime(0.0001, now + (isEmergency ? 0.05 : 0.024));
+
+    osc.connect(filter);
+    filter.connect(env);
+    env.connect(this.oneShotGain);
+    osc.start(now);
+    osc.stop(now + 0.06);
+  }
+
+  /** KVB overspeed double-beep, internally throttled to avoid fatigue. */
+  public triggerKvbBeep(): void {
+    if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
+    const nowMs = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    if (nowMs - this.lastKvbBeepMs < 1200) return;
+    this.lastKvbBeepMs = nowMs;
+
+    const ctx = this.ctx;
+    const base = ctx.currentTime;
+    const peak = dbToGain(-12);
+
+    [0, 0.1].forEach((offset) => {
+      const start = base + offset;
+      const osc = ctx.createOscillator();
+      const env = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1850, start);
+      env.gain.setValueAtTime(0.0001, start);
+      env.gain.exponentialRampToValueAtTime(peak, start + 0.008);
+      env.gain.setValueAtTime(peak, start + 0.052);
+      env.gain.exponentialRampToValueAtTime(0.0001, start + 0.068);
+      osc.connect(env);
+      env.connect(this.oneShotGain!);
+      osc.start(start);
+      osc.stop(start + 0.075);
     });
   }
 

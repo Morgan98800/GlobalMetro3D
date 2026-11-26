@@ -128,7 +128,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 37640,
+      "bytes": 37904,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -137,7 +137,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "8dcef95985c0a77a1bb275d74752846c2010a8ab11556abdfcc5b8100bfadeab"
+      "sha256": "62422abeae7c19537dd8ad9c1a246d52728575680f95ab1be5063b673bdcf747"
     },
     {
       "file": "rer_generic_A__neutral.glb",
@@ -147,7 +147,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38412,
+      "bytes": 38708,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -156,7 +156,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "7195fbce33928426c434a445da6cbda7c0e52a5aadbd7841520e1f831eccf982"
+      "sha256": "cb78e5e363934e8df2ccf64548980b182d1964f3a829e5eb2f9d4ead854e194b"
     },
     {
       "file": "rer_generic_A__cab.glb",
@@ -166,7 +166,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 39276,
+      "bytes": 39604,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -175,7 +175,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "75e933d8128e97a8ebb18a37b475dcc11e6c9819cd4ff70ba46f7a397a75352d"
+      "sha256": "5d14ddba2362ed828d3392fe995ddb5120e72e9a4c5c4b9f2764be56803a5789"
     },
     {
       "file": "rer_generic_A__tail.glb",
@@ -185,7 +185,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38744,
+      "bytes": 39080,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -194,7 +194,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "58c20034c965c3085cbd296682b118d99b146d65fee337c20a9d1dc1d391077c"
+      "sha256": "3272357e4aa7d0280b9913934477c6b1d87c8c41f663704ce7e593e7c009407c"
     },
     {
       "file": "rer_generic_B__neutral.glb",
@@ -204,7 +204,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38404,
+      "bytes": 38612,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -213,7 +213,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "600973036926eaac253194859145dcf8f1af07d79e6e4724141c982ab799d45d"
+      "sha256": "1a7a2a5f078cb7ca04b586e737f7f77bc44567b742a16e5044eefcb7dbd45d6c"
     },
     {
       "file": "rer_generic_B__cab.glb",
@@ -223,7 +223,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 39240,
+      "bytes": 39460,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -232,7 +232,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "c23be398a4adcaeb2eae73c19dc20e182940b5f397280fdea698e6498466c20f"
+      "sha256": "cb64a94fed706c417d2c2a714edc734d641abc8bac8d8c8dde0b83e92ecafee0"
     },
     {
       "file": "rer_generic_B__tail.glb",
@@ -242,7 +242,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38740,
+      "bytes": 38964,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -251,7 +251,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "7d0c320161af40bc9d8b27694a4ef0a57b61b256cb69e8f285bcea9cbcf86923"
+      "sha256": "48ec55bfa9ac6560bfab22850af0e782c6a342cc92273f1a28e9ebc4ecd7f6a5"
     },
     {
       "file": "rer_generic_C__neutral.glb",
@@ -261,7 +261,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38460,
+      "bytes": 38600,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -270,11 +270,68 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "22025ab849c355cf656ebeb0d45ea0389ac6a18b21ea4c7054407f8339303e38"
+      "sha256": "f8ed9fa4cde735ae610f8efada086ec4d150f75afe8d9d089fabf09145102d52"
     },
     {
       "file": "rer_generic_C__cab.glb",
       "family": "rer_generic_C",
+      "line": null,
+      "role": "cab",
+      "model_id": "MI09",
+      "triangles": 306,
+      "vertices": 918,
+      "bytes": 39516,
+      "dimensions_m": {
+        "length_x": 14.86,
+        "width_z": 2.8,
+        "height_y": 3.6727
+      },
+      "height_source": "generated_mi09_rer",
+      "height_measured": true,
+      "grazing_camera_approved": true,
+      "sha256": "be6e580d7f82e2256c85639d25a25972a76769c35c38f9d20179496761940275"
+    },
+    {
+      "file": "rer_generic_C__tail.glb",
+      "family": "rer_generic_C",
+      "line": null,
+      "role": "tail",
+      "model_id": "MI09",
+      "triangles": 306,
+      "vertices": 918,
+      "bytes": 38952,
+      "dimensions_m": {
+        "length_x": 14.86,
+        "width_z": 2.8,
+        "height_y": 3.6727
+      },
+      "height_source": "generated_mi09_rer",
+      "height_measured": true,
+      "grazing_camera_approved": true,
+      "sha256": "c1cd02ceb4ed621db81cd590ddda7f8e89852c8e895691ca80d742662768d8f0"
+    },
+    {
+      "file": "rer_generic_D__neutral.glb",
+      "family": "rer_generic_D",
+      "line": null,
+      "role": "neutral",
+      "model_id": "MI09",
+      "triangles": 306,
+      "vertices": 918,
+      "bytes": 38540,
+      "dimensions_m": {
+        "length_x": 14.86,
+        "width_z": 2.8,
+        "height_y": 3.6727
+      },
+      "height_source": "generated_mi09_rer",
+      "height_measured": true,
+      "grazing_camera_approved": true,
+      "sha256": "ea6411be70becc0e3f9fff1c793e0691ecf3eaacf91a19e286cc20468a8e424b"
+    },
+    {
+      "file": "rer_generic_D__cab.glb",
+      "family": "rer_generic_D",
       "line": null,
       "role": "cab",
       "model_id": "MI09",
@@ -289,64 +346,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "720b94534c51567d522d4c835d76cef15ce010c84d6fc26a396d6aa7026beab2"
-    },
-    {
-      "file": "rer_generic_C__tail.glb",
-      "family": "rer_generic_C",
-      "line": null,
-      "role": "tail",
-      "model_id": "MI09",
-      "triangles": 306,
-      "vertices": 918,
-      "bytes": 38788,
-      "dimensions_m": {
-        "length_x": 14.86,
-        "width_z": 2.8,
-        "height_y": 3.6727
-      },
-      "height_source": "generated_mi09_rer",
-      "height_measured": true,
-      "grazing_camera_approved": true,
-      "sha256": "8ad12ed8e35c44ddd4832809e4217163e4dcc1faebd8f606eb8e728627b8fc3e"
-    },
-    {
-      "file": "rer_generic_D__neutral.glb",
-      "family": "rer_generic_D",
-      "line": null,
-      "role": "neutral",
-      "model_id": "MI09",
-      "triangles": 306,
-      "vertices": 918,
-      "bytes": 38364,
-      "dimensions_m": {
-        "length_x": 14.86,
-        "width_z": 2.8,
-        "height_y": 3.6727
-      },
-      "height_source": "generated_mi09_rer",
-      "height_measured": true,
-      "grazing_camera_approved": true,
-      "sha256": "666294fd198ecb58859904ab8e1e36c6d23ba7f89219733a66750898a71144a4"
-    },
-    {
-      "file": "rer_generic_D__cab.glb",
-      "family": "rer_generic_D",
-      "line": null,
-      "role": "cab",
-      "model_id": "MI09",
-      "triangles": 306,
-      "vertices": 918,
-      "bytes": 39188,
-      "dimensions_m": {
-        "length_x": 14.86,
-        "width_z": 2.8,
-        "height_y": 3.6727
-      },
-      "height_source": "generated_mi09_rer",
-      "height_measured": true,
-      "grazing_camera_approved": true,
-      "sha256": "25f623f4bbef49d9534ab0b0d8b03ba3459a783c26e768f59421051559190eb8"
+      "sha256": "483efa774b6711f1fe1b0adcccd84dd2799b74d4c45005307889950df4e7c6cb"
     },
     {
       "file": "rer_generic_D__tail.glb",
@@ -356,7 +356,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38704,
+      "bytes": 38876,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -365,7 +365,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "6fdb69c5ce7998b9bd25371d550b4419637f1100f54af38f307b0f2ecd1c136f"
+      "sha256": "55a98bdbbf0b31b05efbdbdc831fee61c0f1ff91a801125a7af08077ec61c183"
     },
     {
       "file": "rer_generic_E__neutral.glb",
@@ -375,7 +375,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38264,
+      "bytes": 38560,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -384,7 +384,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "eb988783b9fb5b17c6eb7734ece3dfe3c6c5fca7855a8c45e032784217dc0427"
+      "sha256": "33c2b14e75d6772080802c3313197caf626850f4e04cc9fbf6655bd3ab60c630"
     },
     {
       "file": "rer_generic_E__cab.glb",
@@ -394,7 +394,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38964,
+      "bytes": 39272,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -403,7 +403,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "0300fef16634fcbba8aa0ab464a3d07caa09e46328f0aafc860d82039d750ea8"
+      "sha256": "5ca11ca68e2db2fda16d4a62b2cb8783ee4356c6e9fdd6e1ececd01f81779f72"
     },
     {
       "file": "rer_generic_E__tail.glb",
@@ -413,7 +413,7 @@
       "model_id": "MI09",
       "triangles": 306,
       "vertices": 918,
-      "bytes": 38608,
+      "bytes": 38924,
       "dimensions_m": {
         "length_x": 14.86,
         "width_z": 2.8,
@@ -422,7 +422,7 @@
       "height_source": "generated_mi09_rer",
       "height_measured": true,
       "grazing_camera_approved": true,
-      "sha256": "f26227e5c31c03c2df4d740cf2bc9a00273f4fb84bb5463790a35d092f1a1791"
+      "sha256": "0bbb9712b1a95e5503311c95d1205a0a91ee209af9650bac9dca0b9153a122c9"
     }
   ]
 }

@@ -310,3 +310,36 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
   border: 0;
 }
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  button,
+  a,
+  select,
+  summary,
+  [role="button"],
+  [role="radio"],
+  [role="slider"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  @media (pointer: fine) {
+    html {
+      overscroll-behavior: none;
+    }
+  }
+}

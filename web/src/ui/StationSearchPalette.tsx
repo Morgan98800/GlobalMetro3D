@@ -93,7 +93,7 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
         onMouseEnter={() => setActif(i)}
         onClick={() => p.onChoisir(r)}
         className={cx(
-          'grid cursor-pointer grid-cols-[36px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-2 transition-colors duration-100',
+          'grid cursor-pointer grid-cols-[36px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] px-2 py-2 transition-[transform,background-color,color] duration-100 ease-signal active:scale-[0.99] motion-reduce:active:scale-100',
           i === actif ? 'bg-selection' : 'hover:bg-encart'
         )}
       >
@@ -130,12 +130,12 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Rechercher une station, une adresse ou une ligne"
-        className="relative flex h-full w-full flex-col overflow-hidden bg-surface text-encre animate-feuille md:h-auto md:max-h-[72dvh] md:w-[600px] md:rounded-feuille [box-shadow:0_0_0_1px_var(--color-joint),var(--shadow-flotte)]"
+        className="relative flex h-full w-full flex-col overflow-hidden bg-surface text-encre md:h-auto md:max-h-[72dvh] md:w-[600px] md:rounded-feuille [box-shadow:0_0_0_1px_var(--color-joint),var(--shadow-flotte)]"
       >
         <div className="flex h-16 shrink-0 items-center gap-3 border-b border-joint px-4 pt-[env(safe-area-inset-top)]">
           <RiSearchLine aria-hidden className="size-5 shrink-0 text-icone-2" />
           <input
-            autoFocus
+            autoFocus={desktop}
             role="combobox"
             aria-expanded="true"
             aria-controls={listId}
@@ -144,7 +144,7 @@ export function StationSearchPalette(p: StationSearchPaletteProps) {
             value={p.requete}
             onChange={(e) => p.onRequete(e.target.value)}
             onKeyDown={onKey}
-            placeholder="Station, adresse, lieu ou ligne"
+            placeholder="Station, adresse, lieu ou ligne…"
             className="min-w-0 flex-1 bg-transparent text-[18px] text-encre outline-none placeholder:text-encre-3"
           />
           {p.requete.length > 0 && (

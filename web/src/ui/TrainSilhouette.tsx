@@ -18,6 +18,8 @@ type SilhouetteKind =
   | 'sprague'
   | 'mi09'
   | 'mi79'
+  | 'z2n'
+  | 'rerng'
   | 'ms61';
 
 function resolveKind(stockId: string): SilhouetteKind {
@@ -44,6 +46,11 @@ function resolveKind(stockId: string): SilhouetteKind {
       return 'mi09';
     case 'rerb':
       return 'mi79';
+    case 'rerc':
+    case 'rerd':
+      return 'z2n';
+    case 'rere':
+      return 'rerng';
     case 'ms61':
       return 'ms61';
     default:
@@ -720,6 +727,117 @@ export function TrainSilhouette({ stockId, lineColor, className }: TrainSilhouet
           />
           <path d="M38.8 5.6H41.8L42.8 9.2H38.8V5.6Z" fill="currentColor" fillOpacity="0.68" />
           <path d="M4.2 11H43.4" stroke={lineColor} strokeWidth="1.4" strokeLinecap="round" />
+        </>
+      )}
+
+      {/* Z 2N / Z 20500 (RER C & D) : 2 portes aux extrémités + longue salle centrale à 2 niveaux */}
+      {kind === 'z2n' && (
+        <>
+          <path
+            d="M11 3.6V2.2L14.5 1.3H18"
+            stroke="currentColor"
+            strokeOpacity="0.5"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M3 13.5V4.4C3 3.9 3.6 3.6 4.4 3.6H39.2C41.4 3.6 43.2 5.2 44.5 9.2L45.2 13.5H3Z"
+            fill="currentColor"
+            fillOpacity="0.13"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+          />
+          <rect
+            x="4.8"
+            y="5.5"
+            width="3.6"
+            height="6.8"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.45"
+          />
+          <rect
+            x="33.4"
+            y="5.5"
+            width="3.6"
+            height="6.8"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.45"
+          />
+          <rect
+            x="10.2"
+            y="5.2"
+            width="21.4"
+            height="2.2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="10.2"
+            y="10.1"
+            width="21.4"
+            height="2.2"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <path d="M38.8 5.2H41.6L43.2 9H38.8V5.2Z" fill="currentColor" fillOpacity="0.68" />
+          <path d="M4.2 8.8H43.4" stroke={lineColor} strokeWidth="1.3" strokeLinecap="round" />
+        </>
+      )}
+
+      {/* RER NG / Z 58000 (RER E) : nez aérodynamique profilé + caisse à 2 niveaux à l'arrière */}
+      {kind === 'rerng' && (
+        <>
+          <path
+            d="M10 3.6V2.2L13.2 1.4H16.8"
+            stroke="currentColor"
+            strokeOpacity="0.5"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M3 13.5V4.2C3 3.8 3.6 3.6 4.4 3.6H19.5L23.5 5.2H39.5C42 5.2 43.8 7 44.9 10.6L45.3 13.5H3Z"
+            fill="currentColor"
+            fillOpacity="0.13"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+          />
+          <rect
+            x="5.2"
+            y="5.2"
+            width="12.5"
+            height="2.1"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="5.2"
+            y="10.0"
+            width="12.5"
+            height="2.1"
+            rx="0.5"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <rect
+            x="24"
+            y="6.8"
+            width="13.5"
+            height="3.8"
+            rx="0.6"
+            fill="currentColor"
+            fillOpacity="0.52"
+          />
+          <path d="M39.2 6.6H42.2L43.8 10.2H39.2V6.6Z" fill="currentColor" fillOpacity="0.72" />
+          <path d="M4.2 11.4H44.0" stroke={lineColor} strokeWidth="1.3" strokeLinecap="round" />
         </>
       )}
 

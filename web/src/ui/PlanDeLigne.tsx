@@ -130,6 +130,8 @@ export interface PlanHorizontalProps {
   index: number;
   /** 0..1 progress towards arrets[index + 1] */
   progression?: number;
+  /** Maximum number of visible stops in sliding window */
+  maxVisible?: number;
   onSelectStop?: (stationName: string) => void;
   className?: string;
 }
@@ -139,12 +141,12 @@ export function PlanDeLigneHorizontal({
   arrets,
   index,
   progression = 0,
+  maxVisible = 5,
   onSelectStop,
   className,
 }: PlanHorizontalProps) {
-  // Fenêtre glissante façon bandeau DILIDAM : max 5 arrêts lisibles en entier autour de la rame.
+  // Fenêtre glissante façon bandeau DILIDAM : maxVisible arrêts lisibles en entier autour de la rame.
   const n = arrets.length;
-  const maxVisible = 5;
   const clampedIdx = Math.max(0, Math.min(Math.max(0, n - 1), index));
   const clampedProg = Math.min(1, Math.max(0, progression));
 
@@ -183,31 +185,12 @@ export function PlanDeLigneHorizontal({
           const passed = gi <= clampedIdx;
           const isNext = gi === clampedIdx + 1;
           const leftPct = `${(vi / Math.max(1, vCount - 1)) * 100}%`;
-          return onSelectStop ? (
-            <button
-              key={`${a}-${gi}`}
-              type="button"
-              onClick={() => onSelectStop(a)}
-              aria-label={`Aller à ${a}`}
-              title={a}
-              className={cx(
-                'pointer-events-auto absolute top-[2px] -translate-x-1/2 cursor-pointer rounded-full border-[2.5px] bg-surface transition-transform hover:scale-125 focus-visible:outline-2 focus-visible:outline-focus',
-                isNext ? 'size-[12px] top-[1px]' : 'size-[10px]'
-              )}
-              style={{
-                left: leftPct,
-                borderColor:
-                  passed || isNext
-                    ? couleur
-                    : 'color-mix(in oklab, var(--color-encre) 45%, transparent)',
-                backgroundColor: passed ? couleur : undefined,
-              }}
-            />
-          ) : (
+          return (
             <span
               key={`${a}-${gi}`}
+              aria-hidden
               className={cx(
-                'absolute top-[2px] -translate-x-1/2 rounded-full border-[2.5px] bg-surface',
+                'pointer-events-none absolute top-[2px] -translate-x-1/2 rounded-full border-[2.5px] bg-surface',
                 isNext ? 'size-[12px] top-[1px]' : 'size-[10px]'
               )}
               style={{
@@ -228,7 +211,7 @@ export function PlanDeLigneHorizontal({
         />
       </div>
       <div
-        className="mt-1.5 grid gap-1 text-[11px] leading-[14px]"
+        className="mt-1 grid gap-1 text-[11px] leading-[14px]"
         style={{ gridTemplateColumns: `repeat(${Math.max(1, vCount)}, minmax(0, 1fr))` }}
       >
         {visible.map((a, vi) => {
@@ -245,10 +228,11 @@ export function PlanDeLigneHorizontal({
               key={`${a}-${gi}`}
               type="button"
               onClick={() => onSelectStop(a)}
+              aria-label={a}
               title={a}
               className={cx(
                 cls,
-                'pointer-events-auto cursor-pointer hover:text-encre focus-visible:outline-2 focus-visible:outline-focus'
+                'pointer-events-auto min-h-[26px] w-full cursor-pointer py-1 hover:text-encre focus-visible:outline-2 focus-visible:outline-focus'
               )}
             >
               {a}

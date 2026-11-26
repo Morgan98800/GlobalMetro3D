@@ -1148,6 +1148,8 @@ html[data-theme="light"] .topbar__clock-svg circle {
 .paris-ride-overlay {
   position: fixed;
   inset: 0;
+  height: 100dvh;
+  overflow: hidden;
   z-index: 210;
   background: #050404;
   color: var(--texte);

@@ -26,9 +26,16 @@ describe('paris_ride_view routes, GLB rolling stock mapping, and live sync helpe
     expect(keys.has('D')).toBe(true);
     expect(keys.has('E')).toBe(true);
 
+    const line1 = ROUTES.find((r) => r.key === '1');
+    const line5 = ROUTES.find((r) => r.key === '5');
     const line6 = ROUTES.find((r) => r.key === '6');
+    const rerA = ROUTES.find((r) => r.key === 'A');
     const rerC = ROUTES.find((r) => r.key === 'C');
+    expect(line1?.open.bastilleColumn).toBe('Bastille');
+    expect(line1?.open.grandeArche).toBe('Pont de Neuilly');
+    expect(line5?.open.austerlitzArch).toEqual(['Quai de la Rapée', 'Gare d’Austerlitz']);
     expect(line6?.open.tower).toEqual(['Passy', 'Bir-Hakeim']);
+    expect(rerA?.open.grandeArche).toBe('Nanterre-Préfecture');
     expect(rerC?.open.tower).toEqual(['Javel', 'Champ de Mars – Tour Eiffel']);
   });
 

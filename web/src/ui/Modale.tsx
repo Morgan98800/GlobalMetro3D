@@ -1,7 +1,9 @@
 import { RiCloseLine } from '@remixicon/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { IconButton } from './Button';
 import { cx } from './cx';
+import { useIsDesktop } from './useMediaQuery';
 
 /**
  * Modale — feuille centrée sur bureau, feuille basse sur mobile.
@@ -33,6 +35,8 @@ export function Modale({
 }: ModaleProps) {
   const id = useId();
   const panel = useRef<HTMLDivElement>(null);
+  const desktop = useIsDesktop();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     if (!ouverte) return;
@@ -63,14 +67,25 @@ export function Modale({
   return (
     <div className="pointer-events-auto fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-6">
       <div aria-hidden className="absolute inset-0 bg-nuit-950/55" onClick={onClose} />
-      <div
+      <motion.div
         ref={panel}
         role="dialog"
         aria-modal="true"
         aria-labelledby={id}
         tabIndex={-1}
+        initial={
+          reduceMotion
+            ? { opacity: 0 }
+            : desktop
+              ? { opacity: 0, scale: 0.97 }
+              : { opacity: 0, y: 12 }
+        }
+        animate={
+          reduceMotion ? { opacity: 1 } : desktop ? { opacity: 1, scale: 1 } : { opacity: 1, y: 0 }
+        }
+        transition={{ duration: reduceMotion ? 0.12 : 0.18, ease: [0.22, 1, 0.36, 1] }}
         className={cx(
-          'relative flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-feuille bg-surface text-encre outline-none animate-feuille md:rounded-feuille',
+          'relative flex max-h-[88dvh] w-full origin-bottom flex-col overflow-hidden rounded-t-feuille bg-surface text-encre outline-none md:origin-center md:rounded-feuille',
           '[box-shadow:var(--fx-glacure),0_0_0_1px_var(--color-joint),var(--shadow-flotte)]',
           largeur === 'lg' ? 'md:max-w-[680px]' : 'md:max-w-[560px]',
           className
@@ -78,7 +93,7 @@ export function Modale({
       >
         {bandeau}
         <div className="flex items-center justify-between gap-3 px-5 pb-1 pt-4 md:px-6">
-          <h2 id={id} className="text-titre text-encre">
+          <h2 id={id} className="text-titre text-encre [text-wrap:balance]">
             {titre}
           </h2>
           <IconButton
@@ -91,7 +106,7 @@ export function Modale({
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(20px,env(safe-area-inset-bottom))] pt-2 md:px-6 md:pb-6">
           {children}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

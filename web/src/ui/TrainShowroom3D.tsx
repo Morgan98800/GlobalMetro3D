@@ -185,7 +185,7 @@ export function TrainShowroom3D({ stock, accentColor, className }: TrainShowroom
       new Promise<THREE.Group>((resolve, reject) => {
         const sep = url.includes('?') ? '&' : '?';
         loader.load(
-          `${url}${sep}v=5`,
+          `${url}${sep}v=7`,
           (gltf) => {
             progressParts[part] = 1;
             updateProgress();

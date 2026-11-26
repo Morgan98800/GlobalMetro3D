@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-11-25",
+  "generated_on": "2026-11-26",
   "status": "awaiting_human_asset_approval",
   "policy": {
     "train_models_present": true
@@ -47,7 +47,7 @@
         "width_m": 2.8
       },
       "asset_file": "train/rer_generic_A__neutral.glb",
-      "sha256": "7195fbce33928426c434a445da6cbda7c0e52a5aadbd7841520e1f831eccf982"
+      "sha256": "cb78e5e363934e8df2ccf64548980b182d1964f3a829e5eb2f9d4ead854e194b"
     },
     {
       "family_id": "rer_generic_B",
@@ -58,7 +58,7 @@
         "width_m": 2.8
       },
       "asset_file": "train/rer_generic_B__neutral.glb",
-      "sha256": "600973036926eaac253194859145dcf8f1af07d79e6e4724141c982ab799d45d"
+      "sha256": "1a7a2a5f078cb7ca04b586e737f7f77bc44567b742a16e5044eefcb7dbd45d6c"
     },
     {
       "family_id": "rer_generic_C",
@@ -69,7 +69,7 @@
         "width_m": 2.8
       },
       "asset_file": "train/rer_generic_C__neutral.glb",
-      "sha256": "22025ab849c355cf656ebeb0d45ea0389ac6a18b21ea4c7054407f8339303e38"
+      "sha256": "f8ed9fa4cde735ae610f8efada086ec4d150f75afe8d9d089fabf09145102d52"
     },
     {
       "family_id": "rer_generic_D",
@@ -80,7 +80,7 @@
         "width_m": 2.8
       },
       "asset_file": "train/rer_generic_D__neutral.glb",
-      "sha256": "666294fd198ecb58859904ab8e1e36c6d23ba7f89219733a66750898a71144a4"
+      "sha256": "ea6411be70becc0e3f9fff1c793e0691ecf3eaacf91a19e286cc20468a8e424b"
     },
     {
       "family_id": "rer_generic_E",
@@ -91,7 +91,7 @@
         "width_m": 2.8
       },
       "asset_file": "train/rer_generic_E__neutral.glb",
-      "sha256": "eb988783b9fb5b17c6eb7734ece3dfe3c6c5fca7855a8c45e032784217dc0427"
+      "sha256": "33c2b14e75d6772080802c3313197caf626850f4e04cc9fbf6655bd3ab60c630"
     }
   ]
 }

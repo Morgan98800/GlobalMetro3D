@@ -5,7 +5,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 import {
   BloomEffect,
   EffectComposer,
@@ -27,11 +26,36 @@ import {
   createContactShadowTexture,
 } from './three/pbr_textures';
 import {
+  createBoulevardRoadTexture,
   createFriezeCeramiqueTexture,
-  createHaussmannFacadeMaps,
+  createHaussmannVariantMaps,
   createSortieSignTexture,
+  createStopMarkerTexture,
   createZincRoofMaps,
 } from './three/haussmann_textures';
+import {
+  buildAusterlitzViaductArch,
+  buildBastilleColumn,
+  buildBirHakeimViaductDetails,
+  buildEiffelTower,
+  buildGrandeArche,
+  buildSeineEnvironment,
+  createParisSkyDome,
+} from './three/paris_landmarks';
+import {
+  buildParisBoulevard,
+  buildParisCityBlocks,
+  type CityBlockSpec,
+} from './three/paris_cityscape';
+import { buildStationStopMarkers, buildSweptTrack, type TrackSystem } from './three/paris_track';
+import {
+  NOTCH_LABELS,
+  clampDriveNotch,
+  evaluateStopPrecision,
+  stepManualTrain,
+  type DriveNotch,
+  type KvbStatus,
+} from './ride/drive_physics';
 
 import {
   ROUTES,
@@ -117,6 +141,7 @@ interface TunnelDef {
   b: boolean;
   seine: boolean;
   tower: boolean;
+  austerlitzArch: boolean;
   out: [number, number] | null;
 }
 
@@ -267,7 +292,7 @@ export function mountParisRideView(
   let audioEnabled = false;
   let doorWarnPlayed = false;
 
-  renderer.setPixelRatio(getOptimalPixelRatio(1.25, 1.0));
+  renderer.setPixelRatio(getOptimalPixelRatio(1.6, 1.35));
   renderer.setSize(
     container.clientWidth || window.innerWidth,
     container.clientHeight || window.innerHeight
@@ -958,8 +983,13 @@ export function mountParisRideView(
   const ballastPbr = createBallastPbrMaps(maxAniso);
   const steelNormal = createBrushedMetalNormalMap(maxAniso);
   const contactShadowTex = createContactShadowTexture();
-  const haussmannMaps = createHaussmannFacadeMaps(maxAniso);
+  const haussmannCream = createHaussmannVariantMaps('cream', maxAniso);
+  const haussmannOchre = createHaussmannVariantMaps('ochre', maxAniso);
+  const haussmannModern = createHaussmannVariantMaps('modern', maxAniso);
   const zincRoofMaps = createZincRoofMaps(maxAniso);
+  const boulevardRoadTex = createBoulevardRoadTexture(maxAniso);
+  const stopMetroPosTex = createStopMarkerTexture('TÊTE', maxAniso);
+  const stopMetroNegTex = createStopMarkerTexture('TÊTE', maxAniso);
   const friezeCeramiqueTex = createFriezeCeramiqueTexture(maxAniso);
   const sortieSignTex = createSortieSignTexture(maxAniso);
   textures.push(
@@ -971,13 +1001,23 @@ export function mountParisRideView(
     ballastPbr.roughnessMap,
     steelNormal,
     contactShadowTex,
-    haussmannMaps.map,
-    haussmannMaps.roughnessMap,
+    haussmannCream.map,
+    haussmannCream.roughnessMap,
+    haussmannOchre.map,
+    haussmannOchre.roughnessMap,
+    haussmannModern.map,
+    haussmannModern.roughnessMap,
     zincRoofMaps.map,
     zincRoofMaps.roughnessMap,
+    boulevardRoadTex,
+    stopMetroPosTex,
+    stopMetroNegTex,
     friezeCeramiqueTex,
     sortieSignTex
   );
+  if (haussmannCream.normalMap) textures.push(haussmannCream.normalMap);
+  if (haussmannOchre.normalMap) textures.push(haussmannOchre.normalMap);
+  if (haussmannModern.normalMap) textures.push(haussmannModern.normalMap);
 
   /* ---------- Materials ---------- */
   const M = {
@@ -1084,12 +1124,78 @@ export function mountParisRideView(
     ),
     steel: trackMat(
       new THREE.MeshStandardMaterial({
-        color: MATERIAUX.rail.color,
+        color: 0xc2c8cf,
         normalMap: steelNormal,
-        normalScale: new THREE.Vector2(0.28, 0.28),
-        roughness: MATERIAUX.rail.roughness,
-        metalness: MATERIAUX.rail.metalness,
-        envMapIntensity: 1.15,
+        normalScale: new THREE.Vector2(0.24, 0.24),
+        roughness: 0.16,
+        metalness: 0.94,
+        envMapIntensity: 1.45,
+        side: THREE.DoubleSide,
+      })
+    ),
+    railWeb: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x3b3530,
+        roughness: 0.72,
+        metalness: 0.65,
+        envMapIntensity: 0.35,
+        side: THREE.DoubleSide,
+      })
+    ),
+    rollway: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x62676e,
+        normalMap: steelNormal,
+        normalScale: new THREE.Vector2(0.2, 0.2),
+        roughness: 0.38,
+        metalness: 0.82,
+        envMapIntensity: 0.85,
+        side: THREE.DoubleSide,
+      })
+    ),
+    thirdShroud: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0xd9a81e,
+        roughness: 0.48,
+        metalness: 0.08,
+        envMapIntensity: 0.45,
+        side: THREE.DoubleSide,
+      })
+    ),
+    catenaryMast: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x4b5650,
+        roughness: 0.46,
+        metalness: 0.7,
+        envMapIntensity: 0.65,
+      })
+    ),
+    catenaryWire: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x727a7f,
+        roughness: 0.35,
+        metalness: 0.85,
+        envMapIntensity: 0.9,
+        side: THREE.DoubleSide,
+      })
+    ),
+    cableTray: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x26292e,
+        roughness: 0.7,
+        metalness: 0.3,
+        side: THREE.DoubleSide,
+      })
+    ),
+    stopSignPos: trackMat(
+      new THREE.MeshBasicMaterial({
+        map: stopMetroPosTex,
+        side: THREE.DoubleSide,
+      })
+    ),
+    stopSignNeg: trackMat(
+      new THREE.MeshBasicMaterial({
+        map: stopMetroNegTex,
         side: THREE.DoubleSide,
       })
     ),
@@ -1300,20 +1406,95 @@ export function mountParisRideView(
     ),
     building: trackMat(
       new THREE.MeshStandardMaterial({
-        map: haussmannMaps.map,
-        roughnessMap: haussmannMaps.roughnessMap,
+        map: haussmannCream.map,
+        roughnessMap: haussmannCream.roughnessMap,
+        normalMap: haussmannCream.normalMap,
+        normalScale: new THREE.Vector2(0.45, 0.45),
         roughness: 1.0,
         metalness: 0.04,
-        envMapIntensity: 0.45,
+        envMapIntensity: 0.5,
+      })
+    ),
+    buildingOchre: trackMat(
+      new THREE.MeshStandardMaterial({
+        map: haussmannOchre.map,
+        roughnessMap: haussmannOchre.roughnessMap,
+        normalMap: haussmannOchre.normalMap,
+        normalScale: new THREE.Vector2(0.45, 0.45),
+        roughness: 1.0,
+        metalness: 0.04,
+        envMapIntensity: 0.5,
+      })
+    ),
+    buildingModern: trackMat(
+      new THREE.MeshStandardMaterial({
+        map: haussmannModern.map,
+        roughnessMap: haussmannModern.roughnessMap,
+        normalMap: haussmannModern.normalMap,
+        normalScale: new THREE.Vector2(0.35, 0.35),
+        roughness: 1.0,
+        metalness: 0.1,
+        envMapIntensity: 0.72,
+      })
+    ),
+    awningGreen: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0x1e4231, roughness: 0.78, envMapIntensity: 0.25 })
+    ),
+    awningBordeaux: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0x5c1a24, roughness: 0.78, envMapIntensity: 0.25 })
+    ),
+    boulevardRoad: trackMat(
+      new THREE.MeshStandardMaterial({
+        map: boulevardRoadTex,
+        normalMap: asphaltPbr.normalMap,
+        normalScale: new THREE.Vector2(0.35, 0.35),
+        roughness: 0.85,
+        envMapIntensity: 0.25,
+        side: THREE.DoubleSide,
+      })
+    ),
+    sidewalk: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x9c968b,
+        normalMap: concretePbr.normalMap,
+        normalScale: new THREE.Vector2(0.4, 0.4),
+        roughness: 0.88,
+        envMapIntensity: 0.2,
+        side: THREE.DoubleSide,
+      })
+    ),
+    lawn: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x4b6a3b,
+        roughness: 0.94,
+        envMapIntensity: 0.14,
+      })
+    ),
+    gravel: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0xd1c7b2,
+        roughness: 0.92,
+        envMapIntensity: 0.18,
+      })
+    ),
+    hull: trackMat(
+      new THREE.MeshStandardMaterial({ color: 0x222730, roughness: 0.6, metalness: 0.25 })
+    ),
+    cabinLit: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0xf4ecd8,
+        emissive: 0xffd27a,
+        emissiveIntensity: 0.45,
+        roughness: 0.3,
       })
     ),
     zinc: trackMat(
       new THREE.MeshStandardMaterial({
         map: zincRoofMaps.map,
         roughnessMap: zincRoofMaps.roughnessMap,
-        roughness: 0.85,
-        metalness: 0.48,
-        envMapIntensity: 0.55,
+        roughness: 0.82,
+        metalness: 0.52,
+        envMapIntensity: 0.62,
       })
     ),
     cornice: trackMat(
@@ -1363,16 +1544,39 @@ export function mountParisRideView(
     plug: trackMat(new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide })),
     tower: trackMat(
       new THREE.MeshStandardMaterial({
-        color: 0x6f5a46,
-        roughness: 0.48,
-        metalness: 0.62,
-        envMapIntensity: 0.75,
+        color: 0x79644f,
+        roughness: 0.44,
+        metalness: 0.68,
+        envMapIntensity: 0.95,
         side: THREE.DoubleSide,
+      })
+    ),
+    towerDark: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0x3f362d,
+        roughness: 0.4,
+        metalness: 0.72,
+        envMapIntensity: 0.85,
+        side: THREE.DoubleSide,
+      })
+    ),
+    towerGlass: trackMat(
+      new THREE.MeshStandardMaterial({
+        color: 0xffe4b3,
+        emissive: 0xffb84d,
+        emissiveIntensity: 0.75,
+        roughness: 0.18,
+        metalness: 0.35,
       })
     ),
     towerBeacon: trackMat(
       new THREE.MeshBasicMaterial({
         color: new THREE.Color(3.2, 2.45, 1.15),
+      })
+    ),
+    towerRedLight: trackMat(
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color(3.5, 0.18, 0.12),
       })
     ),
     interiorLining: trackMat(
@@ -2001,7 +2205,7 @@ export function mountParisRideView(
     55,
     (container.clientWidth || window.innerWidth) / (container.clientHeight || window.innerHeight),
     0.05,
-    isMobileGpu ? 950 : 1400
+    1450
   );
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -2081,29 +2285,8 @@ export function mountParisRideView(
   scene.add(sun);
   scene.add(sun.target);
 
-  const sky = (() => {
-    const c = makeCanvas(8, 256);
-    const g = c.getContext('2d')!;
-    const gr = g.createLinearGradient(0, 0, 0, 256);
-    gr.addColorStop(0, '#6f9cc6');
-    gr.addColorStop(0.45, '#b7cde0');
-    gr.addColorStop(0.52, '#e3e6e4');
-    gr.addColorStop(1, '#cfcac0');
-    g.fillStyle = gr;
-    g.fillRect(0, 0, 8, 256);
-    const t = new THREE.CanvasTexture(c);
-    t.colorSpace = THREE.SRGBColorSpace;
-    textures.push(t);
-    const skyGeo = trackGeo(new THREE.SphereGeometry(1150, 32, 16));
-    const skyMat = trackMat(
-      new THREE.MeshBasicMaterial({ map: t, side: THREE.BackSide, fog: false, depthWrite: false })
-    );
-    const m = new THREE.Mesh(skyGeo, skyMat);
-    m.renderOrder = -1;
-    m.visible = false;
-    scene.add(m);
-    return m;
-  })();
+  const sky = createParisSkyDome(textures, trackGeo, trackMat);
+  scene.add(sky);
 
   /* ---------- Station module geometries ---------- */
   function archPts(halfW: number, y0: number, h: number, seg: number, walls: boolean) {
@@ -2225,16 +2408,6 @@ export function mountParisRideView(
     t.translate(0, AY + 0.002, zc);
     platTops.push(t);
     platEdges.push(box(SL, 0.03, 0.38, 0, AY + 0.012, s * (PE + 0.19)));
-  });
-
-  const railsStn: THREE.BufferGeometry[] = [];
-  const thirdStn: THREE.BufferGeometry[] = [];
-  const sleepersStn: THREE.BufferGeometry[] = [];
-  [1.8, -1.8].forEach((zc) => {
-    [-0.7175, 0.7175].forEach((o) => railsStn.push(box(SL, 0.1, 0.07, 0, 0.17, zc + o)));
-    thirdStn.push(box(SL, 0.09, 0.12, 0, 0.28, zc - Math.sign(zc) * 1.45));
-    for (let x = -HALF + 0.35; x < HALF; x += 0.7)
-      sleepersStn.push(box(0.24, 0.12, 2.5, x, 0.06, zc));
   });
 
   const posterX = [-48, -24, 0, 24, 48];
@@ -2382,9 +2555,6 @@ export function mountParisRideView(
         return b;
       })()
     ),
-    rails: trackGeo(mergeGeos(railsStn)),
-    third: trackGeo(mergeGeos(thirdStn)),
-    sleepers: trackGeo(mergeGeos(sleepersStn)),
     frames: trackGeo(mergeGeos(framesStn)),
     posters: postersStn.map((list) => trackGeo(mergeGeos(list))),
     pframes: trackGeo(mergeGeos(pframesStn)),
@@ -2556,6 +2726,9 @@ export function mountParisRideView(
           b: nb.air,
           seine: sp,
           tower: Boolean(r.open.tower && pairIs(r.open.tower, st.name, nb.name)),
+          austerlitzArch: Boolean(
+            r.open.austerlitzArch && pairIs(r.open.austerlitzArch, st.name, nb.name)
+          ),
           out: null,
         });
       }
@@ -2602,6 +2775,18 @@ export function mountParisRideView(
       d = Math.min(d, Math.abs(s - v[0]), Math.abs(s - v[1]));
     });
     return d;
+  }
+
+  function isInCurve(sVal: number): boolean {
+    const s = Math.max(0, sVal);
+    let lo = 0;
+    let hi = pieces.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (pieces[mid].s0 <= s) lo = mid;
+      else hi = mid - 1;
+    }
+    return pieces[lo]?.t === 'A';
   }
 
   const _pose = { x: 0, z: 0, h: 0 };
@@ -2683,16 +2868,16 @@ export function mountParisRideView(
   }
 
   const tunnelProfile = archPts(TW, TY, TH, 48, true);
-  const rectProf = (o: number, y0: number, y1: number, w: number): [number, number][] => [
-    [o - w / 2, y0],
-    [o - w / 2, y1],
-    [o + w / 2, y1],
-    [o + w / 2, y0],
-    [o - w / 2, y0],
-  ];
   const sleeperGeo = trackGeo(new THREE.BoxGeometry(0.24, 0.12, 2.5));
   const lampGeo = trackGeo(new THREE.BoxGeometry(0.3, 0.12, 0.08));
   const unitBox = trackGeo(new THREE.BoxGeometry(1, 1, 1));
+  const mansardUnitGeo = trackGeo(
+    (() => {
+      const geo = new THREE.CylinderGeometry(0.56, 0.72, 1, 4, 1);
+      geo.rotateY(PI / 4);
+      return geo;
+    })()
+  );
   const DECK: [number, number][] = [
     [-4.5, -1.3],
     [-4.5, 1.1],
@@ -2705,36 +2890,125 @@ export function mountParisRideView(
     [-4.5, -1.3],
   ];
 
-  function addTrack(g: THREE.Group, geos: THREE.BufferGeometry[], s0: number, s1: number) {
-    const rails: THREE.BufferGeometry[] = [];
-    const third: THREE.BufferGeometry[] = [];
-    [1.8, -1.8].forEach((zc) => {
-      [-0.7175, 0.7175].forEach((o) =>
-        rails.push(sweep(rectProf(zc + o, 0.12, 0.22, 0.07), s0, s1, 4))
-      );
-      third.push(sweep(rectProf(zc - Math.sign(zc) * 1.45, 0.235, 0.325, 0.12), s0, s1, 4));
+  function currentTrackSystem(): TrackSystem {
+    if (isRerLineNum(route.num)) return 'rer';
+    if (['1', '4', '6', '11', '14'].includes(route.num) && !spragueMode) return 'pneu';
+    return 'fer';
+  }
+
+  function makeTrackMats() {
+    return {
+      railHead: M.steel,
+      railWeb: M.railWeb,
+      third: M.third,
+      thirdShroud: M.thirdShroud,
+      rollway: M.rollway,
+      sleeper: M.sleeper,
+      catenaryMast: M.catenaryMast,
+      catenaryWire: M.catenaryWire,
+      cableTray: M.cableTray,
+      stopSignPos: M.stopSignPos,
+      stopSignNeg: M.stopSignNeg,
+      tactileBand: M.tactileBand,
+    };
+  }
+
+  function makeCityMats() {
+    return {
+      buildings: [M.building, M.buildingOchre, M.buildingModern],
+      zinc: M.zinc,
+      cornice: M.cornice,
+      ironRail: M.ironRail,
+      chimney: M.chimney,
+      awningGreen: M.awningGreen,
+      awningBordeaux: M.awningBordeaux,
+      road: M.boulevardRoad,
+      sidewalk: M.sidewalk,
+      trunk: M.trunk,
+      foliage: M.foliage,
+      lampPost: M.ironRail,
+      lampGlobe: M.tunnelLamp,
+    };
+  }
+
+  function makeLandmarkMats() {
+    return {
+      tower: M.tower,
+      towerDark: M.towerDark,
+      towerGlass: M.towerGlass,
+      towerBeacon: M.towerBeacon,
+      towerRedLight: M.towerRedLight,
+      headlightBeam: M.headlightBeam,
+      trunk: M.trunk,
+      foliage: M.foliage,
+      lawn: M.lawn,
+      gravel: M.gravel,
+      viaduct: M.viaduct,
+      iron: M.iron,
+      ironRail: M.ironRail,
+      water: M.water,
+      lamp: M.tunnelLamp,
+      housing: M.housing,
+      hull: M.hull,
+      cabinLit: M.cabinLit,
+    };
+  }
+
+  function addTrack(
+    g: THREE.Group,
+    geos: THREE.BufferGeometry[],
+    s0: number,
+    s1: number,
+    inTunnel: boolean,
+    isOpenAir: boolean
+  ) {
+    buildSweptTrack({
+      g,
+      geos,
+      s0,
+      s1,
+      system: currentTrackSystem(),
+      inTunnel,
+      isOpenAir,
+      tunnelHalfWidth: TW,
+      sleeperGeo,
+      sweepFn: sweep,
+      poseFn: pose,
+      mats: makeTrackMats(),
+      isMobileGpu,
     });
-    const rg = mergeGeos(rails);
-    const tg = mergeGeos(third);
-    rails.concat(third).forEach((x) => x.dispose());
-    geos.push(rg, tg);
-    g.add(new THREE.Mesh(rg, M.steel));
-    g.add(new THREE.Mesh(tg, M.third));
-    const P = { x: 0, z: 0, h: 0 };
-    const m4 = new THREE.Matrix4();
-    const N = Math.max(1, Math.floor((s1 - s0) / 0.7));
-    const sl = new THREE.InstancedMesh(sleeperGeo, M.sleeper, N * 2);
-    let k = 0;
-    for (let i = 0; i < N; i++) {
-      pose(s0 + 0.35 + i * 0.7, P);
-      [1.8, -1.8].forEach((lat) => {
-        m4.makeRotationY(-P.h);
-        m4.setPosition(P.x - Math.sin(P.h) * lat, 0.06, P.z + Math.cos(P.h) * lat);
-        sl.setMatrixAt(k++, m4);
-      });
-    }
-    sl.instanceMatrix.needsUpdate = true;
-    g.add(sl);
+  }
+
+  function addStationTrack(
+    g: THREE.Group,
+    geos: THREE.BufferGeometry[],
+    inTunnel: boolean,
+    isOpenAir: boolean
+  ) {
+    const localPose = (lx: number, out = { x: 0, z: 0, h: 0 }) => {
+      out.x = lx;
+      out.z = 0;
+      out.h = 0;
+      return out;
+    };
+    const localSweep = (prof: [number, number][], a: number, b: number, _step: number) =>
+      profileTube(prof, a, b);
+    buildSweptTrack({
+      g,
+      geos,
+      s0: -HALF,
+      s1: HALF,
+      system: currentTrackSystem(),
+      inTunnel,
+      isOpenAir,
+      tunnelHalfWidth: AW,
+      sleeperGeo,
+      sweepFn: localSweep,
+      poseFn: localPose,
+      mats: makeTrackMats(),
+      isMobileGpu,
+    });
+    buildStationStopMarkers(g, geos, makeTrackMats(), TRAIN_LEN);
   }
 
   function tunnelGroup(s0: number, s1: number, geos: THREE.BufferGeometry[]) {
@@ -2756,7 +3030,7 @@ export function mountParisRideView(
       ),
       M.bed
     );
-    addTrack(g, geos, s0, s1);
+    addTrack(g, geos, s0, s1, true, false);
     const P = { x: 0, z: 0, h: 0 };
     const m4 = new THREE.Matrix4();
     const lamps: number[] = [];
@@ -2837,242 +3111,15 @@ export function mountParisRideView(
     );
   }
 
-  // Géométrie de toit mansardé biseauté réutilisable pour les immeubles haussmanniens
-  const mansardUnitGeo = trackGeo(
-    (() => {
-      const geo = new THREE.CylinderGeometry(0.56, 0.72, 1, 4, 1);
-      geo.rotateY(PI / 4);
-      return geo;
-    })()
-  );
-
-  function cityBlocks(
-    g: THREE.Group,
-    list: Array<{
-      P: { x: number; z: number; h: number };
-      along: number;
-      lat: number;
-      w: number;
-      h: number;
-      d: number;
-    }>
-  ) {
-    if (!list.length) return;
-    const b = new THREE.InstancedMesh(unitBox, M.building, list.length);
-    const roof = new THREE.InstancedMesh(mansardUnitGeo, M.zinc, list.length);
-    const cornices = new THREE.InstancedMesh(unitBox, M.cornice, list.length * 2);
-    const balconies = new THREE.InstancedMesh(unitBox, M.ironRail, list.length * 2);
-    const chimneys = new THREE.InstancedMesh(unitBox, M.chimney, list.length * 2);
-    list.forEach((o, i) => {
-      // Corps en pierre de taille avec façade haussmannienne texturée
-      placeBox(b, i, o.P, o.along, o.lat, GY + o.h / 2, o.w, o.h, o.d);
-      // Toit mansardé en zinc biseauté
-      placeBox(roof, i, o.P, o.along, o.lat, GY + o.h + 1.9, o.w * 1.01, 3.8, o.d * 1.01);
-      // Grande corniche sommitale + corniche intermédiaire (2e étage)
-      placeBox(cornices, i * 2, o.P, o.along, o.lat, GY + o.h + 0.12, o.w + 0.7, 0.45, o.d + 0.7);
-      placeBox(
-        cornices,
-        i * 2 + 1,
-        o.P,
-        o.along,
-        o.lat,
-        GY + o.h * 0.42,
-        o.w + 0.45,
-        0.28,
-        o.d + 0.45
-      );
-      // Balcons filants en fer forgé (2e & 5e étages)
-      placeBox(
-        balconies,
-        i * 2,
-        o.P,
-        o.along,
-        o.lat,
-        GY + o.h * 0.42 + 0.55,
-        o.w + 0.58,
-        0.16,
-        o.d + 0.58
-      );
-      placeBox(
-        balconies,
-        i * 2 + 1,
-        o.P,
-        o.along,
-        o.lat,
-        GY + o.h * 0.84 + 0.55,
-        o.w + 0.58,
-        0.16,
-        o.d + 0.58
-      );
-      // Cheminées parisiennes en terre cuite sur le faîtage
-      placeBox(chimneys, i * 2, o.P, o.along - o.w * 0.24, o.lat, GY + o.h + 4.1, 1.3, 1.4, 0.85);
-      placeBox(
-        chimneys,
-        i * 2 + 1,
-        o.P,
-        o.along + o.w * 0.24,
-        o.lat,
-        GY + o.h + 4.1,
-        1.3,
-        1.4,
-        0.85
-      );
-    });
-    b.instanceMatrix.needsUpdate = true;
-    roof.instanceMatrix.needsUpdate = true;
-    cornices.instanceMatrix.needsUpdate = true;
-    balconies.instanceMatrix.needsUpdate = true;
-    chimneys.instanceMatrix.needsUpdate = true;
-    g.add(b, roof, cornices, balconies, chimneys);
-  }
-
   let towerWorldPos: THREE.Vector3 | null = null;
-
-  function eiffel(geos: THREE.BufferGeometry[]) {
-    const grp = new THREE.Group();
-    const parts: THREE.BufferGeometry[] = [];
-    const upAxis = new THREE.Vector3(0, 1, 0);
-
-    // Ajoute une poutrelle métallique orientée entre deux points 3D
-    const addStrut = (a: THREE.Vector3, b: THREE.Vector3, radius: number, radialSegs = 4) => {
-      const dir = new THREE.Vector3().subVectors(b, a);
-      const len = dir.length();
-      if (len < 0.05) return;
-      const geo = new THREE.CylinderGeometry(radius, radius, len, radialSegs, 1);
-      const quat = new THREE.Quaternion().setFromUnitVectors(upAxis, dir.normalize());
-      geo.applyQuaternion(quat);
-      geo.translate((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
-      parts.push(geo);
-    };
-
-    // Profil exponentiel réaliste de la demi-largeur de la Tour Eiffel (m) selon l'altitude y
-    const tiers: Array<[number, number, number]> = [
-      [0, 56, 3.8],
-      [28, 44, 3.1],
-      [57, 33, 2.5],
-      [86, 25, 2.0],
-      [115, 18.5, 1.65],
-      [152, 13.2, 1.25],
-      [192, 9.2, 1.0],
-      [234, 6.6, 0.82],
-      [276, 4.8, 0.68],
-      [302, 2.4, 0.45],
-    ];
-    const corners: Array<[number, number]> = [
-      [1, 1],
-      [-1, 1],
-      [-1, -1],
-      [1, -1],
-    ];
-
-    for (let t = 0; t < tiers.length - 1; t++) {
-      const [y0, r0, thick] = tiers[t];
-      const [y1, r1] = tiers[t + 1];
-      const ring0 = corners.map(([sx, sz]) => new THREE.Vector3(sx * r0, y0, sz * r0));
-      const ring1 = corners.map(([sx, sz]) => new THREE.Vector3(sx * r1, y1, sz * r1));
-
-      // 4 piliers d'arête inclinés + contreventements en X sur chaque face (treillis ajouré)
-      for (let i = 0; i < 4; i++) {
-        const next = (i + 1) % 4;
-        addStrut(ring0[i], ring1[i], thick, 6);
-        // Entretoise horizontale au palier supérieur
-        addStrut(ring1[i], ring1[next], thick * 0.45, 4);
-        // Croisillons en X dès le dessus de l'arche du 1er étage
-        if (t >= 1) {
-          addStrut(ring0[i], ring1[next], thick * 0.34, 4);
-          addStrut(ring0[next], ring1[i], thick * 0.34, 4);
-        } else {
-          // Jambes évasées de base : double arête intérieure pour donner l'épaisseur des piliers
-          const in0 = ring0[i].clone().multiplyScalar(0.76);
-          in0.y = y0;
-          const in1 = ring1[i].clone().multiplyScalar(0.78);
-          in1.y = y1;
-          addStrut(in0, in1, thick * 0.65, 5);
-          addStrut(ring0[i], in1, thick * 0.36, 4);
-          addStrut(in0, ring1[i], thick * 0.36, 4);
-        }
-      }
-    }
-
-    // Antenne télédiffusion fine (302 m -> 324 m)
-    addStrut(new THREE.Vector3(0, 300, 0), new THREE.Vector3(0, 324, 0), 0.55, 6);
-
-    const latticeGeo = mergeGeos(parts);
-    parts.forEach((p) => p.dispose());
-    geos.push(latticeGeo);
-    grp.add(new THREE.Mesh(latticeGeo, M.tower));
-
-    // 4 grandes arches ouvragées sous le 1er étage
-    const archGeo = new THREE.TorusGeometry(30, 2.3, 6, 24, PI);
-    geos.push(archGeo);
-    [0, PI / 2, PI, -PI / 2].forEach((rotY) => {
-      const arch = new THREE.Mesh(archGeo, M.tower);
-      arch.position.set(Math.sin(rotY) * 38, 22, Math.cos(rotY) * 38);
-      arch.rotation.y = rotY;
-      grp.add(arch);
-    });
-
-    // 3 plateformes emblématiques avec colonnade + liseré doré HDR
-    [
-      [57, 6.2, 70],
-      [115, 4.6, 41],
-      [276, 3.6, 13.5],
-    ].forEach(([y, h, w]) => {
-      const bg = new THREE.BoxGeometry(w, h, w);
-      geos.push(bg);
-      const m = new THREE.Mesh(bg, M.tower);
-      m.position.y = y;
-      grp.add(m);
-      const glowGeo = new THREE.BoxGeometry(w + 0.8, 1.0, w + 0.8);
-      geos.push(glowGeo);
-      const glowMesh = new THREE.Mesh(glowGeo, M.towerBeacon);
-      glowMesh.position.y = y - h / 2 - 0.35;
-      grp.add(glowMesh);
-    });
-
-    // Phare lumineux HDR au sommet (324 m)
-    const beaconGeo = new THREE.SphereGeometry(2.6, 12, 10);
-    geos.push(beaconGeo);
-    const beacon = new THREE.Mesh(beaconGeo, M.towerBeacon);
-    beacon.position.y = 325;
-    grp.add(beacon);
-
-    // Champ-de-Mars : bouquets d'arbres instanciés autour de la base
-    const trunkGeo = new THREE.CylinderGeometry(0.45, 0.65, 5.5, 6);
-    const crownGeo = new THREE.DodecahedronGeometry(4.2, 1);
-    geos.push(trunkGeo, crownGeo);
-    const treeCoords: Array<[number, number]> = [];
-    for (let a = 0; a < 28; a++) {
-      const ang = (a / 28) * PI * 2;
-      const dist = 78 + (a % 3) * 24;
-      treeCoords.push([Math.cos(ang) * dist, Math.sin(ang) * dist]);
-    }
-    const trunks = new THREE.InstancedMesh(trunkGeo, M.trunk, treeCoords.length);
-    const crowns = new THREE.InstancedMesh(crownGeo, M.foliage, treeCoords.length);
-    const tm = new THREE.Matrix4();
-    treeCoords.forEach(([tx, tz], i) => {
-      tm.makeTranslation(tx, 2.75, tz);
-      trunks.setMatrixAt(i, tm);
-      const s = 0.85 + (i % 4) * 0.16;
-      tm.compose(
-        new THREE.Vector3(tx, 7.6, tz),
-        new THREE.Quaternion(),
-        new THREE.Vector3(s, s * 1.1, s)
-      );
-      crowns.setMatrixAt(i, tm);
-    });
-    trunks.instanceMatrix.needsUpdate = true;
-    crowns.instanceMatrix.needsUpdate = true;
-    grp.add(trunks, crowns);
-
-    return grp;
-  }
+  const segmentUpdaters = new Set<(elapsedSec: number) => void>();
 
   function viaductGroup(
     s0: number,
     s1: number,
-    t: { seine?: boolean; tower?: boolean } | null,
-    geos: THREE.BufferGeometry[]
+    t: { seine?: boolean; tower?: boolean; austerlitzArch?: boolean } | null,
+    geos: THREE.BufferGeometry[],
+    disposables: Array<() => void>
   ) {
     const g = new THREE.Group();
     const add = (geo: THREE.BufferGeometry, mat: THREE.Material) => {
@@ -3080,7 +3127,7 @@ export function mountParisRideView(
       g.add(new THREE.Mesh(geo, mat));
     };
     add(sweep(DECK, s0, s1, 4), M.viaduct);
-    addTrack(g, geos, s0, s1);
+    addTrack(g, geos, s0, s1, false, true);
     const mid = (s0 + s1) / 2;
     const seine = Boolean(t && t.seine);
     const river: [number, number] | null = seine ? [mid - 75, mid + 75] : null;
@@ -3113,25 +3160,22 @@ export function mountParisRideView(
           M.ground
         );
       }
-      const P = pose(mid, { x: 0, z: 0, h: 0 });
-      const wg = new THREE.PlaneGeometry(150, 1600);
-      geos.push(wg);
-      let waterMesh: THREE.Object3D;
-      if (!isMobileGpu) {
-        const reflector = new Reflector(wg, {
-          textureWidth: 256,
-          textureHeight: 256,
-          color: 0x5c7d88,
-          clipBias: 0.005,
-        });
-        waterMesh = reflector;
-      } else {
-        waterMesh = new THREE.Mesh(wg, M.water);
-      }
-      waterMesh.rotation.x = -PI / 2;
-      waterMesh.rotation.z = P.h;
-      waterMesh.position.set(P.x, GY + 0.4, P.z);
-      g.add(waterMesh);
+      const midP = pose(mid, { x: 0, z: 0, h: 0 });
+      const seineEnv = buildSeineEnvironment(
+        { x: midP.x, z: midP.z, h: midP.h },
+        150,
+        geos,
+        makeLandmarkMats(),
+        isMobileGpu
+      );
+      g.add(seineEnv.group);
+      segmentUpdaters.add(seineEnv.update);
+      disposables.push(() => segmentUpdaters.delete(seineEnv.update));
+      g.add(
+        t?.austerlitzArch
+          ? buildAusterlitzViaductArch(s0, s1, river, pose, geos, makeLandmarkMats(), isMobileGpu)
+          : buildBirHakeimViaductDetails(s0, s1, river, pose, geos, makeLandmarkMats(), isMobileGpu)
+      );
     } else {
       add(
         sweep(
@@ -3147,8 +3191,13 @@ export function mountParisRideView(
       );
     }
 
+    buildParisBoulevard(g, s0, s1, river, sweep, pose, makeCityMats(), geos, isMobileGpu);
+
     const piers: number[] = [];
-    for (let s = s0 + 12; s < s1; s += seine ? 36 : 24) piers.push(s);
+    for (let s = s0 + 12; s < s1; s += seine ? 36 : 24) {
+      if (t?.austerlitzArch && river && s >= river[0] + 6 && s <= river[1] - 6) continue;
+      piers.push(s);
+    }
     if (piers.length) {
       const im = new THREE.InstancedMesh(unitBox, M.viaduct, piers.length * 2);
       let i = 0;
@@ -3160,14 +3209,7 @@ export function mountParisRideView(
       g.add(im);
     }
 
-    const list: Array<{
-      P: { x: number; z: number; h: number };
-      along: number;
-      lat: number;
-      w: number;
-      h: number;
-      d: number;
-    }> = [];
+    const list: CityBlockSpec[] = [];
     const seed = hashStr(route.key) + Math.floor(s0);
     let n = 0;
     for (let s = s0 + 10; s < s1 - 6; s += 26) {
@@ -3180,28 +3222,41 @@ export function mountParisRideView(
         list.push({
           P: { ...pose(s, { x: 0, z: 0, h: 0 }) },
           along: 0,
-          lat: side * (26 + rnd(q) * 16),
+          lat: side * (28 + rnd(q) * 16),
           w: 20 + rnd(q + 1) * 5,
-          h: 17 + rnd(q + 2) * 7,
+          h: 17 + rnd(q + 2) * 8,
           d: 14 + rnd(q + 3) * 8,
         });
       });
     }
-    cityBlocks(g, list);
+    buildParisCityBlocks(
+      g,
+      list,
+      makeCityMats(),
+      { unitBox, mansardUnit: mansardUnitGeo },
+      geos,
+      isMobileGpu
+    );
 
     if (t && t.tower) {
       const twPosS = s0 + (s1 - s0) * 0.62;
       const P = pose(twPosS, { x: 0, z: 0, h: 0 });
-      const tw = eiffel(geos);
+      const builtTower = buildEiffelTower(geos, makeLandmarkMats(), isMobileGpu);
       const lat = -190;
-      tw.position.set(P.x - Math.sin(P.h) * lat, GY, P.z + Math.cos(P.h) * lat);
-      towerWorldPos = new THREE.Vector3(tw.position.x, GY + 135, tw.position.z);
-      g.add(tw);
+      builtTower.group.position.set(P.x - Math.sin(P.h) * lat, GY, P.z + Math.cos(P.h) * lat);
+      towerWorldPos = new THREE.Vector3(
+        builtTower.group.position.x,
+        GY + 105,
+        builtTower.group.position.z
+      );
+      g.add(builtTower.group);
+      segmentUpdaters.add(builtTower.update);
+      disposables.push(() => segmentUpdaters.delete(builtTower.update));
       const padGeo = new THREE.CircleGeometry(210, 36);
       geos.push(padGeo);
       const pad = new THREE.Mesh(padGeo, M.ground);
       pad.rotation.x = -PI / 2;
-      pad.position.set(tw.position.x, GY - 0.02, tw.position.z);
+      pad.position.set(builtTower.group.position.x, GY - 0.02, builtTower.group.position.z);
       g.add(pad);
     }
     return g;
@@ -3268,14 +3323,14 @@ export function mountParisRideView(
     const disposables: Array<() => void> = [];
     if (!t.out) parts.push({ g: tunnelGroup(s0, s1, geos), env: 'in' });
     else if (t.out[0] <= s0 + 0.01 && t.out[1] >= s1 - 0.01)
-      parts.push({ g: viaductGroup(s0, s1, t, geos), env: 'out' });
+      parts.push({ g: viaductGroup(s0, s1, t, geos, disposables), env: 'out' });
     else if (t.out[0] <= s0 + 0.01) {
-      parts.push({ g: viaductGroup(s0, t.out[1], t, geos), env: 'out' });
+      parts.push({ g: viaductGroup(s0, t.out[1], t, geos, disposables), env: 'out' });
       parts.push({ g: tunnelGroup(t.out[1], s1, geos), env: 'in' });
       for (const p of portalParts(t.out[1], -1, geos)) parts.push(p);
     } else {
       parts.push({ g: tunnelGroup(s0, t.out[0], geos), env: 'in' });
-      parts.push({ g: viaductGroup(t.out[0], s1, t, geos), env: 'out' });
+      parts.push({ g: viaductGroup(t.out[0], s1, t, geos, disposables), env: 'out' });
       for (const p of portalParts(t.out[0], 1, geos)) parts.push(p);
     }
 
@@ -3290,6 +3345,7 @@ export function mountParisRideView(
 
   function buildAirStation(name: string, k: number): { group: THREE.Group; dispose: () => void } {
     const g = new THREE.Group();
+    const stnGeos: THREE.BufferGeometry[] = [];
     const plaqueTex = new THREE.CanvasTexture(plaqueCanvas(name));
     plaqueTex.wrapS = THREE.RepeatWrapping;
     plaqueTex.wrapT = THREE.RepeatWrapping;
@@ -3306,9 +3362,7 @@ export function mountParisRideView(
     add(STN.platBody, M.platformFace);
     add(STN.platTop, M.slab);
     add(STN.edge, M.edge);
-    add(STN.rails, M.steel);
-    add(STN.third, M.third);
-    add(STN.sleepers, M.sleeper);
+    addStationTrack(g, stnGeos, false, true);
     add(STN.airParapet, M.iron);
     add(STN.canopy, M.canopy);
     add(STN.cols, M.iron);
@@ -3327,35 +3381,52 @@ export function mountParisRideView(
       new THREE.Mesh(STN.sielScreensNeg, sielMatNeg)
     );
     g.add(airSiel);
-    const list: Array<{
-      P: { x: number; z: number; h: number };
-      along: number;
-      lat: number;
-      w: number;
-      h: number;
-      d: number;
-    }> = [];
+    const list: CityBlockSpec[] = [];
     const seed = hashStr(route.key) + k * 101;
     const P0 = { x: 0, z: 0, h: 0 };
+    const hasBastilleColumn = route.open.bastilleColumn === name;
+    const hasGrandeArche = route.open.grandeArche === name;
     for (let x = -110, n = 0; x <= 110; x += 26, n++) {
       [-1, 1].forEach((side) => {
+        if (route.open.tower && side < 0 && (name === 'Passy' || name === 'Bir-Hakeim')) return;
+        if (hasBastilleColumn && side < 0 && Math.abs(x) < 52) return;
+        if (hasGrandeArche && side < 0 && Math.abs(x) < 75) return;
         const q = seed + n * 13 + side * 7;
         list.push({
           P: P0,
           along: x,
-          lat: side * (28 + rnd(q) * 14),
+          lat: side * (30 + rnd(q) * 14),
           w: 20 + rnd(q + 1) * 5,
-          h: 17 + rnd(q + 2) * 7,
+          h: 17 + rnd(q + 2) * 8,
           d: 14 + rnd(q + 3) * 8,
         });
       });
     }
-    cityBlocks(g, list);
+    buildParisCityBlocks(
+      g,
+      list,
+      makeCityMats(),
+      { unitBox, mansardUnit: mansardUnitGeo },
+      stnGeos,
+      isMobileGpu
+    );
+    if (hasBastilleColumn) {
+      const col = buildBastilleColumn(stnGeos, makeLandmarkMats(), isMobileGpu);
+      col.position.set(0, GY, -42);
+      g.add(col);
+    }
+    if (hasGrandeArche) {
+      const arche = buildGrandeArche(stnGeos, makeLandmarkMats(), isMobileGpu);
+      arche.position.set(-18, GY, -125);
+      arche.rotation.y = 0.22;
+      g.add(arche);
+    }
     return {
       group: g,
       dispose() {
         plaqueTex.dispose();
         plaqueMat.dispose();
+        for (const sg of stnGeos) sg.dispose();
       },
     };
   }
@@ -3394,9 +3465,7 @@ export function mountParisRideView(
     add(STN.platTop, M.slab);
     add(STN.edge, M.edge);
     add(STN.bed, M.bed);
-    add(STN.rails, M.steel);
-    add(STN.third, M.third);
-    add(STN.sleepers, M.sleeper);
+    addStationTrack(g, archGeos, true, false);
     add(STN.frames, M.frame);
     STN.posters.forEach((p, i) => add(p, posterMats[i]));
     // Cadres d'affiches en faïence céramique moulurée
@@ -3528,6 +3597,7 @@ export function mountParisRideView(
 
   function clearAll() {
     towerWorldPos = null;
+    segmentUpdaters.clear();
     built.forEach((o) => {
       o.parts.forEach((p) => scene.remove(p.g));
       o.dispose();
@@ -3663,7 +3733,7 @@ export function mountParisRideView(
     const sep = url.includes('?') ? '&' : '?';
     return new Promise((resolve, reject) => {
       rideGlbLoader.load(
-        `${url}${sep}v=5`,
+        `${url}${sep}v=7`,
         (gltf) => {
           normalizeRideGlb(gltf.scene);
           resolve(gltf.scene);
@@ -3738,6 +3808,17 @@ export function mountParisRideView(
   const cabPupitreGroup = new THREE.Group();
   const vueVoieGroup = new THREE.Group();
   const leverPivot = new THREE.Group();
+  let cabWiperPivot: THREE.Group | null = null;
+  const cabDoorLampMat = trackMat(
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.25, 2.2, 0.75) })
+  );
+  const cabKvbLampMat = trackMat(
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.15, 0.2, 0.15) })
+  );
+  const cabNotchLampMat = trackMat(
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(0.9, 0.9, 0.9) })
+  );
+  const cabSpotLights: THREE.SpotLight[] = [];
   const speedoCanvasEl = makeCanvas(512, 256);
   const speedoTex = new THREE.CanvasTexture(speedoCanvasEl);
   speedoTex.colorSpace = THREE.SRGBColorSpace;
@@ -3827,6 +3908,11 @@ export function mountParisRideView(
     screenMesh.rotation.x = -0.34;
     cabPupitreGroup.add(screenMesh);
 
+    const screenBezel = new THREE.Mesh(trackGeo(new THREE.BoxGeometry(0.03, 0.23, 0.45)), M.chrome);
+    screenBezel.position.set(L - 0.42, BY + 0.995, -0.44);
+    screenBezel.rotation.z = -0.34;
+    cabPupitreGroup.add(screenBezel);
+
     const kvbBar = new THREE.Mesh(trackGeo(new THREE.BoxGeometry(0.07, 0.06, 0.22)), M.cabYellow);
     kvbBar.position.set(L - 0.3, BY + 0.97, -0.06);
     cabPupitreGroup.add(kvbBar);
@@ -3838,23 +3924,56 @@ export function mountParisRideView(
     emergencyBtn.position.set(L - 0.44, BY + 0.95, 0.26);
     cabPupitreGroup.add(emergencyBtn);
 
+    // Socle cranté du manipulateur Traction / Freinage + barre LED d'effort
+    const quadrantPlate = new THREE.Mesh(
+      trackGeo(new THREE.BoxGeometry(0.24, 0.03, 0.14)),
+      M.housing
+    );
+    quadrantPlate.position.set(L - 0.48, BY + 0.935, 0.08);
+    quadrantPlate.rotation.z = 0.26;
+    cabPupitreGroup.add(quadrantPlate);
+
+    const notchStrip = new THREE.Mesh(
+      trackGeo(new THREE.BoxGeometry(0.18, 0.015, 0.025)),
+      cabNotchLampMat
+    );
+    notchStrip.position.set(L - 0.48, BY + 0.955, 0.01);
+    notchStrip.rotation.z = 0.26;
+    cabPupitreGroup.add(notchStrip);
+
     leverPivot.position.set(L - 0.48, BY + 0.94, 0.08);
     const leverStem = new THREE.Mesh(
       trackGeo(new THREE.CylinderGeometry(0.014, 0.014, 0.2, 10)),
       M.chrome
     );
     leverStem.position.y = 0.1;
-    const leverKnob = new THREE.Mesh(trackGeo(new THREE.SphereGeometry(0.032, 12, 10)), M.cabDash);
+    const leverKnob = new THREE.Mesh(
+      trackGeo(new THREE.CylinderGeometry(0.02, 0.02, 0.12, 10)),
+      M.cabDash
+    );
+    leverKnob.rotation.x = PI / 2;
     leverKnob.position.y = 0.2;
     leverPivot.add(leverStem, leverKnob);
     cabPupitreGroup.add(leverPivot);
 
-    const wiper = new THREE.Mesh(trackGeo(new THREE.BoxGeometry(0.016, 0.56, 0.02)), M.housing);
-    wiper.position.set(L - 0.04, BY + 1.38, -0.52);
-    wiper.rotation.x = -0.18;
-    cabPupitreGroup.add(wiper);
+    // Essuie-glace avant pivotant (actif sur viaduc)
+    cabWiperPivot = new THREE.Group();
+    cabWiperPivot.position.set(L - 0.03, BY + 1.05, -0.52);
+    const wiperArm = new THREE.Mesh(trackGeo(new THREE.BoxGeometry(0.016, 0.58, 0.022)), M.housing);
+    wiperArm.position.y = 0.28;
+    cabWiperPivot.add(wiperArm);
+    cabPupitreGroup.add(cabWiperPivot);
 
-    // Enrichissement tableau de bord 3D : écran auxiliaire, rampe LED HDR, manomètre frein et montants
+    // Pare-soleil supérieur de cabine + voyants Portes / KVB
+    const sunVisor = new THREE.Mesh(
+      trackGeo(new THREE.BoxGeometry(0.28, 0.025, CW - 0.34)),
+      M.cabDash
+    );
+    sunVisor.position.set(L - 0.16, BY + 1.9, 0);
+    sunVisor.rotation.z = -0.18;
+    cabPupitreGroup.add(sunVisor);
+
+    // Enrichissement tableau de bord 3D : écran auxiliaire, rampe LED HDR, manomètres et montants
     const auxScreen = new THREE.Mesh(trackGeo(new THREE.PlaneGeometry(0.28, 0.16)), sielMatPos);
     auxScreen.position.set(L - 0.44, BY + 0.99, 0.42);
     auxScreen.rotation.order = 'YXZ';
@@ -3862,26 +3981,37 @@ export function mountParisRideView(
     auxScreen.rotation.x = -0.34;
     cabPupitreGroup.add(auxScreen);
 
+    const doorLampMesh = new THREE.Mesh(
+      trackGeo(new THREE.BoxGeometry(0.035, 0.022, 0.055)),
+      cabDoorLampMat
+    );
+    doorLampMesh.position.set(L - 0.34, BY + 1.03, -0.2);
+    const kvbLampMesh = new THREE.Mesh(
+      trackGeo(new THREE.BoxGeometry(0.035, 0.022, 0.055)),
+      cabKvbLampMat
+    );
+    kvbLampMesh.position.set(L - 0.34, BY + 1.03, -0.11);
+    cabPupitreGroup.add(doorLampMesh, kvbLampMesh);
+
     const ledGeo = trackGeo(new THREE.SphereGeometry(0.014, 8, 6));
     [
-      { z: -0.22, mat: M.signalGreen },
-      { z: -0.17, mat: M.signalGreen },
-      { z: -0.12, mat: M.headlightLed },
-      { z: -0.07, mat: M.headlightLed },
-      { z: -0.02, mat: M.signalRed },
+      { z: -0.03, mat: M.signalGreen },
+      { z: 0.02, mat: M.headlightLed },
     ].forEach(({ z, mat }) => {
       const led = new THREE.Mesh(ledGeo, mat);
       led.position.set(L - 0.34, BY + 1.03, z);
       cabPupitreGroup.add(led);
     });
 
-    const gaugeRim = new THREE.Mesh(
-      trackGeo(new THREE.CylinderGeometry(0.055, 0.055, 0.02, 16)),
-      M.chrome
-    );
-    gaugeRim.rotation.z = PI / 2 - 0.34;
-    gaugeRim.position.set(L - 0.42, BY + 0.97, -0.74);
-    cabPupitreGroup.add(gaugeRim);
+    [-0.74, -0.88].forEach((gz) => {
+      const gaugeRim = new THREE.Mesh(
+        trackGeo(new THREE.CylinderGeometry(0.052, 0.052, 0.02, 16)),
+        M.chrome
+      );
+      gaugeRim.rotation.z = PI / 2 - 0.34;
+      gaugeRim.position.set(L - 0.42, BY + 0.97, gz);
+      cabPupitreGroup.add(gaugeRim);
+    });
 
     const pillarGeo = trackGeo(new THREE.BoxGeometry(0.08, 1.15, 0.07));
     [-1.08, 1.08].forEach((pz) => {
@@ -3920,6 +4050,7 @@ export function mountParisRideView(
     fo.add(spot);
     fo.add(tgt);
     spot.target = tgt;
+    if (withCabInterior) cabSpotLights.push(spot);
 
     // Cônes volumétriques légers devant les deux phares avant (visibles en tunnel)
     if (withCabInterior) {
@@ -3999,18 +4130,18 @@ export function mountParisRideView(
         gw.visible = showBoa;
       });
     }
-    cabPupitreGroup.visible = !autoMode;
-    vueVoieGroup.visible = autoMode;
+    cabPupitreGroup.visible = !autoMode || drivingMode;
+    vueVoieGroup.visible = autoMode && !drivingMode;
 
-    if (autoMode) {
-      camLocal.set(L / 2 - 1.18, BY + 1.54, 0);
-      lookLocal.set(L / 2 + 16, BY + 0.74, 0);
+    if (autoMode && !drivingMode) {
+      camLocal.set(L / 2 - 1.18, BY + 1.56, 0);
+      lookLocal.set(L / 2 + 16, BY + 0.88, 0);
     } else if (spragueMode) {
-      camLocal.set(L / 2 - 1.24, BY + 1.58, -0.34);
-      lookLocal.set(L / 2 + 16, BY + 0.78, -0.22);
+      camLocal.set(L / 2 - 1.28, BY + 1.58, -0.34);
+      lookLocal.set(L / 2 + 16, BY + 0.88, -0.22);
     } else {
-      camLocal.set(L / 2 - 1.32, BY + 1.54, -0.32);
-      lookLocal.set(L / 2 + 16, BY + 0.72, -0.18);
+      camLocal.set(L / 2 - 1.38, BY + 1.56, autoMode ? 0 : -0.32);
+      lookLocal.set(L / 2 + 16, BY + 0.86, autoMode ? 0 : -0.18);
     }
 
     stationPsds.forEach((psd) => {
@@ -4087,6 +4218,161 @@ export function mountParisRideView(
   let liveTargetTrainId: string | null = options.initialTrainId ?? null;
   let latestLiveTrain: TrainMarker | null = null;
   let liveLegKey = '';
+
+  let drivingMode = false;
+  let driveNotch: DriveNotch = 0;
+  let kvbStatus: KvbStatus = 'ok';
+  let kvbBrakeLatched = false;
+  let highBeam = true;
+  let manualDoorTarget: 0 | 1 = 0;
+  let distToStopM: number | null = null;
+  let currentLimitKmh = 70;
+  let doorAllowed = false;
+  let tractionBlocked = false;
+  let prevManualV = 0;
+  let stopBanner: {
+    label: string;
+    detail: string;
+    tone: 'ok' | 'good' | 'warn';
+    untilMs: number;
+  } | null = null;
+
+  function setDriveNotch(next: DriveNotch) {
+    if (next === driveNotch) return;
+    driveNotch = next;
+    synthAudio.triggerNotchClick(next === -4);
+    updateHud();
+  }
+
+  function stepManualMode(dt: number) {
+    tr.time += dt;
+    if (!tr.target) planNext();
+    const tg = tr.target!;
+    const isRer = isRerLineNum(route.num);
+    const isPneu = ['1', '4', '6', '11', '14'].includes(route.num) && !spragueMode;
+    const frontS = tr.s;
+    const open = isOpen(frontS);
+    const inCurve = isInCurve(frontS);
+
+    const res = stepManualTrain({
+      s: tr.s,
+      v: tr.v,
+      dir: tr.dir,
+      dt,
+      notch: driveNotch,
+      door: tr.door,
+      targetFront: tg.front,
+      isRer,
+      isPneumatic: isPneu,
+      isOpenAir: open,
+      inCurve,
+      kvbBrakeLatched,
+    });
+
+    tr.s = res.s;
+    tr.v = res.v;
+    currentLimitKmh = res.limitKmh;
+    kvbStatus = res.kvbStatus;
+    kvbBrakeLatched = res.kvbBrakeLatched;
+    if (kvbBrakeLatched) driveNotch = -4;
+    if (kvbStatus === 'warn' || kvbStatus === 'ebrake') synthAudio.triggerKvbBeep();
+    tractionBlocked = res.tractionBlockedByDoors;
+    distToStopM = tg.type === 'stn' ? res.distToStopM : null;
+    doorAllowed = tg.type === 'stn' && res.doorAllowed;
+
+    if (res.v > 0.15) {
+      tr.state = 'run';
+      if (tg.type === 'stn' && tg.k !== undefined && tg.k === tr.cur && res.distToStopM < -16.5) {
+        planNext();
+      }
+    } else if (tg.type === 'stn' && tg.k !== undefined && Math.abs(res.distToStopM) <= 16.0) {
+      if (prevManualV >= 0.25) {
+        const grade = evaluateStopPrecision(res.distToStopM);
+        if (grade) {
+          stopBanner = {
+            label: grade.label,
+            detail: `${grade.offsetM >= 0 ? '+' : ''}${grade.offsetM.toFixed(1)} m du repère · Portes [P]`,
+            tone: grade.grade === 'perfect' ? 'good' : 'ok',
+            untilMs: performance.now() + 3800,
+          };
+          window.dispatchEvent(
+            new CustomEvent('paris-ride-stop-grade', {
+              detail: { label: grade.label, offsetM: grade.offsetM, grade: grade.grade },
+            })
+          );
+        }
+      }
+      tr.cur = tg.k;
+      tr.state = 'dwell';
+    }
+
+    if (tg.type === 'stn' && tg.k !== undefined && res.overranStation && res.v > 0.2) {
+      if (tg.k !== tr.cur) {
+        stopBanner = {
+          label: 'Station dépassée !',
+          detail: stations[tg.k].name,
+          tone: 'warn',
+          untilMs: performance.now() + 3200,
+        };
+      }
+      tr.cur = tg.k;
+      planNext();
+    } else if (tg.type === 'turn' && res.distToStopM < 5) {
+      turnBackFor(tr, true);
+      driveNotch = 0;
+      manualDoorTarget = 0;
+      kvbBrakeLatched = false;
+    }
+
+    if (!doorAllowed && manualDoorTarget === 1 && tr.v >= 0.25) {
+      manualDoorTarget = 0;
+    }
+
+    const sp = dt / 1.15;
+    tr.door += Math.max(-sp, Math.min(sp, manualDoorTarget - tr.door));
+    tr.wheel += (tr.v * dt) / WR;
+    smoothEffort += (res.effort - smoothEffort) * Math.min(1, dt * 8);
+    prevManualV = res.v;
+  }
+
+  function toggleDrivingMode() {
+    drivingMode = !drivingMode;
+    if (drivingMode) {
+      liveMode = false;
+      paused = false;
+      speed = 1;
+      kvbBrakeLatched = false;
+      kvbStatus = 'ok';
+      manualDoorTarget = tr.door > 0.45 ? 1 : 0;
+      driveNotch = tr.v > 8 ? 1 : tr.v > 0.5 ? 0 : 0;
+      prevManualV = tr.v;
+      if (!tr.target) planNext();
+      if (view === 'vault') setView('ride');
+    } else {
+      kvbBrakeLatched = false;
+      kvbStatus = 'ok';
+      tractionBlocked = false;
+      distToStopM = null;
+      stopBanner = null;
+      if (!tr.target) planNext();
+    }
+    applyStockVisuals();
+    updateHud();
+  }
+
+  function toggleManualDoors() {
+    if (!drivingMode) return;
+    if (manualDoorTarget === 1) {
+      manualDoorTarget = 0;
+      synthAudio.triggerDoorChime();
+      if (tr.target?.k === tr.cur) planNext();
+    } else if (doorAllowed) {
+      manualDoorTarget = 1;
+      driveNotch = 0;
+      synthAudio.triggerNotchClick(false);
+    }
+    updateHud();
+  }
 
   function updateLiveUi() {
     updateHud();
@@ -4217,6 +4503,15 @@ export function mountParisRideView(
     tr.dwell = 0;
     tr.door = 1;
     tr.target = null;
+    if (drivingMode) {
+      driveNotch = 0;
+      manualDoorTarget = 1;
+      kvbBrakeLatched = false;
+      kvbStatus = 'ok';
+      distToStopM = 0;
+      doorAllowed = true;
+      planNext();
+    }
     setDest();
     updateHud();
   }
@@ -4295,7 +4590,7 @@ export function mountParisRideView(
     for (const unit of [tr, counterTr]) {
       if (unit.dir !== trackDir) continue;
       const dockedFront = stationSc + (trackDir * TRAIN_LEN) / 2;
-      if (Math.abs(unit.s - dockedFront) < 4.5) {
+      if (Math.abs(unit.s - dockedFront) < 16.5) {
         open = Math.max(open, unit.door);
       }
     }
@@ -4306,8 +4601,36 @@ export function mountParisRideView(
     poseTrainUnit(tr);
     poseTrainUnit(counterTr);
     if (cabPupitreGroup.visible) {
-      const targetTilt = tr.state === 'dwell' ? 0.32 : tr.v > 0.5 ? -0.34 : 0;
-      leverPivot.rotation.z += (targetTilt - leverPivot.rotation.z) * 0.14;
+      const targetTilt = drivingMode
+        ? -driveNotch * 0.14
+        : tr.state === 'dwell'
+          ? 0.32
+          : tr.v > 0.5
+            ? -0.34
+            : 0;
+      leverPivot.rotation.z += (targetTilt - leverPivot.rotation.z) * 0.16;
+
+      if (drivingMode) {
+        if (driveNotch === -4 || kvbStatus === 'ebrake')
+          cabNotchLampMat.color.setRGB(3.1, 0.25, 0.2);
+        else if (driveNotch < 0) cabNotchLampMat.color.setRGB(2.6, 1.7, 0.25);
+        else if (driveNotch > 0) cabNotchLampMat.color.setRGB(0.25, 2.5, 0.9);
+        else cabNotchLampMat.color.setRGB(0.75, 0.8, 0.9);
+      } else {
+        cabNotchLampMat.color.setRGB(0.35, 0.65, 0.85);
+      }
+
+      if (tr.door > 0.04) cabDoorLampMat.color.setRGB(2.9, 1.85, 0.25);
+      else cabDoorLampMat.color.setRGB(0.25, 2.2, 0.75);
+
+      if (kvbStatus === 'ebrake') cabKvbLampMat.color.setRGB(3.3, 0.2, 0.18);
+      else if (kvbStatus === 'warn') cabKvbLampMat.color.setRGB(3.0, 1.9, 0.22);
+      else cabKvbLampMat.color.setRGB(0.12, 0.35, 0.2);
+    }
+    if (cabWiperPivot) {
+      const wipe =
+        camEnv === 'out' && !paused ? 1.26 - Math.abs(Math.sin(tr.time * 1.8)) * 0.78 : 1.32;
+      cabWiperPivot.rotation.x += (wipe - cabWiperPivot.rotation.x) * 0.12;
     }
     if (activeStock.hasPsd && !spragueMode) {
       stationPsds.forEach((psd) => {
@@ -4443,6 +4766,12 @@ export function mountParisRideView(
     liveActive = false;
     lastSpeedoKey = '';
     lastSielKey = '';
+    driveNotch = 0;
+    manualDoorTarget = 0;
+    kvbBrakeLatched = false;
+    kvbStatus = 'ok';
+    distToStopM = null;
+    stopBanner = null;
     if (!stationName) liveTargetTrainId = null;
     updateLiveUi();
     eiffelGlance = false;
@@ -4687,6 +5016,9 @@ export function mountParisRideView(
     refreshDoorLineMap(arrets, curIndex, tr.state === 'dwell');
     const voieText = trackText(tr.s - (tr.dir * TRAIN_LEN) / 2);
 
+    const nowMs = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    if (stopBanner && nowMs > stopBanner.untilMs) stopBanner = null;
+
     hudRoot.render(
       createElement(CabHud, {
         ligne: { shortName: route.num, color: route.bg, textColor: route.fg },
@@ -4722,6 +5054,7 @@ export function mountParisRideView(
         },
         allure: `${speed}×`,
         onAllure: () => {
+          if (drivingMode) return;
           liveMode = false;
           speed = speed === 1 ? 2 : speed === 2 ? 4 : 1;
           updateHud();
@@ -4736,11 +5069,49 @@ export function mountParisRideView(
           audioEnabled = synthAudio.setEnabled(!audioEnabled);
           updateHud();
         },
-        direct: liveMode && liveActive,
+        direct: !drivingMode && liveMode && liveActive,
         onDirect: () => {
+          if (drivingMode) drivingMode = false;
           liveMode = !liveMode;
+          applyStockVisuals();
           updateHud();
         },
+        conduite: drivingMode,
+        onConduite: () => toggleDrivingMode(),
+        cran: driveNotch,
+        cranLabel: NOTCH_LABELS[driveNotch],
+        onCran: (n: number) => {
+          if (!drivingMode) toggleDrivingMode();
+          setDriveNotch(clampDriveNotch(n));
+        },
+        onCranDelta: (delta: number) => {
+          if (!drivingMode) toggleDrivingMode();
+          setDriveNotch(clampDriveNotch(driveNotch + delta));
+        },
+        onFreinUrgence: () => {
+          if (!drivingMode) toggleDrivingMode();
+          setDriveNotch(driveNotch === -4 && tr.v < 0.1 ? 0 : -4);
+        },
+        limiteVitesse: drivingMode ? currentLimitKmh : isRerLineNum(route.num) ? 90 : 70,
+        kvbEtat: drivingMode ? kvbStatus : 'ok',
+        distanceArretM: drivingMode ? distToStopM : null,
+        portesOuvertes: tr.door > 0.04 || manualDoorTarget === 1,
+        portesAutorisees: drivingMode ? doorAllowed : false,
+        onPortes: () => toggleManualDoors(),
+        tractionBloqueePortes: drivingMode && tractionBlocked,
+        onKlaxon: () => {
+          if (!audioEnabled) audioEnabled = synthAudio.setEnabled(true);
+          synthAudio.triggerHorn(isRerLineNum(route.num));
+          updateHud();
+        },
+        phares: highBeam,
+        onPhares: () => {
+          highBeam = !highBeam;
+          updateHud();
+        },
+        arretFeedback: stopBanner
+          ? { label: stopBanner.label, detail: stopBanner.detail, tone: stopBanner.tone }
+          : null,
         onQuitter: () => options.onExit?.(),
         pointDeVue:
           (view === 'ride' || view === 'passenger') && route.open.tower && camEnv === 'out'
@@ -4758,18 +5129,23 @@ export function mountParisRideView(
             : null,
       })
     );
-    const speedoKey = `${route.key}|${stockTag}|${kmh}|${tr.state}`;
+    const speedoKey = `${route.key}|${stockTag}|${kmh}|${tr.state}|${drivingMode ? 1 : 0}|${driveNotch}|${kvbStatus}|${currentLimitKmh}|${distToStopM === null ? '' : Math.round(distToStopM)}|${tr.door > 0.05 ? 1 : 0}`;
     if (cabPupitreGroup.visible && speedoKey !== lastSpeedoKey) {
       lastSpeedoKey = speedoKey;
       const ctx = speedoCanvasEl.getContext('2d');
       if (ctx) {
         drawAfficheurVitesse(ctx, {
           vitesse: kmh,
-          limite: 70,
+          limite: drivingMode ? currentLimitKmh : isRerLineNum(route.num) ? 90 : 70,
           materiel: stockTag,
-          etat: tr.state === 'dwell' ? 'À QUAI' : 'VL / KVB',
+          etat: tr.state === 'dwell' ? 'À QUAI' : drivingMode ? 'CONDUITE' : 'PA / AUTO',
           couleurLigne: route.bg,
           libelleLigne: route.num,
+          notch: drivingMode ? NOTCH_LABELS[driveNotch] : undefined,
+          kvbStatus: drivingMode ? kvbStatus : 'ok',
+          distToStopM: drivingMode ? distToStopM : null,
+          doorsOpen: tr.door > 0.05,
+          manualMode: drivingMode,
         });
       }
       speedoTex.needsUpdate = true;
@@ -4833,6 +5209,47 @@ export function mountParisRideView(
       e.stopImmediatePropagation();
       e.stopPropagation();
       options.onExit?.();
+      return;
+    }
+    const targetTag = (e.target as HTMLElement | null)?.tagName;
+    if (targetTag === 'INPUT' || targetTag === 'SELECT' || targetTag === 'TEXTAREA') return;
+
+    const k = e.key.toLowerCase();
+    if (k === 'm') {
+      e.preventDefault();
+      toggleDrivingMode();
+    } else if (k === '1') {
+      setView('vault');
+    } else if (k === '2') {
+      setView('ride');
+    } else if (k === '3') {
+      setView('passenger');
+    } else if (k === 'h' || k === 'k') {
+      e.preventDefault();
+      if (!audioEnabled) audioEnabled = synthAudio.setEnabled(true);
+      synthAudio.triggerHorn(isRerLineNum(route.num));
+      updateHud();
+    } else if (k === 'l') {
+      e.preventDefault();
+      highBeam = !highBeam;
+      updateHud();
+    } else if (drivingMode) {
+      if (e.key === 'ArrowUp' || k === 'z' || k === 'w') {
+        e.preventDefault();
+        setDriveNotch(clampDriveNotch(driveNotch + 1));
+      } else if (e.key === 'ArrowDown' || k === 's') {
+        e.preventDefault();
+        setDriveNotch(clampDriveNotch(driveNotch - 1));
+      } else if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        setDriveNotch(driveNotch === -4 && tr.v < 0.1 ? 0 : -4);
+      } else if (k === '0' || k === 'n') {
+        e.preventDefault();
+        setDriveNotch(0);
+      } else if (k === 'p' || k === 'o') {
+        e.preventDefault();
+        toggleManualDoors();
+      }
     }
   };
   window.addEventListener('keydown', onKeyDown, true);
@@ -4867,15 +5284,18 @@ export function mountParisRideView(
   let lastCamEnv: 'in' | 'out' | 'edge' | null = null;
 
   let lastRenderMs = 0;
-  const minFrameMs = isMobileGpu ? 33 : 16.5; // Cap ProMotion 120Hz -> 30fps iPhone / 60fps Mac
 
   renderer.setAnimationLoop((nowMs) => {
+    const minFrameMs = isMobileGpu && !drivingMode ? 24 : 16.5;
     if (disposed || document.hidden) return;
     if (nowMs - lastRenderMs < minFrameMs) return;
     lastRenderMs = nowMs;
     const dt = Math.min(0.05, clock.getDelta());
     if (!paused) {
-      if (liveMode && latestLiveTrain) {
+      if (drivingMode) {
+        stepManualMode(dt);
+        stepAutonomousUnit(counterTr, dt, 6, false);
+      } else if (liveMode && latestLiveTrain) {
         stepLiveTrain(latestLiveTrain, dt);
         stepAutonomousUnit(counterTr, dt, 6, false);
       } else {
@@ -4885,6 +5305,8 @@ export function mountParisRideView(
         }
       }
     }
+    const elapsedSec = nowMs * 0.001;
+    segmentUpdaters.forEach((fn) => fn(elapsedSec));
     poseTrain();
     const near = nearestStation();
     const fk = focusStation();
@@ -4920,13 +5342,18 @@ export function mountParisRideView(
       car.localToWorld(tmpA.copy(isPassenger ? passCamLocal : camLocal));
       car.localToWorld(tmpB.copy(isPassenger ? passLookLocal : lookLocal));
 
-      // Physique caméra cabine / passager : micro-vibrations rails, tangage freinage et FOV dynamique
+      if (!drivingMode) {
+        // Physique caméra cabine / passager : micro-vibrations rails, tangage freinage et FOV dynamique
+        const curV = paused ? 0 : tr.v;
+        const accel = dt > 0.0001 ? (curV - prevTrainV) / dt : 0;
+        prevTrainV = curV;
+        const targetEffort = Math.max(-1, Math.min(1, accel / 1.4));
+        smoothEffort += (targetEffort - smoothEffort) * Math.min(1, dt * 6);
+      } else {
+        prevTrainV = tr.v;
+      }
       const curV = paused ? 0 : tr.v;
-      const accel = dt > 0.0001 ? (curV - prevTrainV) / dt : 0;
-      prevTrainV = curV;
-      const targetEffort = Math.max(-1, Math.min(1, accel / 1.4));
-      smoothEffort += (targetEffort - smoothEffort) * Math.min(1, dt * 6);
-      const targetNod = Math.max(-0.012, Math.min(0.012, accel * 0.0045));
+      const targetNod = Math.max(-0.012, Math.min(0.012, smoothEffort * 0.0075));
       smoothPitchNod += (targetNod - smoothPitchNod) * Math.min(1, dt * 6.5);
 
       const isPneu = ['1', '4', '6', '11', '14'].includes(route.num);
@@ -4935,7 +5362,8 @@ export function mountParisRideView(
       const vibAmp = (isPneu ? 0.0022 : 0.0046) * speedRatio;
       tmpA.y += Math.sin(cabVibPhase) * vibAmp + Math.sin(cabVibPhase * 2.3) * vibAmp * 0.35;
 
-      const baseFov = isPassenger ? 68 : 62;
+      const portraitBoost = camera.aspect < 1 ? Math.min(18, (1 - camera.aspect) * 32) : 0;
+      const baseFov = (eiffelGlance ? 74 : isPassenger ? 68 : 62) + portraitBoost;
       const targetFov = baseFov + speedRatio * 2.5;
       if (Math.abs(camera.fov - targetFov) > 0.02) {
         camera.fov += (targetFov - camera.fov) * Math.min(1, dt * 4);
@@ -4944,8 +5372,13 @@ export function mountParisRideView(
 
       const fwdDir = tmpC.copy(tmpB).sub(tmpA).normalize();
       if (eiffelGlance && towerWorldPos) {
+        // Place camera at panoramic front-left belvedere outside the cab lintel so the entire 330m Tour Eiffel frames unobstructed
+        car.localToWorld(tmpA.set(L / 2 + 0.15, BY + 1.65, -0.95));
         fwdDir.copy(towerWorldPos).sub(tmpA).normalize();
       } else {
+        if (!isPassenger && camera.aspect < 0.85) {
+          tmpA.addScaledVector(fwdDir, 0.28);
+        }
         if (Math.abs(cabYaw) > 0.0001) fwdDir.applyAxisAngle(WORLD_UP, cabYaw);
         const totalPitch = cabPitch + smoothPitchNod;
         if (Math.abs(totalPitch) > 0.0001) {
@@ -4959,16 +5392,23 @@ export function mountParisRideView(
     }
     if (camEnv !== lastCamEnv) {
       lastCamEnv = camEnv;
-      const showBeams = camEnv !== 'out';
-      for (const b of headlightBeams) b.visible = showBeams;
     }
-    if (tr.state === 'dwell') {
+    const showBeams = camEnv !== 'out';
+    for (const b of headlightBeams) {
+      b.visible = showBeams;
+      b.scale.setScalar(highBeam ? 1.0 : 0.62);
+    }
+    for (const sp of cabSpotLights) {
+      const base = isMobileGpu ? 3.2 : 5.6;
+      sp.intensity = highBeam ? base : base * 0.42;
+    }
+    if (!drivingMode && tr.state === 'dwell') {
       const warnPhase = !paused && tr.dwell > DWELL - 2.3 && tr.dwell < DWELL - 0.5;
       if (warnPhase && !doorWarnPlayed) {
         doorWarnPlayed = true;
         synthAudio.triggerDoorChime();
       }
-    } else {
+    } else if (!drivingMode) {
       doorWarnPlayed = false;
     }
     synthAudio.updateTelemetry({

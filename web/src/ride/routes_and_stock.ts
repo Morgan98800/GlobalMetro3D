@@ -45,6 +45,9 @@ export interface RouteDef {
     air?: string[];
     seine?: [string, string][];
     tower?: [string, string];
+    austerlitzArch?: [string, string];
+    bastilleColumn?: string;
+    grandeArche?: string;
   };
   stations: RouteStationDef[];
 }
@@ -700,13 +703,25 @@ const RAW_ROUTES: Array<{
 
 const OPEN: Record<
   string,
-  { air?: string[]; seine?: [string, string][]; tower?: [string, string] }
+  {
+    air?: string[];
+    seine?: [string, string][];
+    tower?: [string, string];
+    austerlitzArch?: [string, string];
+    bastilleColumn?: string;
+    grandeArche?: string;
+  }
 > = {
-  '1': { air: ['Bastille'] },
+  '1': {
+    air: ['Pont de Neuilly', 'Bastille'],
+    bastilleColumn: 'Bastille',
+    grandeArche: 'Pont de Neuilly',
+  },
   '2': { air: ['Barbès – Rochechouart', 'La Chapelle', 'Stalingrad', 'Jaurès'] },
   '5': {
     air: ['Quai de la Rapée', 'Gare d’Austerlitz'],
     seine: [['Quai de la Rapée', 'Gare d’Austerlitz']],
+    austerlitzArch: ['Quai de la Rapée', 'Gare d’Austerlitz'],
   },
   '6': {
     air: [
@@ -736,7 +751,10 @@ const OPEN: Record<
   '11': { air: ['Coteaux Beauclair'] },
   '13s': { air: ['Châtillon – Montrouge', 'Malakoff – Étienne Dolet'] },
   '13a': { air: ['Châtillon – Montrouge', 'Malakoff – Étienne Dolet'] },
-  A: { air: ['Nanterre-Préfecture', 'Vincennes', 'Val de Fontenay'] },
+  A: {
+    air: ['Nanterre-Préfecture', 'Vincennes', 'Val de Fontenay'],
+    grandeArche: 'Nanterre-Préfecture',
+  },
   B: { air: ['Aulnay-sous-Bois', 'Cité Universitaire', 'Bourg-la-Reine', 'Antony / Saint-Rémy'] },
   C: {
     air: ['Javel', 'Champ de Mars – Tour Eiffel', 'Pont de l’Alma', 'Invalides', 'Choisy-le-Roi'],
@@ -834,8 +852,8 @@ export function resolveParisStockSpec(
   }
   if (up === '14' || up === '4') {
     return {
-      id: 'mp14_ca',
-      label: 'MP 14 CA',
+      id: up === '4' ? 'mp89_ca' : 'mp14_ca',
+      label: up === '4' ? 'MP 89 CA / MP 14 CA' : 'MP 14 CA',
       driverless: true,
       hasPsd: true,
       boa: true,
@@ -912,7 +930,39 @@ export function resolveParisStockSpec(
       ceilingTint: [1.74, 1.76, 1.78],
     };
   }
-  if (up === '7' || up === '7B' || up === '8' || up === '13') {
+  if (up === '7BIS' || up === '7B') {
+    return {
+      id: 'mf88',
+      label: 'MF 88',
+      driverless: false,
+      hasPsd: false,
+      boa: true,
+      bodyHex: 0xf1f1ee,
+      stripeHex: 0x008a8a,
+      roofHex: 0x4d5257,
+      floorHex: 0x36393d,
+      seatHex: 0xb5322c,
+      liningHex: 0xe0e1e4,
+      ceilingTint: [1.74, 1.74, 1.72],
+    };
+  }
+  if (up === '10') {
+    return {
+      id: 'mf19',
+      label: 'MF 19',
+      driverless: false,
+      hasPsd: false,
+      boa: true,
+      bodyHex: 0xf3f5f8,
+      stripeHex: 0x009cde,
+      roofHex: 0x454a52,
+      floorHex: 0x2c323b,
+      seatHex: 0x0072b2,
+      liningHex: 0xe5e8ed,
+      ceilingTint: [1.72, 1.78, 1.84],
+    };
+  }
+  if (up === '7' || up === '8' || up === '13') {
     return {
       id: 'mf77',
       label: 'MF 77',
@@ -1008,11 +1058,15 @@ export function getLibraryGlbUrlsForLine(lineNumOrKey: string): {
       };
     case '3':
     case '3BIS':
-    case '10':
     case '12':
       return {
         cab: '/models/train/library/mf67_cab.glb',
         car: '/models/train/library/mf67_car.glb',
+      };
+    case '10':
+      return {
+        cab: '/models/train/library/mf19_cab.glb',
+        car: '/models/train/library/mf19_car.glb',
       };
     case '4':
       return {
@@ -1047,13 +1101,29 @@ export function getLibraryGlbUrlsForLine(lineNumOrKey: string): {
         car: '/models/train/library/mp14_car.glb',
       };
     case 'A':
+      return {
+        cab: '/models/train/library/rer_a_mi09_cab.glb',
+        car: '/models/train/library/rer_a_mi09_car.glb',
+      };
     case 'B':
+      return {
+        cab: '/models/train/library/rer_b_mi79_cab.glb',
+        car: '/models/train/library/rer_b_mi79_car.glb',
+      };
     case 'C':
+      return {
+        cab: '/models/train/library/rer_c_z2n_cab.glb',
+        car: '/models/train/library/rer_c_z2n_car.glb',
+      };
     case 'D':
+      return {
+        cab: '/models/train/library/rer_d_z20500_cab.glb',
+        car: '/models/train/library/rer_d_z20500_car.glb',
+      };
     case 'E':
       return {
-        cab: `/models/train/rer_generic_${upper}__cab.glb`,
-        car: `/models/train/rer_generic_${upper}__neutral.glb`,
+        cab: '/models/train/library/rer_e_rerng_cab.glb',
+        car: '/models/train/library/rer_e_rerng_car.glb',
       };
     default:
       return {

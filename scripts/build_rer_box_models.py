@@ -339,68 +339,111 @@ def _load_font(size: int):
 
 
 def paint_rer_atlas(length: float, end_mode: str, letter: str | None) -> bytes:
-    im = Image.new("RGB", (ATLAS, ATLAS), BODY_COLOR)
+    # Per-line authentic Paris RER liveries:
+    # A = MI 09 double-deck (red doors, teal band)
+    # B = MI 79/84 single-deck (4 silver doors, IDFM blue skirt, split twin windshield)
+    # C = Z 2N Transilien Carmillon double-deck (2 end red doors, navy band)
+    # D = Z 20500 IDFM double-deck (2 end silver doors, sky blue skirt & nose)
+    # E = RER NG IDFM (black full mask, LED chevrons, sky blue skirt)
+    is_double = letter in (None, "A", "C", "D", "E")
+    is_z2n = letter in ("C", "D")
+
+    if letter == "C":
+        body_col = (214, 218, 224)
+        band_col = (22, 42, 76)       # Transilien navy
+        skirt_col = (201, 25, 64)     # Carmillon stripe
+        door_col = (201, 25, 64)
+        door_fracs = [0.16, 0.84]
+    elif letter == "D":
+        body_col = (234, 238, 242)
+        band_col = (34, 42, 54)
+        skirt_col = (0, 156, 222)     # IDFM sky blue
+        door_col = (206, 212, 220)
+        door_fracs = [0.16, 0.84]
+    elif letter == "B":
+        body_col = (228, 231, 236)
+        band_col = (30, 40, 54)
+        skirt_col = (0, 156, 222)     # IDFM sky blue
+        door_col = (196, 202, 210)
+        door_fracs = [0.14, 0.38, 0.62, 0.86]
+    elif letter == "E":
+        body_col = (238, 241, 245)
+        band_col = (20, 24, 30)
+        skirt_col = (0, 156, 222)     # IDFM sky blue
+        door_col = (220, 226, 234)
+        door_fracs = [0.22, 0.78]
+    else:
+        body_col = BODY_COLOR
+        band_col = BAND_TEAL
+        skirt_col = (0, 140, 116)     # RATP jade pinstripe
+        door_col = DOOR_RED
+        door_fracs = [0.21, 0.50, 0.79]
+
+    im = Image.new("RGB", (ATLAS, ATLAS), body_col)
     d = ImageDraw.Draw(im)
 
-    # ---- side: MI 09 white/silver body, #005A9C teal window band, continuous dark glass, red double doors
     x0, y0, x1, y1 = R_SIDE
     h = y1 - y0
     w = x1 - x0
-    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=BODY_COLOR)
-    # Subtle vertical aluminum panel ribs
+    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=body_col)
     for px in range(x0 + 24, x1, 44):
         d.line([px, y0 + 2, px, y1 - 8], fill=BODY_ALT, width=1)
-    # Dark underframe skirt sill
+    # Underframe sill + accent skirt
     d.rectangle([x0, y1 - int(h * 0.10), x1 - 1, y1 - 1], fill=UNDER_COLOR)
+    d.rectangle([x0, y1 - int(h * 0.21), x1 - 1, y1 - int(h * 0.11)], fill=skirt_col)
 
-    # Teal window band (#005A9C) + continuous dark tinted glass band (#111111)
-    band_top = y0 + int(h * 0.16)
-    band_bot = y0 + int(h * 0.56)
-    glass_top = y0 + int(h * 0.21)
-    glass_bot = y0 + int(h * 0.51)
-    d.rectangle([x0, band_top, x1 - 1, band_bot], fill=BAND_TEAL)
-    # Keep window & door spacing left-right symmetric so both +Z and -Z sides align when mirrored
     pad = 0.09 if end_mode in ("head", "tail") else 0.04
-    gx0 = x0 + int(w * pad)
-    gx1 = x1 - int(w * pad)
-    d.rectangle([gx0, glass_top, gx1, glass_bot], fill=GLASS_COLOR)
-    d.line([gx0, glass_top + 2, gx1, glass_top + 2], fill=(38, 44, 52), width=2)
+    gx0 = x0 + int(w * (0.24 if is_z2n else pad))
+    gx1 = x1 - int(w * (0.24 if is_z2n else pad))
 
-    # Bright Red Double Doors (#D01020)
-    dw = max(14, int(w * DOOR_WIDTH_M / length))
-    door_fracs = [0.21, 0.50, 0.79]
+    if is_double:
+        # Two superposed window bands (upper + lower deck)
+        d.rectangle([x0, y0 + int(h * 0.12), x1 - 1, y0 + int(h * 0.76)], fill=band_col)
+        d.rectangle([x0, y0 + int(h * 0.42), x1 - 1, y0 + int(h * 0.49)], fill=body_col)
+        for gt, gb in ((0.16, 0.39), (0.52, 0.74)):
+            d.rectangle([gx0, y0 + int(h * gt), gx1, y0 + int(h * gb)], fill=GLASS_COLOR)
+            d.line([gx0, y0 + int(h * gt) + 1, gx1, y0 + int(h * gt) + 1], fill=(42, 48, 56), width=1)
+        glass_top = y0 + int(h * 0.18)
+        glass_bot = y0 + int(h * 0.50)
+    else:
+        # Single-deck MI 79 continuous dark window ribbon
+        band_top = y0 + int(h * 0.16)
+        band_bot = y0 + int(h * 0.56)
+        glass_top = y0 + int(h * 0.21)
+        glass_bot = y0 + int(h * 0.51)
+        d.rectangle([x0, band_top, x1 - 1, band_bot], fill=band_col)
+        d.rectangle([gx0, glass_top, gx1, glass_bot], fill=GLASS_COLOR)
+        d.line([gx0, glass_top + 2, gx1, glass_top + 2], fill=(38, 44, 52), width=2)
+
+    dw = max(13, int(w * (1.25 if letter == "B" else DOOR_WIDTH_M) / length))
     for frac in door_fracs:
         cx = x0 + int(w * frac)
         dl, dr = cx - dw // 2, cx + dw // 2
-        d.rectangle([dl, y0 + int(h * 0.14), dr, y1 - int(h * 0.08)], fill=DOOR_RED, outline=(46, 18, 22))
-        # Dual door glass panes + crisp vertical black center gasket
+        d.rectangle([dl, y0 + int(h * 0.12), dr, y1 - int(h * 0.09)], fill=door_col, outline=(36, 38, 44))
         d.rectangle([dl + 3, glass_top, cx - 2, glass_bot], fill=GLASS_COLOR)
         d.rectangle([cx + 2, glass_top, dr - 3, glass_bot], fill=GLASS_COLOR)
-        d.line([cx, y0 + int(h * 0.14), cx, y1 - int(h * 0.08)], fill=(22, 22, 24), width=2)
+        d.line([cx, y0 + int(h * 0.12), cx, y1 - int(h * 0.09)], fill=(22, 22, 24), width=2)
 
-    # Subtle RER A..E line pill on the silver lower flank
     if letter and letter in RER_COLORS:
         lc = RER_COLORS[letter]
         f_rer = _load_font(12)
         f_let = _load_font(13)
-        for bx_frac in (0.33, 0.61):
+        for bx_frac in (0.36, 0.64):
             bx = x0 + int(w * bx_frac) - 22
-            by = y0 + int(h * 0.65)
+            by = y0 + int(h * 0.78)
             d.rounded_rectangle([bx, by, bx + 26, by + 18], radius=3, fill=(18, 22, 28), outline=(255, 255, 255))
             d.text((bx + 3, by + 2), "RER", fill=(255, 255, 255), font=f_rer)
             d.ellipse([bx + 29, by, bx + 47, by + 18], fill=lc, outline=(255, 255, 255))
             txt_c = (17, 24, 39) if letter == "C" else (255, 255, 255)
             d.text((bx + 34, by + 2), letter, fill=txt_c, font=f_let)
 
-    # ---- roof
     rx0, ry0, rx1, ry1 = R_ROOF
     rh = ry1 - ry0
     d.rectangle([rx0, ry0, rx1 - 1, ry1 - 1], fill=ROOF_COLOR)
-    d.rectangle([rx0, ry0, rx1 - 1, ry0 + int(rh * 0.12)], fill=BODY_COLOR)
-    d.rectangle([rx0, ry1 - int(rh * 0.12), rx1 - 1, ry1 - 1], fill=BODY_COLOR)
+    d.rectangle([rx0, ry0, rx1 - 1, ry0 + int(rh * 0.12)], fill=body_col)
+    d.rectangle([rx0, ry1 - int(rh * 0.12), rx1 - 1, ry1 - 1], fill=body_col)
     d.rectangle([rx0 + 24, ry0 + int(rh * 0.30), rx1 - 24, ry1 - int(rh * 0.30)], fill=(120, 124, 130))
 
-    # ---- ends (+X cab/tail nose & -X gangway)
     end_configs = {
         "gangway": ((R_END_FRONT, "gangway"), (R_END_REAR, "gangway")),
         "head": ((R_END_FRONT, "head"), (R_END_REAR, "gangway")),
@@ -412,17 +455,22 @@ def paint_rer_atlas(length: float, end_mode: str, letter: str | None) -> bytes:
         ew, eh = ex1 - ex0, ey1 - ey0
         if kind == "gangway":
             d.rectangle([ex0, ey0, ex1 - 1, ey1 - 1], fill=(54, 58, 62))
-            d.rectangle([ex0, ey0, ex1 - 1, ey0 + 8], fill=BAND_TEAL)
+            d.rectangle([ex0, ey0, ex1 - 1, ey0 + 8], fill=band_col)
             gx_l, gx_r = ex0 + int(ew * 0.25), ex0 + int(ew * 0.75)
             d.rectangle([gx_l, ey0 + int(eh * 0.16), gx_r, ey1 - 6], fill=(30, 32, 36))
             d.rectangle([gx_l + 5, ey0 + int(eh * 0.24), gx_r - 5, ey0 + int(eh * 0.50)], fill=GLASS_COLOR)
         else:
-            # MI 09 Aerodynamic white/silver lower nose, RATP teal mask, angled dark windshield
-            d.rectangle([ex0, ey0, ex1 - 1, ey1 - 1], fill=BODY_COLOR)
-            d.rectangle([ex0 + 2, ey0 + int(eh * 0.16), ex1 - 3, ey0 + int(eh * 0.62)], fill=BAND_TEAL)
+            d.rectangle([ex0, ey0, ex1 - 1, ey1 - 1], fill=body_col)
+            mask_bot = 0.70 if letter == "E" else 0.62
+            d.rectangle([ex0 + 2, ey0 + int(eh * 0.14), ex1 - 3, ey0 + int(eh * mask_bot)], fill=(16, 18, 22) if letter == "E" else band_col)
+            d.rectangle([ex0, ey1 - int(eh * 0.22), ex1 - 1, ey1 - int(eh * 0.11)], fill=skirt_col)
             d.rectangle([ex0, ey1 - int(eh * 0.11), ex1 - 1, ey1 - 1], fill=UNDER_COLOR)
-            d.rectangle([ex0 + 6, ey0 + int(eh * 0.20), ex1 - 7, ey0 + int(eh * 0.54)], fill=GLASS_COLOR)
-            # Destination sign ("RER A..E")
+            if letter in ("B", "C"):
+                # Twin split windshields
+                d.rectangle([ex0 + 6, ey0 + int(eh * 0.20), (ex0 + ex1) // 2 - 3, ey0 + int(eh * 0.54)], fill=GLASS_COLOR)
+                d.rectangle([(ex0 + ex1) // 2 + 3, ey0 + int(eh * 0.20), ex1 - 7, ey0 + int(eh * 0.54)], fill=GLASS_COLOR)
+            else:
+                d.rectangle([ex0 + 6, ey0 + int(eh * 0.20), ex1 - 7, ey0 + int(eh * 0.54)], fill=GLASS_COLOR)
             if kind == "head":
                 d.rectangle([ex0 + int(ew * 0.16), ey0 + int(eh * 0.04), ex0 + int(ew * 0.84), ey0 + int(eh * 0.15)], fill=(10, 12, 16))
                 lbl = f"RER {letter}" if letter else "RER"
@@ -437,7 +485,6 @@ def paint_rer_atlas(length: float, end_mode: str, letter: str | None) -> bytes:
             d.ellipse([lx_l - lr, ly - lr, lx_l + lr, ly + lr], fill=light_col, outline=(36, 38, 42))
             d.ellipse([lx_r - lr, ly - lr, lx_r + lr, ly + lr], fill=light_col, outline=(36, 38, 42))
 
-    # ---- R_UNDER: HVAC grilles + pantograph brushed metallic silver + matte bogies
     ux0, uy0, ux1, uy1 = R_UNDER
     uym = (uy0 + uy1) // 2
     d.rectangle([ux0, uy0, ux1 - 1, uym - 1], fill=PANTO_SILVER)
@@ -448,39 +495,49 @@ def paint_rer_atlas(length: float, end_mode: str, letter: str | None) -> bytes:
     return _encode_png(im)
 
 
-def paint_rer_mr_atlas(length: float, end_mode: str) -> bytes:
+def paint_rer_mr_atlas(length: float, end_mode: str, letter: str | None = None) -> bytes:
+    is_double = letter in (None, "A", "C", "D", "E")
+    is_z2n = letter in ("C", "D")
+    door_fracs = [0.16, 0.84] if is_z2n else ([0.14, 0.38, 0.62, 0.86] if letter == "B" else ([0.22, 0.78] if letter == "E" else [0.21, 0.50, 0.79]))
+
     im = Image.new("RGB", (ATLAS, ATLAS), (0, 214, 24))
     d = ImageDraw.Draw(im)
 
     x0, y0, x1, y1 = R_SIDE
     h = y1 - y0
     w = x1 - x0
-    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=(0, 88, 64))  # satin silver-white enamel
+    d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=(0, 88, 64))
     d.rectangle([x0, y1 - int(h * 0.10), x1 - 1, y1 - 1], fill=(0, 215, 20))
 
-    band_top = y0 + int(h * 0.16)
-    band_bot = y0 + int(h * 0.56)
-    glass_top = y0 + int(h * 0.21)
-    glass_bot = y0 + int(h * 0.51)
-    d.rectangle([x0, band_top, x1 - 1, band_bot], fill=(0, 96, 56))
     pad = 0.09 if end_mode in ("head", "tail") else 0.04
-    gx0 = x0 + int(w * pad)
-    gx1 = x1 - int(w * pad)
-    d.rectangle([gx0, glass_top, gx1, glass_bot], fill=(0, 20, 44))
+    gx0 = x0 + int(w * (0.24 if is_z2n else pad))
+    gx1 = x1 - int(w * (0.24 if is_z2n else pad))
 
-    dw = max(14, int(w * DOOR_WIDTH_M / length))
-    door_fracs = [0.21, 0.50, 0.79]
+    if is_double:
+        d.rectangle([x0, y0 + int(h * 0.12), x1 - 1, y0 + int(h * 0.76)], fill=(0, 96, 56))
+        for gt, gb in ((0.16, 0.39), (0.52, 0.74)):
+            d.rectangle([gx0, y0 + int(h * gt), gx1, y0 + int(h * gb)], fill=(0, 20, 44))
+        glass_top = y0 + int(h * 0.18)
+        glass_bot = y0 + int(h * 0.50)
+    else:
+        band_top = y0 + int(h * 0.16)
+        band_bot = y0 + int(h * 0.56)
+        glass_top = y0 + int(h * 0.21)
+        glass_bot = y0 + int(h * 0.51)
+        d.rectangle([x0, band_top, x1 - 1, band_bot], fill=(0, 96, 56))
+        d.rectangle([gx0, glass_top, gx1, glass_bot], fill=(0, 20, 44))
+
+    dw = max(13, int(w * (1.25 if letter == "B" else DOOR_WIDTH_M) / length))
     for frac in door_fracs:
         cx = x0 + int(w * frac)
         dl, dr = cx - dw // 2, cx + dw // 2
-        d.rectangle([dl, y0 + int(h * 0.14), dr, y1 - int(h * 0.08)], fill=(0, 108, 42))
+        d.rectangle([dl, y0 + int(h * 0.12), dr, y1 - int(h * 0.09)], fill=(0, 108, 42))
         d.rectangle([dl + 3, glass_top, cx - 2, glass_bot], fill=(0, 20, 44))
         d.rectangle([cx + 2, glass_top, dr - 3, glass_bot], fill=(0, 20, 44))
 
     rx0, ry0, rx1, ry1 = R_ROOF
     d.rectangle([rx0, ry0, rx1 - 1, ry1 - 1], fill=(0, 155, 42))
 
-    # Brushed steel pantograph strip in top of R_UNDER
     ux0, uy0, ux1, uy1 = R_UNDER
     d.rectangle([ux0, uy0, ux1 - 1, (uy0 + uy1) // 2 - 1], fill=(0, 56, 205))
 
@@ -493,25 +550,28 @@ def paint_rer_mr_atlas(length: float, end_mode: str) -> bytes:
     return _encode_png(im)
 
 
-def paint_rer_emissive_atlas(length: float, end_mode: str) -> bytes:
+def paint_rer_emissive_atlas(length: float, end_mode: str, letter: str | None = None) -> bytes:
+    is_double = letter in (None, "A", "C", "D", "E")
+    is_z2n = letter in ("C", "D")
     im = Image.new("RGB", (ATLAS, ATLAS), (0, 0, 0))
     d = ImageDraw.Draw(im)
 
     x0, y0, x1, y1 = R_SIDE
     h = y1 - y0
     w = x1 - x0
-    glass_top = y0 + int(h * 0.21)
-    glass_bot = y0 + int(h * 0.51)
-    gx0 = x0 + int(w * 0.05)
-    gx1 = x1 - (int(w * 0.11) if end_mode in ("head", "tail") else int(w * 0.05))
-    gh = max(4, glass_bot - glass_top)
-    # Warm illuminated RER saloon interior with bright overhead LED band + seat silhouettes
-    d.rectangle([gx0, glass_top + 1, gx1, glass_bot - 1], fill=(208, 184, 138))
-    d.rectangle([gx0, glass_top + 1, gx1, glass_top + max(3, gh // 4)], fill=(252, 238, 198))
-    d.rectangle([gx0, glass_top + (gh * 2) // 3, gx1, glass_bot - 1], fill=(138, 116, 82))
-    # Subtle window pillar dividers along the continuous RER ribbon
-    for px in range(gx0 + 18, gx1 - 12, 22):
-        d.line([px, glass_top + 1, px, glass_bot - 1], fill=(38, 34, 30), width=2)
+    pad = 0.09 if end_mode in ("head", "tail") else 0.04
+    gx0 = x0 + int(w * (0.24 if is_z2n else pad))
+    gx1 = x1 - int(w * (0.24 if is_z2n else pad))
+
+    bands = ((0.16, 0.39), (0.52, 0.74)) if is_double else ((0.21, 0.51),)
+    for gt_f, gb_f in bands:
+        gt, gb = y0 + int(h * gt_f), y0 + int(h * gb_f)
+        gh = max(4, gb - gt)
+        d.rectangle([gx0, gt + 1, gx1, gb - 1], fill=(208, 184, 138))
+        d.rectangle([gx0, gt + 1, gx1, gt + max(2, gh // 4)], fill=(252, 238, 198))
+        d.rectangle([gx0, gt + (gh * 2) // 3, gx1, gb - 1], fill=(138, 116, 82))
+        for px in range(gx0 + 18, gx1 - 12, 22):
+            d.line([px, gt + 1, px, gb - 1], fill=(38, 34, 30), width=2)
 
     if end_mode in ("head", "tail"):
         ex0, ey0, ex1, ey1 = R_END_FRONT
@@ -673,9 +733,9 @@ def main(argv=None) -> int:
     if args.livery == "line":
         for letter in "ABCDE":
             targets.extend([
-                (letter, "neutral", P_n, N_n, UV_n, I_n, paint_rer_atlas(args.car_length, "gangway", letter), mr_neutral, em_neutral),
-                (letter, "cab", P_c, N_c, UV_c, I_c, paint_rer_atlas(args.car_length, "head", letter), mr_head, em_head),
-                (letter, "tail", P_t, N_t, UV_t, I_t, paint_rer_atlas(args.car_length, "tail", letter), mr_tail, em_tail),
+                (letter, "neutral", P_n, N_n, UV_n, I_n, paint_rer_atlas(args.car_length, "gangway", letter), paint_rer_mr_atlas(args.car_length, "gangway", letter), paint_rer_emissive_atlas(args.car_length, "gangway", letter)),
+                (letter, "cab", P_c, N_c, UV_c, I_c, paint_rer_atlas(args.car_length, "head", letter), paint_rer_mr_atlas(args.car_length, "head", letter), paint_rer_emissive_atlas(args.car_length, "head", letter)),
+                (letter, "tail", P_t, N_t, UV_t, I_t, paint_rer_atlas(args.car_length, "tail", letter), paint_rer_mr_atlas(args.car_length, "tail", letter), paint_rer_emissive_atlas(args.car_length, "tail", letter)),
             ])
 
     for letter, role, P, N, UV, I, base_png, mr_png, em_png in targets:

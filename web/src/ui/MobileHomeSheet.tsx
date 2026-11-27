@@ -1,4 +1,4 @@
-import { RiBriefcase4Line, RiHome5Line } from '@remixicon/react';
+import { RiSteering2Line, RiHome5Line } from '@remixicon/react';
 import type { ReactNode } from 'react';
 import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button } from './Button';
@@ -31,6 +31,7 @@ export interface MobileHomeSheetProps {
   directDisponible: boolean;
   onDirect?: () => void;
   rtSource?: string;
+  onSimulateur?: () => void;
 }
 
 export function MobileHomeSheet(p: MobileHomeSheetProps) {
@@ -43,7 +44,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
       cran={p.cran}
       onCran={p.onCran}
       repliable
-      hauteurs={{ repli: 68, bas: 156, moyen: 330 }}
+      hauteurs={{ repli: 68, bas: p.onSimulateur ? 208 : 156, moyen: 330 }}
       ariaLabel="Recherche et lignes du réseau"
       barreRepli={
         <div className="flex items-center gap-2">
@@ -84,6 +85,20 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
             onClick={p.onBibliotheque}
           />
         </div>
+
+        {p.onSimulateur && (
+          <Button
+            variant="secondaire"
+            size="sm"
+            fullWidth
+            lampe
+            icon={<RiSteering2Line aria-hidden className="size-4 shrink-0" />}
+            onClick={p.onSimulateur}
+            className="mt-2 min-h-[44px] active:scale-[0.97] motion-reduce:active:scale-100"
+          >
+            Simulateur 3D · Conduire une rame
+          </Button>
+        )}
       </div>
 
       {p.cran !== 'bas' && (

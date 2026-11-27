@@ -304,7 +304,12 @@ export function mapItineraires(
           type: 'marche',
           minutes: Math.max(1, Math.round(leg.durationSec / 60)),
           metres: leg.distanceM > 0 ? Math.round(leg.distanceM) : undefined,
-          consigne: leg.toLabel ? `Correspondance à ${leg.toLabel}` : 'Correspondance à pied',
+          consigne:
+            leg.fromLabel && leg.toLabel && leg.fromLabel !== leg.toLabel
+              ? `Correspondance ${leg.fromLabel} → ${leg.toLabel}`
+              : leg.toLabel
+                ? `Correspondance à ${leg.toLabel}`
+                : 'Correspondance à pied',
         };
       }
       const stops = leg.stops ?? [];

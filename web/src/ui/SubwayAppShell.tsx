@@ -32,6 +32,7 @@ import {
 import { StationDrawer } from './StationDrawer';
 import { StationSearchPalette, type ResultatRecherche } from './StationSearchPalette';
 import { TopNavBar, type Rubrique } from './TopNavBar';
+import { getStationHeritage } from '../data/paris_station_heritage';
 import { cx } from './cx';
 import { uiStore, useUiStore, type EdinburghPreset, type ThemePreference } from './ui_store';
 import { useIsDesktop } from './useMediaQuery';
@@ -134,9 +135,12 @@ export function SubwayAppShell() {
     lineDrawerOpen,
     libraryOpen,
     libraryTab,
+    gpeVisible,
     routePlannerOpen,
     routeOrigin,
     routeDestination,
+    routeAccessibleOnly,
+    routeAvoidLineIds,
     routeCandidates,
     activeItineraryIndex,
     trackedTrain,
@@ -584,6 +588,18 @@ export function SubwayAppShell() {
     },
   };
 
+  const handleOpenSimulator = isParis
+    ? () => {
+        setMenuOpen(false);
+        handlers.onOpenParisRide?.({
+          initialLine: activeLine?.short_name ?? '6',
+          initialStation: selectedStation?.name ?? 'Passy',
+          initialView: 'ride',
+          initialDriveMode: true,
+        });
+      }
+    : undefined;
+
   const handleToggleRealtime = () => {
     handlers.onToggleRealtime?.();
     toast(
@@ -645,6 +661,7 @@ export function SubwayAppShell() {
               ligneActive={activeLine ? toLineRef(activeLine) : null}
               horloge={clockDate}
               compact
+              onSimulateur={handleOpenSimulator}
               className="px-0 pt-0 md:px-0 md:pt-0"
             />
 
@@ -872,6 +889,9 @@ export function SubwayAppShell() {
           };
           const isHome = savedPlaces.home?.label === selectedStation.name;
           const isWork = savedPlaces.work?.label === selectedStation.name;
+          const heritage = isParis
+            ? getStationHeritage(selectedStation.name)
+            : { exits: [], guimard: null };
 
           const drawerNode = (
             <StationDrawer
@@ -882,6 +902,8 @@ export function SubwayAppShell() {
                   alert: mapTrafficAlert(trafficByLine[l.id]),
                 })),
                 accessible: selectedStation.wheelchair_boarding === 1,
+                guimard: heritage.guimard,
+                sorties: heritage.exits,
                 alerte: firstAlert
                   ? {
                       niveau: mapTrafficAlert(firstAlert) ?? 'vigilance',
@@ -1061,6 +1083,30 @@ export function SubwayAppShell() {
             itineraires={itinerairesProps}
             selection={activeItineraryIndex}
             onSelection={(idx) => handlers.onSelectItineraryIndex?.(idx)}
+            accessibleOnly={routeAccessibleOnly}
+            onToggleAccessible={() =>
+              handlers.onUpdateRouteFilters?.({
+                accessibleOnly: !routeAccessibleOnly,
+                avoidLineIds: routeAvoidLineIds,
+              })
+            }
+            avoidLineIds={routeAvoidLineIds}
+            availableLines={lignesEtat}
+            onToggleAvoidLine={(shortName) => {
+              const next = routeAvoidLineIds.includes(shortName)
+                ? routeAvoidLineIds.filter((x) => x !== shortName)
+                : [...routeAvoidLineIds, shortName];
+              handlers.onUpdateRouteFilters?.({
+                accessibleOnly: routeAccessibleOnly,
+                avoidLineIds: next,
+              });
+            }}
+            onClearAvoidLines={() =>
+              handlers.onUpdateRouteFilters?.({
+                accessibleOnly: routeAccessibleOnly,
+                avoidLineIds: [],
+              })
+            }
             onPartager={() => {
               if (!routeOrigin || !routeDestination) return;
               const slug = cityConfig.slug || 'paris';
@@ -1184,6 +1230,7 @@ export function SubwayAppShell() {
           directDisponible={cityConfig.realtime.provider !== 'none'}
           onDirect={handleToggleRealtime}
           rtSource={rtSource}
+          onSimulateur={handleOpenSimulator}
         />
       )}
 
@@ -1194,6 +1241,8 @@ export function SubwayAppShell() {
             <LibraryDrawer
               tab={libraryTab}
               onTabChange={(t) => uiStore.setLibraryOpen(true, t)}
+              gpeVisible={gpeVisible}
+              onToggleGpe={(v) => handlers.onToggleGpe?.(v)}
               onClose={() => uiStore.setLibraryOpen(false)}
               onDriveTrain={
                 isParis

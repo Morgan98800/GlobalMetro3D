@@ -4,6 +4,8 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 const PI = Math.PI;
 const GY = -7;
 
+export type ParisTimeOfDay = 'day' | 'sunset' | 'night';
+
 export interface Pose2D {
   x: number;
   z: number;
@@ -114,7 +116,11 @@ export function buildEiffelTower(
   geos: THREE.BufferGeometry[],
   mats: LandmarkMaterials,
   isMobileGpu: boolean
-): { group: THREE.Group; update: (elapsedSec: number) => void } {
+): {
+  group: THREE.Group;
+  update: (elapsedSec: number, mood?: ParisTimeOfDay) => void;
+  dispose: () => void;
+} {
   const grp = new THREE.Group();
   const latticeParts: THREE.BufferGeometry[] = [];
   const upAxis = new THREE.Vector3(0, 1, 0);
@@ -417,12 +423,91 @@ export function buildEiffelTower(
   if (crowns.instanceColor) crowns.instanceColor.needsUpdate = true;
   grp.add(trunks, crowns);
 
+  // 7. Nocturnal Parisian Tour Eiffel sparkle ("scintillement") point cloud
+  const sparkleCount = isMobileGpu ? 140 : 240;
+  const sparklePos = new Float32Array(sparkleCount * 3);
+  const sparkleColors = new Float32Array(sparkleCount * 3);
+  const sparklePhases = new Float32Array(sparkleCount);
+  const sparkleFreqs = new Float32Array(sparkleCount);
+  let seed = 0x5f3759df;
+  const nextRand = () => {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+
+  for (let i = 0; i < sparkleCount; i++) {
+    // Proportional height distribution: dense on wide lower pillars + 1st/2nd decks, tapering to 274 m
+    const u = nextRand();
+    const y =
+      u < 0.62
+        ? 14 + (u / 0.62) * 101 // 14..115 m
+        : 115 + ((u - 0.62) / 0.38) * 159; // 115..274 m
+    const halfW = eiffelHalfWidth(y);
+    const cornerIdx = i % 4;
+    const [sx, sz] = corners[cornerIdx];
+    const edgeSpan = (nextRand() - 0.5) * (y < 115 ? halfW * 0.65 : halfW * 1.45);
+    const onZFace = i % 8 < 4;
+    const px = onZFace ? sx * halfW * 0.92 + edgeSpan * 0.4 : sx * halfW * 0.96;
+    const pz = onZFace ? sz * halfW * 0.96 : sz * halfW * 0.92 + edgeSpan * 0.4;
+
+    sparklePos[i * 3] = px;
+    sparklePos[i * 3 + 1] = y;
+    sparklePos[i * 3 + 2] = pz;
+
+    // Warm amber-gold base (#ffd47a)
+    sparkleColors[i * 3] = 0.28;
+    sparkleColors[i * 3 + 1] = 0.23;
+    sparkleColors[i * 3 + 2] = 0.13;
+
+    sparklePhases[i] = nextRand() * PI * 2;
+    sparkleFreqs[i] = 4.6 + nextRand() * 5.2;
+  }
+
+  const sparkleGeo = new THREE.BufferGeometry();
+  sparkleGeo.setAttribute('position', new THREE.BufferAttribute(sparklePos, 3));
+  const sparkleColorAttr = new THREE.BufferAttribute(sparkleColors, 3);
+  sparkleGeo.setAttribute('color', sparkleColorAttr);
+  geos.push(sparkleGeo);
+
+  const sparkleMat = new THREE.PointsMaterial({
+    size: isMobileGpu ? 7.0 : 5.8,
+    sizeAttenuation: true,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.95,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const sparkles = new THREE.Points(sparkleGeo, sparkleMat);
+  sparkles.visible = false;
+  grp.add(sparkles);
+
   return {
     group: grp,
-    update(elapsedSec: number) {
+    update(elapsedSec: number, mood: ParisTimeOfDay = 'day') {
       beaconRot.rotation.y = elapsedSec * 0.42;
       const pulse = 0.72 + 0.28 * Math.sin(elapsedSec * 3.1);
       avLight.scale.setScalar(0.85 + 0.25 * pulse);
+
+      if (mood === 'night') {
+        sparkles.visible = true;
+        for (let i = 0; i < sparkleCount; i++) {
+          const wave = Math.sin(elapsedSec * sparkleFreqs[i] + sparklePhases[i]);
+          const strobe = wave > 0.72 ? (wave - 0.72) / 0.28 : 0;
+          const flash = strobe * strobe * 0.95;
+          const base = 0.26;
+          const idx = i * 3;
+          sparkleColors[idx] = Math.min(1, base + flash);
+          sparkleColors[idx + 1] = Math.min(1, base * 0.831 + flash * 0.973);
+          sparkleColors[idx + 2] = Math.min(1, base * 0.478 + flash * 0.902);
+        }
+        sparkleColorAttr.needsUpdate = true;
+      } else {
+        sparkles.visible = false;
+      }
+    },
+    dispose() {
+      sparkleMat.dispose();
     },
   };
 }
@@ -907,69 +992,165 @@ export function buildSeineEnvironment(
   };
 }
 
-/** Procedural Parisian sky dome with Rayleigh gradient, warm sun disc, and soft cloud strata. */
+/** Procedural Parisian sky dome with day, golden-hour sunset, and starry night textures. */
 export function createParisSkyDome(
   textures: THREE.Texture[],
   trackGeo: <T extends THREE.BufferGeometry>(g: T) => T,
   trackMat: <T extends THREE.Material>(m: T) => T
-): THREE.Mesh {
+): { mesh: THREE.Mesh; setMood: (mood: ParisTimeOfDay) => void } {
   const W = 512;
   const H = 256;
-  const c = document.createElement('canvas');
-  c.width = W;
-  c.height = H;
-  const g = c.getContext('2d')!;
 
-  const gr = g.createLinearGradient(0, 0, 0, H);
-  gr.addColorStop(0, '#4f7fb3');
-  gr.addColorStop(0.28, '#87b0d6');
-  gr.addColorStop(0.47, '#d4e2ec');
-  gr.addColorStop(0.52, '#e6e4de');
-  gr.addColorStop(1, '#c8c4bc');
-  g.fillStyle = gr;
-  g.fillRect(0, 0, W, H);
+  const makeSkyTex = (draw: (g: CanvasRenderingContext2D) => void): THREE.CanvasTexture => {
+    const c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    const g = c.getContext('2d')!;
+    draw(g);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    textures.push(t);
+    return t;
+  };
 
-  // Halo solaire chaleureux à l'ouest / sud-ouest de Paris
-  const sunX = W * 0.32;
-  const sunY = H * 0.38;
-  const sunGlow = g.createRadialGradient(sunX, sunY, 4, sunX, sunY, 110);
-  sunGlow.addColorStop(0, 'rgba(255, 252, 236, 0.95)');
-  sunGlow.addColorStop(0.14, 'rgba(255, 235, 190, 0.55)');
-  sunGlow.addColorStop(0.45, 'rgba(255, 218, 165, 0.16)');
-  sunGlow.addColorStop(1, 'rgba(255, 218, 165, 0)');
-  g.fillStyle = sunGlow;
-  g.fillRect(0, 0, W, H);
+  const dayTex = makeSkyTex((g) => {
+    const gr = g.createLinearGradient(0, 0, 0, H);
+    gr.addColorStop(0, '#4f7fb3');
+    gr.addColorStop(0.28, '#87b0d6');
+    gr.addColorStop(0.47, '#d4e2ec');
+    gr.addColorStop(0.52, '#e6e4de');
+    gr.addColorStop(1, '#c8c4bc');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, W, H);
 
-  // Voiles nuageux parisiens discrets
-  for (let i = 0; i < 18; i++) {
-    const cx = ((i * 97 + 40) % (W - 60)) + 30;
-    const cy = H * (0.24 + (i % 5) * 0.042);
-    const rx = 38 + (i % 4) * 18;
-    const ry = 7 + (i % 3) * 3;
-    const cg = g.createRadialGradient(cx, cy, 2, cx, cy, rx);
-    cg.addColorStop(0, 'rgba(255, 253, 248, 0.32)');
-    cg.addColorStop(1, 'rgba(255, 253, 248, 0)');
-    g.save();
-    g.translate(cx, cy);
-    g.scale(1, ry / rx);
-    g.translate(-cx, -cy);
-    g.fillStyle = cg;
-    g.beginPath();
-    g.arc(cx, cy, rx, 0, PI * 2);
-    g.fill();
-    g.restore();
-  }
+    // Halo solaire chaleureux à l'ouest / sud-ouest de Paris
+    const sunX = W * 0.32;
+    const sunY = H * 0.38;
+    const sunGlow = g.createRadialGradient(sunX, sunY, 4, sunX, sunY, 110);
+    sunGlow.addColorStop(0, 'rgba(255, 252, 236, 0.95)');
+    sunGlow.addColorStop(0.14, 'rgba(255, 235, 190, 0.55)');
+    sunGlow.addColorStop(0.45, 'rgba(255, 218, 165, 0.16)');
+    sunGlow.addColorStop(1, 'rgba(255, 218, 165, 0)');
+    g.fillStyle = sunGlow;
+    g.fillRect(0, 0, W, H);
 
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  textures.push(t);
+    // Voiles nuageux parisiens discrets
+    for (let i = 0; i < 18; i++) {
+      const cx = ((i * 97 + 40) % (W - 60)) + 30;
+      const cy = H * (0.24 + (i % 5) * 0.042);
+      const rx = 38 + (i % 4) * 18;
+      const ry = 7 + (i % 3) * 3;
+      const cg = g.createRadialGradient(cx, cy, 2, cx, cy, rx);
+      cg.addColorStop(0, 'rgba(255, 253, 248, 0.32)');
+      cg.addColorStop(1, 'rgba(255, 253, 248, 0)');
+      g.save();
+      g.translate(cx, cy);
+      g.scale(1, ry / rx);
+      g.translate(-cx, -cy);
+      g.fillStyle = cg;
+      g.beginPath();
+      g.arc(cx, cy, rx, 0, PI * 2);
+      g.fill();
+      g.restore();
+    }
+  });
+
+  const sunsetTex = makeSkyTex((g) => {
+    const gr = g.createLinearGradient(0, 0, 0, H);
+    gr.addColorStop(0, '#1c2754');
+    gr.addColorStop(0.24, '#7a3f63');
+    gr.addColorStop(0.42, '#df7343');
+    gr.addColorStop(0.51, '#f9bd70');
+    gr.addColorStop(0.58, '#c2795e');
+    gr.addColorStop(1, '#3d2a34');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, W, H);
+
+    const sunX = W * 0.3;
+    const sunY = H * 0.47;
+    const sunGlow = g.createRadialGradient(sunX, sunY, 5, sunX, sunY, 125);
+    sunGlow.addColorStop(0, 'rgba(255, 246, 210, 0.98)');
+    sunGlow.addColorStop(0.18, 'rgba(255, 198, 112, 0.72)');
+    sunGlow.addColorStop(0.5, 'rgba(244, 118, 68, 0.28)');
+    sunGlow.addColorStop(1, 'rgba(244, 118, 68, 0)');
+    g.fillStyle = sunGlow;
+    g.fillRect(0, 0, W, H);
+
+    for (let i = 0; i < 16; i++) {
+      const cx = ((i * 103 + 25) % (W - 60)) + 30;
+      const cy = H * (0.26 + (i % 5) * 0.045);
+      const rx = 44 + (i % 4) * 20;
+      const ry = 8 + (i % 3) * 3;
+      const cg = g.createRadialGradient(cx, cy, 2, cx, cy, rx);
+      cg.addColorStop(0, 'rgba(255, 206, 148, 0.36)');
+      cg.addColorStop(1, 'rgba(255, 178, 120, 0)');
+      g.save();
+      g.translate(cx, cy);
+      g.scale(1, ry / rx);
+      g.translate(-cx, -cy);
+      g.fillStyle = cg;
+      g.beginPath();
+      g.arc(cx, cy, rx, 0, PI * 2);
+      g.fill();
+      g.restore();
+    }
+  });
+
+  const nightTex = makeSkyTex((g) => {
+    const gr = g.createLinearGradient(0, 0, 0, H);
+    gr.addColorStop(0, '#040814');
+    gr.addColorStop(0.32, '#0c1732');
+    gr.addColorStop(0.5, '#1c243d');
+    gr.addColorStop(1, '#080c18');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, W, H);
+
+    // Subtle stars across the upper Parisian night dome
+    let s = 0x13579bdf;
+    for (let i = 0; i < 140; i++) {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      const sx = (s / 4294967296) * W;
+      s = (s * 1664525 + 1013904223) >>> 0;
+      const sy = (s / 4294967296) * (H * 0.44);
+      s = (s * 1664525 + 1013904223) >>> 0;
+      const alpha = 0.32 + (s / 4294967296) * 0.65;
+      const radius = i % 11 === 0 ? 1.4 : 0.85;
+      g.fillStyle =
+        i % 9 === 0
+          ? `rgba(255, 238, 198, ${alpha.toFixed(2)})`
+          : `rgba(220, 234, 255, ${alpha.toFixed(2)})`;
+      g.beginPath();
+      g.arc(sx, sy, radius, 0, PI * 2);
+      g.fill();
+    }
+  });
+
+  const moodMaps: Record<ParisTimeOfDay, THREE.CanvasTexture> = {
+    day: dayTex,
+    sunset: sunsetTex,
+    night: nightTex,
+  };
+  let currentMood: ParisTimeOfDay = 'day';
 
   const skyGeo = trackGeo(new THREE.SphereGeometry(1050, 32, 16));
   const skyMat = trackMat(
-    new THREE.MeshBasicMaterial({ map: t, side: THREE.BackSide, fog: false, depthWrite: false })
+    new THREE.MeshBasicMaterial({
+      map: dayTex,
+      side: THREE.BackSide,
+      fog: false,
+      depthWrite: false,
+    })
   );
   const m = new THREE.Mesh(skyGeo, skyMat);
   m.renderOrder = -1;
   m.visible = false;
-  return m;
+
+  return {
+    mesh: m,
+    setMood(mood: ParisTimeOfDay) {
+      if (mood === currentMood) return;
+      currentMood = mood;
+      skyMat.map = moodMaps[mood];
+    },
+  };
 }

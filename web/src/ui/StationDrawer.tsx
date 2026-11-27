@@ -10,6 +10,7 @@ import {
   RiWheelchairLine,
 } from '@remixicon/react';
 import { useState } from 'react';
+import type { GuimardInfo, StationExit } from '../data/paris_station_heritage';
 import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button, IconButton } from './Button';
 import { cx } from './cx';
@@ -35,6 +36,8 @@ export interface StationInfo {
   /** Mode Passionné : rang d'affluence sur le réseau (données ouvertes) */
   rangReseau?: string;
   alerte?: { niveau: LineAlert; texte: string } | null;
+  guimard?: GuimardInfo | null;
+  sorties?: StationExit[];
 }
 
 export interface StationDrawerProps {
@@ -67,10 +70,12 @@ export function StationDrawer(props: StationDrawerProps) {
   const basse = (props.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
   const { station, groupes, direct = true, passionne = false, domicile, travail } = props;
   const [cran, setCran] = useState<DetentSheet>('bas');
+  const [sortiesExpanded, setSortiesExpanded] = useState(false);
   const [prevNom, setPrevNom] = useState(station.nom);
   if (prevNom !== station.nom) {
     setPrevNom(station.nom);
     setCran('bas');
+    setSortiesExpanded(false);
   }
 
   const size = basse ? 'md' : 'sm';
@@ -131,6 +136,15 @@ export function StationDrawer(props: StationDrawerProps) {
               Accessible
             </span>
           )}
+          {station.guimard && (
+            <span
+              title={station.guimard.note}
+              aria-label={`Guimard · ${station.guimard.year} — ${station.guimard.note}`}
+              className="chiffres inline-flex h-7 items-center rounded-[7px] bg-[#14533c] px-2 text-[11.5px] font-semibold text-[#ecfdf5] dark:bg-[#14533c] dark:text-[#ecfdf5]"
+            >
+              Guimard · {station.guimard.year}
+            </span>
+          )}
           {passionne && station.rangReseau && (
             <span className="chiffres inline-flex h-7 items-center rounded-[7px] border border-bord bg-surface/85 px-2 text-[11px] font-semibold text-encre-2">
               {station.rangReseau}
@@ -185,6 +199,54 @@ export function StationDrawer(props: StationDrawerProps) {
           onLigne={props.onLigne}
           onSuivre={props.onSuivre}
         />
+
+        {station.sorties && station.sorties.length > 0 && (
+          <section aria-label="Sorties" className="mt-4 border-t border-joint pt-3.5">
+            <header className="flex items-center justify-between pb-2">
+              <h3 className="text-[13px] font-semibold text-encre-2">Sorties</h3>
+              <span className="chiffres text-[12px] font-medium text-encre-3">
+                {station.sorties.length} accès
+              </span>
+            </header>
+            <ul className="space-y-1.5">
+              {(sortiesExpanded ? station.sorties : station.sorties.slice(0, 4)).map((s) => (
+                <li
+                  key={`${s.num}-${s.label}`}
+                  className="flex items-start gap-2.5 py-1 text-[13px] leading-[18px]"
+                >
+                  <span
+                    aria-hidden
+                    className="chiffres mt-[1px] inline-flex h-[24px] min-w-[24px] shrink-0 items-center justify-center rounded-[5px] bg-[#003CA6] px-1 text-[12px] font-bold text-white tabular-nums"
+                  >
+                    {s.num}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="font-medium text-encre">
+                      <span className="sr-only">Sortie {s.num} : </span>
+                      {s.label}
+                    </span>
+                    {s.landmark && (
+                      <p className="text-[12px] leading-[16px] text-encre-3">{s.landmark}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+            {station.sorties.length > 4 && (
+              <button
+                type="button"
+                aria-expanded={sortiesExpanded}
+                onClick={() => setSortiesExpanded((prev) => !prev)}
+                className={cx(
+                  'mt-2 inline-flex w-full items-center justify-center rounded-[10px] border border-bord bg-encart/75 px-3 py-2 text-[12.5px] font-semibold text-encre-2 transition-colors hover:bg-encart hover:text-encre focus-visible:outline-2 focus-visible:outline-focus',
+                  basse && 'min-h-[44px]'
+                )}
+              >
+                {sortiesExpanded ? 'Réduire' : `Voir les ${station.sorties.length} sorties`}
+              </button>
+            )}
+          </section>
+        )}
       </div>
 
       <footer

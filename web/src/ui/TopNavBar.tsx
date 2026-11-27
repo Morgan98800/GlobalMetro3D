@@ -1,4 +1,4 @@
-import { RiArrowDownSLine, RiMenuLine } from '@remixicon/react';
+import { RiArrowDownSLine, RiMenuLine, RiSteering2Line } from '@remixicon/react';
 import type { ReactNode } from 'react';
 import { Horloge } from './Afficheur';
 import { LineBadgeChip } from './LineBadgeChip';
@@ -37,6 +37,8 @@ export interface TopNavBarProps {
   horloge?: Date;
   /** Mode grand public : masque l’horloge et le sélecteur Simple/Passionné de la barre en mode Simple */
   compact?: boolean;
+  /** Accès direct au simulateur de conduite 3D (Paris) */
+  onSimulateur?: () => void;
   className?: string;
 }
 
@@ -129,6 +131,26 @@ export function TopNavBar(props: TopNavBarProps) {
                   />
                 )
               )}
+              {props.onSimulateur &&
+                (large ? (
+                  <Button
+                    size="sm"
+                    variant="discret"
+                    icon={<RiSteering2Line aria-hidden className="size-4 shrink-0" />}
+                    onClick={props.onSimulateur}
+                    className="active:scale-[0.97] motion-reduce:active:scale-100"
+                  >
+                    Simulateur
+                  </Button>
+                ) : (
+                  <IconButton
+                    size="sm"
+                    label="Simulateur de conduite 3D"
+                    icon={<RiSteering2Line aria-hidden className="size-4 shrink-0" />}
+                    onClick={props.onSimulateur}
+                    className="active:scale-[0.97] motion-reduce:active:scale-100"
+                  />
+                ))}
             </nav>
           </>
         )}

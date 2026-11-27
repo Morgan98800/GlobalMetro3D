@@ -50,7 +50,7 @@ export type RealtimeUiState =
 
 export type ActiveInfoModal = 'about' | 'records' | 'method' | 'settings' | null;
 export type EdinburghPreset = 'waverley' | 'castle' | 'calton' | 'scotland' | 'overview';
-export type LibraryTab = 'rames' | 'histoire';
+export type LibraryTab = 'rames' | 'histoire' | 'gpe';
 
 export interface UiHandlers {
   onCitySelect?: (cityId: string) => void;
@@ -75,7 +75,8 @@ export interface UiHandlers {
     initialDest?: string;
     initialStation?: string;
     initialTrainId?: string;
-    initialView?: 'ride' | 'vault';
+    initialView?: 'ride' | 'vault' | 'passenger';
+    initialDriveMode?: boolean;
     initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   }) => void;
   onRequestNearby?: () => void;
@@ -87,6 +88,8 @@ export interface UiHandlers {
   onComputeItinerary?: (origin: RoutePoint | null, destination: RoutePoint | null) => void;
   onSelectItineraryIndex?: (index: number) => void;
   onClearItinerary?: () => void;
+  onToggleGpe?: (visible?: boolean) => void;
+  onUpdateRouteFilters?: (filters: { accessibleOnly: boolean; avoidLineIds: string[] }) => void;
   onToggleGpsFollow?: () => void;
   onFocusMapCamera?: (opts: {
     center: [number, number];
@@ -123,10 +126,13 @@ export interface UiSnapshot {
   lineDrawerOpen: boolean;
   libraryOpen: boolean;
   libraryTab: LibraryTab;
+  gpeVisible: boolean;
   parisRideLoading: boolean;
   routePlannerOpen: boolean;
   routeOrigin: RoutePoint | null;
   routeDestination: RoutePoint | null;
+  routeAccessibleOnly: boolean;
+  routeAvoidLineIds: string[];
   routeCandidates: TransitItinerary[];
   activeItineraryIndex: number;
   routeLoading: boolean;
@@ -236,10 +242,13 @@ let state: UiSnapshot = {
   lineDrawerOpen: false,
   libraryOpen: false,
   libraryTab: 'rames',
+  gpeVisible: false,
   parisRideLoading: false,
   routePlannerOpen: false,
   routeOrigin: null,
   routeDestination: null,
+  routeAccessibleOnly: false,
+  routeAvoidLineIds: [],
   routeCandidates: [],
   activeItineraryIndex: 0,
   routeLoading: false,

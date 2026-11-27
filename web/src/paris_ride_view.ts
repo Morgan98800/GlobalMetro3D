@@ -41,6 +41,7 @@ import {
   buildGrandeArche,
   buildSeineEnvironment,
   createParisSkyDome,
+  type ParisTimeOfDay,
 } from './three/paris_landmarks';
 import {
   buildParisBoulevard,
@@ -48,13 +49,16 @@ import {
   type CityBlockSpec,
 } from './three/paris_cityscape';
 import { buildStationStopMarkers, buildSweptTrack, type TrackSystem } from './three/paris_track';
+import { buildTrackSignalsAndTiv, disposeSignalTextures } from './three/paris_signals';
 import {
   NOTCH_LABELS,
   clampDriveNotch,
+  computeTrackGradePercent,
   evaluateStopPrecision,
   stepManualTrain,
   type DriveNotch,
   type KvbStatus,
+  type SignalAspect,
 } from './ride/drive_physics';
 
 import {
@@ -84,6 +88,7 @@ import {
   createArchetypeMaterials,
   resolveStationArchetype,
 } from './ride/station_architectures';
+import { AsvaAnnouncer } from './ride/asva_announcer';
 import { RideSynthAudio } from './ride/synth_audio';
 
 export {
@@ -287,8 +292,9 @@ export function mountParisRideView(
       `,
     }) as unknown as THREE.MeshPhysicalMaterial;
 
-  const archMats = createArchetypeMaterials(trackMat);
+  const archMats = createArchetypeMaterials(trackMat, textures);
   const synthAudio = new RideSynthAudio();
+  const asva = new AsvaAnnouncer();
   let audioEnabled = false;
   let doorWarnPlayed = false;
 
@@ -1218,6 +1224,9 @@ export function mountParisRideView(
       })
     ),
     signalGreen: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(0.25, 2.9, 0.95) })),
+    signalYellow: trackMat(
+      new THREE.MeshBasicMaterial({ color: new THREE.Color(3.1, 2.05, 0.25) })
+    ),
     signalRed: trackMat(new THREE.MeshBasicMaterial({ color: new THREE.Color(3.1, 0.24, 0.2) })),
     cabMask: trackMat(
       new THREE.MeshPhysicalMaterial({
@@ -2285,8 +2294,37 @@ export function mountParisRideView(
   scene.add(sun);
   scene.add(sun.target);
 
-  const sky = createParisSkyDome(textures, trackGeo, trackMat);
+  const skyCtrl = createParisSkyDome(textures, trackGeo, trackMat);
+  const sky = skyCtrl.mesh;
   scene.add(sky);
+
+  let timeOfDay: ParisTimeOfDay = 'day';
+  let rainEnabled = false;
+
+  // Pooled open-air rain streaks centered around camera in outdoor sections
+  const RAIN_COUNT = isMobileGpu ? 130 : 250;
+  const rainPositions = new Float32Array(RAIN_COUNT * 6);
+  const rainSeeds = new Float32Array(RAIN_COUNT * 3);
+  for (let i = 0; i < RAIN_COUNT; i++) {
+    rainSeeds[i * 3] = (rnd(i * 19 + 3) - 0.5) * 28;
+    rainSeeds[i * 3 + 1] = rnd(i * 31 + 7) * 14;
+    rainSeeds[i * 3 + 2] = (rnd(i * 47 + 11) - 0.5) * 32;
+  }
+  const rainGeo = trackGeo(new THREE.BufferGeometry());
+  const rainPosAttr = new THREE.BufferAttribute(rainPositions, 3);
+  rainGeo.setAttribute('position', rainPosAttr);
+  const rainMat = trackMat(
+    new THREE.LineBasicMaterial({
+      color: 0xcbe2f5,
+      transparent: true,
+      opacity: 0.42,
+      depthWrite: false,
+    })
+  );
+  const rainLines = new THREE.LineSegments(rainGeo, rainMat);
+  rainLines.frustumCulled = false;
+  rainLines.visible = false;
+  scene.add(rainLines);
 
   /* ---------- Station module geometries ---------- */
   function archPts(halfW: number, y0: number, h: number, seg: number, walls: boolean) {
@@ -3011,7 +3049,23 @@ export function mountParisRideView(
     buildStationStopMarkers(g, geos, makeTrackMats(), TRAIN_LEN);
   }
 
-  function tunnelGroup(s0: number, s1: number, geos: THREE.BufferGeometry[]) {
+  const signalUpdaters = new Set<(aspect: SignalAspect) => void>();
+  const makeSignalMats = () => ({
+    housing: M.housing,
+    iron: M.iron,
+    green: M.signalGreen,
+    yellow: M.signalYellow,
+    red: M.signalRed,
+    whitePole: M.cream,
+  });
+
+  function tunnelGroup(
+    s0: number,
+    s1: number,
+    inCurve: boolean,
+    geos: THREE.BufferGeometry[],
+    disposables: Array<() => void>
+  ) {
     const g = new THREE.Group();
     const add = (geo: THREE.BufferGeometry, mat: THREE.Material) => {
       geos.push(geo);
@@ -3050,40 +3104,21 @@ export function mountParisRideView(
       lm.instanceMatrix.needsUpdate = true;
       g.add(lm);
     }
-    // Signaux lumineux latéraux HDR (déclenchent le BloomEffect en tunnel)
-    const signals: number[] = [];
-    for (let s = s0 + 36; s < s1 - 12; s += 72) signals.push(s);
-    if (signals.length) {
-      const boxGeo = new THREE.BoxGeometry(0.18, 0.72, 0.28);
-      const lensGeo = new THREE.SphereGeometry(0.065, 10, 8);
-      geos.push(boxGeo, lensGeo);
-      const sigBoxes = new THREE.InstancedMesh(boxGeo, M.housing, signals.length);
-      const sigGreens = new THREE.InstancedMesh(lensGeo, M.signalGreen, signals.length);
-      const sigReds = new THREE.InstancedMesh(lensGeo, M.signalRed, signals.length);
-      signals.forEach((s, idx) => {
-        pose(s, P);
-        const lat = TW - 0.16;
-        const bx = P.x - Math.sin(P.h) * lat;
-        const bz = P.z + Math.cos(P.h) * lat;
-        m4.makeRotationY(-P.h);
-        m4.setPosition(bx, 2.05, bz);
-        sigBoxes.setMatrixAt(idx, m4);
-
-        const fx = bx - Math.cos(P.h) * 0.1;
-        const fz = bz - Math.sin(P.h) * 0.1;
-        m4.makeRotationY(-P.h);
-        m4.setPosition(fx, 2.22, fz);
-        sigGreens.setMatrixAt(idx, m4);
-
-        m4.makeRotationY(-P.h);
-        m4.setPosition(fx, 1.92, fz);
-        sigReds.setMatrixAt(idx, m4);
-      });
-      sigBoxes.instanceMatrix.needsUpdate = true;
-      sigGreens.instanceMatrix.needsUpdate = true;
-      sigReds.instanceMatrix.needsUpdate = true;
-      g.add(sigBoxes, sigGreens, sigReds);
-    }
+    const sigHandle = buildTrackSignalsAndTiv({
+      s0,
+      s1,
+      isOpenAir: false,
+      isRer: isRerLineNum(route.num),
+      inCurve,
+      pose,
+      geos,
+      mats: makeSignalMats(),
+      isMobileGpu,
+    });
+    sigHandle.updateAspect(currentSignalAspect);
+    signalUpdaters.add(sigHandle.updateAspect);
+    disposables.push(() => signalUpdaters.delete(sigHandle.updateAspect));
+    g.add(sigHandle.group);
     return g;
   }
 
@@ -3112,12 +3147,12 @@ export function mountParisRideView(
   }
 
   let towerWorldPos: THREE.Vector3 | null = null;
-  const segmentUpdaters = new Set<(elapsedSec: number) => void>();
+  const segmentUpdaters = new Set<(elapsedSec: number, mood: ParisTimeOfDay) => void>();
 
   function viaductGroup(
     s0: number,
     s1: number,
-    t: { seine?: boolean; tower?: boolean; austerlitzArch?: boolean } | null,
+    t: { seine?: boolean; tower?: boolean; austerlitzArch?: boolean; curve?: number } | null,
     geos: THREE.BufferGeometry[],
     disposables: Array<() => void>
   ) {
@@ -3128,6 +3163,21 @@ export function mountParisRideView(
     };
     add(sweep(DECK, s0, s1, 4), M.viaduct);
     addTrack(g, geos, s0, s1, false, true);
+    const viaductSignals = buildTrackSignalsAndTiv({
+      s0,
+      s1,
+      isOpenAir: true,
+      isRer: isRerLineNum(route.num),
+      inCurve: Boolean(t?.curve && Math.abs(t.curve) > 0.05),
+      pose,
+      geos,
+      mats: makeSignalMats(),
+      isMobileGpu,
+    });
+    viaductSignals.updateAspect(currentSignalAspect);
+    signalUpdaters.add(viaductSignals.updateAspect);
+    disposables.push(() => signalUpdaters.delete(viaductSignals.updateAspect));
+    g.add(viaductSignals.group);
     const mid = (s0 + s1) / 2;
     const seine = Boolean(t && t.seine);
     const river: [number, number] | null = seine ? [mid - 75, mid + 75] : null;
@@ -3251,7 +3301,10 @@ export function mountParisRideView(
       );
       g.add(builtTower.group);
       segmentUpdaters.add(builtTower.update);
-      disposables.push(() => segmentUpdaters.delete(builtTower.update));
+      disposables.push(() => {
+        segmentUpdaters.delete(builtTower.update);
+        builtTower.dispose();
+      });
       const padGeo = new THREE.CircleGeometry(210, 36);
       geos.push(padGeo);
       const pad = new THREE.Mesh(padGeo, M.ground);
@@ -3313,7 +3366,7 @@ export function mountParisRideView(
   }
 
   function buildSegment(
-    t: { out: [number, number] | null; seine?: boolean; tower?: boolean },
+    t: { out: [number, number] | null; seine?: boolean; tower?: boolean; curve?: number },
     s0: number,
     s1: number,
     tunnelIndex?: number
@@ -3321,15 +3374,16 @@ export function mountParisRideView(
     const geos: THREE.BufferGeometry[] = [];
     const parts: BuiltPart[] = [];
     const disposables: Array<() => void> = [];
-    if (!t.out) parts.push({ g: tunnelGroup(s0, s1, geos), env: 'in' });
+    const inCurve = Boolean(t.curve && Math.abs(t.curve) > 0.05);
+    if (!t.out) parts.push({ g: tunnelGroup(s0, s1, inCurve, geos, disposables), env: 'in' });
     else if (t.out[0] <= s0 + 0.01 && t.out[1] >= s1 - 0.01)
       parts.push({ g: viaductGroup(s0, s1, t, geos, disposables), env: 'out' });
     else if (t.out[0] <= s0 + 0.01) {
       parts.push({ g: viaductGroup(s0, t.out[1], t, geos, disposables), env: 'out' });
-      parts.push({ g: tunnelGroup(t.out[1], s1, geos), env: 'in' });
+      parts.push({ g: tunnelGroup(t.out[1], s1, inCurve, geos, disposables), env: 'in' });
       for (const p of portalParts(t.out[1], -1, geos)) parts.push(p);
     } else {
-      parts.push({ g: tunnelGroup(s0, t.out[0], geos), env: 'in' });
+      parts.push({ g: tunnelGroup(s0, t.out[0], inCurve, geos, disposables), env: 'in' });
       parts.push({ g: viaductGroup(t.out[0], s1, t, geos, disposables), env: 'out' });
       for (const p of portalParts(t.out[0], 1, geos)) parts.push(p);
     }
@@ -3454,13 +3508,15 @@ export function mountParisRideView(
         ? archMats.copperVault
         : archetype === 'louvre_rivoli'
           ? archMats.stoneVault
-          : archetype === 'cathedral'
-            ? archMats.cathedralVault
-            : M.tile;
+          : archetype === 'cite'
+            ? archMats.citeVault
+            : archetype === 'cathedral'
+              ? archMats.cathedralVault
+              : M.tile;
     const archGeos: THREE.BufferGeometry[] = [];
     add(STN.vault, vaultMat);
     add(STN.portal, vaultMat);
-    addArchetypeDecorations(g, archetype, archMats, archGeos);
+    addArchetypeDecorations(g, archetype, archMats, archGeos, name);
     add(STN.platBody, M.platformFace);
     add(STN.platTop, M.slab);
     add(STN.edge, M.edge);
@@ -3595,9 +3651,21 @@ export function mountParisRideView(
     return remaining > 0;
   }
 
+  let lastStreamLo = Number.NaN;
+  let lastStreamHi = Number.NaN;
+  let streamPending = true;
+  let lastLightStation = -1;
+  let lastCamEnv: 'in' | 'out' | 'edge' | null = null;
+
   function clearAll() {
     towerWorldPos = null;
     segmentUpdaters.clear();
+    signalUpdaters.clear();
+    lastStreamLo = Number.NaN;
+    lastStreamHi = Number.NaN;
+    streamPending = true;
+    lastLightStation = -1;
+    lastCamEnv = null;
     built.forEach((o) => {
       o.parts.forEach((p) => scene.remove(p.g));
       o.dispose();
@@ -3606,9 +3674,43 @@ export function mountParisRideView(
   }
 
   const FOG_IN = new THREE.Color(0x0c0a08);
-  const FOG_OUT = new THREE.Color(0xc3cbd0);
+  const FOG_OUT_DAY = new THREE.Color(0xc3cbd0);
+  const FOG_OUT_SUNSET = new THREE.Color(0xd29770);
+  const FOG_OUT_NIGHT = new THREE.Color(0x0d1528);
+  const HEMI_DAY_SKY = new THREE.Color(0xfff1dc);
+  const HEMI_SUNSET_SKY = new THREE.Color(0xffcaa0);
+  const HEMI_NIGHT_SKY = new THREE.Color(0x3a5182);
+  const HEMI_DAY_GND = new THREE.Color(0x3a2c1e);
+  const HEMI_SUNSET_GND = new THREE.Color(0x3d2433);
+  const HEMI_NIGHT_GND = new THREE.Color(0x161b29);
   let camEnv: 'in' | 'out' | 'edge' = 'in';
   let openMix = 0;
+
+  function setTimeOfDay(next: ParisTimeOfDay) {
+    timeOfDay = next;
+    skyCtrl.setMood(next);
+    if (next === 'night') {
+      M.towerGlass.emissiveIntensity = 1.85;
+      M.cabinLit.emissiveIntensity = 1.45;
+      M.building.emissive.setHex(0x1b140b);
+      M.buildingOchre.emissive.setHex(0x1d140a);
+      M.buildingModern.emissive.setHex(0x141b24);
+    } else if (next === 'sunset') {
+      M.towerGlass.emissiveIntensity = 1.15;
+      M.cabinLit.emissiveIntensity = 0.85;
+      M.building.emissive.setHex(0x0b0704);
+      M.buildingOchre.emissive.setHex(0x0c0804);
+      M.buildingModern.emissive.setHex(0x06080b);
+    } else {
+      M.towerGlass.emissiveIntensity = 0.75;
+      M.cabinLit.emissiveIntensity = 0.45;
+      M.building.emissive.setHex(0x000000);
+      M.buildingOchre.emissive.setHex(0x000000);
+      M.buildingModern.emissive.setHex(0x000000);
+    }
+    applyEnv(tr.s, 1);
+    updateHud();
+  }
 
   function applyEnv(cs: number, dt: number) {
     const open = isOpen(cs);
@@ -3623,15 +3725,38 @@ export function mountParisRideView(
     const target = open ? 1 : near ? 0.25 * (1 - portalDist(cs) / 150) : 0;
     openMix += (target - openMix) * Math.min(1, dt * 2.5);
     const o = openMix;
+    const outFog =
+      timeOfDay === 'night' ? FOG_OUT_NIGHT : timeOfDay === 'sunset' ? FOG_OUT_SUNSET : FOG_OUT_DAY;
     if (scene.fog instanceof THREE.FogExp2) {
-      scene.fog.color.copy(FOG_IN).lerp(FOG_OUT, o);
-      scene.fog.density = 0.0085 + (0.00055 - 0.0085) * o;
+      scene.fog.color.copy(FOG_IN).lerp(outFog, o);
+      const outDensity =
+        timeOfDay === 'night' ? 0.00085 : timeOfDay === 'sunset' ? 0.00068 : 0.00055;
+      scene.fog.density = 0.0085 + (outDensity - 0.0085) * o;
     }
-    sun.intensity = 1.9 * o;
-    hemi.intensity = 0.42 + 0.6 * o;
+    if (timeOfDay === 'night') {
+      sun.color.setHex(0x7c9ad8);
+      sun.intensity = 0.36 * o;
+      hemi.color.copy(HEMI_DAY_SKY).lerp(HEMI_NIGHT_SKY, o);
+      hemi.groundColor.copy(HEMI_DAY_GND).lerp(HEMI_NIGHT_GND, o);
+      hemi.intensity = 0.42 + 0.16 * o;
+      sun.position.set(camera.position.x - 120, camera.position.y + 165, camera.position.z + 60);
+    } else if (timeOfDay === 'sunset') {
+      sun.color.setHex(0xff9c54);
+      sun.intensity = 1.65 * o;
+      hemi.color.copy(HEMI_DAY_SKY).lerp(HEMI_SUNSET_SKY, o);
+      hemi.groundColor.copy(HEMI_DAY_GND).lerp(HEMI_SUNSET_GND, o);
+      hemi.intensity = 0.42 + 0.45 * o;
+      sun.position.set(camera.position.x - 210, camera.position.y + 72, camera.position.z + 90);
+    } else {
+      sun.color.setHex(0xfff3e0);
+      sun.intensity = 1.9 * o;
+      hemi.color.copy(HEMI_DAY_SKY);
+      hemi.groundColor.copy(HEMI_DAY_GND);
+      hemi.intensity = 0.42 + 0.6 * o;
+      sun.position.set(camera.position.x + 120, camera.position.y + 220, camera.position.z + 60);
+    }
     sky.visible = camEnv !== 'in';
     sky.position.copy(camera.position);
-    sun.position.set(camera.position.x + 120, camera.position.y + 220, camera.position.z + 60);
     sun.target.position.copy(camera.position);
   }
 
@@ -3700,6 +3825,7 @@ export function mountParisRideView(
     group.traverse((obj) => {
       const mesh = obj as THREE.Mesh;
       if (!mesh.isMesh) return;
+      mesh.frustumCulled = false;
       const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       for (const mat of mats) {
         if (!mat) continue;
@@ -3793,12 +3919,18 @@ export function mountParisRideView(
       });
   }
 
+  let lastTrDoorOpen: boolean | null = null;
+  let lastCounterDoorOpen: boolean | null = null;
+
   function syncCarVisibility(v: 'vault' | 'ride' | 'passenger') {
-    const useGlb = activeGlbReady && !spragueMode && tr.door <= 0.02;
+    lastTrDoorOpen = tr.door > 0.02;
+    lastCounterDoorOpen = counterTr.door > 0.02;
     for (const unit of [tr, counterTr]) {
+      const useGlbForUnit = activeGlbReady && !spragueMode && unit.door <= 0.02;
       unit.cars.forEach((c, idx) => {
-        const keepInnerForCab = v === 'ride' && unit === tr && idx === 0;
-        const showGlb = useGlb && !keepInnerForCab;
+        const keepInnerForView =
+          unit === tr && ((v === 'ride' && idx === 0) || (v === 'passenger' && idx === 1));
+        const showGlb = useGlbForUnit && !keepInnerForView;
         c.glbSlot.visible = showGlb;
         c.inner.visible = !showGlb;
       });
@@ -3836,6 +3968,9 @@ export function mountParisRideView(
         i === NC - 1,
         Boolean(cls[i])
       );
+      inner.traverse((obj) => {
+        if ((obj as THREE.Mesh).isMesh) obj.frustumCulled = false;
+      });
       inner.position.x = -L / 2;
       const glbSlot = new THREE.Group();
       glbSlot.position.y = 0.05;
@@ -4237,10 +4372,141 @@ export function mountParisRideView(
     untilMs: number;
   } | null = null;
 
+  let prevManualAccel = 0;
+  let currentSignalAspect: SignalAspect = 'VL';
+  let currentTivKmh: number | null = null;
+  let prevSignalAspect: SignalAspect = 'VL';
+  const BOARDING_DURATION_SEC = 4.2;
+  const BUZZER_LEAD_SEC = 1.1;
+  let boardingElapsedSec = 0;
+  let doorCloseCountdownSec = 0;
+
+  type QuaiCameraPreset = 'head' | 'mid' | 'tail' | 'overpass';
+  let quaiCamera: QuaiCameraPreset = 'head';
+  let quaiSide: 1 | -1 = 1;
+
   function setDriveNotch(next: DriveNotch) {
     if (next === driveNotch) return;
     driveNotch = next;
     synthAudio.triggerNotchClick(next === -4);
+    updateHud();
+  }
+
+  function maybeAnnounceAsva(
+    target: { type: 'stn' | 'turn'; k?: number; front: number } | null,
+    distM: number,
+    speedMps: number
+  ) {
+    if (!audioEnabled || paused || view === 'vault') return;
+    if (!target || target.type !== 'stn' || target.k === undefined) return;
+    const st = stations[target.k];
+    if (!st) return;
+    const isTerminus = target.k === 0 || target.k === stations.length - 1;
+    if (distM >= 70 && distM <= 195 && speedMps > 2.2) {
+      asva.announceApproach(st.name, {
+        isTerminus,
+        onChime: () => synthAudio.triggerAsvaChime(),
+      });
+    } else if (distM >= -8 && distM <= 22 && (speedMps > 0.3 || tr.state === 'dwell')) {
+      asva.announceArrival(st.name, { isTerminus });
+    }
+  }
+
+  function repositionCounterTrainNear(anchorIdx: number) {
+    const cDir: 1 | -1 = tr.dir > 0 ? -1 : 1;
+    if (stations.length < 2) return;
+    const clampedIdx = Math.max(0, Math.min(stations.length - 1, anchorIdx));
+    const anchorSt = stations[clampedIdx];
+    const altIdx = Math.max(0, Math.min(stations.length - 1, clampedIdx + tr.dir));
+    const fromIdx = altIdx === clampedIdx ? (clampedIdx > 0 ? clampedIdx - 1 : 1) : altIdx;
+    const aheadOfTarget = (stations[fromIdx].sc - anchorSt.sc) * cDir < 0;
+    if (aheadOfTarget) {
+      const span = Math.abs(stations[fromIdx].sc - anchorSt.sc);
+      const cStartS = anchorSt.sc - cDir * Math.min(135, span * 0.45 + 45);
+      Object.assign(counterTr, {
+        dir: cDir,
+        cur: fromIdx,
+        v: 11.5,
+        state: 'run' as const,
+        dwell: 0,
+        door: 0,
+        s: cStartS,
+        target: {
+          type: 'stn' as const,
+          k: clampedIdx,
+          front: anchorSt.sc + (cDir * TRAIN_LEN) / 2,
+        },
+      });
+    } else {
+      Object.assign(counterTr, {
+        dir: cDir,
+        cur: fromIdx,
+        v: 0,
+        state: 'dwell' as const,
+        dwell: 1.5,
+        door: 0,
+        s: stations[fromIdx].sc + (cDir * TRAIN_LEN) / 2,
+        target: null,
+      });
+      planNextFor(counterTr);
+    }
+    setDest();
+  }
+
+  function reverseDriveDirection() {
+    tr.dir = tr.dir === 1 ? -1 : 1;
+    tr.v = 0;
+    driveNotch = 0;
+    kvbStatus = 'ok';
+    kvbBrakeLatched = false;
+    prevManualAccel = 0;
+    prevManualV = 0;
+    lastDoorMapKey = '';
+    asva.reset();
+    const nk = nearestStation();
+    const st = stations[nk];
+    if (st && Math.abs(tr.s - st.sc) <= 42) {
+      tr.cur = nk;
+      tr.s = st.sc + (tr.dir * TRAIN_LEN) / 2;
+      tr.state = 'dwell';
+      tr.dwell = 0;
+      distToStopM = 0;
+      stopBanner = {
+        label: 'Sens inversé',
+        detail: `${st.name} → ${tr.dir > 0 ? stations[stations.length - 1].name : stations[0].name}`,
+        tone: 'ok',
+        untilMs: performance.now() + 2600,
+      };
+    } else {
+      // Find the nearest station strictly behind tr.s in the new travel direction
+      // so planNext() always targets the very next station directly ahead.
+      let behindIdx = tr.dir > 0 ? -1 : stations.length;
+      if (tr.dir > 0) {
+        for (let i = 0; i < stations.length; i++) {
+          if (stations[i].sc + TRAIN_LEN / 2 < tr.s - 12) behindIdx = i;
+        }
+      } else {
+        for (let i = stations.length - 1; i >= 0; i--) {
+          if (stations[i].sc - TRAIN_LEN / 2 > tr.s + 12) behindIdx = i;
+        }
+      }
+      tr.cur = behindIdx;
+      tr.state = 'run';
+      stopBanner = {
+        label: 'Sens inversé',
+        detail: `Direction ${tr.dir > 0 ? stations[stations.length - 1].name : stations[0].name}`,
+        tone: 'ok',
+        untilMs: performance.now() + 2600,
+      };
+    }
+    planNext();
+    repositionCounterTrainNear(Math.max(0, Math.min(stations.length - 1, nk)));
+    setDest();
+    focusKey = '';
+    lastTrDoorOpen = null;
+    syncCarVisibility(view);
+    poseTrain();
+    if (view === 'vault') aimVault(focusStation());
     updateHud();
   }
 
@@ -4254,6 +4520,19 @@ export function mountParisRideView(
     const open = isOpen(frontS);
     const inCurve = isInCurve(frontS);
 
+    if (manualDoorTarget === 1 && tr.door > 0.7 && doorCloseCountdownSec <= 0) {
+      boardingElapsedSec = Math.min(BOARDING_DURATION_SEC, boardingElapsedSec + dt);
+    }
+    if (doorCloseCountdownSec > 0) {
+      doorCloseCountdownSec -= dt;
+      if (doorCloseCountdownSec <= 0) {
+        doorCloseCountdownSec = 0;
+        manualDoorTarget = 0;
+        if (tg.type === 'stn' && tg.k === tr.cur) planNext();
+      }
+    }
+
+    const gradePct = computeTrackGradePercent(frontS, open);
     const res = stepManualTrain({
       s: tr.s,
       v: tr.v,
@@ -4267,18 +4546,33 @@ export function mountParisRideView(
       isOpenAir: open,
       inCurve,
       kvbBrakeLatched,
+      stockId: activeStock.id,
+      prevAccel: prevManualAccel,
+      gradePercent: gradePct,
     });
+
+    prevManualAccel = res.accel;
+    currentTivKmh = res.tivKmh;
+    if (res.signalAspect !== currentSignalAspect) {
+      currentSignalAspect = res.signalAspect;
+      signalUpdaters.forEach((fn) => fn(currentSignalAspect));
+      if (
+        prevSignalAspect === 'VL' &&
+        (currentSignalAspect === 'A' || currentSignalAspect === 'S')
+      ) {
+        synthAudio.triggerCrocodileChime();
+      }
+      prevSignalAspect = currentSignalAspect;
+    }
 
     tr.s = res.s;
     tr.v = res.v;
     currentLimitKmh = res.limitKmh;
     kvbStatus = res.kvbStatus;
-    kvbBrakeLatched = res.kvbBrakeLatched;
-    if (kvbBrakeLatched) driveNotch = -4;
-    if (kvbStatus === 'warn' || kvbStatus === 'ebrake') synthAudio.triggerKvbBeep();
-    tractionBlocked = res.tractionBlockedByDoors;
+    kvbBrakeLatched = false;
+    tractionBlocked = false;
     distToStopM = tg.type === 'stn' ? res.distToStopM : null;
-    doorAllowed = tg.type === 'stn' && res.doorAllowed;
+    doorAllowed = true;
 
     if (res.v > 0.15) {
       tr.state = 'run';
@@ -4321,11 +4615,8 @@ export function mountParisRideView(
       turnBackFor(tr, true);
       driveNotch = 0;
       manualDoorTarget = 0;
+      doorCloseCountdownSec = 0;
       kvbBrakeLatched = false;
-    }
-
-    if (!doorAllowed && manualDoorTarget === 1 && tr.v >= 0.25) {
-      manualDoorTarget = 0;
     }
 
     const sp = dt / 1.15;
@@ -4333,6 +4624,7 @@ export function mountParisRideView(
     tr.wheel += (tr.v * dt) / WR;
     smoothEffort += (res.effort - smoothEffort) * Math.min(1, dt * 8);
     prevManualV = res.v;
+    maybeAnnounceAsva(tg, res.distToStopM, res.v);
   }
 
   function toggleDrivingMode() {
@@ -4344,14 +4636,18 @@ export function mountParisRideView(
       kvbBrakeLatched = false;
       kvbStatus = 'ok';
       manualDoorTarget = tr.door > 0.45 ? 1 : 0;
+      boardingElapsedSec = manualDoorTarget === 1 ? BOARDING_DURATION_SEC : 0;
+      doorCloseCountdownSec = 0;
       driveNotch = tr.v > 8 ? 1 : tr.v > 0.5 ? 0 : 0;
       prevManualV = tr.v;
+      prevManualAccel = 0;
       if (!tr.target) planNext();
       if (view === 'vault') setView('ride');
     } else {
       kvbBrakeLatched = false;
       kvbStatus = 'ok';
       tractionBlocked = false;
+      doorCloseCountdownSec = 0;
       distToStopM = null;
       stopBanner = null;
       if (!tr.target) planNext();
@@ -4363,15 +4659,23 @@ export function mountParisRideView(
   function toggleManualDoors() {
     if (!drivingMode) return;
     if (manualDoorTarget === 1) {
-      manualDoorTarget = 0;
+      if (doorCloseCountdownSec > 0) {
+        // Re-clicking during buzzer cancels closing and re-opens cleanly
+        doorCloseCountdownSec = 0;
+        synthAudio.triggerNotchClick(false);
+        updateHud();
+        return;
+      }
+      doorCloseCountdownSec = BUZZER_LEAD_SEC;
       synthAudio.triggerDoorChime();
-      if (tr.target?.k === tr.cur) planNext();
-    } else if (doorAllowed) {
+      updateHud();
+    } else {
       manualDoorTarget = 1;
-      driveNotch = 0;
+      doorCloseCountdownSec = 0;
+      boardingElapsedSec = 0;
       synthAudio.triggerNotchClick(false);
+      updateHud();
     }
-    updateHud();
   }
 
   function updateLiveUi() {
@@ -4416,6 +4720,9 @@ export function mountParisRideView(
     } else if (unit.target) {
       const tg = unit.target;
       const rem = (tg.front - unit.s) * unit.dir;
+      if (isPrimary && tg.type === 'stn') {
+        maybeAnnounceAsva(tg, rem, unit.v);
+      }
       unit.v = Math.min(VMAX, unit.v + ACC * dt);
       if (rem <= (unit.v * unit.v) / (2 * A_BRAKE)) {
         unit.v = Math.min(unit.v, Math.sqrt(Math.max(0, 2 * A_BRAKE * rem)));
@@ -4493,9 +4800,19 @@ export function mountParisRideView(
   function jumpToStation(stationName: string) {
     const idx = resolveStationIndex(stationName);
     if (idx < 0 || idx >= stations.length) return;
+    asva.reset();
     liveMode = false;
     liveTargetTrainId = null;
     liveLegKey = '';
+    eiffelGlance = false;
+    cabYaw = 0;
+    cabPitch = 0;
+    focusKey = '';
+    doorCloseCountdownSec = 0;
+    boardingElapsedSec = BOARDING_DURATION_SEC;
+    prevManualAccel = 0;
+    prevManualV = 0;
+    stopBanner = null;
     tr.cur = idx;
     tr.s = stations[idx].sc + (tr.dir * TRAIN_LEN) / 2;
     tr.v = 0;
@@ -4512,7 +4829,25 @@ export function mountParisRideView(
       doorAllowed = true;
       planNext();
     }
+    openMix = isOpen(tr.s) ? 1 : 0;
+    lastStreamLo = Number.NaN;
+    lastStreamHi = Number.NaN;
+    streamPending = true;
+    lastLightStation = -1;
+    lastCamEnv = null;
+    repositionCounterTrainNear(idx);
     setDest();
+    lastTrDoorOpen = null;
+    syncCarVisibility(view);
+    stream(idx - 2, idx + 2, 99);
+    poseTrain();
+    placeLights(idx);
+    lastLightStation = idx;
+    applyEnv(stations[idx].sc, 1);
+    if (view === 'vault') {
+      aimVault(idx);
+      focusKey = `${idx}:${tr.dir}:${quaiCamera}:${quaiSide}`;
+    }
     updateHud();
   }
 
@@ -4598,6 +4933,11 @@ export function mountParisRideView(
   }
 
   function poseTrain() {
+    const trDoorOpen = tr.door > 0.02;
+    const counterDoorOpen = counterTr.door > 0.02;
+    if (trDoorOpen !== lastTrDoorOpen || counterDoorOpen !== lastCounterDoorOpen) {
+      syncCarVisibility(view);
+    }
     poseTrainUnit(tr);
     poseTrainUnit(counterTr);
     if (cabPupitreGroup.visible) {
@@ -4629,8 +4969,10 @@ export function mountParisRideView(
     }
     if (cabWiperPivot) {
       const wipe =
-        camEnv === 'out' && !paused ? 1.26 - Math.abs(Math.sin(tr.time * 1.8)) * 0.78 : 1.32;
-      cabWiperPivot.rotation.x += (wipe - cabWiperPivot.rotation.x) * 0.12;
+        rainEnabled && camEnv !== 'in' && !paused
+          ? 1.26 - Math.abs(Math.sin(tr.time * 3.1)) * 0.86
+          : 1.32;
+      cabWiperPivot.rotation.x += (wipe - cabWiperPivot.rotation.x) * 0.16;
     }
     if (activeStock.hasPsd && !spragueMode) {
       stationPsds.forEach((psd) => {
@@ -4667,10 +5009,23 @@ export function mountParisRideView(
   }
 
   function aimVault(k: number) {
-    const P = pose(stations[k].sc, { x: 0, z: 0, h: 0 });
+    const st = stations[k];
+    const P = pose(st.sc, { x: 0, z: 0, h: 0 });
     const d = tr.dir;
-    toWorld(P, d * 36, 2.75, d * 4.85, camera.position);
-    toWorld(P, -d * 6, 1.85, d * 1.5, controls.target);
+    const side = d * quaiSide;
+    if (quaiCamera === 'mid') {
+      toWorld(P, d * 4, 2.25, side * 5.3, camera.position);
+      toWorld(P, -d * 4, 1.75, side * 0.6, controls.target);
+    } else if (quaiCamera === 'tail') {
+      toWorld(P, -d * 34, 2.7, side * 4.95, camera.position);
+      toWorld(P, d * 8, 1.85, side * 1.2, controls.target);
+    } else if (quaiCamera === 'overpass') {
+      toWorld(P, d * 47, st.air ? 5.9 : 4.15, side * 3.85, camera.position);
+      toWorld(P, -d * 8, 1.75, side * 0.6, controls.target);
+    } else {
+      toWorld(P, d * 36, 2.75, side * 4.85, camera.position);
+      toWorld(P, -d * 6, 1.85, side * 1.4, controls.target);
+    }
     controls.update();
   }
 
@@ -4684,12 +5039,20 @@ export function mountParisRideView(
   function setView(v: 'vault' | 'ride' | 'passenger') {
     view = v;
     focusKey = '';
+    eiffelGlance = false;
     controls.enabled = v === 'vault';
     cabYaw = 0;
     cabPitch = 0;
     camera.fov = v === 'ride' ? 62 : v === 'passenger' ? 68 : 52;
     camera.updateProjectionMatrix();
     syncCarVisibility(v);
+    if (v === 'vault' && stations.length > 0) {
+      const fk = focusStation();
+      aimVault(fk);
+      placeLights(fk);
+      lastLightStation = fk;
+      focusKey = `${fk}:${tr.dir}:${quaiCamera}:${quaiSide}`;
+    }
     updateHud();
   }
 
@@ -4730,6 +5093,13 @@ export function mountParisRideView(
   let badgeTex: THREE.CanvasTexture | null = null;
   function setRoute(key: string, stationName?: string, destName?: string) {
     if (route && route.key !== key) customStockGlb = null;
+    asva.reset();
+    lastDoorMapKey = '';
+    currentSignalAspect = 'VL';
+    prevSignalAspect = 'VL';
+    currentTivKmh = null;
+    prevManualAccel = 0;
+    doorCloseCountdownSec = 0;
     route = ROUTES.find((r) => r.key === key) || ROUTES[0];
     clearAll();
     if (badgeTex) badgeTex.dispose();
@@ -4770,6 +5140,8 @@ export function mountParisRideView(
     manualDoorTarget = 0;
     kvbBrakeLatched = false;
     kvbStatus = 'ok';
+    tractionBlocked = false;
+    doorAllowed = false;
     distToStopM = null;
     stopBanner = null;
     if (!stationName) liveTargetTrainId = null;
@@ -4826,7 +5198,16 @@ export function mountParisRideView(
     applyStockVisuals();
     refreshDualSielTextures(buildDualSielSnapshot(startIdx));
     focusKey = '';
+    openMix = isOpen(tr.s) ? 1 : 0;
     stream(startIdx - 2, startIdx + 2, 99);
+    poseTrain();
+    placeLights(startIdx);
+    lastLightStation = startIdx;
+    applyEnv(startSt.sc, 1);
+    if (view === 'vault') {
+      aimVault(startIdx);
+      focusKey = `${startIdx}:${tr.dir}:${quaiCamera}:${quaiSide}`;
+    }
     updateHud();
     options.onRouteChange?.(route.key);
   }
@@ -5019,6 +5400,8 @@ export function mountParisRideView(
     const nowMs = typeof performance !== 'undefined' ? performance.now() : Date.now();
     if (stopBanner && nowMs > stopBanner.untilMs) stopBanner = null;
 
+    const sielBoards = buildDualSielSnapshot(k);
+
     hudRoot.render(
       createElement(CabHud, {
         ligne: { shortName: route.num, color: route.bg, textColor: route.fg },
@@ -5045,13 +5428,19 @@ export function mountParisRideView(
         vue: view === 'vault' ? 'quai' : view === 'passenger' ? 'passager' : 'cabine',
         onVue: (v: 'quai' | 'cabine' | 'passager') =>
           setView(v === 'quai' ? 'vault' : v === 'passager' ? 'passenger' : 'ride'),
-        materiel: stockTag,
-        onMateriel: () => {
-          spragueMode = !spragueMode;
-          lastSpeedoKey = '';
-          applyStockVisuals();
+        quaiCamera,
+        onQuaiCamera: (preset: QuaiCameraPreset) => {
+          quaiCamera = preset;
+          focusKey = '';
           updateHud();
         },
+        onInverserQuai: () => {
+          quaiSide = quaiSide === 1 ? -1 : 1;
+          focusKey = '';
+          updateHud();
+        },
+        sielBoards,
+        materiel: stockTag,
         allure: `${speed}×`,
         onAllure: () => {
           if (drivingMode) return;
@@ -5062,11 +5451,13 @@ export function mountParisRideView(
         pause: paused,
         onPause: () => {
           paused = !paused;
+          if (paused) asva.cancel();
           updateHud();
         },
         son: audioEnabled,
         onSon: () => {
           audioEnabled = synthAudio.setEnabled(!audioEnabled);
+          if (!audioEnabled) asva.cancel();
           updateHud();
         },
         direct: !drivingMode && liveMode && liveActive,
@@ -5095,20 +5486,30 @@ export function mountParisRideView(
         limiteVitesse: drivingMode ? currentLimitKmh : isRerLineNum(route.num) ? 90 : 70,
         kvbEtat: drivingMode ? kvbStatus : 'ok',
         distanceArretM: drivingMode ? distToStopM : null,
+        signalAspect: drivingMode ? currentSignalAspect : 'VL',
+        tivKmh: drivingMode ? currentTivKmh : null,
+        embarquementPct:
+          drivingMode && manualDoorTarget === 1
+            ? Math.min(100, Math.round((boardingElapsedSec / BOARDING_DURATION_SEC) * 100))
+            : null,
+        ronfleurActif: drivingMode && doorCloseCountdownSec > 0,
         portesOuvertes: tr.door > 0.04 || manualDoorTarget === 1,
         portesAutorisees: drivingMode ? doorAllowed : false,
         onPortes: () => toggleManualDoors(),
         tractionBloqueePortes: drivingMode && tractionBlocked,
-        onKlaxon: () => {
-          if (!audioEnabled) audioEnabled = synthAudio.setEnabled(true);
-          synthAudio.triggerHorn(isRerLineNum(route.num));
-          updateHud();
-        },
         phares: highBeam,
         onPhares: () => {
           highBeam = !highBeam;
           updateHud();
         },
+        ambiance: timeOfDay,
+        onAmbiance: (nextMood: ParisTimeOfDay) => setTimeOfDay(nextMood),
+        pluie: rainEnabled,
+        onPluie: () => {
+          rainEnabled = !rainEnabled;
+          updateHud();
+        },
+        onInverserSens: drivingMode ? () => reverseDriveDirection() : undefined,
         arretFeedback: stopBanner
           ? { label: stopBanner.label, detail: stopBanner.detail, tone: stopBanner.tone }
           : null,
@@ -5151,7 +5552,6 @@ export function mountParisRideView(
       speedoTex.needsUpdate = true;
     }
 
-    const sielBoards = buildDualSielSnapshot(k);
     const sielKey = [
       route.key,
       stations[k]?.name ?? '',
@@ -5224,11 +5624,6 @@ export function mountParisRideView(
       setView('ride');
     } else if (k === '3') {
       setView('passenger');
-    } else if (k === 'h' || k === 'k') {
-      e.preventDefault();
-      if (!audioEnabled) audioEnabled = synthAudio.setEnabled(true);
-      synthAudio.triggerHorn(isRerLineNum(route.num));
-      updateHud();
     } else if (k === 'l') {
       e.preventDefault();
       highBeam = !highBeam;
@@ -5249,6 +5644,9 @@ export function mountParisRideView(
       } else if (k === 'p' || k === 'o') {
         e.preventDefault();
         toggleManualDoors();
+      } else if (k === 'r') {
+        e.preventDefault();
+        reverseDriveDirection();
       }
     }
   };
@@ -5268,6 +5666,9 @@ export function mountParisRideView(
   const initialRouteKey = resolveRideRouteKey(options.initialLine, options.initialDest);
   setRoute(initialRouteKey, options.initialStation, options.initialDest);
   setView(options.initialView ?? 'ride');
+  if (options.initialDriveMode && !drivingMode) {
+    toggleDrivingMode();
+  }
   updateLiveUi();
 
   const WORLD_UP = new THREE.Vector3(0, 1, 0);
@@ -5277,11 +5678,6 @@ export function mountParisRideView(
   const tmpD = new THREE.Vector3();
   const clock = new THREE.Clock();
   let hudT = 0;
-  let lastStreamLo = Number.NaN;
-  let lastStreamHi = Number.NaN;
-  let streamPending = true;
-  let lastLightStation = -1;
-  let lastCamEnv: 'in' | 'out' | 'edge' | null = null;
 
   let lastRenderMs = 0;
 
@@ -5304,9 +5700,14 @@ export function mountParisRideView(
           stepAutonomousUnit(counterTr, dt, 6, false);
         }
       }
+      // Keep the opposite-direction train active near the player's current section
+      // so it never disappears permanently at the far end of a long line.
+      if (stations.length >= 2 && Math.abs(counterTr.s - tr.s) > 1050) {
+        repositionCounterTrainNear(nearestStation());
+      }
     }
     const elapsedSec = nowMs * 0.001;
-    segmentUpdaters.forEach((fn) => fn(elapsedSec));
+    segmentUpdaters.forEach((fn) => fn(elapsedSec, timeOfDay));
     poseTrain();
     const near = nearestStation();
     const fk = focusStation();
@@ -5320,7 +5721,7 @@ export function mountParisRideView(
       lastCamEnv = null;
     }
     if (view === 'vault') {
-      const key = `${fk}:${tr.dir}`;
+      const key = `${fk}:${tr.dir}:${quaiCamera}:${quaiSide}`;
       if (key !== focusKey) {
         focusKey = key;
         aimVault(fk);
@@ -5393,7 +5794,28 @@ export function mountParisRideView(
     if (camEnv !== lastCamEnv) {
       lastCamEnv = camEnv;
     }
-    const showBeams = camEnv !== 'out';
+    const showBeams = camEnv !== 'out' || timeOfDay === 'night';
+    const showRain = rainEnabled && camEnv !== 'in';
+    rainLines.visible = showRain;
+    if (showRain) {
+      const cx = camera.position.x;
+      const cy = camera.position.y;
+      const cz = camera.position.z;
+      const dropPhase = (paused ? 0 : elapsedSec) * 21;
+      for (let i = 0; i < RAIN_COUNT; i++) {
+        const sx = rainSeeds[i * 3];
+        const sy = ((((rainSeeds[i * 3 + 1] - dropPhase) % 14) + 14) % 14) - 4;
+        const sz = rainSeeds[i * 3 + 2];
+        const idx = i * 6;
+        rainPositions[idx] = cx + sx;
+        rainPositions[idx + 1] = cy + sy;
+        rainPositions[idx + 2] = cz + sz;
+        rainPositions[idx + 3] = cx + sx - 0.12;
+        rainPositions[idx + 4] = cy + sy - 0.65;
+        rainPositions[idx + 5] = cz + sz - 0.14;
+      }
+      rainPosAttr.needsUpdate = true;
+    }
     for (const b of headlightBeams) {
       b.visible = showBeams;
       b.scale.setScalar(highBeam ? 1.0 : 0.62);
@@ -5439,6 +5861,7 @@ export function mountParisRideView(
     dispose() {
       if (disposed) return;
       disposed = true;
+      asva.dispose();
       synthAudio.dispose();
       composer?.dispose();
       if (veilTimeout) clearTimeout(veilTimeout);
@@ -5453,6 +5876,7 @@ export function mountParisRideView(
       hudRoot.unmount();
       controls.dispose();
       clearAll();
+      disposeSignalTextures();
       if (badgeTex) badgeTex.dispose();
       if (badgeMat) badgeMat.dispose();
       if (destTex) destTex.dispose();

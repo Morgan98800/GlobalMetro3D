@@ -7,10 +7,12 @@ import {
   RiCloseCircleFill,
   RiCloseLine,
   RiFocus3Line,
+  RiForbidLine,
   RiHome5Line,
   RiShareForwardLine,
   RiStarFill,
   RiWalkLine,
+  RiWheelchairLine,
 } from '@remixicon/react';
 import { Fragment, useId, useState } from 'react';
 import { motion } from 'motion/react';
@@ -70,6 +72,12 @@ export interface RoutePlannerDrawerProps {
   onSelection?: (index: number) => void;
   onPartager: () => void;
   onVoirEn3D?: (segment: Extract<Segment, { type: 'ligne' }>) => void;
+  accessibleOnly?: boolean;
+  onToggleAccessible?: () => void;
+  avoidLineIds?: string[];
+  availableLines?: LineRef[];
+  onToggleAvoidLine?: (shortName: string) => void;
+  onClearAvoidLines?: () => void;
   onClose: () => void;
   presentation?: 'cote' | 'basse';
   className?: string;
@@ -80,6 +88,10 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
   const basse = (props.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
   const [cran, setCran] = useState<DetentSheet>('haut');
   const [autresOuverts, setAutresOuverts] = useState(false);
+  const [avoidOpen, setAvoidOpen] = useState(false);
+  const avoidCount = props.avoidLineIds?.length ?? 0;
+  const avoidedSet = new Set((props.avoidLineIds ?? []).map((id) => id.trim().toUpperCase()));
+  const hasActiveFilters = Boolean(props.accessibleOnly) || avoidCount > 0;
   const routeKey = `${props.depart}|${props.arrivee}|${props.itineraires.length}`;
   const [prevRouteKey, setPrevRouteKey] = useState(routeKey);
   if (prevRouteKey !== routeKey) {
@@ -168,6 +180,102 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
             </Button>
           ))}
         </div>
+        {(props.onToggleAccessible || props.onToggleAvoidLine) && (
+          <div className="mt-2 space-y-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {props.onToggleAccessible && (
+                <button
+                  type="button"
+                  data-route-filter-pmr
+                  aria-pressed={Boolean(props.accessibleOnly)}
+                  onClick={props.onToggleAccessible}
+                  className={cx(
+                    'inline-flex items-center gap-1.5 rounded-full border px-3 text-[12px] font-semibold transition-[background-color,border-color,color] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+                    basse ? 'min-h-[44px]' : 'min-h-[32px]',
+                    props.accessibleOnly
+                      ? 'border-focus bg-encart text-encre ring-1 ring-focus'
+                      : 'border-bord bg-surface text-encre-2 hover:bg-encart hover:text-encre'
+                  )}
+                >
+                  <RiWheelchairLine aria-hidden className="size-3.5 shrink-0" />
+                  <span>Accessible PMR</span>
+                </button>
+              )}
+              {props.onToggleAvoidLine && (
+                <button
+                  type="button"
+                  data-route-filter-avoid
+                  aria-expanded={avoidOpen}
+                  onClick={() => setAvoidOpen((v) => !v)}
+                  className={cx(
+                    'inline-flex items-center gap-1.5 rounded-full border px-3 text-[12px] font-semibold transition-[background-color,border-color,color] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+                    basse ? 'min-h-[44px]' : 'min-h-[32px]',
+                    avoidCount > 0 || avoidOpen
+                      ? 'border-focus bg-encart text-encre ring-1 ring-focus'
+                      : 'border-bord bg-surface text-encre-2 hover:bg-encart hover:text-encre'
+                  )}
+                >
+                  <RiForbidLine aria-hidden className="size-3.5 shrink-0" />
+                  <span>{avoidCount > 0 ? `Éviter (${avoidCount})` : 'Éviter une ligne'}</span>
+                  <RiArrowDownSLine
+                    aria-hidden
+                    className={cx(
+                      'size-3.5 shrink-0 transition-transform duration-150',
+                      avoidOpen && 'rotate-180'
+                    )}
+                  />
+                </button>
+              )}
+              {avoidCount > 0 && props.onClearAvoidLines && (
+                <button
+                  type="button"
+                  onClick={props.onClearAvoidLines}
+                  className={cx(
+                    'inline-flex items-center rounded-full px-2.5 text-[12px] font-medium text-encre-2 transition-[background-color,color] duration-150 hover:bg-encart hover:text-encre focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+                    basse ? 'min-h-[44px]' : 'min-h-[32px]'
+                  )}
+                >
+                  Réinitialiser
+                </button>
+              )}
+            </div>
+            {avoidOpen && props.availableLines && props.availableLines.length > 0 && (
+              <div
+                role="group"
+                aria-label="Lignes à éviter"
+                className="flex max-h-36 flex-wrap gap-1.5 overflow-y-auto overscroll-contain rounded-[12px] border border-bord/80 bg-encart/60 p-2"
+              >
+                {props.availableLines.map((line) => {
+                  const isAvoided = avoidedSet.has(line.shortName.trim().toUpperCase());
+                  return (
+                    <button
+                      key={line.shortName}
+                      type="button"
+                      aria-pressed={isAvoided}
+                      aria-label={`${isAvoided ? 'Ne plus éviter' : 'Éviter'} ${lineName(line.shortName)}`}
+                      onClick={() => props.onToggleAvoidLine?.(line.shortName)}
+                      className={cx(
+                        'relative inline-flex items-center justify-center rounded-[10px] border p-1 transition-[border-color,background-color,transform] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus active:scale-95',
+                        basse ? 'min-h-[44px] min-w-[44px]' : 'min-h-[34px] min-w-[34px]',
+                        isAvoided
+                          ? 'border-signal bg-surface ring-1 ring-signal/50'
+                          : 'border-transparent bg-surface/80 hover:border-bord hover:bg-surface'
+                      )}
+                    >
+                      <LineBadgeChip {...line} size="sm" dimmed={isAvoided} />
+                      {isAvoided && (
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute inset-x-1.5 top-1/2 h-[2px] -translate-y-1/2 -rotate-45 rounded-full bg-signal"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div
@@ -176,7 +284,24 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
           pad
         )}
       >
-        {basse && actif ? (
+        {props.itineraires.length === 0 && hasActiveFilters && props.depart && props.arrivee ? (
+          <div className="flex flex-col items-center justify-center gap-3 rounded-[14px] border border-bord/80 bg-encart/55 px-4 py-6 text-center">
+            <p className="text-[13px] font-medium text-encre-2">
+              Aucun itinéraire trouvé avec vos filtres actifs.
+            </p>
+            <Button
+              size="sm"
+              variant="secondaire"
+              className={basse ? 'min-h-[44px]' : undefined}
+              onClick={() => {
+                if (props.accessibleOnly) props.onToggleAccessible?.();
+                props.onClearAvoidLines?.();
+              }}
+            >
+              Réinitialiser les filtres
+            </Button>
+          </div>
+        ) : basse && actif ? (
           <div className="space-y-2">
             <ul className="space-y-2">
               <CarteItineraire
@@ -231,23 +356,14 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
         ) : (
           <ul className="space-y-2">
             {props.itineraires.map((it, i) => (
-              <motion.div
+              <CarteItineraire
                 key={`${it.arrivee}-${it.minutes}-${it.segments.length}-${i}`}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.2,
-                  delay: Math.min(i * 0.035, 0.14),
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <CarteItineraire
-                  it={it}
-                  ouverte={i === sel}
-                  onOuvrir={() => props.onSelection?.(i)}
-                  onVoirEn3D={props.onVoirEn3D}
-                />
-              </motion.div>
+                it={it}
+                ouverte={i === sel}
+                delay={Math.min(i * 0.035, 0.14)}
+                onOuvrir={() => props.onSelection?.(i)}
+                onVoirEn3D={props.onVoirEn3D}
+              />
             ))}
           </ul>
         )}
@@ -369,18 +485,29 @@ function Champ({
 function CarteItineraire({
   it,
   ouverte,
+  delay = 0,
   onOuvrir,
   onVoirEn3D,
 }: {
   it: Itineraire;
   ouverte: boolean;
+  delay?: number;
   onOuvrir: () => void;
   onVoirEn3D?: (segment: Extract<Segment, { type: 'ligne' }>) => void;
 }) {
   const premier = it.segments.find((s) => s.type === 'ligne');
   const attente = premier && premier.type === 'ligne' ? premier.attente : undefined;
   return (
-    <li className="list-none">
+    <motion.li
+      className="list-none"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.2,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
       <button type="button" onClick={onOuvrir} aria-expanded={ouverte} className="pl-carte-trajet">
         <span className="flex items-start justify-between gap-3">
           <span>
@@ -411,7 +538,7 @@ function CarteItineraire({
           })}
         </div>
       )}
-    </li>
+    </motion.li>
   );
 }
 

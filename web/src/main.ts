@@ -33,6 +33,7 @@ import {
 } from '@core/ui/utils/transit_router';
 import { SubwayAppShell } from './ui/SubwayAppShell';
 import { applyFaienceBasemap } from './map/basemap_palette';
+import { buildGpeGeoJson } from './data/grand_paris_express';
 import { uiStore, type EdinburghPreset, type ThemePreference } from './ui/ui_store';
 import { parseAppUrlState, mergeAppUrlParams, type AppUrlState } from './ui/url_state';
 import { initMonitoring } from './monitoring/sentry';
@@ -434,7 +435,7 @@ async function bootstrap() {
     if (!parisRideHandle) return;
     parisRideHandle.dispose();
     parisRideHandle = null;
-    syncUrlQuery({ ride: false, view: null });
+    syncUrlQuery({ ride: false, view: null, drive: false });
     const uiRoot = document.getElementById('ui-root');
     if (uiRoot) uiRoot.style.display = '';
     engine.setRenderContext({ suspended: document.hidden });
@@ -455,6 +456,7 @@ async function bootstrap() {
     initialStation?: string;
     initialTrainId?: string;
     initialView?: 'ride' | 'vault' | 'passenger';
+    initialDriveMode?: boolean;
     initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   }) => {
     if (cityConfig.id !== 'paris' || parisRideHandle || parisRideOpening) return;
@@ -471,6 +473,7 @@ async function bootstrap() {
         line: opts?.initialLine ?? null,
         station: opts?.initialStation ?? null,
         view: opts?.initialView ?? 'ride',
+        drive: Boolean(opts?.initialDriveMode),
       });
       parisRideHandle = mountParisRideView(document.body, {
         ...opts,
@@ -1021,11 +1024,15 @@ async function bootstrap() {
       return;
     }
 
+    const snap = uiStore.getSnapshot();
+    const hasFilters = snap.routeAccessibleOnly || snap.routeAvoidLineIds.length > 0;
     const candidates = computeTransitItineraries(origin, destination, {
       stations,
       lines,
       ladders: laddersData,
-      trafficByLine: uiStore.getSnapshot().trafficByLine,
+      trafficByLine: snap.trafficByLine,
+      accessibleOnly: snap.routeAccessibleOnly,
+      avoidLineIds: snap.routeAvoidLineIds,
       getNextDepartures: (stationName) => engine.getStationDepartures(stationName, 2),
     });
     if (candidates.length === 0) {
@@ -1033,7 +1040,9 @@ async function bootstrap() {
         routeLoading: false,
         routeCandidates: [],
         activeItineraryIndex: 0,
-        routeError: 'Aucun itinéraire trouvé à proximité sur le réseau.',
+        routeError: hasFilters
+          ? 'Aucun itinéraire trouvé avec vos filtres actifs.'
+          : 'Aucun itinéraire trouvé à proximité sur le réseau.',
       });
       deckOverlay.setActiveItinerary(null);
       return;
@@ -1101,6 +1110,109 @@ async function bootstrap() {
   document.documentElement.dataset.theme = initialTheme;
   document.documentElement.classList.toggle('dark', initialTheme === 'dark');
 
+  let cachedGpeGeoJson: ReturnType<typeof buildGpeGeoJson> | null = null;
+  function syncGpeMapLayer() {
+    if (!map.isStyleLoaded()) return;
+    if (!cachedGpeGeoJson) cachedGpeGeoJson = buildGpeGeoJson();
+    const visible = uiStore.getSnapshot().gpeVisible && cityConfig.id === 'paris';
+    const vis = visible ? 'visible' : 'none';
+
+    if (!map.getSource('gpe-lines-source')) {
+      map.addSource('gpe-lines-source', {
+        type: 'geojson',
+        data: cachedGpeGeoJson.lines,
+      });
+    }
+    if (!map.getSource('gpe-stations-source')) {
+      map.addSource('gpe-stations-source', {
+        type: 'geojson',
+        data: cachedGpeGeoJson.stations,
+      });
+    }
+    if (!map.getLayer('gpe-lines-casing')) {
+      map.addLayer({
+        id: 'gpe-lines-casing',
+        type: 'line',
+        source: 'gpe-lines-source',
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round',
+          visibility: vis,
+        },
+        paint: {
+          'line-color': uiStore.getSnapshot().theme === 'dark' ? '#0e1118' : '#ffffff',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 9, 5, 13, 8],
+          'line-opacity': 0.72,
+        },
+      });
+    } else {
+      map.setLayoutProperty('gpe-lines-casing', 'visibility', vis);
+      map.setPaintProperty(
+        'gpe-lines-casing',
+        'line-color',
+        uiStore.getSnapshot().theme === 'dark' ? '#0e1118' : '#ffffff'
+      );
+    }
+    if (!map.getLayer('gpe-lines-layer')) {
+      map.addLayer({
+        id: 'gpe-lines-layer',
+        type: 'line',
+        source: 'gpe-lines-source',
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round',
+          visibility: vis,
+        },
+        paint: {
+          'line-color': ['get', 'color'],
+          'line-width': ['interpolate', ['linear'], ['zoom'], 9, 2.8, 13, 4.8],
+          'line-dasharray': [2.2, 1.3],
+          'line-opacity': 0.96,
+        },
+      });
+    } else {
+      map.setLayoutProperty('gpe-lines-layer', 'visibility', vis);
+    }
+    if (!map.getLayer('gpe-stations-layer')) {
+      map.addLayer({
+        id: 'gpe-stations-layer',
+        type: 'circle',
+        source: 'gpe-stations-source',
+        layout: { visibility: vis },
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 3, 13, 5.5],
+          'circle-color': '#ffffff',
+          'circle-stroke-width': 2.5,
+          'circle-stroke-color': ['get', 'color'],
+        },
+      });
+    } else {
+      map.setLayoutProperty('gpe-stations-layer', 'visibility', vis);
+    }
+    if (!map.getLayer('gpe-labels-layer')) {
+      map.addLayer({
+        id: 'gpe-labels-layer',
+        type: 'symbol',
+        source: 'gpe-stations-source',
+        minzoom: 11.4,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 11,
+          'text-offset': [0, 1.15],
+          'text-anchor': 'top',
+          visibility: vis,
+        },
+        paint: {
+          'text-color': uiStore.getSnapshot().theme === 'dark' ? '#eef2f6' : '#1b2029',
+          'text-halo-color': uiStore.getSnapshot().theme === 'dark' ? '#10141c' : '#ffffff',
+          'text-halo-width': 1.5,
+        },
+      });
+    } else {
+      map.setLayoutProperty('gpe-labels-layer', 'visibility', vis);
+    }
+  }
+
   const onStyleLoadFaience = () => {
     const snap = uiStore.getSnapshot();
     const activeTheme = snap.theme;
@@ -1113,6 +1225,7 @@ async function bootstrap() {
       true,
       snap.xrayMode
     );
+    syncGpeMapLayer();
   };
   if (map.isStyleLoaded()) onStyleLoadFaience();
   map.on('style.load', onStyleLoadFaience);
@@ -1300,6 +1413,21 @@ async function bootstrap() {
       });
       deckOverlay.setActiveItinerary(null);
     },
+    onToggleGpe: (visible) => {
+      const next = visible ?? !uiStore.getSnapshot().gpeVisible;
+      uiStore.patch({ gpeVisible: next });
+      syncGpeMapLayer();
+    },
+    onUpdateRouteFilters: ({ accessibleOnly, avoidLineIds }) => {
+      uiStore.patch({
+        routeAccessibleOnly: accessibleOnly,
+        routeAvoidLineIds: avoidLineIds,
+      });
+      const snap = uiStore.getSnapshot();
+      if (snap.routeOrigin && snap.routeDestination) {
+        runItineraryComputation(snap.routeOrigin, snap.routeDestination);
+      }
+    },
     onToggleGpsFollow: () => toggleGpsFollow(),
     onEdinburghPreset: (preset: EdinburghPreset) => {
       edinburghHandle?.setCameraPreset(preset);
@@ -1418,6 +1546,7 @@ async function bootstrap() {
         initialLine: urlState.line ?? initialRoute.lineShortName ?? undefined,
         initialStation: urlState.station ?? initialRoute.station ?? undefined,
         initialView: urlState.view ?? 'ride',
+        initialDriveMode: Boolean(urlState.drive),
       });
     }
   };

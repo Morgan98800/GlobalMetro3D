@@ -5,6 +5,7 @@ export interface AppUrlState {
   station?: string | null;
   ride?: boolean;
   view?: ParisRideViewMode | null;
+  drive?: boolean;
 }
 
 const VALID_VIEWS = new Set<ParisRideViewMode>(['ride', 'vault', 'passenger']);
@@ -38,6 +39,11 @@ export function parseAppUrlState(search: string): AppUrlState {
   const view = sp.get('view')?.trim();
   if (view && isValidView(view)) {
     state.view = view;
+  }
+
+  const drive = sp.get('drive')?.trim().toLowerCase();
+  if (drive === '1' || drive === 'true') {
+    state.drive = true;
   }
 
   return state;
@@ -82,6 +88,14 @@ export function mergeAppUrlParams(currentSearch: string, patch: Partial<AppUrlSt
       sp.set('view', view);
     } else {
       sp.delete('view');
+    }
+  }
+
+  if ('drive' in patch) {
+    if (patch.drive === true) {
+      sp.set('drive', '1');
+    } else {
+      sp.delete('drive');
     }
   }
 

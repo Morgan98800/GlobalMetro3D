@@ -3,7 +3,11 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { LineMetadata, StationMetadata } from '@core/types';
 import type { LineLadderData } from '@core/ui/components/station_ladder';
-import { computeTransitItineraries } from '@core/ui/utils/transit_router';
+import {
+  computeTransitItineraries,
+  isLineWheelchairAccessible,
+  PARIS_HUB_TRANSFER_SEC,
+} from '@core/ui/utils/transit_router';
 
 const DATA_DIR = path.resolve(process.cwd(), 'web/public/data');
 const LINES = JSON.parse(
@@ -168,5 +172,284 @@ describe('transit_router on Paris GTFS graph', () => {
     const firstRide = transferRoute[0]?.legs.find((l) => l.kind === 'ride');
     expect(firstRide).toBeTruthy();
     expect(firstRide?.carPositionHint).toMatch(/Avant|Milieu|Arrière/);
+  });
+
+  it('avoids lines specified in avoidLineIds and routes via alternate lines', () => {
+    const chatelet = STATIONS.find((s) => s.name === 'Châtelet')!;
+    const etoile = STATIONS.find((s) => s.name.includes('Étoile'))!;
+
+    const routes = computeTransitItineraries(
+      {
+        label: chatelet.name,
+        coordinates: chatelet.coordinates,
+        kind: 'station',
+        station: chatelet,
+      },
+      {
+        label: etoile.name,
+        coordinates: etoile.coordinates,
+        kind: 'station',
+        station: etoile,
+      },
+      {
+        stations: STATIONS,
+        lines: LINES,
+        ladders: LADDERS,
+        avoidLineIds: ['1'],
+      }
+    );
+
+    expect(routes.length).toBeGreaterThan(0);
+    for (const itinerary of routes) {
+      const rideLegs = itinerary.legs.filter((l) => l.kind === 'ride');
+      expect(rideLegs.length).toBeGreaterThan(0);
+      expect(rideLegs.some((l) => l.lineShortName === '1')).toBe(false);
+    }
+  });
+
+  it('routes via accessible Line 14 instead of shorter non-accessible lines when accessibleOnly is true', () => {
+    const line14 = LINES.find((l) => l.short_name === '14')!;
+    const line1 = LINES.find((l) => l.short_name === '1')!;
+    const rerA = LINES.find((l) => l.short_name === 'A')!;
+    expect(isLineWheelchairAccessible(line14)).toBe(true);
+    expect(isLineWheelchairAccessible(rerA)).toBe(true);
+    expect(isLineWheelchairAccessible(line1)).toBe(false);
+
+    // Real GTFS graph: Mairie de Saint-Ouen -> Saint-Lazare is accessible via Line 14 (never Line 13)
+    const mairieStOuen = STATIONS.find((s) => s.name === 'Mairie de Saint-Ouen')!;
+    const saintLazare = STATIONS.find((s) => s.name === 'Saint-Lazare')!;
+    const realAccessible = computeTransitItineraries(
+      {
+        label: mairieStOuen.name,
+        coordinates: mairieStOuen.coordinates,
+        kind: 'station',
+        station: mairieStOuen,
+      },
+      {
+        label: saintLazare.name,
+        coordinates: saintLazare.coordinates,
+        kind: 'station',
+        station: saintLazare,
+      },
+      {
+        stations: STATIONS,
+        lines: LINES,
+        ladders: LADDERS,
+        accessibleOnly: true,
+      }
+    );
+    expect(realAccessible.length).toBeGreaterThan(0);
+    expect(realAccessible[0].legs.some((l) => l.kind === 'ride' && l.lineShortName === '14')).toBe(
+      true
+    );
+    expect(realAccessible[0].legs.some((l) => l.kind === 'ride' && l.lineShortName === '13')).toBe(
+      false
+    );
+
+    // Controlled synthetic graph where Line 1 is shorter than Line 14, verifying accessibleOnly picks Line 14
+    const synthStations: StationMetadata[] = [
+      {
+        id: 'S1',
+        name: 'Alpha',
+        coordinates: [2.34, 48.86],
+        lines: ['L1', 'L14'],
+        is_hub: true,
+        wheelchair_boarding: 1,
+      },
+      {
+        id: 'S1M',
+        name: 'Mid1',
+        coordinates: [2.35, 48.86],
+        lines: ['L1'],
+        is_hub: false,
+        wheelchair_boarding: 2,
+      },
+      {
+        id: 'S2',
+        name: 'Mid14',
+        coordinates: [2.35, 48.862],
+        lines: ['L14'],
+        is_hub: false,
+        wheelchair_boarding: 2,
+      },
+      {
+        id: 'S3',
+        name: 'Beta',
+        coordinates: [2.36, 48.86],
+        lines: ['L1', 'L14'],
+        is_hub: true,
+        wheelchair_boarding: 1,
+      },
+    ];
+    const synthLines: LineMetadata[] = [
+      {
+        id: 'L1',
+        short_name: '1',
+        long_name: 'Ligne 1',
+        color: '#FFBE00',
+        text_color: '#111111',
+        mode: 'metro',
+        destinations: { '0': 'Beta', '1': 'Alpha' },
+        measured_length_km: 1.5,
+        elevation_offset: 0,
+      },
+      {
+        id: 'L14',
+        short_name: '14',
+        long_name: 'Ligne 14',
+        color: '#640082',
+        text_color: '#FFFFFF',
+        mode: 'metro',
+        destinations: { '0': 'Beta', '1': 'Alpha' },
+        measured_length_km: 3.6,
+        elevation_offset: 0,
+      },
+    ];
+    const synthLadders: Record<string, LineLadderData> = {
+      L1: {
+        id: 'L1',
+        short_name: '1',
+        color: '#FFBE00',
+        text_color: '#111111',
+        directions: {
+          '0': {
+            origin: 'Alpha',
+            terminus: 'Beta',
+            stations: [
+              {
+                id: 'S1',
+                name: 'Alpha',
+                coordinates: [2.34, 48.86],
+                distance_m: 0,
+                is_hub: true,
+                transfers: [],
+              },
+              {
+                id: 'S1M',
+                name: 'Mid1',
+                coordinates: [2.35, 48.86],
+                distance_m: 750,
+                is_hub: false,
+                transfers: [],
+              },
+              {
+                id: 'S3',
+                name: 'Beta',
+                coordinates: [2.36, 48.86],
+                distance_m: 1500,
+                is_hub: true,
+                transfers: [],
+              },
+            ],
+          },
+        },
+      },
+      L14: {
+        id: 'L14',
+        short_name: '14',
+        color: '#640082',
+        text_color: '#FFFFFF',
+        directions: {
+          '0': {
+            origin: 'Alpha',
+            terminus: 'Beta',
+            stations: [
+              {
+                id: 'S1',
+                name: 'Alpha',
+                coordinates: [2.34, 48.86],
+                distance_m: 0,
+                is_hub: true,
+                transfers: [],
+              },
+              {
+                id: 'S2',
+                name: 'Mid14',
+                coordinates: [2.35, 48.862],
+                distance_m: 1800,
+                is_hub: false,
+                transfers: [],
+              },
+              {
+                id: 'S3',
+                name: 'Beta',
+                coordinates: [2.36, 48.86],
+                distance_m: 3600,
+                is_hub: true,
+                transfers: [],
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    const synthDefault = computeTransitItineraries(
+      { label: 'Alpha', coordinates: [2.34, 48.86], kind: 'station', station: synthStations[0] },
+      { label: 'Beta', coordinates: [2.36, 48.86], kind: 'station', station: synthStations[3] },
+      { stations: synthStations, lines: synthLines, ladders: synthLadders }
+    );
+    expect(synthDefault[0].legs.find((l) => l.kind === 'ride')?.lineShortName).toBe('1');
+
+    const synthAccessible = computeTransitItineraries(
+      { label: 'Alpha', coordinates: [2.34, 48.86], kind: 'station', station: synthStations[0] },
+      { label: 'Beta', coordinates: [2.36, 48.86], kind: 'station', station: synthStations[3] },
+      { stations: synthStations, lines: synthLines, ladders: synthLadders, accessibleOnly: true }
+    );
+    expect(synthAccessible.length).toBeGreaterThan(0);
+    expect(synthAccessible[0].legs.find((l) => l.kind === 'ride')?.lineShortName).toBe('14');
+  });
+
+  it('applies realistic hub transfer durations and walk distances at Montparnasse - Bienvenüe and Châtelet', () => {
+    expect(PARIS_HUB_TRANSFER_SEC['montparnasse bienvenue']).toBe(420);
+    expect(PARIS_HUB_TRANSFER_SEC['chatelet']).toBe(360);
+
+    // Saint-Placide (M4) -> Cambronne (M6) transfers at Montparnasse Bienvenue
+    const saintPlacide = STATIONS.find((s) => s.name === 'Saint-Placide')!;
+    const cambronne = STATIONS.find((s) => s.name === 'Cambronne')!;
+    const montparnasseRoutes = computeTransitItineraries(
+      {
+        label: saintPlacide.name,
+        coordinates: saintPlacide.coordinates,
+        kind: 'station',
+        station: saintPlacide,
+      },
+      {
+        label: cambronne.name,
+        coordinates: cambronne.coordinates,
+        kind: 'station',
+        station: cambronne,
+      },
+      { stations: STATIONS, lines: LINES, ladders: LADDERS }
+    );
+    const mpTransfer = montparnasseRoutes[0]?.legs.find((l) => l.kind === 'transfer');
+    expect(mpTransfer).toBeTruthy();
+    expect(mpTransfer?.fromLabel).toContain('Montparnasse');
+    expect(mpTransfer?.durationSec).toBe(420);
+    expect(mpTransfer?.distanceM).toBeGreaterThanOrEqual(400);
+
+    // Rambuteau (M11) -> Saint-Germain-des-Prés (M4) transfers at Châtelet
+    const rambuteau = STATIONS.find((s) => s.name === 'Rambuteau')!;
+    const stGermain = STATIONS.find((s) => s.name === 'Saint-Germain-des-Prés')!;
+    const chateletRoutes = computeTransitItineraries(
+      {
+        label: rambuteau.name,
+        coordinates: rambuteau.coordinates,
+        kind: 'station',
+        station: rambuteau,
+      },
+      {
+        label: stGermain.name,
+        coordinates: stGermain.coordinates,
+        kind: 'station',
+        station: stGermain,
+      },
+      { stations: STATIONS, lines: LINES, ladders: LADDERS }
+    );
+    const chTransfer = chateletRoutes[0]?.legs.find((l) => l.kind === 'transfer');
+    expect(chTransfer).toBeTruthy();
+    expect(chTransfer?.fromLabel).toBe('Châtelet');
+    expect(chTransfer?.durationSec).toBe(360);
+    expect(chTransfer?.distanceM).toBeGreaterThanOrEqual(330);
   });
 });

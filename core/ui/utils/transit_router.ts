@@ -53,12 +53,18 @@ export interface TransitItinerary {
   destination: RoutePoint;
 }
 
+export function isLineWheelchairAccessible(line: LineMetadata): boolean {
+  return line.short_name === '14' || line.mode === 'rail';
+}
+
 export interface RouterNetworkInput {
   stations: StationMetadata[];
   lines: LineMetadata[];
   ladders: Record<string, LineLadderData>;
   trafficByLine?: Record<string, LineTrafficReport>;
   getNextDepartures?: (stationName: string) => StationDeparture[];
+  accessibleOnly?: boolean;
+  avoidLineIds?: string[];
 }
 
 interface GraphEdge {
@@ -101,6 +107,32 @@ export const PARIS_INTERCHANGE_CLUSTERS: readonly {
   { names: ['gare de lyon', 'reilly diderot'], walkSec: 290 },
   { names: ['saint michel', 'saint michel notre dame', 'cluny la sorbonne'], walkSec: 215 },
 ];
+
+/**
+ * Realistic total corridor transfer durations (seconds) at major Paris hubs,
+ * keyed by normalized station name.
+ */
+export const PARIS_HUB_TRANSFER_SEC: Readonly<Record<string, number>> = {
+  chatelet: 360,
+  'chatelet les halles': 360,
+  'les halles': 330,
+  'montparnasse bienvenue': 420,
+  montparnasse: 420,
+  'saint lazare': 300,
+  'gare du nord': 300,
+  'gare de lyon': 300,
+  'charles de gaulle etoile': 270,
+  opera: 270,
+  republique: 240,
+  nation: 240,
+  'place d italie': 240,
+  bastille: 240,
+  'gare de l est': 240,
+  'denfert rochereau': 240,
+  'strasbourg saint denis': 240,
+  'saint michel': 240,
+  'saint michel notre dame': 240,
+};
 
 function normalizeName(value: string): string {
   return value
@@ -206,6 +238,17 @@ function buildGraph(
   lineById: Map<string, LineMetadata>;
 } {
   const lineById = new Map(input.lines.map((line) => [line.id, line]));
+  const avoidSet = new Set(
+    (input.avoidLineIds ?? []).map((id) => id.trim().toUpperCase()).filter(Boolean)
+  );
+  const accessibleStationNames = new Set<string>();
+  if (input.accessibleOnly) {
+    for (const station of input.stations) {
+      if (station.wheelchair_boarding === 1) {
+        accessibleStationNames.add(normalizeName(station.name));
+      }
+    }
+  }
   const edges = new Map<string, GraphEdge[]>();
   const stationByState = new Map<string, RouteStopRef>();
   const hubGroups = new Map<
@@ -249,6 +292,13 @@ function buildGraph(
 
   for (const [lineId, ladder] of Object.entries(input.ladders)) {
     const line = lineById.get(lineId);
+    if (
+      avoidSet.has(lineId.trim().toUpperCase()) ||
+      (line && avoidSet.has(line.short_name.trim().toUpperCase()))
+    ) {
+      continue;
+    }
+    const lineAccessible = Boolean(line && isLineWheelchairAccessible(line));
     const report = resolveLineTraffic(input.trafficByLine, lineId);
     const isInterrupted = report?.status === 'interrupted';
     if (isInterrupted && !allowInterruptedFallback) continue;
@@ -274,6 +324,14 @@ function buildGraph(
         for (let i = 0; i < seq.stations.length - 1; i += 1) {
           const a = seq.stations[i];
           const b = seq.stations[i + 1];
+          if (
+            input.accessibleOnly &&
+            !lineAccessible &&
+            (!accessibleStationNames.has(normalizeName(a.name)) ||
+              !accessibleStationNames.has(normalizeName(b.name)))
+          ) {
+            continue;
+          }
           if (
             !allowInterruptedFallback &&
             (isStationClosedOnLine(report, a.name) || isStationClosedOnLine(report, b.name))
@@ -307,6 +365,44 @@ function buildGraph(
     }
   }
 
+  const addTransferPair = (
+    a: { hubKey: string; stop: RouteStopRef; lineId: string },
+    b: { hubKey: string; stop: RouteStopRef; lineId: string },
+    distM: number,
+    baseCostSec: number
+  ) => {
+    const hubMinSec = Math.max(
+      PARIS_HUB_TRANSFER_SEC[a.hubKey] ?? 0,
+      PARIS_HUB_TRANSFER_SEC[b.hubKey] ?? 0
+    );
+    const costSec = Math.max(baseCostSec, hubMinSec);
+    const rawWalkM = Math.round(distM * WALK_DETOUR_FACTOR);
+    const distanceM = hubMinSec
+      ? Math.max(rawWalkM, Math.round(Math.max(45, costSec - BOARD_WAIT_SEC) * WALK_SPEED_MPS))
+      : rawWalkM;
+    const weightSec = costSec + transferPenaltyExtraSec;
+    const fromStateA = `${a.lineId}::${a.hubKey}`;
+    const toStateB = `${b.lineId}::${b.hubKey}`;
+    addEdge(fromStateA, {
+      toState: toStateB,
+      costSec,
+      weightSec,
+      distanceM,
+      kind: 'transfer',
+      fromStop: a.stop,
+      toStop: b.stop,
+    });
+    addEdge(toStateB, {
+      toState: fromStateA,
+      costSec,
+      weightSec,
+      distanceM,
+      kind: 'transfer',
+      fromStop: b.stop,
+      toStop: a.stop,
+    });
+  };
+
   // Build transfer edges within each named hub + between adjacent hubs (< 160m, e.g., Châtelet <-> Châtelet - Les Halles)
   const allHubEntries = [...hubGroups.values()];
   for (const entries of allHubEntries) {
@@ -317,28 +413,7 @@ function buildGraph(
         const dist = haversineDistanceM(a.stop.coordinates, b.stop.coordinates);
         if (dist > 450) continue;
         const walkExtra = Math.round((dist * WALK_DETOUR_FACTOR) / WALK_SPEED_MPS);
-        const costSec = BASE_TRANSFER_SEC + walkExtra;
-        const weightSec = costSec + transferPenaltyExtraSec;
-        const fromStateA = `${a.lineId}::${a.hubKey}`;
-        const toStateB = `${b.lineId}::${b.hubKey}`;
-        addEdge(fromStateA, {
-          toState: toStateB,
-          costSec,
-          weightSec,
-          distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
-          kind: 'transfer',
-          fromStop: a.stop,
-          toStop: b.stop,
-        });
-        addEdge(toStateB, {
-          toState: fromStateA,
-          costSec,
-          weightSec,
-          distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
-          kind: 'transfer',
-          fromStop: b.stop,
-          toStop: a.stop,
-        });
+        addTransferPair(a, b, dist, BASE_TRANSFER_SEC + walkExtra);
       }
     }
   }
@@ -356,28 +431,7 @@ function buildGraph(
         for (const b of groupB) {
           if (a.lineId === b.lineId) continue;
           const walkExtra = Math.round((dist * WALK_DETOUR_FACTOR) / WALK_SPEED_MPS) + 60;
-          const costSec = BASE_TRANSFER_SEC + walkExtra;
-          const weightSec = costSec + transferPenaltyExtraSec;
-          const fromStateA = `${a.lineId}::${a.hubKey}`;
-          const toStateB = `${b.lineId}::${b.hubKey}`;
-          addEdge(fromStateA, {
-            toState: toStateB,
-            costSec,
-            weightSec,
-            distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
-            kind: 'transfer',
-            fromStop: a.stop,
-            toStop: b.stop,
-          });
-          addEdge(toStateB, {
-            toState: fromStateA,
-            costSec,
-            weightSec,
-            distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
-            kind: 'transfer',
-            fromStop: b.stop,
-            toStop: a.stop,
-          });
+          addTransferPair(a, b, dist, BASE_TRANSFER_SEC + walkExtra);
         }
       }
     }
@@ -412,26 +466,7 @@ function buildGraph(
         const toStateB = `${b.lineId}::${b.hubKey}`;
         const existingA = edges.get(fromStateA)?.some((e) => e.toState === toStateB);
         if (existingA) continue;
-        const costSec = baseWalkSec;
-        const weightSec = costSec + transferPenaltyExtraSec;
-        addEdge(fromStateA, {
-          toState: toStateB,
-          costSec,
-          weightSec,
-          distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
-          kind: 'transfer',
-          fromStop: a.stop,
-          toStop: b.stop,
-        });
-        addEdge(toStateB, {
-          toState: fromStateA,
-          costSec,
-          weightSec,
-          distanceM: Math.round(dist * WALK_DETOUR_FACTOR),
-          kind: 'transfer',
-          fromStop: b.stop,
-          toStop: a.stop,
-        });
+        addTransferPair(a, b, dist, baseWalkSec);
       }
     }
   }
@@ -480,14 +515,33 @@ function runSingleDijkstra(
     allowInterruptedFallback
   );
 
-  const entryCandidates =
+  const rawEntryCandidates =
     origin.kind === 'station' && origin.station
       ? [{ station: origin.station, distanceM: 0 }]
       : findNearbyStations(input.stations, origin.coordinates, 4);
-  const exitCandidates =
+  const rawExitCandidates =
     destination.kind === 'station' && destination.station
       ? [{ station: destination.station, distanceM: 0 }]
       : findNearbyStations(input.stations, destination.coordinates, 4);
+
+  const hasAccessibleStations =
+    Boolean(input.accessibleOnly) && input.stations.some((s) => s.wheelchair_boarding === 1);
+  const preferAccessibleCandidates = (
+    candidates: { station: StationMetadata; distanceM: number }[]
+  ) => {
+    if (!hasAccessibleStations) return candidates;
+    const accessibleWithStates = candidates.filter(
+      (c) =>
+        c.station.wheelchair_boarding === 1 &&
+        (hubStatesByStationId.get(c.station.id)?.length ?? 0) > 0
+    );
+    if (accessibleWithStates.length > 0) return accessibleWithStates;
+    const accessibleAny = candidates.filter((c) => c.station.wheelchair_boarding === 1);
+    return accessibleAny.length > 0 ? accessibleAny : candidates;
+  };
+
+  const entryCandidates = preferAccessibleCandidates(rawEntryCandidates);
+  const exitCandidates = preferAccessibleCandidates(rawExitCandidates);
   if (entryCandidates.length === 0 || exitCandidates.length === 0) return null;
 
   const entryStarts = new Map<
@@ -836,7 +890,8 @@ export function computeTransitItineraries(
     }
   }
 
-  if (candidates.length === 0) {
+  const hasActiveFilters = Boolean(input.accessibleOnly) || (input.avoidLineIds?.length ?? 0) > 0;
+  if (candidates.length === 0 && !hasActiveFilters) {
     candidates.push({
       id: 'walk-fallback',
       tag: 'walk',

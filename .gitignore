@@ -48,8 +48,10 @@ Thumbs.db
 scratch/
 
 .netlify/
+.vercel/
 test-results/
 playwright-report/
 web/.netlify/
+.vercel/
 test-results/
 playwright-report/

@@ -7,6 +7,7 @@ export interface ParisRideOptions {
   initialStation?: string;
   initialTrainId?: string;
   initialView?: 'ride' | 'vault' | 'passenger';
+  initialDriveMode?: boolean;
   initialStockGlb?: { cab: string; car: string; label?: string; sprague?: boolean };
   getStationDepartures?: (stationName: string) => StationDeparture[];
   onExit?: () => void;

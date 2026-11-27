@@ -14,6 +14,7 @@ import {
   ROLLING_STOCK_CATALOG,
   type RollingStockCatalogItem,
 } from '../data/paris_library';
+import { GRAND_PARIS_EXPRESS_LINES } from '../data/grand_paris_express';
 import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button, IconButton } from './Button';
 import { cx } from './cx';
@@ -42,6 +43,8 @@ export interface LibraryDrawerProps {
     bearing?: number;
     highlightLineId?: string | null;
   }) => void;
+  gpeVisible?: boolean;
+  onToggleGpe?: (visible?: boolean) => void;
   className?: string;
 }
 
@@ -53,6 +56,8 @@ export function LibraryDrawer({
   onClose,
   onDriveTrain,
   onFocusMapCamera,
+  gpeVisible = false,
+  onToggleGpe,
   className,
 }: LibraryDrawerProps) {
   const desktop = useIsDesktop();
@@ -62,6 +67,7 @@ export function LibraryDrawer({
   // Rames 3D accordion state (tous les tiroirs fermés à l'ouverture)
   const [expandedStockId, setExpandedStockId] = useState<string | null>(null);
   const [mounted3DId, setMounted3DId] = useState<string | null>(null);
+  const [expandedGpeId, setExpandedGpeId] = useState<string | null>('gpe-15');
   const cardRefs = useRef<Record<string, HTMLLIElement | null>>({});
 
   useEffect(() => {
@@ -153,6 +159,7 @@ export function LibraryDrawer({
           options={[
             { value: 'rames', label: 'Rames 3D' },
             { value: 'histoire', label: 'Histoire' },
+            { value: 'gpe', label: 'Grand Paris' },
           ]}
           className={cx('w-full', basse ? 'mt-2' : 'mt-3')}
         />
@@ -374,7 +381,7 @@ export function LibraryDrawer({
                 );
               })}
             </motion.ul>
-          ) : (
+          ) : tab === 'histoire' ? (
             <motion.div
               key="tab-histoire"
               initial={{ opacity: 0, y: 8 }}
@@ -545,6 +552,220 @@ export function LibraryDrawer({
                   Suivant
                 </Button>
               </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="tab-gpe"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: EASE_PORTES }}
+              className="space-y-3 pb-2"
+            >
+              {/* Bandeau afficheur Plan Lumineux : synthèse réseau + interrupteur carte */}
+              <div className="dark rounded-[14px] border border-white/12 bg-[#0f131a] p-3 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                <div className="flex items-center justify-between gap-2.5">
+                  <div className="min-w-0">
+                    <p className="text-[10.5px] font-semibold uppercase tracking-[0.06em] text-white/60">
+                      Réseau Grand Paris Express
+                    </p>
+                    <p className="chiffres mt-0.5 text-[15px] font-bold text-ambre-400 tabular-nums">
+                      4 lignes · 123,5 km · 45 gares
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    data-gpe-toggle
+                    data-size="sm"
+                    aria-pressed={Boolean(gpeVisible)}
+                    onClick={() => onToggleGpe?.()}
+                    className={cx('pl-poussoir shrink-0', basse && 'min-h-[44px]')}
+                  >
+                    <span className="pl-calotte">
+                      <span aria-hidden className={cx('pl-lampe', gpeVisible && 'is-on')} />
+                      <span>{gpeVisible ? 'Sur la carte' : 'Afficher carte'}</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <ul className="space-y-2">
+                {GRAND_PARIS_EXPRESS_LINES.map((line) => {
+                  const isOpen = expandedGpeId === line.id;
+                  return (
+                    <li key={line.id} className="list-none">
+                      <button
+                        type="button"
+                        aria-expanded={isOpen}
+                        onClick={() => setExpandedGpeId(isOpen ? null : line.id)}
+                        className="pl-carte-trajet !flex min-h-[56px] items-center justify-between gap-2.5 !p-3"
+                      >
+                        <div className="flex min-w-0 items-center gap-2.5">
+                          <span
+                            aria-hidden
+                            className={cx('pl-lampe shrink-0', isOpen && 'is-on')}
+                          />
+                          <span
+                            aria-hidden
+                            className="chiffres inline-flex size-8 shrink-0 items-center justify-center rounded-full text-[15px] font-bold leading-none tabular-nums shadow-sm"
+                            style={{ backgroundColor: line.color, color: line.textColor }}
+                          >
+                            {line.shortName}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="signaletique truncate text-[15px] font-bold leading-tight text-encre">
+                              {line.name}
+                            </p>
+                            <p className="chiffres truncate text-[12px] text-encre-2 tabular-nums">
+                              {line.horizon} · {line.lengthKm} km · {line.stationsCount} gares
+                            </p>
+                          </div>
+                        </div>
+                        <RiArrowDownSLine
+                          aria-hidden
+                          className={cx(
+                            'size-5 shrink-0 text-encre-3 transition-transform duration-200',
+                            isOpen && 'rotate-180 text-encre'
+                          )}
+                        />
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -4 }}
+                            transition={{ duration: 0.22, ease: EASE_PORTES }}
+                            className="overflow-hidden"
+                          >
+                            {/* Filet coloré officiel reliant la pastille à la fiche, identique à Rames 3D */}
+                            <div className="relative pb-2 pl-6 pt-3">
+                              <motion.span
+                                aria-hidden
+                                initial={{ scaleY: 0 }}
+                                animate={{ scaleY: 1 }}
+                                exit={{ scaleY: 0 }}
+                                transition={{ duration: 0.34, ease: EASE_PORTES }}
+                                style={{
+                                  backgroundColor: line.color,
+                                  transformOrigin: 'top center',
+                                }}
+                                className="absolute left-[19px] top-0 h-[34px] w-[4px] rounded-b-full"
+                              />
+                              <motion.span
+                                aria-hidden
+                                initial={{ scaleX: 0 }}
+                                animate={{ scaleX: 1 }}
+                                exit={{ scaleX: 0 }}
+                                transition={{ duration: 0.24, delay: 0.14, ease: EASE_PORTES }}
+                                style={{
+                                  backgroundColor: line.color,
+                                  transformOrigin: 'left center',
+                                }}
+                                className="absolute left-[19px] top-[30px] h-[4px] w-[10px] rounded-r-full"
+                              />
+                              <motion.span
+                                aria-hidden
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.2, delay: 0.2, ease: EASE_PORTES }}
+                                style={{ borderColor: line.color }}
+                                className="absolute left-[14px] top-[25px] z-10 size-[14px] rounded-full border-[3px] bg-surface"
+                              />
+
+                              <div className="space-y-3">
+                                {/* Thermomètre schématique Plan Lumineux des grands pôles */}
+                                <div
+                                  className="dark rounded-[12px] border bg-[#0f131a] px-3.5 py-3 text-white"
+                                  style={{ borderColor: `${line.color}70` }}
+                                >
+                                  <p className="signaletique truncate text-[13px] font-semibold text-white">
+                                    {line.route}
+                                  </p>
+                                  <div className="relative mt-3 flex items-center justify-between px-1">
+                                    <span
+                                      aria-hidden
+                                      className="absolute inset-x-2 top-[5px] h-[3px] rounded-full"
+                                      style={{ backgroundColor: line.color }}
+                                    />
+                                    {line.hubs.slice(0, 4).map((hub, idx) => (
+                                      <div
+                                        key={hub}
+                                        className="relative z-10 flex min-w-0 max-w-[24%] flex-col items-center gap-1.5 text-center"
+                                      >
+                                        <span
+                                          aria-hidden
+                                          className={cx(
+                                            'size-[12px] rounded-full border-[2.5px] bg-[#0f131a]',
+                                            idx === 0 || idx === Math.min(3, line.hubs.length - 1)
+                                              ? 'bg-white'
+                                              : ''
+                                          )}
+                                          style={{ borderColor: line.color }}
+                                        />
+                                        <span className="line-clamp-2 text-[10px] font-medium leading-[12px] text-white/80">
+                                          {hub}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-bord bg-joint">
+                                  <div className="bg-surface px-3 py-2">
+                                    <dt className="text-[11px] font-medium text-encre-3">
+                                      Horizon
+                                    </dt>
+                                    <dd className="chiffres text-[13.5px] font-semibold text-encre tabular-nums">
+                                      {line.horizon}
+                                    </dd>
+                                  </div>
+                                  <div className="bg-surface px-3 py-2">
+                                    <dt className="text-[11px] font-medium text-encre-3">
+                                      Longueur
+                                    </dt>
+                                    <dd className="chiffres text-[13.5px] font-semibold text-encre tabular-nums">
+                                      {line.lengthKm} km · {line.stationsCount} gares
+                                    </dd>
+                                  </div>
+                                  <div className="col-span-2 bg-surface px-3 py-2">
+                                    <dt className="text-[11px] font-medium text-encre-3">
+                                      Matériel roulant
+                                    </dt>
+                                    <dd className="text-[13px] font-semibold text-encre">
+                                      {line.stock}
+                                    </dd>
+                                  </div>
+                                </dl>
+
+                                <Button
+                                  variant="primaire"
+                                  size={basse ? 'md' : 'sm'}
+                                  fullWidth
+                                  className={basse ? 'min-h-[44px]' : undefined}
+                                  onClick={() => {
+                                    onToggleGpe?.(true);
+                                    onFocusMapCamera?.({
+                                      center: line.center,
+                                      zoom: line.zoom,
+                                      pitch: 45,
+                                      bearing: -12,
+                                      highlightLineId: null,
+                                    });
+                                  }}
+                                >
+                                  Voir le tracé sur la carte
+                                </Button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </li>
+                  );
+                })}
+              </ul>
             </motion.div>
           )}
         </AnimatePresence>

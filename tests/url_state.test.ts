@@ -35,6 +35,16 @@ describe('parseAppUrlState', () => {
       view: 'ride',
     });
   });
+
+  it('parses drive simulator parameter', () => {
+    expect(parseAppUrlState('?ride=1&drive=1')).toEqual({
+      ride: true,
+      drive: true,
+    });
+    expect(parseAppUrlState('?drive=true')).toEqual({
+      drive: true,
+    });
+  });
 });
 
 describe('mergeAppUrlParams', () => {
@@ -73,11 +83,23 @@ describe('mergeAppUrlParams', () => {
   });
 
   it('returns an empty string when all parameters are removed', () => {
-    const merged = mergeAppUrlParams('?ride=1&view=ride', {
+    const merged = mergeAppUrlParams('?ride=1&view=ride&drive=1', {
       ride: false,
       view: undefined,
+      drive: false,
     });
 
     expect(merged).toBe('');
+  });
+
+  it('sets and preserves drive simulator parameter', () => {
+    const merged = mergeAppUrlParams('?rt=1', {
+      ride: true,
+      drive: true,
+    });
+    const sp = new URLSearchParams(merged);
+    expect(sp.get('rt')).toBe('1');
+    expect(sp.get('ride')).toBe('1');
+    expect(sp.get('drive')).toBe('1');
   });
 });

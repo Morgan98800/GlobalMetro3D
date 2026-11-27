@@ -91,7 +91,7 @@ describe('Audit Phase 1–4 upgrades', () => {
   it('maps iconic Paris stations to their architectural archetypes', () => {
     expect(resolveStationArchetype('Arts et Métiers', '11')).toBe('arts_et_metiers');
     expect(resolveStationArchetype('Louvre – Rivoli', '1')).toBe('louvre_rivoli');
-    expect(resolveStationArchetype('Cité', '4')).toBe('cathedral');
+    expect(resolveStationArchetype('Cité', '4')).toBe('cite');
     expect(resolveStationArchetype('Auber', 'A')).toBe('cathedral');
     expect(resolveStationArchetype('Odéon', '4')).toBe('faience');
   });

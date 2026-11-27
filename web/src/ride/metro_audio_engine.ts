@@ -100,6 +100,7 @@ export class MetroAudioEngine {
   private arrivalPlayedForStop = false;
   private departPlayedForRun = false;
   private lastKvbBeepMs = 0;
+  private lastCrocodileMs = 0;
 
   private onVisibilityChange = () => {
     if (!this.ctx || this.disposed) return;
@@ -505,6 +506,158 @@ export class MetroAudioEngine {
       env.connect(this.oneShotGain!);
       osc.start(start);
       osc.stop(start + 0.075);
+    });
+  }
+
+  /**
+   * Authentic French SNCF/RATP cab signal repetition ("crocodile") chime:
+   * short high pure tone (~2200 Hz, 140 ms, soft -14 dB), throttled at 1600 ms.
+   */
+  public triggerCrocodileChime(): void {
+    if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
+    if (this.ctx.state === 'suspended') return;
+    const nowMs = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    if (nowMs - this.lastCrocodileMs < 1600) return;
+    this.lastCrocodileMs = nowMs;
+
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const peak = dbToGain(-14);
+
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(2200, now);
+
+    env.gain.setValueAtTime(0.0001, now);
+    env.gain.exponentialRampToValueAtTime(peak, now + 0.008);
+    env.gain.setValueAtTime(peak, now + 0.045);
+    env.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+
+    osc.connect(env);
+    env.connect(this.oneShotGain);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  }
+
+  /**
+   * Warm subtle 3-note ascending RATP-style confirmation chime (-12 dB, ~0.55 s)
+   * played when a driving mission completes cleanly.
+   */
+  public triggerMissionCompleteChime(): void {
+    if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
+    if (this.ctx.state === 'suspended') return;
+
+    const ctx = this.ctx;
+    const base = ctx.currentTime;
+    const peak = dbToGain(-12);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2400, base);
+    filter.connect(this.oneShotGain);
+
+    const notes: Array<{ freq: number; offset: number; dur: number }> = [
+      { freq: 523.25, offset: 0.0, dur: 0.18 }, // C5
+      { freq: 659.25, offset: 0.13, dur: 0.18 }, // E5
+      { freq: 783.99, offset: 0.26, dur: 0.29 }, // G5 (ends at 0.55 s)
+    ];
+
+    notes.forEach(({ freq, offset, dur }) => {
+      const start = base + offset;
+      const sineOsc = ctx.createOscillator();
+      const triOsc = ctx.createOscillator();
+      const sineGain = ctx.createGain();
+      const triGain = ctx.createGain();
+      const noteEnv = ctx.createGain();
+
+      sineOsc.type = 'sine';
+      sineOsc.frequency.setValueAtTime(freq, start);
+      sineGain.gain.setValueAtTime(0.78, start);
+
+      triOsc.type = 'triangle';
+      triOsc.frequency.setValueAtTime(freq, start);
+      triGain.gain.setValueAtTime(0.22, start);
+
+      noteEnv.gain.setValueAtTime(0.0001, start);
+      noteEnv.gain.exponentialRampToValueAtTime(peak, start + 0.016);
+      noteEnv.gain.exponentialRampToValueAtTime(peak * 0.45, start + dur * 0.55);
+      noteEnv.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+
+      sineOsc.connect(sineGain);
+      triOsc.connect(triGain);
+      sineGain.connect(noteEnv);
+      triGain.connect(noteEnv);
+      noteEnv.connect(filter);
+
+      sineOsc.start(start);
+      triOsc.start(start);
+      sineOsc.stop(start + dur + 0.02);
+      triOsc.stop(start + dur + 0.02);
+    });
+  }
+
+  /**
+   * Warm, gentle RATP/SIVE 2-note ASVA announcement chime:
+   * E5 (659.25 Hz, 0.00s, dur 0.16s) -> C5 (523.25 Hz, 0.14s, dur 0.28s)
+   * through a 2200 Hz lowpass filter at -14 dB, while ducking rolling ambience
+   * by -4 dB for 2.6 s so spoken announcements sit cleanly above noise.
+   */
+  public triggerAsvaChime(): void {
+    if (!this.enabled || !this.ctx || !this.oneShotGain || this.disposed) return;
+    if (this.ctx.state === 'suspended') return;
+
+    const ctx = this.ctx;
+    const base = ctx.currentTime;
+    const peak = dbToGain(-14);
+
+    if (this.duckGain) {
+      this.duckGain.gain.cancelScheduledValues?.(base);
+      this.duckGain.gain.setTargetAtTime(dbToGain(-4), base, 0.06);
+      this.duckGain.gain.setTargetAtTime(1, base + 2.6, 0.32);
+    }
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2200, base);
+    filter.connect(this.oneShotGain);
+
+    const notes: Array<{ freq: number; offset: number; dur: number }> = [
+      { freq: 659.25, offset: 0.0, dur: 0.16 }, // E5
+      { freq: 523.25, offset: 0.14, dur: 0.28 }, // C5
+    ];
+
+    notes.forEach(({ freq, offset, dur }) => {
+      const start = base + offset;
+      const sineOsc = ctx.createOscillator();
+      const triOsc = ctx.createOscillator();
+      const sineGain = ctx.createGain();
+      const triGain = ctx.createGain();
+      const noteEnv = ctx.createGain();
+
+      sineOsc.type = 'sine';
+      sineOsc.frequency.setValueAtTime(freq, start);
+      sineGain.gain.setValueAtTime(0.8, start);
+
+      triOsc.type = 'triangle';
+      triOsc.frequency.setValueAtTime(freq, start);
+      triGain.gain.setValueAtTime(0.2, start);
+
+      noteEnv.gain.setValueAtTime(0.0001, start);
+      noteEnv.gain.exponentialRampToValueAtTime(peak, start + 0.015);
+      noteEnv.gain.exponentialRampToValueAtTime(peak * 0.45, start + dur * 0.55);
+      noteEnv.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+
+      sineOsc.connect(sineGain);
+      triOsc.connect(triGain);
+      sineGain.connect(noteEnv);
+      triGain.connect(noteEnv);
+      noteEnv.connect(filter);
+
+      sineOsc.start(start);
+      triOsc.start(start);
+      sineOsc.stop(start + dur + 0.02);
+      triOsc.stop(start + dur + 0.02);
     });
   }
 

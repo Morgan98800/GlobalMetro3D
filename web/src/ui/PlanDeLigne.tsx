@@ -132,6 +132,8 @@ export interface PlanHorizontalProps {
   progression?: number;
   /** Maximum number of visible stops in sliding window */
   maxVisible?: number;
+  /** Hide stop-count header row and render larger, cleaner station labels */
+  compact?: boolean;
   onSelectStop?: (stationName: string) => void;
   className?: string;
 }
@@ -142,6 +144,7 @@ export function PlanDeLigneHorizontal({
   index,
   progression = 0,
   maxVisible = 5,
+  compact = false,
   onSelectStop,
   className,
 }: PlanHorizontalProps) {
@@ -153,7 +156,7 @@ export function PlanDeLigneHorizontal({
   let start = 0;
   let end = n;
   if (n > maxVisible) {
-    start = Math.max(0, Math.min(n - maxVisible, clampedIdx - 1));
+    start = Math.max(0, Math.min(n - maxVisible, compact ? clampedIdx : clampedIdx - 1));
     end = start + maxVisible;
   }
   const visible = arrets.slice(start, end);
@@ -165,7 +168,7 @@ export function PlanDeLigneHorizontal({
 
   return (
     <div className={cx('relative pt-1', className)}>
-      {n > maxVisible && (
+      {!compact && n > maxVisible && (
         <div className="mb-1 flex items-center justify-between text-[11px] leading-[14px] text-encre-3">
           <span>{start > 0 ? `← ${start} avant` : 'Origine'}</span>
           <span className="chiffres font-semibold text-encre-2">
@@ -211,7 +214,10 @@ export function PlanDeLigneHorizontal({
         />
       </div>
       <div
-        className="mt-1 grid gap-1 text-[11px] leading-[14px]"
+        className={cx(
+          'mt-1.5 grid gap-1.5',
+          compact ? 'text-[12.5px] leading-[16px]' : 'text-[11px] leading-[14px]'
+        )}
         style={{ gridTemplateColumns: `repeat(${Math.max(1, vCount)}, minmax(0, 1fr))` }}
       >
         {visible.map((a, vi) => {

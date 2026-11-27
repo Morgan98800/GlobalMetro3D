@@ -1493,8 +1493,8 @@ export class SubwayDeckOverlay {
               onHover: this.onTrainHover,
               onClick: (train) => {
                 if (this.data?.rollingStockDb) {
-                requestTrainModel(train, this.data.rollingStockDb, { priority: 'high' });
-              }
+                  requestTrainModel(train, this.data.rollingStockDb, { priority: 'high' });
+                }
                 this.selectedTrainId = train.id;
                 this.onTrainClick(train);
                 this.updateLayers();

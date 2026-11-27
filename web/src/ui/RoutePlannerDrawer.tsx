@@ -400,9 +400,7 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
         cran={cran}
         onCran={setCran}
         hauteurs={
-          props.itineraires.length === 0
-            ? { bas: 240, moyen: avoidOpen ? 460 : 340 }
-            : undefined
+          props.itineraires.length === 0 ? { bas: 240, moyen: avoidOpen ? 460 : 340 } : undefined
         }
         onDismiss={props.onClose}
         onSwipeBack={props.onClose}

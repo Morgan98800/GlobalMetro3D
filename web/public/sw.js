@@ -43,6 +43,10 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Never intercept Range requests (206 Partial Content, e.g. PMTiles) — Safari iOS
+  // Service Workers do not support caching 206 responses and can break Range headers.
+  if (req.headers.has('range') || url.pathname.endsWith('.pmtiles')) return;
+
   // Heavy static transit datasets & GLB train models: stale-while-revalidate for tunnel resilience.
   // Hashed Vite /assets/* rely on immutable HTTP caching so old JS/CSS chunks don't accumulate here.
   const isDataOrAsset =
@@ -57,7 +61,7 @@ self.addEventListener('fetch', (event) => {
         const cached = await cache.match(req);
         const networkPromise = fetch(req)
           .then((res) => {
-            if (res && res.ok) {
+            if (res && res.status === 200) {
               cache.put(req, res.clone()).catch(() => {});
             }
             return res;

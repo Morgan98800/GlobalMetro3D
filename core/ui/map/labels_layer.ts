@@ -60,9 +60,10 @@ export function createStationLabelsLayer(
   if (!candidates.length) return null;
 
   const scale = (256 * Math.pow(2, zoom)) / 360;
+  const cosLat = Math.max(0.2, Math.cos((mapCenter[1] * Math.PI) / 180));
   const toPixels = (point: Point): Point => [
     (point[0] - mapCenter[0]) * scale,
-    (point[1] - mapCenter[1]) * scale,
+    -((point[1] - mapCenter[1]) * scale) / cosLat,
   ];
   const mapEl = typeof document !== 'undefined' ? document.getElementById('map') : null;
   const dockEl = typeof document !== 'undefined' ? document.getElementById('dock') : null;
@@ -81,6 +82,7 @@ export function createStationLabelsLayer(
     return selected * 100 + hub * 10 - Math.hypot(x, y) * 0.001;
   };
   const placed: Array<{ rect: [number, number, number, number]; selected: boolean }> = [];
+  const seenNames = new Set<string>();
   const pixelOffsets = new Map<string, [number, number]>();
   let selectedLabelIndex = 0;
   const selectedLanes = [-32, -16, 0, 16, 32];
@@ -89,6 +91,12 @@ export function createStationLabelsLayer(
   // collision pass. Returning the complete selected list created a wall of
   // overlapping station names at high zoom.
   const visible = ordered.filter((station) => {
+    const normName = station.name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+    if (seenNames.has(normName)) return false;
     const [x, y] = toPixels(station.coordinates);
     // Reserve a little more than the nominal glyph width. Deck's SDF atlas
     // and anti-aliasing make tight rectangles look overlapped on dense hubs.
@@ -100,9 +108,9 @@ export function createStationLabelsLayer(
     pixelOffsets.set(station.id, [offsetX, offsetY]);
     const rect: [number, number, number, number] = [
       x + offsetX,
-      y - 11 + offsetY,
+      y - 12 + offsetY,
       x + offsetX + width,
-      y + 11 + offsetY,
+      y + 12 + offsetY,
     ];
     if (viewportWidth > 0 && viewportWidth / 2 + rect[0] < leftLabelBoundary) return false;
     const collides = placed.some((other) => {
@@ -110,6 +118,7 @@ export function createStationLabelsLayer(
       return !(rect[2] < ox1 || rect[0] > ox2 || rect[3] < oy1 || rect[1] > oy2);
     });
     if (collides) return false;
+    seenNames.add(normName);
     placed.push({ rect, selected });
     return true;
   });

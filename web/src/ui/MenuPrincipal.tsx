@@ -51,7 +51,7 @@ export function MenuPrincipal({
         as="section"
         role="dialog"
         aria-label="Menu et réglages"
-        className="w-[320px] max-w-[calc(100vw-84px)] p-3 md:max-w-[calc(100vw-24px)]"
+        className="w-[300px] max-w-[calc(100vw-96px)] p-3 md:w-[320px] md:max-w-[calc(100vw-24px)]"
       >
         <Reglage titre="Thème">
           <Segmented

@@ -44,7 +44,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
       cran={p.cran}
       onCran={p.onCran}
       repliable
-      hauteurs={{ repli: 68, bas: p.onSimulateur ? 208 : 156, moyen: 330 }}
+      hauteurs={{ repli: 68, bas: p.onSimulateur ? 232 : 168, moyen: 388 }}
       ariaLabel="Recherche et lignes du réseau"
       barreRepli={
         <div className="flex items-center gap-2">
@@ -60,7 +60,13 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
         </div>
       }
     >
-      <div className="shrink-0 px-4 pt-0.5">
+      <div
+        className={
+          p.cran === 'bas'
+            ? 'shrink-0 px-4 pt-0.5 pb-[max(0.75rem,env(safe-area-inset-bottom))]'
+            : 'shrink-0 px-4 pt-0.5'
+        }
+      >
         <SearchTrigger onOpen={p.onSearch} size="lg" className="w-full" />
 
         <div className="mt-2 grid grid-cols-4 gap-1.5">
@@ -91,7 +97,6 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
             variant="secondaire"
             size="sm"
             fullWidth
-            lampe
             icon={<RiSteering2Line aria-hidden className="size-4 shrink-0" />}
             onClick={p.onSimulateur}
             className="mt-2 min-h-[44px] active:scale-[0.97] motion-reduce:active:scale-100"
@@ -117,7 +122,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
                         {...l}
                         size="md"
                         onClick={() => p.onSelectLine(l.shortName)}
-                        className="!h-[36px] !w-[36px] !text-[15px]"
+                        className="!h-[44px] !w-[44px] !text-[16px]"
                       />
                     ))}
                   </div>
@@ -134,7 +139,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
                         {...l}
                         size="md"
                         onClick={() => p.onSelectLine(l.shortName)}
-                        className="!h-[36px] !w-[36px] !text-[15px]"
+                        className="!h-[44px] !w-[44px] !text-[16px]"
                       />
                     ))}
                   </div>

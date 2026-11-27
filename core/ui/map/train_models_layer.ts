@@ -13,6 +13,7 @@ import {
   smoothShapeForRender,
 } from './rounded_path';
 import { type HubRegistry, resolveLineElevationAt } from './station_levels';
+import { isMobileGpuDevice } from './device_perf';
 import type { TrainMarker } from './trains_layer';
 import { carCenterSpacingM, compassBearingToDeckYaw } from './train_model_geometry';
 import type { LineMetadata } from '@core/types';
@@ -453,20 +454,89 @@ export function isTrainModelReadyForTrain(
   return assetStatus.get(key) === 'ready' && parsedScenegraphs.has(key);
 }
 
-export function requestTrainModel(train: TrainMarker, rollingStockDb: RollingStockDatabase): void {
+export interface RequestTrainModelOptions {
+  /** 'high' bypasses background concurrency cap (used for followed/selected train) */
+  priority?: 'high' | 'normal';
+}
+
+interface PendingAssetJob {
+  key: string;
+  url: string;
+  cabUrl?: string;
+  tailUrl?: string;
+}
+
+const pendingBackgroundQueue: PendingAssetJob[] = [];
+const queuedKeys = new Set<string>();
+let activeBackgroundLoads = 0;
+
+function maxConcurrentBackgroundLoads(): number {
+  return isMobileGpuDevice() ? 2 : 4;
+}
+
+export function requestTrainModel(
+  train: TrainMarker,
+  rollingStockDb: RollingStockDatabase,
+  options?: RequestTrainModelOptions
+): void {
   const stock = getRollingStockForLine(rollingStockDb, train.line || train.lineName);
   const { key, url, cabUrl, tailUrl } = assetKeyForStock(stock);
+  const priority = options?.priority ?? 'normal';
   requestedAssets.add(key);
-  beginAssetLoad(key, url, cabUrl, tailUrl);
+
+  const status = assetStatus.get(key);
+  if (status === 'ready' || status === 'loading') return;
+  // Allow one explicit retry when the user actively follows a previously failed asset
+  if (status === 'failed') {
+    if (priority !== 'high') return;
+    assetStatus.delete(key);
+  }
+
+  if (priority === 'high') {
+    if (queuedKeys.has(key)) {
+      queuedKeys.delete(key);
+      const idx = pendingBackgroundQueue.findIndex((j) => j.key === key);
+      if (idx >= 0) pendingBackgroundQueue.splice(idx, 1);
+    }
+    beginAssetLoad(key, url, cabUrl, tailUrl, true);
+    return;
+  }
+
+  if (activeBackgroundLoads < maxConcurrentBackgroundLoads()) {
+    beginAssetLoad(key, url, cabUrl, tailUrl, false);
+  } else if (!queuedKeys.has(key)) {
+    queuedKeys.add(key);
+    pendingBackgroundQueue.push({ key, url, cabUrl, tailUrl });
+  }
+}
+
+function pumpBackgroundQueue(): void {
+  while (
+    activeBackgroundLoads < maxConcurrentBackgroundLoads() &&
+    pendingBackgroundQueue.length > 0
+  ) {
+    const next = pendingBackgroundQueue.shift();
+    if (!next) break;
+    queuedKeys.delete(next.key);
+    if (assetStatus.get(next.key) !== undefined) continue;
+    beginAssetLoad(next.key, next.url, next.cabUrl, next.tailUrl, false);
+  }
 }
 
 function notifyAssetListeners(): void {
   for (const listener of assetListeners) listener();
 }
 
-function beginAssetLoad(key: string, url: string, cabUrl?: string, tailUrl?: string): void {
+function beginAssetLoad(
+  key: string,
+  url: string,
+  cabUrl?: string,
+  tailUrl?: string,
+  highPriority = false
+): void {
   if (assetStatus.get(key) !== undefined) return;
   assetStatus.set(key, 'loading');
+  if (!highPriority) activeBackgroundLoads += 1;
   notifyAssetListeners();
 
   const controller = new AbortController();
@@ -475,7 +545,11 @@ function beginAssetLoad(key: string, url: string, cabUrl?: string, tailUrl?: str
     const versionedUrl = targetUrl.includes('/models/train/')
       ? `${targetUrl}${targetUrl.includes('?') ? '&' : '?'}v=7`
       : targetUrl;
-    return fetch(versionedUrl, { signal: controller.signal })
+    const init: RequestInit & { priority?: 'high' | 'low' } = {
+      signal: controller.signal,
+      ...(highPriority ? { priority: 'high' } : {}),
+    };
+    return fetch(versionedUrl, init)
       .then((response) => {
         if (!response.ok) throw new Error(`train model ${key}: HTTP ${response.status}`);
         return response.arrayBuffer();
@@ -483,24 +557,45 @@ function beginAssetLoad(key: string, url: string, cabUrl?: string, tailUrl?: str
       .then((buffer) => parse(buffer, GLTFLoader));
   };
 
-  Promise.all([
-    fetchGlb(url),
-    cabUrl ? fetchGlb(cabUrl).catch(() => null) : Promise.resolve(null),
-    tailUrl ? fetchGlb(tailUrl).catch(() => null) : Promise.resolve(null),
-  ])
-    .then(([neutralGltf, cabGltf, tailGltf]) => {
+  // Progressive loading: render the 3D train immediately once the main car GLB is parsed,
+  // then seamlessly upgrade the lead cab & tail cars as soon as their GLBs finish.
+  const neutralPromise = fetchGlb(url);
+  const cabPromise = cabUrl ? fetchGlb(cabUrl).catch(() => null) : Promise.resolve(null);
+  const tailPromise = tailUrl ? fetchGlb(tailUrl).catch(() => null) : Promise.resolve(null);
+
+  neutralPromise
+    .then((neutralGltf) => {
       parsedScenegraphs.set(key, neutralGltf);
-      if (cabGltf) parsedCabScenegraphs.set(key, cabGltf);
-      if (tailGltf) parsedTailScenegraphs.set(key, tailGltf);
       assetStatus.set(key, 'ready');
       notifyAssetListeners();
+
+      void cabPromise.then((cabGltf) => {
+        if (cabGltf) {
+          parsedCabScenegraphs.set(key, cabGltf);
+          notifyAssetListeners();
+        }
+      });
+      void tailPromise.then((tailGltf) => {
+        if (tailGltf) {
+          parsedTailScenegraphs.set(key, tailGltf);
+          notifyAssetListeners();
+        }
+      });
     })
     .catch((error) => {
       console.warn(`[train-models] ${key} unavailable; keeping capsules`, error);
       assetStatus.set(key, 'failed');
       notifyAssetListeners();
     })
-    .finally(() => globalThis.clearTimeout(timeout));
+    .finally(() => {
+      void Promise.allSettled([neutralPromise, cabPromise, tailPromise]).finally(() => {
+        globalThis.clearTimeout(timeout);
+        if (!highPriority) {
+          activeBackgroundLoads = Math.max(0, activeBackgroundLoads - 1);
+          pumpBackgroundQueue();
+        }
+      });
+    });
 }
 
 export function subscribeTrainModelAssets(listener: () => void): () => void {

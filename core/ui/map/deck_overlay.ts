@@ -26,7 +26,7 @@ import {
 import type * as maplibregl from 'maplibre-gl';
 import { resolveTrainRenderLayers } from './train_render_fallback';
 import { createPlatformsLayers } from './platforms_layer';
-import { getOptimalPixelRatio } from './device_perf';
+import { getOptimalPixelRatio, isMobileGpuDevice } from './device_perf';
 import { setStationBuildingCutout } from './overture_buildings';
 import {
   createLocalStationDetailBundle,
@@ -557,6 +557,12 @@ export class SubwayDeckOverlay {
 
   public setSelectedTrain(trainId: string | null) {
     this.selectedTrainId = trainId;
+    if (trainId && this.data?.rollingStockDb && trainModelsEnabled()) {
+      const target = this.trains.find((t) => t.id === trainId);
+      if (target) {
+        requestTrainModel(target, this.data.rollingStockDb, { priority: 'high' });
+      }
+    }
     this.updateLayers();
   }
 
@@ -1379,10 +1385,32 @@ export class SubwayDeckOverlay {
     }
     const { tracks } = this.data;
 
-    const prefetchModels = trainModelsEnabled() && this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD - 1.0;
+    const mobileGpu = isMobileGpuDevice();
+    const prefetchZoomMin = mobileGpu
+      ? TRAIN_MODEL_ZOOM_THRESHOLD
+      : TRAIN_MODEL_ZOOM_THRESHOLD - 1.0;
+    const prefetchModels = trainModelsEnabled() && this.zoom >= prefetchZoomMin;
     const showTrainModels = trainModelsEnabled() && this.zoom >= TRAIN_MODEL_ZOOM_THRESHOLD;
-    if (prefetchModels && this.data?.rollingStockDb) {
+
+    // 1. Always prioritize the followed/selected train's 3D model first so it loads
+    //    during the camera flight without competing with background trains.
+    let waitingForFollowedModel = false;
+    if (this.selectedTrainId && this.data?.rollingStockDb && trainModelsEnabled()) {
+      const selectedTrain = this.trains.find((t) => t.id === this.selectedTrainId);
+      if (selectedTrain) {
+        requestTrainModel(selectedTrain, this.data.rollingStockDb, { priority: 'high' });
+        waitingForFollowedModel = !isTrainModelReadyForTrain(
+          selectedTrain,
+          this.data.rollingStockDb
+        );
+      }
+    }
+
+    // 2. Bounded, center-prioritized background prefetching (prevents 50-GLB network stampede on mobile)
+    if (prefetchModels && !waitingForFollowedModel && this.data?.rollingStockDb) {
       const b = this.bounds;
+      const visibleCandidates: Array<{ train: TrainMarker; distSq: number }> = [];
+      const [cLng, cLat] = this.mapCenter;
       for (const train of this.trains) {
         if (b) {
           const [[west, south], [east, north]] = b;
@@ -1397,7 +1425,19 @@ export class SubwayDeckOverlay {
             continue;
           }
         }
-        requestTrainModel(train, this.data.rollingStockDb);
+        const dx = train.pos[0] - cLng;
+        const dy = train.pos[1] - cLat;
+        visibleCandidates.push({ train, distSq: dx * dx + dy * dy });
+      }
+      visibleCandidates.sort((a, bItem) => a.distSq - bItem.distSq);
+      const maxPrefetchFamilies = mobileGpu ? 3 : 8;
+      const prefetchedLines = new Set<string>();
+      for (const { train } of visibleCandidates) {
+        const lineKey = train.line || train.lineName;
+        if (prefetchedLines.has(lineKey)) continue;
+        prefetchedLines.add(lineKey);
+        requestTrainModel(train, this.data.rollingStockDb, { priority: 'normal' });
+        if (prefetchedLines.size >= maxPrefetchFamilies) break;
       }
     }
 
@@ -1418,7 +1458,9 @@ export class SubwayDeckOverlay {
             hubRegistry: this.hubRegistry,
             undergroundBeforeId: this.undergroundBeforeId,
             onClick: (train) => {
-              if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+              if (this.data?.rollingStockDb) {
+                requestTrainModel(train, this.data.rollingStockDb, { priority: 'high' });
+              }
               this.selectedTrainId = train.id;
               this.onTrainClick(train);
               this.updateLayers();
@@ -1450,7 +1492,9 @@ export class SubwayDeckOverlay {
               undergroundBeforeId: this.undergroundBeforeId,
               onHover: this.onTrainHover,
               onClick: (train) => {
-                if (this.data?.rollingStockDb) requestTrainModel(train, this.data.rollingStockDb);
+                if (this.data?.rollingStockDb) {
+                requestTrainModel(train, this.data.rollingStockDb, { priority: 'high' });
+              }
                 this.selectedTrainId = train.id;
                 this.onTrainClick(train);
                 this.updateLayers();

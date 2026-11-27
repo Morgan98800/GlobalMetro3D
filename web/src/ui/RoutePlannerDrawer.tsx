@@ -86,7 +86,7 @@ export interface RoutePlannerDrawerProps {
 export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
   const desktop = useIsDesktop();
   const basse = (props.presentation ?? (desktop ? 'cote' : 'basse')) === 'basse';
-  const [cran, setCran] = useState<DetentSheet>('haut');
+  const [cran, setCran] = useState<DetentSheet>(props.itineraires.length > 0 ? 'haut' : 'moyen');
   const [autresOuverts, setAutresOuverts] = useState(false);
   const [avoidOpen, setAvoidOpen] = useState(false);
   const avoidCount = props.avoidLineIds?.length ?? 0;
@@ -97,6 +97,9 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
   if (prevRouteKey !== routeKey) {
     setPrevRouteKey(routeKey);
     setAutresOuverts(false);
+    if (props.itineraires.length > 0 && cran !== 'haut') {
+      setCran('haut');
+    }
   }
   const sel = props.selection ?? 0;
   const pad = basse ? 'px-4' : 'px-5';
@@ -396,6 +399,11 @@ export function RoutePlannerDrawer(props: RoutePlannerDrawerProps) {
       <BottomSheet
         cran={cran}
         onCran={setCran}
+        hauteurs={
+          props.itineraires.length === 0
+            ? { bas: 240, moyen: avoidOpen ? 460 : 340 }
+            : undefined
+        }
         onDismiss={props.onClose}
         onSwipeBack={props.onClose}
         ariaLabel="Calculateur d’itinéraire"

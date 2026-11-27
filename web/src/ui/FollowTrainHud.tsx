@@ -77,6 +77,7 @@ export function FollowTrainHud(p: FollowTrainHudProps) {
           label="Arrêter le suivi"
           icon={<RiCloseLine aria-hidden />}
           onClick={p.onArreter}
+          className="pl-hit-44"
         />
       </div>
 
@@ -101,7 +102,7 @@ export function FollowTrainHud(p: FollowTrainHudProps) {
             <Button
               variant="afficheur"
               size="sm"
-              className="shrink-0"
+              className="shrink-0 max-md:min-h-[44px]"
               icon={<RiBox3Line aria-hidden />}
               onClick={p.onMonter}
             >

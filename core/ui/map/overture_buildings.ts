@@ -1,5 +1,5 @@
 import * as maplibregl from 'maplibre-gl';
-import { Protocol } from 'pmtiles';
+import { PMTiles, Protocol } from 'pmtiles';
 import { isMobileGpuDevice } from './device_perf';
 import {
   getOvertureBuildingThemeColors,
@@ -37,6 +37,8 @@ export const OVERTURE_PART_LAYER_ID = 'overture-building-part-3d';
 export const OVERTURE_OUTLINE_LAYER_ID = 'overture-building-outline';
 
 let pmtilesProtocolRegistered = false;
+let sharedPmtilesProtocol: Protocol | null = null;
+const prewarmedPmtilesUrls = new Set<string>();
 let backgroundRefreshStarted = false;
 const mapDesiredVisibility = new WeakMap<maplibregl.Map, boolean>();
 const mapXrayState = new WeakMap<maplibregl.Map, boolean>();
@@ -203,15 +205,34 @@ export function setStationBuildingCutout(
   }
 }
 
-function ensurePmtilesProtocol(): void {
-  if (pmtilesProtocolRegistered) return;
-  if (typeof maplibregl.addProtocol !== 'function') return;
+function ensurePmtilesProtocol(): Protocol | null {
+  if (pmtilesProtocolRegistered) return sharedPmtilesProtocol;
+  if (typeof maplibregl.addProtocol !== 'function') return null;
   try {
     const protocol = new Protocol();
     maplibregl.addProtocol('pmtiles', protocol.tile);
+    sharedPmtilesProtocol = protocol;
     pmtilesProtocolRegistered = true;
+    return protocol;
   } catch {
     // Already registered or running inside a headless test stub
+    return sharedPmtilesProtocol;
+  }
+}
+
+function prewarmPmtilesArchive(httpUrl: string): void {
+  if (prewarmedPmtilesUrls.has(httpUrl)) return;
+  prewarmedPmtilesUrls.add(httpUrl);
+  try {
+    const protocol = ensurePmtilesProtocol();
+    const archive = new PMTiles(httpUrl);
+    protocol?.add(archive);
+    // Warm header + root directory asynchronously so first z>=13 tile fetch skips handshake latency
+    void archive.getHeader().catch(() => {
+      prewarmedPmtilesUrls.delete(httpUrl);
+    });
+  } catch {
+    // Ignore in headless/stubbed environments
   }
 }
 
@@ -340,11 +361,15 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
 
   let pmtilesUrl: string;
   if (useLocalParisArchive) {
-    pmtilesUrl = `pmtiles://${window.location.origin}${LOCAL_PARIS_PMTILES_PATH}`;
+    const httpUrl = `${window.location.origin}${LOCAL_PARIS_PMTILES_PATH}`;
+    prewarmPmtilesArchive(httpUrl);
+    pmtilesUrl = `pmtiles://${httpUrl}`;
   } else {
     const { release, stale } = getCachedOvertureReleaseSync();
     if (stale) refreshOvertureReleaseInBackground();
-    pmtilesUrl = `pmtiles://https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/${release}/buildings.pmtiles`;
+    const httpUrl = `https://overturemaps-extras-us-west-2.s3.us-west-2.amazonaws.com/tiles/${release}/buildings.pmtiles`;
+    prewarmPmtilesArchive(httpUrl);
+    pmtilesUrl = `pmtiles://${httpUrl}`;
   }
   const colors = getOvertureBuildingThemeColors(theme);
   const desiredVisible = mapDesiredVisibility.get(map) ?? true;
@@ -404,7 +429,7 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
         type: 'fill-extrusion',
         source: OVERTURE_SOURCE_ID,
         'source-layer': useLocalParisArchive ? 'mansard_roof' : 'building',
-        minzoom: useLocalParisArchive ? (mobileGpu ? 14.6 : 13.8) : mobileGpu ? 15.4 : 14.8,
+        minzoom: useLocalParisArchive ? (mobileGpu ? 15.2 : 13.8) : mobileGpu ? 15.6 : 14.8,
         filter: useLocalParisArchive
           ? (['>=', ['coalesce', ['get', 'height'], 0], 10] as any)
           : ([
@@ -473,7 +498,7 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
         type: 'line',
         source: OVERTURE_SOURCE_ID,
         'source-layer': 'building',
-        minzoom: mobileGpu ? 15.0 : 14.4,
+        minzoom: mobileGpu ? 15.4 : 14.4,
         filter: [
           'all',
           ['!=', ['get', 'is_underground'], true],
@@ -491,7 +516,7 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
 
     // Keep OpenFreeMap building-3d visible only until Overture actually renders its first
     // 3D building in the viewport (at z >= 13.0), then hide building-3d immediately to prevent z-fighting.
-    let lastSwapCheckMs = 0;
+    // Avoid synchronous queryRenderedFeatures in the per-frame `render` loop (causes mobile stalls).
     const trySwapToOverture = () => {
       if (!map.getLayer(OVERTURE_BUILDING_LAYER_ID) || !map.getLayer('building-3d')) return;
       if (map.getZoom() < 13.0) return;
@@ -502,18 +527,11 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
         if (rendered.length > 0) {
           map.setLayoutProperty('building-3d', 'visibility', 'none');
           map.off('idle', trySwapToOverture);
-          map.off('render', onRenderCheck);
           map.off('sourcedata', onSourceData);
         }
       } catch {
         // Ignore in stubbed/headless maps
       }
-    };
-    const onRenderCheck = () => {
-      const now = performance.now();
-      if (now - lastSwapCheckMs < 200) return;
-      lastSwapCheckMs = now;
-      trySwapToOverture();
     };
     const onSourceData = (e: any) => {
       if (e.sourceId !== OVERTURE_SOURCE_ID || !e.isSourceLoaded) return;
@@ -522,7 +540,6 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
     const onSourceError = (e: any) => {
       if (e.sourceId !== OVERTURE_SOURCE_ID) return;
       map.off('sourcedata', onSourceData);
-      map.off('render', onRenderCheck);
       map.off('idle', trySwapToOverture);
       map.off('error', onSourceError);
       try {
@@ -539,7 +556,6 @@ export function attachOvertureBuildings(map: maplibregl.Map, theme: MapTheme): v
       }
     };
     map.on('sourcedata', onSourceData);
-    map.on('render', onRenderCheck);
     map.on('idle', trySwapToOverture);
     map.on('error', onSourceError);
   } catch (err) {

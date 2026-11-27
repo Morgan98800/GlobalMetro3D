@@ -73,7 +73,7 @@ export function LinesDock(p: LinesDockProps) {
           }
         }}
         hauteurs={
-          choisie ? { repli: 72, bas: 220, moyen: 460 } : { repli: 68, bas: 200, moyen: 328 }
+          choisie ? { repli: 72, bas: 232, moyen: 468 } : { repli: 68, bas: 210, moyen: 392 }
         }
         repliable={!p.onClose}
         onDismiss={p.onClose}
@@ -164,7 +164,7 @@ function NiveauLignes({ lignes, selection, onSelect, onClose, replie }: LinesDoc
                       size="md"
                       selected={selection === l.shortName}
                       onClick={() => onSelect(l.shortName)}
-                      className="max-md:!h-[36px] max-md:!w-[36px] max-md:!text-[15px]"
+                      className="max-md:!h-[44px] max-md:!w-[44px] max-md:!text-[16px]"
                     />
                   ))}
                 </div>
@@ -313,7 +313,7 @@ function NiveauLigne({
         </div>
       )}
       {onMonter && (
-        <footer className="shrink-0 border-t border-joint p-2.5 md:p-3">
+        <footer className="shrink-0 border-t border-joint p-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:p-3">
           <Button
             variant="afficheur"
             fullWidth

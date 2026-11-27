@@ -189,6 +189,7 @@ function ReseauButton({ reseau, onClick }: { reseau: string; onClick?: () => voi
       <Plaque size="sm" className="shrink-0">
         <Marque size={20} />
         <span>{label}</span>
+        <i className="pl-lampe is-on md:hidden" aria-hidden="true" />
       </Plaque>
     );
   }
@@ -202,6 +203,7 @@ function ReseauButton({ reseau, onClick }: { reseau: string; onClick?: () => voi
       className="max-md:min-h-[44px]"
     >
       <span className="signaletique text-[16px] font-[650]">{label}</span>
+      <i className="pl-lampe is-on md:hidden" aria-hidden="true" />
       <RiArrowDownSLine aria-hidden className="size-4 text-icone-2" />
     </Poussoir>
   );

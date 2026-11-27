@@ -308,21 +308,19 @@ export function BottomSheet({
       )}
     >
       {/* Poignée iOS sobre & compacte (cible tactile ≥ 44px, glisser ou toucher) */}
-      <div className="relative z-10 flex shrink-0 items-center justify-center px-3 pt-1.5 pb-0.5">
+      <div className="relative z-10 flex shrink-0 items-center justify-center px-3 pt-1 pb-0">
         <button
           type="button"
           {...bindHandle()}
           aria-label="Glisser ou toucher pour ajuster la hauteur du panneau"
-          className="-my-2 flex h-11 w-full touch-none items-center justify-center outline-none focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-focus"
+          className="-my-2.5 flex h-11 w-full touch-none items-center justify-center outline-none focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-focus"
         >
-          <span className="h-1 w-10 rounded-full bg-encre-3/45" />
+          <span className="h-1 w-9 rounded-full bg-encre-3/45" />
         </button>
       </div>
 
       {isCollapsed && barreRepli ? (
-        <div className="min-h-0 flex-1 overflow-hidden px-3.5 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          {barreRepli}
-        </div>
+        <div className="min-h-0 flex-1 overflow-hidden px-3.5 pt-0.5 pb-2">{barreRepli}</div>
       ) : (
         <div
           {...bindContent()}

@@ -1,10 +1,9 @@
-import { RiSteering2Line, RiHome5Line } from '@remixicon/react';
+import { RiSteering2Line } from '@remixicon/react';
 import type { ReactNode } from 'react';
 import { BottomSheet, type DetentSheet } from './BottomSheet';
 import { Button } from './Button';
-import { formatNombre } from './format';
+import { cx } from './cx';
 import { Poussoir } from './plan-lumineux/PlanLumineux';
-import { InterrupteurDirect } from './InterrupteurDirect';
 import { LineBadgeChip } from './LineBadgeChip';
 import { lineMode } from './lines';
 import type { LigneEtat } from './LinesDock';
@@ -44,7 +43,7 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
       cran={p.cran}
       onCran={p.onCran}
       repliable
-      hauteurs={{ repli: 68, bas: p.onSimulateur ? 232 : 168, moyen: 388 }}
+      hauteurs={{ repli: 80, bas: 144, moyen: 336 }}
       ariaLabel="Recherche et lignes du réseau"
       barreRepli={
         <div className="flex items-center gap-2">
@@ -52,6 +51,8 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
           <Button
             variant="secondaire"
             size="md"
+            lampe
+            pressed={p.direct || hasPerturbations}
             className="min-h-[44px] shrink-0 px-3"
             onClick={() => p.onCran('moyen')}
           >
@@ -60,56 +61,45 @@ export function MobileHomeSheet(p: MobileHomeSheetProps) {
         </div>
       }
     >
-      <div
-        className={
-          p.cran === 'bas'
-            ? 'shrink-0 px-4 pt-0.5 pb-[max(0.75rem,env(safe-area-inset-bottom))]'
-            : 'shrink-0 px-4 pt-0.5'
-        }
-      >
+      <div className="shrink-0 px-3.5 pt-0.5 pb-2">
         <SearchTrigger onOpen={p.onSearch} size="lg" className="w-full" />
 
-        <div className="mt-2 grid grid-cols-4 gap-1.5">
-          <RaccourciBouton
-            icon={<RiHome5Line aria-hidden />}
-            label="Domicile"
-            actif={p.hasHome}
-            lampe={p.hasHome}
-            onClick={p.onDomicile}
-          />
+        <div className={cx('mt-2 grid gap-1.5', p.onSimulateur ? 'grid-cols-4' : 'grid-cols-3')}>
           <RaccourciBouton
             icon={<IconLignes />}
             label="Lignes"
-            actif={hasPerturbations}
-            lampe={hasPerturbations}
+            lampe
+            actif={p.cran !== 'bas' || p.direct || hasPerturbations}
             onClick={p.onLignes}
           />
-          <RaccourciBouton icon={<IconItineraire />} label="Itinéraire" onClick={p.onItineraire} />
+          <RaccourciBouton
+            icon={<IconItineraire />}
+            label="Itinéraire"
+            lampe
+            onClick={p.onItineraire}
+          />
           <RaccourciBouton
             icon={<IconBibliotheque />}
-            label="Rames 3D"
+            label="Bibliothèque"
+            lampe
             onClick={p.onBibliotheque}
           />
+          {p.onSimulateur && (
+            <RaccourciBouton
+              icon={<RiSteering2Line aria-hidden />}
+              label="Conduire"
+              lampe
+              actif
+              onClick={p.onSimulateur}
+            />
+          )}
         </div>
-
-        {p.onSimulateur && (
-          <Button
-            variant="secondaire"
-            size="sm"
-            fullWidth
-            icon={<RiSteering2Line aria-hidden className="size-4 shrink-0" />}
-            onClick={p.onSimulateur}
-            className="mt-2 min-h-[44px] active:scale-[0.97] motion-reduce:active:scale-100"
-          >
-            Simulateur 3D · Conduire une rame
-          </Button>
-        )}
       </div>
 
       {p.cran !== 'bas' && (
-        <div className="mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain border-t border-joint pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <div className="px-4 pt-2.5">
-            <div className="space-y-3.5">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain border-t border-joint pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div className="px-3.5 pt-2.5">
+            <div className="space-y-3">
               {metro.length > 0 && (
                 <div>
                   <h3 className="mb-1.5 text-xs font-medium tracking-[0.04em] text-encre-2">
